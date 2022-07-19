@@ -63,3 +63,5 @@ inter-state same state delivery -
 intra-state
 
 rate product, rate shop..
+
+https://shopery.netlify.app/main/home-02.html

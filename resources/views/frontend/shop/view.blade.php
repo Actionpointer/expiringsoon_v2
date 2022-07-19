@@ -370,5 +370,5 @@
 @endsection
 
 @push('scripts')
-
+@include('layouts.front')
 @endpush

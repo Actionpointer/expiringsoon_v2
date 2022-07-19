@@ -175,7 +175,7 @@
                                                 @if(Auth::check() && $product->like->where('user_id',Auth::id())->count() == 0)
                                                 <div class="cards-md__favs-list">
                                                     <span class="action-btn">
-                                                        <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" id2="{{$product->id}}" class="add-to-wish" data-product="{{$product->id}}product">
+                                                        <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$product->id}}product">
                                                             <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
                                                         </svg>
                                                     </span>
@@ -184,7 +184,7 @@
                                                 @if(Auth::check() && $product->like->where('user_id',Auth::id())->count() == 1)
                                                     <div class="cards-md__favs-list show-heart">
                                                         <span class="action-btn liked">
-                                                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" id2="{{$product->id}}" class="add-to-wish" data-product="{{$product->id}}product">
+                                                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$product->id}}product">
                                                                 <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
                                                             </svg>
                                                         </span>
@@ -360,5 +360,5 @@
 @endsection
 
 @push('scripts')
-
+@include('layouts.front')
 @endpush

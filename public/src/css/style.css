@@ -613,10 +613,11 @@ a {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between; }
-.header .cart-bag {
+.header .cart-bag,.header .wish-bag {
   position: relative;
-  margin-right: 16px; }
-  .header .cart-bag .item-number {
+  margin-right: 16px; 
+}
+  .header .cart-bag .item-number ,.header .wish-bag .item-number{
     position: absolute;
     top: -2px;
     right: -4px;
@@ -637,12 +638,16 @@ a {
     font-size: 10px;
     line-height: 10px;
     color: #fff;
-    font-weight: 500; }
-  .header .cart-bag:hover {
+    font-weight: 500; 
+  }
+  .header .wish-bag .item-number{
+    right: 5px !important;
+  }
+    .header .cart-bag:hover {
     color: #2c742f;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out; }
-    .header .cart-bag:hover .item-number {
+    .header .cart-bag:hover .item-number,.header .wish-bag:hover .item-number {
       top: 0px;
       -webkit-transition: all 0.6s ease-in-out;
       transition: all 0.6s ease-in-out; }

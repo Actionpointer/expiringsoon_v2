@@ -29,7 +29,7 @@ Route::get('orders', [App\Http\Controllers\OrderController::class, 'index'])->na
 Route::get('order/{order}',[App\Http\Controllers\OrderController::class, 'show'])->name('order-details');
 Route::get('cart', [App\Http\Controllers\CartController::class, 'cart'])->name('cart');
 Route::get('wishlist', [App\Http\Controllers\CartController::class, 'wishlist'])->name('wishlist');
-
+Route::post('checkout',[App\Http\Controllers\CartController::class,'checkout'])->name('checkout');
 
 //for vendors
 Route::get('vendor/dashboard', [App\Http\Controllers\HomeController::class, 'vendor'])->name('vendor.dashboard');
@@ -47,10 +47,6 @@ Route::post('product/remove-from-cart',[App\Http\Controllers\CartController::cla
 Route::post('product/add-to-wish',[App\Http\Controllers\CartController::class,'addtowish'])->name('product.addtowish');
 Route::post('product/remove-from-wish',[App\Http\Controllers\CartController::class,'removefromwish'])->name('product.removefromwish');
 Route::post('product/sortFilter',[App\Http\Controllers\CartController::class,'sortFilter'])->name('product.sortFilter');
-
-Route::get('cart',[App\Http\Controllers\SalesController::class,'cart'])->name('cart');
-Route::get('wishlist',[App\Http\Controllers\SalesController::class,'wishlist'])->name('wishlist');
-Route::post('checkout',[App\Http\Controllers\SalesController::class,'checkout'])->name('checkout');
 
 Route::post('pay',[App\Http\Controllers\PaymentController::class,'pay'])->name('pay');
 Route::get('payment/verification',[App\Http\Controllers\PaymentController::class,'verification'])->name('payment.verification');

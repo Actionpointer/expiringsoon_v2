@@ -1,14 +1,13 @@
 <?php
 namespace App\Http\Traits;
 
-use App\City;
-use App\Town;
-use App\State;
-use App\Coupon;
-use App\Payment;
-use App\Setting;
+// use App\Coupon;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
+use App\Models\City;
+use App\Models\Town;
+use App\Models\State;
+use App\Models\Payment;
+use App\Models\Setting;
 use App\Http\Traits\OrderTrait;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,83 +63,83 @@ trait OrderTrait
         return $subtotal;
     }
     
-    protected function getCoupon($code){
-        $cart = request()->session()->get('cart');
-        if(!$cart)
-        return $this->getWorth('No items in your cart');
-        $worth = [];
-        $coupon = Coupon::where('code',$code)->first();
-        if(!$coupon)
-            return $this->getWorth('Coupon does not exist');
-        if(!$coupon->status)
-            return $this->getWorth('Coupon is invalid');
-        if(!$coupon->available)
-            return $this->getWorth('Coupon is expired');
-        if($coupon->start_at && $coupon->start_at > now())
-            return $this->getWorth('Coupon is not available');
-        if($coupon->end_at && $coupon->end_at < now())
-            return $this->getWorth('Coupon is expired');
-        if($coupon->meal_limit){
-            $meal = false;
-            foreach($cart as $item){
-                foreach($coupon->meal_limit as $value){
-                    if($item['type'] == 'App\Meal' && $value == $item['id'])
-                    $meal = true;
-                }
-            }
-            if(!$meal)
-            return $this->getWorth('Coupon is not available for the items in your cart');
-        }
-        if($coupon->minimum_spend){
-            $subtotal = $this->getSubtotal($cart);
-            if($coupon->minimum_spend > $subtotal)
-            return $this->getWorth("Your subtotal must be greater than $coupon->minimum_spend to avail this coupon");
-        }
-        if($coupon->maximum_spend){
-            $subtotal = $this->getSubtotal($cart);
-            if($coupon->maximum_spend < $subtotal)
-            return $this->getWorth("Your subtotal must be lower than $coupon->maximum_spend to avail this coupon");
-        }
-        if($coupon->state_limit){
-            $user = Auth::user();
-            if(!$user)
-            return $this->getWorth("You must login to avail coupon");
-            if($user->addresses->isEmpty())
-            return $this->getWorth("You must set address to avail this coupon");
-            if(!in_array($user->addresses->where('status',true)->first()->state_id, $coupon->state_limit))
-            return $this->getWorth("Coupon is not available in your state");
-        }
-        if($coupon->city_limit){
-            $user = Auth::user();
-            if(!$user)
-            return $this->getWorth("You must login to avail coupon");
-            if($user->addresses->isEmpty())
-            return $this->getWorth("You must set address to avail this coupon");
-            if(!in_array($user->addresses->where('status',true)->first()->city_id, $coupon->city_limit))
-            return $this->getWorth("Coupon is not available in your city");
-        }
+    // protected function getCoupon($code){
+    //     $cart = request()->session()->get('cart');
+    //     if(!$cart)
+    //     return $this->getWorth('No items in your cart');
+    //     $worth = [];
+    //     $coupon = Coupon::where('code',$code)->first();
+    //     if(!$coupon)
+    //         return $this->getWorth('Coupon does not exist');
+    //     if(!$coupon->status)
+    //         return $this->getWorth('Coupon is invalid');
+    //     if(!$coupon->available)
+    //         return $this->getWorth('Coupon is expired');
+    //     if($coupon->start_at && $coupon->start_at > now())
+    //         return $this->getWorth('Coupon is not available');
+    //     if($coupon->end_at && $coupon->end_at < now())
+    //         return $this->getWorth('Coupon is expired');
+    //     if($coupon->meal_limit){
+    //         $meal = false;
+    //         foreach($cart as $item){
+    //             foreach($coupon->meal_limit as $value){
+    //                 if($item['type'] == 'App\Meal' && $value == $item['id'])
+    //                 $meal = true;
+    //             }
+    //         }
+    //         if(!$meal)
+    //         return $this->getWorth('Coupon is not available for the items in your cart');
+    //     }
+    //     if($coupon->minimum_spend){
+    //         $subtotal = $this->getSubtotal($cart);
+    //         if($coupon->minimum_spend > $subtotal)
+    //         return $this->getWorth("Your subtotal must be greater than $coupon->minimum_spend to avail this coupon");
+    //     }
+    //     if($coupon->maximum_spend){
+    //         $subtotal = $this->getSubtotal($cart);
+    //         if($coupon->maximum_spend < $subtotal)
+    //         return $this->getWorth("Your subtotal must be lower than $coupon->maximum_spend to avail this coupon");
+    //     }
+    //     if($coupon->state_limit){
+    //         $user = Auth::user();
+    //         if(!$user)
+    //         return $this->getWorth("You must login to avail coupon");
+    //         if($user->addresses->isEmpty())
+    //         return $this->getWorth("You must set address to avail this coupon");
+    //         if(!in_array($user->addresses->where('status',true)->first()->state_id, $coupon->state_limit))
+    //         return $this->getWorth("Coupon is not available in your state");
+    //     }
+    //     if($coupon->city_limit){
+    //         $user = Auth::user();
+    //         if(!$user)
+    //         return $this->getWorth("You must login to avail coupon");
+    //         if($user->addresses->isEmpty())
+    //         return $this->getWorth("You must set address to avail this coupon");
+    //         if(!in_array($user->addresses->where('status',true)->first()->city_id, $coupon->city_limit))
+    //         return $this->getWorth("Coupon is not available in your city");
+    //     }
         
-        if($coupon->limit_per_user){
-            $user = Auth::user();
-            if(!$user)
-            return $this->getWorth("You must login to avail coupon");
-            $payment = Payment::where('user_id',$user->id)->where('coupon_id',$coupon->id)->count();
-            if($coupon->limit_per_user <= $payment)
-            return $this->getWorth("You have used this coupon before");
-        }
-        if($coupon->free_shipping){
-            $user = Auth::user();
-            if(!$user)
-            return $this->getWorth("You must login to avail coupon");
-            if($user->addresses->isEmpty())
-            return $this->getWorth("You must set address to avail this coupon");
-            return $this->getWorth('Free Shipping Coupon has been applied',$this->getDeliveryCharge());
-        }
-        if($coupon->is_percentage)
-            return $this->getWorth('Discount has been applied to your order',$coupon->value /100 * $this->getSubtotal($cart));
-        else
-            return $this->getWorth('Discount has been applied to your order',$coupon->value); 
-    }
+    //     if($coupon->limit_per_user){
+    //         $user = Auth::user();
+    //         if(!$user)
+    //         return $this->getWorth("You must login to avail coupon");
+    //         $payment = Payment::where('user_id',$user->id)->where('coupon_id',$coupon->id)->count();
+    //         if($coupon->limit_per_user <= $payment)
+    //         return $this->getWorth("You have used this coupon before");
+    //     }
+    //     if($coupon->free_shipping){
+    //         $user = Auth::user();
+    //         if(!$user)
+    //         return $this->getWorth("You must login to avail coupon");
+    //         if($user->addresses->isEmpty())
+    //         return $this->getWorth("You must set address to avail this coupon");
+    //         return $this->getWorth('Free Shipping Coupon has been applied',$this->getDeliveryCharge());
+    //     }
+    //     if($coupon->is_percentage)
+    //         return $this->getWorth('Discount has been applied to your order',$coupon->value /100 * $this->getSubtotal($cart));
+    //     else
+    //         return $this->getWorth('Discount has been applied to your order',$coupon->value); 
+    // }
 
     protected function getWorth($description,$value = 0){
         $worth = ['value'=> $value,'description'=> $description];

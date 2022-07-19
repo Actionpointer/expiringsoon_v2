@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\WishlistTrait;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{asset('src/lib/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('src/css/style.css')}}" />
     <style>
-        .ec-cart-float {
+        .ec-cart-float,.ec-wish-float {
             display: none;
             position: fixed;
             width: 100px;
@@ -29,7 +29,7 @@
             z-index: 15;
             background: #00b207;
         }
-        .ec-cart-float .ec-cart-count {
+        .ec-cart-float .ec-cart-count,.ec-wish-float .wish-counter {
             position: absolute;
             top: 20px;
             right: 0;
@@ -53,9 +53,12 @@
                 -ms-flex-pack: center;
                     justify-content: center;
         }
+        .ec-wish-float .wish-counter{
+            top:5px !important;
+        }
 
         @media (max-width: 550px) {
-        .ec-cart-float {
+        .ec-cart-float,.ec-wish-float {
             position: fixed;
             width: 100px;
             height: 100px;
@@ -172,6 +175,15 @@
         @empty
         @endforelse
       </div>
+      <div class="ec-wish-float">
+        <svg width="70" height="70" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z"
+                stroke="white"
+                stroke-width="1.5"
+            />
+        </svg>
+        <div class="wish-counter">{{auth()->check() ? auth()->user()->likes->count() : 0}}</div>
+      </div>
         <div class="loader">
             <div class="loader-icon">
                 <img src="{{asset('src/images/loader.gif')}}" alt="loader" />
@@ -180,7 +192,7 @@
 
         <!-- Header Section start -->
         <header class="header header--two">
-            <div class="header__top">
+            <div class="header__top" style="background:#1a1a1a;color:#b2b2b2">
                 <div class="container">
                     <div class="header__top-content">
                         <div class="header__top-left">
@@ -255,10 +267,11 @@
                         </form>
                         <div class="header__cart">
                             <div class="header__cart-item">
-                                <a class="fav" href="{{route('wishlist')}}">
+                                <a class="fav wish-bag" href="{{route('wishlist')}}">
                                     <svg width="25" height="23" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="#1A1A1A" stroke-width="1.5" />
                                     </svg>
+                                    <span class="item-number wish-counter" @if(auth()->check() && auth()->user()->likes->count()) style @else style="display:none" @endif>{{auth()->check() ? auth()->user()->likes->count() : 0}}</span>
                                 </a>
                             </div>
                             <div class="header__cart-item">
@@ -285,7 +298,7 @@
                     </div>
                 </div>
             </div>
-            <div class="header__bottom">
+            <div class="header__bottom" style="background: #1a1a1a">
                 <div class="container">
                     <div class="header__bottom-content">
                         <div class="header__bottom-left">
@@ -341,7 +354,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="header__bottom-right">
+                        {{-- <div class="header__bottom-right">
                             <div class="header__activity-icons">
                                 <div class="fav d-inline-block mx-sm-4">
                                     <a href="{{route('wishlist')}}">
@@ -378,7 +391,36 @@
                                     </svg>
                                 </a>
                             </div>
-                        </div>
+                        </div> --}}
+                        <a href="#" class="header__telephone-number">
+                            <span>
+                                <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M14.4359 2.375C15.9193 2.77396 17.2718 3.55567 18.358 4.64184C19.4441 5.72801 20.2258 7.08051 20.6248 8.56388"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M13.5306 5.75687C14.4205 5.99625 15.2318 6.46521 15.8833 7.11678C16.5349 7.76835 17.0039 8.57967 17.2433 9.46949"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M7.115 11.6517C8.02238 13.5074 9.5263 15.0049 11.3859 15.9042C11.522 15.9688 11.6727 15.9966 11.8229 15.9851C11.9731 15.9736 12.1178 15.9231 12.2425 15.8386L14.9812 14.0134C15.1022 13.9326 15.2414 13.8833 15.3862 13.8698C15.5311 13.8564 15.677 13.8793 15.8107 13.9364L20.9339 16.1326C21.1079 16.2065 21.2532 16.335 21.3479 16.4987C21.4426 16.6623 21.4815 16.8523 21.4589 17.04C21.2967 18.307 20.6784 19.4714 19.7196 20.3154C18.7608 21.1593 17.5273 21.6249 16.25 21.625C12.3049 21.625 8.52139 20.0578 5.73179 17.2682C2.94218 14.4786 1.375 10.6951 1.375 6.75C1.37512 5.47279 1.84074 4.23941 2.68471 3.28077C3.52867 2.32213 4.6931 1.70396 5.96 1.542C6.14771 1.51936 6.33769 1.55832 6.50134 1.653C6.66499 1.74769 6.79345 1.89298 6.86738 2.067L9.06537 7.1945C9.1219 7.32698 9.14485 7.47137 9.13218 7.61485C9.11951 7.75833 9.07162 7.89647 8.99275 8.017L7.17275 10.7977C7.09015 10.923 7.04141 11.0675 7.03129 11.2171C7.02117 11.3668 7.05001 11.5165 7.115 11.6517V11.6517Z"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+
+                                +234 811 12 4567
+                            </span>
+                        </a>
                     </div>
                     {{-- <div class="header__bottom-content">
                         <ul class="header__navigation-menu">
