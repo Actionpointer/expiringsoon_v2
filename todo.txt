@@ -1,0 +1,65 @@
+image size is max 1mb
+
+implement payout by flutter transfer
+check phone number exist.. both at register and profile update
+add password strength meter
+show country prefix in settings phone number update
+
+shops that want to have branches../enterprise
+
+who can topup (buyer?, seller?) and what do they use topup to do
+
+subscriptions for multiple shops and each subscription determines number of shops you can have (add this to admin)
+
+for every bank account, there must be kyc
+CAC 
+PARTICULARS OF 1 DIRECTOR ..e.g drivers license
+BVN
+ADDRESS
+
+BVN VALIDATION
+MANUAL BVN validation before payouts
+
+SHOP ID VERIFICATION BEFORE PRODUCT VISIBILITY
+
+admin
+security
+customercare
+auditor
+
+
+admin featured products are adverts
+
+vendor selects products and feature them as adverts on the homepage for a fee..
+if product expires before feature ends, feature expires
+
+filter by location, 
+add filter to vendor page
+add feature page..
+product will be featured based on category and a location
+feature to home page
+provide feature plans such as 
+feature one product for a period, feature many products for a period, feature to the top
+
+admin manage product should suspend / allow products
+admin manage shops
+
+money received from order is not available to withdraw until order is complete -- use settlement table
+customer can raise complain about product/order within 24hours of reception
+money can be refunded to the buyer. 
+
+who determines when the item will get to customer
+who carries the item to buyer 
+
+we tell them that they deliver within 72hours
+if customers order out of state, put a disclaimer that refund may not happen
+
+specify states we can deliver to, other states users have to pickup
+specify timeframe for both interstate and intrastate
+specify cost for both interstate and intrastate
+
+deduct both commission and shipping cost from payment
+inter-state same state delivery - 
+intra-state
+
+rate product, rate shop..
