@@ -1,0 +1,19 @@
+vendor bvn verification
+revisit security alert - once someone is throttled 
+implement payout by flutter transfer.. then check payment page user, vendor, shops
+add password strength meter
+shop staff save
+select2 on modal in categories edit not working
+select2 required attribute not working
+notifications - email and inapp
+categories homepage
+hot deals mobile view (home page & hot deals page)
+product rating.. show in index, product, hotdeals
+if user is downgrading, show the impact of the plan to the user.
+if user wants to be restored to the previous existing plan, make it possible... but no refund
+cron job, to check every subscription for a. expiring. b. auto_renew
+email, when subscription is expiring
+email when subscription is auto-renewed
+email when subscription auto-renewal is cancelled
+if user does not have subscription, he cannot access other shops he has
+add coupon for buying subscriptions ? Coupon value + percentage

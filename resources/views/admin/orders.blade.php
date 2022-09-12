@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" />
 <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/>
 <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
 
@@ -15,20 +15,8 @@
         <ul class="breedcrumb__content">
           <li>
             <a href="index.php">
-              <svg
-                width="18"
-                height="19"
-                viewBox="0 0 18 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"
-                  stroke="#808080"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path   d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"   stroke="#808080"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" />
               </svg>
               <span> > </span>
             </a>
@@ -53,54 +41,58 @@
     <div class="container">
       <div class="row dashboard__content">
         @include('admin.navigation')
-        <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
+        <div class="col-lg-9 section--xl pt-0">
           <div class="container">
             <!-- Order History  -->
-            <div class="dashboard__order-history" style="padding:10px;font-size:13px">
+            <div class="dashboard__order-history">
               <div class="dashboard__order-history-title">
                 <h2 class="font-body--xl-500">Order History</h2>
               </div>
-              <div class="dashboard__order-history-table">
+              <div class="dashboard__order-history-table" style="padding:10px;font-size:13px">
                 <div class="table-responsive">
                   <table id="datatable" class="table display" style="width:100%;font-size:13px">
                     <thead>
                       <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"> Order Id</th>
-                        <th scope="col" class="dashboard__order-history-table-title">  Date</th>
-                        <th scope="col" class="dashboard__order-history-table-title">  Total</th>
-                        <th scope="col" class="dashboard__order-history-table-title">  Status</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> </th>
+                        <th scope="col" class="cart-table-title">  Order Id</th>
+                        <th scope="col" class="cart-table-title">  Date</th>
+                        <th scope="col" class="cart-table-title">  Total</th>
+                        <th scope="col" class="cart-table-title">  Status</th>
+                        <th scope="col" class="cart-table-title">  Shipment By</th>
+                        <th scope="col" class="cart-table-title"> Manage </th>
                       </tr>
                     </thead>
                     <tbody>
                       @forelse($orders as $order)
-                            @php
-                                $vat = (5 / 100) * $order->total;
-                                $deliveryfee = '500';
-                                $finalttl = $vat + $order->total + $deliveryfee;
-                            @endphp
                             <tr>
                                 <!-- Order Id  -->
-                                <td class="dashboard__order-history-table-item order-id"> 
-                                    <span style="font-weight:500">#{{$order->orderid}}</span>
+                                <td> 
+                                    <span style="font-weight:500">#{{$order->id}}</span>
                                 </td>
                                 <!-- Date  -->
-                                <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
+                                <td> 
+                                  <span style="font-weight:500">{{$order->created_at->format('Y-m-d')}} </span> </td>
                                 <!-- Total  -->
-                                <td class="   dashboard__order-history-table-item   order-total "> 
-                                    <p class="order-total-price">   N {{number_format($order->total, 0)}} </p>
+                                <td> 
+                                    <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
                                 </td>
                                 <!-- Status -->
-                                <td class="dashboard__order-history-table-item   order-status "> {{$order->deliverystatus}}</td>
+                                <td> {{$order->status}}</td>
                                 <!-- Details page  -->
-                                <td class="dashboard__order-history-table-item   order-details ">
-                                    @if($order->deliverystatus =='Incomplete')
-                                        <a href="{{route('cart')}}"> Complete Order</a>
-                                    @else
-                                    <a href="invoice.php?ref=$order->orderid">
-                                        <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24"></span>
-                                    </a>
+                                <td>
+                                    @if(!intval($order->deliveryfee))
+                                      Pickup
+                                    @elseif($order->deliveryByVendor())
+                                      Vendor
+                                    @else 
+                                      Admin
                                     @endif
+                                </td>
+                                <td>
+                                    <a href="{{route('order-details',$order)}}">
+                                        <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">
+                                          View Details
+                                        </span>
+                                    </a>
                                 </td>
                             </tr>   
                         @empty
@@ -125,7 +117,7 @@
 @endsection
 @push('scripts')
 
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('src/datatable/assets/buttons/demo.js')}}"></script>
     <script src="{{asset('src/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
     <script src="{{asset('src/datatable/assets/buttons/jszip.min.js')}}"></script>

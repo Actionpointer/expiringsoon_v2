@@ -47,7 +47,7 @@ $(document).on('click','.add-to-cart',function(){
                 // Show cart popup
                 $(".ec-cart-float").fadeIn();
                 // Remove Empty message
-                $("#cart-empty").hide();
+                $(".cart-empty").hide();
 
                 // Hide Cart Popup
                 setTimeout(function(){
@@ -63,6 +63,7 @@ $(document).on('click','.add-to-cart',function(){
 
 $(document).on('click','.remove-from-cart',function(){
     var product_id = parseInt($(this).attr('data-product'));
+
     $.ajax({
         type:'POST',
         dataType: 'json',
@@ -74,7 +75,7 @@ $(document).on('click','.remove-from-cart',function(){
         success:function(data) {
             console.log(data.cart);
             if(!data.cart_count){
-                $("#cart-empty").show();
+                $(".cart-empty").show();
             }
             var cart_total = 0;
             $(".cart-counter").text(data.cart_count);

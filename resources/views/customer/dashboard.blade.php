@@ -2,7 +2,7 @@
 @push('styles')
 
 @endpush
-@section('title'){{$user->fname.' '.$user->lname}} | User Dashboard @endsection
+@section('title'){{$user->name}} | User Dashboard @endsection
 @section('main')
 <!-- breedcrumb section start  -->
 <div class="section breedcrumb">
@@ -12,20 +12,8 @@
         <ul class="breedcrumb__content">
           <li>
             <a href="{{route('index')}}">
-              <svg
-                width="18"
-                height="19"
-                viewBox="0 0 18 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"
-                  stroke="#808080"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path   d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"   stroke="#808080"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" />
               </svg>
               <span> > </span>
             </a>
@@ -73,34 +61,29 @@
               <div class="col-lg-7">
                 <div class="dashboard__user-profile dashboard-card">
                   <div class="dashboard__user-profile-img">
-                    <img @if(!$user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->fname}} {{$user->lname}}" />
+                    <img @if(!$user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->name}}" />
                   </div>
                   <div class="dashboard__user-profile-info">
-                    <h5 class="font-body--xl-500 name">{{$user->fname}} {{$user->lname}}</h5>
-                    @if($user->role =='Shopper') 
-                        <p class="font-body--md-400 designation">Wallet: 
-                            <span style="color:#00b207;font-weight:500">N{{number_format($user->wallet, 2)}}</span>
-                        </p>
-                        <a href="{{route('profile.edit')}}#topUpSection" class="edit font-body--lg-500">Top-Up Wallet</a>
-                    @else
-                    <div style="margin:auto">
-                        <div style="float:left;padding-right:20px;margin-right:20px;border-right:2px solid #e0dfdf">
-                            <p align="left" class="font-body--md-400 designation">Total Sales</p>
-                                <div style="margin-top:-10px">
-                                    <a href="sales.php" class="edit font-body--lg-500" style="font-size:20px">N 0</a>
-                                </div>
-                        </div>
-                        <div style="float:left;margin-right:10px">
-                            <p align="left" class="font-body--md-400 designation">Balance</p>
-                            <div style="margin-top:-10px">
-                                <a href="#" class="edit font-body--lg-500" style="font-size:20px">N{{number_format($user->wallet, 2)}}</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="{{route('profile')}}#requestPayout" class="edit font-body--lg-500">Request Payout</a>
-                    </div>
-                    @endif
+                    <h5 class="font-body--xl-500 name">{{$user->name}}</h5>
+                        <p class="font-body--lg-400 designation">{{$user->state->name}},{{cache('settings')['country']}}</p>
+                        <span class="text-muted small">
+                          <svg width="16" height="16" viewBox="0 0 46 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M2 15.5V38.25C2 38.7141 2.18437 39.1592 2.51256 39.4874C2.84075 39.8156 3.28587 40 3.75 40H42.25C42.7141 40 43.1592 39.8156 43.4874 39.4874C43.8156 39.1592 44 38.7141 44 38.25V15.5L23 1.5L2 15.5Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                              <path d="M19.1816 27.75L2.53906 39.5047" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                              <path d="M43.4611 39.5065L26.8186 27.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                              <path d="M44 15.5L26.8185 27.75H19.1815L2 15.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg>
+                          {{$user->email}}
+                        </span>
+                        
+                        |<span class="text-muted small"> 
+                          <svg width="16" height="16" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M7.115 11.6517C8.02238 13.5074 9.5263 15.0049 11.3859 15.9042C11.522 15.9688 11.6727 15.9966 11.8229 15.9851C11.9731 15.9736 12.1178 15.9231 12.2425 15.8386L14.9812 14.0134C15.1022 13.9326 15.2414 13.8833 15.3862 13.8698C15.5311 13.8564 15.677 13.8793 15.8107 13.9364L20.9339 16.1326C21.1079 16.2065 21.2532 16.335 21.3479 16.4987C21.4426 16.6623 21.4815 16.8523 21.4589 17.04C21.2967 18.307 20.6784 19.4714 19.7196 20.3154C18.7608 21.1593 17.5273 21.6249 16.25 21.625C12.3049 21.625 8.52139 20.0578 5.73179 17.2682C2.94218 14.4786 1.375 10.6951 1.375 6.75C1.37512 5.47279 1.84074 4.23941 2.68471 3.28077C3.52867 2.32213 4.6931 1.70396 5.96 1.542C6.14771 1.51936 6.33769 1.55832 6.50134 1.653C6.66499 1.74769 6.79345 1.89298 6.86738 2.067L9.06537 7.1945C9.1219 7.32698 9.14485 7.47137 9.13218 7.61485C9.11951 7.75833 9.07162 7.89647 8.99275 8.017L7.17275 10.7977C7.09015 10.923 7.04141 11.0675 7.03129 11.2171C7.02117 11.3668 7.05001 11.5165 7.115 11.6517V11.6517Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg>
+
+                          {{$user->mobile}}
+                        </span>
+                        <p><a href="{{route('profile')}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Edit Profile</a></p>
                   </div>
                 </div>
               </div>
@@ -108,97 +91,22 @@
               <div class="col-lg-5">
                 <div class="dashboard__user-billing dashboard-card">
                   <h2 class="dashboard__user-billing-title font-body--md-500">
-                    @if($user->role =='Shopper') Billing Address @else Pick-Up Address @endif
+                    <u>Notifications</u>
                   </h2>
                   <div class="dashboard__user-billing-info">
-                    <h5 class="dashboard__user-billing-name font-body--xl-500" >
-                      {{$user->role}} #{{$user->userid}}
-                      @if($user->role =='Vendor' && $user->status =='Approved') 
-                        <span class="iconify" style="color:#00b207" data-icon="akar-icons:check-box-fill" data-width="20" data-height="20">
-                      @endif
-                    </h5>
-                    <p class="dashboard__user-billing-location font-body--md-400"> {{$user->address}}, {{$user->state}} </p>
-                    <p class="dashboard__user-billing-email font-body--lg-400" > {{$user->email}} </p>
-                    <p class="dashboard__user-billing-number font-body--lg-400" > {{$user->phone}} </p>
+
+                    <p class="dashboard__user-billing-location font-body--md-400 border-bottom"> {{$user->state->name}} </p>
+                    <h5 class="text-muted">No Notification</h5>
                   </div>
-                  <a href="{{route('profile')}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Edit Profile</a>
+                  
                 </div>
               </div>
             </div>
-
-            <!-- Sales History  -->
-            @if($user->role =='Vendor') 
-              <div class="dashboard__order-history" style="margin-top: 24px">
-                <div class="dashboard__order-history-title">
-                    <h2 class="font-body--xl-500">Sales History</h2>
-                    <a href="sales.php" class="font-body--lg-500">
-                    View All</a>
-                </div>
-                <div class="dashboard__order-history-table">
-                    <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="dashboard__order-history-table-title"> Product
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Date
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Vendor %
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Comm %
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> QTY
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"></th>
-                        </tr>
-                        </thead>
-                        <tbody>                     
-                            @forelse($user->carts->where('status','Delivered')->sortByDesc('date')->take(10) as $cart)
-                                    @php
-                                        $deliveryfee = '500';
-                                        $vat = (5 / 100) * $cart->total;
-                                        $finalttl = $vat + $cart->total + $deliveryfee;
-                                    @endphp
-                                    <tr>
-                                        <!-- Order Id  -->
-                                        <td class="dashboard__order-history-table-item order-id"> 
-                                            <span style="font-weight:500">{{$cart->product->name}}</span><br/>
-                                        </td>
-                                        <!-- Date  -->
-                                        <td class="dashboard__order-history-table-item order-date "> {{$cart->created_at->format('Y-m-d')}}
-                                        </td>
-                                        <!-- Vendor Split  -->
-                                        <td class="dashboard__order-history-table-item order-total "> 
-                                            <p class="order-total-price">   N{{number_format($user->commission / 100 * $cart->total, 0)}} </p>
-                                        </td>
-                                        <!-- Site Split  -->
-                                        <td class="dashboard__order-history-table-item order-total"> 
-                                            <p class="order-total-price">   N{{number_format($cart->total - ($user->commission / 100 * $cart->total), 0)}} </p>
-                                        </td>
-                                        <!-- Status -->
-                                        <td class="   dashboard__order-history-table-item   order-status "> {{$cart->qty}}</td>
-                                        <!-- Details page  -->
-                                        <td class="dashboard__order-history-table-item   order-details "> 
-                                            <a href="invoice.php?ref={{$cart->orderid}}">
-                                                <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">
-                                                </span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                            @empty
-                                <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%"><img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}"><br />You have no orders at this time.</div>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-              </div>
-            @endif
-
+            @if($user->orders->whereIn('status',['new','processing','shipped','delivered','completed']))
             <!-- Order History -->
-              <div class="dashboard__order-history" style="margin-top: 24px">
+            <div class="dashboard__order-history" style="margin-top: 24px">
               <div class="dashboard__order-history-title">
-                <h2 class="font-body--xl-500">Order History</h2>
+                <h2 class="font-body--xl-500">Recent Orders</h2>
                 <a href="{{route('orders')}}" class="font-body--lg-500">
                   View All</a>
               </div>
@@ -207,7 +115,7 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"> Order Id</th>
+                        <th scope="col" class="dashboard__order-history-table-title">Shop/Order Id</th>
                         <th scope="col" class="dashboard__order-history-table-title"> Date</th>
                         <th scope="col" class="dashboard__order-history-table-title"> Total</th>
                         <th scope="col" class="dashboard__order-history-table-title"> Status</th>
@@ -215,48 +123,56 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($user->orders as $order)
-                            @php
-                                $vat = (5 / 100) * $order->total;
-                                $deliveryfee = '500';
-                                $finalttl = $vat + $order->total + $deliveryfee;
-                            @endphp
-                            <tr>
-                                <!-- Order Id  -->
-                                <td class="dashboard__order-history-table-item order-id"> 
-                                    <span style="font-weight:500">#{{$order->orderid}}</span>
-                                </td>
-                                <!-- Date  -->
-                                <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
-                                <!-- Total  -->
-                                <td class="   dashboard__order-history-table-item   order-total "> 
-                                    <p class="order-total-price">   N {{number_format($order->total, 0)}} </p>
-                                </td>
-                                <!-- Status -->
-                                <td class="dashboard__order-history-table-item   order-status "> {{$order->deliverystatus}}</td>
-                                <!-- Details page  -->
-                                <td class="dashboard__order-history-table-item   order-details ">
-                                    @if($order->deliverystatus =='Incomplete')
-                                        <a href="{{route('cart')}}"> Complete Order</a>
-                                    @else
-                                    <a href="invoice.php?ref=$order->orderid">
-                                        <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24"></span>
-                                    </a>
-                                    @endif
-                                </td>
-                            </tr>
-                            
-                        @empty
-                        <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                            <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
-                            <br />You have no orders at this time.
-                        </div>
-                      @endforelse
+                      @foreach($user->orders->whereIn('status',['new','processing','shipped','delivered','completed'])->sortByDesc('updated_at') as $order)   
+                          <tr>
+                              <!-- Order Id  -->
+                              <td class="dashboard__order-history-table-item order-id"> 
+                                  <span style="font-weight:500"><a href="{{route('vendor.show',$order->shop)}}">{{$order->shop->name}}</a>/Order#{{$order->id}}</span>
+                              </td>
+                              <!-- Date  -->
+                              <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
+                              <!-- Total  -->
+                              <td class="   dashboard__order-history-table-item   order-total "> 
+                                  <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
+                              </td>
+                              <!-- Status -->
+                              <td class="dashboard__order-history-table-item   order-status "> 
+                                @switch($order->status)
+                                @case('new') Received
+                                    
+                                    @break
+                                @case('processing') Processing
+                                    
+                                    @break
+                                @case('shipped') Shipped
+                                
+                                @break
+                                @case('delivered') Delivered
+                                    
+                                    @break
+                                @case('completed') Completed
+                                
+                                @break
+                                @default Cancelled
+                                    
+                            @endswitch
+                              </td>
+                              <!-- Details page  -->
+                              <td class="dashboard__order-history-table-item   order-details ">
+                                  
+                                  <a href="{{route('order-details',$order)}}">
+                                      <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">view</span>
+                                  </a>
+                                  
+                              </td>
+                          </tr>
+                      @endforeach
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
+            @endif
           </div>
         </div>
       </div>

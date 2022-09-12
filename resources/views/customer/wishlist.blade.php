@@ -10,7 +10,7 @@
         <div class="container">
           <ul class="breedcrumb__content">
             <li>
-              <a href="index.php">
+              <a href="{{route('index')}}">
                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg"> 
                   <path ="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"   stroke="#808080"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" />
             </svg>
@@ -18,7 +18,7 @@
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="{{route('home')}}">
                 Account
                 <span> > </span>
               </a>
@@ -51,21 +51,11 @@
               <tbody> 
                   
                   @forelse ($user->likes as $like)
-                    @php  
-                      if($like->product->expiry->diffInDays(now()) <= 30)
-                          $discount = $like->product->shop->discounts->where('expiry',30)->first()->discount;
-                      elseif($like->product->expiry->diffInDays(now()) <= 60)
-                          $discount = $like->product->shop->discounts->where('expiry',60)->first()->discount;
-                      elseif($like->product->expiry->diffInDays(now()) <= 90)
-                          $discount = $like->product->shop->discounts->where('expiry',90)->first()->discount;
-                      else
-                          $discount = 0;
-                          $sale = $like->product->price - $discount;
-                    @endphp
+                    
                       <tr class="likeditem">   
                           <!-- Product item  -->   
                           <td class="cart-table-item align-middle">     
-                              <a href="product.php?pid= {{$like->product->id}}" class="cart-table__product-item">
+                              <a href="{{route('product.show',$like->product)}}" class="cart-table__product-item">
                                   <div class="cart-table__product-item-img">
                                       <img src="{{Storage::url($like->product->photo)}}" alt=" {{$like->product->name}}" />
                                   </div>
@@ -73,29 +63,26 @@
                               </a>
                           </td>
                           <!-- Price  -->   
-                          <td class="cart-table-item order-date align-middle">
-                              @if($like->product->expiry !='' && $like->product->expiry->diffInDays(now()) < 90)      
-                                  <p class="font-body--lg-500">
-                                      N{{number_format($sale, 0)}} 
-                                      <del>N{{number_format($like->product->price, 0)}}</del>
-                                  </p>
-                              @else       
-                                  <p class="font-body--lg-500">
-                                      N{{number_format($like->product->price, 0)}}
-                                  </p>     
-                              @endif  
+                          <td class="cart-table-item order-date align-middle">  
+                              <p class="font-body--lg-500">
+                                  {!!cache('settings')['currency_symbol']!!}{{number_format($like->product->amount, 0)}} 
+                                  @if($like->product->amount != $like->product->price)
+                                    <del>{!!cache('settings')['currency_symbol']!!}{{number_format($like->product->price, 0)}}</del>
+                                  @endif
+                              </p>    
                           </td>   
                           <!-- Stock Status  -->
                           <td class="cart-table-item stock-status align-middle">
-                              @if($like->product->stock > 0 && $like->product->status == 'Listed')
+                              @if($like->product->stock > 0 && $like->product->status == true)
                                   <span class="font-body--md-400 in"> in Stock</span>
                               @else
                                   <span class="font-body--md-400 out"> out of stock</span>   
                               @endif  
-                          </td>   
+                          </td>
+
                           <td class="cart-table-item add-cart align-middle">     
                               <div class="add-cart__wrapper">
-                                  @if($like->product->stock > 0 && $like->product->status== 'Listed')
+                                  @if($like->product->stock > 0 && $like->product->status== true)
                                       <button class="button button--md add-to-cart" data-product="{{$like->product_id}}">Add to Cart</button>
                                   @else
                                       <button class="button button--md button--disable">Add to Cart</button>     
@@ -172,18 +159,6 @@
           
           // Fetch Products
           @forelse ($user->likes as $like)
-              @php  
-                if($like->product->expiry->diffInDays(now()) <= 30)
-                    $discount = $like->product->shop->discounts->where('expiry',30)->first()->discount;
-                elseif($like->product->expiry->diffInDays(now()) <= 60)
-                    $discount = $like->product->shop->discounts->where('expiry',60)->first()->discount;
-                elseif($like->product->expiry->diffInDays(now()) <= 90)
-                    $discount = $like->product->shop->discounts->where('expiry',90)->first()->discount;
-                else
-                    $discount = 0;
-                    $sale = $like->product->price - $discount;
-              @endphp
-
             <div class="shoping-card likeditem">
               <div class="shoping-card__img-wrapper">
                 <img src="{{Storage::url($like->product->photo)}}" alt=" {{$like->product->name}}" />
@@ -191,19 +166,25 @@
               <h5 class="shoping-card__product-caption font-body--lg-400">
                 {{$like->product->name}}
 
-                @if($like->product->stock > 0 && $like->product->status=='Listed')
+                @if($like->product->stock > 0 && $like->product->status==true)
                   <span class="tag tag--in"> in Stock</span>
                 @else
                   <span class="tag tag--out"> out of stock</span>
                 @endif
                 <!-- <span class="tag tag--out">Out of Stock</span> -->
               </h5>
+              
+                <h6 class="shoping-card__product-price font-body--lg-600">
+                  {!!cache('settings')['currency_symbol']!!}{{number_format($like->product->amount, 0)}} 
+                  @if($like->product->amount != $like->product->price)
+                  <del class="prev-price">
+                    {!!cache('settings')['currency_symbol']!!}{{number_format($like->product->price, 0)}}
+                  </del>
+                  @endif
+                </h6>
+              
 
-              <h6 class="shoping-card__product-price font-body--lg-600">
-                N{{number_format($sale, 0)}} <del class="prev-price">N{{number_format($like->product->price, 0)}}</del>
-              </h6>
-
-              @if($like->product->stock > 0 && $like->product->status=='Listed')
+              @if($like->product->stock > 0 && $like->product->status==true)
                 <button class="button button--md add-to-cart" data-product="{{$like->product->id}}">Add to Cart</button>
               @else
                 <button class="button button--md button--disable">Add to Cart</button>
@@ -217,7 +198,7 @@
 
           @empty
             <div style="margin:auto;padding:1%;text-align:center"><img style="padding:10px;width:100px" src="img/exclamation.png"><br />Your Wishlist is empty.<br />
-              <a href="shop.php">
+              <a href="{{route('product.list')}}">
                 <span style="font-size:13px;color:#00b207">Start Shopping Now!</span>
               </a>
             </div>

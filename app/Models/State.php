@@ -2,7 +2,8 @@
 
 namespace App\Models;
 use App\Models\City;
-use App\Models\Country;
+use App\Models\Shop;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
@@ -12,7 +13,14 @@ class State extends Model
     public function cities(){
         return $this->hasMany(City::class);
     }
-    public function country(){
-        return $this->belongsTo(Country::class);
+    public function shops(){
+        return $this->hasMany(Shop::class);
+    }
+    public function products(){
+        return $this->hasManyThrough(Product::class,Shop::class);
+    }
+    public function scopeWithin($query){
+        $country = cache('settings')['country_id'];
+        return $query->where('country_id',$country);
     }
 }

@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Kyc;
 use App\Models\Bank;
-use App\Models\Shop;
 use App\Models\City;
+use App\Models\Shop;
 use App\Models\State;
-use App\Models\Category;
+use App\Models\Advert;
+use App\Models\Account;
+use App\Models\Product;
 use App\Models\Setting;
-use App\Models\BankInfo;
+use App\Models\Category;
 use App\Models\Discount;
+use App\Models\ShippingRate;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -23,14 +26,58 @@ class ShopController extends Controller
     }
     
     public function index(){
-        $shops = Shop::all();
-        return view('frontend.shop.list',compact('shops'));
+        $category = null;
+        $categories = Category::has('products')->get();
+        $states = State::has('products')->get();
+        $state = auth()->check() && auth()->user()->state_id ? auth()->user()->state->name : session('geo_locale')['state'];
+        $state_id = State::where('name',$state)->first()->id;
+        $shops = Shop::active()->selling();
+        if(request()->query() && request()->query('state_id')){
+            $state_id = request()->query('state_id');
+            $shops = $shops->where('state_id',$state_id);
+        }else{
+            $shops = $shops->where('state_id',$state_id);
+        }
+        if(request()->query() && request()->query('category_id')){
+            $category_id = request()->query('category_id');
+            $category = Category::find($category_id);
+            $shops = $shops->whereHas('products',function($query) use($category_id){
+                $query->where('category_id',$category_id);
+            });
+                
+        }
+        if(request()->query() && request()->query('sortBy')){
+            if(request()->query('sortBy') == 'name_asc'){
+                $shops = $shops->orderBy('name','asc');
+            }
+            if(request()->query('sortBy') == 'name_desc'){
+                $shops = $shops->orderBy('name','desc');
+            }
+        }
+        $shops = $shops->get();
+        $advert_G = Advert::state($state_id)->running()->activeShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_H = Advert::state($state_id)->running()->activeShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+        return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
     }
 
     public function show(Shop $shop){
-        $categories = Category::all();
-        // dd($categories);
-        return view('frontend.shop.view',compact('shop','categories'));
+        $category = null;
+        $categories = Category::has('products')->get();
+        $products = Product::where('shop_id',$shop->id)->edible()->approved()->accessible()->available()->visible();
+        if(request()->query() && request()->query('category_id')){
+            $products = $products->where('category_id',request()->query('category_id'));
+            $category = Category::find(request()->query('category_id'));
+        }
+        if(request()->query() && request()->query('sortBy')){
+            if(request()->query('sortBy') == 'price_asc'){
+                $products = $products->orderBy('price','asc');
+            }
+            if(request()->query('sortBy') == 'price_desc'){
+                $products = $products->orderBy('price','desc');
+            }
+        }
+        $products = $products->paginate(16);
+        return view('frontend.shop.view',compact('shop','categories','products','category'));
     }
 
 /* Vendor area */
@@ -38,20 +85,29 @@ class ShopController extends Controller
     public function list(){
         $user = auth()->user();
         // dd($user);
-        return view('shop.list',compact('user'));
+        return view('vendor.shop.list',compact('user'));
     }
 
     public function create(){
         $states = State::all();
         $cities = City::all();
-        return view('shop.create',compact('states','cities'));
+        return view('vendor.shop.create',compact('states','cities'));
     }
     public function store(Request $request){
+        $user = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'photo' => 'nullable|max:1024',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         if($request->hasFile('photo')){
             $name = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$name);
         }
-        $shop = Shop::create(['name'=> $request->name,'slug'=> explode(' ',$request->name)[0],'email'=>$request->email,'phone'=>$request->phone,'banner'=>$name,'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id]);
+        $shop = Shop::create(['name'=> $request->name,'slug'=> explode(' ',$request->name)[0],'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$name,'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id]);
+        $user->role = 'vendor';
+        $user->save();
         return redirect()->route('shop.settings',$shop);
     }
     
@@ -64,55 +120,66 @@ class ShopController extends Controller
         $user = auth()->user();
         $banks = Bank::all();
         $states = State::all();
-        $minThreshold = Setting::where('name','minThreshold')->first()->value;
-        return view('shop.settings',compact('user','shop','banks','states','minThreshold'));
+        $minThreshold = Setting::where('name','basic_minimum_payout')->first()->value;
+        $rates = ShippingRate::where('shop_id',$shop->id)->get();
+        return view('shop.settings',compact('user','shop','banks','states','minThreshold','rates'));
     }
 
-    public function address(Request $request){
-        $user = auth()->user();
-        if($request->address) $user->address = $request->address;
-        if($request->state) $user->state = $request->state;
-        $user->save();
-        return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
-    }
+    // public function address(Request $request){
+    //     $user = auth()->user();
+    //     if($request->address) $user->address = $request->address;
+    //     if($request->state) $user->state = $request->state;
+    //     $user->save();
+    //     return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
+    // }
 
     public function bank_info(Request $request){
         $user = auth()->user();
-        BankInfo::updateOrCreate(['user_id'=> $user->id],['acctname'=> $request->acctname,'acctno'=> $request->acctno,'bank'=> $request->bank]);
+        Account::updateOrCreate(['user_id'=> $user->id],['acctname'=> $request->acctname,'acctno'=> $request->acctno,'bank'=> $request->bank]);
         return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);
     }
 
-    public function upload_id(Request $request){
+    public function upload_id(Request $request,Shop $shop){
         $user = auth()->user();
         $ext = $request->file('theDoc')->getClientOriginalExtension();
         $filename = $user->id.rand().time().'.'.$ext;
         $request->file('theDoc')->storeAs('public/uploads',$filename);//save the file to public folder
-        $kyc = Kyc::updateOrCreate(['user_id'=> $user->id,'type'=> $request->idType],['doctype'=> $ext,'document'=> 'uploads/'.$filename]);
+        $kyc = Kyc::updateOrCreate(['shop_id'=> $shop->id,'type'=> $request->idType],['user_id'=> $request->owner ? $user->id: '','doctype'=> $ext,'document'=> 'uploads/'.$filename]);
         return redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
     }
 
-    
+    public function notifications(Shop $shop){
+        
+    }
     public function discounts(Request $request){
         $user = auth()->user();
-        Discount::updateOrCreate(['user_id'=> $user->id],['expiry'=> $request->expirydate,'discount'=> $request->discount]);
         return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
     }
 
 
 /* Admin area */
-    public function adminIndex(){
-
+    public function admin_index(){
+        $shops = Shop::all();
+        return view('admin.shops.list',compact('shops'));
     }
-    public function adminShow(){
+    public function admin_view(Shop $shop){
+        return view('admin.shops.view',compact('shop'));
+    }
+    public function admin_manage(Request $request){
+        $shop = Shop::find($request->shop_id);
+        $shop->status = $request->action == 'suspend' ? false:true;
+        $shop->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'Shop Status Updated']);
+    }
+    public function admin_kyc(Request $request){
+        $kyc = Kyc::find($request->kyc_id);
+        $kyc->status = $request->status;
+        $kyc->reason = $request->reason ?? null;
+        $kyc->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'KYC Document updated']);
 
     }
     
-    public function products(Shop $shop)
-    {
-        return view('shop.product.list',compact('shop'));
-    }
 
-    public function orders(Shop $shop){
-
-    }
+    
 }

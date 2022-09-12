@@ -18,25 +18,33 @@ trait CartTrait
             $cart = [
                     $product->id => [
                         "product" => $product,
+                        "shop_id" => $product->shop_id,
                         "quantity" => $quantity,
                         "amount" => $product->amount,
+                        "total" => $product->amount * $quantity,
                     ]
             ];
             request()->session()->put('cart', $cart);
         }else{
             // if cart not empty then check if this product exist then increment quantity
             if(isset($cart[$product->id])) {
-                if($update)
+                if($update){
                     $cart[$product->id]['quantity'] = $quantity;
-                else
+                    $cart[$product->id]['total'] = $product->amount * $quantity;
+                }     
+                else{
                     $cart[$product->id]['quantity'] = $cart[$product->id]['quantity'] + $quantity;
+                    $cart[$product->id]['total'] = $product->amount * $cart[$product->id]['quantity'];
+                }   
                 request()->session()->put('cart', $cart);
             }else{
                 // if item not exist in cart then add to cart with quantity = 1
                 $cart[$product->id] = [
                     "product" => $product,
+                    "shop_id" => $product->shop_id,
                     "quantity" => $quantity,
                     "amount" => $product->amount,
+                    "total" => $product->amount * $quantity,
                 ];
                 request()->session()->put('cart', $cart);
             }
@@ -54,11 +62,17 @@ trait CartTrait
 
     protected function addToCartDb(Product $product,$quantity = 1,$update = false){
         $user = Auth::user();
-        $dbcart = Cart::firstOrNew(['user_id' => $user->id,'product_id' => $product->id]);
-        if($update)
+        $dbcart = Cart::firstOrNew(['user_id' => $user->id,'product_id' => $product->id,'shop_id'=> $product->shop_id]);
+        if($update){
             $dbcart->quantity = $quantity;
-        else 
+            $dbcart->amount = $product->amount;
+            $dbcart->total = $quantity * $product->amount;
+        }   
+        else {
             $dbcart->quantity = $dbcart->quantity + $quantity;
+            $dbcart->amount = $product->amount;
+            $dbcart->total = ($dbcart->quantity + $quantity) * $product->amount;
+        }
         $dbcart->save();
     }
     

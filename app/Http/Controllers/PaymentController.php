@@ -2,51 +2,38 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\Bank;
 use App\Models\Shop;
-use App\Models\Payout;
-use App\Models\Setting;
+use App\Models\Order;
+use App\Models\Payment;
+use App\Models\Settlement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
     }
-    public function pay(Request $request){
-        $coupon_id = null;
-        $user = Auth::user();
-        $items = collect([]);
-        foreach($request->items as $item){
-            $temp = json_decode($item,TRUE);
-            $items->push($temp);
-        } 
-        // dd($items->sum('amount') + $request->vat);
-        if($request->payment_id){
-            $payment = Payment::find($request->payment_id);
-        }
-        else{
-            $payment = Payment::create(['user_id'=> $user->id,'coupon_id' => $coupon_id,'reference'=> uniqid('swivas'.Auth::id()),'description'=> 'payment for orders','discount'=> $request->discount,'currency'=> $user->country->currency_iso,'amount'=> $request->vat + $items->sum('amount')]);
-            foreach($items->groupBy('shop_id') as $key => $shopOrder){
-                $subtotal = $shopOrder->sum('amount');
-                $vat = $this->getVat() * $subtotal / 100;
-                $total = $subtotal + $vat;
-                $order = Order::create(['user_id'=> $user->id,'shop_id'=> $key,'payment_id'=> $payment->id,'currency'=> $user->country->currency_iso,'subtotal'=> $subtotal,'vat'=> $vat,'total'=> $total ]);
-                foreach($shopOrder as $product){
-                    $details = OrderDetail::create(['order_id'=> $order->id,'product_id'=> $product['id'],'quantity'=> $product['quantity'],'unit_price'=> $product['price'],'amount'=> $product['amount'] ]);
-                }
-            }
-        }
-        
-        if($request->input('payment-option') == 'online'){
-            $response = $this->initializePayment($payment);
-            if($response->status == 'success')
-                return redirect()->to($response->data->link);
-            else return redirect()->route('payment.status',$payment);
-        }
-        else{
-            $response = $this->pointPayment($payment);
-            return redirect()->route('payment.status',$payment);
-        }
+    public function callback(){
+        //get the transaction id
+        //check which payment gateway is active
+        //if paystack, call paystack verify, else call flutter by trait
+        //receive info of payment..
+        //create the payment and its paymentable (order, or subscription)
+        //redirect to dashboard if vendor, to orders if user
+       
+    }
+    public function index(){
+        $payments = Payment::where('user_id',auth()->id())->get();
+        return view('payments',compact('payments'));
+    }
+    public function invoice(Payment $payment){
+        return view('invoice',compact('payment'));
+    }
+    public function receipt(Settlement $settlement){
+        return view('receipt',compact('settlement'));
     }
 
     public function verification(){
@@ -76,39 +63,24 @@ class PaymentController extends Controller
         return response()->json($response,200);
     }
 
-    public function status(Payment $payment){
-        return view('frontend.outside.sale.paymentstatus',compact('payment'));
-    }
-
-
-    //vendor
-    public function index(Shop $shop)
-    {
-        return view('shop.payouts',compact('shop'));
-    }
-    public function payout(Shop $shop,Request $request){
-        // payout
-        $user = auth()->user();
-        $minThreshold = Setting::where('name','minThreshold')->first()->value;
-        if($request->payout > $shop->wallet)
-        return redirect()->back()->with(['result'=> '0','message'=> 'Insufficient Balance']);
-        if($request->payout < $minThreshold)
-        return redirect()->back()->with(['result'=> '0','message'=> 'Payout must be greater than threshold']);
-        //log payout
-        return redirect()->back()->with(['result'=> '1','message'=> 'Payout Request Successful']);
-        
+    public function topup(Request $request){
+        if($url = $this->initializePayment($request->amount)){
+            return redirect()->to($url);
+        }else
+            return redirect()->back()->with(['result'=> '0','message'=> 'Error Processing Payment']);
     }
     
-
-    /** Admin */
-    public function adminIndex()
-    {
-        $payouts = Payout::orderBy('created_at','desc')->get();
-        return view('admin.payouts',compact('payouts'));
+    public function admin_index(){
+        $payments = Payment::all();
+        $settlements = Settlement::all();
+        return view('admin.payments',compact('payments','settlements'));
+    }
+    
+    public function shop_index(Shop $shop){
+        $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
+        return view('shop.payments',compact('shop','settlements'));
     }
 
-    public function adminPayout(Request $request)
-    {
-        //
-    }
+
+    
 }

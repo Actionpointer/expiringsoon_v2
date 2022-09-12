@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop;
+use App\Models\State;
+use App\Models\Advert;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Ixudra\Curl\Facades\Curl;
+
 class ProductController extends Controller
 {
     public function __construct(){
@@ -15,20 +19,58 @@ class ProductController extends Controller
     
     public function index()
     {
-        $products = Product::where('status','listed')->orderBy('expiry','desc');
-        $categories = Category::all();
-        $category = Category::find(1);
-        $subcategory = Subcategory::find(1);
-        if(request()->query() && request()->query('cat')){
-            $products = $products->where('category_id',request()->query('cat'));
-            $category = Category::find(request()->query('cat'));
+        // product is visible, product is in locale, 
+        $category = null;
+        $categories = Category::has('products')->get();
+        $states = State::has('products')->get();
+        $state = auth()->check() && auth()->user()->state_id ? auth()->user()->state->name : session('geo_locale')['state'];
+        $state_id = State::where('name',$state)->first()->id;
+        $advert = Advert::state($state_id)->running()->where('position',"F")->orderBy('views','asc')->first();
+        if($advert){
+            $advert->views = $advert->views + 1;
+            $advert->save();
         }
-        if(request()->query() && request()->query('cid')){
-            $products = $products->where('subcategory_id',request()->query('cid'));
-            $subcategory = Subcategory::find(request()->query('cid'));
+        $products = Product::edible()->approved()->accessible()->available()->visible();
+
+        if(request()->query() && request()->query('state_id')){
+            if(request()->query('state_id') != '-1'){
+                $state_id = request()->query('state_id');
+                $products = $products->whereHas('shop',function($qry) use($state_id){
+                    $qry->where('state_id',$state_id);
+                });
+            }
+        }else{
+            
+            $products = $products->whereHas('shop',function($qry) use($state_id){
+                $qry->where('state_id',$state_id);
+            });
         }
-        $products = $products->get();
-        return view('frontend.product.list',compact('products','category','categories','subcategory'));
+        if(request()->query() && request()->query('category_id')){
+            $products = $products->where('category_id',request()->query('category_id'));
+            $category = Category::find(request()->query('category_id'));
+        }
+        // if(request()->query() && request()->query('subcategory_id')){
+        //     $subcategory = Subcategory::find(request()->query('subcategory_id'));
+        //     $products = $products->filter(function($value) use($subcategory){ 
+        //         return in_array($subcategory->id,$value->subcategories); 
+        //     });
+        // }
+        if(request()->query() && request()->query('sortBy')){
+            if(request()->query('sortBy') == 'price_asc'){
+                $products = $products->orderBy('price','asc');
+            }
+            if(request()->query('sortBy') == 'price_desc'){
+                $products = $products->orderBy('price','desc');
+            }
+            if(request()->query('sortBy') == 'expiry_asc'){
+                $products = $products->orderBy('expire_at','asc');
+            }
+            if(request()->query('sortBy') == 'expiry_desc'){
+                $products = $products->orderBy('expire_at','desc');
+            }
+        }
+        $products = $products->paginate(16);
+        return view('frontend.product.list',compact('advert','products','category','categories','states','state_id'));
     }
 
     public function show(Product $product)
@@ -42,11 +84,12 @@ class ProductController extends Controller
         return view('frontend.product.subcategories',compact('subcategories'));
     }
 
-/* Vendor area */    
+    /* Vendor area */    
     public function list(Shop $shop){
-        $products = Product::where('shop_id',$shop->id)->orderBy('expiry','desc')->get();
+        $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->get();
         return view('shop.product.list',compact('shop','products'));
     }
+
     public function create(Shop $shop){
         $categories = Category::all();
         return view('shop.product.create',compact('shop','categories'));
@@ -56,7 +99,6 @@ class ProductController extends Controller
     {
         //
     }
-
 
     public function update(Request $request, $id)
     {
@@ -68,9 +110,18 @@ class ProductController extends Controller
         //
     }
 
-    public function adminIndex()
+    public function admin_index()
     {
-        $products = Product::where('status','listed')->orderBy('expiry','desc')->get();
-        return view('admin.products.list',compact('products'));
+        $products = Product::where('visible',true)->orderBy('expire_at','desc')->get();
+        return view('admin.products',compact('products'));
+    }
+
+    public function admin_manage(Request $request){
+        if($request->action == 'approve'){
+            $products = Product::whereIn('id',$request->products)->update(['status'=> 1]);
+        }else{
+            $products = Product::whereIn('id',$request->products)->update(['status'=> '-1']);
+        }
+        return redirect()->back();
     }
 }

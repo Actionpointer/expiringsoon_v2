@@ -8,23 +8,24 @@ use App\Models\City;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
+use App\Models\Advert;
 use App\Models\Payout;
+use App\Models\Account;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Discount;
-use App\Models\BankAccount;
+use App\Models\Settlement;
+use App\Models\ShippingRate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-// use Cviebrock\EloquentSluggable\Sluggable;
-
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Shop extends Model
 {
-    use Notifiable;
-    // Sluggable;
+    use HasFactory,Notifiable,Sluggable;
     
     protected $fillable = ['name','slug','email','phone','banner','address','state_id','city_id'];
-    protected $casts = ['categories'=> 'array'];
+    
 
     // public static function boot()
     // {
@@ -32,23 +33,32 @@ class Shop extends Model
     //     parent::observe(new \App\Observers\ShopObserver);
     // }
 
-    // public function sluggable()
-    // {
-    //     return [
-    //         'slug' => [
-    //             'source' => 'name',
-    //             'separator' => '_'
-    //         ]
-    //     ];
-    // }
-    public function routeNotificationForNexmo($notification)
+    public function sluggable():array
     {
-        return $this->mobile;
+        return [
+            'slug' => [
+                'source' => 'name',
+                'separator' => '_'
+            ]
+        ];
     }
+    // public function routeNotificationForNexmo($notification)
+    // {
+    //     return $this->mobile;
+    // }
     public function getRouteKeyName(){
         return 'slug';
     }
-
+    public function getMobileAttribute()
+    {
+        return $this->phone_prefix.intval($this->phone);   
+    }
+    public function scopeActive($query){
+        return $query->where('status',true);
+    }
+    public function scopeSelling($query){
+        return $query->whereHas('products',function($q) {$q->where('status',true)->where('visible',true);});
+    }
     public function users(){
         return $this->belongsToMany(User::class)->withPivot('role','status');
     }
@@ -56,7 +66,10 @@ class Shop extends Model
         return $this->hasMany(Kyc::class);
     }
     public function staff(){
-        return $this->hasMany(ShopUser::class);
+        return $this->users->where('pivot.role','!=','owner');
+    }
+    public function owner(){
+        return $this->users->where('pivot.role','owner')->first();
     }
     public function country(){
         return $this->belongsTo(Country::class);
@@ -67,12 +80,11 @@ class Shop extends Model
     public function city(){
         return $this->belongsTo(City::class);
     }
-
-    public function products(){
-        return $this->hasMany(Product::class);
+    public function bankaccounts(){
+        return $this->hasMany(Account::class);
     }
-    public function orders(){
-        return $this->hasMany(Order::class);
+    public function shippingRates(){
+        return $this->hasMany(ShippingRate::class);
     }
     public function categories(){
         $categories = collect([]);
@@ -81,15 +93,25 @@ class Shop extends Model
         }
         return $categories;
     }
-
-    public function discounts(){
-        return $this->hasMany(Discount::class);
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
+    public function adverts(){
+        return $this->morphMany(Advert::class,'advertable');
     }
     public function carts(){
         return $this->hasMany(Cart::class);
     }
+    public function orders(){
+        return $this->hasMany(Order::class);
+    }
+    
     public function payouts(){
         return $this->hasMany(Payout::class);
+    }
+    
+    public function settlements(){
+        return $this->morphMany(Settlement::class,'receiver');
     }
     
 }

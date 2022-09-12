@@ -5,50 +5,61 @@ namespace App\Models;
 
 use App\Models\Cart;
 use App\Models\Like;
+use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\Order;
+use App\Models\State;
 use App\Models\Payout;
-use App\Models\Product;
-use App\Models\BankInfo;
-use App\Models\Discount;
+use App\Models\Address;
+use App\Models\Payment;
+use App\Models\Settlement;
+use App\Models\Subscription;
 use Illuminate\Notifications\Notifiable;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable,Sluggable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'username', 'fname','lname','email', 'password','phone','country_id','role','commission'
+        'slug', 'fname','lname','email', 'password','phone_prefix','phone','country_id','role','commission'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    
-
+    public function sluggable():array
+    {
+        return [
+            'slug' => [
+                'source' => ['fname','lname'],
+                'separator' => '_'
+            ]
+        ];
+    }
+    public function getRouteKeyName(){
+        return 'slug';
+    }
+    public function getNameAttribute()
+    {
+        return ucwords($this->fname.' '.$this->lname);   
+    }
+    public function getMobileAttribute()
+    {
+        return $this->phone_prefix.intval($this->phone);   
+    }
+    public function state(){
+        return $this->belongsTo(State::class);
+    }
     public function carts(){
         return $this->hasMany(Cart::class);
     }
@@ -58,18 +69,50 @@ class User extends Authenticatable
     public function likes(){
         return $this->hasMany(Like::class);
     }
-    public function bankinfo(){
-        return $this->hasOne(BankInfo::class);
+    public function addresses(){
+        return $this->hasMany(Address::class);
     }
     
     public function payouts(){
         return $this->hasMany(Payout::class);
     }
+    public function payments(){
+        return $this->hasMany(Payment::class);
+    }
     public function shops(){
-        return $this->belongsToMany(Shop::class);
+        return $this->belongsToMany(Shop::class)->withPivot('role','status');
     }
     public function staff(){
         return $this->hasMany(ShopUser::class);
+    }
+
+    // public function kyc(){
+    //     return $this->morphOne(Kyc::class,'owner');
+    // }
+
+    public function subscriptions(){
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function advertSubscriptions(){
+        return $this->hasMany(Subscription::class)->where('type','advert')->where('end_at', '>', now())->where('status',true); 
+    }
+
+    public function activeSubscription(){
+        $plan = Plan::where('slug','free_plan')->first();
+        return $this->hasOne(Subscription::class)->where('type','enterprise')->where('plan_id','!=',$plan->id)->where('end_at', '>', now())->where('status',true); 
+    }
+    
+    public function freeSubscription(){
+        $plan = Plan::where('slug','free_plan')->first();
+        return $this->hasOne(Subscription::class)->where('plan_id',$plan->id)->where('status',true); 
+    }
+
+    public function settlements(){
+        return $this->morphMany(Settlement::class,'receiver');
+    }
+    public function hasAnyRole($value){
+        return in_array($this->role,$value);
     }
 
 }

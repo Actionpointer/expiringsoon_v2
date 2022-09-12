@@ -33,6 +33,8 @@ Table Contents
         16.10   Brands Slider
         16.11   Member Slider
         16.12   Blog Post Slider
+    17. Dropdown
+    18. Select2
 
  */
 
@@ -67,12 +69,13 @@ if (document.getElementById('countdown')) {
 /* 
     3. BVSelect Plugin
 ======================== */
+
 if (document.getElementById('selectbox1')) {
   var demo1 = new BVSelect({
     selector: '#selectbox1',
     searchbox: false,
     offset: false,
-    placeholder: 'Eng',
+    placeholder: 'Select',
   });
 }
 
@@ -81,7 +84,14 @@ if (document.getElementById('selectbox2')) {
     selector: '#selectbox2',
     searchbox: false,
     offset: false,
-    placeholder: 'USD',
+  });
+}
+
+if (document.getElementById('accountdropdown')) {
+  var demo2 = new BVSelect({
+    selector: '#accountdropdown',
+    searchbox: false,
+    offset: false,
   });
 }
 
@@ -97,7 +107,7 @@ if (document.getElementById('sort')) {
 if (document.getElementById('country')) {
   var country = new BVSelect({
     selector: '#country',
-    searchbox: false,
+    searchbox: true,
     offset: false,
     placeholder: 'Select',
   });
@@ -106,18 +116,27 @@ if (document.getElementById('country')) {
 if (document.getElementById('states')) {
   var states = new BVSelect({
     selector: '#states',
-    searchbox: false,
+    searchbox: true,
     offset: false,
-    placeholder: 'Selects',
+    placeholder: 'Select',
   });
 }
 
 if (document.getElementById('zip')) {
   var zip = new BVSelect({
     selector: '#zip',
-    searchbox: false,
+    searchbox: true,
     offset: false,
-    placeholder: 'Zip Code',
+    placeholder: 'Select',
+  });
+}
+
+if (document.getElementById('postal')) {
+  var postal = new BVSelect({
+    selector: '#postal',
+    searchbox: true,
+    offset: false,
+    placeholder: 'Select',
   });
 }
 
@@ -153,7 +172,7 @@ if (document.getElementById('sort-by')) {
     selector: '#sort-by',
     searchbox: false,
     offset: false,
-    placeholder: 'Sort by: Latest',
+    placeholder: 'Sort by:',
   });
 }
 
@@ -1204,4 +1223,18 @@ var blogs = new Swiper('.blog-list--slider', {
     clickable: true,
     dynamicBullets: true,
   },
+});
+
+//17. Dropdown
+$('.dropdownMenuButton').click(function(){
+  $(this).closest('.dropdown').toggleClass('show');
+  $(this).closest('.dropdown').find('.dropdown-menu').toggleClass('show');
+})
+
+//18. Select2
+$('.select2').select2({
+  width:'100%',
+  placeholder:'Select',
+  tags:true,
+  tokenSeparators:[',']
 });

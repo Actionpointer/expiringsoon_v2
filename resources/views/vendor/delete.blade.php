@@ -1,22 +1,7 @@
 @extends('layouts.app')
 
 @push('styles')
-<style>
-  .docimg {
-      width: 10%;
-      margin-right: 5px;
-      float: left;
-  }
-  .docimg img {
-      width: 100%;
-  }
-  .docinfo {
-      width: 70%;
-  }
-  #topUp,#theFile,#theDoc {
-      display: none;
-    }
-</style>
+
 @endpush
 @section('title')Account Settings | User Dashboard @endsection
 @section('main')
@@ -29,12 +14,7 @@
           <li>
             <a href="{{route('index')}}">
               <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                <path
-                  d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"
-                  stroke="#808080"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                <path d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z" stroke="#808080" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
                 />
               </svg>
               <span> > </span>
@@ -101,7 +81,7 @@
                         <div class="dashboard__content-card-img flex-column">
                             
                             <div class="dashboard__content-img-wrapper" id="avatar">
-                              <img @if(!$user->pic) src="{{asset('img/avatar.png')}}"  @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->fname}} {{$user->lname}}"  onclick="performClick('theFile');"  id="imgPreview"   />
+                              <img @if(!$user->pic) src="{{asset('img/avatar.png')}}"  @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->name}}"  onclick="performClick('theFile');"  id="imgPreview"   />
                             </div>
                             <div>
                               <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />

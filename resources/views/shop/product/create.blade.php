@@ -155,14 +155,9 @@
                           </select>
                         </div>
                         <div class="contact-form-input">
-                          <label for="country">Sub Category</label>
-                          <select
-                            id="loadsubs"
-                            name="subcat_id"
-                            class="contact-form-input__dropdown droplist"
-                            required
-                          >
-                          <option value="" selected>Select</option>
+                          <label for="loadsubs">Sub Category</label>
+                          <select id="loadsubs" name="subcat_id" class="contact-form-input__dropdown droplist" required >
+                            <option value="" selected>Select</option>
                           </select>
                         </div>
                       </div>

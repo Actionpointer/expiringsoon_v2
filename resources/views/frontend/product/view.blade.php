@@ -59,17 +59,6 @@
                 </div>
                 <div class="col-lg-6">
                     <!-- Products information -->
-                    @php  
-                        if($product->expiry->diffInDays(now()) <= 30)
-                            $discount = $product->shop->discounts->where('expiry',30)->first()->discount;
-                        elseif($product->expiry->diffInDays(now()) <= 60)
-                            $discount = $product->shop->discounts->where('expiry',60)->first()->discount;
-                        elseif($product->expiry->diffInDays(now()) <= 90)
-                            $discount = $product->shop->discounts->where('expiry',90)->first()->discount;
-                        else
-                            $discount = 0;
-                            $sale = $product->price - $discount;
-                    @endphp
                     <div class="products__content">
                         <div class="products__content-title">
                             <h2 class="font-title--md" style="font-size:20px">{{$product->name}}</h2>
@@ -81,13 +70,13 @@
                         </div>
 
                         <div class="products__content-price">
-                          @if($product->expiry!='' && $product->expiry->diffInDays(now()) < 90)
+                          @if($product->expire_at!='' && $product->expire_at->diffInDays(now()) < 90)
                             <h2 class="font-body--xxxl-500">
-                                <del class="font-body--xxl-400">N{{number_format($product->price, 0)}}</del> 
-                                N{{number_format($sale, 0)}}</h2>
-                            <span class="label sale-off">{{$discount}}% off </span>
+                                <del class="font-body--xxl-400">{!!cache('settings')['currency_symbol']!!}{{number_format($product->price, 0)}}</del> 
+                                {!!cache('settings')['currency_symbol']!!}{{number_format($product->amount, 0)}}</h2>
+                            <span class="label sale-off">{{$product->discount}}% off </span>
                           @else
-                            <h2 class="font-body--xxxl-500">N{{number_format($product->price, 2)}}</h2>
+                            <h2 class="font-body--xxxl-500">{!!cache('settings')['currency_symbol']!!}{{number_format($product->price, 2)}}</h2>
                           @endif
                         </div>
                     </div>
@@ -96,8 +85,8 @@
                         <div class="products__content-brand">
                           <div class="brand-name">
                               <h2 class="font-body--md-400">Vendor:<br />
-                              <a href="{{route('shop.show',$product->shop)}}" style="color:#00b207;font-weight:500">{{$product->shop->username}}</a></h2>
-                              <a href="{{route('shop.show',$product->shop)}}" class="brand-name-logo">
+                              <a href="{{route('vendor.show',$product->shop)}}" style="color:#00b207;font-weight:500">{{$product->shop->username}}</a></h2>
+                              <a href="{{route('vendor.show',$product->shop)}}" class="brand-name-logo">
                                   <img @if(!$product->shop->banner) src="{{asset('img/avatar.png')}}"  @else src="{{Storage::url($product->shop->banner)}}" @endif alt="{{$product->shop->username}}" style="width:45px;border-radius:50px;border:1px solid #bababa;padding:2px" />
                               </a>
                           </div>
@@ -145,7 +134,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <p class="products__content-brand-info font-body--md-400">{{$product->info}}</p>
+                        <p class="products__content-brand-info font-body--md-400">{{$product->description}}</p>
                     </div>
                     <!-- Action button -->
                     <div class="products__content">
@@ -166,8 +155,8 @@
                             @if($product->stock == 0)
                               <button type="submit" class="button button--md products__content-action-item button--disable">
                               @else
-                                @if($product->expiry!='' && $product->expiry->diffInDays(now()) < 90)
-                                <button type="submit" class="button button--md products__content-action-item" id="addbtn" data-price="{{$sale}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
+                                @if($product->expire_at!='' && $product->expire_at->diffInDays(now()) < 90)
+                                <button type="submit" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->amount}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
                                 @else
                                     <button type="submit" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->price}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
                                 @endif
@@ -213,27 +202,15 @@
             <div class="swiper-container related-slider--one">
                 <div class="swiper-wrapper">
                   
-                  @foreach ($product->category->products->where('id','!=',$product->id) as $item)
-                        @php  
-                            if($item->expiry->diffInDays(now()) <= 30)
-                                $discount = $item->shop->discounts->where('expiry',30)->first()->discount;
-                            elseif($item->expiry->diffInDays(now()) <= 60)
-                                $discount = $item->shop->discounts->where('expiry',60)->first()->discount;
-                            elseif($item->expiry->diffInDays(now()) <= 90)
-                                $discount = $item->shop->discounts->where('expiry',90)->first()->discount;
-                            else
-                                $discount = 0;
-                                $sale = $item->price - $discount;
-                        @endphp
-                        
+                  @foreach ($product->category->products->where('id','!=',$product->id) as $item)    
                         <div class="swiper-slide">
                             <div class="cards-md cards-md--four w-100">
                                 <div class="cards-md__img-wrapper">
                                     <a href="{{route('product.show',$item)}}">
                                         <img @if(!$item->photo) src='{{asset("img/no-image.png")}}'  @else src="{{Storage::url($item->photo)}}" @endif alt="{{$item->product}}" />
                                     </a>
-                                    @if($item->expiry!='' && $item->expiry->diffInDays(now()) < 90 && $item->stock > 0) 
-                                        <span class="tag danger font-body--md-400" style="background:#00b207;font-size:13px">Sale {{$discount}}>%</span>
+                                    @if($item->expire_at!='' && $item->discount && $item->stock > 0) 
+                                        <span class="tag danger font-body--md-400" style="background:#00b207;font-size:13px">Sale {{$product->discount}}>%</span>
                                        
                                     @endif
                                     @if($item->stock == 0) 
@@ -262,16 +239,16 @@
                                     <a href="product.php?pid={{$item->id}}" class="cards-md__info-left">
                                         <h6 class="font-body--md-400 product-title">{{$item->product}}</h6>
                                         <div class="cards-md__info-price">
-                                        @if($item->expiry!='' && $item->expiry->diffInDays(now()) < 90) 
-                                            <span class="font-body--lg-500">N{{number_format($sale, 0)}}></span>
-                                            <del class="font-body--lg-400" style="color:#00b207">N{{number_format($item->price, 0)}}></del>
+                                        @if($item->expire_at!='' && $item->discount) 
+                                            <span class="font-body--lg-500">{!!cache('settings')['currency_symbol']!!}{{number_format($product->amount, 0)}}></span>
+                                            <del class="font-body--lg-400" style="color:#00b207">{!!cache('settings')['currency_symbol']!!}{{number_format($item->price, 0)}}></del>
                                         @else 
-                                            <span class="font-body--lg-500">N{{number_format($item->price, 0)}}></span>
+                                            <span class="font-body--lg-500">{!!cache('settings')['currency_symbol']!!}{{number_format($item->price, 0)}}></span>
                                         @endif
                                         </div>
                                         <ul class="d-flex" style="color:#888;font-size:12px">
-                                        @if($item->expiry!='' && $item->expiry->diffInDays(now()) < 90) 
-                                        <li>Expires in <span style="font-weight:550;color:#00b207">{{$item->expiry->diffInDays(now())}}> days</span><li>
+                                        @if($item->expire_at!='' && $item->discount) 
+                                        <li>Expires in <span style="font-weight:550;color:#00b207">{{$item->expire_at->diffInDays(now())}}> days</span><li>
                                         @else 
                                             <li>&nbsp;</li>
                                         @endif
@@ -280,8 +257,8 @@
                                     <div class="cards-md__info-right">
                                         @if($item->stock > 0) 
                                             <span class="action-btn">
-                                                @if($item->expiry!='' && $item->expiry->diffInDays(now()) < 90) 
-                                                    <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-cart" id3="{{$item->id}}" data-price="{{$sale}}" data-product="{{$item->product}}" data-photo="{{$item->photo}}">
+                                                @if($item->expire_at!='' && $item->discount) 
+                                                    <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-cart" id3="{{$item->id}}" data-price="{{$product->amount}}" data-product="{{$item->product}}" data-photo="{{$item->photo}}">
                                                         <path
                                                             d="M6.66667 8.83333H4.16667L2.5 18H17.5L15.8333 8.83333H13.3333M6.66667 8.83333V6.33333C6.66667 4.49239 8.15905 3 10 3V3C11.8409 3 13.3333 4.49238 13.3333 6.33333V8.83333M6.66667 8.83333H13.3333M6.66667 8.83333V11.3333M13.3333 8.83333V11.3333"
                                                             stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">

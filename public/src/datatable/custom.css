@@ -69,12 +69,12 @@ table.dataTable thead th.sorting_desc:after {
 content: "\f0dd";
 }
 
-table.dataTable.display tbody tr:hover > .sorting_1,
+/* table.dataTable.display tbody tr:hover > .sorting_1,
 table.dataTable.order-column.hover tbody tr:hover > .sorting_1,
 tbody tr:hover {
-background-color: #333 !important;
-color: #fff;
-}
+ background-color: rgb(204, 198, 198) !important; 
+ color: #fff;
+} */
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {

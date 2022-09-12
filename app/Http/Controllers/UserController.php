@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\User;
 use App\Models\State;
+use App\Models\Address;
 use App\Models\Country;
 use App\Models\Setting;
-use App\Models\BankInfo;
-use App\Models\Discount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -17,21 +15,35 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
     public function profile(){
         $user = auth()->user();
         $banks = Bank::all();
         $states = State::all();
-        $minThreshold = Setting::where('name','minThreshold')->first()->value;
-        return view('customer.profile',compact('user','banks','states','minThreshold'));
+        $countries = Country::all();
+        return view('profile',compact('user','banks','states','countries'));
     }
 
     public function update(Request $request){
         // dd($request->all());
-        //add validation rules.. phone number should not be existing before
+        $validator = Validator::make($request->all(), [
+            'fname' => 'nullable|string',
+            'lname' => 'nullable|string',
+            'phone' => 'nullable|string|unique:users',
+            'photo' => 'nullable|max:1024',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         $user = auth()->user();
         if($request->fname) $user->fname = $request->fname;
         if($request->lname) $user->lname = $request->lname;
-        if($request->phone) $user->phone = $request->phone;
+        if($request->phone) {
+            $user->phone_prefix = $request->code;
+            $user->phone = intval($request->phone);
+        }
         if($request->hasFile('photo')){
             if($user->image) Storage::delete('public/'.$user->pic);
             $name = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
@@ -40,13 +52,6 @@ class UserController extends Controller
         }
         $user->save();
         return redirect()->back()->with(['result'=> '1','message'=> 'Profile Updated Successfully']);
-    }
-
-    public function topup(Request $request){
-        if($url = $this->initializePayment($request->amount)){
-            return redirect()->to($url);
-        }else
-            return redirect()->back()->with(['result'=> '0','message'=> 'Error Processing Payment']);
     }
 
     public function password(Request $request){
@@ -68,56 +73,47 @@ class UserController extends Controller
         else return redirect()->back()->with(['result' => '1','message'=>'Something went wrong']);
     }
 
-    public function verify($transaction){
-        return redirect()->route('home')->with(['result'=> '1','message'=> 'You topped your wallet']);
+    public function address(Request $request){
+        $user= auth()->user();
+        if($request->main){
+            Address::where('user_id',$user->id)->update(['main'=> 0]);
+        }
+        if($request->address_id){
+            if($request->delete){
+                Address::where('id',$request->address_id)->delete();
+            }else{
+                $address = Address::where('id',$request->address_id)->update(['state_id'=> $request->state_id,'city_id'=> $request->city_id,'street' => $request->street,'contact_phone' => $request->contact_phone,'contact_name' => $request->contact_name,'main' => $request->main ?? 0]);
+            }
+           
+        }else{
+            $address = Address::create(['user_id'=> auth()->id(),'state_id'=> $request->state_id,'city_id'=> $request->city_id,'street' => $request->street,'contact_phone' => $request->contact_phone,'contact_name' => $request->contact_name ,'main' => $request->main ?? 0]);
+        }
+        $addresses = Address::where('user_id',$user->id)->get();
+        if($addresses->isNotEmpty() && $addresses->where('main',true)->isEmpty()){
+            $addresses->first()->main = true;
+            $addresses->first()->save();
+        }
+        return redirect()->back();
     }
 
-    
-    
-    
-    
-    
+    public function notifications(){
+        
+    }
+
     /*
      Admin area
      */
 
-    public function index()
-    {
-        $users = User::where('role','!=','Administrator')->get();
-        return view('admin.users.list',compact('users'));
+    public function customers(){
+        $users = User::where('role','shopper')->get();
+        // dd($users);
+        return view('admin.customers',compact('users'));
+    }
+    public function customer_manage(Request $request){
+        $customer = User::find($request->user_id);
+        $customer->status = $request->status;
+        $customer->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'User Status Changed']);
     }
 
-    
-
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        return view('admin.users.list',compact('user'));
-    }
-
-
-    public function destroy($id)
-    {
-        //
-    }
 }

@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Order;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Settlement extends Model
+{
+    use HasFactory;
+    protected $fillable = ['reference','order_id','receiver_id','receiver_type','amount','status'];
+    public function order(){
+        return $this->belongsTo(Order::class);
+    }
+    public function receiver(){
+        return $this->morphTo();
+    }
+    
+    public function getRouteKeyName(){
+        return 'reference';
+    }
+}

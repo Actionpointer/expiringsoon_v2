@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\State;
 use App\Models\Country;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -44,8 +45,8 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        $countries = Country::orderBy('name','asc')->get();
-        return view('frontend.register',compact('countries'));
+        // dd(cache('settings'));
+        return view('auth.register');
     }
 
     /**
@@ -63,7 +64,6 @@ class RegisterController extends Controller
             'lname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'country' => ['required', 'string'],
             // 'role' => ['required', 'string'],
         ]);
     }
@@ -83,10 +83,10 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'fname' => $data['fname'],
             'lname' => $data['lname'],
-            'phone' => $data['phone'],
-            'country_id' => $data['country'],
-            'role' => $data['role'],
-            // 'commission' => $data['role'] == 'vendor' ? 90 : 0,
+            'phone' => intval($data['phone']),
+            'phone_prefix' => cache('settings')['dialing_code'],
+            'role' => 'shopper',
+            'state_id' => State::where('name',session('geo_locale')['state'])->first()->id,
         ]);
     }
 }

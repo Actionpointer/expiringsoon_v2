@@ -14,20 +14,19 @@ class CreateShopsTable extends Migration
     public function up()
     {
         Schema::create('shops', function (Blueprint $table) {
-        $table->id();
-        $table->string('slug');
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->string('phone');
-        $table->string('banner')->nullable();
-        $table->string('address');
-        $table->unsignedBigInteger('city_id');
-        $table->unsignedBigInteger('state_id');
-        $table->unsignedBigInteger('country_id');
-        $table->boolean('status')->default(0);
-        $table->integer('commission')->default(0);
-        $table->double('wallet')->default(0);
-        $table->timestamps();
+            $table->id();
+            $table->string('slug');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('phone');
+            $table->string('banner')->nullable();
+            $table->string('address');
+            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('state_id');
+            $table->unsignedBigInteger('country_id');
+            $table->boolean('status')->default(0);
+            $table->double('wallet')->default(0);
+            $table->timestamps();
         });
     }
 

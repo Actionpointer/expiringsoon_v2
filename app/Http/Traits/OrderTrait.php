@@ -3,33 +3,91 @@ namespace App\Http\Traits;
 
 // use App\Coupon;
 use Carbon\Carbon;
+use App\Models\Cart;
 use App\Models\City;
-use App\Models\Town;
+use App\Models\Shop;
 use App\Models\State;
+use App\Models\Address;
 use App\Models\Payment;
 use App\Models\Setting;
-use App\Http\Traits\OrderTrait;
+use App\Models\ShippingRate;
 use Illuminate\Support\Facades\Auth;
 
 trait OrderTrait
 {
 
-    protected function getOrder(){
-        $cart = request()->session()->get('cart');
+    protected function getOrder($carts = null){
+        $cart = $carts ? $carts->toArray() : request()->session()->get('cart');
         if(!$cart)
-        $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=>$this->getVat()];
+        $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=> $this->getVat(),'shipping'=> 0];
         else
-        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $this->getVat()/100 *$this->getSubtotal($cart),'vat_percent'=>$this->getVat()];
-        $grandtotal = $order['subtotal'] + $order['vat'];
+        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $this->getVat()/100 * $this->getSubtotal($cart),'vat_percent'=>$this->getVat(),'shipping'=> $this->getShipping($cart)];
+        $grandtotal = $order['subtotal'] + $order['vat'] + $order['shipping'];
         $order['grandtotal'] = $grandtotal;
         return $order;
     }
 
-    // protected function getDeliveries(){
-    //     $deliveries = [];
-    //     $cart = request()->session()->get('cart');
-    //     return $deliveries;
-    // }
+    protected function getSubtotal(Array $cart){
+        $subtotal = 0; 
+        foreach($cart as $item){
+            $amount = array_key_exists('product',$item) ?  $item['product']->amount : $item['amount'];
+            $subtotal += $item['quantity'] * $amount;
+        }
+        return $subtotal;
+    }
+
+    protected function getVat(){
+        $vat = Setting::where('name','vat')->first()->value;
+        return $vat;
+    }
+
+    protected function getShipping(Array $cart){
+        $user = auth()->user();
+        $state_id = $user->addresses->where('main',true)->first() ? $user->addresses->where('main',true)->first()->state_id : 0;
+        $shop_ids = array_unique(array_column($cart, 'shop_id'));
+        $shops = Shop::whereIn('id',$shop_ids)->get();
+        $shipping = 0;
+        $company_rate = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first();
+        foreach($shops as $shop){
+            if($shop->shippingRates->isNotEmpty() && $shop->shippingRates->where('destination_id',$state_id)->first()){
+                $shipping+= $shop->shippingRates->where('destination_id',$state_id)->first()->amount;
+            }elseif($company_rate){
+                $shipping+= $company_rate->amount;
+            }else{
+                $shipping+=0;
+            }
+        }
+        return $shipping;
+    }
+
+    protected function getShopShipment($shop_id,$address_id = null){
+        $hours = 0;
+        $amount = 0;
+        if($address_id)
+            $state_id = Address::find($address_id)->state_id;
+        else 
+            $state_id = auth()->user()->state_id;
+        if(ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
+            $hours = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->hours;
+            $amount = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->amount;
+        }elseif(ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()){
+            $hours = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()->hours;
+            $amount = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()->amount;
+        }
+        return ['hours'=> $hours,'amount'=>$amount];
+    }
+
+    protected function getEachShipment($carts,$address_id){
+        $total = $this->getShipping($carts);
+        $shop_ids = array_unique(array_column($carts, 'shop_id'));
+        // dd($shop_ids);
+        $result = [];
+        foreach($shop_ids as $shopId){
+            $res = $this->getShopShipment($shopId,$address_id);
+            $result[] = array_merge($res,['shop_id'=> $shopId,'time'=> now()->addHours($res['hours'])->format('l jS \of\ F')]);
+        }
+        return ['total'=> $total,'shipments'=> $result];
+    }
 
     // protected function getDeliveryCharge(){
     //     $state = State::all();
@@ -50,18 +108,7 @@ trait OrderTrait
     //     return $delivery * count($this->getDeliveries());
     // }
 
-    protected function getVat(){
-        $vat = Setting::where('name','vat')->first()->value;
-        return $vat;
-    }
-
-    protected function getSubtotal(Array $cart){
-        $subtotal = 0;
-        foreach($cart as $item){
-            $subtotal += $item['quantity'] * $item['product']->amount;
-        }
-        return $subtotal;
-    }
+    
     
     // protected function getCoupon($code){
     //     $cart = request()->session()->get('cart');
@@ -141,16 +188,16 @@ trait OrderTrait
     //         return $this->getWorth('Discount has been applied to your order',$coupon->value); 
     // }
 
-    protected function getWorth($description,$value = 0){
-        $worth = ['value'=> $value,'description'=> $description];
-        return $worth;
-    }
+    // protected function getWorth($description,$value = 0){
+    //     $worth = ['value'=> $value,'description'=> $description];
+    //     return $worth;
+    // }
 
-    protected function getWeek($value){
-        if($value < Carbon::now()->endOfWeek())
-        return 'this week';
-        else return 'next week';
-    }
+    // protected function getWeek($value){
+    //     if($value < Carbon::now()->endOfWeek())
+    //     return 'this week';
+    //     else return 'next week';
+    // }
     
 }
 

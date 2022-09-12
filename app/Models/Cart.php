@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Shop;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,13 +16,19 @@ class Cart extends Model
     
     public $table = 'cart';
 
-    protected $fillable = ['user_id','product_id','quantity'];
+    protected $fillable = ['user_id','product_id','quantity','shop_id','amount','total','order_id'];
     
     public function product(){
         return $this->belongsTo(Product::class);
     }
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    public function shop(){
+        return $this->belongsTo(Shop::class);
+    }
+    public function order(){
+        return $this->belongsTo(Order::class);
     }
     
 }
