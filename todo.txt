@@ -1,38 +1,18 @@
-
-
-3.ADVERT
-vendor selects plan first and pays for it.. then he can select products to feature based on the plan he selected
-on selecting product to feature, he will select category and location
-if product expires before feature ends, feature is not shown anymore
-
-===================================================================================================
-MILESTONE 1 AFTER TWO WEEKS
-=========================================================================================
 6.PAYMENT
 money received from order is not available to withdraw until order is complete 
 -- use settlement table
 customer can raise complain about product/order within 24hours of reception
 
-
-
 http://expiringsoon.test/payment/callback?trxref=62f4b24fc6e2f&reference=62f4b24fc6e2f
 
-
-
 7.DELIVERY
-
 if customers order out of current state, put a disclaimer that a refund may not happen
-
-if customer selects pickup, show the shop address after payment is made.
-
 8.REVIEW
 customer rate product, rate shop..after order is completed, refunded, 
 
 REPORT SHOPS/PRODUCT
 
 9.SECURITY
-disable checkout except user has something in his cart in layout.app
-
 Shop verification requires:
 Required ID: ADDRESS PROOF, CAC (enterprise) and or ID card of owner (starter business)
 
@@ -61,43 +41,14 @@ PAYMENTS [add profit, revenue & payout to settlement]
 
 vendor menu (add kyc to profile)
 DASHBOARD - analysis of products across all shops
-MY SHOPS 
-SUBSCRIPTIONS
-ANALYTICS [SHOPS, PRODUCTS, FEATURES, CUSTOMERS, ]
-MESSAGE
-FEATURES [show all entry points with padlock on the ones not available
-            onclick any, open the page  
-            show subscription states at the top
-            in one tab, show current features, on click an item, show feature history
-            in another tab, show add features
-        ]
 
 
 shop menu
 DASHBOARD [show notifications recent]
 PRODUCTS [add checkbox to each product with buttons at the top to delete]
-ORDERS
-SETTINGS 
-PAYOUTS [throttle bvn validation]
-PAYMENTS  
+(add kyc to profile)
 
 staff menu
 DASHBOARD [show notifications recent]
 PRODUCTS
 ORDERS
-
-
-
-customer menu
-DASHBOARD
-ORDERS
-ADDRESSES
-WISHLIST
-TRANSACTIONS
-WALLET
-MESSAGES
-
-
-LOGIN/REGISTER : Redirect user to same page after login/register
-
-

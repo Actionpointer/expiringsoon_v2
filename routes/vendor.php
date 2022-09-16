@@ -6,16 +6,23 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
     Route::get('shops', [App\Http\Controllers\ShopController::class, 'list'])->name('shops');
     Route::get('shop/create', [App\Http\Controllers\ShopController::class, 'create'])->name('shop.create');
     Route::post('shop/store', [App\Http\Controllers\ShopController::class, 'store'])->name('shop.store');    
-    Route::get('subscriptions', [App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscriptions');   
-    Route::post('subscription-plans/', [App\Http\Controllers\SubscriptionController::class, 'store'])->name('subscription.store');   
+
+    Route::get('adsets', [App\Http\Controllers\PlanController::class, 'adplan_index'])->name('adsets');   
+
+    Route::post('subscription/plans', [App\Http\Controllers\SubscriptionController::class, 'plan_subscription'])->name('subscription.plan');   
+    Route::post('subscription/features', [App\Http\Controllers\SubscriptionController::class, 'feature_subscription'])->name('subscription.feature');   
     Route::post('subscription/cancel-renew', [App\Http\Controllers\SubscriptionController::class, 'cancel_renew'])->name('subscription.cancel_renew');   
+
     Route::get('transactions',[App\Http\Controllers\PaymentController::class,'index'])->name('payments');
-    Route::get('features',[App\Http\Controllers\AdvertController::class,'index'])->name('features');
-    Route::get('features/description/{plan}',[App\Http\Controllers\AdvertController::class,'description'])->name('feature.description');
-    Route::get('adverts/{plan}',[App\Http\Controllers\AdvertController::class,'create'])->name('adverts');
+
+    // Route::get('features',[App\Http\Controllers\AdvertController::class,'index'])->name('features');
+    
+    Route::get('adverts/{feature}',[App\Http\Controllers\AdvertController::class,'create'])->name('adverts');
     Route::post('adverts/product/filter',[App\Http\Controllers\AdvertController::class,'filter_products'])->name('advert.filter_product');
     Route::post('adverts/store/product',[App\Http\Controllers\AdvertController::class,'store_product_advert'])->name('advert.store.products');
     Route::post('adverts/store/shop',[App\Http\Controllers\AdvertController::class,'store_shop_advert'])->name('advert.store.shops');
-    Route::post('adverts/manage',[App\Http\Controllers\AdvertController::class,'manage'])->name('adverts.manage');
-    Route::get('analytics',[App\Http\Controllers\HomeController::class, 'analytics'])->name('analytics');
+    
+    Route::post('adverts/manage',[App\Http\Controllers\AdvertController::class,'remove'])->name('advert.remove');
+
+    // Route::get('analytics',[App\Http\Controllers\HomeController::class, 'analytics'])->name('analytics');
 });

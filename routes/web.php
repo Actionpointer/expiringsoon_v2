@@ -3,11 +3,13 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-
+Route::view('about','about');
 
 Auth::routes();
 Route::get('notifications',[App\Http\Controllers\UserController::class, 'notifications'])->name('notifications');
-Route::get('plans',[App\Http\Controllers\PlanController::class, 'index'])->name('plans');
+Route::get('plans',[App\Http\Controllers\PlanController::class, 'plan_index'])->name('plans');
+Route::get('adplans',[App\Http\Controllers\PlanController::class, 'adplan_index'])->name('adplans');
+
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
 Route::get('products', [App\Http\Controllers\ProductController::class, 'index'])->name('product.list');
 Route::get('product/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
@@ -42,15 +44,10 @@ Route::post('checkout/getshipment',[App\Http\Controllers\CartController::class,'
 Route::post('checkout/confirm',[App\Http\Controllers\CartController::class,'confirmcheckout'])->name('confirmcheckout');
 
 //for vendors
-
-
 Route::post('edit-photo',[App\Http\Controllers\SettingsController::class, 'photo'])->name('edit-photo');
 Route::post('bank-info',[App\Http\Controllers\SettingsController::class, 'bank_info'])->name('bank-info');
 Route::post('upload-id',[App\Http\Controllers\SettingsController::class, 'upload_id'])->name('upload_id');
-
 // Route::get('vendor/staffprofile', [App\Http\Controllers\UserController::class, 'staffprofile'])->name('staff.profile');
-
-
 Route::post('product/add-to-cart',[App\Http\Controllers\CartController::class,'addtocart'])->name('product.addtocart');
 Route::post('product/remove-from-cart',[App\Http\Controllers\CartController::class,'removefromcart'])->name('product.removefromcart');
 Route::post('product/add-to-wish',[App\Http\Controllers\CartController::class,'addtowish'])->name('product.addtowish');
@@ -65,7 +62,8 @@ Route::get('transactions',[App\Http\Controllers\PaymentController::class,'index'
 
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
 Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
-
+Route::get('adset/description/',[App\Http\Controllers\AdvertController::class,'description'])->name('adsets');
+    
 include('vendor.php');
 include('shop.php');
 include('admin.php');

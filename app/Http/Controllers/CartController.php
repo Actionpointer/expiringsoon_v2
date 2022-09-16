@@ -48,9 +48,11 @@ class CartController extends Controller
         $product = Product::find($request->product_id);
         if(!$product)
         abort(404);
-        $cart = $this->addToCartSession($product);
+        $quantity = $request->quantity ?? 1;
+        $update = $request->update ?? false;
+        $cart = $this->addToCartSession($product,$quantity,$update);
         if(auth()->check())
-        $this->addToCartDb($product);
+        $this->addToCartDb($product,$quantity,$update);
         return response()->json(['cart_count'=> count((array)$cart),'cart'=> $cart],200);
     }
 

@@ -43,27 +43,6 @@ class ShipmentController extends Controller
     {
         //
     }
-    public function admin_rates(Request $request){
-        if($request->rate_id){
-            if($request->option){
-                $rate = ShippingRate::where('id',$request->rate_id)->delete();
-            }else{
-                $rate = ShippingRate::find($request->rate_id);
-                $rate->origin_id = $request->origin_id;
-                $rate->destination_id = $request->destination_id;
-                $rate->hours = $request->hours;
-                $rate->amount = $request->amount;
-                $rate->save();
-            }  
-        }else{
-            $rate = new ShippingRate;
-            $rate->origin_id = $request->origin_id;
-            $rate->destination_id = $request->destination_id;
-            $rate->hours = $request->hours;
-            $rate->amount = $request->amount;
-            $rate->save();
-        }
-        return redirect()->back();
-    }
+    
     
 }

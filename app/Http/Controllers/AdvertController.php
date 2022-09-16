@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\GeoLocationTrait;
 use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\State;
 use App\Models\Advert;
+use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subscription;
@@ -13,66 +15,63 @@ use Illuminate\Http\Request;
 
 class AdvertController extends Controller
 {
+    use GeoLocationTrait;
+
     public function __construct(){
         $this->middleware('auth')->except('redirect');
     }
-    
-    public function index(){
-        $plans = Plan::where('type','advert')->get();
-        return view('vendor.features.index',compact('plans'));
-    }
-    
-    public function description(Plan $plan){
-        return view('vendor.features.description',compact('plan'));
-    }
 
-    public function create(Plan $plan){
-        $subscription = auth()->user()->advertSubscriptions->where('plan_id',$plan->id)->first();
+    public function create(Feature $feature){
+        // $feature = auth()->user()->features->where('subscribable_id',$feature->id)->first();
         $shops = auth()->user()->shops;
         $states = State::all();
-        if($plan->products){
+        $state_id = $this->currentState()->id;
+        if($feature->adplan->type == 'products'){
             $products = Product::edible()->approved()->accessible()->available()->visible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
             $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
-            return view('vendor.features.products',compact('subscription','products','categories','shops','states'));
+            return view('vendor.features.products',compact('feature','products','categories','shops','states','state_id'));
         }else
-        return view('vendor.features.shops',compact('subscription','shops','states'));
+        return view('vendor.features.shops',compact('feature','shops','states','state_id'));
     }
 
     public function store_product_advert(Request $request){
-        $shops = auth()->user()->shops;
-        if($request->allproducts)
-           $products = Product::whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
-        else 
-            $products = [];
+        $products = [];
         foreach($request->products as $product_id){
             $products[] = Product::find($product_id);
         }
+        $feature = Feature::find($request->feature_id);
         foreach($products as $product){
-            $advert =  new Advert;
-            $advert->subscription_id =  $request->subscription_id;
-            $advert->advertable_id =  $product->id;
-            $advert->advertable_type = get_class($product);
-            $advert->state_id = $request->state_id;
-            $advert->save();
+            if($feature->units > $feature->adverts->count()){
+                $advert =  new Advert;
+                $advert->feature_id =  $request->feature_id;
+                $advert->position =  $feature->adplan->position;
+                $advert->advertable_id =  $product->id;
+                $advert->advertable_type = get_class($product);
+                $advert->state_id = $request->state_id;
+                $advert->save();
+            }
         }
         return redirect()->back();
     }
 
     public function store_shop_advert(Request $request){
-        if($request->allshops)
-           $shops = auth()->user()->shops;
-        else 
-           $shops = [];
+        $shops = [];
         foreach($request->shops as $shop_id){
-            $shops[ ] = Shop::find($shop_id);
+            $shops[] = Shop::find($shop_id);
         }
+        $feature = Feature::find($request->feature_id);
         foreach($shops as $shop){
-            $advert =  new Advert;
-            $advert->subscription_id =  $request->subscription_id;
-            $advert->advertable_id =  $shop->id;
-            $advert->advertable_type = get_class($shop);
-            $advert->state_id = $request->state_id;
-            $advert->save();   
+            if($feature->units > $feature->adverts->count()){
+                $advert =  new Advert;
+                $advert->feature_id =  $request->feature_id;
+                $advert->position =  $feature->adplan->position;
+                $advert->advertable_id =  $shop->id;
+                $advert->advertable_type = get_class($shop);
+                $advert->state_id = $request->state_id;
+                $advert->status = false;
+                $advert->save();  
+            }
+             
         }
         return redirect()->back();
     }
@@ -110,12 +109,8 @@ class AdvertController extends Controller
             $advert = Advert::where("id",$request->advert_id)->update(["status"=> $request->status]);
     }
 
-    public function manage(Request $request){
-        if($request->action == 'publish'){
-            $adverts = Advert::whereIn('id',$request->adverts)->update(['status'=> 1]);
-        }else{
-            $adverts = Advert::whereIn('id',$request->adverts)->update(['status'=> 0]);
-        }
+    public function remove(Request $request){
+        $adverts = Advert::destroy($request->adverts);
         return redirect()->back();
     }
 

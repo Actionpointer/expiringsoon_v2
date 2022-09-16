@@ -39,7 +39,7 @@
       <div class="row shoping-cart__content">
         <div class="col-lg-8">
           @forelse ($shops as $shop)
-            <div class="cart-table">
+            <div class="cart-table shop-cart">
               <div class="table-responsive">
                   <table class="table">
                     <thead>
@@ -54,12 +54,12 @@
                     <tbody>
                         
                         @foreach(collect($items)->where('shop_id',$shop->id) as $key=>$cart)
-                            <tr class="item" data-price="{{$cart['product']->amount}}" data-amount="{{$cart['product']->amount * $cart['quantity']}}" data-qty="{{$cart['quantity']}}">
+                            <tr class="item" data-product="{{$key}}product" data-price="{{$cart['product']->amount}}" data-amount="{{$cart['product']->amount * $cart['quantity']}}" data-qty="{{$cart['quantity']}}">
                                 <!-- Product item  -->
                                 <td class="cart-table-item align-middle">
                                     <a href="{{route('product.show',$cart['product'])}}" class="cart-table__product-item">
                                         <div class="cart-table__product-item-img">
-                                        <img src="./storage/{{$cart['product']->photo}}" alt="product">
+                                        <img src="{{Storage::url($cart['product']->photo)}}" alt="product">
                                         </div>
                                         <h5 class="font-body--lg-400">{{$cart['product']->name}}</h5>
                                     </a>
@@ -74,7 +74,7 @@
                                         <button class="counter-btn-dec counter-btn" data-action="decrement">
                                         -
                                         </button>
-                                        <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$key}}" min="0" max="1000" placeholder="0" value="{{$cart['quantity']}}">
+                                        <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$key}}" min="1" max="1000" placeholder="1" value="{{$cart['quantity']}}">
                                         <button class="counter-btn-inc counter-btn" data-action="increment">
                                         +
                                         </button>
@@ -83,7 +83,7 @@
                                 <!-- Subtotal  -->
                                 <td class="cart-table-item order-subtotal align-middle">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!}{{$cart['total']}}</p>
+                                        <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} <span class="product-total">{{$cart['total']}}</span> </p>
                                         <button class="delete-item remove-item" data-product="{{$key}}product">
                                         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 23.5C18.0748 23.5 23 18.5748 23 12.5C23 6.42525 18.0748 1.5 12 1.5C5.92525 1.5 1 6.42525 1 12.5C1 18.5748 5.92525 23.5 12 23.5Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
@@ -104,7 +104,7 @@
                 <div class="cart-table-action-btn d-flex">
                   <a href="{{route('vendor.show',$shop)}}" class="button button--md shop">Return to Shop</a>
                   <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                  <button type="submit" class="button button--md update bg-success text-white">Checkout: {!!cache('settings')['currency_symbol']!!}<span class="shop-total mx-0">{{collect($items)->where('shop_id',$shop->id)->sum('total')}}</span></button>
+                  <button type="submit" class="button button--md update bg-success text-white">Checkout: {!!cache('settings')['currency_symbol']!!}<span class="subtotal mx-0">{{collect($items)->where('shop_id',$shop->id)->sum('total')}}</span></button>
                 </div>
               </form>
             </div>
@@ -136,13 +136,13 @@
                   <button class="counter-btn-dec counter-btn" data-action="decrement">
                     -
                   </button>
-                  <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$key}}" min="0" max="1000" value="{{$cart['quantity']}}" placeholder="0">
+                  <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$key}}" min="1" max="1000" value="{{$cart['quantity']}}" placeholder="0">
                   <button class="counter-btn-inc counter-btn" data-action="increment">
                     +
                   </button>
                 </div>
                 <h6 class="shoping-card__product-totalprice font-body--lg-600">
-                  {!!cache('settings')['currency_symbol']!!}{{$cart['total']}}
+                  {!!cache('settings')['currency_symbol']!!} <span class="product-total"></span> {{$cart['total']}}
                 </h6>
                 <button class="close-btn remove-item" data-product="{{$key}}product">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -180,21 +180,24 @@
                 <!-- memo  -->
                 <div class="bill-card__memo">
                   <!-- Subtotal  -->
-                  <div class="bill-card__memo-item subtotal">
+                  <div class="bill-card__memo-item">
                     <p class="font-body--md-400">No of Items:</p>
-                    <span class="font-body--md-500" id="subtotal">{{collect($items)->count()}}</span>
+                    <span class="font-body--md-500">{{collect($items)->count()}}</span>
                   </div>
-                  <!-- Shipping  -->
-                  <div class="bill-card__memo-item shipping">
+                  
+                  <div class="bill-card__memo-item">
                     <p class="font-body--md-400">No of Shops :</p>
-                    <span class="font-body--md-500" id="shipping">{{$shops->count()}}</span>
+                    <span class="font-body--md-500">{{$shops->count()}}</span>
                   </div>
                   <!-- total  -->
                   <div class="bill-card__memo-item total">
                     <p class="font-body--lg-400">Total:</p>
-                    <span class="font-body--xl-500" id="grandtotal">
+                    <span class="font-body--xl-500">
                       {!!cache('settings')['currency_symbol']!!} 
-                      {{number_format(collect($items)->sum('total'))}}
+                      <span id="grandtotal">
+                        {{number_format(collect($items)->sum('total'))}}
+                      </span>
+                      
                     </span>
                   </div>
                 </div>
@@ -220,63 +223,52 @@
 @include('layouts.front')
 <script>
   $('.counter-btn').click(function(){
-      let quantity = $(this).closest('.counter-btn-wrapper').find('.quantity');
+      let clicked = $(this).closest('.counter-btn-wrapper').find('.quantity');
+      let quantity = parseInt($(this).closest('.counter-btn-wrapper').find('.quantity').val());
       if($(this).attr('data-action') == 'increment'){
-        $('.quantity[data-slug="'+quantity.attr('data-slug')+'"]').val(parseInt(quantity.val()) + 1)
+        newquantity = quantity + 1
       }
       else{
-        $('.quantity[data-slug="'+quantity.attr('data-slug')+'"]').val(parseInt(quantity.val()) - 1)
-      } 
+        newquantity = quantity - 1
+        if(newquantity <=0) newquantity = 1;
+      }
+      updatecart(clicked.closest(".item").attr('data-product'),newquantity);
+      total(clicked,newquantity);
+      mysubtotal(clicked);
+      mygrandtotal();
   })
-  function grandtotal(){
-      var subtotal = $('#subtotal').val();
-      var deliveries = $('#deliveri').val();
-      // var discount = $('#discount').val();
-      var grandtotal = 0;
-      grandtotal = parseInt(subtotal);
-      // $('.grandtotal').html(grandtotal);
-      $('#grandtotal').val(grandtotal);
+  function total(clicked,newquantity){
+    $('.quantity[data-slug="'+clicked.attr('data-slug')+'"]').val(newquantity);
+    price = parseInt(clicked.closest('.item').attr('data-price'))
+    amount = price * newquantity
+    clicked.closest('.item').find('.product-total').text(amount);
+    clicked.closest('.item').attr('data-amount',amount);
+    clicked.closest('.item').attr('data-qty',newquantity);
   }
-  function subtotal(){
-      var subtotal = 0;
-      var cart_count = 0
-      $('.item').each(function(index){
+  function mysubtotal(clicked){
+      let subtotal = 0;
+      // var cart_count = 0
+      clicked.closest('.shop-cart').find('.item').each(function(index){
           subtotal += parseInt($(this).attr('data-amount'));
-          // cart_count += parseInt($(this).attr('data-qty'));
       });
-      $('.subtotal').html(subtotal);
-      $('#subtotal').val(subtotal);
-      // $('.cart_count').html(cart_count);
+      clicked.closest('.shop-cart').find('.subtotal').text(subtotal);
   }
-  function getamount(){
-    // function deliveries(){
-    //     var delivery = 0;
-    //     $('.item').each(function(index){
-    //         delivery += parseInt($(this).attr('data-delivery'));
-    //         // cart_count += parseInt($(this).attr('data-qty'));
-    //     });
-    //     var vat = vat_percent/100 *subtotal;
-    //     $('#vat').val(vat)
+  function mygrandtotal(){
+    let grandtotal = 0;
+      $('.item').each(function(index){
+          grandtotal += parseInt($(this).attr('data-amount'));
+      });
+      $('#grandtotal').text(grandtotal);
   }
-
-  
   $(document).on('change input','.quantity',function(){
-    alert('ok')
-      var qty = $(this).val(); //get the quantity
-      // var slug = $(this).attr('slug'); //get slug of the quantities 
-      $('input[slug="'+slug+'"]').val(qty); //give quantity to all quantity input box
+      var clicked = $(this); //get the quantity
+      if($(this).val() != ''){
+        updatecart(clicked.closest(".item").attr('data-product'),$(this).val());
+        total($(this),parseInt($(this).val())); 
+        mysubtotal(clicked);
+        mygrandtotal();
+      }
       
-      // $(this).closest('tr').attr('data-qty',qty); //place the quantity on the item row attribute
-      // var input = $('input[id="'+slug+'"]').val(); //get input of item
-      // input = JSON.parse(input);
-      // input.quantity = qty; //replace quantity in the input
-      // $('input[id="'+slug+'"]').val(JSON.stringify(input)); // return the new input
-      // var amount = parseInt($(this).closest('tr').attr('data-price')) * parseInt(qty); //calculate new amount
-      // $(this).closest('tr').attr('data-amount',amount); //place the amount on the item row attribute
-      // $('.total[data-slug="'+slug+'"]').html(amount); //place the amount on the item row
-      // subtotal();
-      // vat();
-      // grandtotal();
   })
   $(document).on('click','.remove-item',function(){
     var product_id = parseInt($(this).attr('data-product'));

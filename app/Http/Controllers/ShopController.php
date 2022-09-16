@@ -29,22 +29,18 @@ class ShopController extends Controller
         $category = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
-        $state = auth()->check() && auth()->user()->state_id ? auth()->user()->state->name : session('geo_locale')['state'];
-        $state_id = State::where('name',$state)->first()->id;
+        
         $shops = Shop::active()->selling();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $shops = $shops->where('state_id',$state_id);
-        }else{
-            $shops = $shops->where('state_id',$state_id);
-        }
+        }else{$state_id = 0;}
         if(request()->query() && request()->query('category_id')){
             $category_id = request()->query('category_id');
             $category = Category::find($category_id);
             $shops = $shops->whereHas('products',function($query) use($category_id){
                 $query->where('category_id',$category_id);
             });
-                
         }
         if(request()->query() && request()->query('sortBy')){
             if(request()->query('sortBy') == 'name_asc'){
@@ -54,7 +50,7 @@ class ShopController extends Controller
                 $shops = $shops->orderBy('name','desc');
             }
         }
-        $shops = $shops->get();
+        $shops = $shops->paginate(16);
         $advert_G = Advert::state($state_id)->running()->activeShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
         $advert_H = Advert::state($state_id)->running()->activeShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
         return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));

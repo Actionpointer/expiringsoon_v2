@@ -87,19 +87,18 @@
                                 <td class="cart-table-item stock-status order-date align-middle">
                                       {{$advert->views}} Views <br>
                                       {{$advert->clicks}} Clicks
-                                    
                                 </td>
                                 <!-- Stock Status  -->
                                 <td class="cart-table-item stock-status order-date align-middle">
                                   @if($advert->status)
                                     @if($advert->advertable_type == 'App\Models\Shop')
-                                      @if($advert->advertable->owner()->advertSubscriptions->isNotEmpty())
+                                      @if($advert->advertable->owner()->features->isNotEmpty())
                                       <span class="font-body--md-400 in"> Active</span>
                                       @else
                                         <span class="font-body--md-400 out"> Expired</span>
                                       @endif
                                     @else
-                                      @if($advert->advertable->shop->owner()->advertSubscriptions->isNotEmpty())
+                                      @if($advert->advertable->shop->owner()->features->isNotEmpty())
                                         <span class="font-body--md-400 in"> Active</span>
                                       @else
                                         <span class="font-body--md-400 out"> Expired</span>

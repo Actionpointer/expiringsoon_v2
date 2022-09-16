@@ -1,4 +1,5 @@
 vendor bvn verification
+throttle bvn validation
 revisit security alert - once someone is throttled 
 implement payout by flutter transfer.. then check payment page user, vendor, shops
 add password strength meter
@@ -15,5 +16,13 @@ cron job, to check every subscription for a. expiring. b. auto_renew
 email, when subscription is expiring
 email when subscription is auto-renewed
 email when subscription auto-renewal is cancelled
+auto-renew subscription & feature
+add auto-renew to user settings.. e.g auto renew subscription, a
 if user does not have subscription, he cannot access other shops he has
 add coupon for buying subscriptions ? Coupon value + percentage
+when shop starts, user has free subscription by default.
+shipment controller is empty
+release settlement to shop wallet after order changes to completed
+if customer does not raise query xdays after delivery, change order to completed
+middleware to prevent shop creation if no subscription is available
+Redirect user to same page after login/register

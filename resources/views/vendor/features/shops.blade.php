@@ -26,7 +26,7 @@
             <a href="#"> Vendor <span> > </span> </a>
           </li>
           <li>
-            <a href="{{route('vendor.features')}}"> Features <span> > </span> </a>
+            <a href="{{route('vendor.adsets')}}"> Features <span> > </span> </a>
           </li>
           <li class="active"><a href="#">Products</a></li>
         </ul>
@@ -51,7 +51,7 @@
                       </li>
                       <li class="nav-item" role="presentation">
                           <button class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" data-bs-target="#pills-plans" type="button" role="tab" aria-controls="pills-plans" aria-selected="false">
-                                Add New Adverts
+                                Add Shops
                           </button>
                       </li>       
                   </ul>
@@ -79,7 +79,7 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    @forelse($subscription->adverts as $advert)
+                                    @forelse($feature->adverts as $advert)
                                       <tr>
                                         <!-- Product item  -->
                                         <td class="border-0">
@@ -105,32 +105,25 @@
                                         <!-- Date  -->
                                         <td class="dashboard__order-history-table-item order-date "> {{ $advert->views}}</td>
                                         <!-- Total  -->
-                                        <td class="   dashboard__order-history-table-item order-total ">  {{ $advert->clicks}} </td>
+                                        <td class="   dashboard__order-history-table-item order-total">  {{ $advert->clicks}} </td>
 
-                                        <td class="   dashboard__order-history-table-item order-total "> 
+                                        <td class="   dashboard__order-history-table-item order-total"> 
                                             @if($advert->status)
                                               Active
                                             @else
-                                              Inactive
+                                              Pending
                                             @endif  
                                         </td>
                                         <!-- Status -->
                                         
                                         <td class="dashboard__order-history-table-item order-status ">
                                           <div class="dropdown">
-                                            <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                              Manage
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <form class="d-inline" action="{{route('vendor.adverts.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
-                                                <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                @if(!$advert->status)
-                                                <button type="submit" name="action" value="publish" class="dropdown-item">Publish</button>
-                                                @else
-                                                <button type="submit" name="action" value="unpublish" class="dropdown-item">Unpublish</button>
-                                                @endif
-                                              </form>                                      
-                                            </div>
+                                            <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
+                                              <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                              <button class="btn btn-sm btn-danger" type="submit">
+                                                Remove
+                                              </button>
+                                            </form>
                                           </div>
                                         </td>
 
@@ -158,16 +151,11 @@
                       <div class="row shoping-cart__content justify-content-center">              
                         <div class="col-lg-8">
                           <form method="POST" action="{{route('vendor.advert.store.shops')}}">@csrf
-                            <input type="hidden" name="subscription_id" value="{{$subscription->id}}">
-                            @if($subscription->plan->shops == '-1')
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="delivery_address" id="existingaddress" value="existing" checked >
-                                <label class="form-check-label font-body--400" for="existing"> Select all shops </label>
-                              </div> 
-                            @endif
+                            <input type="hidden" name="feature_id" value="{{$feature->id}}">
+                            
                             <div class="contact-form-input">
                                 <label>Select Shops</label>
-                                <select id="shops" name="shops[]" class="select2" @if($subscription->plan->shops = "-1" || $subscription->plan->shops > 1) multiple @endif>
+                                <select id="shops" name="shops[]" class="select2" multiple @if($feature->units <= $feature->adverts->count()) disabled @endif>
                                   @foreach ($shops as $shop)
                                     <option value="{{$shop->id}}">{{$shop->name}} </option>  
                                   @endforeach 
@@ -178,11 +166,11 @@
                               <label>Show in Location</label>
                               <select id="stateselect" name="state_id" class="select2" required>
                                 @foreach ($states as $state)
-                                  <option value="{{$state->id}}">{{$state->name}}</option>  
+                                  <option value="{{$state->id}}" @if($state->id == $state_id) selected @endif>{{$state->name}}</option>  
                                 @endforeach     
                               </select>
                             </div>
-                            <button class="button button--lg w-100" style="margin-top: 20px" type="submit">
+                            <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($feature->units <= $feature->adverts->count()) disabled @endif>
                               Create Advert
                             </button>
                             
@@ -206,12 +194,11 @@
 @endsection
 @push('scripts')
 <script>
-    var limit = @json($subscription->plan->shops);
-    if(limit > 1){
+    var limit = @json($feature->units);
+    var used = @json($feature->adverts->count());
       $('.select2#shop[multiple]').select2({
-        maximumSelectionLength:limit,
+        maximumSelectionLength:limit-used,
       })
-    }
     
     $('#addbankaccount').click(function(e){
         e.preventDefault();

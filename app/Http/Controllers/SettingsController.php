@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
+use App\Models\Plan;
 use App\Models\User;
 use App\Models\State;
-use App\Models\Plan;
+use App\Models\Adplan;
 use App\Models\Country;
 use App\Models\Setting;
 use App\Models\Category;
 use Illuminate\Support\Arr;
 use App\Models\ShippingRate;
-use App\Models\Subcategory;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -26,15 +26,18 @@ class SettingsController extends Controller
     {
         $this->middleware('auth');
     }
+    
     public function index(){
         $users = User::whereNotIn('role',['shopper','vendor'])->get();
         $countries = Country::all();
         $states = State::within()->get();
         $plans = Plan::all();
+        $adplans = Adplan::all();
         $settings = Setting::all();
         $rates = ShippingRate::whereNull('shop_id')->get();
-        return view('admin.settings',compact('plans','users','countries','settings','rates','states'));
+        return view('admin.settings',compact('plans','adplans','users','countries','settings','rates','states'));
     }
+
     public function settings(Request $request){
         foreach($request->except('_token') as $key => $value){
             if($request->country_id){
@@ -55,52 +58,91 @@ class SettingsController extends Controller
         return redirect()->back();
     }
 
-    public function storeAdmin(Request $request){
-        dd($request->all());
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users',
-            'phone' => 'required|string|unique:users',
-            'password' => 'required','string','confirmed'
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+    public function shipping_rates(Request $request){
+        if($request->rate_id){
+            if($request->delete){
+                $rate = ShippingRate::where('id',$request->rate_id)->delete();
+            }else{
+                $rate = ShippingRate::find($request->rate_id);
+                $rate->origin_id = $request->origin_id;
+                $rate->destination_id = $request->destination_id;
+                $rate->hours = $request->hours;
+                $rate->amount = $request->amount;
+                $rate->save();
+            }  
+        }else{
+            $rate = new ShippingRate;
+            $rate->origin_id = $request->origin_id;
+            $rate->destination_id = $request->destination_id;
+            $rate->hours = $request->hours;
+            $rate->amount = $request->amount;
+            $rate->save();
         }
-        // $dial = 
-        $user = User::create(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
         return redirect()->back();
     }
 
-    public function updateAdmin(Request $request){
-        $user = User::find($request->user_id);
-        $validator = Validator::make($request->all(), [
-            'name' => 'nullable|string',
-            'email' => ['nullable',Rule::unique('users')->ignore($user)],
-            'phone' => ['nullable',Rule::unique('users')->ignore($user)],
-            'password' => 'nullable','string','confirmed'
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+    public function admins(Request $request){
+        
+        if($request->user_id){
+            if($request->delete){
+                $user = User::destroy($request->user_id);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted User']);
+            }else{
+                //update
+                $user = User::find($request->user_id);
+                $validator = Validator::make($request->all(), [
+                    'name' => 'nullable|string',
+                    'email' => ['nullable',Rule::unique('users')->ignore($user)],
+                    'phone' => ['nullable',Rule::unique('users')->ignore($user)],
+                    'password' => Rule::requiredIf(isset($request->user_id)),'string','confirmed'
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update user']);
+                }
+                $user = User::where('id',$request->user_id)->update(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
+            }
+        }else{
+            //create
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'email' => 'required|string|unique:users',
+                'phone' => 'required|string|unique:users',
+                'password' => 'required','string','confirmed'
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
+            }
+            $user = User::create(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
+        }   
+    }
+    
+    public function plans(Request $request){
+        if($request->plan_id){
+            if($request->delete){
+                $plan = Plan::find($request->plan_id);
+                if($plan->activeSubscriptions->isEmpty()){
+                    $plan->delete();
+                    return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Deleted Successfully']);
+                }else return redirect()->back()->with(['result'=> 0,'message'=> 'Unable to delete plan which has active subscriptions']);
+            }else{
+                $plan = Plan::where('id',$request->plan_id)->update(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Updated Successfully']);
+            }
+        }else{
+            $plan = Plan::create(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Created Successfully']);
         }
-        if($request->filled('name')){
-            $user->fname = explode(' ',$request->name)[0];
-            $user->lname = explode(' ',$request->name)[1];
-        }
-        if($request->filled('phone')){
-            $user->phone = $request->phone;
-            $user->phone_prefix = cache('settings')['dialing_code'];
-        } 
-        if($request->filled('role')) $user->role = $request->role;
-        if($request->filled('email')) $user->email = $request->email;
-        if($request->filled('password')) $user->password = Hash::make($request->password);
-        $user->save();
-        return redirect()->back();
     }
 
-    public function destroyAdmin(Request $request){
-        $user = User::where('id',$request->user_id)->delete();
-        return redirect()->back();
+    public function adplans(Request $request){  
+        foreach($request->price_per_day as $key=>$price){
+            $adplan = Adplan::where('id',$key)->update(['price_per_day'=> $price]);
+        }
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Updated advert plan successfully']);
     }
+
     
     public function categories(){
         $categories = Category::all();
@@ -112,7 +154,15 @@ class SettingsController extends Controller
     public function categories_management(Request $request){
         if($request->category_id){
             $category = Category::find($request->category_id);
-            if($request->action == 'update'){
+            if($request->delete){
+                if($category->products->count()){
+                    return redirect()->back()->with(['result'=> 0,'message'=> 'Unable to delete category which has products']);
+                }
+                $category->subcategories->detach();
+                $category->delete();
+
+                
+            }else{
                 $category->name = $request->category;
                 $category->save();
                 $old_subs = Arr::where($request->tags, function ($value, $key) {
@@ -126,12 +176,6 @@ class SettingsController extends Controller
                     $newtag = Tag::create(['name'=> $sub]);
                     $category->subcategories->attach($newtag->id);
                 }
-            }else{
-                if($category->products->count()){
-                    return redirect()->back()->with(['result'=> 0,'message'=> 'Unable to delete category which has products']);
-                }
-                $category->subcategories->detach();
-                $category->delete();
             }
         }else{
             $category = Category::create(['name'=> $request->category]);

@@ -69,19 +69,27 @@ class User extends Authenticatable
     public function likes(){
         return $this->hasMany(Like::class);
     }
+    
     public function addresses(){
         return $this->hasMany(Address::class);
     }
-    
+
     public function payouts(){
         return $this->hasMany(Payout::class);
     }
+
     public function payments(){
         return $this->hasMany(Payment::class);
     }
+
     public function shops(){
         return $this->belongsToMany(Shop::class)->withPivot('role','status');
     }
+
+    public function products(){  
+        return $this->hasManyThrough(Product::class,ShopUser::class,'user_id','shop_id');
+    }
+
     public function staff(){
         return $this->hasMany(ShopUser::class);
     }
@@ -94,23 +102,22 @@ class User extends Authenticatable
         return $this->hasMany(Subscription::class);
     }
 
-    public function advertSubscriptions(){
-        return $this->hasMany(Subscription::class)->where('type','advert')->where('end_at', '>', now())->where('status',true); 
-    }
-
     public function activeSubscription(){
-        $plan = Plan::where('slug','free_plan')->first();
-        return $this->hasOne(Subscription::class)->where('type','enterprise')->where('plan_id','!=',$plan->id)->where('end_at', '>', now())->where('status',true); 
+        return $this->hasOne(Subscription::class)->where('end_at', '>', now())->where('status',true); 
     }
     
-    public function freeSubscription(){
-        $plan = Plan::where('slug','free_plan')->first();
-        return $this->hasOne(Subscription::class)->where('plan_id',$plan->id)->where('status',true); 
+    public function features(){
+        return $this->hasMany(Feature::class);
+    }
+
+    public function activeFeatures(){
+        return $this->hasMany(Feature::class)->where('end_at', '>', now())->where('status',true); 
     }
 
     public function settlements(){
         return $this->morphMany(Settlement::class,'receiver');
     }
+
     public function hasAnyRole($value){
         return in_array($this->role,$value);
     }

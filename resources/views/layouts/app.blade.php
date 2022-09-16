@@ -616,7 +616,7 @@
                         <div class="shopping-cart__product-content cartitem">
                             <div class="shopping-cart__product-content-item">
                                 <div class="img-wrapper">
-                                    <img src="./storage/{{$cart['product']->photo}}" alt="{{$cart['product']->name}}" />
+                                    <img src="{{Storage::url($cart['product']->photo)}}" alt="{{$cart['product']->name}}" />
                                 </div>
                                 <div class="text-content">
                                     <h5 class="font-body--md-400 product-title">{{$cart['product']->name}}</h5>

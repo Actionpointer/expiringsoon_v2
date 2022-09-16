@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePlansTable extends Migration
+class CreateAdplansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreatePlansTable extends Migration
      */
     public function up()
     {
-        Schema::create('plans', function (Blueprint $table) {
+        Schema::create('adplans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->double('hour_rate')->default(0);
+            $table->string('position');
+            $table->string('type');
+            $table->double('price_per_day')->default(0);
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class CreatePlansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plans');
+        Schema::dropIfExists('adplans');
     }
 }

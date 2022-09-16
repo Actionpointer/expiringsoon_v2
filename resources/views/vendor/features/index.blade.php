@@ -42,16 +42,16 @@
                     <div class="">
                         <div class="row">
                             
-                            @foreach ($plans as $plan)
+                            @foreach ($adplans as $adplan)
                             <div class="col-lg-4 col-md-6">
                                 <div class="cards-ss cards-ss--md cards-ss--md-one">
                                     <div class="cards-ss--md__img-wrapper bg-primary">
                                         {{-- <img src="{{asset('src/images/banner/banner-sm-09.png')}}" alt="banner-sale" /> --}}
                                         <div class="cards-ss--md__text-content">
-                                            <h2 class="font-title--sm">{{$plan->name}}</h2>
+                                            <h2 class="font-title--sm">{{$feature->name}}</h2>
                                             <p>This plan makes your life better. It is even the plan of the week</p>
-                                            @if(auth()->user()->advertSubscriptions->where('plan_id',$plan->id)->first())
-                                            <a href="{{route('vendor.adverts',$plan)}}" class="button button--md bg-success text-white">
+                                            @if(auth()->user()->features->where('adplan_id',$feature->id)->first())
+                                            <a href="{{route('vendor.adverts',$feature)}}" class="button button--md bg-success text-white">
                                                 Click to Enter
                                                 <span>
                                                     <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,8 +61,8 @@
                                                 </span>
                                             </a>
                                             @else
-                                            <a href="{{route('vendor.feature.description',$plan)}}" class="button button--md">
-                                                Starts at {!!cache('settings')['currency_symbol']!!}{{number_format($plan->months_1)}}
+                                            <a href="{{route('vendor.feature.description',$feature)}}" class="button button--md">
+                                                Starts at {!!cache('settings')['currency_symbol']!!}{{number_format($feature->price_per_day)}}
                                                 <span>
                                                     <svg width="17" height="15" viewBox="-1.14 0 30 30" xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="_19_-_Lock" data-name="19 - Lock" >
                                                         <path id="Path_201" data-name="Path 201" d="M29.857,28V14a3,3,0,0,0-3-3H5.143a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H26.857A3,3,0,0,0,29.857,28Zm-2-14V28a1,1,0,0,1-1,1H5.143a1,1,0,0,1-1-1V14a1,1,0,0,1,1-1H26.857A1,1,0,0,1,27.857,14Z" transform="translate(-2.143 -1)" fill-rule="evenodd"/>

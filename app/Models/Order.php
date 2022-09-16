@@ -23,11 +23,16 @@ class Order extends Model
     {
         return [
             'slug' => [
-                'source' => uniqid(),
+                'source' => 'name',
                 'separator' => '_'
             ]
         ];
     }
+
+    public function getNameAttribute(){
+        return uniqid();   
+    }
+    
     public function getRouteKeyName(){
         return 'slug';
     }

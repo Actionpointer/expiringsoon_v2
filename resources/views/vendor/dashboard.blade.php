@@ -69,7 +69,7 @@
                       @if($user->activeSubscription)
                           <h6 class="my-2 text-dark">{{$user->activeSubscription->plan->name}}</h6>
                           @if($user->activeSubscription->expiring())
-                            <form class="" action="{{route('vendor.subscription.store')}}" method="POST"> @csrf 
+                            <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
                               <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
                               <p>Subscription about to expire ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
                               <button type="submit"><u>Renew</u></button> | <a href="{{route('plans')}}"><u>Change plan</u></a> </p>

@@ -102,7 +102,7 @@
                         <div class="filter-box__top-left">
                             <div class="select-box--item" style="min-width: 200px!important">
                                 <select name="category_id" id="category_id" class="select2 w-100" onchange="document.getElementById('filterform').submit();">
-                                    <option value="0">All Categories</option>
+                                    <option value="0" >All Categories</option>
                                         @foreach ($categories->sortBy('category') as $cat)
                                             <option value="{{$cat->id}}" @if($category && $category->id == $cat->id) selected @endif>{{$cat->name}}</option>
                                         @endforeach
@@ -110,7 +110,7 @@
                             </div>
                             <div class="select-box--item" style="min-width: 200px!important">
                                 <select name="state_id" id="state_id" class="select2" onchange="document.getElementById('filterform').submit();">
-                                    <option value="0">All States</option>
+                                    <option value="0" @if($state_id == 0) selected @endif>All States</option>
                                     @foreach ($states as $state)
                                         <option value="{{$state->id}}" @if($state_id == $state->id) selected @endif>{{$state->name}}</option>
                                     @endforeach

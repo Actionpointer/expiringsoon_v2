@@ -56,15 +56,16 @@
                           </button>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <button class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" data-bs-target="#pills-plans" type="button" role="tab" aria-controls="pills-plans" aria-selected="false">
-                            Plans
-                          </button>
-                      </li>
-                      <li class="nav-item" role="presentation">
                           <button class="nav-link" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="false">
                               Admins
                           </button>
                       </li>
+                      <li class="nav-item" role="presentation">
+                          <button class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" data-bs-target="#pills-plans" type="button" role="tab" aria-controls="pills-plans" aria-selected="false">
+                            Plans
+                          </button>
+                      </li>
+                     
                       <li class="nav-item" role="presentation">
                           <button class="nav-link" id="pills-customer-tab" data-bs-toggle="pill" data-bs-target="#pills-customer" type="button" role="tab" aria-controls="pills-customer" aria-selected="false">
                               Advert
@@ -369,89 +370,6 @@
                           </div>
                       </div>
 
-                      <!-- Plan  -->
-                      <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
-                        <div class="products-tab__description">
-                          <div class="dashboard__content-card">
-                              <div class="dashboard__content-card-header">
-                                  <h5 class="font-body--xl-500">Basic</h5>
-                              </div>
-                              <div class="dashboard__content-card-body">
-                                  <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
-                                      <div class="contact-form__content">
-                                          <div class="contact-form-input">
-                                              <label for="feature">Minimum Payout</label>
-                                              <input type="text" name="minpayout" placeholder="Minimum Payout" value="{{$settings->firstWhere('name','basic_minimum_payout')->value}}" />
-                                          </div>
-                                          <div class="contact-form-input">
-                                              <label for="vat">Maximum Payout</label>
-                                              <input type="text" name="maxpayout" placeholder="Set Maximum. Payout" value="{{$settings->firstWhere('name','basic_maximum_payout')->value}}"/>
-                                          </div>
-                                          <div class="contact-form-input">
-                                              <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <label for="vat">Commission %</label>
-                                                        <input type="text" name="basic_commission_percentage" placeholder="Percentage" value="{{$settings->firstWhere('name','basic_commission_percentage')->value}}"/>
-                                                    </div>
-                                                    <div class="col-sm-1"> 
-                                                        <p class="h4 my-4 text-center">+</p>  
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <label for="vat">Commission Fixed</label>
-                                                        <input type="text" name="basic_commission_fixed" placeholder="Fixed" value="{{$settings->firstWhere('name','basic_commission_fixed')->value}}"/>
-                                                    </div>
-                                              </div>
-                                              
-                                          </div>
-                                          
-                                          <div class="contact-form-btn">
-                                              <button class="button button--md" type="submit"> Save
-                                              </button>
-                                          </div>
-                                      </div>
-                                  </form>
-                              </div>
-                          </div>
-                          <div class="dashboard__content-card">
-                              <div class="dashboard__content-card-header">
-                                  <h5 class="font-body--xl-500">Enterprise</h5>
-                              </div>
-                              <div class="dashboard__content-card-body">
-                                  <form method="post" id="payout">
-                                    <div class="contact-form__content">
-                                        <div class="contact-form-input">
-                                            <label for="vat">Enterprise Minimum Payout</label>
-                                            <input type="text" name="minpayout" placeholder="Set Min. Payout" value="{{$settings->firstWhere('name','enterprise_minimum_payout')->value}}" onkeypress="validate(event)" />
-                                        </div>
-                                        <div class="contact-form-input">
-                                            <label for="vat">Enterprise Maximum Payout</label>
-                                            <input type="text" name="minpayout" placeholder="Set Min. Payout" value="{{$settings->firstWhere('name','enterprise_maximum_payout')->value}}" onkeypress="validate(event)" />
-                                        </div>
-                                        <div class="contact-form-input">
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <label for="vat">Enterprise Commission %</label>
-                                                        <input type="text" name="enterprise_commission_percentage" placeholder="Percentage" value="{{$settings->firstWhere('name','enterprise_commission_percentage')->value}}"/>
-                                                    </div>
-                                                    <div class="col-sm-1"> 
-                                                        <p class="h4 my-4 text-center">+</p>  
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <label for="vat">Enterprise Commission Fixed</label>
-                                                        <input type="text" name="enterprise_commission_fixed" placeholder="Fixed" value="{{$settings->firstWhere('name','enterprise_commission_fixed')->value}}"/>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                        <div class="contact-form-btn">
-                                        <button class="button button--md" type="submit"> Save
-                                        </button>
-                                        </div>
-                                    </div>
-                                  </form>
-                              </div>
-                          </div>
-                        </div>
-                    </div>
                       <!-- Admin -->
                       <div class="tab-pane fade" id="pills-information" role="tabpanel" aria-labelledby="pills-information-tab">
                           <div class="products-tab__information">
@@ -461,131 +379,131 @@
                                 <h5 class="font-body--xl-500">Manage Admins</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" action="{{route('admin.user.store')}}" id="admin" class="mb-3">@csrf
+                                <form method="post" action="{{route('admin.users')}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
-                                    <div class="contact-form-input">
-                                        <label for="states" style="margin-top:15px">Admin Level</label>
-                                        <select id="zip" name="role" class="contact-form-input__dropdown" >
-                                        <option value='admin' selected>Administrator</option>
-                                        <option value='customercare'>Customer Care</option>
-                                        <option value='security'>Security</option>
-                                        <option value='auditor'>Auditor</option>
-                                        </select>
-                                    </div>
-                                    <div class="contact-form-input">
-                                        <label for="name">Full Name</label>
-                                        <input type="text" name="name" placeholder="Enter Full Name" required />
-                                    </div>
-                                    <div class="contact-form__content-group">
-                                        <div class="contact-form-input"> 
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" placeholder="Enter Email" required />
+                                        <div class="contact-form-input">
+                                            <label for="states" style="margin-top:15px">Admin Level</label>
+                                            <select id="zip" name="role" class="contact-form-input__dropdown" >
+                                            <option value='admin' selected>Administrator</option>
+                                            <option value='customercare'>Customer Care</option>
+                                            <option value='security'>Security</option>
+                                            <option value='auditor'>Auditor</option>
+                                            </select>
                                         </div>
                                         <div class="contact-form-input">
-                                        <label for="phone">Phone</label>
-                                        <input type="text" name="phone" placeholder="Enter Phone" required />
+                                            <label for="name">Full Name</label>
+                                            <input type="text" name="name" placeholder="Enter Full Name" required />
                                         </div>
-                                    </div>
-                                    <div class="contact-form__content-group">
-                                        <div class="contact-form-input">
-                                        <label for="password">Password</label>
-                                        <input type="password" name="password" placeholder="Enter Password" required />
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input"> 
+                                            <label for="email">Email</label>
+                                            <input type="email" name="email" placeholder="Enter Email" required />
+                                            </div>
+                                            <div class="contact-form-input">
+                                            <label for="phone">Phone</label>
+                                            <input type="text" name="phone" placeholder="Enter Phone" required />
+                                            </div>
                                         </div>
-                                        <div class="contact-form-input">
-                                        <label for="password">Repeat Password</label>
-                                        <input type="password" name="password_confirmation" placeholder="Repeat Password" required />
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input">
+                                            <label for="password">Password</label>
+                                            <input type="password" name="password" placeholder="Enter Password" required />
+                                            </div>
+                                            <div class="contact-form-input">
+                                            <label for="password">Repeat Password</label>
+                                            <input type="password" name="password_confirmation" placeholder="Repeat Password" required />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="contact-form-btn">
-                                        <button class="button button--md" type="submit"> + Create Admin </button>
-                                    </div>
+                                        <div class="contact-form-btn">
+                                            <button class="button button--md" type="submit"> + Create Admin </button>
+                                        </div>
                                     </div>
                                 </form>
                                 <div id="process3">
                                     <table id="" class="table " style="width:100%;font-size:13px">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Level</th>
-                                            <th scope="col">Manage</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($users as $user)
+                                        <thead>
                                             <tr>
-                                                <td>{{$user->name}}</td>
-                                                <td>{{$user->email}}</td>
-                                                <td>{{$user->mobile}}</td>
-                                                <td>{{$user->role}}</td>
-                                                <td>
-                                                    @if($user->id != Auth::id()) 
-                                                    <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit</a>| 
-                                                    <form class="d-inline" action="{{route('admin.user.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
-                                                        <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                        <button type="submit" class="text-danger">Delete</button>
-                                                    </form>
-                                                    
-                                                    @endif
-                                                </td> 
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Phone</th>
+                                                <th scope="col">Level</th>
+                                                <th scope="col">Manage</th>
+                                                <th></th>
                                             </tr>
-                                            @if($user->id != Auth::id())
-                                            <tr>
-                                                <td colspan="6" style="border:none;padding:0px">
-                                                    <form action="#" method="post" id="adminedit{{$user->id}}" style="display:none">
-                                                        @csrf 
-                                                        <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                        <div class="contact-form__content">
-                                                            <div class="contact-form__content-group my-3">
-                                                                <div class="contact-form-input">
-                                                                    <label for="states">Admin Level</label>
-                                                                    <select name="role" class="form-control-lg w-100 contact-form-input__dropdown border text-muted" >
-                                                                        <option value='admin' @if($user->role == 'admin') selected @endif>Administrator</option>
-                                                                        <option value='customercare'  @if($user->role == 'customercare') selected @endif>Customer Care</option>
-                                                                        <option value='security' @if($user->role == 'security') selected @endif>Security</option>
-                                                                        <option value='auditor'  @if($user->role == 'auditor') selected @endif>Auditor</option>
-                                                                    </select>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($users as $user)
+                                                <tr>
+                                                    <td>{{$user->name}}</td>
+                                                    <td>{{$user->email}}</td>
+                                                    <td>{{$user->mobile}}</td>
+                                                    <td>{{$user->role}}</td>
+                                                    <td>
+                                                        @if($user->id != Auth::id()) 
+                                                        <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit </a> | 
+                                                        <form class="d-inline" action="{{route('admin.users')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                            <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                            <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
+                                                        </form>
+                                                        
+                                                        @endif
+                                                    </td> 
+                                                </tr>
+                                                @if($user->id != Auth::id())
+                                                <tr>
+                                                    <td colspan="6" style="border:none;padding:0px">
+                                                        <form action="{{route('admin.users')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                            @csrf 
+                                                            <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                            <div class="contact-form__content">
+                                                                <div class="contact-form__content-group my-3">
+                                                                    <div class="contact-form-input">
+                                                                        <label for="states">Admin Level</label>
+                                                                        <select name="role" class="form-control-lg w-100 contact-form-input__dropdown border text-muted" >
+                                                                            <option value='admin' @if($user->role == 'admin') selected @endif>Administrator</option>
+                                                                            <option value='customercare'  @if($user->role == 'customercare') selected @endif>Customer Care</option>
+                                                                            <option value='security' @if($user->role == 'security') selected @endif>Security</option>
+                                                                            <option value='auditor'  @if($user->role == 'auditor') selected @endif>Auditor</option>
+                                                                        </select>
+                                                                    </div>
+                                                                
+                                                                    <div class="contact-form-input">
+                                                                        <label for="address">Full Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                        <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" />
+                                                                    </div>
                                                                 </div>
-                                                            
-                                                                <div class="contact-form-input">
-                                                                    <label for="address">Full Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                    <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" />
+                                                                <div class="contact-form__content-group">
+                                                                    <div class="contact-form-input"> 
+                                                                    <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                    <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" />
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                    <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                    <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="contact-form__content-group">
+                                                                    <div class="contact-form-input">
+                                                                    <label for="password">Password @error('password') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                    <input type="password" name="password" placeholder="Enter Password"/>
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                    <label for="repeat">Repeat Password</label>
+                                                                    <input type="password" name="password_confirmation" placeholder="Repeat Password"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="contact-form-btn">
+                                                                    <button class="button button--md" type="submit"> Update Admin </button>
+                                                                    <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='none'"> Cancel </button>
                                                                 </div>
                                                             </div>
-                                                            <div class="contact-form__content-group">
-                                                                <div class="contact-form-input"> 
-                                                                <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" />
-                                                                </div>
-                                                                <div class="contact-form-input">
-                                                                <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="contact-form__content-group">
-                                                                <div class="contact-form-input">
-                                                                <label for="password">Password @error('password') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                <input type="password" name="password" placeholder="Enter Password"/>
-                                                                </div>
-                                                                <div class="contact-form-input">
-                                                                <label for="repeat">Repeat Password</label>
-                                                                <input type="password" name="password_confirmation" placeholder="Repeat Password"/>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                            <div class="contact-form-btn">
-                                                                <button class="button button--md" type="submit"> Update Admin </button>
-                                                                <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='none'"> Cancel </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                                 </div>
@@ -593,91 +511,292 @@
                             
                           </div>
                       </div>
+                      <!-- Plan  -->
+                      <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
+                        <div class="products-tab__information">
+                                <!-- Manage Plan  -->
+                                <div class="dashboard__content-card">
+                                    <div class="dashboard__content-card-header">
+                                        <h5 class="font-body--xl-500">Manage Plans</h5>
+                                    </div>
+                                    <div class="dashboard__content-card-body">                                        
+                                        <table id="" class="table " style="width:100%;font-size:13px">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Shops</th>
+                                                    <th scope="col">Products</th>
+                                                    <th scope="col">Amount</th>
+                                                    <th scope="col">Commission</th>
+                                                    <th scope="col">Payout</th>
+                                                    <th scope="col">Manage</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse ($plans as $plan)
+                                                    <tr>
+                                                        <td>{{$plan->name}}</td>
+                                                        <td>{{$plan->shops}}</td>
+                                                        <td>{{$plan->products}}</td>
+                                                        <td>
+                                                            1 Month: {{$plan->months_1}} <br> 3 Months: {{$plan->months_3}} <br>
+                                                            6 Months: {{$plan->months_6}} <br> 1 Year: {{$plan->months_12}}
+                                                        </td>
+                                                        <td>
+                                                            @if($plan->commission_percentage){{$plan->commission_percentage}}% @endif @if($plan->commission_percentage && $plan->commission_fixed) + @endif @if($plan->commission_fixed) {!!cache('settings')['currency_symbol']!!}{{$plan->commission_fixed}} @endif
+                                                            <!-- {{$plan->commission_percentage}}% + {!!cache('settings')['currency_symbol']!!}{{$plan->commission_fixed}} -->
+                                                        
+                                                        </td>
+                                                        <td>
+                                                            Min: {{$plan->minimum_payout}} <br> Max: {{$plan->maximum_payout}}
+                                                        </td>
+                                                        <td>
+                                                            
+                                                            <a href="#" onclick="event.preventDefault();document.getElementById('planedit'+{{$plan->id}}).style.display='block'">Edit</a> | 
+                                                            <form class="d-inline" action="{{route('admin.plans')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                                <input type="hidden" name="plan_id" value="{{$plan->id}}">
+                                                                <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
+                                                            </form>
+                                                            
+                                                        </td> 
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <td colspan="7" style="padding:0px">
+                                                            <form action="{{route('admin.plans')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
+                                                                <input type="hidden" name="plan_id" value="{{$plan->id}}">
+                                                                <div class="contact-form__content">
+                                                                    
+                                                                    <div class="contact-form-input">
+                                                                        <label for="name">Plan Name</label>
+                                                                        <input type="text" name="name" value="{{$plan->name}}" required />
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                        <label for="name">Plan Description</label>
+                                                                        <input type="text" name="description" value="{{$plan->description}}" required />
+                                                                    </div>
+                                                                    
+                                                                    <div class="contact-form-input">
+                                                                        <div class="input-group d-flex">
+                                                                            <div class="prepend">
+                                                                                <label>No of Shops</label>
+                                                                                <input type="number" name="shops" class="form-control" required value="{{$plan->shops}}"/>
+                                                                            </div>
+                                                                            <div>
+                                                                                <label>No of Products</label>
+                                                                                <input type="number" name="products" class="form-control" required value="{{$plan->products}}"/>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                        <div class="input-group d-flex">
+                                                                            <div class="prepend">
+                                                                                <label>Commission Percentage</label>
+                                                                                <input type="number" name="commission_percentage" class="form-control" required value="{{$plan->commission_percentage}}" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <label>Commission Fixed</label>
+                                                                                <input type="number" name="commission_fixed" class="form-control" required value="{{$plan->commission_fixed}}"/>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                        <!-- <label for="number1">Plan Payout</label> -->
+                                                                        <div class="input-group d-flex">
+                                                                            <div class="prepend">
+                                                                                <label for="number1">Minimum Payout </label>
+                                                                                <input type="number" name="minimum_payout" class="form-control" required value="{{$plan->minimum_payout}}"/>
+                                                                            </div>
+                                                                            <div>
+                                                                                <label for="number1">Maximum Payout</label>
+                                                                                <input type="number" name="maximum_payout" class="form-control" required value="{{$plan->maximum_payout}}"/>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                        <label for="number1">Plan Cost</label>
+                                                                        <div class="row no-gutters">
+                                                                            <div class="col-3">
+                                                                                <label for="number1">1 Month </label>
+                                                                                <input type="number" name="months_1" class="form-control" required value="{{$plan->months_1}}"/>
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="number1">3 Months </label>
+                                                                                <input type="number" name="months_3" class="form-control" required value="{{$plan->months_3}}"/>
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="number1">6 Months </label>
+                                                                                <input type="number" name="months_6" class="form-control" required value="{{$plan->months_6}}"/>
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="number1">1 Year</label>
+                                                                                <input type="number" name="months_12" class="form-control" required value="{{$plan->months_12}}"/>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                
+                                                                    </div>
+                                                                    
+                                                                    <div class="contact-form-btn">
+                                                                        <button class="button button--md" type="submit"> Update Plan </button>
+                                                                        <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('planedit'+{{$plan->id}}).style.display='none'"> Cancel </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr><td colspan="7" class="text-center">No Plan</td></tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- New Plan  -->
+                                <div class="dashboard__content-card">
+                                    <div class="dashboard__content-card-header">
+                                        <h5 class="font-body--xl-500">New Plan</h5>
+                                    </div>
+                                    <div class="dashboard__content-card-body">
+                                        <form method="post" action="{{route('admin.plans')}}" id="admin" class="mb-3">@csrf
+                                            <div class="contact-form__content">
+                                                
+                                                <div class="contact-form-input">
+                                                    <label for="name">Plan Name</label>
+                                                    <input type="text" name="name" required />
+                                                </div>
+                                                <div class="contact-form-input">
+                                                    <label for="name">Plan Description</label>
+                                                    <input type="text" name="description" required />
+                                                </div>
+                                                
+                                                <div class="contact-form-input">
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <label for="number_of_shops">No of Shops</label>
+                                                            <input type="number" name="shops" class="form-control" id="number_of_shops" required/>
+                                                        </div>
+                                                        <div>
+                                                            <label for="number_of_products">No of Products</label>
+                                                            <input type="number" name="products" class="form-control" id="number_of_products" required/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="contact-form-input">
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <label>Commission Percentage</label>
+                                                            <input type="number" name="commission_percentage" class="form-control" required />
+                                                        </div>
+                                                        <div>
+                                                            <label>Commission Fixed</label>
+                                                            <input type="number" name="commission_fixed" class="form-control" required />
+                                                        </div>
+                                                        
+                                                    </div>
+                                            
+                                                </div>
+                                                <div class="contact-form-input">
+                                                    <!-- <label for="number1">Plan Payout</label> -->
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <label for="number1">Minimum Payout </label>
+                                                            <input type="number" name="minimum_payout" class="form-control" required />
+                                                        </div>
+                                                        <div>
+                                                            <label for="number1">Maximum Payout</label>
+                                                            <input type="number" name="maximum_payout" class="form-control" required />
+                                                        </div>
+                                                        
+                                                    </div>
+                                            
+                                                </div>
+                                                <div class="contact-form-input">
+                                                    <label for="number1">Plan Cost</label>
+                                                    <div class="row no-gutters">
+                                                        <div class="col-3">
+                                                            <label for="number1">1 Month </label>
+                                                            <input type="number" name="months_1" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label for="number1">3 Months </label>
+                                                            <input type="number" name="months_3" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label for="number1">6 Months </label>
+                                                            <input type="number" name="months_6" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label for="number1">1 Year</label>
+                                                            <input type="number" name="months_12" class="form-control" required />
+                                                        </div>
+                                                        
+                                                    </div>
+                                            
+                                                </div>
+                                                
+                                                <div class="contact-form-btn">
+                                                    <button class="button button--md" type="submit"> Create Plan </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                        </div>
+                        
+                      </div>
+                      
                       <!--  Advert  -->
                       <div class="tab-pane fade" id="pills-customer" role="tabpanel" aria-labelledby="pills-customer-tab">
                           <div class="row products-tab__feedback">
                             
                             <div class="dashboard__content-card">
                                 <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">Adverts</h5>
+                                    <h5 class="font-body--xl-500">Advert Plans</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                    <form method="post" id="vat">
+                                    <form method="POST" action="{{route('admin.adplans')}}">@csrf
                                         <div class="contact-form__content">
-                                            <table class="table">
-                                                <tr>
-                                                    <th>Plan</th>
-                                                    <th>Days</th>
-                                                    <th>Rate</th>
+                                            <table class="table" style="width:100%;font-size:13px">
+                                                <tbody><tr>
+                                                    <th scope="col">Plan</th>
+                                                    <th scope="col">Page</th>
+                                                    <th scope="col">Description</th>
+                                                    <th scope="col">Amount</th>
                                                 </tr>
                                                 <tr>
-                                                    <th colspan="3">Shops</th>
+                                                    <th colspan="4">Shops</th>
                                                 </tr>
+                                                @foreach($adplans->where('type','shops') as $adplan)
                                                 <tr>
-                                                    <td>Feature one shop</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
+                                                    <td>{{$adplan->name}}</td>
+                                                    <td>{{$adplan->page}}</td>
+                                                    <td>{{ucwords($adplan->description)}}</td>
+                                                    <td><input type="number" name="price_per_day[{{$adplan->id}}]" value="{{$adplan->price_per_day}}" class="form-control"></td>
                                                 </tr>
+                                                @endforeach
                                                 <tr>
-                                                    <td>Feature many shops</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
+                                                    <th colspan="4">Products</th>
                                                 </tr>
+                                                @foreach($adplans->where('type','products') as $adplan)
                                                 <tr>
-                                                    <td>Feature to home page</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
+                                                    <td>{{$adplan->name}}</td>
+                                                    <td>{{$adplan->page}}</td>
+                                                    <td>{{ucwords($adplan->description)}}</td>
+                                                    <td><input type="number" name="price_per_day[{{$adplan->id}}]" value="{{$adplan->price_per_day}}" class="form-control"></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Feature to the top</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="3">Products</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feature one product</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feature one category</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feature many products</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feature many categories</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feature to home page</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feature to the top</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr><th colspan="3">Emails to customers on:</th></tr>
-                                                <tr>
-                                                    <td>New Product</td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Price Drop </td>
-                                                    <td><input type="text" value="10" class="form-control"></td>
-                                                    <td><input type="text" value="1000" class="form-control"></th>
-                                                </tr>
-                                            </table>
+                                                @endforeach
+                                                
+                                                
+                                                
+                                                
+                                            </tbody></table>
                                             <div class="contact-form-btn">
                                                 <button class="button button--md" type="submit"> Save
                                                 </button>
@@ -766,11 +885,10 @@
                                                 <td>{{$rate->hours}}</td>
                                                 <td>{{$rate->amount}}</td>
                                                 <td> 
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit</a> | 
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit </a> | 
                                                     <form class="d-inline" action="{{route('admin.shipments')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
                                                         <input type="hidden" name="rate_id" value="{{$rate->id}}">
-                                                        <input type="hidden" name="option" value="delete">
-                                                        <button type="submit" class="text-danger">Delete</button>
+                                                        <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
                                                     </form>
                                                 </td>
                                                 <div class="modal fade" id="rateedit{{$rate->id}}" tabindex="-1" aria-labelledby="rateedit{{$rate->id}}ModalLabel" aria-hidden="true">
@@ -840,7 +958,7 @@
                             </div>
                           
                         </div>
-                    </div>
+                      </div>
                   </div>
               </div>
             </div>

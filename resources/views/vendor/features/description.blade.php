@@ -42,7 +42,7 @@
                 
                 
                 <h2 class="font-title--sm blog-head-title">
-                  {{$plan->name}}
+                  {{$feature->name}}
                 </h2>
                 <div class="single-blog--tag-info">
                     <div class="single-blog--tag-item">
@@ -162,16 +162,11 @@
               <!-- comment Box   -->
               <div class="comment-box">
                 <h5 class="font-body--xxxl-500">Subscribe</h5>
-                <form action="{{route('vendor.subscription.store')}}" method="post">@csrf
-                  <input type="hidden" name="plan" id="plan" value="{{$plan->slug}}">
+                <form action="{{route('vendor.subscription.feature')}}" method="post">@csrf
+                  <input type="hidden" name="plan" id="plan" value="{{$feature->slug}}">
                   <div class="contact-form-group">
                     <div class="contact-form-input col-lg-6 pt-3">
-                        <select id="selectbox2" name="duration" class="contact-form-input__dropdown" required>
-                            <option value="1"> 1 month -- {!!cache('settings')['currency_symbol']!!}{{number_format($plan->months_1)}}</option>
-                            <option value="3"> 3 months -- {!!cache('settings')['currency_symbol']!!}{{number_format($plan->months_3)}}</option>
-                            <option value="6"> 6 months -- {!!cache('settings')['currency_symbol']!!}{{number_format($plan->months_6)}}</option>
-                            <option value="12"> 12 months -- {!!cache('settings')['currency_symbol']!!}{{number_format($plan->months_12)}}</option>
-                        </select>
+                        
                     </div>
                     <div class="contact-form--button col-lg-6 ps-2">
                         <button class="button button--md" type="submit">

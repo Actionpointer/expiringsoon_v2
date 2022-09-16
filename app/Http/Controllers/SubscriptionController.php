@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plan;
+use App\Models\Adplan;
+use App\Models\Feature;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Http\Traits\PaymentTrait;
@@ -10,37 +12,48 @@ use App\Http\Traits\PaymentTrait;
 class SubscriptionController extends Controller
 {
     use PaymentTrait;
+
     public function __construct(){
         $this->middleware('auth')->except('plans');
     }
-    
-    
-    public function index(){
-        $plans = Plan::all();
-        $user = auth()->user();
-        return view('vendor.subscription',compact('plans','user'));
-    }
 
-    
-    public function admin_index()
-    {
+    public function admin_index(){
         $subscriptions = Subscription::all();
-        return view('admin.subscriptions',compact('subscriptions'));
+        $features = Feature::all();
+        return view('admin.subscriptions',compact('subscriptions','features'));
     }
 
     
-    public function store(Request $request)
-    {
+    public function plan_subscription(Request $request){
         if($request->has('subscription_id')){
             $subscription = Subscription::find($request->subscription_id);
         }else{
             $plan = Plan::where('slug',$request->plan)->first();
-            if(auth()->user()->subscriptions->where('plan_id',$plan->id)->where('type','enterprise')->where('status',true)->where('end_at','>',now())->isNotEmpty()){
+            if(auth()->user()->subscriptions->where('subscribable_id',$plan->id)->where('status',true)->where('end_at','>',now())->isNotEmpty()){
                 return redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
             }
-            $subscription = Subscription::create(['user_id'=> auth()->id(),'plan_id'=> $plan->id,'type'=> $plan->type,'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration)]);
+            $subscription = Subscription::create(['user_id'=> auth()->id(),'subscribable_id'=> $plan->id,'subscribable_type'=> get_class($plan),'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration)]);
         }
         $link = $this->initializePayment($subscription->amount,[$subscription->id,$subscription->duration]);
+        if(!$link)
+            return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
+        else
+        return redirect()->to($link);
+    }
+
+    public function feature_subscription(Request $request){
+        // dd($request->all());
+        $features = collect([]);
+        if($request->has('feature_id')){
+            $feature = Feature::where('id',$request->feature_id)->get();
+            $features->push($feature);
+        }else{
+            foreach($request->adplans as $key=>$plan){
+                $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key])])->first();
+                $features->push($feature);
+            }
+        }
+        $link = $this->initializePayment($features->sum('amount'),$features->pluck('id')->toArray(),'features');
         if(!$link)
             return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
         else
@@ -56,12 +69,7 @@ class SubscriptionController extends Controller
 
     
      
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         //

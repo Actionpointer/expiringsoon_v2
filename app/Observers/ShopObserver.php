@@ -28,12 +28,11 @@ class ShopObserver
         //
     }
 
-    /**
-     * Handle the Shop "deleted" event.
-     *
-     * @param  \App\Models\Shop  $shop
-     * @return void
-     */
+    public function deleting(Shop $shop)
+    {
+        $shop->adverts->delete();
+    }
+
     public function deleted(Shop $shop)
     {
         //

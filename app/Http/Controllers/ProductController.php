@@ -23,15 +23,7 @@ class ProductController extends Controller
         $category = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
-        $state = auth()->check() && auth()->user()->state_id ? auth()->user()->state->name : session('geo_locale')['state'];
-        $state_id = State::where('name',$state)->first()->id;
-        $advert = Advert::state($state_id)->running()->where('position',"F")->orderBy('views','asc')->first();
-        if($advert){
-            $advert->views = $advert->views + 1;
-            $advert->save();
-        }
         $products = Product::edible()->approved()->accessible()->available()->visible();
-
         if(request()->query() && request()->query('state_id')){
             if(request()->query('state_id') != '-1'){
                 $state_id = request()->query('state_id');
@@ -39,22 +31,11 @@ class ProductController extends Controller
                     $qry->where('state_id',$state_id);
                 });
             }
-        }else{
-            
-            $products = $products->whereHas('shop',function($qry) use($state_id){
-                $qry->where('state_id',$state_id);
-            });
-        }
+        }else{$state_id = 0;}
         if(request()->query() && request()->query('category_id')){
             $products = $products->where('category_id',request()->query('category_id'));
             $category = Category::find(request()->query('category_id'));
         }
-        // if(request()->query() && request()->query('subcategory_id')){
-        //     $subcategory = Subcategory::find(request()->query('subcategory_id'));
-        //     $products = $products->filter(function($value) use($subcategory){ 
-        //         return in_array($subcategory->id,$value->subcategories); 
-        //     });
-        // }
         if(request()->query() && request()->query('sortBy')){
             if(request()->query('sortBy') == 'price_asc'){
                 $products = $products->orderBy('price','asc');
@@ -70,6 +51,11 @@ class ProductController extends Controller
             }
         }
         $products = $products->paginate(16);
+        $advert = Advert::state($state_id)->running()->where('position',"F")->orderBy('views','asc')->first();
+        if($advert){
+            $advert->views = $advert->views + 1;
+            $advert->save();
+        }
         return view('frontend.product.list',compact('advert','products','category','categories','states','state_id'));
     }
 

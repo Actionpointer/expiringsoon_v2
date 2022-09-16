@@ -5,18 +5,17 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('dashboard',[App\Http\Controllers\HomeController::class, 'admin'])->name('dashboard');
     Route::get('settings',[App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
     Route::post('settings',[App\Http\Controllers\SettingsController::class, 'settings'])->name('settings');
-    Route::post('shipping-rates',[App\Http\Controllers\ShipmentController::class, 'admin_rates'])->name('shipments');
-    Route::post('shipping-rates/edit',[App\Http\Controllers\ShipmentController::class, 'admin_update'])->name('shipments.update');
-    Route::post('user',[App\Http\Controllers\SettingsController::class, 'storeAdmin'])->name('user.store');
-    Route::post('user/update',[App\Http\Controllers\SettingsController::class, 'updateAdmin'])->name('user.update');
-    Route::post('user/delete',[App\Http\Controllers\SettingsController::class, 'destroyAdmin'])->name('user.delete');
-    
+    Route::post('shipping-rates',[App\Http\Controllers\SettingsController::class, 'shipping_rates'])->name('shipments');
+    Route::post('users',[App\Http\Controllers\SettingsController::class, 'admins'])->name('users');
     Route::post('plans',[App\Http\Controllers\SettingsController::class, 'plans'])->name('plans');
-    Route::get('categories',[App\Http\Controllers\SettingsController::class, 'categories'])->name('categories');
-    Route::post('categories',[App\Http\Controllers\SettingsController::class, 'categories_management'])->name('categories.management');
+    Route::post('adplans',[App\Http\Controllers\SettingsController::class, 'adplans'])->name('adplans');
     
     Route::get('subscriptions',[App\Http\Controllers\SubscriptionController::class, 'admin_index'])->name('subscriptions');
     Route::post('subscriptions',[App\Http\Controllers\SubscriptionController::class, 'update'])->name('subscriptions');
+    
+    Route::get('categories',[App\Http\Controllers\SettingsController::class, 'categories'])->name('categories');
+    Route::post('categories',[App\Http\Controllers\SettingsController::class, 'categories_management'])->name('categories.management');
+    
     
     Route::get('shops', [App\Http\Controllers\ShopController::class, 'admin_index'])->name('shops');
     Route::get('shop/manage/{shop}', [App\Http\Controllers\ShopController::class, 'admin_view'])->name('shop.show');

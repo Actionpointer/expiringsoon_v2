@@ -18,7 +18,7 @@
 }
 </style>
 @endpush
-@section('title')Shopping Cart | Expiring Soon @endsection
+@section('title') Subscription Plans | Expiring Soon @endsection
 @section('main')
     <!-- breedcrumb section start  -->
   <div class="section breedcrumb">
@@ -235,64 +235,90 @@
                                 </span>
                             </td>
                         @endforeach
+                    </tr>   
+                    <tr class="">
+                        <th scope="row" class="bg-light py-3 px-4 mb-0">Pricing</th>
+                        @foreach($plans as $enterprise)
+                            <td class="bg-light"></td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <th scope="row" class="font-body--md-400 py-3 ps-5">1 Month</th>
+                        @foreach($plans as $enterprise)
+                            <td class="text-center @if(!$loop->last) border-right @endif">
+                                {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_1)}}
+                            </td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <th scope="row" class="font-body--md-400 py-3 ps-5">3 Months</th>
+                        @foreach($plans as $enterprise)
+                            <td class="text-center @if(!$loop->last) border-right @endif">
+                                {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_3)}}
+                            </td>
+                        @endforeach
                     </tr> 
-                </tr>
-                <tr class="">
-                    <th scope="row" class="bg-light py-3 px-4 mb-0">Pricing</th>
-                    @foreach($plans as $enterprise)
-                        <td class="bg-light"></td>
-                    @endforeach
-                </tr>
-                <tr>
-                    <th scope="row" class="font-body--md-400 py-3 ps-5">1 Month</th>
-                    @foreach($plans as $enterprise)
-                        <td class="text-center @if(!$loop->last) border-right @endif">
-                            {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_1)}}
-                        </td>
-                    @endforeach
-                </tr>
-                <tr>
-                    <th scope="row" class="font-body--md-400 py-3 ps-5">3 Months</th>
-                    @foreach($plans as $enterprise)
-                        <td class="text-center @if(!$loop->last) border-right @endif">
-                            {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_3)}}
-                        </td>
-                    @endforeach
-                </tr> 
-                <tr>
-                    <th scope="row" class="font-body--md-400 py-3 ps-5">6 Months</th>
-                    @foreach($plans as $enterprise)
-                        <td class="text-center @if(!$loop->last) border-right @endif">
-                            {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_6)}}
-                        </td>
-                    @endforeach
-                </tr> 
-                <tr>
-                    <th scope="row" class="font-body--md-400 py-3 ps-5"> 1 Year</th>
-                    @foreach($plans as $enterprise)
-                        <td class="text-center @if(!$loop->last) border-right @endif">
-                            {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_12)}}
-                        </td>
-                    @endforeach
-                </tr>                
+                    <tr>
+                        <th scope="row" class="font-body--md-400 py-3 ps-5">6 Months</th>
+                        @foreach($plans as $enterprise)
+                            <td class="text-center @if(!$loop->last) border-right @endif">
+                                {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_6)}}
+                            </td>
+                        @endforeach
+                    </tr> 
+                    <tr>
+                        <th scope="row" class="font-body--md-400 py-3 ps-5"> 1 Year</th>
+                        @foreach($plans as $enterprise)
+                            <td class="text-center @if(!$loop->last) border-right @endif">
+                                {!!cache('settings')['currency_symbol']!!}{{number_format($enterprise->months_12)}}
+                            </td>
+                        @endforeach
+                    </tr>                
                 <tr class="border-top">
                     <th scope="row" class="p-3"> </th>
                     @foreach($plans as $enterprise)
                         <td class="text-center @if(!$loop->last) border-right @endif p-3">
-                            @if(auth()->check() && auth()->user()->activeSubscription && auth()->user()->activeSubscription->plan_id == $enterprise->id)
-                                <button type="button" class="btn btn-sm btn-primary disabled text-nowrap">
-                                    Current Plan 
-                                    {{auth()->user()->activeSubscription->start_at->diffInMonths(auth()->user()->activeSubscription->end_at)}} months
-                                </button>
+                            @if(auth()->check())
+                                @if(auth()->user()->activeSubscription)
+                                    @if($enterprise->id == auth()->user()->activeSubscription->id)
+                                        <button type="button" class="btn btn-sm btn-primary disabled text-nowrap">
+                                            Current Plan 
+                                            {{auth()->user()->activeSubscription->start_at->diffInMonths(auth()->user()->activeSubscription->end_at)}} months
+                                        </button>
+                                    @else
+                                        <select id="{{$enterprise->slug}}" class="form-control-sm chooseplan" @if($enterprise->slug == 'free_plan') disabled @endif>
+                                            <option value="0">Choose Plan</option>
+                                            <option value="1">1 Month</option>
+                                            <option value="3">3 Months</option>
+                                            <option value="6">6 Months</option>
+                                            <option value="12">1 Year</option>
+                                        </select>
+                                    @endif
+                                @else
+                                    @if($enterprise->slug == 'free_slug')
+                                    <button type="button" class="btn btn-sm btn-primary disabled text-nowrap">
+                                        Current Plan 
+                                    </button>
+                                    @else
+                                    <select id="{{$enterprise->slug}}" class="form-control-sm chooseplan" >
+                                        <option value="0">Choose Plan</option>
+                                        <option value="1">1 Month</option>
+                                        <option value="3">3 Months</option>
+                                        <option value="6">6 Months</option>
+                                        <option value="12">1 Year</option>
+                                    </select>  
+                                    @endif
+                                @endif
                             @else
-                                <select id="{{$enterprise->slug}}" class="form-control-sm chooseplan" @if(auth()->check() && !auth()->user()->activeSsubscription && $enterprise->slug == 'free_plan') disabled @endif>
+                                <select id="{{$enterprise->slug}}" class="form-control-sm chooseplan">
                                     <option value="0">Choose Plan</option>
                                     <option value="1">1 Month</option>
                                     <option value="3">3 Months</option>
                                     <option value="6">6 Months</option>
                                     <option value="12">1 Year</option>
-                                </select>  
+                                </select> 
                             @endif
+                            
                         </td>  
                     @endforeach
                 </tr>
@@ -326,7 +352,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <form action="{{route('vendor.subscription.store')}}" method="post" class="d-flex ">@csrf
+                                <form action="{{route('vendor.subscription.plan')}}" method="post" class="d-flex ">@csrf
                                     <input type="hidden" name="plan" id="plan">
                                     <input type="hidden" name="duration" id="duration">
                                     <button href="#" class="button button--md text-white d-flex justify-content-between w-100">

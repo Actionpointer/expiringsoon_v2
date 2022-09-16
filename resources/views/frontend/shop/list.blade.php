@@ -221,7 +221,7 @@
                             </div>
                             <div class="select-box--item" style="min-width: 200px!important">
                                 <select name="state_id" id="state_id" class="select2" onchange="document.getElementById('filterform').submit();">
-                                    <option value="0">All States</option>
+                                    <option value="0" @if($state_id == 0) selected @endif>All States</option>
                                     @foreach ($states as $state)
                                         <option value="{{$state->id}}" @if($state_id == $state->id) selected @endif>{{$state->name}}</option>
                                     @endforeach
