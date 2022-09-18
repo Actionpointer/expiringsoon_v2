@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Tag;
 use App\Models\Shop;
 use App\Models\State;
 use App\Models\Advert;
 use App\Models\Product;
 use App\Models\Category;
+use Faker\Provider\Lorem;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
+use Illuminate\Validation\Rule;
+use App\Http\Requests\ProductRequest;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -23,14 +30,12 @@ class ProductController extends Controller
         $category = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
-        $products = Product::edible()->approved()->accessible()->available()->visible();
+        $products = Product::edible()->approved()->active()->accessible()->available()->visible();
         if(request()->query() && request()->query('state_id')){
-            if(request()->query('state_id') != '-1'){
-                $state_id = request()->query('state_id');
-                $products = $products->whereHas('shop',function($qry) use($state_id){
-                    $qry->where('state_id',$state_id);
-                });
-            }
+            $state_id = request()->query('state_id');
+            $products = $products->whereHas('shop',function($qry) use($state_id){
+                $qry->where('state_id',$state_id);
+            });
         }else{$state_id = 0;}
         if(request()->query() && request()->query('category_id')){
             $products = $products->where('category_id',request()->query('category_id'));
@@ -51,7 +56,7 @@ class ProductController extends Controller
             }
         }
         $products = $products->paginate(16);
-        $advert = Advert::state($state_id)->running()->where('position',"F")->orderBy('views','asc')->first();
+        $advert = Advert::state($state_id)->running()->certifiedShop()->where('position',"F")->orderBy('views','asc')->first();
         if($advert){
             $advert->views = $advert->views + 1;
             $advert->save();
@@ -61,6 +66,8 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
+        if((!auth()->check() && !$product->isCertified()) || (auth()->check() && auth()->id() != $product->shop->owner()->id) )
+        abort(404,'Product is not available');
         return view('frontend.product.view',compact('product'));
     }
 
@@ -78,7 +85,19 @@ class ProductController extends Controller
 
     public function create(Shop $shop){
         $categories = Category::all();
-        return view('shop.product.create',compact('shop','categories'));
+        $tags = Tag::all(); 
+        return view('shop.product.create',compact('shop','categories','tags'));
+    }
+
+    public function store(Shop $shop,ProductRequest $request){
+        $validated = $request->validated();
+        dd($validated);
+        if($request->hasFile('photo')){
+            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $request->file('photo')->storeAs('public/',$photo);
+        } 
+        $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120]);
+        return redirect()->route('shop.product.list',$shop);
     }
 
     public function edit($id)
@@ -103,11 +122,13 @@ class ProductController extends Controller
     }
 
     public function admin_manage(Request $request){
-        if($request->action == 'approve'){
-            $products = Product::whereIn('id',$request->products)->update(['status'=> 1]);
+        if($request->delete){
+            $products = Product::whereIn('id',$request->products)->whereDoesntHave('orders')->get();
+            $products->each->delete();
+            return redirect()->back()->with(['result'=>1,'message'=> 'Products deleted Successfully']);
         }else{
-            $products = Product::whereIn('id',$request->products)->update(['status'=> '-1']);
+            $products = Product::whereIn('id',$request->products)->update(['status'=> $request->approved]);
         }
-        return redirect()->back();
+        return redirect()->back()->with(['result'=>1,'message'=> 'Products updated Successfully']);
     }
 }

@@ -77,7 +77,7 @@
                                 <!-- Stock Status  -->
                                 <td class="cart-table-item stock-status order-date align-middle">
                                   
-                                  <span class="font-body--md-400  @if($shop->status) in @else out @endif"> {{ $shop->status ? 'Active':'Inactive'}}</span>        
+                                  <span class="font-body--md-400  @if($shop->approved) in @else out @endif"> {{ $shop->approved ? 'Approved':'Pending Approval'}}</span>        
                                 </td>
                                 <td class="cart-table-item add-cart align-middle">
                                   <a href="{{route('admin.shop.show',$shop)}}"  class="cart-table__product-item"  >  

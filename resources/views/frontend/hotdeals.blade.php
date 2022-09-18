@@ -195,7 +195,7 @@
                                             <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
                                         </a>
                                         @if($advert->product->price > $advert->product->amount)
-                                            <span class="tag blue font-body--md-400">sale {{$advert->discount}}% </span>
+                                            <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
                                         @if($advert->product->stock == 0)
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
@@ -277,7 +277,7 @@
                                             <a href="product-details.html">
                                                 <img src="src/images/products/img-02.png" alt="products" />
                                             </a>
-                                            <span class="tag danger font-body--md-400">sale 50%</span>
+                                            <span class="tag danger font-body--md-400">sale 50% off</span>
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
@@ -574,7 +574,7 @@
                                             <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
                                         </a>
                                         @if($advert->product->price > $advert->product->amount)
-                                            <span class="tag blue font-body--md-400">sale {{$advert->discount}}% </span>
+                                            <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
                                         @if($advert->product->stock == 0)
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
@@ -657,7 +657,7 @@
                                             <a href="product-details.html">
                                                 <img src="src/images/products/img-02.png" alt="products" />
                                             </a>
-                                            <span class="tag danger font-body--md-400">sale 50%</span>
+                                            <span class="tag danger font-body--md-400">sale 50% off</span>
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
@@ -954,7 +954,7 @@
                                             <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
                                         </a>
                                         @if($advert->product->price > $advert->product->amount)
-                                            <span class="tag blue font-body--md-400">sale {{$advert->discount}}% </span>
+                                            <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off </span>
                                         @endif
                                         @if($advert->product->stock == 0)
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
@@ -1037,7 +1037,7 @@
                                             <a href="product-details.html">
                                                 <img src="src/images/products/img-02.png" alt="products" />
                                             </a>
-                                            <span class="tag danger font-body--md-400">sale 50%</span>
+                                            <span class="tag danger font-body--md-400">sale 50% off</span>
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
@@ -1334,7 +1334,7 @@
                                             <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
                                         </a>
                                         @if($advert->product->price > $advert->product->amount)
-                                            <span class="tag blue font-body--md-400">sale {{$advert->discount}}% </span>
+                                            <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
                                         @if($advert->product->stock == 0)
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
@@ -1417,7 +1417,7 @@
                                             <a href="product-details.html">
                                                 <img src="src/images/products/img-02.png" alt="products" />
                                             </a>
-                                            <span class="tag danger font-body--md-400">sale 50%</span>
+                                            <span class="tag danger font-body--md-400">sale 50% off</span>
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
@@ -1714,7 +1714,7 @@
                                             <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
                                         </a>
                                         @if($advert->product->price > $advert->product->amount)
-                                            <span class="tag blue font-body--md-400">sale {{$advert->discount}}% </span>
+                                            <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
                                         @if($advert->product->stock == 0)
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
@@ -1797,7 +1797,7 @@
                                             <a href="product-details.html">
                                                 <img src="src/images/products/img-02.png" alt="products" />
                                             </a>
-                                            <span class="tag danger font-body--md-400">sale 50%</span>
+                                            <span class="tag danger font-body--md-400">sale 50% off</span>
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
@@ -2265,7 +2265,7 @@
                                         <img src="{{Storage::url($feature->product->photo)}}" alt="{{$feature->product->name}}" onerror="this.src='img/no-image.png';" />
                                     </a>
                                     @if($feature->product->price > $feature->product->amount)
-                                        <span class="tag blue font-body--md-400">sale {{$feature->discount}}% </span>
+                                        <span class="tag blue font-body--md-400">sale {{floor($feature->discount)}}% off </span>
                                     @endif
                                     @if($feature->product->stock == 0)
                                         <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>

@@ -14,7 +14,11 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        //
+        if(cache('settings')['auto_approve_product'])
+        $product->approved = true;
+        if($product->shop->owner()->activeSubscription)
+        $product->status = true;
+        $product->save();
     }
 
     /**

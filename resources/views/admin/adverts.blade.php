@@ -76,11 +76,8 @@
                                                   <small class="text-muted">(shop)</small>
                                               @endif
                                             </h5>
-                                            <span style="font-weight:550;color:#ff0000">Product expired and is no longer featured</span>
+                                            {{-- <span style="font-weight:550;color:#ff0000">Product expired and is no longer featured</span> --}}
                                         </div>
-                                        
-                                        
-                                        
                                     </a>
                                 </td>
                                 
@@ -90,22 +87,17 @@
                                 </td>
                                 <!-- Stock Status  -->
                                 <td class="cart-table-item stock-status order-date align-middle">
-                                  @if($advert->status)
-                                    @if($advert->advertable_type == 'App\Models\Shop')
-                                      @if($advert->advertable->owner()->features->isNotEmpty())
-                                      <span class="font-body--md-400 in"> Active</span>
-                                      @else
-                                        <span class="font-body--md-400 out"> Expired</span>
+                                  @if($advert->approved)
+                                    @if($advert->status)
+                                      @if($advert->advertable->isCertified())
+                                        <span class="font-body--md-400 in"> Ad is showing</span>
+                                      @else 
+                                        <span class="font-body--md-400 out"> Ad is not showing</span>
                                       @endif
-                                    @else
-                                      @if($advert->advertable->shop->owner()->features->isNotEmpty())
-                                        <span class="font-body--md-400 in"> Active</span>
-                                      @else
-                                        <span class="font-body--md-400 out"> Expired</span>
-                                      @endif
+                                    @else <span class="font-body--md-400 out"> Inactive</span>
                                     @endif
-                                  @else
-                                    <span class="font-body--md-400 out"> Not Approved</span>
+                                  @else 
+                                    <span class="font-body--md-400 out"> Pending Approval</span>
                                   @endif
                                 </td>
 
@@ -117,11 +109,12 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                       <form class="d-inline" action="{{route('admin.adverts.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                                         <input type="hidden" name="advert_id" value="{{$advert->id}}">
-                                        @if(!$advert->status)
-                                        <button type="submit" name="action" value="approve" class="dropdown-item">Approve</button>
+                                        @if(!$advert->approved)
+                                        <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
                                         @else
-                                        <button type="submit" name="action" value="disapprove" class="dropdown-item">Disapprove</button>
+                                        <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
                                         @endif
+                                        <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
                                       </form>                                      
                                     </div>
                                   </div>

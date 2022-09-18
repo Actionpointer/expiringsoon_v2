@@ -31,22 +31,6 @@
 </div>
   <!-- breedcrumb section end   -->
 
-  <?php
-  if(isset($_GET['top']) && $_GET['top']=='1'){
-  echo'
-  <div class="notify">
-  <p style="color:#fff">You topped up your Wallet</p>
-  </div>
-  ';
-  }
-  if(isset($_GET['top']) && $_GET['top']!=='1'){
-    echo'
-    <div class="error">
-    <p style="color:#fff">Error Processing Payment</p>
-    </div>
-    ';
-  }
-  ?>
 
   <!-- dashboard Secton Start  -->
   <div class="dashboard section">

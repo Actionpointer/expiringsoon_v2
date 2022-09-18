@@ -173,18 +173,23 @@
                                     <div id="process3" style="font-size:15px;margin-bottom:20px">
                                         
                                             <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
-                                                <div>30 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount30}} % Discount</span></div>
+                                                <div>30 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount30}}% Discount</span></div>
                                                 <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="30" data-discount="{{$shop->discount30}}">Edit</a>
                                             </div>
                                             </br />
                                             <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
-                                              <div>60 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount60}} % Discount</span></div>
+                                              <div>60 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount60}}% Discount</span></div>
                                               <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="60" data-discount="{{$shop->discount60}}">Edit</a>
                                             </div>
                                             </br />
                                             <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
-                                              <div>90 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount90}} % Discount</span></div>
+                                              <div>90 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount90}}% Discount</span></div>
                                               <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="90" data-discount="{{$shop->discount90}}">Edit</a>
+                                            </div>
+                                            </br />
+                                            <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
+                                              <div>120 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount120}}% Discount</span></div>
+                                              <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="120" data-discount="{{$shop->discount120}}">Edit</a>
                                             </div>
                                             </br />
                                         

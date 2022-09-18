@@ -14,7 +14,11 @@ class ShopObserver
      */
     public function created(Shop $shop)
     {
-        //
+        if(cache('settings')['auto_approve_shop'])
+        $shop->approved = true;
+        if($shop->owner()->activeSubscription)
+        $shop->status = true;
+        $shop->save();
     }
 
     /**

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{asset('src/lib/css/bvselect.css')}}" />
     <link rel="stylesheet" href="{{asset('src/lib/css/venobox.css')}}" />
     <link rel="stylesheet" href="{{asset('src/lib/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('src/lib/css/font-awesome.min.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{asset('src/select2/css/select2.min.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{asset('src/select2/css/custom.css')}}"/>
     <link rel="stylesheet" href="{{asset('src/css/style.css')}}" />
@@ -225,6 +226,8 @@
                             <a href="{{route('login')}}">Login</a>
                             <span>|</span>
                             <a href="{{route('register')}}">Register</a>
+                            <span>|</span>
+                            <a href="{{route('start-selling')}}">Start Selling</a>
                             @else
                             <div class="header__navigation-menu-link p-0">
                                 <a href="#">

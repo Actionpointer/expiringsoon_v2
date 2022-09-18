@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" href="int-tel/build/css/intlTelInput.css">
-<link rel="stylesheet" href="int-tel/build/css/demo.css">
+
 <style>
   .notify{
     margin-top: 0px;

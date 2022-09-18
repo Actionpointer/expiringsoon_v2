@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @push('styles')
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" /> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/> --}}
+<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
 
 @endpush
 @section('title')My Products | Expiring Soon @endsection
@@ -56,7 +56,6 @@
                       <tr>
                           <th scope="col" class="cart-table-title">Product</th>
                           <th scope="col" class="cart-table-title">Price</th>
-                          <th scope="col" class="cart-table-title">Stock</th>
                           <th scope="col" class="cart-table-title"></th>
                           {{-- <th scope="col" class="cart-table-title"></th> --}}
                       </tr>
@@ -79,32 +78,35 @@
                                 </span>
                                 </h5>
                               </a>
-                              @if($product->expire_at <= now())
-                                <ul class="d-flex" style="margin-top:10px;color:#888;font-size:12px">
-                                  <li>Expires <span style="font-weight:550;color:#00b207">
-                                    {{$product->expire_at->format('l, M jS Y')}} | {{$product->expire_at->diffInDays(now())}} days</span>
-                                  <li>
-                                </ul>
-                              @endif
-                              @if($product->expire_at <= now())
-                                <ul class="d-flex" style="margin-top:10px;color:#888;font-size:12px">
-                                  <li><span style="font-weight:550;color:#ff0000">Product expired and is no longer listed</span><li>
-                                </ul>
-                              @endif
+                              
+                                <p class="d-flex flex-column flex-md-row" style="margin-top:10px;color:#888;font-size:12px">          
+                                      @if(!$product->isEdible())
+                                        <span class="font-body--md-400 mx-1 text-danger">Product expired</span> 
+                                      @elseif($product->expire_at->diffInDays(now()) <= 7)
+                                        <span class="mx-1 text-warning">Expires in {{$product->expire_at->diffInDays(now())}} days  </span> 
+                                      @else
+                                        <span class="font-body--md-400 mx-1">Expires on {{$product->expire_at->format('M jS Y')}}  </span> 
+                                      @endif
+                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->stock  > 10) bg-success text-white @else bg-danger text-white @endif ">{{$product->stock}} remaining</span>  
+                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->status) bg-primary text-white @else text-danger @endif"> 
+                                        @if($product->status) Active  @else Inactive @endif 
+                                      </span> 
+                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->approved) text-success  @else text-warning @endif"> 
+                                        @if($product->approved) Approved  @else Pending Approval @endif 
+                                      </span> 
+                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->visible) bg-dark text-white @else text-muted @endif"> 
+                                        @if($product->visible) Published  @else Draft @endif 
+                                      </span>
+                                      {{-- @if($product->adverts->isNotEmpty()) | Featured @endif --}}
+                                <p>
+                              
+                              
                             </td>
                               <!-- Price  -->
                             <td class="cart-table-item order-date align-middle">
                               <p class="font-body--lg-500">
                                 {!!cache('settings')['currency_symbol']!!}{{number_format($product->price , 2)}}
                               </p>
-                            </td>
-                              <!-- Stock Status  -->
-                            <td class="cart-table-item stock-status order-date align-middle">
-                              @if($product->stock  > 0)
-                                <span class="font-body--md-400 in">{{$product->stock}}</span>
-                              @else
-                                <span class="font-body--md-400 out">{{$product->stock}}</span>
-                              @endif
                             </td>
 
                             <td class="cart-table-item add-cart align-middle">
@@ -114,8 +116,10 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                   <a class="dropdown-item" href="{{route('shop.product.edit',[$shop,$product])}}">Edit</a>
+                                  <a class="dropdown-item" href="#">Unpublish</a>
                                   <a class="dropdown-item" href="#">Feature</a>
                                   <a class="dropdown-item" href="#">Delete</a>
+                                  
                                 </div>
                               </div>
                             </td>

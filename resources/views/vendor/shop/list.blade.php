@@ -88,11 +88,16 @@
                                     </td>
                                 </tr>
                             @empty
-                                <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                                    <p>You have no orders at this time.</p><br>
+                            <tr>
+                                <td colspan="7">
+                                  <div style="margin:auto;padding:1%;text-align:center;">
+                                    <p>Let's begin creating your shop.</p><br>
                                     <a href="{{route('vendor.shop.create')}}">Create Shop</a>
                                     
                                 </div>
+                                </td>
+                            </tr>
+                                
                             @endforelse
                         </tbody>
                     </table>

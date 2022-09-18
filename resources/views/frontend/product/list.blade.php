@@ -153,7 +153,7 @@
                                                 <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" onerror="this.src='{{asset('img/no-image.png')}}';" />
                                             </a>
                                                 @if($product->price > $product->amount)
-                                                <span class="tag blue font-body--md-400" style="font-size:13px">Sale {{$product->discount}} %</span>
+                                                <span class="tag blue font-body--md-400" style="font-size:13px">Sale {{floor($product->discount)}}% off</span>
                                                 @endif
                                                 @if($product->stock == 0)
                                                     <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>

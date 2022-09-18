@@ -476,7 +476,7 @@
                                                     <img src="{{Storage::url($feature->product->photo)}}" alt="{{$feature->product->name}}" onerror="this.src='img/no-image.png';" />
                                                 </a>
                                                 @if($feature->product->price > $feature->product->amount)
-                                                    <span class="tag blue font-body--md-400">sale {{$feature->discount}}% </span>
+                                                    <span class="tag blue font-body--md-400">sale {{floor($feature->discount)}}% off </span>
                                                 @endif
                                                 @if($feature->product->stock == 0)
                                                     <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
@@ -564,7 +564,7 @@
                                 <div class="cards-lg__img-wrapper">
                                     <img src="src/images/products/img-12.png" alt="products">
                                     <div class="tag-group">
-                                        <span class="tag danger">Sale 50%</span>
+                                        <span class="tag danger">Sale 50% off</span>
                                         <span class="tag blue">Best Sale</span>
                                     </div>
                                     <form action="#">
@@ -652,7 +652,7 @@
                                     <a href="product-details.html">
                                         <img src="src/images/products/img-02.png" alt="products">
                                     </a>
-                                    <span class="tag danger font-body--md-400">sale 50%</span>
+                                    <span class="tag danger font-body--md-400">sale 50% off</span>
                                     <div class="cards-md__favs-list">
                                         <span class="action-btn">
                                             <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -790,7 +790,7 @@
                                     <a href="product-details.html">
                                         <img src="src/images/products/img-02.png" alt="products">
                                     </a>
-                                    <span class="tag danger font-body--md-400">sale 50%</span>
+                                    <span class="tag danger font-body--md-400">sale 50% off</span>
                                     <div class="cards-md__favs-list">
                                         <span class="action-btn">
                                             <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1186,7 +1186,7 @@
                                     <a href="product-details.html">
                                         <img src="src/images/products/img-02.png" alt="products">
                                     </a>
-                                    <span class="tag danger font-body--md-400">sale 50%</span>
+                                    <span class="tag danger font-body--md-400">sale 50% off</span>
                                     <div class="cards-md__favs-list">
                                         <span class="action-btn">
                                             <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">

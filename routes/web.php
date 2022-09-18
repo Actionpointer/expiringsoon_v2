@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('about','about');
 
 Auth::routes();
+Route::view('start-selling','auth.register')->name('start-selling');
 Route::get('notifications',[App\Http\Controllers\UserController::class, 'notifications'])->name('notifications');
 Route::get('plans',[App\Http\Controllers\PlanController::class, 'plan_index'])->name('plans');
 Route::get('adplans',[App\Http\Controllers\PlanController::class, 'adplan_index'])->name('adplans');

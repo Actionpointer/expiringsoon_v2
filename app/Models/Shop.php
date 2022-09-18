@@ -27,11 +27,11 @@ class Shop extends Model
     protected $fillable = ['name','slug','email','phone','banner','address','state_id','city_id'];
     
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     parent::observe(new \App\Observers\ShopObserver);
-    // }
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ShopObserver);
+    }
 
     public function sluggable():array
     {
@@ -49,15 +49,23 @@ class Shop extends Model
     public function getRouteKeyName(){
         return 'slug';
     }
-    public function getMobileAttribute()
-    {
+    public function getMobileAttribute(){
         return $this->phone_prefix.intval($this->phone);   
+    }
+    public function scopeApproved($query){
+        return $query->where('approved',true);
+    }
+    public function scopeVisible($query){
+        return $query->where('visible',true);
     }
     public function scopeActive($query){
         return $query->where('status',true);
     }
     public function scopeSelling($query){
         return $query->whereHas('products',function($q) {$q->where('status',true)->where('visible',true);});
+    }
+    public function isCertified(){
+        return $this->status && $this->approved && $this->visible;
     }
     public function users(){
         return $this->belongsToMany(User::class)->withPivot('role','status');
@@ -87,10 +95,8 @@ class Shop extends Model
         return $this->hasMany(ShippingRate::class);
     }
     public function categories(){
-        $categories = collect([]);
-        foreach($this->categories as $category_id){
-            $categories->push(Category::find($category_id));
-        }
+        $categories = $this->products->pluck('category_id');
+        $categories = Category::whereIn('id',$categories)->get();
         return $categories;
     }
     public function products(){

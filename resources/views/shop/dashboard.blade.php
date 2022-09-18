@@ -107,7 +107,7 @@
               <div class="dashboard__order-history" style="margin-top: 24px">
                 <div class="dashboard__order-history-title">
                     <h2 class="font-body--xl-500">Sales History</h2>
-                    <a href="sales.php" class="font-body--lg-500">
+                    <a href="{{route('shop.order.list',$shop)}}" class="font-body--lg-500">
                     View All</a>
                 </div>
                 <div class="dashboard__order-history-table">

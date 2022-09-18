@@ -89,23 +89,26 @@
                                           </div>
                                         </td>
                                         <td class="dashboard__order-history-table-item" style="padding-left:0px !important"> 
-                                            <span style="font-weight:500"> {{$advert->advertable->name}} </span>
+                                            <span style="font-weight:500"> {{$advert->product->name}} </span>
                                             <span class="d-block small">Product
-                                            @if(!$advert->advertable->isEdible())
+                                            
+                                            @if(!$advert->product->approved)
+                                              <button class="badge btn-danger">Pending Approval </button>
+                                            @elseif(!$advert->product->status)
+                                              <button class="badge btn-danger">Suspended </button>
+
+                                            @elseif(!$advert->product->isEdible())
                                               <button class="badge btn-danger">Expired </button>
                                             
-                                            @elseif(!$advert->advertable->status)
-                                              <button class="badge btn-danger">Inactive </button>
+                                            @elseif(!$advert->product->visible)
+                                              <button class="badge btn-danger">Not visible </button>
                                             
-                                            @elseif(!$advert->advertable->visible)
-                                              <button class="badge btn-danger">Invisible </button>
+                                            @elseif(!$advert->product->isAccessible())
+                                              <button class="badge btn-danger">Not accessible </button>
                                             
-                                            @elseif(!$advert->advertable->isAccessible())
-                                              <button class="badge btn-danger">Inaccessible </button>
-                                            
-                                            @elseif(!$advert->advertable->stock)
-                                              <button class="badge btn-danger"> Unavailable </button>
-                                            @else Active
+                                            @elseif(!$advert->product->stock)
+                                              <button class="badge btn-danger"> Out of Stock </button>
+                                            @else Satisfactory
                                             @endif </span>
                                         </td>
                                         <!-- Date  -->
@@ -114,10 +117,12 @@
                                         <td class="   dashboard__order-history-table-item order-total ">  {{ $advert->clicks}} </td>
 
                                         <td class="   dashboard__order-history-table-item order-total "> 
-                                            @if($advert->status)
-                                              Active
+                                            @if($advert->approved)
+                                                @if($advert->status) Approved & Active
+                                                @else Inactive
+                                                @endif
                                             @else
-                                              Inactive
+                                              Pending Approval
                                             @endif  
                                         </td>
                                         <!-- Status -->
@@ -131,16 +136,7 @@
                                               </button>
                                             </form>
                                             
-                                            {{-- <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <form class="d-inline" action="{{route('vendor.adverts.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
-                                                <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                @if(!$advert->status)
-                                                <button type="submit" name="action" value="publish" class="dropdown-item">Publish</button>
-                                                @else
-                                                <button type="submit" name="action" value="unpublish" class="dropdown-item">Unpublish</button>
-                                                @endif
-                                              </form>                                      
-                                            </div> --}}
+                                            
                                           </div>
                                         </td>
 
@@ -254,8 +250,12 @@
               'categories': categories,
           },
           success:function(data) {
-              console.log(data);
-              //adjust all the subtotals and grandtotals here
+            $('#product').children().remove()
+            console.log('filtered product count '+data.length)
+            data.forEach(element => {
+              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop.name+` </option>`)
+            });
+            $('#product').select2();
           },
           error: function (data, textStatus, errorThrown) {
               console.log(data);

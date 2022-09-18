@@ -88,12 +88,16 @@
                                 </td>
                                 <td class="cart-table-item stock-status align-middle">
                                   <div class="d-flex">
-                                    @if(!$product->status)
+                                    @if(!$product->approved)
                                       <span class="font-body--md-400 in bg-warning text-white"> Pending Approval</span>
-                                    @elseif($product->status == '-1')
-                                        <span class="font-body--md-400 out"> Rejected</span>
                                     @else 
                                         <span class="font-body--md-400 in"> Approved</span>
+                                    @endif
+
+                                    @if(!$product->status)
+                                        <span class="font-body--md-400 out"> Inactive</span>
+                                    @else
+                                        <span class="font-body--md-400 out"> Active</span>
                                     @endif
 
                                     @if($product->isEdible())
@@ -112,11 +116,12 @@
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <form class="d-inline" action="{{route('admin.products.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                                       <input type="hidden" name="products[]" value="{{$product->id}}">
-                                      @if(!$product->status || $product->status == '-1')
-                                      <button type="submit" name="action" value="approve" class="dropdown-item">Approve</button>
+                                      @if(!$product->approved)
+                                      <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
                                       @else
-                                      <button type="submit" name="action" value="reject" class="dropdown-item">Disapprove</button>
+                                      <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
                                       @endif
+                                      <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
                                     </form>                                      
                                   </div>
                                 </div>

@@ -30,7 +30,7 @@ class ShopController extends Controller
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
         
-        $shops = Shop::active()->selling();
+        $shops = Shop::active()->approved()->visible()->selling();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $shops = $shops->where('state_id',$state_id);
@@ -51,15 +51,17 @@ class ShopController extends Controller
             }
         }
         $shops = $shops->paginate(16);
-        $advert_G = Advert::state($state_id)->running()->activeShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_H = Advert::state($state_id)->running()->activeShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_G = Advert::state($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_H = Advert::state($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
         return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
     }
 
     public function show(Shop $shop){
+        if(!$shop->isCertified())
+        abort(404,'Shop is not available');
         $category = null;
         $categories = Category::has('products')->get();
-        $products = Product::where('shop_id',$shop->id)->edible()->approved()->accessible()->available()->visible();
+        $products = Product::where('shop_id',$shop->id)->edible()->approved()->active()->accessible()->available()->visible();
         if(request()->query() && request()->query('category_id')){
             $products = $products->where('category_id',request()->query('category_id'));
             $category = Category::find(request()->query('category_id'));
@@ -161,12 +163,14 @@ class ShopController extends Controller
     public function admin_view(Shop $shop){
         return view('admin.shops.view',compact('shop'));
     }
+
     public function admin_manage(Request $request){
         $shop = Shop::find($request->shop_id);
-        $shop->status = $request->action == 'suspend' ? false:true;
+        $shop->approved = $request->approved;
         $shop->save();
         return redirect()->back()->with(['result'=> '1','message'=> 'Shop Status Updated']);
     }
+    
     public function admin_kyc(Request $request){
         $kyc = Kyc::find($request->kyc_id);
         $kyc->status = $request->status;

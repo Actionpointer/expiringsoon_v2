@@ -1,8 +1,7 @@
 @extends('layouts.app')
 @push('styles')
     <!-- Phone input -->
-    <link rel="stylesheet" href="int-tel/build/css/intlTelInput.css">
-    <link rel="stylesheet" href="int-tel/build/css/demo.css">
+    
     <style>
       .notify{
         margin-top: 0px;
@@ -70,6 +69,8 @@
     <div class="form-wrapper">
       <h6 class="font-title--sm" style="font-size:16px">create account</h6>
       <form method="post" action="{{route('register')}}" id="register">@csrf
+
+        @if(Route::is('start-selling'))<input type="hidden" name="role" value="vendor">@endif
         <div class="form-input">
           <input type="text" name="fname" placeholder="First Name" required />
           @error('fname')
@@ -89,14 +90,14 @@
       
 
         <div class="form-input">
-          <input type="tel" name="phone" id="phone" placeholder="Phone number in local format. e.g 08023456789" required />
-          
-        </div>
-      @error('phone')
+          <input type="tel" name="phone" id="phone" placeholder="Phone number in {{cache('settings')['country']}}local format. e.g 08023456789" required />
+          @error('phone')
           <span class="invalid-feedback d-block" role="alert">
               <strong>{{ $message }}</strong>
           </span>
-      @enderror
+          @enderror
+        </div>
+      
       <div class="form-input">
         <input type="email" name="email" id="email" placeholder="Email Address" required />
         
@@ -177,7 +178,7 @@
           </div>
         </div>
         <div class="form-button">
-          <button type="submit" name="btn-register" class="button button--md w-100 btn-register button--disable">Create Account</button>
+          <button type="submit" name="btn-register" class="button button--md w-100 btn-register">Create Account</button>
         </div>
         <div class="form-register">
           Already have an account? <a href="{{route('login')}}">Login</a>

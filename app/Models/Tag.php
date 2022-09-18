@@ -11,7 +11,16 @@ class Tag extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
-    public function tag(){
+    protected $appends = ['category','category_id'];
+
+    public function categories(){
         return $this->belongsToMany(Category::class,'subcategories');
+    }
+
+    public function getCategoryAttribute(){
+        return $this->categories->first()->name;   
+    }
+    public function getCategoryIdAttribute(){
+        return $this->categories->first()->id;   
     }
 }

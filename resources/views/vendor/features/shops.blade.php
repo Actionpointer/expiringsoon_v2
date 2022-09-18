@@ -93,7 +93,6 @@
                                             <span class="d-block small">Shop
                                               @if(!$advert->advertable->status == '-1')
                                                 <button class="badge btn-danger">Suspended </button>
-                                              
                                               @elseif($advert->advertable->status)
                                                 <button class="badge btn-success">Active </button>
                                               

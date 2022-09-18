@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use App\Models\State;
-use App\Models\Country;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
+    // use GeoLocationTrait;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -24,7 +24,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers,GeoLocationTrait;
 
     /**
      * Where to redirect users after registration.
@@ -59,10 +59,10 @@ class RegisterController extends Controller
     {
         // dd($data);
         return Validator::make($data, [
-            'username' => ['required', 'string', 'max:255','unique:users'],
             'fname' => ['required', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             // 'role' => ['required', 'string'],
         ]);
@@ -83,10 +83,10 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'fname' => $data['fname'],
             'lname' => $data['lname'],
-            'phone' => intval($data['phone']),
+            'phone' => $data['phone'],
             'phone_prefix' => cache('settings')['dialing_code'],
-            'role' => 'shopper',
-            'state_id' => State::where('name',session('geo_locale')['state'])->first()->id,
+            'role' => $data['role'] ?? 'shopper',
+            'state_id' => $this->currentState()->id,
         ]);
     }
 }

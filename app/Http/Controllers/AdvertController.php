@@ -21,13 +21,23 @@ class AdvertController extends Controller
         $this->middleware('auth')->except('redirect');
     }
 
+    public function redirect(Advert $advert){
+        $advert->clicks =+ 1;
+        $advert->save();
+        if($advert->advertable_type == 'App\Models\Product'){
+            return redirect()->route('product.show',$advert->advertable);
+        }else{
+            return redirect()->route('vendor.show',$advert->advertable);
+        } 
+    }
+
     public function create(Feature $feature){
         // $feature = auth()->user()->features->where('subscribable_id',$feature->id)->first();
-        $shops = auth()->user()->shops;
+        $shops = Shop::where('user_id',auth()->id())->active()->visible()->approved()->selling()->get();
         $states = State::all();
         $state_id = $this->currentState()->id;
         if($feature->adplan->type == 'products'){
-            $products = Product::edible()->approved()->accessible()->available()->visible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
+            $products = Product::edible()->approved()->active()->accessible()->available()->visible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
             $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
             return view('vendor.features.products',compact('feature','products','categories','shops','states','state_id'));
         }else
@@ -68,10 +78,8 @@ class AdvertController extends Controller
                 $advert->advertable_id =  $shop->id;
                 $advert->advertable_type = get_class($shop);
                 $advert->state_id = $request->state_id;
-                $advert->status = false;
                 $advert->save();  
-            }
-             
+            }  
         }
         return redirect()->back();
     }
@@ -87,14 +95,9 @@ class AdvertController extends Controller
         return response()->json($products,200);
     }
 
-    public function redirect(Advert $advert){
-        $advert->clicks =+ 1;
-        $advert->save();
-        if($advert->advertable_type == 'App\Models\Product'){
-            return redirect()->route('product.show',$advert->advertable);
-        }else{
-            return redirect()->route('vendor.show',$advert->advertable);
-        } 
+    public function remove(Request $request){
+        $adverts = Advert::destroy($request->adverts);
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Ads Deleted Successfully']);
     }
 
     public function admin_index(){
@@ -102,23 +105,16 @@ class AdvertController extends Controller
         return view('admin.adverts',compact('adverts'));
     }
 
-    public function manage_advert(Request $request){
-        if($request->action == "delete")
-            $advert = Advert::where("id",$request->advert_id)->delete();
-        else 
-            $advert = Advert::where("id",$request->advert_id)->update(["status"=> $request->status]);
-    }
-
-    public function remove(Request $request){
-        $adverts = Advert::destroy($request->adverts);
-        return redirect()->back();
-    }
-
     public function admin_manage(Request $request){
         $advert = Advert::find($request->advert_id);
-        $advert->status = $request->action == 'disapprove'?false:true;
-        $advert->save();
-        return redirect()->back();
+        if($request->delete){
+            $advert->delete();
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Deleted Successfully']);
+        }else{
+            $advert->approved = $request->approved;
+            $advert->save();
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Updated Successfully']);
+        }
     }
 
 }

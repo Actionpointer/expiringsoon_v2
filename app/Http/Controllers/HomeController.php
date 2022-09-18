@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Kyc;
+use App\Models\City;
 use App\Models\Shop;
 use App\Models\Order;
-use App\Models\City;
 use App\Models\State;
 use App\Models\Advert;
 use App\Models\Category;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -23,9 +24,9 @@ class HomeController extends Controller
         $categories = Category::orderBy('name','ASC')->take(8)->get();
         $state = auth()->check() && auth()->user()->state_id ? auth()->user()->state->name : session('geo_locale')['state'];
         $state_id = State::where('name',$state)->first()->id;
-        $advert_A = Advert::state($state_id)->running()->activeShop()->where('position',"A")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_B = Advert::state($state_id)->running()->activeShop()->where('position',"B")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_Z = Advert::with('product')->state($state_id)->running()->activeProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_A = Advert::state($state_id)->running()->certifiedShop()->where('position',"A")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_B = Advert::state($state_id)->running()->certifiedShop()->where('position',"B")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_Z = Advert::with('product')->state($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
         return view('frontend.index',compact('categories','advert_A','advert_B','advert_Z'));
     }
 
@@ -33,10 +34,10 @@ class HomeController extends Controller
         $state = auth()->check() && auth()->user()->state_id ? auth()->user()->state->name : session('geo_locale')['state'];
         $state_id = State::where('name',$state)->first()->id;
         $categories = Category::orderBy('name','ASC')->take(8)->get();
-        $advert_C = Advert::state($state_id)->running()->activeShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_D = Advert::state($state_id)->running()->activeShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_E = Advert::state($state_id)->running()->activeShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_Z = Advert::with('product')->state($state_id)->running()->activeProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_C = Advert::state($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_D = Advert::state($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_E = Advert::state($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_Z = Advert::with('product')->state($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
         // dd($advert_Z);
         
         return view('frontend.hotdeals',compact('categories','advert_C','advert_D','advert_E','advert_Z'));
@@ -74,7 +75,7 @@ class HomeController extends Controller
 
     public function admin(){
         $user = auth()->user();
-        $documents = Kyc::whereHas('shop', function ($q) {$q->where('status',false); })->take(20)->get(); 
+        $documents = Kyc::whereHas('shop', function ($q) {$q->approved()->active(); })->take(20)->get(); 
         $orders = Order::where('status','new')->orderBy('created_at','desc')->get();   
         return view('admin.dashboard',compact('user','documents','orders'));
     }

@@ -17,6 +17,13 @@ class Advert extends Model
     protected $fillable = [
         'advertable_id','advertable_type','feature_id','status','state_id'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\AdvertObserver);
+    }
+
     public function advertable(){
         return $this->morphTo();
     }
@@ -41,15 +48,26 @@ class Advert extends Model
         return $query->where('state_id',$state_id);
     }
     public function scopeRunning($query){
-        return $query->whereHas('feature', function (Builder $qry) 
+        return $query->where('approved',true)->where('status',true)->whereHas('feature', function (Builder $qry) 
             { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); });
     }
-    public function scopeActiveProduct($query){
-        return $query->whereHas('product', function (Builder $qry) 
-                { $qry->edible()->approved()->visible()->accessible()->available();});
+    public function scopeCertifiedProduct($query){
+        return $query->whereHas('product', function (Builder $qry){ 
+                 $qry->edible()->approved()->active()->visible()->accessible()->available();});
     }
-    public function scopeActiveShop($query){
-        return $query->whereHas('shop', function (Builder $qry)  { $qry->where('status',1);});
+    public function scopeCertifiedShop($query){
+        return $query->whereHas('shop', function (Builder $qry)  { 
+            $qry->where('status',true)->where('approved',true)->where('visible',true)
+            ->whereHas('products',function(Builder $q){
+                $q->edible()->approved()->active()->visible()->accessible()->available();
+            });
+        });
+    }
+    public function scopeApproved($query){
+        return $query->where('approved',true);
+    }
+    public function scopeActive($query){
+        return $query->where('status',true);
     }
     
 

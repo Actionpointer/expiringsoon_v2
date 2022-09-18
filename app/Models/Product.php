@@ -29,13 +29,11 @@ class Product extends Model
         return 'slug';
     }
     
-    protected $fillable = [
-        'shop_id','quantity','photo','price','slug','name','status'
-    ];
+    protected $fillable = ['name','shop_id','slug','description','stock','category_id', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
     protected $appends = ['amount'];
 
     protected $dates = ['expire_at','uploaded'];
-    protected $casts = ['subcategories'=> 'array'];
+    protected $casts = ['tags'=> 'array'];
 
     public static function boot()
     {
@@ -64,24 +62,10 @@ class Product extends Model
         $discount = 0;
         if($timeline){
             if($this['discount'.$timeline]) 
-                $discount = $this['discount'.$timeline];
+                $discount = 100 * ($this->price - $this['discount'.$timeline]) / $this->price;
             elseif($this->shop['discount'.$timeline]) 
                 $discount = $this->shop['discount'.$timeline];
         }
-        // switch($timeline){
-        //     case 30: if($this->discount30) $discount = $this->discount30;
-        //             elseif($this->shop->discount30) $discount = $this->shop->discount30;
-        // }
-        // if($this->expire_at->diffInDays(now()) <= 30 && $this->shop->discount30)
-        //     $discount = $this->shop->discount30;
-        // elseif($this->expire_at->diffInDays(now()) <= 60 && $this->shop->discount60)
-        //     $discount = $this-> shop->discount60;
-        // elseif($this->expire_at->diffInDays(now()) <= 90 && $this-> shop->discount90)
-        //     $discount = $this-> shop->discount90;
-        // elseif($this->expire_at->diffInDays(now()) <= 120 && $this-> shop->discount120)
-        //     $discount = $this-> shop->discount120;
-        // else
-        //     $discount = 0;
         return $discount;
     }
 
@@ -103,28 +87,33 @@ class Product extends Model
     public function adverts(){
         return $this->morphMany(Advert::class,'advertable');
     }
+
     public function isEdible(){
         return $this->expire_at > now();
     }
     
     public function isAccessible(){
-        return $this->whereHas('shop',function ($q) { $q->where('status',true); } );
-    }
-    public function isAvailable(){
-        return $this->stock;
+        return $this->shop->status && $this->shop->approved;
     }
 
+    public function isCertified(){
+        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->active && $this->visible && $this->stock;
+    }
+    
     public function scopeEdible($query){
         return $query->where('expire_at','>',now());
     }
     public function scopeApproved($query){
+        return $query->where('approved',true);
+    }
+    public function scopeActive($query){
         return $query->where('status',true);
     }
     public function scopeVisible($query){
         return $query->where('visible',true);
     }
     public function scopeAccessible($query){
-        return $query->whereHas('shop',function ($q) { $q->where('status',true); } );
+        return $query->whereHas('shop',function ($q) { $q->where('status',true)->where('approved',true); } );
     }
     public function scopeAvailable($query){
         return $query->where('stock','>',0);

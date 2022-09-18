@@ -18,7 +18,6 @@ email when subscription is auto-renewed
 email when subscription auto-renewal is cancelled
 auto-renew subscription & feature
 add auto-renew to user settings.. e.g auto renew subscription, a
-if user does not have subscription, he cannot access other shops he has
 add coupon for buying subscriptions ? Coupon value + percentage
 when shop starts, user has free subscription by default.
 shipment controller is empty
@@ -26,3 +25,14 @@ release settlement to shop wallet after order changes to completed
 if customer does not raise query xdays after delivery, change order to completed
 middleware to prevent shop creation if no subscription is available
 Redirect user to same page after login/register
+
+if user does not have subscription[
+    1. he cant create new shops/products past the limit alotted to free. 
+    2. he cannot create withdrawals, bvn validation, 
+    3. his products, shops and ads that are deactivated will not show in front
+    4. he can access everything deactivated, but he sees a notification at the top saying shop/product deactivated
+    5. when user subscribes, activate the number of shops & products that the subscription can buy
+
+add approval status to views (product, shop, adverts)
+
+mass product approval, send email

@@ -318,6 +318,7 @@
           reader.readAsDataURL(input.files[0]);
       }
   }
+  
   $(document).on('change','.states',function(){
       var state_id = $(this).val();
       cities = $(this).closest('.location').find('.cities');

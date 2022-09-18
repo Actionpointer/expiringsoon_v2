@@ -31,7 +31,8 @@ MILESTONE 2 AFTER ANOTHER 2WEEKS
 admin, customercare, auditor, security, vendor, staff, customer, 
 
 admin menu
-DASHBOARD
+DASHBOARD [recent notifications, total shops vs total active, total products vs total active , 
+            total orders vs recent orders, total settlements vs recent settlements, total payouts vs recent payouts, kyc message]
 SETTINGS [add message settings,]
 SUBSCRIPTIONS [add auto-renew by default ticked]
 SHOPS [add confirmation with password to manage verification | autosend email to vendor when approved or disapproved]
@@ -40,15 +41,27 @@ PRODUCTS [add confirmation with password to manage verification | autosend email
 PAYMENTS [add profit, revenue & payout to settlement]
 
 vendor menu (add kyc to profile)
-DASHBOARD - analysis of products across all shops
+DASHBOARD - [current subscription, total shops, total products, total amount, total orders, 
+            recent transactions,recent notification]
+SHOPS - shop| products | sales | profit | wallet | 
 
 
 shop menu
-DASHBOARD [show notifications recent]
-PRODUCTS [add checkbox to each product with buttons at the top to delete]
+DASHBOARD [ recent notifications, total products vs total active , shop status, shop approval, shop visibility, 
+            total orders vs recent orders, recent payouts, recent settlements, kyc message ]
+
+PRODUCTS [  
+            add checkbox to each product with buttons at the top to delete, 
+            show edible, show status(depends on subscription) , show approval, show stock, show accessible,show visibility, show featured
+            button: [edit, feature, delete, publish/unpublish, ]
+
+            Expiring soon | active | approved | stock | featured | published | 20 remaining 
+        ]
 (add kyc to profile)
 
 staff menu
 DASHBOARD [show notifications recent]
 PRODUCTS
 ORDERS
+
+

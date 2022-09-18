@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Subscription extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','subscribable_id','subscribable_type','amount','start_at','end_at'];
+    protected $fillable = ['user_id','plan_id','amount','start_at','end_at'];
     
     protected $dates = ['start_at','end_at'];
 

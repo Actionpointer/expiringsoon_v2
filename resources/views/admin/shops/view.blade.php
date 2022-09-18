@@ -65,10 +65,10 @@
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <form class="d-inline" action="{{route('admin.shop.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                                   <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                  @if(!$shop->status)
-                                  <button type="submit" name="action" value="activate" class="dropdown-item">Activate</button>
+                                  @if(!$shop->approved)
+                                  <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
                                   @else
-                                  <button type="submit" name="action" value="suspend" class="dropdown-item">Suspend</button>
+                                  <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
                                   @endif
                                 </form>                                      
                               </div>
@@ -172,11 +172,9 @@
                               </td>
                               <td>
                                   @if(!$kyc->status)
-                                    Pending
-                                  @elseif($kyc->status == '-1')
-                                    Rejected
+                                    Pending {{$kyc->reason}}
                                   @else
-                                    Active
+                                    Approved
                                   @endif
                               </td>
                               <td>
@@ -204,7 +202,7 @@
                                           <form action="{{route('admin.kyc.manage')}}" method="post" id="rateedit{{$kyc->id}}">
                                               @csrf 
                                               <input type="hidden" name="kyc_id" value="{{$kyc->id}}">
-                                              <input type="hidden" name="status" value="-1">
+                                              <input type="hidden" name="status" value="0">
                                               <div class="contact-form__content my-3">
                                                   <div class="contact-form-input">
                                                     <label for="hours">Reason</label>
@@ -232,11 +230,9 @@
                                 <td>{{$kyc->created_at->format('d-m-Y')}}</td>
                                   <td>
                                     @if(!$kyc->status)
-                                      Pending
-                                    @elseif($kyc->status == '-1')
-                                      Rejected
+                                      Pending {{$kyc->reason}}
                                     @else
-                                      Active
+                                      Approved
                                     @endif
                                 </td>
                                 <td>
@@ -264,7 +260,6 @@
                                             <form action="{{route('admin.kyc.manage')}}" method="post" id="rateedit{{$kyc->id}}">
                                                 @csrf 
                                                 <input type="hidden" name="kyc_id" value="{{$kyc->id}}">
-                                                <input type="hidden" name="status" value="-1">
                                                 <div class="contact-form__content my-3">
                                                     <div class="contact-form-input">
                                                       <label for="hours">Reason</label>

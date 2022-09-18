@@ -29,10 +29,10 @@ class SubscriptionController extends Controller
             $subscription = Subscription::find($request->subscription_id);
         }else{
             $plan = Plan::where('slug',$request->plan)->first();
-            if(auth()->user()->subscriptions->where('subscribable_id',$plan->id)->where('status',true)->where('end_at','>',now())->isNotEmpty()){
+            if(auth()->user()->subscriptions->where('plan_id',$plan->id)->where('status',true)->where('end_at','>',now())->isNotEmpty()){
                 return redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
             }
-            $subscription = Subscription::create(['user_id'=> auth()->id(),'subscribable_id'=> $plan->id,'subscribable_type'=> get_class($plan),'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration)]);
+            $subscription = Subscription::create(['user_id'=> auth()->id(),'plan_id'=> $plan->id,'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration)]);
         }
         $link = $this->initializePayment($subscription->amount,[$subscription->id,$subscription->duration]);
         if(!$link)

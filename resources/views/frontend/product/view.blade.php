@@ -74,7 +74,7 @@
                             <h2 class="font-body--xxxl-500">
                                 <del class="font-body--xxl-400">{!!cache('settings')['currency_symbol']!!}{{number_format($product->price, 0)}}</del> 
                                 {!!cache('settings')['currency_symbol']!!}{{number_format($product->amount, 0)}}</h2>
-                            <span class="label sale-off">{{$product->discount}}% off </span>
+                            <span class="label sale-off">{{floor($product->discount)}}% off </span>
                           @else
                             <h2 class="font-body--xxxl-500">{!!cache('settings')['currency_symbol']!!}{{number_format($product->price, 2)}}</h2>
                           @endif
@@ -210,7 +210,7 @@
                                         <img @if(!$item->photo) src='{{asset("img/no-image.png")}}'  @else src="{{Storage::url($item->photo)}}" @endif alt="{{$item->product}}" />
                                     </a>
                                     @if($item->expire_at!='' && $item->discount && $item->stock > 0) 
-                                        <span class="tag danger font-body--md-400" style="background:#00b207;font-size:13px">Sale {{$product->discount}}>%</span>
+                                        <span class="tag danger font-body--md-400" style="background:#00b207;font-size:13px">Sale {{floor($product->discount)}}% off</span>
                                        
                                     @endif
                                     @if($item->stock == 0) 
