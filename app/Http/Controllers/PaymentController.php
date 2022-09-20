@@ -2,24 +2,32 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Bank;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
+use App\Http\Traits\PayoutTrait;
+use App\Http\Traits\PaymentTrait;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
+    use PaymentTrait;
     public function __construct(){
         $this->middleware('auth');
     }
     public function callback(){
+        // dd(request()->query);
+        // ["trxref" => "632889cbaa15f","reference" => "632889cbaa15f"]
         //get the transaction id
         //check which payment gateway is active
         //if paystack, call paystack verify, else call flutter by trait
+        if(cache('settings')['active_payment_gateway'] == 'paystack')
+            $details = $this->verifyPaystackPayment(request()->query('reference'));
+        else $details = $this->verifyFlutterWavePayment(request()->query('trxref'));
+        dd($details);
         //receive info of payment..
         //create the payment and its paymentable (order, or subscription)
         //redirect to dashboard if vendor, to orders if user
@@ -69,6 +77,11 @@ class PaymentController extends Controller
         }else
             return redirect()->back()->with(['result'=> '0','message'=> 'Error Processing Payment']);
     }
+
+    public function shop_index(Shop $shop){
+        $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
+        return view('shop.payments',compact('shop','settlements'));
+    }
     
     public function admin_index(){
         $payments = Payment::all();
@@ -76,10 +89,7 @@ class PaymentController extends Controller
         return view('admin.payments',compact('payments','settlements'));
     }
     
-    public function shop_index(Shop $shop){
-        $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
-        return view('shop.payments',compact('shop','settlements'));
-    }
+    
 
 
     

@@ -37,6 +37,7 @@
     
 
     <!-- dashboard Secton Start  -->
+    @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -45,17 +46,42 @@
           <div class="container">
             <!-- Order History  -->
             <div class="dashboard__order-history" style="padding:10px;font-size:13px">
-              <div class="dashboard__order-history-title d-flex justify-content-between">
+              <div class="dashboard__order-history-title d-flex flex-column flex-md-row justify-content-between">
                 <h2 class="font-body--xl-500 ">My Products</h2>
+                <div class="my-2 my-md-0">
+                  @if(auth()->id() == $shop->owner()->id)
+                  <button type="button" class="btn btn-primary" onclick="featureform();">Feature</button>
+                  @endif
+                  <button type="button" class="btn btn-danger" onclick="if(confirm('Are you sure you want to delete?')) deleteform();">Delete</button>
+                </div>
                 <a href="{{route('shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
+              </div>
+              <div class="">
+                <form id="featureform" action="{{route('vendor.feature.products')}}" method="POST">@csrf
+                  <input type="hidden" name="shop_id" value="{{$shop->id}}" >
+                </form>
+                <form id="deleteform" action="{{route('shop.products.delete',$shop)}}" method="POST">@csrf
+                  <input type="hidden" name="action" value="delete" >
+                </form>
               </div>
               <div class="dashboard__order-history-table">
                 <div class="table-responsive">
                   <table id="datatable" class="table display" style="width:100%;font-size:13px">
                     <thead>
                       <tr>
-                          <th scope="col" class="cart-table-title">Product</th>
-                          <th scope="col" class="cart-table-title">Price</th>
+                          {{-- <th scope="col" class="cart-table-title"></th> --}}
+                          <th scope="col" class="cart-table-title" style="min-width:200px!important;">
+                            <div class="d-flex align-items-center">
+                              <div class="form-check d-inline">
+                                <label class="form-check-label font-body--400" for="existing"> </label>
+                                <input class="form-check-input checkboxes" type="checkbox" name="products[]">
+                              </div>
+                             <span class="align-bottom">Product</span> 
+                            </div>
+                            
+                          </th>
+                          <th scope="col" class="cart-table-title align-middle">
+                            Price</th>
                           <th scope="col" class="cart-table-title"></th>
                           {{-- <th scope="col" class="cart-table-title"></th> --}}
                       </tr>
@@ -63,23 +89,36 @@
                     <tbody>
                       @forelse($shop->products as $product)
                           <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
-                              <!-- Product item  -->
-                            <td class="cart-table-item align-middle">
-                              <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
-                                <div class="cart-table__product-item-img">
-                                  <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" />
-                                </div>
-                                <h5 class="font-body--lg-400" style="font-size:14px">
-                                  {{$product->name}}
-                                  <span>
-                                    <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
-                                    </svg>
-                                </span>
-                                </h5>
-                              </a>
-                              
-                                <p class="d-flex flex-column flex-md-row" style="margin-top:10px;color:#888;font-size:12px">          
+                            <td class="cart-table-item align-middle" >
+                              <div class="d-flex flex-column">
+                                  <div class="d-flex flex-column flex-md-row">
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check pt-2 d-inline-block">
+                                          <label class="form-check-label font-body--400" for="existing"> </label>
+                                          <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
+                                        </div>
+                                        <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
+                                          <div class="cart-table__product-item-img">
+                                            <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" />
+                                          </div>
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center">
+                                      <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
+                                        <h5 class="font-body--lg-400" style="font-size:14px"> {{$product->name}}
+                                          <span>
+                                            <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
+                                            </svg>
+                                          </span>
+                                        </h5>
+                                      </a>
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <p class="d-flex flex-column flex-md-row text-nowrap" style="margin-top:10px;color:#888;font-size:12px">          
                                       @if(!$product->isEdible())
                                         <span class="font-body--md-400 mx-1 text-danger">Product expired</span> 
                                       @elseif($product->expire_at->diffInDays(now()) <= 7)
@@ -98,9 +137,9 @@
                                         @if($product->visible) Published  @else Draft @endif 
                                       </span>
                                       {{-- @if($product->adverts->isNotEmpty()) | Featured @endif --}}
-                                <p>
-                              
-                              
+                                    <p>
+                                  </div>
+                              </div>
                             </td>
                               <!-- Price  -->
                             <td class="cart-table-item order-date align-middle">
@@ -116,9 +155,18 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                   <a class="dropdown-item" href="{{route('shop.product.edit',[$shop,$product])}}">Edit</a>
-                                  <a class="dropdown-item" href="#">Unpublish</a>
-                                  <a class="dropdown-item" href="#">Feature</a>
-                                  <a class="dropdown-item" href="#">Delete</a>
+                                  @if(auth()->id() == $shop->owner()->id)
+                                  <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
+                                    <input type="hidden" name="shop_id" value="{{$shop->id}}">
+                                    <input type="hidden" name="products[]" value="{{$product->id}}">
+                                    <button type="submit" class="dropdown-item">Feature</button>
+                                  </form>
+                                  @endif
+                                  <form class="d-inline" action="{{route('shop.products.delete',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
+                                    <input type="hidden" name="products[]" value="{{$product->id}}">
+                                    <button type="submit" class="dropdown-item">Delete</button>
+                                  </form>
+                                  
                                   
                                 </div>
                               </div>
@@ -149,21 +197,11 @@
 @push('scripts')
 
     <script type="text/javascript" src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('src/datatable/assets/buttons/demo.js')}}"></script>
-    <script src="{{asset('src/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('src/datatable/assets/buttons/jszip.min.js')}}"></script>
-    <script src="{{asset('src/datatable/assets/buttons/pdfmake.min.js')}}"></script>
-    <script src="{{asset('src/datatable/assets/buttons/vfs_fonts.js')}}"></script>
-    <script src="{{asset('src/datatable/assets/buttons/buttons.html5.min.js')}}"></script>
-    <script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script>
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
                 "pagingType": "full_numbers",
                 dom: 'lBfrtip',
-                buttons: [
-                    { extend: 'print', className: 'btn btn-danger' }, { extend: 'pdf', className: 'btn btn-primary' }, { extend: 'csv', className: 'btn btn-warning' }, { extend: 'excel', className: 'btn btn-success' }, { extend: 'copy', className: 'btn btn-info' }
-                ],
                 "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
@@ -175,9 +213,26 @@
                 }
             });
         });
-
-        // $('.dropdownMenuButton').click(function(){
-        //     $(this).closest('td').find('.dropdown,.dropdown-menu').toggleClass('show');
-        // })
+    </script>
+    <script>
+      function deleteform(){
+        if($('.checkboxes:checked').length){
+          $('.checkboxes:checked').each(function(key,elem){
+              var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
+              $('#deleteform').append($(input));
+          });
+          $('#deleteform').submit();
+        }
+      }
+      function featureform(){
+        if($('.checkboxes:checked').length){
+          $('.checkboxes:checked').each(function(key,elem){
+              var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
+              $('#featureform').append($(input));
+          });
+          $('#featureform').submit();
+        }
+      }
+    
     </script>
 @endpush

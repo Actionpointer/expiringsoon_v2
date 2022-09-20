@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Plan;
 use App\Models\User;
 use App\Models\Advert;
-use App\Models\Plan;
 use App\Models\PaymentItem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Subscription extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     protected $fillable = ['user_id','plan_id','amount','start_at','end_at'];
     
     protected $dates = ['start_at','end_at'];

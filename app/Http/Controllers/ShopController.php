@@ -6,15 +6,15 @@ use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\City;
 use App\Models\Shop;
+use App\Models\User;
 use App\Models\State;
 use App\Models\Advert;
-use App\Models\Account;
 use App\Models\Product;
-use App\Models\Setting;
 use App\Models\Category;
-use App\Models\Discount;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request; 
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -78,7 +78,7 @@ class ShopController extends Controller
         return view('frontend.shop.view',compact('shop','categories','products','category'));
     }
 
-/* Vendor area */
+    /* Vendor area */
 
     public function list(){
         $user = auth()->user();
@@ -91,6 +91,7 @@ class ShopController extends Controller
         $cities = City::all();
         return view('vendor.shop.create',compact('states','cities'));
     }
+
     public function store(Request $request){
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
@@ -118,41 +119,133 @@ class ShopController extends Controller
         $user = auth()->user();
         $banks = Bank::all();
         $states = State::all();
-        $minThreshold = Setting::where('name','basic_minimum_payout')->first()->value;
+        $cities = City::where('state_id',$shop->state_id)->get();
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
-        return view('shop.settings',compact('user','shop','banks','states','minThreshold','rates'));
+        // dd($user->idcard);
+        return view('shop.settings',compact('user','shop','banks','states','cities','rates'));
     }
 
-    // public function address(Request $request){
-    //     $user = auth()->user();
-    //     if($request->address) $user->address = $request->address;
-    //     if($request->state) $user->state = $request->state;
-    //     $user->save();
-    //     return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
-    // }
-
-    public function bank_info(Request $request){
-        $user = auth()->user();
-        Account::updateOrCreate(['user_id'=> $user->id],['acctname'=> $request->acctname,'acctno'=> $request->acctno,'bank'=> $request->bank]);
-        return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);
+    public function profile(Shop $shop,Request $request){
+        $shop->name = $request->name;
+        $shop->email = $request->email;
+        $shop->phone = $request->phone;
+        if($request->hasFile('banner')){
+            if($shop->banner) Storage::delete('public/'.$shop->banner);
+            $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
+            $request->file('photo')->storeAs('public/',$banner);
+            $shop->banner = $banner;
+        } 
+        $shop->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'Shop Details Updated Successfully']);
     }
 
-    public function upload_id(Request $request,Shop $shop){
-        $user = auth()->user();
-        $ext = $request->file('theDoc')->getClientOriginalExtension();
-        $filename = $user->id.rand().time().'.'.$ext;
-        $request->file('theDoc')->storeAs('public/uploads',$filename);//save the file to public folder
-        $kyc = Kyc::updateOrCreate(['shop_id'=> $shop->id,'type'=> $request->idType],['user_id'=> $request->owner ? $user->id: '','doctype'=> $ext,'document'=> 'uploads/'.$filename]);
+    public function address(Shop $shop,Request $request){
+        $shop->address = $request->address;
+        $shop->state_id = $request->state_id;
+        $shop->city_id = $request->city_id;
+        $shop->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
+    }
+
+    public function discounts(Shop $shop,Request $request){
+        $shop->discount30 = $request->discount30;
+        $shop->discount60 = $request->discount60;
+        $shop->discount90 = $request->discount90;
+        $shop->discount120 = $request->discount120;
+        $shop->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
+    }
+
+    public function kyc(Shop $shop,Request $request){
+        // dd($request->all());
+        if(!$request->idcard && !$request->addressproof && !$request->companydoc)
+        return redirect()->back()->with(['result'=> 0,'message'=> 'Nothing was uploaded']);
+        foreach(['idcard','addressproof','companydoc'] as $type){
+            if($request[$type] && $request->hasFile($type)){
+                if($shop[$type]) Storage::delete('public/'.$shop[$type]->document);
+                $doctype = explode('/',$request->file($type)->getClientMimeType())[0];
+                $document = 'uploads/'.time().'.'.$request->file($type)->getClientOriginalExtension();
+                $request->file($type)->storeAs('public/',$document);
+                $kyc = Kyc::updateOrCreate(['verifiable_id'=> $type == 'idcard'? $shop->owner()->id: $shop->id,'verifiable_type'=> $type == 'idcard'? 'App\Models\User': 'App\Models\Shop','type'=> $type],['doctype'=> $doctype,'document'=> $document,'reason'=> '']);
+            } 
+        }
         return redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
     }
+
+    public function staff(Shop $shop,Request $request){
+        if($request->user_id){
+            if($request->delete){
+                $user = User::destroy($request->user_id);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
+            }else{
+                //update
+                $user = User::find($request->user_id);
+                $validator = Validator::make($request->all(), [
+                    'name' => 'nullable|string',
+                    'email' => ['nullable',Rule::unique('users')->ignore($user)],
+                    'phone' => ['nullable',Rule::unique('users')->ignore($user)],
+                    'password' => Rule::requiredIf(isset($request->user_id)),'string','confirmed'
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update user']);
+                }
+                $user = User::where('id',$request->user_id)->update(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
+            }
+        }else{
+            //create
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'email' => 'required|string|unique:users',
+                'phone' => 'required|string|unique:users',
+                'password' => 'required','string','confirmed'
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
+            }
+            $user = User::create(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
+        }   
+    }
+
+    public function shipping(Shop $shop,Request $request){
+        if($request->rate_id){
+            if($request->delete){
+                $user = ShippingRate::destroy($request->rate_id);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Shipping Rate']);
+            }else{
+                //update
+                $validator = Validator::make($request->all(), [
+                    'state_id' => 'required|numeric',
+                    'hours' => 'required|numeric',
+                    'amount' => 'required|numeric',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update shipping rate']);
+                }
+                $rate = ShippingRate::where('id',$request->rate_id)->update(['destination_id'=> $request->state_id,'hours'=> $request->hours,'amount'=> $request->amount]);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated Shipping Rate']);
+            }
+        }else{
+            //create
+            $validator = Validator::make($request->all(), [
+                'state_id' => 'required|numeric',
+                'hours' => 'required|numeric',
+                'amount' => 'required|numeric',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create shipping rate']);
+            }
+            $rate = ShippingRate::create(['shop_id'=> $shop->id ,'origin_id'=> $shop->state_id,'destination_id'=> $request->state_id,'hours'=> $request->hours,'amount'=> $request->amount]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Shipping Rate created successfully']);
+        } 
+    }
+
 
     public function notifications(Shop $shop){
         
     }
-    public function discounts(Request $request){
-        $user = auth()->user();
-        return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
-    }
+    
 
 
 /* Admin area */
@@ -163,14 +256,12 @@ class ShopController extends Controller
     public function admin_view(Shop $shop){
         return view('admin.shops.view',compact('shop'));
     }
-
     public function admin_manage(Request $request){
         $shop = Shop::find($request->shop_id);
         $shop->approved = $request->approved;
         $shop->save();
         return redirect()->back()->with(['result'=> '1','message'=> 'Shop Status Updated']);
     }
-    
     public function admin_kyc(Request $request){
         $kyc = Kyc::find($request->kyc_id);
         $kyc->status = $request->status;

@@ -7,14 +7,14 @@ http://expiringsoon.test/payment/callback?trxref=62f4b24fc6e2f&reference=62f4b24
 
 7.DELIVERY
 if customers order out of current state, put a disclaimer that a refund may not happen
+
 8.REVIEW
 customer rate product, rate shop..after order is completed, refunded, 
 
 REPORT SHOPS/PRODUCT
 
 9.SECURITY
-Shop verification requires:
-Required ID: ADDRESS PROOF, CAC (enterprise) and or ID card of owner (starter business)
+
 
 for every bank account added, there must be BVN validation
 
@@ -33,35 +33,105 @@ admin, customercare, auditor, security, vendor, staff, customer,
 admin menu
 DASHBOARD [recent notifications, total shops vs total active, total products vs total active , 
             total orders vs recent orders, total settlements vs recent settlements, total payouts vs recent payouts, kyc message]
-SETTINGS [add message settings,]
-SUBSCRIPTIONS [add auto-renew by default ticked]
+
+SETTINGS [add message settings (get notification for all order messages), (when should receiver be notified of unread messages) ]
+
+SUBSCRIPTIONS 
+
 SHOPS [add confirmation with password to manage verification | autosend email to vendor when approved or disapproved]
+
 CATEGORIES [modal]
+
 PRODUCTS [add confirmation with password to manage verification | autosend email to vendor when approved or disapproved]
+
 PAYMENTS [add profit, revenue & payout to settlement]
 
 vendor menu (add kyc to profile)
+
 DASHBOARD - [current subscription, total shops, total products, total amount, total orders, 
             recent transactions,recent notification]
-SHOPS - shop| products | sales | profit | wallet | 
-
 
 shop menu
-DASHBOARD [ recent notifications, total products vs total active , shop status, shop approval, shop visibility, 
-            total orders vs recent orders, recent payouts, recent settlements, kyc message ]
-
-PRODUCTS [  
-            add checkbox to each product with buttons at the top to delete, 
-            show edible, show status(depends on subscription) , show approval, show stock, show accessible,show visibility, show featured
-            button: [edit, feature, delete, publish/unpublish, ]
-
-            Expiring soon | active | approved | stock | featured | published | 20 remaining 
-        ]
-(add kyc to profile)
-
-staff menu
-DASHBOARD [show notifications recent]
-PRODUCTS
-ORDERS
+PRODUCTS [  show featured]
 
 
+{
+  "status": true,
+  "message": "Verification successful",
+  "data": {
+    "id": 2009945086,
+    "domain": "test",
+    "status": "success",
+    "reference": "rd0bz6z2wu",
+    "amount": 20000,
+    "message": null,
+    "gateway_response": "Successful",
+    "paid_at": "2022-08-09T14:21:32.000Z",
+    "created_at": "2022-08-09T14:20:57.000Z",
+    "channel": "card",
+    "currency": "NGN",
+    "ip_address": "100.64.11.35",
+    "metadata": "",
+    "log": {
+      "start_time": 1660054888,
+      "time_spent": 4,
+      "attempts": 1,
+      "errors": 0,
+      "success": true,
+      "mobile": false,
+      "input": [],
+      "history": [
+        {
+          "type": "action",
+          "message": "Attempted to pay with card",
+          "time": 3
+        },
+        {
+          "type": "success",
+          "message": "Successfully paid with card",
+          "time": 4
+        }
+      ]
+    },
+    "fees": 100,
+    "fees_split": null,
+    "authorization": {
+        "authorization_code": "AUTH_ahisucjkru",
+        "bin": "408408",
+        "last4": "4081",
+        "exp_month": "12",
+        "exp_year": "2030",
+        "channel": "card",
+        "card_type": "visa ",
+        "bank": "TEST BANK",
+        "country_code": "NG",
+        "brand": "visa",
+        "reusable": true,
+        "signature": "SIG_yEXu7dLBeqG0kU7g95Ke",
+        "account_name": null
+    },
+    "customer": {
+      "id": 89929267,
+      "first_name": null,
+      "last_name": null,
+      "email": "hello@email.com",
+      "customer_code": "CUS_i5yosncbl8h2kvc",
+      "phone": null,
+      "metadata": null,
+      "risk_action": "default",
+      "international_format_phone": null
+    },
+    "plan": null,
+    "split": {},
+    "order_id": null,
+    "paidAt": "2022-08-09T14:21:32.000Z",
+    "createdAt": "2022-08-09T14:20:57.000Z",
+    "requested_amount": 20000,
+    "pos_transaction_data": null,
+    "source": null,
+    "fees_breakdown": null,
+    "transaction_date": "2022-08-09T14:20:57.000Z",
+    "plan_object": {},
+    "subaccount": {}
+  }
+}

@@ -243,7 +243,7 @@
                                     <a href="{{route('profile')}}">Profile</a>
                                   </li>
                                   <li class="header__navigation-drop-menu-link">
-                                    <a href="{{route('messages')}}">Support</a>
+                                    <a @if(in_array(auth()->user()->role,['vendor','shopper'])) href="{{route('messages')}}" @else href="{{route('admin.messages')}}" @endif>Support</a>
                                   </li>
                                   <li class="header__navigation-drop-menu-link">
                                     <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>

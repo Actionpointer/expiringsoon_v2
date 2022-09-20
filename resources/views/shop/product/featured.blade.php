@@ -37,6 +37,7 @@
     
 
     <!-- dashboard Secton Start  -->
+    @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">

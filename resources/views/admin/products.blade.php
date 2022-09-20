@@ -33,7 +33,7 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -50,7 +50,7 @@
               </form>
               <form id="disapproveform" action="{{route('admin.products.manage')}}" method="POST">@csrf
                 <input type="hidden" name="action" value="reject" >
-            </form>
+              </form>
               <div class="table-responsive">
                 <table id="datatable" class="table display" style="width:100%;font-size:13px">
                     <thead>

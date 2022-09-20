@@ -17,6 +17,13 @@ class SubscriptionController extends Controller
         $this->middleware('auth')->except('plans');
     }
 
+    public function plans()
+    {
+        $plans = Plan::orderBy('id','desc')->get();
+        $enterprises = $plans->keyBy('slug');
+        return view('plans',compact('plans','enterprises'));
+    }
+
     public function admin_index(){
         $subscriptions = Subscription::all();
         $features = Feature::all();
@@ -49,7 +56,7 @@ class SubscriptionController extends Controller
             $features->push($feature);
         }else{
             foreach($request->adplans as $key=>$plan){
-                $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key])])->first();
+                $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key])]);
                 $features->push($feature);
             }
         }

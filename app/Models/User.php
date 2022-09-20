@@ -94,9 +94,9 @@ class User extends Authenticatable
         return $this->hasMany(ShopUser::class);
     }
 
-    // public function kyc(){
-    //     return $this->morphOne(Kyc::class,'owner');
-    // }
+    public function idcard(){
+        return $this->morphOne(Kyc::class,'verifiable')->where('type','idcard');
+    }
 
     public function subscriptions(){
         return $this->hasMany(Subscription::class);

@@ -1,40 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-    <!-- Phone input -->
-    
-    <style>
-      .notify{
-        margin-top: 0px;
-        text-align: center;
-        background-color: #1cc88a;
-        color: #fff;
-        padding: 10px;
-        width: 100%;
-        height: 40px;
-        font-size: 14px;
-      }
-  
-      .error{
-        margin-top: 0px;
-        text-align: center;
-        background-color: #e84a4a;
-        color: #fff;
-        padding: 10px;
-        width: 100%;
-        height: 40px;
-        font-size: 14px;
-      }
-  
-      @media screen and (max-width: 480px){
-        .notify, .error{
-        margin-top: -30px;
-        margin-bottom: 20px;
-        padding: 10px;
-        height: 45px;
-        }
-      }
-    </style>
-  
+   
     
 @endpush
 @section('title')Register @endsection
@@ -62,7 +28,7 @@
   </div>
 </div>
 <!-- breedcrumb section end   -->
-
+@include('layouts.session')
 <!-- create account-in Section Start  -->
 <section class="create-account section section--xl">
   <div class="container">

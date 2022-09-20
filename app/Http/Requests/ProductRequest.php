@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'stock' => 'required|numeric|gt:1',
             'category_id' => 'required|numeric',
             'tags' => 'nullable',
-            'photo' => 'required|image',
+            'photo' => 'sometimes|required|image',
             'expiry' => 'required|date|after:today',
             'price' => 'required|numeric',
             'discount120' => 'nullable|lt:price|gt:discount90',

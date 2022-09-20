@@ -38,9 +38,7 @@
     </div>
 </div>
 <!-- breedcrumb section end   -->
-
-  
-
+@include('layouts.session')
 <!-- dashboard Secton Start  -->
 <div class="dashboard section">
   <div class="container">
@@ -332,81 +330,32 @@
               @if($order->status!=='completed')
                 <!-- Send Message -->
                 <div class="conversation my-4">
-                  @if($order->messages->filter(function ($value,$key) {return $value->receiver_id ==auth()->id() || $value->user_id == auth()->id();})->isNotEmpty())
-                  <h5 class="font-body--xxxl d-flex justify-content-between pb-3"><span>Conversation</span></h5>
-                  <div class="user-comments__list" style="overflow-y:scroll;">
-                    @foreach ($order->messages->filter(function ($value,$key) {return $value->receiver_id ==auth()->id() || $value->user_id == auth()->id();}) as $message)
-                      <div class="d-flex py-4 border-bottom">
-                          @if(!in_array(auth()->user()->role,['shopper','vendor']))
-                            <div class="user-img">
-                              <img class="rounded-circle" alt="user-photo"
-                                  @if($message->user->role == 'vendor')
-                                      @if(!$order->shop->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->shop->banner)}}" @endif 
-                                  @else
-                                      @if(!$order->user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->user->pic)}}" @endif 
-                                  @endif
-                              >
-                            </div>
-
-                            <div class="user-message-info">
-                                <div class="d-flex ">
-                                  <h5 class="font-body--md-500">
-                                    @if($message->user->role == 'vendor')
-                                      {{$order->shop->name}} 
-                                    @endif
-                                    @if($message->user->role == 'shopper')
-                                      {{$order->user->name}}  
-                                    @endif
-                                    @if( !in_array($message->user->role,['vendor','shopper']))
-                                        Admin
-                                    @endif
-                                  </h5>
-                                  <ul class="inside d-flex">
-                                    <li class="text-muted border-top border-white mx-2">{{$message->created_at->format('d M,Y h:i A')}}</li>
-                                    <li class="text-muted border-top border-white">
-                                      @if($message->receiver->role == 'vendor')
-                                          To Seller
-                                      @endif
-                                      @if($message->receiver->role == 'shopper')
-                                          To Buyer 
-                                      @endif
-                                      @if( !in_array($message->receiver->role,['vendor','shopper']))
-                                          To Admin
-                                      @endif
-                                    </li>
-                                  </ul>
-                                </div>
-      
-                                <p class="font-body--sm-400">
-                                  {{$message->body}}
-                                </p>
-                            </div>
-                          @else
-                            @php $usr = auth()->user()->role == 'shopper'? $order->user_id : $order->shop->owner()->id; @endphp
-                            @if($usr == $message->user_id || $usr == $message->receiver_id)
+                  @if($order->messages->isNotEmpty())
+                    <h5 class="font-body--xxxl d-flex justify-content-between pb-3"><span>Conversation</span></h5>
+                    <div class="user-comments__list" style="overflow-y:scroll;">
+                      @foreach ($order->messages as $message)
+                         
+                          <div class="d-flex py-4 border-bottom">
                               <div class="user-img">
-                                <img class="rounded-circle" alt="user-photo"
-                                    @if($message->user->role == 'vendor')
-                                        @if(!$order->shop->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->shop->banner)}}" @endif 
-                                    @else
-                                        @if(!$order->user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->user->pic)}}" @endif 
-                                    @endif
-                                >
+                                  @if($message->sender == 'shopper')
+                                    <img class="rounded-circle" alt="user-photo" @if(!$order->user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->user->pic)}}" @endif > 
+                                  @elseif($message->sender == 'vendor')
+                                  <img class="rounded-circle" alt="user-photo" @if(!$order->shop->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->shop->banner)}}" @endif >
+                                  @else
+                                  <img class="rounded-circle" alt="user-photo" src="{{asset('img/avatar.png')}}"> 
+                                  @endif
                               </div>
-
                               <div class="user-message-info">
                                   <div class="d-flex ">
-                                    <h5 class="font-body--md-500">
-                                      @if($message->user->role == 'vendor')
-                                        {{$order->shop->name}} 
+                                    
+                                      @if($message->sender == 'vendor')
+                                        <h5 class="font-body--md-500"> {{$order->shop->name}} </h5>
+                                      @elseif($message->sender == 'shopper')
+                                        <h5 class="font-body--md-500"> {{$order->user->name}}  </h5> 
+                                      @else
+                                        <h5 class="font-body--md-500">   Admin </h5>
                                       @endif
-                                      @if($message->user->role == 'shopper')
-                                        {{$order->user->name}}  
-                                      @endif
-                                      @if( !in_array($message->user->role,['vendor','shopper']))
-                                          Admin
-                                      @endif
-                                    </h5>
+                                    
                                     <ul class="inside"><li class="text-muted border-top border-white">{{$message->created_at->format('d M,Y h:i A')}}</li></ul>
                                   </div>
         
@@ -414,23 +363,25 @@
                                     {{$message->body}}
                                   </p>
                               </div>
-                            @endif
-                          @endif
+                          </div>
                           
-                      </div>
-                    @endforeach
-                  </div>
+                      @endforeach
+                    </div>
                   @endif
                   <form action="{{route('order.message',$order->shop)}}" method="POST"> @csrf
                     <input type="hidden" name="order_id" value=" {{$order->id}}">
+                    <input type="hidden" name="shop_id" value=" {{$order->shop_id}}">
+                    <input type="hidden" name="user_id" value=" {{$order->user_id}}">
+                    <input type="hidden" name="sender" value=" {{auth()->user()->role}}">
+
                     <div class="contact-form-input mb-0 mt-3">
-                      <select id="" name="receiver_id" class="form-control" required >
+                      <select id="ordermessage" name="receiver" class="form-control" required >
                           <option value="" selected disabled> Send Message -</option>
                           @if(auth()->user()->role != 'shopper')
-                          <option value="{{$order->user->id}}">To Buyer</option>
+                          <option value="buyer" @if(isset($shop) && $shop->id == $order->shop_id) selected @endif>To Buyer</option>
                           @endif
                           @if(auth()->user()->role != 'vendor')
-                            <option value="{{$order->shop->owner()->id}}" @if($order->user_id == auth()->id()) selected @endif > To Vendor </option>
+                            <option value="vendor" @if($order->user_id == auth()->id()) selected @endif > To Vendor </option>
                           @endif
                       </select>
                     </div>

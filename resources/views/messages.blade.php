@@ -40,7 +40,8 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @include('layouts.session')
+  <!-- dashboard Secton Start  -->
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -56,18 +57,20 @@
               </h5>
               <div class="user-comments__list" style="overflow-y:scroll; height:50vh;">
                 @foreach ($messages as $message)
-                  <div class="d-flex py-4 border-bottom @if($message->receiver_id) justify-content-end @endif">
+                  <div class="d-flex py-4 border-bottom  @if((in_array(auth()->user()->role,['vendor','shopper']) && $message->receiver_id ) || (!in_array(auth()->user()->role,['vendor','shopper']) && blank($message->receiver_id) )) justify-content-end @endif ">
                     <div class="d-flex w-50">
                       <div class="user-img">
-                        <img class="rounded-circle" alt="user-photo" @if(!$message->user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($message->user->pic)}}" @endif >
+                          <img class="rounded-circle" alt="user-photo" @if($message->sender->pic) src="{{Storage::url($message->sender->pic)}}" @else src="{{asset('img/avatar.png')}}" @endif>
                       </div>
 
                       <div class="user-message-info">
                           <div class="d-flex ">
                             <h5 class="font-body--md-500">
-                                @if( in_array(auth()->user()->role,['shopper','vendor']) )
-                                  @if($message->user_id == auth()->id()) Me @else Admin @endif
-                                @else {{$message->user->name}}
+                                
+                                @if( in_array($message->sender->role,['shopper','vendor']) )
+                                  {{$message->sender->name}}
+                                @else 
+                                  Admin 
                                 @endif
                             </h5>
                             <ul class="inside"><li class="text-muted border-top border-white">{{$message->created_at->format('d M,Y h:i A')}}</li></ul>
@@ -84,6 +87,7 @@
               <form action="{{route('messages.store')}}" method="POST">@csrf
                 <div class="d-flex py-4">
                   <textarea name="body" class="form-control" placeholder="Write Message"></textarea>
+                      <input type="hidden" name="sender_id"  value="{{auth()->id()}}">
                     @if(isset($user))
                       <input type="hidden" name="receiver_id"  value="{{$user->id}}">
                     @endif

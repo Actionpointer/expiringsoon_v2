@@ -31,6 +31,7 @@
       </div>
     </div>
 </div>
+@include('layouts.session')
 <section class="section billing section--xl pt-0">
     <div class="container">
       <form action="{{route('confirmcheckout')}}" method="POST">@csrf

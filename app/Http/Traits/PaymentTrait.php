@@ -23,26 +23,26 @@ trait PaymentTrait
     protected function initiateFlutterWave($amount,$items,$type){
         $user = Auth::user();
         $currency = Setting::where('name','currency_iso')->first()->value;
-        $response = Curl::to('https://ravesandboxapi.flutterwave.com/v3/payments')
+        $response = Curl::to('https://api.flutterwave.com/v3/payments')
         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
         ->withData( array('customer' => ['email'=> $user->email,'phonenumber'=> $user->phone,'name'=> $user->fname.' '.$user->lname],
                         'tx_ref'=> uniqid(),"currency" => $currency,"payment_options"=>"card,account,ussd",
                         "redirect_url"=> route('payment.callback'),'amount'=> $amount,
                         'metadata' => ['user_id'=> $user->id],
                         "customizations"=> [
-                            "title"=>"Expiring Soon",
-                            "description"=>"Payment",
-                            "logo"=> asset('src/images/logo.png')
+                            "title" => "Expiring Soon",
+                            "description" => "Payment",
+                            "logo" => asset('src/images/logo.png')
                         ]) )
         ->asJson()
         ->post();
-        if($response && $response->status)
-            return $response->data->authorization_url;
+        if($response && $response->status == 'success')
+            return $response->data->link;
         else return false;
     }
     
     protected function verifyFlutterWavePayment($value){
-        $paymentDetails = Curl::to('https://api.flutterwave.com/v3/transactions/'.$value.'/verify/')
+        $paymentDetails = Curl::to('https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref='.$value)
          ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
          ->asJson()
          ->get();
@@ -55,7 +55,7 @@ trait PaymentTrait
       $response = Curl::to('https://api.paystack.co/transaction/initialize')
       ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
       ->withHeader('Content-Type: application/json')
-      ->withData( array('email'=> $user->email,'amount'=> $amount,'currency'=> $currency,
+      ->withData( array('email'=> $user->email,'amount'=> $amount*100,'currency'=> $currency,
                       'reference'=> uniqid(),"callback_url"=> route('payment.callback'),
                       'metadata' => json_encode(['user_id'=> $user->id,'phonenumber'=> $user->phone,'items' => $items,'type'=> $type])
                       ) )
@@ -65,6 +65,14 @@ trait PaymentTrait
       if($response && $response->status)
         return $response->data->authorization_url;
       else return false;
+    }
+
+    protected function verifyPaystackPayment($value){
+        $paymentDetails = Curl::to('https://api.paystack.co/transaction/verify/'.$value)
+         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+         ->asJson()
+         ->get();
+        return $paymentDetails;
     }
 
     // protected function resolveBankAccount($account_bank,$account_number){

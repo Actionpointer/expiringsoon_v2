@@ -1,39 +1,6 @@
 @extends('layouts.app')
 @push('styles')
 
-<style>
-  .notify{
-    margin-top: 0px;
-    text-align: center;
-    background-color: #1cc88a;
-    color: #fff;
-    padding: 10px;
-    width: 100%;
-    height: 40px;
-    font-size: 14px;
-  }
-
-  .error{
-    margin-top: 0px;
-    text-align: center;
-    background-color: #e84a4a;
-    color: #fff;
-    padding: 10px;
-    width: 100%;
-    height: 40px;
-    font-size: 14px;
-  }
-
-  @media screen and (max-width: 480px){
-    .notify, .error{
-    margin-top: -30px;
-    margin-bottom: 20px;
-    padding: 10px;
-    height: 45px;
-    }
-  }
-</style>
-
 @endpush
 @section('title')Login @endsection
 @section('main')
@@ -58,27 +25,7 @@
       </div>
       <!-- breedcrumb section end   -->
   
-      <?php
-      if(isset($_GET['fail'])){
-      echo '<div class="error"><p style="color:#fff">Please login to continue</p></div>';
-      }
-      if(isset($_GET['new'])){
-      echo '<div class="notify"><p style="color:#fff">Please login to continue</p></div>';
-      }
-      if(isset($_GET['error']) && $_GET['error']=='2'){
-      echo '<div class="error"><p style="color:#fff">Wrong email format</p></div>';
-      }
-      if(isset($_GET['error']) && $_GET['error']=='3'){
-      echo '<div class="error"><p style="color:#fff">We couldn\'t find that email address</p></div>';
-      }
-      if(isset($_GET['error']) && $_GET['error']=='4'){
-      echo '<div class="error"><p style="color:#fff">Password incorrect</p></div>';
-      }
-      if(isset($_GET['error']) && $_GET['error']=='5'){
-      echo '<div class="error"><p style="color:#fff">Your Email Address is Unverified. Please check email for verification link.</p></div>';
-      }
-      ?>
-  
+      @include('layouts.session')
       <!-- Sign-in Section Start  -->
       <section class="sign-in section section--xl">
         <div class="container">

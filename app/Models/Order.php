@@ -6,7 +6,7 @@ use App\Models\Cart;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Address;
-use App\Models\Message;
+use App\Models\OrderMessage;
 use App\Models\Product;
 use App\Models\Settlement;
 use App\Models\PaymentItem;
@@ -62,7 +62,7 @@ class Order extends Model
         return $this->shop->shippingRates->where('destination',$this->address->state_id)->first() ? true:false;
     }
     public function messages(){
-        return $this->hasMany(Message::class);
+        return $this->hasMany(OrderMessage::class);
     }
     public function reviews(){
         return $this->hasMany(Review::class);

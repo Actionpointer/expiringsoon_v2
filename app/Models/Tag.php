@@ -16,7 +16,6 @@ class Tag extends Model
     public function categories(){
         return $this->belongsToMany(Category::class,'subcategories');
     }
-
     public function getCategoryAttribute(){
         return $this->categories->first()->name;   
     }

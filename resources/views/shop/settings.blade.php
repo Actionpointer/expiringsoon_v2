@@ -29,12 +29,8 @@
 </div>
   <!-- breedcrumb section end   -->
   
-  @if(Session::has('result'))
-      <div class="mb-0 @if(Session('result')) notify @else error @endif" >
-          <p style="color:#fff">{{Session('message')}}</p>
-      </div>
-  @endif
-  <!-- dashboard Secton Start  -->
+  @include('layouts.session')
+<!-- dashboard Secton Start  -->
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -81,7 +77,7 @@
                                   <h5 class="font-body--xl-500">Account Settings </h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                  <form method="post" id="editinfo" action="{{route('profile.update')}}" enctype="multipart/form-data">@csrf
+                                  <form method="post" id="editinfo" action="{{route('shop.profile',$shop)}}" enctype="multipart/form-data">@csrf
                                     <div class="row">
                                       <div class="col-lg-7 order-lg-0 order-2">
                                         <div class="contact-form__content">
@@ -101,10 +97,7 @@
                                             <label for="number1">Phone Number</label>
                                             <input type="number" name="phone" value="{{$shop->phone}}" placeholder="Phone Number" onkeypress="validate(event)" />
                                           </div>
-                                          <div id="process" style="font-size:13px;font-weight:500"></div>
-                                          {{-- <div class="contact-form-btn">
-                                            <button class="button button--md" type="submit"> Save Details</button>
-                                          </div> --}}
+                                          
                                         </div>
                                       </div>
                                       <div class="col-lg-5 order-lg-0 order-1">
@@ -136,26 +129,31 @@
                                   <h5 class="font-body--xl-500"> Store/Pick-Up Address</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                  <form method="post" id="editaddress" action="">@csrf
-                                    <input type="hidden" name="uid2" value="{{$shop->id}}">
+                                  <form method="post" id="editaddress" action="{{route('shop.address',$shop)}}">@csrf
                                     <div class="contact-form__content">
                                       <div class="contact-form-input">
                                         <label for="address">Street Address *</label>
-                                        <input type="text" name="address" value="{{$shop->address}}" placeholder="Delivery Address" required/>
+                                        <input type="text" name="address" value="{{$shop->address}}" placeholder="Shop Address" required/>
                                       </div>
                                       <div class="contact-form__content-group">
                                         <!-- states -->
                                         <div class="contact-form-input">
                                           <label for="states">state</label>
-                                          <select id="states" name="state" class="contact-form-input__dropdown">
-                                          
+                                          <select id="state" name="state_id" class="states select2">
                                             @foreach ($states as $state)
-                                              <option value="{{$state->name}}" @if($shop->state_id == $state->id) selected @endif>{{$state->name}}</option>
+                                              <option value="{{$state->id}}" @if($shop->state_id == $state->id) selected @endif>{{$state->name}}</option>
+                                            @endforeach
+                                          </select>
+                                        </div>
+                                        <div class="contact-form-input">
+                                          <label for="cities">City</label>
+                                          <select id="city" name="city_id" class="cities select2" >
+                                            @foreach ($cities as $city)
+                                              <option value="{{$city->name}}" @if($shop->city_id == $city->id ) selected @endif>{{$city->name}}</option>
                                             @endforeach
                                           </select>
                                         </div>
                                       </div>
-                                      <div id="process2" style="font-size:13px;font-weight:500"></div>
                                     </div>
                                     <div class="contact-form-btn">
                                       <button class="button button--md" type="submit"> Save Details</button>
@@ -170,52 +168,67 @@
                                 <h5 class="font-body--xl-500">Discounts</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                    <div id="process3" style="font-size:15px;margin-bottom:20px">
-                                        
-                                            <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
-                                                <div>30 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount30}}% Discount</span></div>
-                                                <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="30" data-discount="{{$shop->discount30}}">Edit</a>
-                                            </div>
-                                            </br />
-                                            <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
-                                              <div>60 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount60}}% Discount</span></div>
-                                              <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="60" data-discount="{{$shop->discount60}}">Edit</a>
-                                            </div>
-                                            </br />
-                                            <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
-                                              <div>90 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount90}}% Discount</span></div>
-                                              <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="90" data-discount="{{$shop->discount90}}">Edit</a>
-                                            </div>
-                                            </br />
-                                            <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-top:10px;display:flex;justify-content:space-between">
-                                              <div>120 Days: <span style="color:#00b207;font-weight:500">{{$shop->discount120}}% Discount</span></div>
-                                              <a href="javascript:void(0)" class="edit-discount text-success mx-5" data-period="120" data-discount="{{$shop->discount120}}">Edit</a>
-                                            </div>
-                                            </br />
-                                        
+                                  <form method="post" id="discount_form" action="{{route('shop.discounts',$shop)}}">@csrf
+                                    <div class="table-responsive">
+                                      <table class="table">
+                                        <tr>
+                                            <th class="text-nowrap">Expiry Period</th>
+                                            <th>Discount</th>
+                                        </tr>
+                                        <tr>
+                                            <td>30 Days</td>
+                                            <td>
+                                              <div class="input-group d-flex flex-nowrap">
+                                                  
+                                                  <input class="form-control-sm border-light" type="number" name="discount30" value="{{$shop->discount30}}">
+                                                  <div class="input-group-append">
+                                                    <span class="input-group-text">%</span>
+                                                  </div>
+                                              </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                          <td>60 Days</td>
+                                          <td>
+                                            <div class="input-group d-flex flex-nowrap">
+                                                  
+                                              <input class="form-control-sm border-light" type="number" name="discount60" value="{{$shop->discount60}}">
+                                              <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                              </div>
+                                          </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>90 Days</td>
+                                          <td>
+                                            <div class="input-group d-flex flex-nowrap">
+                                                  
+                                              <input class="form-control-sm border-light" type="number" name="discount90" value="{{$shop->discount90}}">
+                                              <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                              </div>
+                                          </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>120 Days</td>
+                                          <td>
+                                            <div class="input-group d-flex flex-nowrap">
+                                                  
+                                              <input class="form-control-sm border-light" type="number" name="discount120" value="{{$shop->discount120}}">
+                                              <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                              </div>
+                                          </div>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                      <div class="contact-form-btn">
+                                        <button class="button button--md" type="submit">Save Discount</button>
+                                      </div>
                                     </div>
-                                    <form method="post" id="discount_form" action="{{route('shop.discounts',$shop)}}" style="display:none">@csrf
-                                        <div class="contact-form__content-group">
-                                            <!-- states -->
-                                            <div class="contact-form-input">
-                                                <label for="discount_period">Expiry Period</label>
-                                                <select id="discount_period" name="expire_at" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
-                                                    <option value="30">1 Month</option>
-                                                    <option value="60">2 Months</option>
-                                                    <option value="90">3 Months</option>
-                                                    <option value="120">4 Months</option>
-                                                </select>
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <label for="address">Discount (Percentage) *</label>
-                                                <input type="number" name="discount" id="discount_value" placeholder="Discount (Numbers Only)" min="0" autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div class="contact-form-btn">
-                                            <button class="button button--md" type="submit">Save Discount</button>
-                                        </div>
-                                    </form>
-                                    
+                                  </form>   
                                 </div>
                               </div>
                             
@@ -234,44 +247,147 @@
                               </div>
                               <div class="dashboard__content-card-body">
                                 <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-bottom:10px;font-size:13px">Upload any of the following documents so we can authenticate your account</div>
-                                <div id="process6">
-                                  @if($shop->kyc->isNotEmpty())
-                                    @foreach($shop->kyc as $kyc)
-                                      <div style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
-                                        <div class="docimg">
-                                            <a href="{{$kyc->document}}" target="_blank">
-                                              <img @if($kyc->doctype =='PDF') src="{{asset('img/icon-pdf.jpg')}}" @else src="{{asset('img/icon-jpg.jpg')}}" @endif>
-                                            </a>
-                                        </div>
-                                        <div class="docinfo">
-                                          <span style="font-size:14px">{{$kyc->type}}</span>
-                                            <br /><span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($kyc->status == 'approved') #00b207; @else #ff0000; @endif">{{$kyc->status}}</span>
-                                        </div>
+                                <form method="post" enctype="multipart/form-data" id="uploadDoc" action="{{route('shop.kyc',$shop)}}">@csrf
+                                  <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
+                                    @if($shop->idcard)
+                                      <div class="docimg">
+                                        <a href="{{Storage::url($shop->idcard->document)}}" target="_blank">
+                                          <img @if($shop->idcard->doctype =='PDF') src="{{asset('img/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->idcard->document)}}" @endif id="idcardpreview">
+                                        </a>
+                                        
                                       </div>
-                                    @endforeach
-                                  @endif
-                                </div>
-
-                                <form method="post" enctype="multipart/form-data" id="uploadDoc" action="{{route('upload_id',$shop)}}">@csrf
-                                    <div class="contact-form__content-group">
-                                      <div class="col-lg-8" style="margin-top:10px">
-                                          <label for="idtype" style="font-size:14px">Select ID Type *</label>
-                                          <select id="idtype" name="idType" class="form-control-lg w-100 contact-form-input__dropdown border text-muted"  style="margin-top:10px;margin-bottom:10px"  required>
-                                            <option value="" selected>- Select -</option>
-                                            <option value="Driver's Licence">Driver's Licence</option>
-                                            <option value="Internatonal Passport">Internatonal Passport</option>
-                                            <option value="National Identity Card">National Identity Card</option>
-                                          </select>
-                                          <input name="owner" value="1" type="hidden">
-                                          <input type="file" name="theDoc" id="theDoc" onchange="loadDoc(event)" accept=".pdf, .png, .jpg, .jpeg" required />
-                                          <img src="{{asset('img/file-select.png')}}" onclick="performClick('theDoc');" style="width:100%;margin-bottom:5px" id="upload">
+                                      <div class="docinfo d-flex justify-content-between align-items-center">
+                                        <div>
+                                          <span style="font-size:14px">Owner ID</span>
+                                            <br />
+                                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->idcard->status ) #00b207; @else #ff0000; @endif">
+                                              @if($shop->idcard->status) Approved
+                                              @elseif($shop->idcard->reason) Rejected
+                                              @else Pending Approval
+                                              @endif
+                                            </span>
+                                            @if($shop->idcard->reason)
+                                              <span class="d-block font-body--sm-400 text-danger">{{$shop->idcard->reason}}</span>
+                                            @endif
+                                        </div>
+                                        <button class="btn btn-primary" type="button" onclick="performClick('idcard');">@if(!$shop->idcard->reason) Uploaded @else Upload @endif</button>
+                                    
                                       </div>
+                                    @else
+                                    <div class="docimg">
+                                      <a href="javascript:void()" onclick="performClick('idcard');" target="_blank">
+                                        <img src="{{asset('img/icon-jpg.jpg')}}" id="idcardpreview">
+                                      </a>
+                                      
                                     </div>
+                                    <div class="docinfo d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <span style="font-size:14px">Owner ID</span>
+                                          <br />
+                                          <span style="font-weight:500;font-size:12px;text-transform:uppercase">
+                                          Upload National ID Card / Driver's License / International Passport
+                                        </span>
+                                      </div>
+                                      <button class="btn btn-primary" type="button" onclick="performClick('idcard');">Upload</button>
+                                      
+                                    </div>
+                                    @endif
+                                    <input type="file" style="display: none" name="idcard" id="idcard" onchange="readURL(this,'idcardpreview')" accept=".pdf, .png, .jpg, .jpeg" />
+                                  </div>
+                                  <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
+                                    @if($shop->addressproof)
+                                      <div class="docimg">
+                                        <a href="{{Storage::url($shop->addressproof->document)}}" target="_blank">
+                                          <img @if($shop->addressproof->doctype =='PDF') src="{{asset('img/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->addressproof->document)}}" @endif id="addressproofpreview">
+                                        </a>
+                                      </div>
+                                      <div class="docinfo d-flex justify-content-between align-items-center">
+                                        <div>
+                                          <span style="font-size:14px">Address Proof</span>
+                                            <br />
+                                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->addressproof->status ) #00b207; @else #ff0000; @endif">
+                                              @if($shop->addressproof->status) Approved
+                                              @elseif($shop->addressproof->reason) Rejected
+                                              @else Pending Approval
+                                              @endif
+                                            </span>
+                                            @if($shop->addressproof->reason)
+                                              <span class="d-block font-body--sm-400 text-danger">{{$shop->addressproof->reason}}</span>
+                                            @endif
+                                        </div>
+                    
+                                        <button class="btn btn-primary" type="button" onclick="performClick('addressproof');">@if(!$shop->addressproof->reason) Uploaded @else Upload @endif</button>
+                                      </div>
+                                    @else
+                                    <div class="docimg">
+                                      <a href="javascript:void()" onclick="performClick('addressproof');" target="_blank">
+                                        <img src="{{asset('img/icon-jpg.jpg')}}" id="addressproofpreview">
+                                      </a>
+                                      
+                                    </div>
+                                    <div class="docinfo d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <span style="font-size:14px">Address Proof</span>
+                                          <br />
+                                          <span style="font-weight:500;font-size:12px;text-transform:uppercase">
+                                          Upload Utility Bill e.g Electricity Bill, Waste Bill etc
+                                        </span>
+                                      </div>
+                                      <button class="btn btn-primary" type="button" onclick="performClick('addressproof');">Upload</button>
+                                    </div>
+                                    @endif
+                                    <input type="file" style="display: none" name="addressproof" id="addressproof" onchange="readURL(this,'addressproofpreview')" accept=".pdf, .png, .jpg, .jpeg" />
+                                  </div>
+                                  <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
+                                    @if($shop->companydoc)
+                                      <div class="docimg">
+                                        <a href="{{Storage::url($shop->companydoc->document)}}" target="_blank">
+                                          <img @if($shop->companydoc->doctype =='PDF') src="{{asset('img/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->companydoc->document)}}" @endif id="companydocpreview">
+                                        </a>
+                                      </div>
+                                      <div class="docinfo d-flex justify-content-between align-items-center">
+                                        <div>
+                                          <span style="font-size:14px">Company Document</span>
+                                            <br />
+                                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->companydoc->status ) #00b207; @else #ff0000; @endif">
+                                              @if($shop->companydoc->status) Approved
+                                              @elseif($shop->companydoc->reason) Rejected
+                                              @else Pending Approval
+                                              @endif
+                                            </span>
+                                            @if($shop->companydoc->reason)
+                                              <span class="d-block font-body--sm-400 text-danger">{{$shop->companydoc->reason}}</span>
+                                            @endif
+                                        </div>
+                                        <button class="btn btn-primary"  type="button" onclick="performClick('companydoc');">@if(!$shop->companydoc->reason) Uploaded @else Upload @endif</button>
+                                      </div>
+                                    @else
+                                    <div class="docimg">
+                                      <a href="javascript:void()" onclick="performClick('companydoc');" target="_blank">
+                                        <img src="{{asset('img/icon-jpg.jpg')}}" id="companydocpreview">
+                                      </a>
+                                      
+                                    </div>
+                                    <div class="docinfo d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <span style="font-size:14px">Company Document</span>
+                                          <br />
+                                          <span style="font-weight:500;font-size:12px;text-transform:uppercase">
+                                          Upload CAC
+                                        </span>
+                                      </div>
+                                      <button class="btn btn-primary" type="button" onclick="performClick('companydoc');">Upload</button>
+                                    </div>
+                                    @endif
+                                    <input type="file" style="display: none" name="companydoc" id="companydoc" onchange="readURL(this,'companydocpreview')" accept=".pdf, .png, .jpg, .jpeg" />
+                                  </div>
+
                                     <div class="contact-form-btn">
                                       <button class="button button--md" type="submit" id="btn-doc">
                                           Save Document
                                       </button>
                                     </div>
+                                
                                 </form>
                               
                               </div>
@@ -287,7 +403,7 @@
                                 <h5 class="font-body--xl-500">Manage Staff</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" action="#" id="admin" class="mb-3">@csrf
+                                <form method="post" action="{{route('shop.staff',$shop)}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
                                       <div class="contact-form-input">
                                           <label for="name">Full Name</label>
@@ -339,15 +455,18 @@
                                            
                                             <td>
                                                 @if($user->id != Auth::id()) 
-                                                <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit</a>
-                                                | <a href="javascript:void()" class="text-danger">Delete</a>
+                                                <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit</a> | 
+                                                <form class="d-inline" action="{{route('shop.staff',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                  <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                  <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
+                                                </form>
                                                 @endif
                                             </td> 
                                             </tr>
                                             @if($user->id != Auth::id())
                                             <tr>
                                               <td colspan="6" style="border:none;padding:0px">
-                                                  <form action="{{route('admin.user.update')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                  <form action="#" method="post" id="adminedit{{$user->id}}" style="display:none">
                                                       @csrf 
                                                       <input type="hidden" name="user_id" value="{{$user->id}}">
                                                       <div class="contact-form__content">
@@ -406,13 +525,13 @@
                                 <h5 class="font-body--xl-500">Add Destination</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" id="editcategory">
+                                <form method="post" id="editcategory" action="{{route('shop.shipping',$shop)}}" >@csrf
                                     <div class="contact-form__content">
                 
                                     <div class="contact-form__content-group">
                                         <div class="contact-form-input">
                                         <label for="states">State </label>
-                                        <select id="states" name="state_id" class="contact-form-input__dropdown">
+                                        <select id="statez" name="state_id" class="states select2">
                                             @foreach ($states as $state)
                                                 <option value="{{$state->id}}">{{$state->name}}</option>
                                             @endforeach
@@ -464,7 +583,63 @@
                                             <td>{{$rate->destination->name}}</td>
                                             <td>{{$rate->hours}}</td>
                                             <td>{{$rate->amount}}</td>
-                                            <td> <a href="javascript:void(0)" data-target="#editcategorymodal" data-toggle="modal">Edit</a> | Delete</td>
+                                            <td> 
+                                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit</a> | 
+                                                
+                                                <form class="d-inline" action="{{route('shop.shipping',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete shipping rate?');">@csrf
+                                                  <input type="hidden" name="rate_id" value="{{$rate->id}}">
+                                                  <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
+                                                </form>
+                                            </td>
+                                            <div class="modal fade" id="rateedit{{$rate->id}}" tabindex="-1" aria-labelledby="rateedit{{$rate->id}}ModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="rateedit{{$rate->id}}ModalLabel">Edit Shipping Rate</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <form action="{{route('shop.shipping',$shop)}}" method="post" id="rateedit{{$rate->id}}">
+                                                          @csrf 
+                                                          <input type="hidden" name="rate_id" value="{{$rate->id}}">
+                                                          <div class="contact-form__content my-3">
+                                                              <div class="contact-form__content-group">
+                                                                  
+                                                                  <div class="contact-form-input">
+                                                                      <label for="destination">Destination </label>
+                                                                      <select id="destination" name="state_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted" >
+                                                                          @foreach ($states as $state)
+                                                                              <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
+                                                                          @endforeach
+                                                                      </select>
+                                                                  </div>
+                                                              </div>
+                                                      
+                                                              <div class="contact-form__content-group">
+                                                                  <div class="contact-form-input">
+                                                                      <label for="hours">Hours</label>
+                                                                      <input type="number" name="hours" value="{{$rate->hours}}" placeholder="hours" />
+                                                                  </div>
+                                                      
+                                                                  <div class="contact-form-input">
+                                                                      <label for="amounts">Amount</label>
+                                                                      <input type="number" name="amount" value="{{$rate->amount}}" placeholder="Delivery cost" />
+                                                                  </div>
+                                                              </div>
+                                                      
+                                                              <div class="contact-form-btn">
+                                                                  <button class="button button--md" type="submit">
+                                                                      Update Shipping Rate
+                                                                  </button>
+                                                                  <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                              </div>
+                                                          </div>
+                                                      </form>
+                                                  </div>
+                                                  
+                                                </div>
+                                              </div>
+                                          </div>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -492,24 +667,13 @@
 @endsection
 @push('scripts')
 <script>
-  $('#gotouser').click(function(){
-      $('#edituser').show()
-  })
-  function validate(evt) {
-    var theEvent = evt || window.event;
-
-    // Handle paste
-    if (theEvent.type === 'paste') {
-        key = event.clipboardData.getData('text/plain');
-    } else {
-    // Handle key press
-        var key = theEvent.keyCode || theEvent.which;
-        key = String.fromCharCode(key);
-    }
-    var regex = /[0-9]|\./;
-    if( !regex.test(key) ) {
-      theEvent.returnValue = false;
-      if(theEvent.preventDefault) theEvent.preventDefault();
+        
+  function performClick(elemId) {
+    var elem = document.getElementById(elemId);
+    if(elem && document.createEvent) {
+        var evt = document.createEvent("MouseEvents");
+        evt.initEvent("click", true, false);
+        elem.dispatchEvent(evt);
     }
   }
         
@@ -529,6 +693,30 @@
       $('#discount_period option[value="'+period+'"]').prop('selected', true)
       $('#discount_value').val(discount)
       $('#discount_form').show();
+  })
+  $(document).on('change','#state',function(){
+      var state_id = $(this).val();
+      cities = $('.cities');
+      // console.log.val())
+      $.ajax({
+        type:'POST',
+        dataType: 'json',
+        url: "{{route('cities')}}",
+        data:{
+            '_token' : $('meta[name="csrf-token"]').attr('content'),
+            'state_id': state_id,
+        },
+        success:function(data) {
+          cities.children().remove()
+          data.forEach(element => {
+            cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
+          });
+          cities.select2();
+        },
+        error: function (data, textStatus, errorThrown) {
+            console.log(data);
+        },
+      })
   })
 </script>
 @endpush

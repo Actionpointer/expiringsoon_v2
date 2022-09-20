@@ -33,7 +33,7 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -103,6 +103,8 @@
                                                       <button class="badge btn-danger">Expired </button>
                                                   @elseif($subscription->expiring())
                                                       <button class="badge btn-warning">Expiring </button>
+                                                  @elseif(!$subscription->status)
+                                                      <button class="badge btn-danger">Not Active </button>
                                                   @else
                                                       <button class="badge btn-success">Active </button>
                                                   @endif

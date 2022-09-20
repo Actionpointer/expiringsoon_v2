@@ -107,7 +107,10 @@ class UserController extends Controller
     public function customers(){
         $users = User::where('role','shopper')->get();
         // dd($users);
-        return view('admin.customers',compact('users'));
+        return view('admin.customers.list',compact('users'));
+    }
+    public function customer_show(User $user){
+        return view('admin.customers.view',compact('user'));
     }
     public function customer_manage(Request $request){
         $customer = User::find($request->user_id);

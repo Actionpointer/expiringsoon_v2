@@ -1,15 +1,3 @@
-<?php
-session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
-include("dbconnect.php");
-if(isset($_COOKIE['email'])){
-$query = "SELECT * FROM users WHERE email='".$_COOKIE['email']."'";
-$result = mysqli_query($con, $query);
-$uqr = mysqli_fetch_assoc($result);
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 

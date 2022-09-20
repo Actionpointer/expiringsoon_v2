@@ -35,8 +35,8 @@
   <!-- breedcrumb section end   -->
 
   
-
-  <!-- dashboard Secton Start  -->
+  @include('layouts.session')
+<!-- dashboard Secton Start  -->
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">

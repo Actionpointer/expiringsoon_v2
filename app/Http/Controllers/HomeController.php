@@ -75,7 +75,8 @@ class HomeController extends Controller
 
     public function admin(){
         $user = auth()->user();
-        $documents = Kyc::whereHas('shop', function ($q) {$q->approved()->active(); })->take(20)->get(); 
+        $documents = Kyc::where('status',false)->whereNull('reason')->take(20)->get(); 
+        // dd($documents[0]->verifiable);
         $orders = Order::where('status','new')->orderBy('created_at','desc')->get();   
         return view('admin.dashboard',compact('user','documents','orders'));
     }

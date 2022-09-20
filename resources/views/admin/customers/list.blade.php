@@ -33,7 +33,8 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @include('layouts.session')
+  
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -62,13 +63,15 @@
                       <!-- Product item  -->
                       <td class="cart-table-item align-middle" style="background-color:#fff;padding-top:12px !important">
                           <div class="cart-table__product-item-img">
-                            <img src="{{$user->pic}}" alt="{{$user->name}}" onerror="this.src='{{asset('img/avatar.png')}}'" />
+                            <a href="{{route('admin.customer.show',$user)}}">
+                            <img src="{{$user->pic}}" alt="{{$user->name}}" onerror="this.src='{{asset('img/avatar.png')}}'" /></a>
                           </div>
                       </td>
                       <td class="cart-table-item order-date align-middle">
-                        <span class="font-body--lg-500" style="color:#000">#{{$user->id}}. {{$user->name}}</span>
+                        <a href="{{route('admin.customer.show',$user)}}">
+                          <span class="font-body--lg-500" style="color:#000">#{{$user->id}}. {{$user->name}}</span>
                         <br />
-                        <span style="font-size:12px;color:#888">{{$user->email}}</span>
+                        <span style="font-size:12px;color:#888">{{$user->email}}</span></a>
                       </td>
                       <!-- Price  -->
                       <td class="cart-table-item order-date align-middle">

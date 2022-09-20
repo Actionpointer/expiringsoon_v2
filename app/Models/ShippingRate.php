@@ -9,7 +9,7 @@ use App\Models\State;
 class ShippingRate extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['shop_id','origin_id','destination_id','hours','amount'];
     public function origin(){
         return $this->belongsTo(State::class,'origin_id');
     }

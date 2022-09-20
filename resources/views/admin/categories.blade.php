@@ -33,12 +33,8 @@
 </div>
   <!-- breedcrumb section end   -->
   
-  @if(Session::has('result'))
-      <div class="mb-0 @if(Session('result')) notify @else error @endif" >
-          <p style="color:#fff">{{Session('message')}}</p>
-      </div>
-  @endif
-  <!-- dashboard Secton Start  -->
+  @include('layouts.session')
+<!-- dashboard Secton Start  -->
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -134,7 +130,7 @@
                                       </div>
                                       <div class="contact-form-input">
                                         <label for="states">Subcategories</label>
-                                          <select id="subcategories" name="subcategories[]" class="select2" multiple>
+                                          <select id="subcategories" name="subcategories[]" class="form-control select2" multiple>
                                               @foreach ($category->subcategories as $subcategory)
                                                   <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
                                               @endforeach

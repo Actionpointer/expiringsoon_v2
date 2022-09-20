@@ -1,38 +1,55 @@
 vendor bvn verification
 throttle bvn validation
 revisit security alert - once someone is throttled 
-implement payout by flutter transfer.. then check payment page user, vendor, shops
 add password strength meter
+
+implement payout by flutter transfer.. then check payment page user, vendor, shops
+
 shop staff save
 select2 on modal in categories edit not working
-select2 required attribute not working
-notifications - email and inapp
 categories homepage
+
+
+notifications - email and inapp
+
 hot deals mobile view (home page & hot deals page)
+
+reviews
 product rating.. show in index, product, hotdeals
+
 if user is downgrading, show the impact of the plan to the user.
 if user wants to be restored to the previous existing plan, make it possible... but no refund
-cron job, to check every subscription for a. expiring. b. auto_renew
-email, when subscription is expiring
-email when subscription is auto-renewed
-email when subscription auto-renewal is cancelled
-auto-renew subscription & feature
-add auto-renew to user settings.. e.g auto renew subscription, a
-add coupon for buying subscriptions ? Coupon value + percentage
-when shop starts, user has free subscription by default.
-shipment controller is empty
+
+
+add auto-renew to vendor settings.. e.g auto renew subscription,
+cron job, to check every subscription for 
+    a. expiring: send email. 
+    b. auto_renew : perform renew and send email
+    c: expired: change all his shop status to false, and all his product status to false.. leave only the number allocated by free
+if user does not have subscription[
+    1. he can create new shops/products but their status will be false
+    2. he cannot create withdrawals, bvn validation, 
+    3. his products, shops and ads that are deactivated will not show in frontend and at backend, they show shop/product deactivated at the top
+    5. when user subscribes, activate only the number of shops & products that the subscription can buy
+    6. add coupon for buying subscriptions ? Coupon value + percentage
+    7. when user cancel auto-renew, send email
+add approval status to views (product, shop, adverts)
+mass product approval, send 
+
 release settlement to shop wallet after order changes to completed
 if customer does not raise query xdays after delivery, change order to completed
-middleware to prevent shop creation if no subscription is available
+decrease stock after each purchase
+apply minimum stock level to products
+
 Redirect user to same page after login/register
 
-if user does not have subscription[
-    1. he cant create new shops/products past the limit alotted to free. 
-    2. he cannot create withdrawals, bvn validation, 
-    3. his products, shops and ads that are deactivated will not show in front
-    4. he can access everything deactivated, but he sees a notification at the top saying shop/product deactivated
-    5. when user subscribes, activate the number of shops & products that the subscription can buy
+Profile Page: transaction pin, identity card, auto-renew subscriptions, 
 
-add approval status to views (product, shop, adverts)
+add PUBLISH & DRAFT button to product list
 
-mass product approval, send email
+revisit advert page to edit advert status
+click feature ->  vendor/feature/products    -> vendor/adverts/{feature} 
+
+payments & payouts using paystack and flutter
+
+ban staff (both admin staff & shop staff)

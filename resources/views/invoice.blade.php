@@ -30,9 +30,7 @@
     </div>
 </div>
 <!-- breedcrumb section end   -->
-
-  
-
+@include('layouts.session')
 <!-- dashboard Secton Start  -->
 <div class="dashboard section">
   <div class="container">

@@ -93,11 +93,11 @@ class Product extends Model
     }
     
     public function isAccessible(){
-        return $this->shop->status && $this->shop->approved;
+        return $this->shop->status && $this->shop->approved && $this->shop->visible;
     }
 
     public function isCertified(){
-        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->active && $this->visible && $this->stock;
+        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->status && $this->visible && $this->stock;
     }
     
     public function scopeEdible($query){

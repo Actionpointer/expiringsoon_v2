@@ -15,32 +15,28 @@ class MessageController extends Controller
     public function index()
     {
         $user = auth()->user();
-        Message::where('receiver_id',$user->id)->whereNull('order_id')->update(['is_read'=> 1]);
-        $messages = Message::whereNull('order_id')->where(function ($query) use($user) {
-            return $query->where('user_id',$user->id)
+        Message::where('receiver_id',$user->id)->update(['read_at'=> now()]);
+        $messages = Message::where(function ($query) use($user) {
+            return $query->where('sender_id',$user->id)
                          ->orWhere('receiver_id',$user->id); } )->get();
         return view('messages',compact('messages'));
     }
 
-    public function store(Request $request)
-    {
-        $message = new Message;
-        $message->user_id = auth()->id();
-        if($request->receiver_id) $message->receiver_id = $request->receiver_id;
-        $message->body = $request->body;
-        $message->save();
+    public function store(Request $request){
+        $message = Message::create(['sender_id'=> $request->sender_id,'receiver_id'=> $request->receiver_id ?? null,'body'=> $request->body]);
         return redirect()->back();
     }
 
 
     public function admin_index(){
-        $messages = Message::orderBy('created_at','desc')->orderBy('is_read','desc')->get()->unique('user_id');
+        $messages = Message::whereHas('sender',function ($query){$query->whereIn('role',['vendor','shopper']);})->orderBy('created_at','desc')->orderBy('read_at','desc')->get()->unique('sender_id');
+        // dd($messages);
         return view('admin.messages',compact('messages'));
     }
     public function admin_conversation(User $user){
-        Message::where('user_id',$user->id)->whereNull('receiver_id')->update(['is_read'=> 1]);
-        $messages = Message::whereNull('order_id')->where(function ($query) use($user) {
-            return $query->where('user_id',$user->id)
+        Message::where('sender_id',$user->id)->update(['read_at'=> now()]);
+        $messages = Message::where(function ($query) use($user) {
+            return $query->where('sender_id',$user->id)
                          ->orWhere('receiver_id',$user->id); } )->get();
         return view('messages',compact('messages','user'));
     }

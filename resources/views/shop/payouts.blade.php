@@ -33,7 +33,7 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -134,7 +134,7 @@
                                                                 <p style="color:#cc7817;font-size:14px"><span id="status">Pending</span></p>
                                                             @elseif($payout->status == 'rejected')
                                                             <p style="color:#d92e2e;font-size:14px"><span id="status">Cancelled</span></p>
-                                                            @elseif($payment->status == 'processing')
+                                                            @elseif($payout->status == 'processing')
                                                             <p style="color:#d92e2e;font-size:14px;font-weight:500">Processing</p>
                                                             @else 
                                                               <p style="color:#00b207;font-size:14px;font-weight:500">Paid</p>
@@ -176,7 +176,7 @@
                                                   <a href="#" onclick="event.preventDefault();document.getElementById('bankedit'+{{$account->id}}).style.display='block'">Edit</a>
                                               </div>
                                           </div>
-                                          <form method="post" id="bankedit{{$account->id}}" action="{{route('bank-info')}}" style="display: none">@csrf
+                                          <form method="post" id="bankedit{{$account->id}}" action="{{route('shop.bank-info',$shop)}}" style="display: none">@csrf
                                               <div class="contact-form__content-group">
                                                   <div class="contact-form-input">
                                                       <label for="bank">Your Bank</label>
@@ -199,7 +199,7 @@
                                               </div>
                                               <div class="contact-form-btn">
                                                   <button class="button button--md" type="submit"> Update Details</button>
-                                                  <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('bankedit').style.display='none'"> Cancel</button>
+                                                  <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('bankedit'+{{$account->id}}).style.display='none'"> Cancel</button>
                                               </div>
                                           </form>
                                         </div>

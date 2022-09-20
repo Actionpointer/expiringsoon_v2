@@ -31,6 +31,7 @@
     <!-- breedcrumb section end   -->
 
   <!-- Shopping Cart Section Start   -->
+  @include('layouts.session')
   <section class="shoping-cart section section--xl">
     <div class="container">
       <div class="section__head justify-content-center">

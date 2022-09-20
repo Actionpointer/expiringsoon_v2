@@ -12,6 +12,7 @@ class Address extends Model
 {
     use HasFactory;
     protected $fillable = ['user_id','state_id','city_id','street','contact_phone','contact_name','main'];
+    
     public function state(){
         return $this->belongsTo(State::class);
     }

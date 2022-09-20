@@ -35,12 +35,8 @@
 </div>
   <!-- breedcrumb section end   -->
   
-  @if(Session::has('result'))
-      <div class="mb-0 @if(Session('result')) notify @else error @endif" >
-          <p style="color:#fff">{{Session('message')}}</p>
-      </div>
-  @endif
-  <!-- dashboard Secton Start  -->
+  @include('layouts.session')
+<!-- dashboard Secton Start  -->
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -152,7 +148,7 @@
                                                 <tr>
                                                     <td class="d-flex">
                                                         <label class="form-check-label font-body--400" for="existing"> 
-                                                            Auto Approve Advert
+                                                            Auto Approve Product Advert
                                                         </label>
                                                     </td>
                                                     <td>
@@ -160,7 +156,7 @@
                                                             <label class="form-check-label font-body--400" for="existing"> 
                                                                 On
                                                             </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_advert" @if($settings->firstWhere('name','auto_approve_advert')->value) checked @endif value="1" >
+                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if($settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="1" >
                                                         </div>
                                                     </td>
                                                     <td>
@@ -168,7 +164,30 @@
                                                             <label class="form-check-label font-body--400" for="existing"> 
                                                                 Off
                                                             </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_advert" @if(!$settings->firstWhere('name','auto_approve_advert')->value) checked @endif value="0" > 
+                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if(!$settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="0" > 
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="d-flex">
+                                                        <label class="form-check-label font-body--400" for="existing"> 
+                                                            Auto Approve Shop Advert
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check mx-3">
+                                                            <label class="form-check-label font-body--400" for="existing"> 
+                                                                On
+                                                            </label>
+                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if($settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="1" >
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label font-body--400" for="existing"> 
+                                                                Off
+                                                            </label>
+                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if(!$settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="0" > 
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -899,7 +918,7 @@
                                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{route('admin.shipments')}}" method="post" id="rateedit{{$rate->id}}" style="display:none">
+                                                            <form action="{{route('admin.shipments')}}" method="post" id="rateedit{{$rate->id}}">
                                                                 @csrf 
                                                                 <input type="hidden" name="rate_id" value="{{$rate->id}}">
                                                                 <div class="contact-form__content my-3">

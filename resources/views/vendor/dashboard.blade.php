@@ -31,7 +31,7 @@
 </div>
   <!-- breedcrumb section end   -->
 
-
+  @include('layouts.session')
   <!-- dashboard Secton Start  -->
   <div class="dashboard section">
     <div class="container">
@@ -56,7 +56,7 @@
                             <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
                               <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
                               <p>Subscription about to expire ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
-                              <button type="submit"><u>Renew</u></button> | <a href="{{route('plans')}}"><u>Change plan</u></a> </p>
+                              <button type="submit"><u>Renew</u></button> | <a href="{{route('vendor.plans')}}"><u>Change plan</u></a> </p>
                             </form> 
                           @elseif($user->activeSubscription->auto_renew) 
                             <form class="" action="{{route('vendor.subscription.cancel_renew')}}" method="POST"> @csrf 
@@ -68,7 +68,7 @@
                             <p>Plan will expire on {{$user->activeSubscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p>
                           @endif
                       @else
-                      <h6 class="my-2 text-dark">Free Subscription| <a href="{{route('plans')}}"><u>upgrade</u></a> </h6>
+                      <h6 class="my-2 text-dark">Free Subscription| <a href="{{route('vendor.plans')}}"><u>upgrade</u></a> </h6>
                       @endif
                         
                     

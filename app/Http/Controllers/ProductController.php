@@ -9,14 +9,10 @@ use App\Models\State;
 use App\Models\Advert;
 use App\Models\Product;
 use App\Models\Category;
-use Faker\Provider\Lorem;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
-use Ixudra\Curl\Facades\Curl;
-use Illuminate\Validation\Rule;
 use App\Http\Requests\ProductRequest;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -24,8 +20,7 @@ class ProductController extends Controller
         $this->middleware('auth')->except(['index','show','getSubcategories']);
     }
     
-    public function index()
-    {
+    public function index(){
         // product is visible, product is in locale, 
         $category = null;
         $categories = Category::has('products')->get();
@@ -64,8 +59,7 @@ class ProductController extends Controller
         return view('frontend.product.list',compact('advert','products','category','categories','states','state_id'));
     }
 
-    public function show(Product $product)
-    {
+    public function show(Product $product){
         if((!auth()->check() && !$product->isCertified()) || (auth()->check() && auth()->id() != $product->shop->owner()->id) )
         abort(404,'Product is not available');
         return view('frontend.product.view',compact('product'));
@@ -90,8 +84,6 @@ class ProductController extends Controller
     }
 
     public function store(Shop $shop,ProductRequest $request){
-        $validated = $request->validated();
-        dd($validated);
         if($request->hasFile('photo')){
             $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$photo);
@@ -100,20 +92,34 @@ class ProductController extends Controller
         return redirect()->route('shop.product.list',$shop);
     }
 
-    public function edit($id)
-    {
-        //
+    public function edit(Shop $shop,Product $product){
+        $categories = Category::all();
+        $tags = Tag::all(); 
+        return view('shop.product.edit',compact('shop','product','categories','tags'));
     }
 
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Shop $shop,Request $request){
+        $product = Product::find($request->product_id);
+        if($request->hasFile('photo')){
+            if($product->photo) Storage::delete('public/'.$product->photo);
+            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $request->file('photo')->storeAs('public/',$photo);
+            $product->update(['photo'=> $photo]);
+        } 
+        $product->update(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120]);
+        return redirect()->route('shop.product.list',$shop);
     }
 
-    public function destroy($id)
-    {
-        //
+    public function destroy(Shop $shop,Request $request){
+        $products = Product::whereIn('id',$request->products)->get();
+        foreach($products as $product){
+            if($product->carts->isEmpty()){
+                $product->delete();
+            }
+        }
+        return redirect()->back();
     }
+
 
     public function admin_index()
     {

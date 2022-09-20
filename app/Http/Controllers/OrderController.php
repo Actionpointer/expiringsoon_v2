@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Shop;
 use App\Models\Order;
-use App\Models\Message;
+use App\Models\OrderMessage;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -18,15 +18,15 @@ class OrderController extends Controller
         $user = auth()->user();
         return view('customer.orders.list',compact('user'));
     }
-    public function show(Order $order)
-    {
+    public function show(Order $order){
+        $user = auth()->user();
+        OrderMessage::where('order_id',$order->id)->where('user_id',$user->id)->where('receiver',$user->role)->whereNull('read_at')->update(['read_at'=>now()]);
         return view('order',compact('order'));
     }
 
-    public function message(Request $request)
-    {
-        $user = auth()->user();
-        $message = Message::create(['user_id'=> $user->id,'receiver_id'=> $request->receiver_id,'order_id'=> $request->order_id,'body'=> $request->body]);
+    public function message(Request $request){
+        $order = Order::find($request->order_id);
+        $message = OrderMessage::create(['user_id'=> $order->user_id,'order_id'=> $order->id,'shop_id'=> $order->shop_id,'body'=> $request->body,'sender'=> $request->sender,'receiver' => $request->receiver]);
         return redirect()->back();
     }
 
@@ -36,6 +36,7 @@ class OrderController extends Controller
     }
 
     public function shop_order_view(Shop $shop,Order $order){
+        OrderMessage::where('order_id',$order->id)->where('shop_id',$shop->id)->where('receiver','vendor')->whereNull('read_at')->update(['read_at'=>now()]);
         return view('order',compact('shop','order'));
     }
 

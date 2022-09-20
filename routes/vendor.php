@@ -7,17 +7,23 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
     Route::get('shop/create', [App\Http\Controllers\ShopController::class, 'create'])->name('shop.create');
     Route::post('shop/store', [App\Http\Controllers\ShopController::class, 'store'])->name('shop.store');    
 
-    Route::get('adsets', [App\Http\Controllers\PlanController::class, 'adplan_index'])->name('adsets');   
-
+    Route::get('plans',[App\Http\Controllers\SubscriptionController::class, 'plans'])->name('plans');
     Route::post('subscription/plans', [App\Http\Controllers\SubscriptionController::class, 'plan_subscription'])->name('subscription.plan');   
     Route::post('subscription/features', [App\Http\Controllers\SubscriptionController::class, 'feature_subscription'])->name('subscription.feature');   
     Route::post('subscription/cancel-renew', [App\Http\Controllers\SubscriptionController::class, 'cancel_renew'])->name('subscription.cancel_renew');   
 
     Route::get('transactions',[App\Http\Controllers\PaymentController::class,'index'])->name('payments');
 
-    // Route::get('features',[App\Http\Controllers\AdvertController::class,'index'])->name('features');
+    //adplans bought, and buy adplans
+    Route::get('adsets', [App\Http\Controllers\AdvertController::class, 'adsets'])->name('adsets');   
     
-    Route::get('adverts/{feature}',[App\Http\Controllers\AdvertController::class,'create'])->name('adverts');
+    //list adds, create ads (both shop and products)
+    Route::get('adverts/{feature}',[App\Http\Controllers\AdvertController::class,'ads'])->name('adverts');
+
+    //create featured ads
+    Route::post('feature/products',[App\Http\Controllers\AdvertController::class,'feature_products'])->name('feature.products');
+    Route::post('feature/products/subscription',[App\Http\Controllers\AdvertController::class,'feature_products_subscription'])->name('feature.products.subscription');
+
     Route::post('adverts/product/filter',[App\Http\Controllers\AdvertController::class,'filter_products'])->name('advert.filter_product');
     Route::post('adverts/store/product',[App\Http\Controllers\AdvertController::class,'store_product_advert'])->name('advert.store.products');
     Route::post('adverts/store/shop',[App\Http\Controllers\AdvertController::class,'store_shop_advert'])->name('advert.store.shops');

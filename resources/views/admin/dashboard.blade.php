@@ -33,7 +33,7 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -96,16 +96,22 @@
                             <tr>
                                 <!-- Order Id  -->
                                 <td class="dashboard__order-history-table-item order-id" >
-                                    <img @if(!$document->shop->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($document->shop->banner)}}" @endif alt="{{$document->shop->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                    @if($document->verifiable_type == 'App\Models\Shop')
+                                      <img @if($document->verifiable->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                    @else
+                                    <img @if($document->verifiable->owner()->photo) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($document->verifiable->owner()->photo)}}" @endif alt="{{$document->verifiable->owner()->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                    @endif
                                 </td>
                                 <!-- Date  -->
                                 <td class="dashboard__order-history-table-item order-date">
                                     <p class="order-total-price">
-                                        {{$document->shop->name}}
+                    
+                                        {{$document->verifiable->name}}
                                         <br />
                                         <span style="font-size:12px;color:#888">
-                                            {{$document->shop->email}}
+                                            {{$document->verifiable->email}}
                                         </span>
+                                     
                                     </p>
                                 </td>
                                 <!-- Total  -->
@@ -119,7 +125,11 @@
                                 </td>
                                 <!-- Details page  -->
                                 <td class=" dashboard__order-history-table-item order-details ">
-                                    <a href="{{route('admin.shop.show',$document->shop)}}"> View Shop</a>
+                                  @if($document->verifiable_type == 'App\Models\Shop')
+                                    <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
+                                  @else
+                                    <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
+                                  @endif
                                 </td>
                             </tr>
                         @empty

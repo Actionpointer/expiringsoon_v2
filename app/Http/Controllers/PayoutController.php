@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bank;
 use App\Models\Shop;
 use App\Models\Payout;
+use App\Models\Account;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Http\Traits\PayoutTrait;
@@ -21,6 +22,12 @@ class PayoutController extends Controller
     {
         $banks = Bank::all();
         return view('shop.payouts',compact('shop','banks'));
+    }
+
+    public function bank_info(Request $request){
+        $user = auth()->user();
+        Account::updateOrCreate(['user_id'=> $user->id],['acctname'=> $request->acctname,'acctno'=> $request->acctno,'bank'=> $request->bank]);
+        return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);
     }
 
     public function payout(Shop $shop,Request $request){

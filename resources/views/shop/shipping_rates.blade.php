@@ -32,12 +32,8 @@
 </div>
   <!-- breedcrumb section end   -->
   
-  @if(Session::has('result'))
-      <div class="mb-0 @if(Session('result')) notify @else error @endif" >
-          <p style="color:#fff">{{Session('message')}}</p>
-      </div>
-  @endif
-  <!-- dashboard Secton Start  -->
+  @include('layouts.session')
+<!-- dashboard Secton Start  -->
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">

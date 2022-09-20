@@ -44,7 +44,7 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -59,7 +59,7 @@
                       <thead>
                         <tr>
                           <th scope="col" class="cart-table-title">Sender </th>
-                          <th scope="col" class="cart-table-title">Type </th>
+                          
                           <th scope="col" class="cart-table-title">Status</th>
                         </tr>
                       </thead>
@@ -68,15 +68,15 @@
                         @forelse ($messages as $message)
                           <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                               <td class="cart-table-item align-middle" style="background-color:#fff;padding-top:12px !important">
-                                <a @if($message->order_id) href="{{route('order-details',$message->order)}}" @else href="{{route('admin.message',$message->user)}}" @endif class="d-block text-dark">
+                                <a href="{{route('admin.message',$message->sender)}}" class="d-block text-dark">
                                   <div class="d-flex">
                                     <div class="user-img">
-                                      <img @if(!$message->user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($message->user->pic)}}" @endif class="rounded-circle" alt="user-photo">
+                                      <img @if(!$message->sender->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($message->sender->pic)}}" @endif class="rounded-circle" alt="user-photo">
                                     </div>
           
                                     <div class="user-message-info">
                                         <div class="d-flex">
-                                          <h5 class="font-body--md-500">{{$message->user->name}}</h5>
+                                          <h5 class="font-body--md-500">{{$message->sender->name}}</h5>
                                           <ul class="inside"><li class="text-muted border-top border-white">{{$message->created_at->format('d M,Y h:i A')}}</li></ul>
                                         </div>
           
@@ -87,11 +87,9 @@
                                   </div>
                                 </a> 
                               </td>
+                              
                               <td class="cart-table-item order-date align-middle">
-                                  @if($message->order_id) Order @else Support @endif
-                              </td>
-                              <td class="cart-table-item order-date align-middle">
-                                {{$message->is_read ? 'Read': 'Unread'}}
+                                {{$message->read_at ? 'Read': 'Unread'}}
                               </td>
                           </tr>
                         @empty

@@ -10,10 +10,10 @@ class Kyc extends Model
     use HasFactory;
     public $table = 'kyc';
 
-    protected $fillable = ['shop_id','user_id','type','doctype','document'];
+    protected $fillable = ['verifiable_id','verifiable_type','type','doctype','document','reason'];
 
-    public function shop(){
-        return $this->belongsTo(Shop::class);
+    public function verifiable(){
+        return $this->morphTo();
     }
     public static function boot()
     {

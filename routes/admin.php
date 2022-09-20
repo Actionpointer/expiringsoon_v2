@@ -34,6 +34,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('payments',[App\Http\Controllers\PaymentController::class, 'admin_index'])->name('payments');
     
     Route::get('customers',[App\Http\Controllers\UserController::class, 'customers'])->name('customers');
+    Route::get('customer/show/{user}',[App\Http\Controllers\UserController::class, 'customer_show'])->name('customer.show');
     Route::post('customers',[App\Http\Controllers\UserController::class, 'customer_manage'])->name('customer.manage');
 
     Route::get('messages',[App\Http\Controllers\MessageController::class, 'admin_index'])->name('messages');

@@ -41,6 +41,10 @@ class ProductObserver
     public function deleting(Product $product)
     {
         $product->adverts->delete();
+        //orders
+        //carts
+        //wishlist
+        //
     }
 
     public function deleted(Product $product)

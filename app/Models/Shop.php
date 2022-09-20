@@ -62,7 +62,7 @@ class Shop extends Model
         return $query->where('status',true);
     }
     public function scopeSelling($query){
-        return $query->whereHas('products',function($q) {$q->where('status',true)->where('visible',true);});
+        return $query->whereHas('products',function($q) {$q->where('status',true)->where('visible',true)->where('approved',true);});
     }
     public function isCertified(){
         return $this->status && $this->approved && $this->visible;
@@ -71,7 +71,16 @@ class Shop extends Model
         return $this->belongsToMany(User::class)->withPivot('role','status');
     }
     public function kyc(){
-        return $this->hasMany(Kyc::class);
+        return $this->MorphMany(Kyc::class,'verifiable');
+    }
+    public function idcard(){
+        return $this->owner()->morphOne(Kyc::class,'verifiable')->where('type','idcard');
+    }
+    public function addressproof(){
+        return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
+    }
+    public function companydoc(){
+        return $this->MorphOne(Kyc::class,'verifiable')->where('type','companydoc');
     }
     public function staff(){
         return $this->users->where('pivot.role','!=','owner');

@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Traits\GeoLocationTrait;
 use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\State;
+use App\Models\Adplan;
 use App\Models\Advert;
 use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Subscription;
 use Illuminate\Http\Request;
+use App\Http\Traits\PaymentTrait;
+use App\Http\Traits\GeoLocationTrait;
 
 class AdvertController extends Controller
 {
-    use GeoLocationTrait;
+    use GeoLocationTrait,PaymentTrait;
 
     public function __construct(){
         $this->middleware('auth')->except('redirect');
@@ -31,9 +32,16 @@ class AdvertController extends Controller
         } 
     }
 
-    public function create(Feature $feature){
+    public function adsets(){
+        $user = auth()->user();
+        $adplans = Adplan::all();
+        return view('vendor.features.adsets',compact('user','adplans'));
+    }
+
+    public function ads(Feature $feature){
         // $feature = auth()->user()->features->where('subscribable_id',$feature->id)->first();
-        $shops = Shop::where('user_id',auth()->id())->active()->visible()->approved()->selling()->get();
+        $user = auth()->user();
+        $shops = $user->shops->where('status',true)->where('visible',true)->where('approved',true);
         $states = State::all();
         $state_id = $this->currentState()->id;
         if($feature->adplan->type == 'products'){
@@ -52,13 +60,7 @@ class AdvertController extends Controller
         $feature = Feature::find($request->feature_id);
         foreach($products as $product){
             if($feature->units > $feature->adverts->count()){
-                $advert =  new Advert;
-                $advert->feature_id =  $request->feature_id;
-                $advert->position =  $feature->adplan->position;
-                $advert->advertable_id =  $product->id;
-                $advert->advertable_type = get_class($product);
-                $advert->state_id = $request->state_id;
-                $advert->save();
+                $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
             }
         }
         return redirect()->back();
@@ -99,6 +101,30 @@ class AdvertController extends Controller
         $adverts = Advert::destroy($request->adverts);
         return redirect()->back()->with(['result'=> 1,'message'=> 'Ads Deleted Successfully']);
     }
+
+    public function feature_products(Request $request){
+        $products = Product::whereIn('id',$request->products)->edible()->approved()->active()->accessible()->available()->visible()->get();
+        $allproducts = Product::where('shop_id',$request->shop_id)->edible()->approved()->active()->accessible()->available()->visible()->get();
+        $states = State::all();
+        $state_id = $this->currentState()->id;
+        $adplan = Adplan::where('position','Z')->first();
+        return view('vendor.features.ads',compact('allproducts','products','states','state_id','adplan'));
+    }
+
+    public function feature_products_subscription(Request $request){
+        // dd($request->all());
+        $products = Product::whereIn('id',$request->products)->get();
+        $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $request->adplan_id,'units'=> count($request->products),'amount'=> $request->amount,'start_at'=> now(),'end_at'=> now()->addDays($request->days)]);        
+        foreach($products as $product){
+            $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
+        }
+        $link = $this->initializePayment($feature->amount,$products->pluck('id')->toArray(),'products');
+        if(!$link)
+            return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
+        else
+        return redirect()->to($link);
+    }
+
 
     public function admin_index(){
         $adverts = Advert::all();
