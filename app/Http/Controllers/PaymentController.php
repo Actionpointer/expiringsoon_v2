@@ -71,12 +71,12 @@ class PaymentController extends Controller
         return response()->json($response,200);
     }
 
-    public function topup(Request $request){
-        if($url = $this->initializePayment($request->amount)){
-            return redirect()->to($url);
-        }else
-            return redirect()->back()->with(['result'=> '0','message'=> 'Error Processing Payment']);
-    }
+    // public function topup(Request $request){
+    //     if($url = $this->initializePayment($request->amount)){
+    //         return redirect()->to($url);
+    //     }else
+    //         return redirect()->back()->with(['result'=> '0','message'=> 'Error Processing Payment']);
+    // }
 
     public function shop_index(Shop $shop){
         $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();

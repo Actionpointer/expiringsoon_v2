@@ -26,7 +26,7 @@
               <span> > </span>
             </a>
           </li>
-          <li><a href="{{route('admin.customers')}}">Customer <span> > </span></a></li>
+          <li><a href="{{route('admin.users')}}">Users <span> > </span></a></li>
           <li class="active"><a href="#">{{$user->name}}</a></li>
         </ul>
       </div>
@@ -59,7 +59,7 @@
                                 Manage
                               </button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <form class="d-inline" action="{{route('admin.customer.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
+                                <form class="d-inline" action="{{route('admin.user.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                                   <input type="hidden" name="user_id" value="{{$user->id}}">
                                   @if(!$user->status)
                                   <button type="submit" name="status" value="1" class="dropdown-item">Approve</button>

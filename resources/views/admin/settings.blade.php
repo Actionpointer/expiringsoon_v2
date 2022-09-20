@@ -398,7 +398,7 @@
                                 <h5 class="font-body--xl-500">Manage Admins</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" action="{{route('admin.users')}}" id="admin" class="mb-3">@csrf
+                                <form method="post" action="{{route('admin.staff')}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
                                         <div class="contact-form-input">
                                             <label for="states" style="margin-top:15px">Admin Level</label>
@@ -460,7 +460,7 @@
                                                     <td>
                                                         @if($user->id != Auth::id()) 
                                                         <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit </a> | 
-                                                        <form class="d-inline" action="{{route('admin.users')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                        <form class="d-inline" action="{{route('admin.staff')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
                                                             <input type="hidden" name="user_id" value="{{$user->id}}">
                                                             <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
                                                         </form>
@@ -471,7 +471,7 @@
                                                 @if($user->id != Auth::id())
                                                 <tr>
                                                     <td colspan="6" style="border:none;padding:0px">
-                                                        <form action="{{route('admin.users')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                        <form action="{{route('admin.staff')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
                                                             @csrf 
                                                             <input type="hidden" name="user_id" value="{{$user->id}}">
                                                             <div class="contact-form__content">

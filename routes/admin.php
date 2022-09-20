@@ -6,7 +6,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('settings',[App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
     Route::post('settings',[App\Http\Controllers\SettingsController::class, 'settings'])->name('settings');
     Route::post('shipping-rates',[App\Http\Controllers\SettingsController::class, 'shipping_rates'])->name('shipments');
-    Route::post('users',[App\Http\Controllers\SettingsController::class, 'admins'])->name('users');
+    Route::post('staff',[App\Http\Controllers\SettingsController::class, 'admins'])->name('staff');
     Route::post('plans',[App\Http\Controllers\SettingsController::class, 'plans'])->name('plans');
     Route::post('adplans',[App\Http\Controllers\SettingsController::class, 'adplans'])->name('adplans');
     
@@ -33,9 +33,9 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::post('adverts',[App\Http\Controllers\AdvertController::class, 'admin_manage'])->name('adverts.manage');
     Route::get('payments',[App\Http\Controllers\PaymentController::class, 'admin_index'])->name('payments');
     
-    Route::get('customers',[App\Http\Controllers\UserController::class, 'customers'])->name('customers');
-    Route::get('customer/show/{user}',[App\Http\Controllers\UserController::class, 'customer_show'])->name('customer.show');
-    Route::post('customers',[App\Http\Controllers\UserController::class, 'customer_manage'])->name('customer.manage');
+    Route::get('users',[App\Http\Controllers\UserController::class, 'users'])->name('users');
+    Route::get('users/show/{user}',[App\Http\Controllers\UserController::class, 'user_show'])->name('user.show');
+    Route::post('users',[App\Http\Controllers\UserController::class, 'user_manage'])->name('user.manage');
 
     Route::get('messages',[App\Http\Controllers\MessageController::class, 'admin_index'])->name('messages');
     Route::get('message/{user}',[App\Http\Controllers\MessageController::class, 'admin_conversation'])->name('message');

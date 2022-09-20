@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
 
 @endpush
-@section('title')Customers @endsection
+@section('title')Users @endsection
 @section('main')
     <!-- breedcrumb section start  -->
   <div class="section breedcrumb">
@@ -52,7 +52,7 @@
                   <tr>
                     <th scope="col" class="cart-table-title">User </th>
                     <th scope="col" class="cart-table-title">Details</th>
-                    <th scope="col" class="cart-table-title">Orders</th>
+                    <th scope="col" class="cart-table-title">Role</th>
                     <th scope="col" class="cart-table-title">Status</th>
                     <th scope="col" class="cart-table-title"></th>
                   </tr>
@@ -63,19 +63,22 @@
                       <!-- Product item  -->
                       <td class="cart-table-item align-middle" style="background-color:#fff;padding-top:12px !important">
                           <div class="cart-table__product-item-img">
-                            <a href="{{route('admin.customer.show',$user)}}">
-                            <img src="{{$user->pic}}" alt="{{$user->name}}" onerror="this.src='{{asset('img/avatar.png')}}'" /></a>
+                            <a href="{{route('admin.user.show',$user)}}">
+                            <img src="{{Storage::url($user->pic)}}" alt="{{$user->name}}" onerror="this.src='{{asset('img/avatar.png')}}'" /></a>
                           </div>
                       </td>
                       <td class="cart-table-item order-date align-middle">
-                        <a href="{{route('admin.customer.show',$user)}}">
+                        <a href="{{route('admin.user.show',$user)}}">
                           <span class="font-body--lg-500" style="color:#000">#{{$user->id}}. {{$user->name}}</span>
                         <br />
-                        <span style="font-size:12px;color:#888">{{$user->email}}</span></a>
+                          <span style="font-size:12px;color:#888">{{$user->email}}</span><br>
+                          <span style="font-size:12px;color:#888">{{$user->mobile}}</span>
+
+                        </a>
                       </td>
                       <!-- Price  -->
                       <td class="cart-table-item order-date align-middle">
-                        <p class="font-body--lg-500" style="color:#00b207">{{$user->orders->count().' orders'}} - {!!cache('settings')['currency_symbol']!!}{{number_format($user->payments->sum('amount'), 2)}}</p>
+                        <p class="font-body--lg-500" style="color:#00b207">{{ucwords($user->role)}}</p>
                       </td>
                       <!-- Stock Status  -->
                       <td class="cart-table-item order-date align-middle">
@@ -93,7 +96,7 @@
                             Manage
                           </button>
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <form class="d-inline" action="{{route('admin.customer.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
+                            <form class="d-inline" action="{{route('admin.user.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                               <input type="hidden" name="user_id" value="{{$user->id}}">
                               @if(!$user->status)
                               <button type="submit" name="status" value="1" class="dropdown-item">Activate</button>

@@ -104,18 +104,18 @@ class UserController extends Controller
      Admin area
      */
 
-    public function customers(){
-        $users = User::where('role','shopper')->get();
+    public function users(){
+        $users = User::all();
         // dd($users);
-        return view('admin.customers.list',compact('users'));
+        return view('admin.users.list',compact('users'));
     }
-    public function customer_show(User $user){
-        return view('admin.customers.view',compact('user'));
+    public function user_show(User $user){
+        return view('admin.users.view',compact('user'));
     }
-    public function customer_manage(Request $request){
-        $customer = User::find($request->user_id);
-        $customer->status = $request->status;
-        $customer->save();
+    public function user_manage(Request $request){
+        $user = User::find($request->user_id);
+        $user->status = $request->status;
+        $user->save();
         return redirect()->back()->with(['result'=> '1','message'=> 'User Status Changed']);
     }
 
