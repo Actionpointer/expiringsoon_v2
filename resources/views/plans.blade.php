@@ -295,18 +295,18 @@
                                         </select>
                                     @endif
                                 @else
-                                    @if($enterprise->slug == 'free_slug')
-                                    <button type="button" class="btn btn-sm btn-primary disabled text-nowrap">
-                                        Current Plan 
-                                    </button>
+                                    @if($enterprise->slug == 'free_plan')
+                                        <button type="button" class="btn btn-sm btn-primary disabled text-nowrap">
+                                            Current Plan 
+                                        </button>
                                     @else
-                                    <select id="{{$enterprise->slug}}" class="form-control-sm chooseplan" >
-                                        <option value="0">Choose Plan</option>
-                                        <option value="1">1 Month</option>
-                                        <option value="3">3 Months</option>
-                                        <option value="6">6 Months</option>
-                                        <option value="12">1 Year</option>
-                                    </select>  
+                                        <select id="{{$enterprise->slug}}" class="form-control-sm chooseplan" >
+                                            <option value="0">Choose Plan</option>
+                                            <option value="1">1 Month</option>
+                                            <option value="3">3 Months</option>
+                                            <option value="6">6 Months</option>
+                                            <option value="12">1 Year</option>
+                                        </select>  
                                     @endif
                                 @endif
                             @else

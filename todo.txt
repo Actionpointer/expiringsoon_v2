@@ -135,3 +135,48 @@ PRODUCTS [  show featured]
     "subaccount": {}
   }
 }
+
+=======================================================================
+{#464 ▼
+  +"status": "success"
+  +"message": "Transaction fetched successfully"
+  +"data": {#1189 ▼
+    +"id": 3753419
+    +"tx_ref": "632a46d1bf39a"
+    +"flw_ref": "FLW-MOCK-e22a1a8cf5162b4059b4b943fd26ed6e"
+    +"device_fingerprint": "effd6a6d1bb5ce5beec4930029e3cdfe"
+    +"amount": 2911.8
+    +"currency": "NGN"
+    +"charged_amount": 2911.8
+    +"app_fee": 40.77
+    +"merchant_fee": 0
+    +"processor_response": "successful"
+    +"auth_model": "PIN"
+    +"ip": "52.209.154.143"
+    +"narration": "CARD Transaction "
+    +"status": "successful"
+    +"payment_type": "card"
+    +"created_at": "2022-09-20T23:05:51.000Z"
+    +"account_id": 102059
+    +"card": {#792 ▼
+      +"first_6digits": "553188"
+      +"last_4digits": "2950"
+      +"issuer": " CREDIT"
+      +"country": "NIGERIA NG"
+      +"type": "MASTERCARD"
+      +"token": "flw-t1nf-490e743e2bab7f7fe007966019e88cc9-m03k"
+      +"expiry": "09/32"
+    }
+    +"meta": {#474 ▼
+      +"__CheckoutInitAddress": "https://ravemodal-dev.herokuapp.com/v3/hosted/pay"
+    }
+    +"amount_settled": 2871.03
+    +"customer": {#216 ▼
+      +"id": 1770762
+      +"name": "Keno Aki"
+      +"phone_number": "N/A"
+      +"email": "shopper2@gmail.com"
+      +"created_at": "2022-09-20T23:05:51.000Z"
+    }
+  }
+}

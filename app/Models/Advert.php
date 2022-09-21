@@ -57,7 +57,7 @@ class Advert extends Model
     }
     public function scopeCertifiedShop($query){
         return $query->whereHas('shop', function (Builder $qry)  { 
-            $qry->where('status',true)->where('approved',true)->where('visible',true)
+            $qry->where('status',true)->where('approved',true)->where('published',true)
             ->whereHas('products',function(Builder $q){
                 $q->edible()->approved()->active()->visible()->accessible()->available();
             });

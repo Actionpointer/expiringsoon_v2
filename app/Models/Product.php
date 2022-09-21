@@ -29,7 +29,7 @@ class Product extends Model
         return 'slug';
     }
     
-    protected $fillable = ['name','shop_id','slug','description','stock','category_id', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
+    protected $fillable = ['name','shop_id','slug','description','stock','category_id','published', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
     protected $appends = ['amount'];
 
     protected $dates = ['expire_at','uploaded'];
@@ -93,11 +93,11 @@ class Product extends Model
     }
     
     public function isAccessible(){
-        return $this->shop->status && $this->shop->approved && $this->shop->visible;
+        return $this->shop->status && $this->shop->approved && $this->shop->published;
     }
 
     public function isCertified(){
-        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->status && $this->visible && $this->stock;
+        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->status && $this->published && $this->stock;
     }
     
     public function scopeEdible($query){
@@ -110,10 +110,10 @@ class Product extends Model
         return $query->where('status',true);
     }
     public function scopeVisible($query){
-        return $query->where('visible',true);
+        return $query->where('published',true);
     }
     public function scopeAccessible($query){
-        return $query->whereHas('shop',function ($q) { $q->where('status',true)->where('approved',true); } );
+        return $query->whereHas('shop',function ($q) { $q->where('status',true)->where('approved',true)->where('published',true); } );
     }
     public function scopeAvailable($query){
         return $query->where('stock','>',0);

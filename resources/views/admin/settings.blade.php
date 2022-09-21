@@ -400,18 +400,34 @@
                                 <div class="dashboard__content-card-body">
                                 <form method="post" action="{{route('admin.staff')}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
-                                        <div class="contact-form-input">
-                                            <label for="states" style="margin-top:15px">Admin Level</label>
-                                            <select id="zip" name="role" class="contact-form-input__dropdown" >
-                                            <option value='admin' selected>Administrator</option>
-                                            <option value='customercare'>Customer Care</option>
-                                            <option value='security'>Security</option>
-                                            <option value='auditor'>Auditor</option>
-                                            </select>
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input">
+                                                <label for="states" style="">Admin Level</label>
+                                                <select id="zips" name="role" class="form-control-lg w-100 border text-muted" >
+                                                    <option value='admin' selected>Administrator</option>
+                                                    <option value='customercare'>Customer Care</option>
+                                                    <option value='security'>Security</option>
+                                                    <option value='auditor'>Auditor</option>
+                                                </select>
+                                            </div>
+                                            <div class="contact-form-input">
+                                                <label for="states" style="">Status</label>
+                                                <select id="zissdsp" name="status" class="form-control-lg w-100 border text-muted" >
+                                                    <option value='1'>Active</option>
+                                                    <option value='0'>Suspended</option>
+                                                </select>
+                                            </div>
+
                                         </div>
-                                        <div class="contact-form-input">
-                                            <label for="name">Full Name</label>
-                                            <input type="text" name="name" placeholder="Enter Full Name" required />
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input">
+                                                <label for="name">First Name</label>
+                                                <input type="text" name="fname" placeholder="Enter First Name" required />
+                                            </div>
+                                            <div class="contact-form-input">
+                                                <label for="name">Last Name</label>
+                                                <input type="text" name="lname" placeholder="Enter Last Name" required />
+                                            </div>
                                         </div>
                                         <div class="contact-form__content-group">
                                             <div class="contact-form-input"> 
@@ -443,8 +459,8 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Phone</th>
+                                                <th scope="col">Contact</th>
+                                                <th scope="col">Status</th>
                                                 <th scope="col">Level</th>
                                                 <th scope="col">Manage</th>
                                                 <th></th>
@@ -454,12 +470,13 @@
                                             @foreach ($users as $user)
                                                 <tr>
                                                     <td>{{$user->name}}</td>
-                                                    <td>{{$user->email}}</td>
-                                                    <td>{{$user->mobile}}</td>
+                                                    <td>{{$user->email}}<br>{{$user->mobile}}
+                                                    </td>
+                                                    <td>@if($user->status) Active @else Suspended @endif</td>
                                                     <td>{{$user->role}}</td>
                                                     <td>
                                                         @if($user->id != Auth::id()) 
-                                                        <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit </a> | 
+                                                        <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block';$('.select2').select2();">Edit </a> | 
                                                         <form class="d-inline" action="{{route('admin.staff')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
                                                             <input type="hidden" name="user_id" value="{{$user->id}}">
                                                             <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
@@ -478,17 +495,29 @@
                                                                 <div class="contact-form__content-group my-3">
                                                                     <div class="contact-form-input">
                                                                         <label for="states">Admin Level</label>
-                                                                        <select name="role" class="form-control-lg w-100 contact-form-input__dropdown border text-muted" >
+                                                                        <select id="abdcc{{$user->id}}" name="role" class="form-control-lg w-100 border text-muted" >
                                                                             <option value='admin' @if($user->role == 'admin') selected @endif>Administrator</option>
                                                                             <option value='customercare'  @if($user->role == 'customercare') selected @endif>Customer Care</option>
                                                                             <option value='security' @if($user->role == 'security') selected @endif>Security</option>
                                                                             <option value='auditor'  @if($user->role == 'auditor') selected @endif>Auditor</option>
                                                                         </select>
                                                                     </div>
-                                                                
                                                                     <div class="contact-form-input">
-                                                                        <label for="address">Full Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                        <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" />
+                                                                        <label for="states">Status</label>
+                                                                        <select id="abc{{$user->id}}" name="status" class="form-control-lg w-100 border text-muted" >
+                                                                            <option value='1' @if($user->status) selected @endif>Active</option>
+                                                                            <option value='0' @if(!$user->status) selected @endif>Suspended</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="contact-form__content-group my-3">
+                                                                    <div class="contact-form-input">
+                                                                        <label for="firstname">First Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                        <input type="text" name="fname" value="{{$user->fname}}" placeholder="Enter First Name" />
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                        <label for="lastname">Last Name @error('lname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                        <input type="text" name="lname" value="{{$user->lname}}" placeholder="Enter Last Name" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="contact-form__content-group">
@@ -501,16 +530,7 @@
                                                                     <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
                                                                     </div>
                                                                 </div>
-                                                                <div class="contact-form__content-group">
-                                                                    <div class="contact-form-input">
-                                                                    <label for="password">Password @error('password') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                    <input type="password" name="password" placeholder="Enter Password"/>
-                                                                    </div>
-                                                                    <div class="contact-form-input">
-                                                                    <label for="repeat">Repeat Password</label>
-                                                                    <input type="password" name="password_confirmation" placeholder="Repeat Password"/>
-                                                                    </div>
-                                                                </div>
+                                                                
                                                                 
                                                                 <div class="contact-form-btn">
                                                                     <button class="button button--md" type="submit"> Update Admin </button>

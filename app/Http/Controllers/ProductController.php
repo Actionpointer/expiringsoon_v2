@@ -25,7 +25,8 @@ class ProductController extends Controller
         $category = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
-        $products = Product::edible()->approved()->active()->accessible()->available()->visible();
+        $products = Product::edible()->approved()->active()->accessible()->available()->visible()->get();
+        dd($products->first()->name);
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $products = $products->whereHas('shop',function($qry) use($state_id){
@@ -60,8 +61,12 @@ class ProductController extends Controller
     }
 
     public function show(Product $product){
-        if((!auth()->check() && !$product->isCertified()) || (auth()->check() && auth()->id() != $product->shop->owner()->id) )
-        abort(404,'Product is not available');
+        if(!$product->isCertified()){
+            if(auth()->check() && auth()->id() == $product->shop->owner()->id){
+                return view('frontend.product.view',compact('product'));
+            }
+            abort(404,'Product is not available');
+        }
         return view('frontend.product.view',compact('product'));
     }
 
@@ -88,7 +93,7 @@ class ProductController extends Controller
             $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$photo);
         } 
-        $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120]);
+        $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published]);
         return redirect()->route('shop.product.list',$shop);
     }
 
@@ -106,7 +111,7 @@ class ProductController extends Controller
             $request->file('photo')->storeAs('public/',$photo);
             $product->update(['photo'=> $photo]);
         } 
-        $product->update(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120]);
+        $product->update(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published]);
         return redirect()->route('shop.product.list',$shop);
     }
 
@@ -123,7 +128,7 @@ class ProductController extends Controller
 
     public function admin_index()
     {
-        $products = Product::where('visible',true)->orderBy('expire_at','desc')->get();
+        $products = Product::where('published',true)->orderBy('expire_at','desc')->get();
         return view('admin.products',compact('products'));
     }
 

@@ -55,7 +55,7 @@
               <div class="dashboard__content-card">
                 <div class="dashboard__order-history-title" style="border-bottom:1px solid #ddd">
                   <h2 class="font-body--xxl-500">Edit Product</h2>
-                  <a href="#" class="font-body--lg-500"> Visibility: @if($product->visible) Published @else Draft @endif </a>
+                  <a href="#" class="font-body--lg-500"> Visibility: @if($product->published) Published @else Draft @endif </a>
                 </div>
                 <div class="dashboard__content-card-body">
                   <div class="row">
@@ -245,10 +245,10 @@
 
                       </div>
                       <div class="contact-form-btn">
-                        <button class="button button--md bg-secondary my-1" name="visible" value="0" type="submit" id="submit">
+                        <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
                           Save as Draft
                         </button>
-                        <button class="button button--md my-1" name="visible" value="1" type="submit" id="submit">
+                        <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
                           Publish Product
                         </button>
                       </div>

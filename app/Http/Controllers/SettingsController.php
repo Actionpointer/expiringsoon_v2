@@ -15,13 +15,14 @@ use App\Models\ShippingRate;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
-
-
 class SettingsController extends Controller
 {
+    use GeoLocationTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -89,31 +90,37 @@ class SettingsController extends Controller
                 return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted User']);
             }else{
                 //update
+                // dd($request->all());
                 $user = User::find($request->user_id);
                 $validator = Validator::make($request->all(), [
-                    'name' => 'nullable|string',
+                    'fname' => 'nullable|string',
+                    'lname' => 'nullable|string',
+                    'status' => 'nullable|numeric',
+                    'role' => 'nullable|string',
                     'email' => ['nullable',Rule::unique('users')->ignore($user)],
                     'phone' => ['nullable',Rule::unique('users')->ignore($user)],
-                    'password' => Rule::requiredIf(isset($request->user_id)),'string','confirmed'
                 ]);
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update user']);
                 }
-                $user = User::where('id',$request->user_id)->update(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+                $user = User::where('id',$request->user_id)->update(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone]);
                 return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
             }
         }else{
             //create
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'fname' => 'required|string',
+                'lname' => 'required|string',
+                'status' => 'required|numeric',
+                'role' => 'required|string',
                 'email' => 'required|string|unique:users',
                 'phone' => 'required|string|unique:users',
                 'password' => 'required','string','confirmed'
             ]);
             if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
+                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
             }
-            $user = User::create(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+            $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'state_id'=> $this->currentState()->id,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
             return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
         }   
     }

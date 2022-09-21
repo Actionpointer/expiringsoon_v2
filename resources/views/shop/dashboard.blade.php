@@ -126,7 +126,7 @@
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Visibility:</h5>
-                        <p class="font-body--md-500">{{$shop->visibility ? 'Published': 'Draft'}}</p>
+                        <p class="font-body--md-500">{{$shop->published ? 'Published': 'Draft'}}</p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Approval Status:</h5>

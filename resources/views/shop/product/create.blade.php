@@ -237,10 +237,10 @@
 
                       </div>
                       <div class="contact-form-btn">
-                        <button class="button button--md bg-secondary my-1" name="visible" value="0" type="submit" id="submit">
+                        <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
                           Save as Draft
                         </button>
-                        <button class="button button--md my-1" name="visible" value="1" type="submit" id="submit">
+                        <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
                           Publish Product
                         </button>
                       </div>

@@ -21,12 +21,14 @@ class PaymentController extends Controller
     public function callback(){
         // dd(request()->query);
         // ["trxref" => "632889cbaa15f","reference" => "632889cbaa15f"]
-        //get the transaction id
-        //check which payment gateway is active
-        //if paystack, call paystack verify, else call flutter by trait
-        if(cache('settings')['active_payment_gateway'] == 'paystack')
+        //check status of transaction 
+        //flutter = request()->query('status') // success, cancelled
+        if(cache('settings')['active_payment_gateway'] == 'paystack'){
             $details = $this->verifyPaystackPayment(request()->query('reference'));
-        else $details = $this->verifyFlutterWavePayment(request()->query('trxref'));
+        }  
+        else {
+            $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
+        }
         dd($details);
         //receive info of payment..
         //create the payment and its paymentable (order, or subscription)

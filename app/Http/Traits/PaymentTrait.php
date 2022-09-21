@@ -28,7 +28,7 @@ trait PaymentTrait
         ->withData( array('customer' => ['email'=> $user->email,'phonenumber'=> $user->phone,'name'=> $user->fname.' '.$user->lname],
                         'tx_ref'=> uniqid(),"currency" => $currency,"payment_options"=>"card,account,ussd",
                         "redirect_url"=> route('payment.callback'),'amount'=> $amount,
-                        'metadata' => ['user_id'=> $user->id],
+                        'meta' => ['user_id'=> $user->id],
                         "customizations"=> [
                             "title" => "Expiring Soon",
                             "description" => "Payment",

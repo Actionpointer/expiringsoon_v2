@@ -100,7 +100,7 @@
                                             @elseif(!$advert->product->isEdible())
                                               <button class="badge btn-danger">Expired </button>
                                             
-                                            @elseif(!$advert->product->visible)
+                                            @elseif(!$advert->product->published)
                                               <button class="badge btn-danger">Not visible </button>
                                             
                                             @elseif(!$advert->product->isAccessible())

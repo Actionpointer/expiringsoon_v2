@@ -101,12 +101,13 @@ class ShopController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         if($request->hasFile('photo')){
-            $name = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $request->file('photo')->storeAs('public/',$name);
+            $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $request->file('photo')->storeAs('public/',$banner);
         }
-        $shop = Shop::create(['name'=> $request->name,'slug'=> explode(' ',$request->name)[0],'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$name,'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id]);
+        $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id]);
         $user->role = 'vendor';
         $user->save();
+        $shop->users()->attach($user->id,['role' =>'owner']);
         return redirect()->route('shop.settings',$shop);
     }
     
@@ -121,7 +122,6 @@ class ShopController extends Controller
         $states = State::all();
         $cities = City::where('state_id',$shop->state_id)->get();
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
-        // dd($user->idcard);
         return view('shop.settings',compact('user','shop','banks','states','cities','rates'));
     }
 
@@ -175,27 +175,30 @@ class ShopController extends Controller
     public function staff(Shop $shop,Request $request){
         if($request->user_id){
             if($request->delete){
+                //detach user from shop
+                $shop->users()->detach($request->user_id);
                 $user = User::destroy($request->user_id);
                 return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
             }else{
                 //update
                 $user = User::find($request->user_id);
                 $validator = Validator::make($request->all(), [
-                    'name' => 'nullable|string',
-                    'email' => ['nullable',Rule::unique('users')->ignore($user)],
-                    'phone' => ['nullable',Rule::unique('users')->ignore($user)],
-                    'password' => Rule::requiredIf(isset($request->user_id)),'string','confirmed'
+                    'name' => 'required|string',
+                    'email' => ['required',Rule::unique('users')->ignore($user)],
+                    'phone' => ['required',Rule::unique('users')->ignore($user)],
+                    'status' => 'required|numeric'
                 ]);
-                if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update user']);
+                if($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
                 }
-                $user = User::where('id',$request->user_id)->update(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+                $user = User::where('id',$request->user_id)->update(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'status'=> $request->status,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone]);
                 return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
             }
         }else{
             //create
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'fname' => 'required|string',
+                'lname' => 'required|string',
                 'email' => 'required|string|unique:users',
                 'phone' => 'required|string|unique:users',
                 'password' => 'required','string','confirmed'
@@ -203,7 +206,8 @@ class ShopController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
             }
-            $user = User::create(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+            $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'role'=> 'vendor','email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password),'state_id'=> $shop->state_id]);
+            $shop->users()->attach($user->id,['role' =>'staff']);
             return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
         }   
     }

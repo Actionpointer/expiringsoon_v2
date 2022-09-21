@@ -405,9 +405,15 @@
                                 <div class="dashboard__content-card-body">
                                 <form method="post" action="{{route('shop.staff',$shop)}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
-                                      <div class="contact-form-input">
-                                          <label for="name">Full Name</label>
-                                          <input type="text" name="name" placeholder="Enter Full Name" required />
+                                      <div class="contact-form__content-group">
+                                          <div class="contact-form-input">
+                                              <label for="fname">First Name</label>
+                                              <input type="text" name="fname" placeholder="Enter First Name" required />
+                                          </div>
+                                          <div class="contact-form-input">
+                                            <label for="name">Last Name</label>
+                                            <input type="text" name="lname" placeholder="Enter Last Name" required />
+                                          </div>
                                       </div>
                                       <div class="contact-form__content-group">
                                           <div class="contact-form-input"> 
@@ -439,8 +445,8 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Name</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Phone</th>
+                                            <th scope="col">Contact</th>
+                                            <th scope="col">Status</th>
                                             
                                             <th scope="col">Manage</th>
                                             <th></th>
@@ -450,8 +456,8 @@
                                         @foreach ($shop->staff() as $user)
                                             <tr>
                                             <td>{{$user->name}}</td>
-                                            <td>{{$user->email}}</td>
-                                            <td>{{$user->mobile}}</td>
+                                            <td>{{$user->email}} <br> {{$user->mobile}}</td>
+                                            <td>@if($user->status) Active @else Suspended @endif</td>
                                            
                                             <td>
                                                 @if($user->id != Auth::id()) 
@@ -466,14 +472,21 @@
                                             @if($user->id != Auth::id())
                                             <tr>
                                               <td colspan="6" style="border:none;padding:0px">
-                                                  <form action="#" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                  <form action="{{route('shop.staff',$shop)}}" method="post" id="adminedit{{$user->id}}" style="display:none">
                                                       @csrf 
                                                       <input type="hidden" name="user_id" value="{{$user->id}}">
                                                       <div class="contact-form__content">
                                                       <div class="contact-form__content-group my-3">
                                                           <div class="contact-form-input">
-                                                            <label for="address">Full Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                            <label for="address">Full Name @error('name') <span class="text-danger">{{$message}}</span> @enderror</label>
                                                             <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" />
+                                                          </div>
+                                                          <div class="contact-form-input">
+                                                            <label for="stat">Status @error('status') <span class="text-danger">{{$status}}</span> @enderror</label>
+                                                            <select id="abc{{$user->id}}" name="status" class="form-control-lg w-100 border text-muted" >
+                                                              <option value='1' @if($user->status) selected @endif>Active</option>
+                                                              <option value='0' @if(!$user->status) selected @endif>Suspended</option>
+                                                          </select>
                                                           </div>
                                                       </div>
                                                       <div class="contact-form__content-group">
@@ -486,16 +499,7 @@
                                                           <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
                                                           </div>
                                                       </div>
-                                                      <div class="contact-form__content-group">
-                                                          <div class="contact-form-input">
-                                                          <label for="password">Password @error('password') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                          <input type="password" name="password" placeholder="Enter Password"/>
-                                                          </div>
-                                                          <div class="contact-form-input">
-                                                          <label for="repeat">Repeat Password</label>
-                                                          <input type="password" name="password_confirmation" placeholder="Repeat Password"/>
-                                                          </div>
-                                                      </div>
+                                                      
                                                       
                                                       <div class="contact-form-btn">
                                                           <button class="button button--md" type="submit"> Update Staff </button>

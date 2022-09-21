@@ -105,7 +105,7 @@ class UserController extends Controller
      */
 
     public function users(){
-        $users = User::all();
+        $users = User::whereIn('role',['shopper','vendor'])->get();
         // dd($users);
         return view('admin.users.list',compact('users'));
     }

@@ -41,7 +41,7 @@ class AdvertController extends Controller
     public function ads(Feature $feature){
         // $feature = auth()->user()->features->where('subscribable_id',$feature->id)->first();
         $user = auth()->user();
-        $shops = $user->shops->where('status',true)->where('visible',true)->where('approved',true);
+        $shops = $user->shops->where('status',true)->where('published',true)->where('approved',true);
         $states = State::all();
         $state_id = $this->currentState()->id;
         if($feature->adplan->type == 'products'){

@@ -24,7 +24,7 @@ class Shop extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','email','phone','banner','address','state_id','city_id'];
+    protected $fillable = ['name','slug','email','phone','banner','address','state_id','city_id','published'];
     
 
     public static function boot()
@@ -56,16 +56,16 @@ class Shop extends Model
         return $query->where('approved',true);
     }
     public function scopeVisible($query){
-        return $query->where('visible',true);
+        return $query->where('published',true);
     }
     public function scopeActive($query){
         return $query->where('status',true);
     }
     public function scopeSelling($query){
-        return $query->whereHas('products',function($q) {$q->where('status',true)->where('visible',true)->where('approved',true);});
+        return $query->whereHas('products',function($q) {$q->where('status',true)->where('published',true)->where('approved',true);});
     }
     public function isCertified(){
-        return $this->status && $this->approved && $this->visible;
+        return $this->status && $this->approved && $this->published;
     }
     public function users(){
         return $this->belongsToMany(User::class)->withPivot('role','status');

@@ -133,8 +133,8 @@
                                       <span class="font-body--md-400 rounded px-1 mx-1 @if($product->approved) text-success  @else text-warning @endif"> 
                                         @if($product->approved) Approved  @else Pending Approval @endif 
                                       </span> 
-                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->visible) bg-dark text-white @else text-muted @endif"> 
-                                        @if($product->visible) Published  @else Draft @endif 
+                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->published) bg-dark text-white @else text-muted @endif"> 
+                                        @if($product->published) Published  @else Draft @endif 
                                       </span>
                                       {{-- @if($product->adverts->isNotEmpty()) | Featured @endif --}}
                                     <p>
