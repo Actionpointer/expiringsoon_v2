@@ -127,13 +127,16 @@
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Medium</h5>
-                          <p class="font-body--md-500">{{$payment->medium}}</p>
+                          <p class="font-body--md-500">{{$payment->method}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Reference:</h5>
                           <p class="font-body--md-500">{{$payment->reference}}</p>
                         </div>
-                        
+                        <div class="dashboard__totalpayment-card-body-item">
+                          <h5 class="font-body--md-400">VAT {{$payment->vat}}%:</h5>
+                          <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!}{{number_format(($payment->amount * $payment->vat) / ($payment->vat+100))}}</p>
+                        </div>
                         
                         <div class="dashboard__totalpayment-card-body-item total" >
                           <h5 class="font-body--xl-400">Amount:</h5>

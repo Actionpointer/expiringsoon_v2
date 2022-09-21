@@ -1,8 +1,3 @@
-<?php
-include("dbconnect.php");
-$uqq = mysqli_query($con, "SELECT * FROM users WHERE id='".$_GET['uid']."'");
-$uqr = mysqli_fetch_assoc($uqq);
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -138,7 +133,7 @@ $uqr = mysqli_fetch_assoc($uqq);
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#000000; font-family:'Playfair Display', Georgia,serif; font-size:25px; line-height:35px; text-align:center; padding-bottom:15px;"><span style="font-size:18px">Hi, <?php echo $uqr['fname']; ?></span><br /><i>Welcome to Expiring Soon!</i></td>
+															<td class="h1 pb25" style="color:#000000; font-family:'Playfair Display', Georgia,serif; font-size:25px; line-height:35px; text-align:center; padding-bottom:15px;"><span style="font-size:18px">Hi, Tolu</span><br /><i>Welcome to Expiring Soon!</i></td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-bottom:25px;">

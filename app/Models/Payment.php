@@ -11,7 +11,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['reference','method','user_id','status','amount'];
+    protected $fillable = ['reference','method','user_id','status','amount','vat'];
 
     public function items(){
         return $this->hasMany(PaymentItem::class);

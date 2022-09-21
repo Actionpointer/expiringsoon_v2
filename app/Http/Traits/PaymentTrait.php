@@ -1,18 +1,20 @@
 <?php
 namespace App\Http\Traits;
-use App\Models\Setting;
+use App\Models\Payment;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Auth;
 
 
 trait PaymentTrait
 {
-    protected function initializePayment($amount,$items,$type ='subscription'){
-        $gateway = Setting::firstWhere('name','active_payment_gateway')->value;
+    protected function initializePayment($amount,$items,$type){
+        $gateway = cache('settings')['active_payment_gateway'];
+        $user = Auth::user();
+        $payment = Payment::create(['user_id'=> $user->id,'reference'=> uniqid(),'amount'=> $amount ,'vat'=> cache('settings')['vat']]);
         switch($gateway){
-            case 'paystack': $link = $this->initiatePaystack($amount,$items,$type);
+            case 'paystack': $link = $this->initiatePaystack($payment,$items,$type);
             break;
-            case 'flutter': $link = $this->initiateFlutterWave($amount,$items,$type);
+            case 'flutter': $link = $this->initiateFlutterWave($payment,$items,$type);
             break;
             default: dd('which one is this');
             break;
@@ -20,15 +22,13 @@ trait PaymentTrait
         return $link;
     }
     
-    protected function initiateFlutterWave($amount,$items,$type){
-        $user = Auth::user();
-        $currency = Setting::where('name','currency_iso')->first()->value;
+    protected function initiateFlutterWave(Payment $payment,$items,$type){
         $response = Curl::to('https://api.flutterwave.com/v3/payments')
         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-        ->withData( array('customer' => ['email'=> $user->email,'phonenumber'=> $user->phone,'name'=> $user->fname.' '.$user->lname],
-                        'tx_ref'=> uniqid(),"currency" => $currency,"payment_options"=>"card,account,ussd",
-                        "redirect_url"=> route('payment.callback'),'amount'=> $amount,
-                        'meta' => ['user_id'=> $user->id],
+        ->withData( array('customer' => ['email'=> $payment->user->email,'phonenumber'=> $payment->user->phone,'name'=> $payment->user->fname.' '.$payment->user->lname],
+                        'tx_ref'=> $payment->reference,"currency" => cache('settings')['currency_iso'],"payment_options"=>"card,account,ussd",
+                        "redirect_url"=> route('payment.callback'),'amount'=> $payment->amount,
+                        'meta' => ['user_id'=> $payment->user->id,'items' => $items,'type'=> $type],
                         "customizations"=> [
                             "title" => "Expiring Soon",
                             "description" => "Payment",
@@ -49,15 +49,13 @@ trait PaymentTrait
         return $paymentDetails;
     }
 
-    public function initiatePaystack($amount,$items,$type){
-      $user = auth()->user();
-      $currency = Setting::firstWhere('name','currency_iso')->value;
+    public function initiatePaystack(Payment $payment,$items,$type){
       $response = Curl::to('https://api.paystack.co/transaction/initialize')
       ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
       ->withHeader('Content-Type: application/json')
-      ->withData( array('email'=> $user->email,'amount'=> $amount*100,'currency'=> $currency,
-                      'reference'=> uniqid(),"callback_url"=> route('payment.callback'),
-                      'metadata' => json_encode(['user_id'=> $user->id,'phonenumber'=> $user->phone,'items' => $items,'type'=> $type])
+      ->withData( array('email'=> $payment->user->email,'amount'=> $payment->amount*100,'currency'=> cache('settings')['currency_iso'],
+                      'reference'=> $payment->reference,"callback_url"=> route('payment.callback'),
+                      'metadata' => json_encode(['user_id'=> $payment->user->id,'items' => $items,'type'=> $type])
                       ) )
       
       ->asJson()                
@@ -74,6 +72,28 @@ trait PaymentTrait
          ->get();
         return $paymentDetails;
     }
+
+    protected function getPaymentData($option,$value){
+        
+        $gateway = cache('settings')['active_payment_gateway'];
+        switch($option){
+            case 'status': return in_array($value->status,['success',true]); 
+                break;
+            case 'trx_status': return in_array($value->data->status,['success','successful']);
+                break;
+            case 'amount': return $gateway == 'paystack' ? $value->data->amount/100 : $value->data->amount;
+                break;
+            case 'reference': return $gateway == 'paystack' ? $value->data->reference : $value->data->tx_ref;
+                break;
+            case 'items': return $gateway == 'paystack' ? $value->data->metadata->items : $value->data->meta->items;
+                break;
+            case 'type': return $gateway == 'paystack' ? $value->data->metadata->type : $value->data->meta->type;
+                break;
+        }  
+    }
+    // protected function getFlutterPaymentData($value){
+    //     return 
+    // }
 
     // protected function resolveBankAccount($account_bank,$account_number){
     //     $response = Curl::to('https://api.flutterwave.com/v3/accounts/resolve')

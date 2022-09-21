@@ -25,8 +25,7 @@ class ProductController extends Controller
         $category = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
-        $products = Product::edible()->approved()->active()->accessible()->available()->visible()->get();
-        dd($products->first()->name);
+        $products = Product::edible()->approved()->active()->accessible()->available()->visible();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $products = $products->whereHas('shop',function($qry) use($state_id){
@@ -61,12 +60,12 @@ class ProductController extends Controller
     }
 
     public function show(Product $product){
-        if(!$product->isCertified()){
-            if(auth()->check() && auth()->id() == $product->shop->owner()->id){
-                return view('frontend.product.view',compact('product'));
-            }
-            abort(404,'Product is not available');
-        }
+        // if(!$product->isCertified()){
+        //     if(auth()->check() && auth()->id() == $product->shop->owner()->id){
+        //         return view('frontend.product.view',compact('product'));
+        //     }
+        //     abort(404,'Product is not available');
+        // }
         return view('frontend.product.view',compact('product'));
     }
 

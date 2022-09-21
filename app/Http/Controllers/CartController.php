@@ -84,23 +84,19 @@ class CartController extends Controller
 
     public function checkout(Request $request){
         $user = auth()->user();
-        if($request->order_id){
-            $ordr = Order::find($request->order_id);
-            $carts = $ordr->items;
-        }else{
-            $items = request()->session()->get('cart');
-            if(!isset($items)){
-                return redirect()->back();
-            }
-            foreach($items as $key => $value){
-                $this->addToCartDb($value['product'],$value['quantity'],true);
-            }
-            $carts = Cart::where('user_id',$user->id);
-            if($request->shop_id){
-                $carts = $carts->where('shop_id',$request->shop_id);
-            }
-            $carts = $carts->get();
+        $items = request()->session()->get('cart');
+        if(!isset($items)){
+            return redirect()->back();
         }
+        foreach($items as $key => $value){
+            $this->addToCartDb($value['product'],$value['quantity'],true);
+        }
+
+        $carts = Cart::where('user_id',$user->id);
+        if($request->shop_id){
+            $carts = $carts->where('shop_id',$request->shop_id);
+        }
+        $carts = $carts->whereIn('product_id',array_keys($items))->get();
         $countries = Country::all();
         $states = State::all();
         $cities = City::all();
@@ -144,7 +140,7 @@ class CartController extends Controller
             $orders->push($order);
         }
         //take payment
-        $link = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'orders');
+        $link = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
         if(!$link)
         return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
         else

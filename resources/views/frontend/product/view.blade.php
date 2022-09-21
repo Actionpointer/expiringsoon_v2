@@ -151,14 +151,12 @@
                             </div>
                             <!-- add to cart  -->
                             <form method="post" id="addtocart">
-                            <input type="hidden" name="pid" id="pid" value="{{$product->id}}">
+                            <input type="hidden" name="pid" id="product_id" value="{{$product->id}}">
                             @if($product->stock == 0)
-                              <button type="submit" class="button button--md products__content-action-item button--disable">
+                              <button type="button" class="button button--md products__content-action-item button--disable">
                               @else
-                                @if($product->expire_at!='' && $product->expire_at->diffInDays(now()) < 90)
-                                <button type="submit" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->amount}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
-                                @else
-                                    <button type="submit" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->price}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
+                                
+                                <button type="button" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->price}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
                                 @endif
                                 Add to Cart
                                 <span>
@@ -173,20 +171,54 @@
                                     </svg>
                                 </span>
                             </button>
-                            @endif
+                          
                           </form>
 
                             <!-- fav  -->
-                            <button class="button-fav products__content-action-item">
+                            {{-- <button class="button-fav products__content-action-item">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.9996 17.5451C-6.66672 8.33336 4.99993 -1.66664 9.9996 4.65674C14.9999 -1.66664 26.6666 8.33336 9.9996 17.5451Z" stroke="currentColor" stroke-width="1.5" />
                                 </svg>
-                            </button>
+                            </button> --}}
+
+                            {{-- <span class="action-btn liked">
+                                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$product->id}}product">
+                                    <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
+                                </svg>
+                            </span> --}}
+                            @if(Auth::check() && $product->like->where('user_id',Auth::id())->count() == 0)
+                               
+                                    <span class="action-btn">
+                                        <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$product->id}}product">
+                                            <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
+                                        </svg>
+                                    </span>
+                                
+                            @endif
+                            @if(Auth::check() && $product->like->where('user_id',Auth::id())->count() == 1)
+                            <span class="action-btn liked">
+                                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="remove-from-wish" data-product="{{$product->id}}product">
+                                    <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
+                                </svg>
+                            </span>
+                            @endif
                         </div>
                     </div>
                     <!-- Tags  -->
                     <div class="products__content">
-                        <h5 class="products__content-category font-body--md-500">Category: <a href="{{route('product.list')}}?cat={{$product->category_id}}">{{$product->category->name}}</a></h5>
+                        <h5 class="products__content-category font-body--md-500">Category: <a href="{{route('product.list')}}?category_id={{$product->category_id}}">{{$product->category->name}}</a></h5>
+                        @if($product->tags && $product->tags->isNotEmpty())
+                        <div class="products__content-tags">
+                            <h5 class="font-body--md-500">Tag :</h5>
+                            <div class="products__content-tags-item">
+                                @foreach ($tags as $tag)
+                                    <a href="#" class="font-body--md-400">{{$tag}}</a>
+                                @endforeach
+                                
+                                
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -290,4 +322,20 @@
 @push('scripts')
 @include('layouts.front')
 <script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script>
+<script>
+    $('#addbtn').click(function(){
+        let quantity = $('#counter-btn-counter').val()
+        let product_id = $('#product_id').val()
+        updatecart(product_id,quantity);
+        // Show cart popup
+        $(".ec-cart-float").fadeIn();
+        // Remove Empty message
+        $(".cart-empty").hide();
+
+        // Hide Cart Popup
+        setTimeout(function(){
+            $(".ec-cart-float").fadeOut();
+        }, 3000);
+    })
+</script>
 @endpush

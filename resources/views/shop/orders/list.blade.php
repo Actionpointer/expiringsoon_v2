@@ -63,7 +63,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($shop->orders as $order)
+                      @forelse($shop->orders->where('status','!=','new') as $order)
                             <tr>
                                 <!-- Order Id  -->
                                 <td> 

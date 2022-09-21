@@ -105,17 +105,19 @@
                           <p class="font-body--md-500">{{$settlement->created_at->format('jS F Y')}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
-                          <h5 class="font-body--md-400">Medium</h5>
+                          <h5 class="font-body--md-400">Medium:</h5>
                           <p class="font-body--md-500">Wallet</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Reference:</h5>
                           <p class="font-body--md-500">{{$settlement->reference}}</p>
                         </div>
+                        @if($settlement->order->deliveryByVendor())
                         <div class="dashboard__totalpayment-card-body-item">
-                          <h5 class="font-body--md-400">VAT</h5>
-                          <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} -{{number_format($settlement->order->vat,2)}}</p>
+                          <h5 class="font-body--md-400">Shipping</h5>
+                          <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($settlement->order->deliveryfee,2)}}</p>
                         </div>
+                        @endif
                         <div class="dashboard__totalpayment-card-body-item total" >
                           <h5 class="font-body--xl-400">Amount:</h5>
                           <p class="font-body--xl-500">{!!cache('settings')['currency_symbol']!!} {{number_format($settlement->amount, 2)}}</p>
@@ -159,7 +161,7 @@
                             </td>
                             <!-- Subtotal  -->     
                             <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
-                                <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($settlement->order->subtotal - $settlement->order->commission(), 2)}}</p>
+                                <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($settlement->order->earning(), 2)}}</p>
                             </td>
                         </tr>
                         @if($settlement->order->deliveryByVendor())

@@ -62,7 +62,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($user->orders as $order)
+                      @forelse($user->orders->where('status','!=','new') as $order)
                             
                             <tr>
                                 <!-- Order Id  -->
@@ -77,7 +77,7 @@
                                 </td>
                                 <!-- Status -->
                                 <td> @switch($order->status)
-                                    @case('new') Received
+                                    @case('new') Payment Pending
                                         
                                         @break
                                     @case('processing') Processing

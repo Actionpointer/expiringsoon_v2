@@ -57,3 +57,5 @@ forgot password
 
 cart page- when you remove products from a particular shop.. subtract the cost of that product from the checkout..
 if there is no more products, remove that section completely
+product page .. add to cart, add to wish, similar products, 
+clean all orders with status new

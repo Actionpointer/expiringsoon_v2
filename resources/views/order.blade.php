@@ -66,7 +66,11 @@
                               {{$order->user->name}}
                           </h2>
                           <p class="font-body--md-400">
+                            @if($order->address_id)
                               {{$order->address->street}},  {{$order->address->city->name}},  {{$order->address->state->name}}
+                            @else
+                              {{$order->user->state->name}}
+                            @endif
                           </p>
                         </div>
                         <div class="dashboard__details-card-item__inner">
@@ -79,7 +83,7 @@
                           </div>
                           <div class=" dashboard__details-card-item__inner-contact">
                             <h5 class="title">Phone</h5>
-                            <p class="font-body--md-400"> {{$order->address->contact_phone}}</p>
+                            <p class="font-body--md-400"> @if($order->address_id) {{$order->address->contact_phone}} @else {{$order->user->mobile}} @endif</p>
                           </div>
                         </div>
                       </div>
@@ -153,7 +157,7 @@
                           <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($order->subtotal, 2)}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
-                          <h5 class="font-body--md-400">VAT 7%:</h5>
+                          <h5 class="font-body--md-400">VAT :</h5>
                           <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($order->vat, 2)}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
@@ -298,18 +302,16 @@
                           <div class="contact-form-input">
                               <label for="states" style="margin-bottom:15px">Update Order Status</label>
                               <select id="" name="status" class="form-control" required>
-                                  @if($order->status == 'new')
-                                  <option value="processing">Processing</option>
-                                  @endif
-                                  @if(in_array($order->status,['new','processing']))
+                                  
+                                  @if($order->status== 'processing')
                                   <option value="shipped">Shipped for Delivery</option>
                                   @endif
-                                  @if(in_array($order->status,['new','processing','shipped']))
+                                  @if(in_array($order->status,['processing','shipped']))
                                   <option value="delivered">Delivered</option>
                                   @endif
-                                  @if(in_array($order->status,['new','processing']))
+                                  {{-- @if($order->status == 'processing')
                                   <option value="cancelled">Cancelled</option>
-                                  @endif
+                                  @endif --}}
                               </select>
                           </div>
                       </div>

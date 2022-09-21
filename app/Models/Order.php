@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use App\Models\Cart;
+use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Address;
-use App\Models\OrderMessage;
 use App\Models\Product;
 use App\Models\Settlement;
 use App\Models\PaymentItem;
-use Cviebrock\EloquentSluggable\Sluggable;
+use App\Models\OrderMessage;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
@@ -53,7 +54,7 @@ class Order extends Model
         return $this->morphOne(PaymentItem::class,'paymentable');
     }
     public function settlement(){
-        return $this->hasMany(Settlement::class);
+        return $this->hasOne(Settlement::class);
     }
     public function address(){
         return $this->belongsTo(Address::class);
@@ -68,12 +69,13 @@ class Order extends Model
         return $this->hasMany(Review::class);
     }
     public function commission(){
-        $fixed = $this->shop->isEnterprise() ? cache('settings')['enterprise_commission_fixed'] : cache('settings')['basic_commission_fixed']; 
-        $percentage = $this->shop->isEnterprise() ? cache('settings')['enterprise_commission_percentage'] : cache('settings')['basic_commission_percentage']; 
+        $plan = $this->shop->owner()->activeSubscription ? $this->shop->owner()->activeSubscription->plan : Plan::where('slug','free_plan')->first();
+        $fixed = $plan->commission_fixed; 
+        $percentage = $plan->commission_percentage; 
         return ($this->subtotal * ($percentage / 100)) + $fixed;
     }
     public function earning(){
-        return $this->subtotal - ($this->vat + $this->commission());
+        return $this->subtotal - $this->commission();
     }
 
 }

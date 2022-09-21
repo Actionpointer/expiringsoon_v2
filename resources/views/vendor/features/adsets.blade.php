@@ -189,7 +189,7 @@
                                         <!-- Product item  -->
                                         <td class="cart-table-item align-middle">
                                             <div class="form-check d-flex">
-                                                <input class="form-check-input adplans" type="checkbox" name="adplans[]" value="{{$adplan->id}}" id="adplan_id{{$adplan->id}}">
+                                                <input class="form-check-input adplans" type="checkbox" name="adplans[{{$adplan->id}}]" value="{{$adplan->id}}" id="adplan_id{{$adplan->id}}">
                                                 <label class="form-check-label font-body--400" for="adplan_id{{$adplan->id}}">
                                                     <div>
                                                       <span class="lh-1">{{$adplan->description}} <span class="d-block small">{{$adplan->page}}</span></span>
@@ -197,7 +197,7 @@
                                                     </div>
                                                         
                                                 </label>
-                                                <input type="hidden" name="price[]" class="price" value="{{$adplan->price_per_day}}">
+                                                <input type="hidden" name="price[{{$adplan->id}}]" class="price" value="{{$adplan->price_per_day}}">
                                             </div>
                                         </td>
                                         <!-- Price  -->
@@ -208,7 +208,7 @@
                                             <button type="button" class="counter-btn-dec counter-btn" data-action="decrement">
                                               -
                                             </button>
-                                            <input type="number" class="counter-btn-counter quantity days" data-type="days" name="days[]" value="{{cache('settings')['minimum_advert_days']}}" min="{{cache('settings')['minimum_advert_days']}}" max="365" placeholder="1">
+                                            <input type="number" class="counter-btn-counter quantity days" data-type="days" name="days[{{$adplan->id}}]" value="{{cache('settings')['minimum_advert_days']}}" min="{{cache('settings')['minimum_advert_days']}}" max="365" placeholder="1">
                                             <button type="button" class="counter-btn-inc counter-btn" data-action="increment">
                                               +
                                             </button>
@@ -219,7 +219,7 @@
                                             <button type="button" class="counter-btn-dec counter-btn" data-action="decrement">
                                               -
                                             </button>
-                                            <input type="number" class="counter-btn-counter quantity units" data-type="units" name="units[]" value="1" min="1" max="1000" placeholder="1">
+                                            <input type="number" class="counter-btn-counter quantity units" data-type="units" name="units[{{$adplan->id}}]" value="1" min="1" max="1000" placeholder="1">
                                             <button type="button" class="counter-btn-inc counter-btn" data-action="increment">
                                               +
                                             </button>
@@ -231,7 +231,7 @@
                                             <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!}
                                               {{-- <span class="plan-total">{{cache('settings')['minimum_advert_days'] * $adplan->price_per_day}}</span> </p> --}}
                                               {{-- <input type="hidden" class="counter-btn-counter quantity" data-type="units" name="units[]" value="1" min="1" max="1000" placeholder="1"> --}}
-                                              <input type="text" name="amount[]" class="d-inline border-0 amount" size="8" value="{{cache('settings')['minimum_advert_days'] * $adplan->price_per_day}}" readonly>
+                                              <input type="text" name="amount[{{$adplan->id}}]" class="d-inline border-0 amount" size="8" value="{{cache('settings')['minimum_advert_days'] * $adplan->price_per_day}}" readonly>
                                           </div>
                                         </td>
                                       </tr>

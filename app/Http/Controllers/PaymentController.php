@@ -10,6 +10,7 @@ use App\Models\Settlement;
 use Illuminate\Http\Request;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Traits\PaymentTrait;
+use App\Models\PaymentItem;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -21,8 +22,13 @@ class PaymentController extends Controller
     public function callback(){
         // dd(request()->query);
         // ["trxref" => "632889cbaa15f","reference" => "632889cbaa15f"]
-        //check status of transaction 
-        //flutter = request()->query('status') // success, cancelled
+        //check status of transaction ..if failed, 
+        //flutter = request()->query('status') // successful, cancelled
+        //paystack = request()->query('status') // 
+        if(!in_array(request()->query('status'),['successful','success'])){
+            //delete this order, and remove the order number from the cart
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again1']);
+        }
         if(cache('settings')['active_payment_gateway'] == 'paystack'){
             $details = $this->verifyPaystackPayment(request()->query('reference'));
         }  
@@ -30,13 +36,58 @@ class PaymentController extends Controller
             $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
         }
         dd($details);
-        //receive info of payment..
-        //create the payment and its paymentable (order, or subscription)
-        //redirect to dashboard if vendor, to orders if user
+        if(!$this->getPaymentData('status',$details)){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again2']);
+        }
+        if(!$this->getPaymentData('trx_status',$details)){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again3']);
+        }
+        if(!$payment = Payment::where('reference',$this->getPaymentData('reference',$details))->first()){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again4']);
+        }
+        if($payment->amount != $this->getPaymentData('amount',$details)){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again5']);
+        }
+        foreach($this->getPaymentData('items',$details) as $item){
+            PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $this->getPaymentData('type',$details)]);
+        }
+        $payment->status = 'success';
+        $payment->save();
+        return redirect()->route('home')->with(['result'=>1,'message'=> 'Payment Successful']);
        
     }
+
+    public function status(Payment $payment){
+        if(cache('settings')['active_payment_gateway'] == 'paystack'){
+            $details = $this->verifyPaystackPayment($payment->reference);
+        }  
+        else {
+            $details = $this->verifyFlutterWavePayment($payment->reference);
+        }
+        dd($details);
+        if(!$this->getPaymentData('status',$details)){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+        }
+        if(!$this->getPaymentData('trx_status',$details)){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+        }
+        $payment = Payment::where('reference',$this->getPaymentData('reference',$details))->first();
+        if(!$payment){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+        }
+        if($payment->amount != $this->getPaymentData('amount',$details)){
+            return redirect('account')->with('statuss','Payment was not successful. Please try again');
+        }
+        dd($this->getPaymentData('items',$details));
+        foreach($this->getPaymentData('items',$details) as $item){
+            PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $this->getPaymentData('type',$details)]);
+        }
+        $payment->status = 'success';
+        $payment->save();
+        return redirect()->route('home')->flash(['result'=> 1,'message'=> 'Payment Successful']);
+    }
     public function index(){
-        $payments = Payment::where('user_id',auth()->id())->get();
+        $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
         return view('payments',compact('payments'));
     }
     public function invoice(Payment $payment){
@@ -86,7 +137,7 @@ class PaymentController extends Controller
     }
     
     public function admin_index(){
-        $payments = Payment::all();
+        $payments = Payment::where('status','success')->get();
         $settlements = Settlement::all();
         return view('admin.payments',compact('payments','settlements'));
     }

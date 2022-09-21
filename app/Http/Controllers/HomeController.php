@@ -49,6 +49,7 @@ class HomeController extends Controller
     
     public function home(){
         $user = auth()->user(); 
+        request()->session()->reflash();
         if($user->role == 'shopper'){
             return view('customer.dashboard',compact('user'));
         }

@@ -40,7 +40,7 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!--<![endif]-->
-	<title>Order Receipt No. <?php echo $oqr['orderid']; ?> | Expiring Soon</title>
+	<title>Order Receipt No. 22334455 | Expiring Soon</title>
 	<!--[if gte mso 9]>
 	<style type="text/css" media="all">
 		sup { font-size: 100% !important; }

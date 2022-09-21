@@ -30,7 +30,11 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-
+  @if (session('statuss'))
+    <div class="alert alert-success">
+        {{ session('statuss') }}
+    </div>
+@endif
   @include('layouts.session')
   <!-- dashboard Secton Start  -->
   <div class="dashboard section">
@@ -50,6 +54,7 @@
                   <div class="dashboard__user-profile-info">
                     <h5 class="font-body--xl-500 name">{{$user->name}}</h5>
                     <h6 class="my-2 text-dark">
+            
                       @if($user->activeSubscription)
                           <h6 class="my-2 text-dark">{{$user->activeSubscription->plan->name}}</h6>
                           @if($user->activeSubscription->expiring())

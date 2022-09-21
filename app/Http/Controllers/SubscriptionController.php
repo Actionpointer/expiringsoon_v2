@@ -41,7 +41,7 @@ class SubscriptionController extends Controller
             }
             $subscription = Subscription::create(['user_id'=> auth()->id(),'plan_id'=> $plan->id,'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration)]);
         }
-        $link = $this->initializePayment($subscription->amount,[$subscription->id,$subscription->duration]);
+        $link = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
         if(!$link)
             return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
         else
@@ -60,7 +60,7 @@ class SubscriptionController extends Controller
                 $features->push($feature);
             }
         }
-        $link = $this->initializePayment($features->sum('amount'),$features->pluck('id')->toArray(),'features');
+        $link = $this->initializePayment($features->sum('amount'),$features->pluck('id')->toArray(),'App\Models\Feature');
         if(!$link)
             return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
         else
@@ -75,8 +75,6 @@ class SubscriptionController extends Controller
     }
 
     
-     
-
     public function destroy($id)
     {
         //

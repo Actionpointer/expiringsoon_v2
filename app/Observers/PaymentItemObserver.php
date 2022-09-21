@@ -18,11 +18,7 @@ class PaymentItemObserver
             $paymentItem->paymentable->status == 'processing';
             $paymentItem->paymentable->save();
 
-            /*distribute the payment according to 
-                a. shipping
-                b. vendor settlement
-                c. admin settlement
-            */
+           
         }
     }
 

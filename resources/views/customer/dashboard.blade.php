@@ -122,7 +122,7 @@
                               <!-- Status -->
                               <td class="dashboard__order-history-table-item   order-status "> 
                                 @switch($order->status)
-                                @case('new') Received
+                                @case('new') Payment Pending
                                     
                                     @break
                                 @case('processing') Processing

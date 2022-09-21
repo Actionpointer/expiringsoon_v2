@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Order;
+use App\Observers\SettlementObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -19,5 +20,9 @@ class Settlement extends Model
     
     public function getRouteKeyName(){
         return 'reference';
+    }
+    public static function boot(){
+        parent::boot();
+        parent::observe(new SettlementObserver);
     }
 }

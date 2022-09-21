@@ -206,6 +206,8 @@ function updatecart(product_id,quantity){
                 });
                 $('.cart-ttl-amount').text(cart_total.toLocaleString());
                 $(".cart-empty").hide();
+
+                
             
         },
         error: function (data, textStatus, errorThrown) {
