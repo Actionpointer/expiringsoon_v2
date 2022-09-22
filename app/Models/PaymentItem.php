@@ -21,4 +21,5 @@ class PaymentItem extends Model
         parent::boot();
         parent::observe(new PaymentItemObserver);
     }
+
 }

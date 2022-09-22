@@ -2,16 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Models\Subscription;
+use App\Models\Feature;
+use App\Events\RenewFeature;
 use Illuminate\Bus\Queueable;
-use App\Events\RenewSubscription;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Notifications\InvoiceNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class SubscriptionRenewalJob implements ShouldQueue
+class FeatureRenewalJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,10 +32,10 @@ class SubscriptionRenewalJob implements ShouldQueue
      */
     public function handle()
     {
-        $subscriptions = Subscription::where('auto_renew',true)->where(function ($query) {
-            return $query->where('end_at','>',now()->subHours(cache('settings')['auto_renewal_period']))->orWhere('end_at','>=',now());})->get();
-            foreach($subscriptions as $subscription){
-                event(new RenewSubscription($subscription));
+        $features = Feature::where('auto_renew',true)->where(function ($query) {
+            return $query->where('end_at','>',now()->subHours(2))->orWhere('end_at','>=',now());})->get();
+            foreach($features as $feat){
+                event(new RenewFeature($feat));
             }
     }
 }

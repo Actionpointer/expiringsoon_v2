@@ -18,7 +18,8 @@ REPORT SHOPS/PRODUCT
 
 for every bank account added, there must be BVN validation
 
-Bvn validation: manual bvn validation before payouts (check ID Card name against the bvn validation result name, phone, dob)
+Bvn validation: manual bvn validation before payouts 
+(check ID Card name against the bvn validation result name, phone, dob)
 
 login throttle, bvn validation, transaction confirmation error, id verification mismatch, 
 

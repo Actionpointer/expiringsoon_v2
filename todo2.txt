@@ -3,9 +3,7 @@ throttle bvn validation
 revisit security alert - once someone is throttled 
 add password strength meter
 
-implement payout by flutter transfer.. then check payment page user, vendor, shops
 
-shop staff save
 select2 on modal in categories edit not working
 categories homepage
 
@@ -14,8 +12,10 @@ notifications - email and inapp
 
 hot deals mobile view (home page & hot deals page)
 
-reviews
-product rating.. show in index, product, hotdeals
+reviews : product rating.. show in index, product, hotdeals
+refund
+coupon
+security with pin
 
 if user is downgrading, show the impact of the plan to the user.
 if user wants to be restored to the previous existing plan, make it possible... but no refund
@@ -29,33 +29,21 @@ cron job, to check every subscription for
 if user does not have subscription[
     1. he can create new shops/products but their status will be false
     2. he cannot create withdrawals, bvn validation, 
-    3. his products, shops and ads that are deactivated will not show in frontend and at backend, they show shop/product deactivated at the top
+    3. his products, shops and ads that are deactivated will show shop/product deactivated at the top
     5. when user subscribes, activate only the number of shops & products that the subscription can buy
     6. add coupon for buying subscriptions ? Coupon value + percentage
     7. when user cancel auto-renew, send email
-add approval status to views (product, shop, adverts)
-mass product approval, send 
 
-release settlement to shop wallet after order changes to completed
 if customer does not raise query xdays after delivery, change order to completed
-decrease stock after each purchase
-apply minimum stock level to products
-
-Redirect user to same page after login/register
 
 Profile Page: transaction pin, identity card, auto-renew subscriptions, 
 
 add PUBLISH & DRAFT button to product list
 
 revisit advert page to edit advert status
-click feature ->  vendor/feature/products    -> vendor/adverts/{feature} 
 
-payments & payouts using paystack and flutter
-http://localhost/reigntech/expiringsoon/public/payment/callback?status=successful&tx_ref=632a46d1bf39a&transaction_id=3753419
-
+automatic payouts using flutter/paystack
 forgot password
-
-cart page- when you remove products from a particular shop.. subtract the cost of that product from the checkout..
-if there is no more products, remove that section completely
-product page .. add to cart, add to wish, similar products, 
+cart page- on removal, if there is no more products, remove that shop section completely
+product page .. redo wishlist, similar products, 
 clean all orders with status new

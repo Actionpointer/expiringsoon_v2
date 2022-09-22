@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Settlement;
 use App\Models\PaymentItem;
 use App\Models\OrderMessage;
+use App\Observers\OrderObserver;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +19,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Order extends Model
 {
     use HasFactory,Sluggable;
-    protected $fillable = ['slug','user_id','shop_id','address_id','delivery_fee','expected_at','subtotal','vat','total'];
+    
+    protected $fillable = ['slug','user_id','shop_id','address_id','deliveryfee','expected_at','subtotal','vat','total','delivered_at'];
+    protected $dates = ['expected_at','delivered_at'];
 
     public function sluggable():array
     {
@@ -28,6 +31,12 @@ class Order extends Model
                 'separator' => '_'
             ]
         ];
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new OrderObserver);
     }
 
     public function getNameAttribute(){
@@ -60,7 +69,7 @@ class Order extends Model
         return $this->belongsTo(Address::class);
     }
     public function deliveryByVendor(){
-        return $this->shop->shippingRates->where('destination',$this->address->state_id)->first() ? true:false;
+        return $this->address_id && $this->shop->shippingRates->where('destination',$this->address->state_id)->first();
     }
     public function messages(){
         return $this->hasMany(OrderMessage::class);

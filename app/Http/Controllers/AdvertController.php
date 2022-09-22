@@ -118,7 +118,7 @@ class AdvertController extends Controller
         foreach($products as $product){
             $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
         }
-        $link = $this->initializePayment($feature->amount,$products->pluck('id')->toArray(),'products');
+        $link = $this->initializePayment($feature->amount,[$feature->id],'App\Models\Feature');
         if(!$link)
             return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
         else

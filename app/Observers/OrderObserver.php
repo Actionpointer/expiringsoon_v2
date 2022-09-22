@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Order;
 use App\Models\Settlement;
+use App\Events\OrderPurchased;
+use App\Notifications\OrderStatusNotification;
 
 class OrderObserver
 {
@@ -29,17 +31,9 @@ class OrderObserver
         if($order->isDirty('status') && $order->status == 'processing'){
             $delivery = $order->deliveryByVendor() ? $order->deliveryfee : 0;
             $settlement = Settlement::create(['receiver_id'=> $order->shop_id,'receiver_type'=> 'App\Models\Shop','order_id'=> $order->id,'amount'=> $order->earning() + $delivery,'reference'=> uniqid()]);
+            event(new OrderPurchased($order));
         }
-        if($order->isDirty('status') && $order->status == 'shipped'){
-            /*
-                send email to customer
-           */
-        }
-        if($order->isDirty('status') && $order->status == 'delivered'){
-            /*
-                send email to customer
-           */
-        }
+       
         if($order->isDirty('status') && $order->status == 'completed'){
             /*
                 send email to customer
@@ -49,14 +43,9 @@ class OrderObserver
             $order->settlement->status = true;
             $order->settlement->save();
         }
+        $order->user->notify(new OrderStatusNotification($order));
     }
 
-    /**
-     * Handle the Order "deleted" event.
-     *
-     * @param  \App\Models\Order  $order
-     * @return void
-     */
     public function deleted(Order $order)
     {
         //

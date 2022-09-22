@@ -28,7 +28,7 @@ trait PaymentTrait
         ->withData( array('customer' => ['email'=> $payment->user->email,'phonenumber'=> $payment->user->phone,'name'=> $payment->user->fname.' '.$payment->user->lname],
                         'tx_ref'=> $payment->reference,"currency" => cache('settings')['currency_iso'],"payment_options"=>"card,account,ussd",
                         "redirect_url"=> route('payment.callback'),'amount'=> $payment->amount,
-                        'meta' => ['user_id'=> $payment->user->id,'items' => $items,'type'=> $type],
+                        'meta' => ['user_id'=> $payment->user->id,'items' => json_encode($items),'type'=> $type],
                         "customizations"=> [
                             "title" => "Expiring Soon",
                             "description" => "Payment",
@@ -55,7 +55,7 @@ trait PaymentTrait
       ->withHeader('Content-Type: application/json')
       ->withData( array('email'=> $payment->user->email,'amount'=> $payment->amount*100,'currency'=> cache('settings')['currency_iso'],
                       'reference'=> $payment->reference,"callback_url"=> route('payment.callback'),
-                      'metadata' => json_encode(['user_id'=> $payment->user->id,'items' => $items,'type'=> $type])
+                      'metadata' => json_encode(['user_id'=> $payment->user->id,'items' => json_encode($items),'type'=> $type])
                       ) )
       
       ->asJson()                
@@ -85,9 +85,11 @@ trait PaymentTrait
                 break;
             case 'reference': return $gateway == 'paystack' ? $value->data->reference : $value->data->tx_ref;
                 break;
-            case 'items': return $gateway == 'paystack' ? $value->data->metadata->items : $value->data->meta->items;
+            case 'items': return $gateway == 'paystack' ? json_decode($value->data->metadata->items) : json_decode($value->data->meta->items);
                 break;
             case 'type': return $gateway == 'paystack' ? $value->data->metadata->type : $value->data->meta->type;
+                break;
+            case 'method': return $gateway == 'paystack' ? $value->data->channel : $value->data->payment_type;
                 break;
         }  
     }

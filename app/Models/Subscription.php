@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\Advert;
 use App\Models\PaymentItem;
+use App\Observers\SubscriptionObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,12 @@ class Subscription extends Model
     protected $fillable = ['user_id','plan_id','amount','start_at','end_at'];
     
     protected $dates = ['start_at','end_at'];
+
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new SubscriptionObserver);
+    }
 
     public function user(){
         return $this->belongsTo(User::class);
@@ -37,11 +44,11 @@ class Subscription extends Model
         switch($this->duration){
             case '1': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 7;
                 break;
-            case '3': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 21;
+            case '3': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 14;
                 break;
-            case '6': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 30;
+            case '6': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 21;
                 break;
-            case '12': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 45;
+            case '12': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 28;
                 break;
         }
     }
@@ -56,6 +63,10 @@ class Subscription extends Model
 
     public function scopeActiveSubscription($query){
         return $query->where('status',true)->where('start_at','<',now())->where('end_at','>',now());
+    }
+    
+    public function scopeExpired($query){
+        return $query->where('start_at','<',now())->where('end_at','<',now());
     }
 
 }

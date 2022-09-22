@@ -125,6 +125,7 @@ class CartController extends Controller
                 $shipping_fee = $this->getShopShipment($shop_id,$request->address_id)['amount'];
                 $shipping_hours = $this->getShopShipment($shop_id,$request->address_id)['hours'];
             }
+            //dd($shipping_fee);
             $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
                 'deliveryfee'=> $shipping_fee,'expected_at'=> $shipping_hours ? now()->addHours($shipping_hours) : null
             ]);
@@ -135,7 +136,7 @@ class CartController extends Controller
             }
             $order->subtotal = $subtotal;
             $order->vat = $vat * $subtotal / 100;
-            $order->total = ($vat * $subtotal / 100) + $subtotal;
+            $order->total = ($vat * $subtotal / 100) + $subtotal + $shipping_fee;
             $order->save();
             $orders->push($order);
         }

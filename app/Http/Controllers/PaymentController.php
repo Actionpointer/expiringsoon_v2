@@ -25,7 +25,7 @@ class PaymentController extends Controller
         //check status of transaction ..if failed, 
         //flutter = request()->query('status') // successful, cancelled
         //paystack = request()->query('status') // 
-        if(!in_array(request()->query('status'),['successful','success'])){
+        if(cache('settings')['active_payment_gateway'] == 'flutter' && request()->query('status') != 'successful'){
             //delete this order, and remove the order number from the cart
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again1']);
         }
@@ -35,7 +35,6 @@ class PaymentController extends Controller
         else {
             $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
         }
-        dd($details);
         if(!$this->getPaymentData('status',$details)){
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again2']);
         }
@@ -64,7 +63,7 @@ class PaymentController extends Controller
         else {
             $details = $this->verifyFlutterWavePayment($payment->reference);
         }
-        dd($details);
+        // dd($this->getPaymentData('method',$details));
         if(!$this->getPaymentData('status',$details)){
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
         }
@@ -78,14 +77,15 @@ class PaymentController extends Controller
         if($payment->amount != $this->getPaymentData('amount',$details)){
             return redirect('account')->with('statuss','Payment was not successful. Please try again');
         }
-        dd($this->getPaymentData('items',$details));
         foreach($this->getPaymentData('items',$details) as $item){
-            PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $this->getPaymentData('type',$details)]);
+            PaymentItem::updateOrCreate(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $this->getPaymentData('type',$details)]);
         }
         $payment->status = 'success';
+        $payment->method = $this->getPaymentData('method',$details);
         $payment->save();
-        return redirect()->route('home')->flash(['result'=> 1,'message'=> 'Payment Successful']);
+        return redirect()->route('home')->with(['result'=> 1,'message'=> 'Payment Successful']);
     }
+    
     public function index(){
         $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
         return view('payments',compact('payments'));

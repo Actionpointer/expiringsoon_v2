@@ -14,18 +14,18 @@ class SettlementObserver
      */
     public function created(Settlement $settlement)
     {
-        //
+        //send an email to vendor ? should you?
     }
 
-    /**
-     * Handle the Settlement "updated" event.
-     *
-     * @param  \App\Models\Settlement  $settlement
-     * @return void
-     */
     public function updated(Settlement $settlement)
     {
-        //
+        //if paid, send an email to vendor
+        if($settlement->isDirty('status') && $settlement->status){
+            /*
+                send email to customer
+           */
+            
+        }
     }
 
     /**

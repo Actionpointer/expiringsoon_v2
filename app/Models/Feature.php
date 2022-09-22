@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Adplan;
-use App\Models\Subscription;
+use App\Observers\FeatureObserver;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,10 +23,18 @@ class Feature extends Model
             ]
         ];
     }
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new FeatureObserver);
+    }
 
     public function getNameAttribute()
     {
         return uniqid();   
+    }
+    public function getDurationAttribute(){
+        return $this->start_at->diffInMonths($this->end_at);   
     }
     protected $fillable = ['user_id','slug','adplan_id','units','amount','start_at','end_at'];
 
@@ -53,6 +61,9 @@ class Feature extends Model
     }
     public function expiring(){
         return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 3;
+    }
+    public function scopeExpired($query){
+        return $query->where('start_at','<',now())->where('end_at','<',now());
     }
 
 }

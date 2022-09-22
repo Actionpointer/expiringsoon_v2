@@ -49,7 +49,6 @@ class SubscriptionController extends Controller
     }
 
     public function feature_subscription(Request $request){
-        // dd($request->all());
         $features = collect([]);
         if($request->has('feature_id')){
             $feature = Feature::where('id',$request->feature_id)->get();

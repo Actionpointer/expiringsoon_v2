@@ -51,7 +51,7 @@
                     <h5 class="font-body--xl-500 name">{{$shop->name}} </h5>
                     <div style="margin:auto">
                         <div style="float:left;padding-right:20px;margin-right:20px;border-right:2px solid #e0dfdf">
-                            <p align="left" class="font-body--md-400 designation">Total Sales</p>
+                            <p align="left" class="font-body--md-400 designation">Total Earnings</p>
                                 <div style="margin-top:-10px">
                                     <a href="{{route('shop.order.list',$shop)}}" class="edit font-body--lg-500" style="font-size:20px">{!!cache('settings')['currency_symbol']!!}{{number_format($shop->settlements->where('status',true)->sum('amount'), 2)}}</a>
                                 </div>

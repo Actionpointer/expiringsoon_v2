@@ -56,7 +56,7 @@ class SettingsController extends Controller
         $settings = Cache::rememberForever('settings', function () {
             return \App\Models\Setting::select(['name','value'])->get()->pluck('value','name')->toArray();
         });
-        return redirect()->back();
+        return redirect()->back()->with(['result'=>1,'message'=> 'Settings Saved']);
     }
 
     public function shipping_rates(Request $request){
@@ -79,7 +79,7 @@ class SettingsController extends Controller
             $rate->amount = $request->amount;
             $rate->save();
         }
-        return redirect()->back();
+        return redirect()->back()->with(['result'=>1,'message'=> 'Shipping Settings Saved']);
     }
 
     public function admins(Request $request){
