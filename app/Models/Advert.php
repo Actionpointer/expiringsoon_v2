@@ -15,7 +15,7 @@ class Advert extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'advertable_id','advertable_type','feature_id','status','state_id','position'
+        'advertable_id','advertable_type','feature_id','status','state_id','position','approved'
     ];
 
     public static function boot()

@@ -104,7 +104,8 @@ class ShopController extends Controller
             $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$banner);
         }
-        $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id]);
+        $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
+        'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id,'status'=> $user->allowedShops() < $user->shops->count() ? true:false]);
         $user->role = 'vendor';
         $user->save();
         $shop->users()->attach($user->id,['role' =>'owner']);

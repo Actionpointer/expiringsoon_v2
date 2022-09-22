@@ -66,10 +66,16 @@ class SubscriptionController extends Controller
         return redirect()->to($link);
     }
 
-    public function cancel_renew(Request $request){
+    public function subscription_cancel_renew(Request $request){
         $subscription = Subscription::find($request->subscription_id);
         $subscription->auto_renew = false;
         $subscription->save();
+        return redirect()->back();
+    }
+    public function feature_cancel_renew(Request $request){
+        $feature = Feature::find($request->feature_id);
+        $feature->auto_renew = false;
+        $feature->save();
         return redirect()->back();
     }
 

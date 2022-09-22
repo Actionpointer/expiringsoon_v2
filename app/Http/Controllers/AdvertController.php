@@ -60,7 +60,7 @@ class AdvertController extends Controller
         $feature = Feature::find($request->feature_id);
         foreach($products as $product){
             if($feature->units > $feature->adverts->count()){
-                $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
+                $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_product_advert'] ? true:false]);
             }
         }
         return redirect()->back();
@@ -74,13 +74,7 @@ class AdvertController extends Controller
         $feature = Feature::find($request->feature_id);
         foreach($shops as $shop){
             if($feature->units > $feature->adverts->count()){
-                $advert =  new Advert;
-                $advert->feature_id =  $request->feature_id;
-                $advert->position =  $feature->adplan->position;
-                $advert->advertable_id =  $shop->id;
-                $advert->advertable_type = get_class($shop);
-                $advert->state_id = $request->state_id;
-                $advert->save();  
+                $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $shop->id,'advertable_type'=> get_class($shop),'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_shop_advert'] ? true:false]);
             }  
         }
         return redirect()->back();

@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Feature;
 use App\Notifications\FeatureRenewalNotification;
 use App\Notifications\FeaturePurchasedNotification;
+use App\Notifications\FeatureRenewalCancelNotification;
 
 class FeatureObserver
 {
@@ -30,14 +31,16 @@ class FeatureObserver
         if($feature->isDirty('status') && $feature->status){
             if($feature->end_at->diffInHours(now()) < 5){
                 //it was renewed
-                $duration = $feature->start_at->diffInMonths($feature->end_at);
-                $feature->end_at = now()->addMonths($duration);
+                $feature->end_at = now()->addMonths($feature->duration);
                 $feature->save();
                 $feature->user->notify(new FeatureRenewalNotification($feature));
             }else{
                 $feature->user->notify(new FeaturePurchasedNotification($feature));
             }
             
+        }
+        if($feature->isDirty('auto_renew') && !$feature->auto_renew){
+            $feature->user->notify(new FeatureRenewalCancelNotification($feature));
         }
     }
 

@@ -26,6 +26,6 @@ class AutoRenewFeature
      */
     public function handle(RenewFeature $event)
     {
-        //
+        //handle the payment of the feature
     }
 }

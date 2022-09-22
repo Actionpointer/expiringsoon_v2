@@ -135,13 +135,29 @@
                                                 </button>
                                               </form>
                                             @endif
+                                            @if($feature->active() && $feature->auto_renew)
+                                              <form action="{{route('vendor.feature.cancel_renew')}}" method="post">@csrf
+                                                <input type="hidden" name="feature_id" value="{{$feature->id}}">
+                                                <button class="btn btn-warning text-white">
+                                                  Cancel Auto Renew
+                                                  <span>
+                                                  <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                      <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                  </span>
+                                                </button>
+                                              </form>
+                                            @endif
                                           </div>
                                         </td>
                                         <td style="padding:20px;vertical-align:middle">
                                           @if($feature->active())
                                             <button class="badge btn-success">Active </button>
                                           @elseif($feature->expiring())
-                                              <button class="badge btn-warning">Expiring </button>
+                                            <button class="badge btn-warning">Expiring </button>
+                                              @if($feature->auto_renew)
+                                                Auto Renewal on {{ $feature->end_at->subHours(cache('settings')['auto_renewal_period'])->format('d-M h:iA') }}
+                                              @endif
                                           @else
                                               <button class="badge btn-danger">Expired </button>
                                           @endif 

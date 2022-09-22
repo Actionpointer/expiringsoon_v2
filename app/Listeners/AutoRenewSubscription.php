@@ -26,6 +26,6 @@ class AutoRenewSubscription implements ShouldQueue
      */
     public function handle(RenewSubscription $event)
     {
-        //
+        //handle the payment of the subscription
     }
 }

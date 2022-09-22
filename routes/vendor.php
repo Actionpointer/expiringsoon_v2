@@ -10,8 +10,9 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
     Route::get('plans',[App\Http\Controllers\SubscriptionController::class, 'plans'])->name('plans');
     Route::post('subscription/plans', [App\Http\Controllers\SubscriptionController::class, 'plan_subscription'])->name('subscription.plan');   
     Route::post('subscription/features', [App\Http\Controllers\SubscriptionController::class, 'feature_subscription'])->name('subscription.feature');   
-    Route::post('subscription/cancel-renew', [App\Http\Controllers\SubscriptionController::class, 'cancel_renew'])->name('subscription.cancel_renew');   
-
+    Route::post('subscription/cancel-renew', [App\Http\Controllers\SubscriptionController::class, 'subscription_cancel_renew'])->name('subscription.cancel_renew');   
+    Route::post('feature/cancel-renew', [App\Http\Controllers\SubscriptionController::class, 'feature_cancel_renew'])->name('feature.cancel_renew');   
+    
     Route::get('transactions',[App\Http\Controllers\PaymentController::class,'index'])->name('payments');
 
     //adplans bought, and buy adplans

@@ -88,11 +88,13 @@ class ProductController extends Controller
     }
 
     public function store(Shop $shop,ProductRequest $request){
+        $user = auth()->user();
         if($request->hasFile('photo')){
             $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$photo);
         } 
-        $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published]);
+        $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,
+        'published'=> $request->published,'status'=> $user->allowedProducts() < $user->products->count() ? true:false]);
         return redirect()->route('shop.product.list',$shop);
     }
 

@@ -29,7 +29,7 @@ class Product extends Model
         return 'slug';
     }
     
-    protected $fillable = ['name','shop_id','slug','description','stock','category_id','published', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
+    protected $fillable = ['name','shop_id','slug','description','stock','category_id','published','status', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
     protected $appends = ['amount'];
 
     protected $dates = ['expire_at','uploaded'];

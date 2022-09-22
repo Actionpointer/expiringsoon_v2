@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Subscription;
 use App\Notifications\SubscriptionPurchasedNotification;
+use App\Notifications\SubscriptionRenewalCancelNotification;
 use App\Notifications\SubscriptionRenewalNotification;
 
 class SubscriptionObserver
@@ -30,8 +31,7 @@ class SubscriptionObserver
         if($subscription->isDirty('status') && $subscription->status){
             if($subscription->end_at->diffInMonths(now()) < 1){
                 //it was renewed
-                $duration = $subscription->start_at->diffInMonths($subscription->end_at);
-                $subscription->end_at = now()->addMonths($duration);
+                $subscription->end_at = now()->addMonths($subscription->duration);
                 $subscription->save();
                 $subscription->user->notify(new SubscriptionRenewalNotification($subscription));
                 
@@ -39,6 +39,9 @@ class SubscriptionObserver
                 $subscription->user->notify(new SubscriptionPurchasedNotification($subscription));
             }
             
+        }
+        if($subscription->isDirty('auto_renew') && !$subscription->auto_renew){
+            $subscription->user->notify(new SubscriptionRenewalCancelNotification($subscription));
         }
     }
 
