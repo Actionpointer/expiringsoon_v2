@@ -1,3 +1,16 @@
+BVN validation
+OTP
+PIN SET
+USE PIN TO VALIDATE
+throttle
+REVIEW
+Coupon
+notification EMAILS
+
+
+
+
+
 vendor bvn verification : for every bank account added, there must be BVN validation
 Bvn validation: manual bvn validation before payouts 
 (check ID Card name against the bvn validation result name, phone, dob)
@@ -9,7 +22,8 @@ security with pin
 
 
 8.REVIEW
-customer rate product, rate shop..after order is completed, refunded, 
+customer rate product, rate shop..after order is completed, refund
+
 REPORT SHOPS/PRODUCT
 reviews : product rating.. show in index, product, hotdeals
 
@@ -22,14 +36,10 @@ notifications - email and inapp
 hot deals mobile view (home page & hot deals page)
 
 REFUND
-if customers order out of current state, put a disclaimer that a refund may not happen
 
 coupon
 
-SETTINGS
-add auto-renew to vendor settings.. e.g auto renew subscription,
-Profile Page: transaction pin, identity card, auto-renew subscriptions, 
-update admin settings with new database parameters
+
 
 cron job for running jobs 
 if user is downgrading, show the impact of the plan to the user.
@@ -50,9 +60,6 @@ add PUBLISH & DRAFT button to product list
 revisit advert page to edit advert status
 
 automatic payouts using flutter/paystack
-forgot password
 cart page- on removal, if there is no more products, remove that shop section completely
 product page .. redo wishlist, similar products, 
 clean all orders with status new
-
-add autorenew checkbox to subscription and feature purchase form

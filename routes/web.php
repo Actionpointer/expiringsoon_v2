@@ -29,6 +29,7 @@ Route::post('support',[App\Http\Controllers\MessageController::class, 'store'])-
 
 Route::post('address',[App\Http\Controllers\UserController::class, 'address'])->name('address');
 Route::post('edit-password',[App\Http\Controllers\UserController::class, 'password'])->name('edit-password');
+Route::post('edit-pin',[App\Http\Controllers\UserController::class, 'pin'])->name('edit-pin');
 Route::post('topup',[App\Http\Controllers\PaymentController::class, 'topup'])->name('topup');
 Route::get('orders', [App\Http\Controllers\OrderController::class, 'index'])->name('orders');
 Route::get('order/{order}',[App\Http\Controllers\OrderController::class, 'show'])->name('order-details');
@@ -56,10 +57,9 @@ Route::get('transactions',[App\Http\Controllers\PaymentController::class,'index'
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
 Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
 Route::get('adset/description/',[App\Http\Controllers\AdvertController::class,'description'])->name('adsets');
-    
+Route::get('runjob',[App\Http\Controllers\ShipmentController::class,'index'])->name('runjob');
 include('vendor.php');
 include('shop.php');
 include('admin.php');
-
 
 

@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\UserSubscribed;
+use App\Events\UserFeatured;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -21,10 +21,10 @@ class ActivateAdverts implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\UserSubscribed  $event
+     * @param  \App\Events\UserFeatured  $event
      * @return void
      */
-    public function handle(UserSubscribed $event)
+    public function handle(UserFeatured $event)
     {
         //
     }

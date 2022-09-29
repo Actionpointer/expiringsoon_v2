@@ -108,7 +108,7 @@ class AdvertController extends Controller
     public function feature_products_subscription(Request $request){
         // dd($request->all());
         $products = Product::whereIn('id',$request->products)->get();
-        $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $request->adplan_id,'units'=> count($request->products),'amount'=> $request->amount,'start_at'=> now(),'end_at'=> now()->addDays($request->days)]);        
+        $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $request->adplan_id,'units'=> count($request->products),'amount'=> $request->amount,'start_at'=> now(),'end_at'=> now()->addDays($request->days),'auto_renew'=> $request->auto_renew ? true:false]);        
         foreach($products as $product){
             $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
         }

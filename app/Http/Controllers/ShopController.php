@@ -95,7 +95,7 @@ class ShopController extends Controller
     public function store(Request $request){
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
-            'photo' => 'nullable|max:1024',
+            'photo' => 'required|max:1024',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -105,10 +105,10 @@ class ShopController extends Controller
             $request->file('photo')->storeAs('public/',$banner);
         }
         $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
-        'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id,'status'=> $user->allowedShops() < $user->shops->count() ? true:false]);
+        'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id,'published'=> $request->published]);
         $user->role = 'vendor';
         $user->save();
-        $shop->users()->attach($user->id,['role' =>'owner']);
+        
         return redirect()->route('shop.settings',$shop);
     }
     
@@ -130,6 +130,7 @@ class ShopController extends Controller
         $shop->name = $request->name;
         $shop->email = $request->email;
         $shop->phone = $request->phone;
+        $shop->published = $request->published;
         if($request->hasFile('banner')){
             if($shop->banner) Storage::delete('public/'.$shop->banner);
             $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();

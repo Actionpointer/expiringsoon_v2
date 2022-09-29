@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\RenewFeature;
+use App\Events\UserFeatured;
+use App\Events\FeatureExpired;
 use App\Events\OrderPurchased;
 use App\Events\UserSubscribed;
 use App\Listeners\ActivateShops;
@@ -44,6 +46,10 @@ class EventServiceProvider extends ServiceProvider
             DecreaseProduct::class,
             RemoveFromWishList::class,
         ],
+        OrderCompleted::class => [
+            SettleVendor::class,
+            RemoveFromWishList::class,
+        ],
         SubscriptionExpired::class => [
             DeactivateProducts::class,
             DeactivateShops::class,
@@ -52,6 +58,12 @@ class EventServiceProvider extends ServiceProvider
         UserSubscribed::class => [
             ActivateProducts::class,
             ActivateShops::class,
+            ActivateAdverts::class
+        ],
+        FeatureExpired::class => [
+            DeactivateAdverts::class
+        ],
+        UserFeatured::class => [
             ActivateAdverts::class
         ],
         RenewSubscription::class => [

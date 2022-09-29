@@ -17,7 +17,6 @@ PRODUCTS [add confirmation with password to manage verification | autosend email
 PAYMENTS [add profit, revenue & payout to settlement]
 
 vendor menu (add kyc to profile)
-
 DASHBOARD - [current subscription, total shops, total products, total amount, total orders, 
             recent transactions,recent notification]
 

@@ -25,7 +25,7 @@ class Shop extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','email','phone','banner','address','state_id','city_id','published'];
+    protected $fillable = ['name','slug','email','phone','phone_prefix','banner','address','state_id','city_id','published','status'];
     
 
     public static function boot()

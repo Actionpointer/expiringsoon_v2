@@ -97,6 +97,13 @@
                                             <label for="number1">Phone Number</label>
                                             <input type="number" name="phone" value="{{$shop->phone}}" placeholder="Phone Number" onkeypress="validate(event)" />
                                           </div>
+                                          <div class="contact-form-input">
+                                            <label for="visibility">Visibility</label>
+                                            <select class="form-control-lg w-100 text-muted border" name="published">
+                                                <option value="0" @if(!$shop->published) selected @endif>Draft</option>
+                                                <option value="1" @if($shop->published) selected @endif>Published</option>
+                                            </select>
+                                          </div>
                                           
                                         </div>
                                       </div>
@@ -436,7 +443,7 @@
                                           </div>
                                       </div>
                                       <div class="contact-form-btn">
-                                          <button class="button button--md" type="submit"> + Create Admin </button>
+                                          <button class="button button--md" type="submit"> + Create Staff </button>
                                       </div>
                                     </div>
                                 </form>

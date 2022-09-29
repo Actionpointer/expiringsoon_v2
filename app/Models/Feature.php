@@ -36,7 +36,7 @@ class Feature extends Model
     public function getDurationAttribute(){
         return $this->start_at->diffInMonths($this->end_at);   
     }
-    protected $fillable = ['user_id','slug','adplan_id','units','amount','start_at','end_at'];
+    protected $fillable = ['user_id','slug','adplan_id','units','amount','start_at','end_at','auto_renew'];
 
     public function getRouteKeyName(){
         return 'slug';

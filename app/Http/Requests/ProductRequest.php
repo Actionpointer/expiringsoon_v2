@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
@@ -29,7 +30,7 @@ class ProductRequest extends FormRequest
             'stock' => 'required|numeric|gt:1',
             'category_id' => 'required|numeric',
             'tags' => 'nullable',
-            'photo' => 'sometimes|required|image',
+            'photo' => Rule::requiredIf(!request()->product_id),'image',
             'expiry' => 'required|date|after:today',
             'price' => 'required|numeric',
             'discount120' => 'nullable|lt:price|gt:discount90',

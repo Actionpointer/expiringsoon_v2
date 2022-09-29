@@ -3,8 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\Advert;
-use App\Models\Product;
-use App\Events\SubscriptionExpired;
+use App\Events\FeatureExpired;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -23,15 +22,11 @@ class DeactivateAdverts implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\SubscriptionExpired  $event
+     * @param  \App\Events\FeatureExpired  $event
      * @return void
      */
-    public function handle(SubscriptionExpired $event)
+    public function handle(FeatureExpired $event)
     {
-        $user = $event->subscription->user;
-        $allowed_products = $user->allowedProducts();
-        $user_products = $user->products;
-        $current_products = $user_products->count();
-        // Advert::whereIn('id',[$user_products->pluck('id')->toArray()])->take($current_products - $allowed_products)->update(['status'=> false]);
+        Advert::where('feature_id',$event->feature)->take($current_products - $allowed_products)->update(['status'=> false]);
     }
 }

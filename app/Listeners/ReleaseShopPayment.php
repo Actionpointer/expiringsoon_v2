@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Setting;
+use App\Models\Setting;
 use App\Events\ShopPaymentEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

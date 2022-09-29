@@ -45,9 +45,12 @@
               <div class="dashboard__content-card">
                 <div class="dashboard__order-history-title" style="border-bottom:1px solid #ddd">
                   <h2 class="font-body--xxl-500">Add New Product</h2>
-                  <a href="{{route('shop.product.list',$shop)}}" class="font-body--lg-500">
-                    See All</a
-                  >
+                  @if($shop->owner()->products->count() >= $shop->owner()->allowedProducts()) 
+                  <span>
+                    You have exhausted your product quota
+                    @if(auth()->id() == $shop->owner()->id) <a href="{{route('vendor.plans')}}" class="font-body--lg-500"> <u>UPGRADE</u></a> @endif
+                  </span>
+                  @endif
                 </div>
                 <div class="dashboard__content-card-body">
                   <div class="row">
@@ -119,7 +122,7 @@
                             <img  src="{{asset('img/no-image.jpg')}}" class="rounded-circle" alt="Product Photo" onclick="performClick('theFile');" id="imgPreview"    />
                           </div>
                           <div>
-                            <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
+                            <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg"/>
                             @error('photo')
                                 <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -167,8 +170,10 @@
                       <div class="contact-form__content-group">
 
                         <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" type="button">When expiry date is below 1 month</button>
-                          <div class="discountoptions" style="display:none">
+                          
+                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 1 month</button>
+                          
+                          <div class="discountoptions" @if(!old('discount30')) style="display:none" @endif>
                             <label for="number1">1 to 30days discount price</label>
                             <div class="input-group d-flex">
                               <input type="number" name="discount30" id="discount30" value="{{ old('discount30') }}" placeholder="Sales Price" class="form-control discountprice"/>
@@ -184,8 +189,8 @@
                           </div>
                         </div>
                         <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" type="button">When expiry date is below 2months</button>
-                          <div class="discountoptions" style="display:none">
+                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 2months</button>
+                          <div class="discountoptions"  @if(!old('discount30')) style="display:none" @endif>
                             <label for="number1">31 to 60days discount price</label>
                             <div class="input-group d-flex">
                               <input type="number" name="discount60" value="{{ old('discount60') }}" id="discount60" placeholder="Sales Price" class="form-control discountprice"/>
@@ -201,8 +206,8 @@
                           </div>
                         </div>
                         <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" type="button">When expiry date is below 3months</button>
-                          <div class="discountoptions" style="display:none">
+                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 3months</button>
+                          <div class="discountoptions"  @if(!old('discount30')) style="display:none" @endif>
                             <label for="number1">61 to 90days discount price</label>
                             <div class="input-group d-flex">
                               <input type="number" name="discount90" id="discount90" value="{{ old('discount90') }}"  placeholder="Sales Price" class="form-control discountprice"/>
@@ -218,8 +223,8 @@
                           </div>
                         </div>
                         <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" type="button">When expiry date is below 4months</button>
-                          <div class="discountoptions" style="display:none">
+                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 4months</button>
+                          <div class="discountoptions"  @if(!old('discount30')) style="display:none" @endif>
                             <label for="number1">91 to 120days discount price</label>
                             <div class="input-group d-flex">
                               <input type="number" name="discount120" id="discount120" value="{{ old('discount120') }}"  placeholder="Sales Price" class="form-control discountprice"/>
@@ -236,6 +241,9 @@
                         </div>
 
                       </div>
+                      @if($shop->owner()->products->count() >= $shop->owner()->allowedProducts()) 
+                      <h3 class="text-danger">The status of this product will be <strong>INACTIVE</strong></h3>
+                      @endif
                       <div class="contact-form-btn">
                         <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
                           Save as Draft

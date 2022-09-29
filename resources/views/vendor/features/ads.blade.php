@@ -95,6 +95,10 @@
                               <span class="font-body--xl-500">{!!cache('settings')['currency_symbol']!!}
                                 <span id="subtotal">{{$products->count() * $adplan->price_per_day * cache('settings')['minimum_advert_days']}}</span> </span>
                             </div>
+                            <div class="form-check py-2">
+                              <label class="form-check-label" for="autorenew" > Auto-renew</label>
+                              <input class="form-check-input checkboxes" type="checkbox" name="auto_renew" value="1" checked>
+                            </div>
                           </div>
                             <input type="hidden" id="amount" name="amount" value="{{$products->count() * $adplan->price_per_day * cache('settings')['minimum_advert_days']}}">
                             <button class="button button--lg w-100" style="margin-top: 20px" type="submit">

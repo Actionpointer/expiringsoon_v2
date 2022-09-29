@@ -284,6 +284,55 @@
                   </form>
                 </div>
               </div>
+              @if(auth()->user()->role != 'shopper')
+              <div class="dashboard__content-card">
+                <div class="dashboard__content-card-header">
+                  <h5 class="font-body--xl-500">Transaction Pin</h5>
+                </div>
+                <div class="dashboard__content-card-body">
+                  <form method="post" action="{{route('edit-pin')}}" id="editPassword">@csrf
+                    <div class="contact-form__content">
+                      
+                      <div class="contact-form__content-group">
+                        <!-- New Password  -->
+                        <div class="contact-form-input"> <label for="npassword">New Pin </label>
+                          <input   type="password" id="newPassword" name="password" placeholder="" autocomplete="new-password" required />
+                          <span class="icon" onclick="showPassword('npassword',this)"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> <circle cx="12" cy="12" r="3"></circle> </svg> </span>
+                        </div>
+                        <!-- confirm  Password  -->
+                        <div class="contact-form-input">
+                          <label for="confirmPassword">Confirm Pin</label>
+                          <input   type="password"   id="confirmPassword"   name="password_confirmation"  autocomplete="new-password" placeholder=""   required />
+                          <span   class="icon"   onclick="showPassword('confirmPassword',this)">   
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+                              <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> 
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </span>
+                        </div>
+                        
+                      </div>
+                      <div class="contact-form-input">
+                        <label for="number1">One Time Password</label>
+                        <div class="input-group d-flex">
+                           <input type="number" name="otp" class="form-control" placeholder="Enter OTP" />
+                        
+                            <div class="append">
+                                <button class="btn btn-dark">Generate</button>
+                            </div>
+                          </div>
+                        
+                      </div>
+                      <div id="passmatch" style="font-size:13px;font-weight:450"></div>
+                      <div class="contact-form-btn">
+                        <button type="submit" class="button button--md" type="submit"> Save New Password
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              @endif
             </div>
           </div>
       </div>

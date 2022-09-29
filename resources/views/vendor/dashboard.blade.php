@@ -195,9 +195,11 @@
                           <td class="dashboard__order-history-table-item order-status ">
                             @if($subscription->deleted_at || $subscription->end_at < now())
                               <button class="badge btn-danger">Expired </button>
-                            @elseif($subscription->end_at->diffInMonths(now()) < 2)
+                            @elseif($subscription->expiring() && $subscription->status)
                                 <button class="badge btn-warning">Expiring </button>
-                            @else
+                            @elseif(!$subscription->status)
+                                <button class="badge btn-danger">Not Active </button>
+                              @else
                                 <button class="badge btn-success">Active </button>
                             @endif
                           </td>

@@ -8,6 +8,7 @@ use App\Models\State;
 use App\Models\Address;
 use App\Models\Country;
 use App\Models\Setting;
+use App\Notifications\OTPNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -73,6 +74,8 @@ class UserController extends Controller
         else return redirect()->back()->with(['result' => '1','message'=>'Something went wrong']);
     }
 
+
+
     public function address(Request $request){
         $user= auth()->user();
         if($request->main){
@@ -94,6 +97,30 @@ class UserController extends Controller
             $addresses->first()->save();
         }
         return redirect()->back();
+    }
+
+    public function generateOTP(){
+        $user = auth()->user();
+        $otp = uniqid();
+        $user->notify(new OTPNotification($otp));
+        return response()->json(200);
+    }
+
+    public function pin(Request $request){
+        $user = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'pin' => 'required','string','confirmed',
+            'otp' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput()->with(['result'=> '0','message'=> 'You missed something!']);
+        }
+        
+        $user->pin = Hash::make($request->pin);
+        $user->save();
+        return redirect()->back()->with(['result' => '1','message'=>'Pin changed successfully']); //with success
     }
 
     public function notifications(){

@@ -352,19 +352,25 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <form action="{{route('vendor.subscription.plan')}}" method="post" class="d-flex ">@csrf
+                                <form action="{{route('vendor.subscription.plan')}}" method="post" >@csrf
                                     <input type="hidden" name="plan" id="plan">
                                     <input type="hidden" name="duration" id="duration">
-                                    <button href="#" class="button button--md text-white d-flex justify-content-between w-100">
-                                        <span class="font-body--xl-400">Pay</span>
-                                        <span class="font-body--xl-400">{!!cache('settings')['currency_symbol']!!}<span id="plan_amount" class="ms-0"></span></span>
-                                        <span class="font-body--xl-400">
-                                            <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </button>
+                                    <div class="form-check py-2">
+                                        <label class="form-check-label" for="autorenew" > Auto-renew Subscription</label>
+                                        <input class="form-check-input checkboxes" type="checkbox" name="auto_renew" value="1" checked>
+                                    </div>
+                                    <div class="d-flex ">
+                                        <button href="#" class="button button--md text-white d-flex justify-content-between w-100">
+                                            <span class="font-body--xl-400">Pay</span>
+                                            <span class="font-body--xl-400">{!!cache('settings')['currency_symbol']!!}<span id="plan_amount" class="ms-0"></span></span>
+                                            <span class="font-body--xl-400">
+                                                <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
                                 </form>
                             </td>
                         </tr>

@@ -150,7 +150,7 @@
                             <img src="src/images/banner/banner-sm-05.png" alt="banner" />
 
                             <div class="banner__wrapper-text">
-                                <h5 class="font-body--md-500">Summer Sale</h5>
+                                <h5 class="font-body--md-500">sSummer Sale</h5>
                                 <h2 class="font-title--sm">75% off</h2>
                                 <p class="font-body--md-400">Only Fruit & Vegetable</p>
                                 <a href="#" class="button button--md">

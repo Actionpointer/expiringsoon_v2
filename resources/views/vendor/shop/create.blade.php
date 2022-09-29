@@ -43,8 +43,10 @@
             <div class="container">
               <!-- Account Settings  -->
               <div class="dashboard__content-card">
-                <div class="dashboard__content-card-header">
+                <div class="dashboard__order-history-title border-bottom">
                   <h5 class="font-body--xl-500">Create Shop </h5>
+                  @if(auth()->user()->shops->count() >= auth()->user()->allowedShops())
+                  <a href="{{route('vendor.plans')}}" class="small">You've exhausted your shop quota. <u>UPGRADE</u></a>@endif
                 </div>
                 <div class="dashboard__content-card-body">
                   <form method="post" id="editinfo" action="{{route('vendor.shop.store')}}" enctype="multipart/form-data">@csrf
@@ -53,16 +55,16 @@
                         <div class="contact-form__content">
                           
                           <div class="contact-form-input">
-                            <label for="fname">Shop Name </label>
-                            <input type="text" name="name" placeholder=" Name"/>
+                            <label for="fname">Shop Name *</label>
+                            <input type="text" name="name" placeholder=" Name" required/>
                           </div>
                           <div class="contact-form-input">
-                            <label for="lname2">Shop Email </label>
-                            <input type="email" name="email" placeholder="Email" />
+                            <label for="lname2">Shop Email * </label>
+                            <input type="email" name="email" placeholder="Email" required/>
                           </div>
                           <div class="contact-form-input">
-                            <label for="number1">Phone Number</label>
-                            <input type="number" name="phone" placeholder="Phone Number in local format. e.g 080945432" />
+                            <label for="number1">Phone Number *</label>
+                            <input type="number" name="phone" placeholder="Phone Number in local format. e.g 080945432" required/>
                           </div>
                         </div>
                       </div>
@@ -73,7 +75,12 @@
                               <img src="{{asset('img/avatar.png')}}" alt="logo"  onclick="performClick('theFile');"  id="imgPreview"   />
                             </div>
                             <div>
-                              <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
+                              <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" required/>
+                              @error('photo')
+                <span class="invalid-feedback d-block" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
                               <button type="button" class="button w-100 mt-3 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Logo/Banner </button>
                             </div>
                             
@@ -88,16 +95,16 @@
                             <div class="contact-form__content-group row">
                               <!-- states -->
                               <div class="contact-form-input col-lg-6">
-                                <label for="states">state</label>
-                                <select id="states" name="state" class="contact-form-input__dropdown">
+                                <label for="states">state *</label>
+                                <select id="states" name="state" class="contact-form-input__dropdown" required>
                                   @foreach ($states as $state)
                                     <option value="{{$state->id}}">{{$state->name}}</option>
                                   @endforeach
                                 </select>
                               </div>
                               <div class="contact-form-input col-lg-6">
-                                <label for="city">city</label>
-                                <select name="city_id" class="select2">
+                                <label for="city">city *</label>
+                                <select name="city_id" class="select2" required>
                                     @foreach ($cities as $city)
                                       <option value="{{$city->id}}">{{ucwords(strtolower($city->name))}}</option>
                                     @endforeach
@@ -107,8 +114,12 @@
                           </div>
                       </div>
                       <div class="col-lg-12 order-lg-0 order-1">
+                        @if(auth()->user()->shops->count() >= auth()->user()->allowedShops()) 
+                        <h3 class="text-danger">The status of this shop will be <strong>INACTIVE</strong></h3>
+                        @endif
                         <div class="contact-form-btn">
-                          <button class="button button--md" type="submit"> Save Details</button>
+                          <button class="button button--md bg-secondary" name="published" value="0" type="submit"> Create as Draft</button>
+                          <button class="button button--md" name="published" value="1" type="submit"> Create & Publish</button>
                         </div>
                       </div>
                     </div>

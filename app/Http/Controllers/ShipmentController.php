@@ -11,12 +11,14 @@ class ShipmentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
     
-    public function create()
+    public function index()
     {
-        //
+        // return 'ok';
+       \App\Jobs\SubscriptionRenewalJob::dispatch();
+       return 'ok';
     }
 
     public function store(Request $request)

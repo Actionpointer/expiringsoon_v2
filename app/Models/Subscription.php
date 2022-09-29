@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Subscription extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['user_id','plan_id','amount','start_at','end_at'];
+    protected $fillable = ['user_id','plan_id','amount','start_at','end_at','auto_renew'];
     
     protected $dates = ['start_at','end_at'];
 

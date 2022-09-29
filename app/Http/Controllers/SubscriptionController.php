@@ -32,6 +32,7 @@ class SubscriptionController extends Controller
 
     
     public function plan_subscription(Request $request){
+        
         if($request->has('subscription_id')){
             $subscription = Subscription::find($request->subscription_id);
         }else{
@@ -39,7 +40,7 @@ class SubscriptionController extends Controller
             if(auth()->user()->subscriptions->where('plan_id',$plan->id)->where('status',true)->where('end_at','>',now())->isNotEmpty()){
                 return redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
             }
-            $subscription = Subscription::create(['user_id'=> auth()->id(),'plan_id'=> $plan->id,'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration)]);
+            $subscription = Subscription::create(['user_id'=> auth()->id(),'plan_id'=> $plan->id,'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration),'auto_renew'=> $request->auto_renew ? true:false]);
         }
         $link = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
         if(!$link)
@@ -55,7 +56,7 @@ class SubscriptionController extends Controller
             $features->push($feature);
         }else{
             foreach($request->adplans as $key=>$plan){
-                $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key])]);
+                $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key]),'auto_renew'=> $request->auto_renew ? true:false ]);
                 $features->push($feature);
             }
         }

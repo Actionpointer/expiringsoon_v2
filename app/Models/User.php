@@ -123,15 +123,15 @@ class User extends Authenticatable
     }
 
     public function allowedProducts(){
-        if($this->activeSubscription()){
-            return $this->activeSubscription()->plan->products;
+        if($this->activeSubscription){
+            return $this->activeSubscription->plan->products;
         }else{
             return \App\Models\Plan::where('slug','free_plan')->first()->products;
         }
     }
     public function allowedShops(){
-        if($this->activeSubscription()){
-            return $this->activeSubscription()->plan->shops;
+        if($this->activeSubscription){
+            return $this->activeSubscription->plan->shops;
         }else{
             return \App\Models\Plan::where('slug','free_plan')->first()->shops;
         }

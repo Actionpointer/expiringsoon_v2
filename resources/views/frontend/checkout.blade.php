@@ -39,7 +39,8 @@
           <div class="col-lg-8">
             <div class="billing__content-card">
               <div class="billing__content-card-header">
-                <h2 class="font-body--xxxl-500">Delivery Address</h2>
+                <h2 class="font-body--xxxl-500 mb-0">Delivery Address</h2>
+                <small class="text-muted font-body--sm-400">Please note that only orders wherein the buyer's delivery address and the sellers location are in the same state are eligible for refund! </small>
               </div>
               <div class="billing__content-card-body">  
                 @if($user->addresses->isNotEmpty())

@@ -94,7 +94,7 @@ class ProductController extends Controller
             $request->file('photo')->storeAs('public/',$photo);
         } 
         $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-        'published'=> $request->published,'status'=> $user->allowedProducts() < $user->products->count() ? true:false]);
+        'published'=> $request->published]);
         return redirect()->route('shop.product.list',$shop);
     }
 
@@ -104,7 +104,7 @@ class ProductController extends Controller
         return view('shop.product.edit',compact('shop','product','categories','tags'));
     }
 
-    public function update(Shop $shop,Request $request){
+    public function update(Shop $shop,ProductRequest $request){
         $product = Product::find($request->product_id);
         if($request->hasFile('photo')){
             if($product->photo) Storage::delete('public/'.$product->photo);

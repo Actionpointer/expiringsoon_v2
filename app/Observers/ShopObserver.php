@@ -14,10 +14,11 @@ class ShopObserver
      */
     public function created(Shop $shop)
     {
+        $user = auth()->user();
+        $shop->users()->attach($user->id,['role' =>'owner']);
         if(cache('settings')['auto_approve_shop'])
         $shop->approved = true;
-        if($shop->owner()->activeSubscription)
-        $shop->status = true;
+        $shop->status = $shop->owner()->allowedShops() < $user->shops->count() ? true:false;
         $shop->save();
     }
 

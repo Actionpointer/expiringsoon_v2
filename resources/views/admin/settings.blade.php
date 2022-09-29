@@ -97,7 +97,11 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            
+                                            <div class="contact-form-input">
+                                                <label for="vat">VAT %</label>
+                                                <input type="text" name="vat" placeholder="Set VAT Percentage" value="{{$settings->firstWhere('name','vat')->value}}" />
+                                            </div>
+
                                             <div class="contact-form-input">
                                                 <label for="gateway">Payment Gateway</label>
                                                 <select name="active_payment_gateway" id="selectbox2">
@@ -106,13 +110,15 @@
                                                     @endforeach                                                    
                                                 </select>
                                             </div>
+
+                                            
                                             <div class="contact-form-input">
-                                                <label for="vat">VAT %</label>
-                                                <input type="text" name="vat" placeholder="Set VAT Percentage" value="{{$settings->firstWhere('name','vat')->value}}" />
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <label for="vat">Maximum Delivery Hours</label>
-                                                <input type="text" name="maximum_delivery_hours" placeholder="Set Maximum Delivery Hours" value="{{$settings->firstWhere('name','maximum_delivery_hours')->value}}" />
+                                                <label for="gateway">Payout</label>
+                                                <select name="automatic_payout_transfer" id="selectbox1">
+                                                   <option value="1" @if($settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Automatic </option>
+                                                   <option value="0" @if(!$settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Manual </option>
+                                                                                                  
+                                                </select>
                                             </div>
                                             <div class="contact-form-input">
                                                 <label for="number1">Throttle request</label>
@@ -137,254 +143,376 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">Others</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                    <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
-                                        <div class="contact-form__content">
-                                            <table>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Auto Approve Product Advert
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if($settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if(!$settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Auto Approve Shop Advert
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if($settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if(!$settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Auto Approve Shop
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop" @if($settings->firstWhere('name','auto_approve_shop')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop" @if(!$settings->firstWhere('name','auto_approve_shop')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Auto Approve Product
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if($settings->firstWhere('name','auto_approve_product')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if(!$settings->firstWhere('name','auto_approve_product')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Send Shop Approval Email
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_shop_approval_email" @if($settings->firstWhere('name','send_shop_approval_email')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_shop_approval_email" @if(!$settings->firstWhere('name','send_shop_approval_email')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Send Shop Rejection Email
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_shop_rejection_email" @if($settings->firstWhere('name','send_shop_rejection_email')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_shop_rejection_email" @if(!$settings->firstWhere('name','send_shop_rejection_email')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Send Product Approval Email
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_product_approval_email" @if($settings->firstWhere('name','send_product_approval_email')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_product_approval_email" @if(!$settings->firstWhere('name','send_product_approval_email')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Send Product Rejection Email
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if($settings->firstWhere('name','send_product_rejection_email')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if(!$settings->firstWhere('name','send_product_rejection_email')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Send Advert Approval Email
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_advert_approval_email" @if($settings->firstWhere('name','send_advert_approval_email')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_product_approval_email" @if(!$settings->firstWhere('name','send_advert_approval_email')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="d-flex">
-                                                        <label class="form-check-label font-body--400" for="existing"> 
-                                                            Send Advert Rejection Email
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check mx-3">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                On
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_advert_rejection_email" @if($settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="1" >
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check">
-                                                            <label class="form-check-label font-body--400" for="existing"> 
-                                                                Off
-                                                            </label>
-                                                            <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if(!$settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="0" > 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <div class="contact-form-btn">
-                                                <button class="button button--md" type="submit"> Save
-                                                </button>
-                                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="dashboard__content-card">
+                                        <div class="dashboard__content-card-header">
+                                            <h5 class="font-body--xl-500">Products</h5>
                                         </div>
-                                    </form>
+                                        <div class="dashboard__content-card-body">
+                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                                <div class="contact-form__content">
+                                                    <div class="form-group row mb-2 font-body--md-400">
+                                                        <label for="min_stck_level" class="col-8">Minimum stock level</label>
+                                                        <input type="text" class="col-4"  name="minimum_stock_level" placeholder="Set Minimum stock level" value="{{$settings->firstWhere('name','minimum_stock_level')->value}}" />
+                                                    </div>
+                                                    <div class="form-group row mb-2 font-body--md-400">
+                                                        <label for="max_stck_hours" class="col-8">Maximum stock level</label>
+                                                        <input type="text" class="col-4"  name="maximum_stock_level" placeholder="Set Maximum stock level" value="{{$settings->firstWhere('name','maximum_stock_level')->value}}" />
+                                                    </div>
+                                                    <table>
+                                                        
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Auto Approve Product
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if($settings->firstWhere('name','auto_approve_product')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if(!$settings->firstWhere('name','auto_approve_product')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Send Product Approval Email
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_approval_email" @if($settings->firstWhere('name','send_product_approval_email')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_approval_email" @if(!$settings->firstWhere('name','send_product_approval_email')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Send Product Rejection Email
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if($settings->firstWhere('name','send_product_rejection_email')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if(!$settings->firstWhere('name','send_product_rejection_email')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                       
+                                                    </table>
+                                                    <div class="contact-form-btn">
+                                                        <button class="button button--md" type="submit"> Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="dashboard__content-card">
+                                        <div class="dashboard__content-card-header">
+                                            <h5 class="font-body--xl-500">Orders</h5>
+                                        </div>
+                                        <div class="dashboard__content-card-body">
+                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                                <div class="contact-form__content">
+                                                    <div class="form-group row mb-2 font-body--md-400">
+                                                        <label for="max_del_hours" class="col-8 ">Maximum Delivery Hours</label>
+                                                        <input type="text" class="col-4"  name="maximum_delivery_hours" placeholder="Set Maximum Delivery Hours" value="{{$settings->firstWhere('name','maximum_delivery_hours')->value}}" />
+                                                    </div>
+                                                    <div class="form-group row mb-2 font-body--md-400">
+                                                        <label for="vat" class="col-8 font-body--400">Order Rejection Period</label>
+                                                        <input type="text" class="col-4" name="vat" placeholder="Set Order Rejection Period" value="{{$settings->firstWhere('name','order_rejection_period')->value}}" />
+                                                    </div>
+                                                    <table>
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Send Order Rejection Email
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_rejection_email" @if($settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if(!$settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="contact-form-btn">
+                                                        <button class="button button--md" type="submit"> Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            {{-- shop and adverts --}}
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="dashboard__content-card">
+                                        <div class="dashboard__content-card-header">
+                                            <h5 class="font-body--xl-500">Shop</h5>
+                                        </div>
+                                        <div class="dashboard__content-card-body">
+                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                                <div class="contact-form__content">
+                                                    <table>
+                                                        
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Auto Approve Shop
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop" @if($settings->firstWhere('name','auto_approve_shop')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop" @if(!$settings->firstWhere('name','auto_approve_shop')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+        
+                                                        
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Send Shop Approval Email
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_approval_email" @if($settings->firstWhere('name','send_shop_approval_email')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_approval_email" @if(!$settings->firstWhere('name','send_shop_approval_email')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Send Shop Rejection Email
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_rejection_email" @if($settings->firstWhere('name','send_shop_rejection_email')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_rejection_email" @if(!$settings->firstWhere('name','send_shop_rejection_email')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                        
+                                                    </table>
+                                                    <div class="contact-form-btn">
+                                                        <button class="button button--md" type="submit"> Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="dashboard__content-card">
+                                        <div class="dashboard__content-card-header">
+                                            <h5 class="font-body--xl-500">Advert</h5>
+                                        </div>
+                                        <div class="dashboard__content-card-body">
+                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                                <div class="contact-form__content">
+                                                    <div class="form-group row mb-2 font-body--md-400">
+                                                        <label for="max_del_hours" class="col-8 font-body--400">Minimum Advert Days</label>
+                                                        <input type="text" class="col-4"  name="minimum_advert_days" placeholder="Set minimum advert days" value="{{$settings->firstWhere('name','minimum_advert_days')->value}}" />
+                                                    </div>
+                                                    {{-- <div class="form-group row mb-2">
+                                                        <label for="vat" class="col-8 font-body--400">Maximum Advert Days</label>
+                                                        <input type="text" class="col-4" name="vat" placeholder="Set maximum advert days" value="{{$settings->firstWhere('name','maximum_advert_days')->value}}" />
+                                                    </div> --}}
+                                                    <table>
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Auto Approve Product Advert
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if($settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if(!$settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Auto Approve Shop Advert
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if($settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if(!$settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Send Advert Approval Email
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_approval_email" @if($settings->firstWhere('name','send_advert_approval_email')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_approval_email" @if(!$settings->firstWhere('name','send_advert_approval_email')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="d-flex">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Send Advert Rejection Email
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check mx-3">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        On
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_rejection_email" @if($settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="1" >
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label font-body--400" for="existing"> 
+                                                                        Off
+                                                                    </label>
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_rejection_email" @if(!$settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="0" > 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        
+            
+                                                    </table>
+                                                    <div class="contact-form-btn">
+                                                        <button class="button button--md" type="submit"> Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             
                           </div>
                       </div>
