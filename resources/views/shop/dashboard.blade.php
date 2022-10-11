@@ -71,7 +71,7 @@
                     </div>
                     @if($shop->owner()->id == auth()->id())
                     <div>
-                        <a href="{{route('shop.settings',$shop)}}#requestPayout" class="edit font-body--lg-500">Request Payout</a>
+                        <a href="{{route('shop.payouts',$shop)}}" class="edit font-body--lg-500">Request Payout</a>
                     </div>
                     @endif
                   </div>

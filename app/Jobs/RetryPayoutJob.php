@@ -2,20 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Models\Shop;
-use App\Models\User;
-use App\Models\Order;
-use App\Notifications\OrderStatusNotification;
+use App\Events\RetryPayout;
+use App\Models\Payout;
 use Illuminate\Bus\Queueable;
+use App\Http\Traits\PayoutTrait;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\ShopOrderNotification;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CheckOrderExpectedDateJob implements ShouldQueue
+class RetryPayoutJob implements ShouldQueue,ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,6 +26,11 @@ class CheckOrderExpectedDateJob implements ShouldQueue
         //
     }
 
+    public function uniqueId()
+    {
+        return $this->payout->id;
+    }
+
     /**
      * Execute the job.
      *
@@ -36,10 +38,11 @@ class CheckOrderExpectedDateJob implements ShouldQueue
      */
     public function handle()
     {
-        //send message to vendor & user
-        $orders = Order::where('status','processing')->where('expected_at','>',now())->where('expected_at','<=',now()->addDay())->get();
-        foreach($orders as $order){
-            $order->shop->notify(new ShopOrderNotification($order,'late'));
+        $payouts = Payout::where('status','failed')->whereNotNull('transfer_id')->get();
+        foreach($payouts as $payout){
+            event(new RetryPayout($payout));
+            
         }
+        
     }
 }

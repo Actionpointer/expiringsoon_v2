@@ -148,7 +148,7 @@
             <div class="dashboard__order-history" style="margin-top: 24px">
               <div class="dashboard__order-history-title">
                 <h2 class="font-body--xxl-500">Recent Orders</h2>
-                <a href="admin-orders.php" class="font-body--lg-500">See All</a>
+                <a href="{{route('admin.orders')}}" class="font-body--lg-500">See All</a>
               </div>
               <div class="dashboard__order-history-table">
                 <div class="table-responsive">
@@ -169,7 +169,7 @@
                     <tbody>
                       
                       @forelse ($orders as $order)
-                            @php $deliveryfee = 500 @endphp
+                            
                         <tr>
                             <!-- Order Id  -->
                             <td class="dashboard__order-history-table-item order-id"> 
@@ -181,7 +181,7 @@
                             </td>
                             <!-- Total  -->
                             <td class="   dashboard__order-history-table-item   order-total "> 
-                                <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{ number_format($order->total + $deliveryfee + ($order->total * 0.5), 0)}} </p>
+                                <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{ number_format($order->total)}} </p>
                             </td>
                             <!-- Status -->
                             <td class="   dashboard__order-history-table-item   order-status "> 
@@ -212,6 +212,187 @@
                 </div>
               </div>
             </div>
+
+            <!-- Shop status and notifications  -->
+            <div class="my-3">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="dashboard__totalpayment-card">
+                    <div class="dashboard__totalpayment-card-header">
+                      <div class="dashboard__totalpayment-card-header">
+                        <div class="dashboard__totalpayment-card-header-item">
+                          <h5 class="title">Pending Approvals</h5>
+                          {{-- <p class="details order-id"> {{$order->trackingcode}}</p> --}}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="dashboard__totalpayment-card-body">
+                      
+                      <a class="dashboard__totalpayment-card-body-item" href="#">
+                        <h5 class="font-body--md-400 text-primary">Shops:</h5>
+                        <p class="font-body--md-500">
+                            10
+                        </p>
+                      </a>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Products:</h5>
+                        <p class="font-body--md-500">4</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Adverts</h5>
+                        <p class="font-body--md-500">1</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Payouts</h5>
+                        <p class="font-body--md-500">2</p>
+                      </div>
+                      
+                      
+                      {{-- <div class="dashboard__totalpayment-card-body-item total" >
+                        <h5 class="font-body--xl-400">Total:</h5>
+                        <p class="font-body--xl-500">{!!cache('settings')['currency_symbol']!!} {{number_format($order->total, 2)}}</p>
+                      </div> --}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="dashboard__totalpayment-card">
+                    <div class="dashboard__totalpayment-card-header">
+                      <div class="dashboard__totalpayment-card-header">
+                        <div class="dashboard__totalpayment-card-header-item">
+                          <h5 class="title">Notifications</h5>
+                          
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="dashboard__totalpayment-card-body">
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">No Notification</h5>
+                        
+                      </div>
+                      
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="my-3">
+              <div class="row">
+                
+                <div class="col-lg-6">
+                  <div class="dashboard__order-history">
+                    <div class="dashboard__order-history-title">
+                        <h2 class="font-body--xl-500">Recent Payouts</h2>
+                        <a href="{{route('admin.payouts')}}" class="font-body--lg-500"> View All</a>
+                    </div>
+                    <div class="dashboard__order-history-table">
+                        <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="dashboard__order-history-table-title"> Date </th>
+                                <th scope="col" class="dashboard__order-history-table-title"> Amount </th>
+                                <th scope="col" class="dashboard__order-history-table-title"> Status</th>   
+                            </tr>
+                            </thead>
+                            <tbody>                     
+                                @forelse($payouts->sortByDesc('updated_at')->take(5) as $payout)                                       
+                                    <tr>
+                                        <td class="dashboard__order-history-table-item order-date "> 
+                                          {{$payout->created_at->format('Y-m-d')}}
+                                        </td>
+                                        <!-- Vendor Split  -->
+                                        <td class="dashboard__order-history-table-item order-total "> 
+                                            <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($payout->amount, 0)}} 
+                                            </p>
+                                        </td>
+                                        
+                                        <td class="dashboard__order-history-table-item order-details" style="text-align: left!important"> 
+                                            <span class="@if($payout->status == 'pending' || $payout->status == 'processing') text-warning @elseif($payout->status == 'rejected') text-danger @else text-success @endif">
+                                                {{$payout->status}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                      <td colspan="3" class="text-center">
+                                        <div style="padding:1%;margin-bottom:5%">
+                                          <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                                          <br />You have no payouts at this time.
+                                        </div>
+                                      </td>
+                                    </tr> 
+                                @endforelse
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-lg-6">
+                  <div class="dashboard__order-history">
+                    <div class="dashboard__order-history-title">
+                      <h2 class="font-body--xl-500">Recent Order</h2>
+                      <a href="{{route('admin.orders')}}" class="font-body--lg-500">
+                        View All</a>
+                    </div>
+                    <div class="dashboard__order-history-table">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                             
+                              <th scope="col" class="dashboard__order-history-table-title"> Date</th>
+                              <th scope="col" class="dashboard__order-history-table-title"> Total</th>
+                              <th scope="col" class="dashboard__order-history-table-title"> Status</th>
+                              <th scope="col" class="dashboard__order-history-table-title"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @forelse($orders->whereIn('status',['processing','delivered']) as $order)
+                                  
+                                  <tr>
+                                      
+                                      <!-- Date  -->
+                                      <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
+                                      <!-- Total  -->
+                                      <td class="   dashboard__order-history-table-item   order-total "> 
+                                          <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
+                                      </td>
+                                      <!-- Status -->
+                                      <td class="dashboard__order-history-table-item   order-status "> {{$order->status}}</td>
+                                      <!-- Details page  -->
+                                      <td class="dashboard__order-history-table-item   order-details ">
+                                          @if($order->status =='Incomplete')
+                                              <a href="{{route('cart')}}"> Complete Order</a>
+                                          @else
+                                          <a href="invoice.php?ref=$order->orderid">
+                                              <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24"></span>
+                                          </a>
+                                          @endif
+                                      </td>
+                                  </tr>
+                                  
+                              @empty
+                              <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
+                                  <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                                  <br />You have no orders at this time.
+                              </div>
+                            @endforelse
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

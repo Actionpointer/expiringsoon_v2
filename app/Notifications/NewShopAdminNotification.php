@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
-class ShopOrderNotification extends Notification
+class NewShopAdminNotification extends Notification
 {
     use Queueable;
 
@@ -17,7 +16,7 @@ class ShopOrderNotification extends Notification
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct()
     {
         //
     }
@@ -41,7 +40,6 @@ class ShopOrderNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        //new order, late order
         return (new MailMessage)
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))

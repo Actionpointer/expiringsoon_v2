@@ -106,8 +106,6 @@ class ShopController extends Controller
         }
         $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
         'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id,'published'=> $request->published]);
-        $user->role = 'vendor';
-        $user->save();
         
         return redirect()->route('shop.settings',$shop);
     }

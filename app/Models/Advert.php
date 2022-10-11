@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Models\Shop;
-use App\Models\Product;
 use App\Models\Feature;
+use App\Models\Product;
+use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Advert extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory,SoftDeletes,GeoLocationTrait;
 
     protected $fillable = [
         'advertable_id','advertable_type','feature_id','status','state_id','position','approved'
@@ -40,10 +41,10 @@ class Advert extends Model
         return $this->belongsTo(Feature::class);
     }
 
-    public function scopeState($query,$state_id){
+    public function scopeState($query,$state_id=null){
         if(!$state_id){
-            $state = auth()->check() && auth()->user()->state_id ? auth()->user()->state->name : session('geo_locale')['state'];
-            $state_id = State::where('name',$state)->first()->id;
+            $state = $this->currentState();
+            $state_id = $state->id;
         }
         return $query->where('state_id',$state_id);
     }

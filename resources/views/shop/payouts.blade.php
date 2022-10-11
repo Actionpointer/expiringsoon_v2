@@ -68,23 +68,18 @@
                                         <a href="#" class="font-body--lg-500 text-dark">{!!cache('settings')['currency_symbol']!!}{{ number_format($shop->wallet, 2)}}<span class="text-success"> Balance</span> </a>
                                     </div>
                                     <div class="dashboard__content-card-body">
-                                        <form method="post">
+                                        <form method="post" action="{{route('shop.payout',$shop)}}">@csrf
 
                                           <div class="contact-form__content">
                                             <div class="contact-form__content-group">
                                               <div class="contact-form-input"> 
                                                 <label for="address">Enter Amount *</label>
-                                                <input type="number" name="amount" max="{{$shop->wallet}}" id="amount" placeholder="0.00" autocomplete="off" required="">
+                                                <input type="number" name="amount" min="{{$shop->owner()->minimum_payout()}}" max="{{$shop->owner()->maximum_payout() > $shop->wallet ? $shop->wallet : $shop->owner()->maximum_payout()}}" id="amount" placeholder="Minimum ({{$shop->owner()->minimum_payout()}}) and Maximum ({{$shop->owner()->maximum_payout() > $shop->wallet ? $shop->wallet : $shop->owner()->maximum_payout()}})" autocomplete="off" required="">
                                               </div>
                                               <div class="contact-form-input">
-                                                <label for="phone">Account</label>
-                                                @if($shop->bankaccounts->isNotEmpty())
-                                                <select id="states" name="account_id" required="">
-                                                    @foreach ($shop->bankaccounts as $account)
-                                                        <option value="{{$account->id}}">{{$account->acctname}} Bank 00429892323</option>
-                                                    @endforeach  
-                                                  
-                                                </select>
+                                                @if($shop->bankaccount)
+                                                <label for="phone">Pay To: </label>
+                                                <p>{{$shop->bankaccount->bank->name}} ,{{$shop->bankaccount->account_number}}, {{$shop->bankaccount->account_name}}</p>
                                                 @else 
                                                 <button type="button" class="button button--md bg-dark" id="addbankaccount">Add Bank Account</button>
                                                 @endif
@@ -93,7 +88,7 @@
                                             
                                         </div>
                                         <div class="contact-form-btn">
-                                            <button class="button button--md @if($shop->bankaccounts->isEmpty()) button--disable @endif" type="submit" id="btn-payout1">Submit Request</button>
+                                            <button class="button button--md @if(!$shop->bankaccount) button--disable @endif" type="submit" id="btn-payout1">Submit Request</button>
                                         </div>
                                         </form>
                                     </div>
@@ -110,7 +105,7 @@
                                                   <th scope="col" class="cart-table-title">Amount</th>
                                                   <th scope="col" class="cart-table-title">To</th>
                                                   <th scope="col" class="cart-table-title">Status</th>
-                                                  <th scope="col" class="cart-table-title">Transaction ID</th>
+                                                  <th scope="col" class="cart-table-title">Reference</th>
                             
                                                 </tr>
                                             </thead>
@@ -126,19 +121,30 @@
                                                             <p class="font-body--lg-500" style="color:#00b207">{!!cache('settings')['currency_symbol']!!}{{ number_format($payout->amount, 2)}}</p>
                                                         </td>
                                                         <td class="cart-table-item order-date align-middle">
-                                                          {{$payout->account->bank->name.''.$payout->account->acctno}}
+                                                          {{$payout->account->bank->name.''.$payout->account->account_number}}
                                                       </td>
                                                         <!-- Stock Status  -->
                                                         <td class="cart-table-item order-date align-middle">
-                                                            @if($payout->status == 'pending')
-                                                                <p style="color:#cc7817;font-size:14px"><span id="status">Pending</span></p>
-                                                            @elseif($payout->status == 'rejected')
-                                                            <p style="color:#d92e2e;font-size:14px"><span id="status">Cancelled</span></p>
-                                                            @elseif($payout->status == 'processing')
-                                                            <p style="color:#d92e2e;font-size:14px;font-weight:500">Processing</p>
-                                                            @else 
-                                                              <p style="color:#00b207;font-size:14px;font-weight:500">Paid</p>
-                                                            @endif
+                                                          @switch($payout->status)
+                                                              @case('pending')
+                                                                    <p style="color:#cc7817;font-size:14px"><span id="status">Pending</span></p>
+                                                                  @break
+                                                              @case('rejected')
+                                                                    <p style="color:#d92e2e;font-size:14px"><span id="status">Cancelled</span></p>
+                                                                  @break
+                                                              @case('processing')
+                                                                    <p style="color:#5e2ed9;font-size:14px;font-weight:500">Processing</p>
+                                                              @break
+                                                              @case('failed')
+                                                                <p style="color:#d92e2e;font-size:14px"><span id="status">Failed</span></p>
+                                                              @break
+                                                              @case('paid')
+                                                                <p style="color:#00b207;font-size:14px;font-weight:500">Paid</p>
+                                                              @break
+                                                              @default
+                                                                  
+                                                          @endswitch
+                                                            
                                                         </td>
                                                         <td class="cart-table-item order-date align-middle">{{$payout->reference}}</td>
                                                         
@@ -165,76 +171,99 @@
                                   <h5 class="font-body--xl-500">Bank Account</h5>
                               </div>
                               <div class="dashboard__content-card-body">
-                                @if($shop->bankaccounts->isNotEmpty())
-                                    @foreach ($shop->bankaccounts as $account)
-                                        <div class="border-bottom pb-3">
-                                          <div  style="font-size:15px;margin-bottom:20px">                       
-                                              <div style="padding-bottom:10px;margin-top:10px">
-                                                  {{$account->bank->name}} <br /> {{$account->acctname}} <br />
-                                                  <span style="color:#000;font-weight:500">{{$account->acctno}}</span>
-                                                  </br />
-                                                  <a href="#" onclick="event.preventDefault();document.getElementById('bankedit'+{{$account->id}}).style.display='block'">Edit</a>
-                                              </div>
+                                @if($shop->bankaccount)
+                                    <div class="pb-3">
+                                      <div  style="font-size:15px;margin-bottom:20px">                       
+                                          <div style="padding-bottom:10px;margin-top:10px">
+                                              {{$shop->bankaccount->bank->name}} <br /> 
+                                              {{$shop->bankaccount->account_name}} <br />
+                                              <span style="color:#000;font-weight:500">{{$shop->bankaccount->account_number}}</span> <br />
+                                              @if($shop->branch_id)
+                                              <span style="color:#000;font-weight:500">{{$shop->bankaccount->branch->name}}</span> <br />
+                                              @endif
+                                              <a href="#" onclick="event.preventDefault();document.getElementById('bankedit'+{{$shop->bankaccount->id}}).style.display='block'">Edit</a>
                                           </div>
-                                          <form method="post" id="bankedit{{$account->id}}" action="{{route('shop.bank-info',$shop)}}" style="display: none">@csrf
-                                              <div class="contact-form__content-group">
-                                                  <div class="contact-form-input">
-                                                      <label for="bank">Your Bank</label>
-                                                      <select id="bank" name="bank" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
-                                                              @foreach($banks as $bank)
-                                                              <option value="{{$bank->name}}" @if($shop->bank_id == $bank->id) selected @endif >{{$bank->name}}</option>
-                                                              @endforeach
-                                                      </select>
-                                                  </div>
-                      
-                                                  <div class="contact-form-input">
-                                                      <label for="acctname">Account Name *</label>
-                                                      <input type="text" id="acctname" name="acctname" value="{{$shop->acctname}}" placeholder="Account Name" required />
-                                                  </div>
-                      
-                                                  <div class="contact-form-input">
-                                                      <label for="address">Account No. *</label>
-                                                      <input type="text" name="acctno" id="acctno" value="{{$shop->acctno}}" onkeypress="validate(event)"   autocomplete="off"   maxlength="10"   required />
-                                                  </div>
+                                      </div>
+                                      <form method="post" id="bankedit{{$shop->bankaccount->id}}" action="{{route('shop.bank-info',$shop)}}" style="display: none">@csrf
+                                          <input type="hidden" name="account_id" value="{{$shop->bankaccount->id}}">
+                                          <div class="contact-form__content-group">
+                                              <div class="contact-form-input">
+                                                  <label for="bank">Your Bank</label>
+                                                  <select id="bank" name="bank_id" class="select2">
+                                                          @foreach($banks as $bank)
+                                                          <option value="{{$bank->id}}" @if($shop->bank_id == $bank->id) selected @endif >{{$bank->name}}</option>
+                                                          @endforeach
+                                                  </select>
                                               </div>
-                                              <div class="contact-form-btn">
-                                                  <button class="button button--md" type="submit"> Update Details</button>
-                                                  <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('bankedit'+{{$account->id}}).style.display='none'"> Cancel</button>
+                                              @if(session('location')['country']->iso == 'GH' && $branches->isNotEmpty())
+                                                <div class="contact-form-input">
+                                                    <label for="branch">Branch *</label>
+                                                    <select id="branch" name="branch_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
+                                                      @foreach($branches as $branch)
+                                                        <option value="{{$branch->id}}" @if($shop->branch_id == $branch->id) selected @endif >{{$branch->name}}</option>
+                                                      @endforeach
+                                                    </select>
+                                                </div>
+                                              @endif
+                  
+                                              <div class="contact-form-input">
+                                                  <label for="address">Account No. *</label>
+                                                  <input type="text" name="account_number" id="account_number" value="{{$shop->bankaccount->account_number}}"   autocomplete="off"   maxlength="10"   required />
                                               </div>
-                                          </form>
-                                        </div>
-                                    @endforeach
-                                @endif
-                                    <form class="my-3" method="post" id="bankinfo" action="#">@csrf
+
+                                              @if(session('location')['country']->iso == 'NG')
+                                              <div class="contact-form-input">
+                                                  <label for="address">BVN. *</label>
+                                                  <input   type="text"   name="bvn"   id="bvn" autocomplete="off"  maxlength="11"   required />
+                                              </div>
+                                              @endif
+                                          </div>
+                                          <div class="contact-form-btn">
+                                              <button class="button button--md" type="submit"> Update Details</button>
+                                              <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('bankedit'+{{$shop->bankaccount->id}}).style.display='none'"> Cancel</button>
+                                          </div>
+                                      </form>
+                                    </div>
+                                @else
+                                    <form class="my-3" method="post" id="bankinfo" action="{{route('shop.bank-info',$shop)}}">@csrf
                                         <h4>Add New Bank Account</h4>
                                         <div class="contact-form__content-group mt-3">  
                                             <div class="contact-form-input">
                                                 <label for="bank">Your Bank</label>
-                                                <select id="country" name="bank" class="form-control-lg w-100 contact-form-input__dropdown border">
+                                                <select id="banks" name="bank_id" class="select2">
                                                     <option selected>- Select -</option>
                                                         @foreach($banks as $bank)
-                                                        <option value="{{$bank->name}}">{{$bank->name}}</option>
+                                                        <option value="{{$bank->id}}">{{$bank->name}}</option>
                                                         @endforeach
                                                 </select>
                                             </div>
-                        
+                                            @if(session('location')['country']->iso == 'GH' && $branches->isNotEmpty())
+                                              <div class="contact-form-input">
+                                                  <label for="branch">Branch *</label>
+                                                  <select id="branch" name="branch_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
+                                                    @foreach($branches as $branch)
+                                                      <option value="{{$branch->id}}">{{$branch->name}}</option>
+                                                    @endforeach
+                                                  </select>
+                                              </div>
+                                            @endif
                                             <div class="contact-form-input">
-                                                <label for="acctname">Account No *</label>
-                                                <input   type="text"  id="acctnumber"  name="acctno"   placeholder="Account Name"   required />
+                                                <label for="account_number">Account No *</label>
+                                                <input   type="text"  id="acctnumber"  name="account_number"   placeholder="Account Number"   required />
                                             </div>
-                        
-                                            <div class="contact-form-input">
-                                                <label for="address">BVN. *</label>
-                                                <input   type="text"   name="bvn"   id="bvn" autocomplete="off"   maxlength="10"   required />
-                                            </div>
+                                            @if(session('location')['country']->iso == 'NG')
+                                              <div class="contact-form-input">
+                                                  <label for="address">BVN. *</label>
+                                                  <input   type="text"  name="bvn" id="bvn" autocomplete="off"  maxlength="11"   required />
+                                              </div>
+                                            @endif
                                         </div>
-                                        <h6 class="text-muted">Account Name: <span id="account_name">Asuquo Bathelomew</span></h6>
-                                        <input type="hidden" name="acctname" required>
+
                                         <div class="contact-form-btn">
                                             <button class="button button--md" type="submit"> Save Details</button>
                                         </div>
                                     </form>
-                                
+                                @endif
                               </div>
                           </div>
                           

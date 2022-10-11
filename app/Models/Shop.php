@@ -16,6 +16,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Settlement;
 use App\Models\ShippingRate;
+use App\Observers\ShopObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -31,7 +32,7 @@ class Shop extends Model
     public static function boot()
     {
         parent::boot();
-        parent::observe(new \App\Observers\ShopObserver);
+        parent::observe(new ShopObserver);
     }
 
     public function sluggable():array
@@ -98,8 +99,8 @@ class Shop extends Model
     public function city(){
         return $this->belongsTo(City::class);
     }
-    public function bankaccounts(){
-        return $this->hasMany(Account::class);
+    public function bankaccount(){
+        return $this->hasOne(Account::class);
     }
     public function shippingRates(){
         return $this->hasMany(ShippingRate::class);

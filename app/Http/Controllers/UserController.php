@@ -22,7 +22,8 @@ class UserController extends Controller
     public function profile(){
         $user = auth()->user();
         $banks = Bank::all();
-        $states = State::all();
+        $states = State::withinCountry()->get();
+        dd($states);
         $countries = Country::all();
         return view('profile',compact('user','banks','states','countries'));
     }

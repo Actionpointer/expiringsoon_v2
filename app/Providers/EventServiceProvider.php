@@ -2,24 +2,33 @@
 
 namespace App\Providers;
 
+use App\Events\DeleteShop;
+use App\Events\RetryPayout;
 use App\Events\RenewFeature;
 use App\Events\UserFeatured;
 use App\Events\FeatureExpired;
+use App\Events\OrderCompleted;
 use App\Events\OrderPurchased;
 use App\Events\UserSubscribed;
+use App\Listeners\SettleVendor;
 use App\Listeners\ActivateShops;
+use App\Events\CheckPayoutStatus;
 use App\Events\RenewSubscription;
+use App\Listeners\RetryingPayout;
 use App\Listeners\ActivateAdverts;
 use App\Listeners\DeactivateShops;
 use App\Listeners\DecreaseProduct;
 use App\Events\SubscriptionExpired;
-use App\Listeners\ActivateProducts;
+use App\Events\DisbursePayout;
+use App\Listeners\DisbursingPayout;
 use App\Listeners\AutoRenewFeature;
 use App\Listeners\DeactivateAdverts;
 use App\Listeners\DeactivateProducts;
 use App\Listeners\RemoveFromWishList;
 use Illuminate\Support\Facades\Event;
+use App\Listeners\ShopDeleteProcesses;
 use Illuminate\Auth\Events\Registered;
+use App\Listeners\CheckingPayoutStatus;
 use App\Listeners\AutoRenewSubscription;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -71,7 +80,19 @@ class EventServiceProvider extends ServiceProvider
         ],
         RenewFeature::class => [
             AutoRenewFeature::class
-        ]
+        ],
+        DeleteShop::class => [
+            ShopDeleteProcesses::class
+        ],
+        DisbursePayout::class => [
+            DisbursingPayout::class
+        ],
+        RetryPayout::class => [
+            RetryingPayout::class
+        ],
+        CheckPayoutStatus::class => [
+            CheckingPayoutStatus::class
+        ],
         
     ];
 

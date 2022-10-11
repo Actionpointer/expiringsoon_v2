@@ -28,9 +28,9 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::post('orders',[App\Http\Controllers\OrderController::class, 'admin_manage'])->name('order.manage');
     
     Route::get('payouts',[App\Http\Controllers\PayoutController::class, 'admin_index'])->name('payouts');
-    Route::post('payouts',[App\Http\Controllers\PayoutController::class, 'admin_manage'])->name('payouts.manage');
+    Route::post('payouts/manage',[App\Http\Controllers\PayoutController::class, 'admin_manage'])->name('payouts.manage');
     Route::get('adverts',[App\Http\Controllers\AdvertController::class, 'admin_index'])->name('adverts');
-    Route::post('adverts',[App\Http\Controllers\AdvertController::class, 'admin_manage'])->name('adverts.manage');
+    Route::post('adverts/manage',[App\Http\Controllers\AdvertController::class, 'admin_manage'])->name('adverts.manage');
     Route::get('payments',[App\Http\Controllers\PaymentController::class, 'admin_index'])->name('payments');
     
     Route::get('users',[App\Http\Controllers\UserController::class, 'users'])->name('users');

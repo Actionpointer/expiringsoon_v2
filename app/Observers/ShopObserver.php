@@ -3,6 +3,9 @@
 namespace App\Observers;
 
 use App\Models\Shop;
+use App\Events\DeleteShop;
+use App\Notifications\ShopStatusNotification;
+use App\Notifications\ShopWelcomeNotification;
 
 class ShopObserver
 {
@@ -15,11 +18,14 @@ class ShopObserver
     public function created(Shop $shop)
     {
         $user = auth()->user();
+        $user->role = 'vendor';
+        $user->save();
         $shop->users()->attach($user->id,['role' =>'owner']);
         if(cache('settings')['auto_approve_shop'])
         $shop->approved = true;
         $shop->status = $shop->owner()->allowedShops() < $user->shops->count() ? true:false;
         $shop->save();
+        $shop->notify(new ShopWelcomeNotification);
     }
 
     /**
@@ -33,20 +39,22 @@ class ShopObserver
         if($shop->isDirty('state_id') || $shop->isDirty('address') || $shop->isDirty('city_id')){
             if($shop->addressproof){
                 $shop->addressproof->status = false;
-                $shop->addressproof->reason = 'Shop new address does not match document';
+                $shop->addressproof->reason = 'Shop new address does not match address proof document';
                 $shop->addressproof->save();
                 $shop->approved = false;
                 $shop->save();
+                $shop->owner()->notify(new ShopStatusNotification('disapproved','Shop new address does not match address proof document'));
             }
             
         }
         if($shop->isDirty('name')){
             if($shop->companydoc){
                 $shop->companydoc->status = false;
-                $shop->companydoc->reason = 'Shop new name does not match document';
+                $shop->companydoc->reason = 'Shop new name does not match kyc document';
                 $shop->companydoc->save();
                 $shop->approved = false;
                 $shop->save();
+                $shop->owner()->notify(new ShopStatusNotification('disapproved','Shop new name does not match kyc document'));
             }
             
         }
@@ -54,15 +62,11 @@ class ShopObserver
 
     public function deleting(Shop $shop)
     {
-        $shop->adverts->delete();
-        $shop->orders->delete();
-        $shop->carts->delete();
-        $shop->products->delete();
+        $shop->owner()->notify(new ShopStatusNotification('deleted'));
+        event(new DeleteShop($shop));
     }
 
-    public function deleted(Shop $shop)
-    {
-        //send an email to the owner
+    public function deleted(Shop $shop){
     }
 
     /**

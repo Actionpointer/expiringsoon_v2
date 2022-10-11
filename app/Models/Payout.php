@@ -12,7 +12,7 @@ class Payout extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status'];
+    protected $fillable = ['user_id','shop_id','account_id','reference','amount','transfer_id','status'];
     
     public function user(){
         return $this->belongsTo(User::class);

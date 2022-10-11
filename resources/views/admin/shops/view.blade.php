@@ -94,8 +94,8 @@
                                       </g>
                                       
                                     </svg>
-                                  </span>
-                                  {{$shop->email}}
+                                </span>
+                                {{$shop->email}}
                             </p>
                             <p class="font-body--md-400">
                                 <span>
@@ -112,32 +112,32 @@
                         </div>
                         
                         <div class="card">
-                            <div class="card-body">
-                                <table class="table small">
-                                    <tr><td>No of Products</td><td align="right">{{$shop->products->count()}}</td></tr>
-                                    <tr><td>No of Staff</td><td align="right">{{$shop->staff()->count()}}</td></tr>
-                                    <tr><td>Orders</td><td align="right">{{$shop->orders->count()}}</td></tr>
-                                    <tr><td>Wallet</td><td align="right">{!! cache('settings')['currency_symbol'] !!} {{number_format($shop->wallet,2)}}</td></tr>
-                                    <tr>
-                                      <td>Subscription </td>
-                                      <td align="right">
-                                          @if($shop->owner()->activeSubscription)
-                                          {{$shop->owner()->activeSubscription->plan->name}} Subscription
-                                          @else Free Subscription
-                                          @endif
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>Status </td>
-                                      <td align="right">
-                                          @if($shop->status)
-                                            Active
-                                          @else Inactive
-                                          @endif
-                                      </td>
-                                    </tr>
-                                </table>
-                            </div>
+                          <div class="card-body">
+                              <table class="table small">
+                                  <tr><td>No of Products</td><td align="right">{{$shop->products->count()}}</td></tr>
+                                  <tr><td>No of Staff</td><td align="right">{{$shop->staff()->count()}}</td></tr>
+                                  <tr><td>Orders</td><td align="right">{{$shop->orders->count()}}</td></tr>
+                                  <tr><td>Wallet</td><td align="right">{!! cache('settings')['currency_symbol'] !!} {{number_format($shop->wallet,2)}}</td></tr>
+                                  <tr>
+                                    <td>Subscription </td>
+                                    <td align="right">
+                                        @if($shop->owner()->activeSubscription)
+                                        {{$shop->owner()->activeSubscription->plan->name}} Subscription
+                                        @else Free Subscription
+                                        @endif
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Status </td>
+                                    <td align="right">
+                                        @if($shop->status)
+                                          Active
+                                        @else Inactive
+                                        @endif
+                                    </td>
+                                  </tr>
+                              </table>
+                          </div>
                         </div>
                     </div>
                   </div>
@@ -299,21 +299,19 @@
                             <th>Account Name</th>
                             <th>Status</th>
                         </tr>
-                        @forelse($shop->bankaccounts as $account)
+                        @if($shop->bankaccount)
                             <tr>
-                                <td>{{$account->bank->name}}</td>
-                                <td>{{$account->acctno}}</th>
-                                <td>{{$account->acctname}}e</td>
-                                <td>Active</td>
+                                <td>{{$shop->bankaccount->bank->name}}</td>
+                                <td>{{$shop->bankaccount->account_number}}</th>
+                                <td>{{$shop->bankaccount->account_name}}e</td>
+                                <td>@if($shop->bankaccount->status) Active @else Inactive @endif</td>
                             </tr>
-                        @empty  
+                        @else 
                             <tr><td>No Bank account</td></tr>
-                        @endforelse
-                        
-                    </table>
-                     
+                        @endif
+                    </table> 
                 </div>
-            </div>
+              </div>
             </div>
           </div>
       </div>

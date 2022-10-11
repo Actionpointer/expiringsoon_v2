@@ -19,7 +19,7 @@ class PaymentController extends Controller
     public function __construct(){
         $this->middleware('auth');
     }
-    public function callback(){
+    public function paymentcallback(){
         // dd(request()->query);
         // ["trxref" => "632889cbaa15f","reference" => "632889cbaa15f"]
         //check status of transaction ..if failed, 
@@ -85,6 +85,7 @@ class PaymentController extends Controller
         $payment->save();
         return redirect()->route('home')->with(['result'=> 1,'message'=> 'Payment Successful']);
     }
+    
     
     public function index(){
         $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();

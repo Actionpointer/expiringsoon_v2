@@ -82,8 +82,8 @@
                                         </span>
                                         <br />
                                         <span style="font-size:12px;color:#888">
-                                            {{$payout->account->bank->name}}<br />{{$payout->account->acctname}} > 
-                                            <span style="color:#000">{{$payout->account->acctno}}</span>
+                                            {{$payout->account->bank->name}}<br />{{$payout->account->account_name}} > 
+                                            <span style="color:#000">{{$payout->account->account_number}}</span>
                                         </span>
                                     </div>
                                   </td>

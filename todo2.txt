@@ -1,18 +1,19 @@
-BVN validation
-OTP
-PIN SET
-USE PIN TO VALIDATE
+BVN validation (revisit)
+Payout approve on admin side - Payout retry with job - 
+update admin dashboard with recent payout
+
+
+notification
+pending kycns
+recent orders, 
+
+OTP ,PIN SET,USE PIN TO VALIDATE
 throttle
 REVIEW
 Coupon
 notification EMAILS
+TAGS ON PRODUCT PAGE
 
-
-
-
-
-vendor bvn verification : for every bank account added, there must be BVN validation
-Bvn validation: manual bvn validation before payouts 
 (check ID Card name against the bvn validation result name, phone, dob)
 throttle bvn validation
 login throttle, bvn validation, transaction confirmation error, id verification mismatch, 

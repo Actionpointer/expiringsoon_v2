@@ -11,9 +11,11 @@ use App\Models\Order;
 use App\Models\State;
 use App\Models\Payout;
 use App\Models\Address;
+use App\Models\Country;
 use App\Models\Payment;
 use App\Models\Settlement;
 use App\Models\Subscription;
+use App\Observers\UserObserver;
 use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -37,6 +39,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new UserObserver);
+    }
+
     public function sluggable():array
     {
         return [
@@ -56,6 +64,9 @@ class User extends Authenticatable
     public function getMobileAttribute()
     {
         return $this->phone_prefix.intval($this->phone);   
+    }
+    public function country(){
+        return $this->belongsTo(Country::class);
     }
     public function state(){
         return $this->belongsTo(State::class);
@@ -138,6 +149,20 @@ class User extends Authenticatable
     }
     public function allowedAdverts(){
 
+    }
+    public function minimum_payout(){
+        if($this->activeSubscription){
+            return $this->activeSubscription->plan->minimum_payout;
+        }else{
+            return \App\Models\Plan::where('slug','free_plan')->first()->minimum_payout;
+        }
+    }
+    public function maximum_payout(){
+        if($this->activeSubscription){
+            return $this->activeSubscription->plan->maximum_payout;
+        }else{
+            return \App\Models\Plan::where('slug','free_plan')->first()->maximum_payout;
+        }
     }
 
 }

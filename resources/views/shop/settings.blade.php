@@ -486,7 +486,7 @@
                                                       <div class="contact-form__content-group my-3">
                                                           <div class="contact-form-input">
                                                             <label for="address">Full Name @error('name') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                            <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" />
+                                                            <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" readonly/>
                                                           </div>
                                                           <div class="contact-form-input">
                                                             <label for="stat">Status @error('status') <span class="text-danger">{{$status}}</span> @enderror</label>
@@ -499,11 +499,11 @@
                                                       <div class="contact-form__content-group">
                                                           <div class="contact-form-input"> 
                                                           <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                          <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" />
+                                                          <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" readonly/>
                                                           </div>
                                                           <div class="contact-form-input">
                                                           <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                          <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
+                                                          <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" readonly/>
                                                           </div>
                                                       </div>
                                                       
