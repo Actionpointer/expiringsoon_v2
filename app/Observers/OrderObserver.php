@@ -33,20 +33,20 @@ class OrderObserver
             $delivery = $order->deliveryByVendor() ? $order->deliveryfee : 0;
             $settlement = Settlement::create(['receiver_id'=> $order->shop_id,'receiver_type'=> 'App\Models\Shop','order_id'=> $order->id,'amount'=> $order->earning() + $delivery,'reference'=> uniqid()]);
             event(new OrderPurchased($order));
-            $order->shop->notify(new ShopOrderNotification($order,'processing'));
+            $order->shop->notify(new ShopOrderNotification($order));
         }
         if($order->isDirty('status') && $order->status == 'shipped'){
-            $order->user->notify(new OrderStatusNotification($order,'shipped'));
+            $order->user->notify(new OrderStatusNotification($order));
         }
         if($order->isDirty('status') && $order->status == 'delivered'){
-            $order->user->notify(new OrderStatusNotification($order,'delivered'));
+            $order->user->notify(new OrderStatusNotification($order));
         }
         if($order->isDirty('status') && $order->status == 'completed'){
             $order->shop->wallet += $order->settlement->amount;
             $order->shop->save();
             $order->settlement->status = true;
             $order->settlement->save();
-            $order->user->notify(new OrderStatusNotification($order,'completed'));
+            $order->user->notify(new OrderStatusNotification($order));
         }
         
     }

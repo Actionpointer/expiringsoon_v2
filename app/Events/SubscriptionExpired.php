@@ -28,7 +28,9 @@ class SubscriptionExpired
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *DeactivateProducts::class,
+     *DeactivateShops::class,
+     *DeactivateAdverts::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

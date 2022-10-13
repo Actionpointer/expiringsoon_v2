@@ -23,6 +23,19 @@ trait PayoutTrait
         dd($link);
         return $link;
     }
+
+    public function verifybankaccount($account_number,$bank_code,$bvn=null,$branch=null){
+        // $gateway = Setting::firstWhere('name','active_payment_gateway')->value;
+        // switch($gateway){
+        //     case 'paystack':  $result = $this->resolveBankAccountByPaystack($account_number,$bank_code,$bvn);
+        //     break;
+        //     case 'flutter': $result = $this->resolveBankAccountByFlutter($account_number,$bank_code,$bvn);
+        //     break;
+        // }
+        // abandoning paystack bvn verification cos it doesn't return useful data
+        $result = $this->resolveBankAccountByFlutter($account_number,$bank_code,$bvn);
+        return $result;
+    }
     
     protected function initiateFlutterWave(Payout $payout){
         $currency = cache('settings')['currency_iso'];
@@ -55,6 +68,24 @@ trait PayoutTrait
         }
         
     }
+
+    public function initiatePaystack(Payout $payout){
+        $user = auth()->user();
+        $currency = cache('settings')['currency_iso'];
+        $response = Curl::to('https://api.paystack.co/transaction/initialize')
+        ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+        ->withHeader('Content-Type: application/json')
+        ->withData( array('email'=> $user->email,'amount'=> $payout->amount,'currency'=> $currency,
+                        'reference'=> $payout->reference,"callback_url"=> route('payment.callback'),
+                        'metadata' => json_encode(['user_id'=> $user->id,'phonenumber'=> $user->phone])
+                        ) )
+        
+        ->asJson()                
+        ->post();
+        if($response->status)
+          return $response->data->authorization_url;
+        else return false;
+    }
     
     protected function retryFlutterWave(Payout $payout){
         $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id/retries")
@@ -64,35 +95,19 @@ trait PayoutTrait
         //check the status and update
     }
 
-    public function initiatePaystack(Payout $payout){
-      $user = auth()->user();
-      $currency = session('location')['country']->currency_iso;
-      $response = Curl::to('https://api.paystack.co/transaction/initialize')
-      ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-      ->withHeader('Content-Type: application/json')
-      ->withData( array('email'=> $user->email,'amount'=> $payout->amount,'currency'=> $currency,
-                      'reference'=> $payout->reference,"callback_url"=> route('payment.callback'),
-                      'metadata' => json_encode(['user_id'=> $user->id,'phonenumber'=> $user->phone])
-                      ) )
-      
-      ->asJson()                
-      ->post();
-      if($response->status)
-        return $response->data->authorization_url;
-      else return false;
+    protected function retryPaystack(Payout $payout){
+        $response = Curl::to("https://api.paystack.com/v3/transfers/$payout->transfer_id/retries")
+            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+            ->asJson()
+            ->get();
+        //check the status and update
     }
 
-    public function verifybankaccount($account_number,$bank_code,$bvn=null,$branch=null){
-        // $gateway = Setting::firstWhere('name','active_payment_gateway')->value;
-        // switch($gateway){
-        //     case 'paystack':  $result = $this->resolveBankAccountByPaystack($account_number,$bank_code,$bvn);
-        //     break;
-        //     case 'flutter': $result = $this->resolveBankAccountByFlutter($account_number,$bank_code,$bvn);
-        //     break;
-        // }
-        // abandoning paystack bvn verification cos it doesn't return useful data
-        $result = $this->resolveBankAccountByFlutter($account_number,$bank_code,$bvn);
-        return $result;
+    protected function fetchFlutterWave(Payout $payout){
+        $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id")
+            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+            ->asJson()
+            ->get(); 
     }
     
     protected function resolveBankAccountByFlutter($account_number,$bank,$bvn){

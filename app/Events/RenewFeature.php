@@ -28,7 +28,7 @@ class RenewFeature
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *AutoRenewFeature::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

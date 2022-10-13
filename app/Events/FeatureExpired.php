@@ -26,7 +26,7 @@ class FeatureExpired
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *DeactivateAdverts::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

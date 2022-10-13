@@ -28,12 +28,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-        View::composer('layouts.categoriesmenu', function ($view) {
-            $view->with(['categories'=> \App\Models\Category::all(),'carts'=> \App\Models\Cart::all()]);
-        });
-        View::composer('layouts.app', function ($view) {
-            $view->with(['states'=> \App\Models\State::has('products')->get()]);
-        });
+        
+        
         $settings = Cache::rememberForever('settings', function () {
             return \App\Models\Setting::select(['name','value'])->get()->pluck('value','name')->toArray();
         });

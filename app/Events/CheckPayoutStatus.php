@@ -26,7 +26,7 @@ class CheckPayoutStatus
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *CheckingPayoutStatus::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

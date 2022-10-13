@@ -28,7 +28,7 @@ class RenewSubscription
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *AutoRenewSubscription::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

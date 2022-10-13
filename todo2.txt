@@ -1,16 +1,14 @@
 BVN validation (revisit)
-Payout approve on admin side - Payout retry with job - 
-update admin dashboard with recent payout
-
+fetch payout
+retry payout with job - 
+what happens when admin approves kyc? 
 
 notification
-pending kycns
-recent orders, 
-
 OTP ,PIN SET,USE PIN TO VALIDATE
 throttle
 REVIEW
-Coupon
+
+
 notification EMAILS
 TAGS ON PRODUCT PAGE
 
@@ -19,17 +17,17 @@ throttle bvn validation
 login throttle, bvn validation, transaction confirmation error, id verification mismatch, 
 revisit security alert - once someone is throttled 
 add password strength meter
-security with pin
 
 
 8.REVIEW
 customer rate product, rate shop..after order is completed, refund
 
+if customer does not raise query xdays after delivery, change order to completed
+
 REPORT SHOPS/PRODUCT
 reviews : product rating.. show in index, product, hotdeals
 
 
-select2 on modal in categories edit not working
 categories homepage
 
 notifications - email and inapp
@@ -54,13 +52,8 @@ if user does not have subscription[
     5. when user subscribes, activate only the number of shops & products that the subscription can buy
     6. add coupon for buying subscriptions ? Coupon value + percentage
   
-if customer does not raise query xdays after delivery, change order to completed
-
-add PUBLISH & DRAFT button to product list
 
 revisit advert page to edit advert status
 
-automatic payouts using flutter/paystack
-cart page- on removal, if there is no more products, remove that shop section completely
-product page .. redo wishlist, similar products, 
+on product page .. redo wishlist, similar products, 
 clean all orders with status new

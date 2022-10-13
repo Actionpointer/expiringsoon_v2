@@ -52,6 +52,8 @@
                   @if(auth()->id() == $shop->owner()->id)
                   <button type="button" class="btn btn-primary" onclick="featureform();">Feature</button>
                   @endif
+                  <button type="button" class="btn btn-success" onclick="if(confirm('Are you sure you want to publish?')) publishform();">Publish</button>
+                  <button type="button" class="btn btn-secondary" onclick="if(confirm('Are you sure you want to draft?')) draftform();">Draft </button>
                   <button type="button" class="btn btn-danger" onclick="if(confirm('Are you sure you want to delete?')) deleteform();">Delete</button>
                 </div>
                 <a href="{{route('shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
@@ -60,8 +62,14 @@
                 <form id="featureform" action="{{route('vendor.feature.products')}}" method="POST">@csrf
                   <input type="hidden" name="shop_id" value="{{$shop->id}}" >
                 </form>
-                <form id="deleteform" action="{{route('shop.products.delete',$shop)}}" method="POST">@csrf
-                  <input type="hidden" name="action" value="delete" >
+                <form id="deleteform" action="{{route('shop.products.manage',$shop)}}" method="POST">@csrf
+                  <input type="hidden" name="delete" value="1" >
+                </form>
+                <form id="publishform" action="{{route('shop.products.manage',$shop)}}" method="POST">@csrf
+                  <input type="hidden" name="published" value="1" >
+                </form>
+                <form id="draftform" action="{{route('shop.products.manage',$shop)}}" method="POST">@csrf
+                  <input type="hidden" name="draft" value="1" >
                 </form>
               </div>
               <div class="dashboard__order-history-table">
@@ -74,7 +82,7 @@
                             <div class="d-flex align-items-center">
                               <div class="form-check d-inline">
                                 <label class="form-check-label font-body--400" for="existing"> </label>
-                                <input class="form-check-input checkboxes" type="checkbox" name="products[]">
+                                <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
                               </div>
                              <span class="align-bottom">Product</span> 
                             </div>
@@ -162,8 +170,9 @@
                                     <button type="submit" class="dropdown-item">Feature</button>
                                   </form>
                                   @endif
-                                  <form class="d-inline" action="{{route('shop.products.delete',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
+                                  <form class="d-inline" action="{{route('shop.products.manage',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
                                     <input type="hidden" name="products[]" value="{{$product->id}}">
+                                    <input type="hidden" name="delete" value="1">
                                     <button type="submit" class="dropdown-item">Delete</button>
                                   </form>
                                   
@@ -215,9 +224,10 @@
         });
     </script>
     <script>
+      
       function deleteform(){
         if($('.checkboxes:checked').length){
-          $('.checkboxes:checked').each(function(key,elem){
+          $('.checkboxes:checked').not('#checkbox_master').each(function(key,elem){
               var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
               $('#deleteform').append($(input));
           });
@@ -226,11 +236,29 @@
       }
       function featureform(){
         if($('.checkboxes:checked').length){
-          $('.checkboxes:checked').each(function(key,elem){
+          $('.checkboxes:checked').not('#checkbox_master').each(function(key,elem){
               var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
               $('#featureform').append($(input));
           });
           $('#featureform').submit();
+        }
+      }
+      function publishform(){
+        if($('.checkboxes:checked').length){
+          $('.checkboxes:checked').not('#checkbox_master').each(function(key,elem){
+              var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
+              $('#publishform').append($(input));
+          });
+          $('#publishform').submit();
+        }
+      }
+      function draftform(){
+        if($('.checkboxes:checked').length){
+          $('.checkboxes:checked').not('#checkbox_master').each(function(key,elem){
+              var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
+              $('#draftform').append($(input));
+          });
+          $('#draftform').submit();
         }
       }
     

@@ -326,59 +326,84 @@
             </table>
         </div>
         <!-- End Table -->
-      </div>
+    </div>
 
     <section class="members members--two section section--md" id="confirmation" style="display: none">
         <div class="container">
-            <div class="section__head section__head--one justify-content-center mb-0">
-                <div class="">
-                    <h4 class="section--title-one font-title--md mb-3">Confirm Checkout</h4>
-                    <table class="table table-borderless">
-                        <tr>
-                            <td class="border">
-                                Selected Plan:
-                            </td>
-                            <td class="border">
-                                <span id="plan_name"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="border">
-                                Duration:
-                            </td>
-                            <td class="border">
-                                <span id="plan_duration"></span> Months
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <form action="{{route('vendor.subscription.plan')}}" method="post" >@csrf
-                                    <input type="hidden" name="plan" id="plan">
-                                    <input type="hidden" name="duration" id="duration">
-                                    <div class="form-check py-2">
-                                        <label class="form-check-label" for="autorenew" > Auto-renew Subscription</label>
-                                        <input class="form-check-input checkboxes" type="checkbox" name="auto_renew" value="1" checked>
+            <div class="row justify-content-center">
+                <div class=" col-md-6  mb-0">
+                    <div class="bill-card">
+                        <div class="bill-card__content">
+                            <div class="bill-card__header">
+                                <h2 class="bill-card__header-title font-body--xxl-500">
+                                Order Summery
+                                </h2>
+                            </div>
+                            <div class="bill-card__body">
+                                <!-- memo  -->
+                                <div class="bill-card__memo">
+                                    
+                                    <div class="bill-card__memo-item total">
+                                        <p class="font-body--lg-400">Selected Plan:</p> 
+                                        <span class="font-body--xl-500">
+                                            <span id="plan_name" > </span> 
+                                        </span>
                                     </div>
-                                    <div class="d-flex ">
-                                        <button href="#" class="button button--md text-white d-flex justify-content-between w-100">
-                                            <span class="font-body--xl-400">Pay</span>
-                                            <span class="font-body--xl-400">{!!cache('settings')['currency_symbol']!!}<span id="plan_amount" class="ms-0"></span></span>
-                                            <span class="font-body--xl-400">
-                                                <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                </svg>
-                                            </span>
+                                
+                                    <!-- total  -->
+                                    <div class="bill-card__memo-item total">
+                                        <p class="font-body--lg-400">Duration:</p> 
+                                        <span class="font-body--xl-500">
+                                            <span id="plan_duration" > </span> Months
+                                        </span>
+                                    </div>
+                                    <div class="bill-card__memo-item total">
+                                        <p class="font-body--lg-400">Amount:</p>
+                                        <span class="font-body--xl-500">{!!cache('settings')['currency_symbol']!!}
+                                        <span id="plan_amount" class="ms-0"></span> 
+                                        </span>
+                                    </div>
+                                    <div class="bill-card__memo-item">
+                                        <p class="font-body--lg-400">Discount:</p>
+                                        <span class="font-body--xl-500">-{!!cache('settings')['currency_symbol']!!}
+                                        <span id="discount_text" class="ms-0">0</span> 
+                                        </span>
+                                    </div>
+                                    <div class="bill-card__memo-item mb-3">
+                                        <p class="font-body--lg-400">Total:</p>
+                                        <span class="font-body--xl-500">{!!cache('settings')['currency_symbol']!!}
+                                            <span id="total" class="ms-0">0</span> 
+                                        </span>
+                                    </div>
+                                    <form action="{{route('vendor.subscription.plan')}}" method="post" >@csrf
+                                        <input type="hidden" name="plan" id="plan">
+                                        <input type="hidden" name="duration" id="duration">
+                                        <input type="hidden" name="amount" id="amount">
+                                        <div class="">
+                                            <div class="newsletter-card__input w-100">
+                                                <input type="text" name="coupon" id="coupon_code" placeholder="Enter Code">
+                                                <button class="button button--lg" type="button" id="coupon_button"> Apply Coupon </button>
+                                            </div>
+                                            <small id="coupon_description" class="d-block text-info text-center"></small>
+                                        </div>
+                                        <input type="hidden" name="discount" id="discount" value="0">
+                                        <input type="hidden" name="coupon_used" id="coupon_used">
+                                        <div class="form-check py-2">
+                                            <label class="form-check-label" for="autorenew" > Auto-renew</label>
+                                            <input class="form-check-input checkboxes" type="checkbox" name="auto_renew" value="1" checked>
+                                        </div>
+                                        <button class="button button--lg w-100" style="margin-top: 20px" type="submit">
+                                            Place Order
                                         </button>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
+                                    
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
                 </div>
             </div>
-            
-            
         </div>
     </section>
 
@@ -386,16 +411,47 @@
 @endsection
 @push('scripts')
 <script>
-    var enterprises = @json($enterprises);
-    
+    var enterprises = @json($enterprises);  
     $('.chooseplan').change(function(){
         $('.chooseplan').not($(this)).val(0);   
         $('#plan_name').text(enterprises[$(this).attr('id')]['name'])
-        $('#plan').val($(this).attr('id'))
         $('#plan_duration').text($(this).val())
+        $('#plan_amount,#total').text(enterprises[$(this).attr('id')]['months_'+$(this).val()])
+        $('#plan').val($(this).attr('id'))
         $('#duration').val($(this).val())
-        $('#plan_amount').text(enterprises[$(this).attr('id')]['months_'+$(this).val()])
+        $('#amount').val(enterprises[$(this).attr('id')]['months_'+$(this).val()])
         $('#confirmation').show();
+    })
+
+    $('#coupon_button').on('click',function(){
+        let code = $('#coupon_code').val()
+        let amount = $('#amount').val()
+        if(code != ''){
+            $.ajax({
+                type:'POST',
+                dataType: 'json',
+                url: "{{route('vendor.applycoupon')}}",
+                data:{
+                    '_token' : $('meta[name="csrf-token"]').attr('content'),
+                    'code': code,
+                    'amount': amount,
+                },
+                success:function(data) {
+                    console.log(data)
+                    if(data.value != 0){
+                        $('#discount').val(data.value);
+                        $('#total').text(parseInt(amount) - parseInt(data.value))
+                        $('#amount').val(parseInt(amount) - parseInt(data.value))
+                        $('#discount_text').html(data.value);
+                        $('#coupon_used').val(code);
+                    }
+                    $('#coupon_description').html(data.description);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            })
+        }  
     })
 </script>
 @endpush

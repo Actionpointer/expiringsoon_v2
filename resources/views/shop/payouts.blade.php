@@ -195,7 +195,7 @@
                                                           @endforeach
                                                   </select>
                                               </div>
-                                              @if(session('location')['country']->iso == 'GH' && $branches->isNotEmpty())
+                                              @if(cache('settings')['country_iso'] == 'GH' && $branches->isNotEmpty())
                                                 <div class="contact-form-input">
                                                     <label for="branch">Branch *</label>
                                                     <select id="branch" name="branch_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
@@ -211,7 +211,7 @@
                                                   <input type="text" name="account_number" id="account_number" value="{{$shop->bankaccount->account_number}}"   autocomplete="off"   maxlength="10"   required />
                                               </div>
 
-                                              @if(session('location')['country']->iso == 'NG')
+                                              @if(cache('settings')['country_iso'] == 'NG')
                                               <div class="contact-form-input">
                                                   <label for="address">BVN. *</label>
                                                   <input   type="text"   name="bvn"   id="bvn" autocomplete="off"  maxlength="11"   required />
@@ -237,7 +237,7 @@
                                                         @endforeach
                                                 </select>
                                             </div>
-                                            @if(session('location')['country']->iso == 'GH' && $branches->isNotEmpty())
+                                            @if(cache('settings')['country_iso'] == 'GH' && $branches->isNotEmpty())
                                               <div class="contact-form-input">
                                                   <label for="branch">Branch *</label>
                                                   <select id="branch" name="branch_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
@@ -251,7 +251,7 @@
                                                 <label for="account_number">Account No *</label>
                                                 <input   type="text"  id="acctnumber"  name="account_number"   placeholder="Account Number"   required />
                                             </div>
-                                            @if(session('location')['country']->iso == 'NG')
+                                            @if(cache('settings')['country_iso'] == 'NG')
                                               <div class="contact-form-input">
                                                   <label for="address">BVN. *</label>
                                                   <input   type="text"  name="bvn" id="bvn" autocomplete="off"  maxlength="11"   required />

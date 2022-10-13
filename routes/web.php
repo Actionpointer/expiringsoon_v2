@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('about','about');
+Route::view('email','emails.completed');
 
 Auth::routes();
 Route::view('start-selling','auth.register')->name('start-selling');

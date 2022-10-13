@@ -39,8 +39,7 @@ class CartController extends Controller
             $shop_ids = array_column($items, 'shop_id');
             $shops = Shop::whereIn('id',$shop_ids)->get();
         }
-        $order = $this->getOrder();
-        return view('frontend.cart',compact('items','order','shops'));
+        return view('frontend.cart',compact('items','shops'));
     }
 
     public function addtocart(Request $request){

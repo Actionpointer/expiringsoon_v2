@@ -149,7 +149,6 @@ class SettingsController extends Controller
         }
         return redirect()->back()->with(['result'=> 1,'message'=> 'Updated advert plan successfully']);
     }
-
     
     public function categories(){
         $categories = Category::all();

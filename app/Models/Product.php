@@ -6,11 +6,12 @@ use App\Models\Cart;
 use App\Models\Like;
 use App\Models\Shop;
 use App\Models\Advert;
+use App\Models\Review;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -117,5 +118,9 @@ class Product extends Model
     }
     public function scopeAvailable($query){
         return $query->where('stock','>',0);
+    }
+    
+    public function reviews(){
+        return $this->morphMany(Review::class,'reviewable');
     }
 }

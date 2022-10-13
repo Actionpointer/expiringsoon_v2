@@ -81,8 +81,8 @@ class HomeController extends Controller
         $user = auth()->user();
         $documents = Kyc::where('status',false)->whereNull('reason')->take(5)->get(); 
         // dd($documents[0]->verifiable);
-        $orders = Order::all();   
-        $payouts = Payout::all();   
+        $orders = Order::where('status','processing')->latest()->take(5)->get();   
+        $payouts = Payout::where('status','pending')->orderBy('created_at','asc')->take(5)->get();   
         return view('admin.dashboard',compact('user','documents','orders','payouts'));
     }
 

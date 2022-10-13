@@ -118,7 +118,13 @@
                 </a>
             </div>
           @endforelse
-
+          <div id="cart-empty" style="margin:auto;padding:10%;text-align:center;display:none">
+            <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+            <br/>Your cart is empty.<br />
+            <a href="{{route('product.list')}}">
+                <span style="font-size:13px;color:#00b207">Start Shopping Now!</span>
+            </a>
+          </div>
           <div class="shoping-cart__mobile">
             @forelse(collect($items) as $key=>$cart)
               <div class="shoping-card">
@@ -183,12 +189,12 @@
                   <!-- Subtotal  -->
                   <div class="bill-card__memo-item">
                     <p class="font-body--md-400">No of Items:</p>
-                    <span class="font-body--md-500">{{collect($items)->count()}}</span>
+                    <span id="items_count" class="font-body--md-500">{{collect($items)->count()}}</span>
                   </div>
                   
                   <div class="bill-card__memo-item">
                     <p class="font-body--md-400">No of Shops :</p>
-                    <span class="font-body--md-500">{{$shops->count()}}</span>
+                    <span id="shops_count" class="font-body--md-500">{{$shops->count()}}</span>
                   </div>
                   <!-- total  -->
                   <div class="bill-card__memo-item total">
@@ -235,7 +241,7 @@
       }
       updatecart(clicked.closest(".item").attr('data-product'),newquantity);
       total(clicked,newquantity);
-      mysubtotal(clicked);
+      mysubtotal(clicked.closest('.shop-cart'));
       mygrandtotal();
   })
   function total(clicked,newquantity){
@@ -246,19 +252,20 @@
     clicked.closest('.item').attr('data-amount',amount);
     clicked.closest('.item').attr('data-qty',newquantity);
   }
-  function mysubtotal(clicked){
+  function mysubtotal(shopcart){
       let subtotal = 0;
-      // var cart_count = 0
-      clicked.closest('.shop-cart').find('.item').each(function(index){
+      shopcart.find('.item').each(function(index){
           subtotal += parseInt($(this).attr('data-amount'));
       });
-      clicked.closest('.shop-cart').find('.subtotal').text(subtotal);
+      shopcart.find('.subtotal').text(subtotal);
   }
   function mygrandtotal(){
     let grandtotal = 0;
       $('.item').each(function(index){
           grandtotal += parseInt($(this).attr('data-amount'));
       });
+      $('#items_count').text($('.item').length)
+      $('#shops_count').text($('.shop-cart').length)
       $('#grandtotal').text(grandtotal);
   }
   $(document).on('change input','.quantity',function(){
@@ -272,9 +279,20 @@
       
   })
   $(document).on('click','.remove-item',function(){
-    var product_id = parseInt($(this).attr('data-product'));
-    $(this).parents(".item,.shoping-card").animate({ backgroundColor: "#fff" }, "fast")
-            .animate({ opacity: "hide" }, "slow");
+    let product_id = parseInt($(this).attr('data-product'));
+    let shopcart = $(this).parents(".shop-cart")
+    if($(this).closest('.shop-cart').find('.item').length > 1){
+      $(this).parents(".item,.shoping-card").animate({ backgroundColor: "#fff" }, "fast").animate({ opacity: "hide" }, "slow");
+      $(this).parents(".item,.shoping-card").remove()
+    }else{
+      $(this).parents(".shop-cart").animate({ backgroundColor: "#fff" }, "fast").animate({ opacity: "hide" }, "slow");
+      $(this).parents(".shop-cart").remove()
+    }
+    if($(".shop-cart").length == 0){
+      $('#cart-empty').show()
+    }
+    mysubtotal(shopcart)
+    mygrandtotal()
     $.ajax({
         type:'POST',
         dataType: 'json',
@@ -326,5 +344,5 @@
 });
 
 </script>
-<script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script>
+{{-- <script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script> --}}
 @endpush

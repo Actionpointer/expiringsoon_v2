@@ -7,11 +7,12 @@ use App\Models\Adplan;
 use App\Models\Feature;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PaymentTrait;
 
 class SubscriptionController extends Controller
 {
-    use PaymentTrait;
+    use PaymentTrait,OrderTrait;
 
     public function __construct(){
         $this->middleware('auth')->except('plans');
@@ -32,7 +33,7 @@ class SubscriptionController extends Controller
 
     
     public function plan_subscription(Request $request){
-        
+       
         if($request->has('subscription_id')){
             $subscription = Subscription::find($request->subscription_id);
         }else{
@@ -40,7 +41,11 @@ class SubscriptionController extends Controller
             if(auth()->user()->subscriptions->where('plan_id',$plan->id)->where('status',true)->where('end_at','>',now())->isNotEmpty()){
                 return redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
             }
-            $subscription = Subscription::create(['user_id'=> auth()->id(),'plan_id'=> $plan->id,'amount'=> $plan['months_'.$request->duration],'start_at'=> now(),'end_at'=> now()->addMonths($request->duration),'auto_renew'=> $request->auto_renew ? true:false]);
+            $subscription = Subscription::create(
+                ['user_id'=> auth()->id(),'plan_id'=> $plan->id,'amount'=> $request->coupon_used ? $plan['months_'.$request->duration] - $this->getCoupon($request->coupon_used,$plan['months_'.$request->duration])['value'] : $plan['months_'.$request->duration],
+                'start_at'=> now(),'end_at'=> now()->addMonths($request->duration),
+                'coupon' => $request->coupon_used,
+                'auto_renew'=> $request->auto_renew ? true:false]);
         }
         $link = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
         if(!$link)

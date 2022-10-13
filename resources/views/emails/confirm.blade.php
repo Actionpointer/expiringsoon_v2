@@ -1,22 +1,3 @@
-<?php
-include("dbconnect.php");
-$oqq = mysqli_query($con, "SELECT * FROM orders WHERE orderid='".$_GET['ref']."'");
-$oqr = mysqli_fetch_assoc($oqq);
-
-$uqq = mysqli_query($con, "SELECT * FROM users WHERE id='".$oqr['userid']."'");
-$uqr = mysqli_fetch_assoc($uqq);
-
-$stq = mysqli_query($con, "SELECT * FROM settings");
-$stqr = mysqli_fetch_assoc($stq);
-
-$sum = "SELECT sum(total) as inv_ttl FROM cart WHERE userid='".$uqr['id']."' AND orderid='".$_GET['ref']."'";
-$res = mysqli_query($con, $sum);
-while ($row = mysqli_fetch_array($res)){
-$inv_orderttl = $row['inv_ttl'];
-}
-$inv_vat = ($stqr['vat'] / 100) * $inv_orderttl;
-$finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -40,18 +21,16 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!--<![endif]-->
-	<title>Order Receipt No. 22334455 | Expiring Soon</title>
+	<title>Welcome | Grabbr</title>
 	<!--[if gte mso 9]>
 	<style type="text/css" media="all">
 		sup { font-size: 100% !important; }
 	</style>
 	<![endif]-->
-
 	<!-- site Favicon -->
 	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
 	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
 	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
-
 
 	<style type="text/css" media="screen">
 		/* Linked Styles */
@@ -60,12 +39,6 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 		p { padding:0 !important; margin:0 !important }
 		img { -ms-interpolation-mode: bicubic; /* Allow smoother rendering of resized image in Internet Explorer */ }
 		.mcnPreviewText { display: none !important; }
-		.cart-row {display: block; height: 30px; width: 98%; padding: 5px; font-size: 12px; border-bottom: 1px solid #ddd;}
-		.cart-row-ttl {display: block; height: 90px; width: 98%; padding: 5px; font-size: 12px; border-bottom: 1px solid #ddd;}
-		.cart-item {float: left; width: 15%;}
-		.cart-item-name {float: left; width: 60%;}
-		.cart-item-qty {float: left; width: 10%;}
-		.cart-item-ttl {float: left !important; width: 30%;}
 
 
 		/* Mobile styles */
@@ -123,7 +96,11 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 												<th class="column-top" width="145" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="https://ng.expiringsoon.shop" target="_blank"><img src="https://ng.expiringsoon.shop/src/images/logo.png" width="125" border="0" alt="" /></a></td>
+															<td style="font-size:0pt; line-height:0pt; text-align:left;">
+																<a href="http://expiringsoon.shop" target="_blank">
+																	<img src="{{asset('src/images/logo.png')}}" width="125" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</th>
@@ -146,13 +123,15 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img"><img src="https://ng.expiringsoon.shop/img/img-welcome.jpg" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;">
+										<img src="{{asset('img/img-verify.jpg')}}" border="0" width="100%" alt="" />
+									</td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
 
 							<!-- Intro -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="font-size:13px">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
 								<tr>
 									<td style="padding-bottom: 10px;">
 										<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -160,90 +139,24 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">New order from <?php echo $uqr['fname']; ?>,</span><br />Order <b><?php echo $oqr['orderid']; ?></b> has been confirmed successfully.</td>
+															<td class="h1 pb25" style="color:#000000; font-family:'Playfair Display', Georgia,serif; font-size:25px; line-height:35px; text-align:center; padding-bottom:15px;"><span style="font-size:18px">Hi, Mike</span></td>
 														</tr>
 														<tr>
-															<td class="text-center pb25" style="padding-top:10px;border-bottom:1px solid #ddd">&nbsp;</td>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-bottom:25px;">
+															<div style="margin:auto;width:80%">You will need to verify your email to complete registration.<br />Click the button below to confirm.</div></td>
 														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Delivery Address</span><br />
-															<?php echo $oqr['deliveryaddress']; ?></div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Recipient Details</span><br />
-															<?php echo $oqr['recipient']; ?><br /><?php echo $oqr['deliverycontact']; ?></div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
-															Order #: <?php echo $oqr['orderid']; ?><br />
-															Date: <?php echo $oqr['dateadded']; ?><br />
-															</div>
-															</td>
-														</tr>
-														<tr>
-															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
-																<div class="cart-row">
-																<div class="cart-item-name" style="font-weight: 600;">Item</div>
-																<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
-																<div class="cart-item" style="font-weight: 600;">Price</div>
-																<div class="cart-item" style="font-weight: 600;">Total</div>
-																</div>
-																<?php
-																$query = "SELECT * FROM cart WHERE userid='".$uqr['id']."' AND orderid='".$_GET['ref']."' ORDER BY date DESC";
-																$qq = mysqli_query($con, $query);
-																while ($value = mysqli_fetch_array($qq)){
-
-																$pqq = mysqli_query($con, "SELECT * FROM products WHERE id='".$value['productid']."'");
-																$pqr = mysqli_fetch_assoc($pqq);
-																?>
-																<div class="cart-row">
-																<div class="cart-item-name"><?php echo $pqr['product']; ?></div>
-																<div class="cart-item-qty"><?php echo $value['qty']; ?></div>
-																<div class="cart-item">N<?php echo number_format($pqr['price'], 0); ?></div>
-																<div class="cart-item">N<?php echo number_format($pqr['price'] * $value['qty'], 0); ?></div>
-																</div>
-															<?php } ?>
-															<div class="cart-row-ttl">
-																<div class="cart-item-name">&nbsp;</div>
-																<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
-																<div class="cart-item">N<?php echo number_format($inv_orderttl, 0); ?></div>
-
-																	<div class="cart-item-name">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">VAT (<?php echo $stqr['vat']; ?>%)</span></div>
-																	<div class="cart-item">N<?php echo number_format($inv_vat, 0); ?></div>
-
-																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
-																	<div class="cart-item">N<?php echo $oqr['deliveryfee']; ?></div>
-
-																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
-																	<div class="cart-item"><span style="font-weight: 600;">N<?php echo number_format($finalttl, 0); ?></span></div>
-															</div>
-															<div class="cart-row">
-															<div class="cart-item-name">Payment Method</div>
-															<div class="cart-item-qty"><span style="font-weight: 600;"><?php echo $oqr['paymentmethod']; ?></span></div>
-															<div class="cart-item">&nbsp</div>
-															<div class="cart-item">&nbsp</div>
-															</div>
-															</td>
-														</tr>
-														<!-- Button -->
-														<tr>
+														 {{-- <tr>
 															<td align="center">
-																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
-																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/account.php" target="_blank" class="link"><img src="https://ng.expiringsoon.shop/img/btn-orderdetails.png" width="175"></a></td>
-																	</tr>
-																</table>
+																<a href="https://ng.expiringsoon.shop/verify.php?token=11111" target="_blank" class="link">
+																	<img src="{{asset('img/btn-confirm.png')}}" width="200">
+																</a>
 															</td>
-														</tr>
-														<!-- END Button -->
+														</tr>  --}}
+														<tr>
+															<td class="text-btn-large" bgcolor="#cd6502" style="font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; border:0px solid #cd6502; padding:15px 35px;">
+																<a href="https://grabbr.ng/verify.php?token=11111&uid=222; ?>" target="_blank" class="link-2" style="color:#fff; text-decoration:none;"><span class="link-2" style="color:#fff; text-decoration:none;">Confirm Your Email</span></a>
+															</td>
+														</tr> 
 													</table>
 												</td>
 											</tr>
@@ -262,7 +175,11 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="https://ng.expiringsoon.shop/img/t2_instagram.jpg" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
+																<a href="#" target="_blank">
+																	<img src="{{asset('src/images/logo.png')}}" width="34" height="34" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</td>

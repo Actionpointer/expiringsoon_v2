@@ -116,14 +116,26 @@ class ProductController extends Controller
         return redirect()->route('shop.product.list',$shop);
     }
 
-    public function destroy(Shop $shop,Request $request){
+    public function manage(Shop $shop,Request $request){
+        // dd($request->all());
         $products = Product::whereIn('id',$request->products)->get();
-        foreach($products as $product){
-            if($product->carts->isEmpty()){
-                $product->delete();
-            }
+        if($request->published){
+            $products = Product::whereIn('id',$request->products)->update(['published'=> true]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Published Successfully']);
         }
-        return redirect()->back();
+        if($request->draft){
+            $products = Product::whereIn('id',$request->products)->update(['published'=> false]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Drafted Successfully']);
+        }
+        if($request->delete){
+            foreach($products as $product){
+                if($product->carts->isEmpty()){
+                    $product->delete();
+                }
+            }    
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Deleted Successfully']);
+        }
+        
     }
 
 

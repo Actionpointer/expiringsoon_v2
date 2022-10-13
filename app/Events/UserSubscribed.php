@@ -28,7 +28,9 @@ class UserSubscribed
 
     /**
      * Get the channels the event should broadcast on.
-     *
+        *ActivateProducts::class,
+        *ActivateShops::class,
+        *ActivateAdverts::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

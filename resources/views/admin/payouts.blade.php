@@ -99,7 +99,7 @@
                                       @elseif($payout->status == 'rejected')
                                           <p style="color:#d92e2e;font-size:14px;font-weight:500">Rejected</p>
                                       @elseif($payout->status == 'processing')
-                                          <p style="color:#d92e2e;font-size:14px;font-weight:500">Processing</p>
+                                          <p class="text-info" style="font-size:14px;font-weight:500">Processing</p>
                                       @else
                                           <p style="color:#00b207;font-size:14px;font-weight:500">Paid</p>
                                       @endif
@@ -108,6 +108,8 @@
                                   <td class="cart-table-item add-cart align-middle">
                                     @if($payout->status == 'paid')
                                       <a href="">View Receipt</a>
+                                    @elseif($payout->status == 'processing')
+                                      <span class="btn btn-sm btn-info">Please wait</span>
                                     @else
                                     <div class="dropdown">
                                       <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -157,6 +159,9 @@
 <script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script>
 <script>
   $(document).ready(function() {
+    let url = window.location.href;
+    let query = url.split('?')[1] ? url.split('?')[1].split('=')[1] :'';
+
       $('#datatable').DataTable({
           "pagingType": "full_numbers",
           dom: 'lBfrtip',
@@ -170,9 +175,13 @@
           ],
           responsive: true,
           language: {
-          search: "_INPUT_",
-          searchPlaceholder: "Search Users",
-          }
+            search: "_INPUT_",
+            searchPlaceholder: "Search Payouts",
+          },
+          search: {
+              "search": query
+            }
+          
       });
   });
 </script>

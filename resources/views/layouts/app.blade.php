@@ -674,50 +674,7 @@
     <script src="{{asset('src/select2/js/select2.min.js')}}"></script>
     <script src="{{asset('src/js/main.js')}}"></script>
     {{-- <script src="{{asset('src/js/products.js')}}"></script> --}}
-    
-    <script>
-        $(document).ready(function(){
-            $("form#subscribe").on("submit", function(event){
-                event.preventDefault();
-                var btn = document.getElementById("btn-subscribe");
-                btn.innerHTML = 'Wait...';
-                var formValues=$(this).serialize();
-                $.post("process.php", formValues, function(data){
-                    btn.disabled = true;
-                    btn.innerHTML = 'Subscribed!';
-                    btn.style.backgroundColor = "#666666"
-                    btn.style.border = "0px"
-                });
-            });
-        });
-    </script>
-    
-    <script>
-        $(function() {
-            $(".approve").click(function(e){
-                e.preventDefault();
-                if(confirm("Request will be marked as Paid. Are you sure?")){
-                var element = $(this);
-                var pid = element.attr("id4");
-                $(this).hide();
 
-                var info = 'id4=' + pid;
-                $.ajax({
-                    type: "GET",
-                    url: "process.php",
-                    data: info,
-                    success: function(){
-                    $("#status").html("Paid").css({'color':'#00b207', 'font-weight':'500'});
-                    alert("payout Request Status Updated");
-                    }
-                });
-                }
-                else{
-                return false;
-                }
-            });
-        });
-    </script>
     @stack('scripts')
 </body>
 </html>

@@ -148,6 +148,8 @@
 <script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script>
 <script>
   $(document).ready(function() {
+      let url = window.location.href;
+      let query = url.split('?')[1] ? url.split('?')[1].split('=')[1] :'';
       $('#datatable').DataTable({
           "pagingType": "full_numbers",
           dom: 'lBfrtip',
@@ -162,7 +164,10 @@
           language: {
           search: "_INPUT_",
           searchPlaceholder: "Search",
-          }
+          },
+          search: {
+              "search": query
+            }
       });
   });
 </script>

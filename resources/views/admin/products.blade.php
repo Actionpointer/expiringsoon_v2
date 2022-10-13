@@ -55,12 +55,20 @@
                 <table id="datatable" class="table display" style="width:100%;font-size:13px">
                     <thead>
                         <tr>
-                        <th scope="col" class="cart-table-title"> </th>
-                        <th scope="col" class="cart-table-title">Product</th>
-                        <th scope="col" class="cart-table-title">Vendor</th>
-                        <th scope="col" class="cart-table-title">Orders</th>
-                        <th scope="col" class="cart-table-title">Status</th>
-                        <th scope="col" class="cart-table-title">Manage</th>
+                          <th scope="col" class="cart-table-title" >
+                            <div class="d-flex align-items-center">
+                              <div class="form-check d-inline">
+                                <label class="form-check-label font-body--400" for="existing"> </label>
+                                <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
+                              </div>
+                             <span class="align-bottom"></span> 
+                            </div>
+                          </th>
+                        <th scope="col" class="cart-table-title align-middle">Product</th>
+                        <th scope="col" class="cart-table-title align-middle">Vendor</th>
+                        <th scope="col" class="cart-table-title align-middle">Orders</th>
+                        <th scope="col" class="cart-table-title align-middle">Status</th>
+                        <th scope="col" class="cart-table-title align-middle">Manage</th>
                         </tr>
                     </thead>
                     <tbody style="width:100%;font-size:13px">
@@ -68,7 +76,7 @@
                             <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                                 <!-- Product item  -->
                                 <td>
-                                  <div class="form-check pt-2">
+                                  <div class="form-check pt-2 ms-3">
                                     <label class="form-check-label font-body--400" for="existing"> </label>
                                     <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
                                   </div>
@@ -89,7 +97,7 @@
                                 <td class="cart-table-item stock-status align-middle">
                                   <div class="d-flex">
                                     @if(!$product->approved)
-                                      <span class="font-body--md-400 in bg-warning text-white"> Pending Approval</span>
+                                      <span class="font-body--md-400 in bg-warning text-white text-nowrap"> Pending Approval</span>
                                     @else 
                                         <span class="font-body--md-400 in"> Approved</span>
                                     @endif
@@ -156,6 +164,8 @@
 
 <script>
     $(document).ready(function() {
+      let url = window.location.href;
+      let query = url.split('?')[1] ? url.split('?')[1].split('=')[1] :'';
         $('#datatable').DataTable({
             "pagingType": "full_numbers",
             dom: 'lBfrtip',
@@ -171,7 +181,10 @@
             language: {
             search: "_INPUT_",
             searchPlaceholder: "Search",
-            }
+            },
+            search: {
+                "search": query
+              }
         });
     });
 </script>

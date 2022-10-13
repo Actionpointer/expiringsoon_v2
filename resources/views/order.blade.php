@@ -249,6 +249,7 @@
                         <th scope="col" class="dashboard__order-history-table-title"> Price </th>
                         <th scope="col" class="dashboard__order-history-table-title" > quantity </th>
                         <th scope="col" class="dashboard__order-history-table-title"> Subtotal </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Review </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -256,22 +257,22 @@
                       @foreach($order->items as $cart)
                           <tr>
                               <!-- Product item  -->
-                                  <td class="dashboard__order-history-table-item align-middle">
-                                      <a href="#" class="dashboard__product-item" >
-                                          <div class="dashboard__product-item-img">
-                                              <img src="{{Storage::url($cart->product->photo)}}" alt=" {{$cart->product->name}}" />
-                                          </div>
-                                          <h5 class="font-body--md-400"> {{$cart->product->name}}</h5>
-                                          {{-- <div style="margin-top:-20px">
-                                              <a href="{{route('admin.shop.show',$order->shop)}}" target="_blank" style="color:#00b207;font-weight:500">
-                                                  <div style="font-size:12px">
-                                                      <span style="font-weight:400;color:#333">Vendor:</span>  
-                                                      {{$order->shop->name}}
-                                                  </div>
-                                              </a>
-                                          </div> --}}
-                                      </a>
-                                  </td>
+                              <td class="dashboard__order-history-table-item align-middle">
+                                  <a href="#" class="dashboard__product-item" >
+                                      <div class="dashboard__product-item-img">
+                                          <img src="{{Storage::url($cart->product->photo)}}" alt=" {{$cart->product->name}}" />
+                                      </div>
+                                      <h5 class="font-body--md-400"> {{$cart->product->name}}</h5>
+                                      {{-- <div style="margin-top:-20px">
+                                          <a href="{{route('admin.shop.show',$order->shop)}}" target="_blank" style="color:#00b207;font-weight:500">
+                                              <div style="font-size:12px">
+                                                  <span style="font-weight:400;color:#333">Vendor:</span>  
+                                                  {{$order->shop->name}}
+                                              </div>
+                                          </a>
+                                      </div> --}}
+                                  </a>
+                              </td>
                               <!-- Price  -->
                               <td class="dashboard__order-history-table-item order-date align-middle "     >
                                   {!!cache('settings')['currency_symbol']!!} {{number_format($cart->amount, 0)}}
@@ -284,6 +285,7 @@
                               <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
                                   <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($order->total, 0)}}</p>
                               </td>
+                              <td>Review Product</td>
                           </tr>
                       @endforeach
                     </tbody>
@@ -294,42 +296,36 @@
 
             <!-- Order Status -->
             <div class="row">
-              @if($order->status != 'completed' && auth()->user()->role != 'shopper')
-              <div class="col-lg-4" style="margin-top:20px">
-                  <form method="post" id="orderstatus" action="{{route('shop.order.manage',$order->shop)}}">@csrf
-                      <input type="hidden" name="order_id" value=" {{$order->id}}">
-                      <div class="contact-form__content-group">
-                          <div class="contact-form-input">
-                              <label for="states" style="margin-bottom:15px">Update Order Status</label>
-                              <select id="" name="status" class="form-control" required>
-                                  
-                                  @if($order->status== 'processing')
-                                  <option value="shipped">Shipped for Delivery</option>
-                                  @endif
-                                  @if(in_array($order->status,['processing','shipped']))
-                                  <option value="delivered">Delivered</option>
-                                  @endif
-                                  {{-- @if($order->status == 'processing')
-                                  <option value="cancelled">Cancelled</option>
-                                  @endif --}}
-                              </select>
+              @if($order->status !== 'completed' )
+                @if(auth()->user()->role != 'shopper')
+                  <div class="col-lg-4" style="margin-top:20px">
+                      <form method="post" id="orderstatus" action="{{route('shop.order.manage',$order->shop)}}">@csrf
+                          <input type="hidden" name="order_id" value=" {{$order->id}}">
+                          <div class="contact-form__content-group">
+                              <div class="contact-form-input">
+                                  <label for="states" style="margin-bottom:15px">Update Order Status</label>
+                                  <select id="" name="status" class="form-control" required>
+                                      
+                                      @if($order->status== 'processing')
+                                      <option value="shipped">Shipped for Delivery</option>
+                                      @endif
+                                      @if(in_array($order->status,['processing','shipped']))
+                                      <option value="delivered">Delivered</option>
+                                      @endif
+                                      {{-- @if($order->status == 'processing')
+                                      <option value="cancelled">Cancelled</option>
+                                      @endif --}}
+                                  </select>
+                              </div>
                           </div>
-                      </div>
-                      <div class="contact-form-btn" style="margin-top:-5px">
-                          <button class="button button--md" type="submit" id="btn-update">
-                          Save Status
-                          </button>
-                      </div>
-                  </form>
-              </div>
-              @endif
-              @if($order->status == 'completed')
-              <div class="col-lg-12" style="margin-top:20px">
-                  <p style="font-weight:500;font-size:14px">Order has been Completed</p>
-              </div>
-              @endif
-              
-              @if($order->status!=='completed')
+                          <div class="contact-form-btn" style="margin-top:-5px">
+                              <button class="button button--md" type="submit" id="btn-update">
+                              Save Status
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+                @endif
                 <!-- Send Message -->
                 <div class="conversation my-4">
                   @if($order->messages->isNotEmpty())
@@ -394,6 +390,38 @@
                   </form>
                 </div>
               @endif
+
+              {{-- @if($order->status == 'completed') --}}
+                <div class="col-lg-12" style="margin-top:20px">
+                    
+                    <div class="comment-box">
+                      <h5 class="font-body--xxxl-500">Review Vendor</h5>
+        
+                      <form action="#" class="my-3">
+                        <div class="contact-form-group">
+                          <div class="contact-form--input">
+                            <label for="name">Rating</label>
+                            <input type="text" placeholder="rating"  id="name">
+                          </div>
+                          
+                        </div>
+        
+                        <div class="contact-form--input contact-form--input-area mb-0" id="comments">
+                          <label for="message">Message</label>
+                          <textarea name="message" id="message" placeholder="Write your comment here…"></textarea>
+                        </div>
+                        
+                        <div class="contact-form-button">
+                          <button class="button button--md" type="submit">
+                            Post Review
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              {{-- @endif --}}
+              
+              
             </div>
           </div>
       </div>

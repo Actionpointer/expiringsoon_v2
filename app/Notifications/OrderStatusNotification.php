@@ -2,23 +2,24 @@
 
 namespace App\Notifications;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class OrderStatusNotification extends Notification
 {
     use Queueable;
-
+    public $order;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Order $order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -40,18 +41,21 @@ class OrderStatusNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        switch($this->order->status){
+            case 'processing': $view = 'emails.receipt';
+                break;
+            case 'shipped': $view = 'emails.shipped';
+                break;
+            case 'delivered': $view = 'emails.delivered';
+                break;
+            case 'completed': $view = 'emails.completed';
+                break;
+
+        }
+        return (new MailMessage)->view($view,['order' => $this->order]);
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
+    
     public function toArray($notifiable)
     {
         return [

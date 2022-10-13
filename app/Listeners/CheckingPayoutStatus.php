@@ -28,6 +28,6 @@ class CheckingPayoutStatus implements ShouldQueue
      */
     public function handle(CheckPayoutStatus $event)
     {
-        $this->checkPayoutStatus($event->payout);
+        $this->fetchFlutterWave($event->payout);
     }
 }

@@ -47,7 +47,7 @@
                 <h5 class="font-body--xl-500">Add Category</h5>
               </div>
               <div class="dashboard__content-card-body">
-                <form method="post" action="{{route('admin.categories.management')}}" id="editcategory">@csrf
+                <form method="post" action="{{route('admin.categories.management')}}" id="addcategory">@csrf
                   <div class="contact-form__content">
 
                     <div class="contact-form-input">
@@ -107,14 +107,14 @@
                             </td>
                             <td>{{$category->products->count()}}</td>
                             <td>
-                                <button data-bs-toggle="modal" data-bs-target="#editcategory{{$category->id}}">Edit</button> | 
+                                <button class="edit_button" data-bs-toggle="modal" data-bs-target="#editcategory{{$category->id}}">Edit</button> | 
                                 <form action="{{route('admin.categories.management')}}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this category?');">@csrf
                                     <input type="hidden" name="category_id" value="{{$category->id}}">
                                     <button type="submit" name="action" value="delete">Delete</button>
                                 </form>
                             </td>
                           </tr>
-                          <div class="modal fade" id="editcategory{{$category->id}}" aria-labelledby="editcategory{{$category->id}}Label" aria-hidden="true">
+                          <div class="modal fade" id="editcategory{{$category->id}}" aria-labelledby="editcategory{{$category->id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -131,9 +131,10 @@
                                       <div class="contact-form-input">
                                         <label for="states">Subcategories</label>
                                           <select id="subcategories" name="subcategories[]" class="form-control select2" multiple>
-                                              @foreach ($category->subcategories as $subcategory)
-                                                  <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
-                                              @endforeach
+                                            @foreach ($tags as $tag)
+                                              <option value="{{$tag->id}}" @if(in_array($tag->id,$category->subcategories->pluck('id')->toArray())) selected @endif>{{$tag->name}}</option>
+                                            @endforeach 
+                                            
                                           </select>
                                       </div>
                                       
@@ -199,8 +200,10 @@
     });
 </script>
 <script>
-    // $('.select2').select2({
-    //   dropdownParent: $(this).parent('.modal.show')
-    // })
+    $('.edit_button').on('click',function(){
+        let id = $(this).attr('data-bs-target');
+        $('#'+id.substring(1)).modal()
+        $('#'+id.substring(1)+' .select2').select2()
+    })
 </script>
 @endpush

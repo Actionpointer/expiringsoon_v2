@@ -1238,3 +1238,10 @@ $('.select2').select2({
   tags:true,
   tokenSeparators:[',']
 });
+
+//19. Multi-select
+$('#checkbox_master').change(function() {
+  if($(this).is(':checked')){
+      $('.checkboxes').prop('checked',true)
+  }else $('.checkboxes').prop('checked',false)
+})

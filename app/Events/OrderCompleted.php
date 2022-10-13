@@ -26,7 +26,9 @@ class OrderCompleted
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *SettleVendor::class,
+      *RemoveFromWishList::class,
+      *SendingReviewRequest::class,
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

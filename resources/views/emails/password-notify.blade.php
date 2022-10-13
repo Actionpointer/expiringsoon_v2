@@ -1,19 +1,7 @@
-<?php
-include("dbconnect.php");
-$uqq = mysqli_query($con, "SELECT * FROM users WHERE id='".$_GET['uid']."'");
-$uqr = mysqli_fetch_assoc($uqq);
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!DOCTYPE html PUBLIC>
+<html>
 <head>
-	<!--[if gte mso 9]>
-	<xml>
-		<o:OfficeDocumentSettings>
-		<o:AllowPNG/>
-		<o:PixelsPerInch>96</o:PixelsPerInch>
-		</o:OfficeDocumentSettings>
-	</xml>
-	<![endif]-->
+	
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,19 +9,13 @@ $uqr = mysqli_fetch_assoc($uqq);
 	<meta name="format-detection" content="address=no" />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="x-apple-disable-message-reformatting" />
-    <!--[if !mso]><!-->
+    
 	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900,900i" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!--<![endif]-->
+	
 	<title>Password Reset | Expiring Soon</title>
-	<!--[if gte mso 9]>
-	<style type="text/css" media="all">
-		sup { font-size: 100% !important; }
-	</style>
-	<![endif]-->
-
-	<!-- site Favicon -->
+	
 	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
 	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
 	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
@@ -109,7 +91,11 @@ $uqr = mysqli_fetch_assoc($uqq);
 												<th class="column-top" width="145" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="https://expiringsoon.shop" target="_blank"><img src="https://expiringsoon.shop/src/images/logo.png" width="125" border="0" alt="" /></a></td>
+															<td style="font-size:0pt; line-height:0pt; text-align:left;">
+																<a href="https://expiringsoon.shop" target="_blank">
+																	<img src="{{asset('src/images/logo.png')}}" width="125" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</th>
@@ -132,7 +118,9 @@ $uqr = mysqli_fetch_assoc($uqq);
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
 								<tr>
-									<td class="fluid-img" align="center" style="padding:10px"><img src="https://expiringsoon.shop/img/icon-check.jpg" border="0" width="200" alt="" /></td>
+									<td class="fluid-img" align="center" style="padding:10px">
+										<img src="{{asset('img/icon-check.jpg')}}" border="0" width="200" alt="" />
+									</td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
@@ -176,7 +164,11 @@ $uqr = mysqli_fetch_assoc($uqq);
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="https://expiringsoon.shop/img/t2_instagram.jpg" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
+																<a href="#" target="_blank">
+																	<img src="{{asset('img/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</td>

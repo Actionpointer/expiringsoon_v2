@@ -29,7 +29,7 @@ Route::group(['prefix'=>'vendor/{shop}','as'=> 'shop.'],function (){
     Route::post('product/store', [App\Http\Controllers\ProductController::class, 'store'])->name('product.store');
     Route::get('product/edit/{product}', [App\Http\Controllers\ProductController::class, 'edit'])->name('product.edit');
     Route::post('product/update', [App\Http\Controllers\ProductController::class, 'update'])->name('product.update');
-    Route::post('product/delete', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.delete');
+    Route::post('product/manage', [App\Http\Controllers\ProductController::class, 'manage'])->name('products.manage');
 
     Route::get('orders', [App\Http\Controllers\OrderController::class, 'shop_orders'])->name('order.list');
     Route::get('order/{order}', [App\Http\Controllers\OrderController::class, 'shop_order_view'])->name('order.view');

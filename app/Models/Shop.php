@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\State;
 use App\Models\Advert;
 use App\Models\Payout;
+use App\Models\Review;
 use App\Models\Account;
 use App\Models\Country;
 use App\Models\Product;
@@ -129,6 +130,10 @@ class Shop extends Model
     
     public function settlements(){
         return $this->morphMany(Settlement::class,'receiver');
+    }
+
+    public function reviews(){
+        return $this->morphMany(Review::class,'reviewable');
     }
     
 }

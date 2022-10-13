@@ -26,7 +26,7 @@ class UserFeatured
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *ActivateAdverts::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

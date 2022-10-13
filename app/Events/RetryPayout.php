@@ -26,7 +26,7 @@ class RetryPayout
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     *RetryingPayout::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

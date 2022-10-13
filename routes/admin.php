@@ -9,14 +9,15 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::post('staff',[App\Http\Controllers\SettingsController::class, 'admins'])->name('staff');
     Route::post('plans',[App\Http\Controllers\SettingsController::class, 'plans'])->name('plans');
     Route::post('adplans',[App\Http\Controllers\SettingsController::class, 'adplans'])->name('adplans');
-    
+    Route::get('coupons',[App\Http\Controllers\CouponController::class, 'list'])->name('coupons');
+    Route::post('coupons/manage',[App\Http\Controllers\CouponController::class, 'manage'])->name('coupon.manage');
     Route::get('subscriptions',[App\Http\Controllers\SubscriptionController::class, 'admin_index'])->name('subscriptions');
     Route::post('subscriptions',[App\Http\Controllers\SubscriptionController::class, 'update'])->name('subscriptions');
     
     Route::get('categories',[App\Http\Controllers\SettingsController::class, 'categories'])->name('categories');
     Route::post('categories',[App\Http\Controllers\SettingsController::class, 'categories_management'])->name('categories.management');
     
-    
+
     Route::get('shops', [App\Http\Controllers\ShopController::class, 'admin_index'])->name('shops');
     Route::get('shop/manage/{shop}', [App\Http\Controllers\ShopController::class, 'admin_view'])->name('shop.show');
     Route::post('shop/management', [App\Http\Controllers\ShopController::class, 'admin_manage'])->name('shop.manage');

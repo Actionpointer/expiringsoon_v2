@@ -1,12 +1,3 @@
-<?php
-include("dbconnect.php");
-$uqq = mysqli_query($con, "SELECT * FROM users WHERE id='".$_GET['uid']."'");
-$uqr = mysqli_fetch_assoc($uqq);
-
-$vqq = mysqli_query($con, "SELECT * FROM verify WHERE userid='".$uqr['id']."'");
-$vqr = mysqli_fetch_assoc($vqq);
-// $token = md5(uniqid(rand(), true));
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -30,16 +21,18 @@ $vqr = mysqli_fetch_assoc($vqq);
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!--<![endif]-->
-	<title>Welcome | Grabbr</title>
+	<title>Order Receipt No. 22334455 | Expiring Soon</title>
 	<!--[if gte mso 9]>
 	<style type="text/css" media="all">
 		sup { font-size: 100% !important; }
 	</style>
 	<![endif]-->
+
 	<!-- site Favicon -->
 	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
 	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
 	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
+
 
 	<style type="text/css" media="screen">
 		/* Linked Styles */
@@ -48,6 +41,12 @@ $vqr = mysqli_fetch_assoc($vqq);
 		p { padding:0 !important; margin:0 !important }
 		img { -ms-interpolation-mode: bicubic; /* Allow smoother rendering of resized image in Internet Explorer */ }
 		.mcnPreviewText { display: none !important; }
+		.cart-row {display: block; height: 30px; width: 98%; padding: 5px; font-size: 12px; border-bottom: 1px solid #ddd;}
+		.cart-row-ttl {display: block; height: 90px; width: 98%; padding: 5px; font-size: 12px; border-bottom: 1px solid #ddd;}
+		.cart-item {float: left; width: 15%;}
+		.cart-item-name {float: left; width: 60%;}
+		.cart-item-qty {float: left; width: 10%;}
+		.cart-item-ttl {float: left !important; width: 30%;}
 
 
 		/* Mobile styles */
@@ -105,7 +104,11 @@ $vqr = mysqli_fetch_assoc($vqq);
 												<th class="column-top" width="145" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="http://expiringsoon.shop" target="_blank"><img src="https://ng.expiringsoon.shop/src/images/logo.png" width="125" border="0" alt="" /></a></td>
+															<td style="font-size:0pt; line-height:0pt; text-align:left;">
+																<a href="https://ng.expiringsoon.shop" target="_blank">
+																	<img src="{{asset('src/images/logo.png')}}" width="125" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</th>
@@ -128,13 +131,15 @@ $vqr = mysqli_fetch_assoc($vqq);
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;"><img src="https://ng.expiringsoon.shop/img/img-verify.jpg" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img">
+										<img src="{{asset('img/img-welcome.jpg')}}" border="0" width="100%" alt="" />
+									</td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
 
 							<!-- Intro -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="font-size:13px">
 								<tr>
 									<td style="padding-bottom: 10px;">
 										<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -142,20 +147,91 @@ $vqr = mysqli_fetch_assoc($vqq);
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#000000; font-family:'Playfair Display', Georgia,serif; font-size:25px; line-height:35px; text-align:center; padding-bottom:15px;"><span style="font-size:18px">Hi, <?php echo $uqr['fname']; ?></span></td>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">New order from John,</span><br />Order <b>2323232</b> has been confirmed successfully.</td>
 														</tr>
 														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-bottom:25px;">
-															<div style="margin:auto;width:80%">You will need to verify your email to complete registration.<br />Click the button below to confirm.</div></td>
+															<td class="text-center pb25" style="padding-top:10px;border-bottom:1px solid #ddd">&nbsp;</td>
 														</tr>
 														<tr>
-															<td align="center"><a href="https://ng.expiringsoon.shop/verify.php?token=<?php echo $vqr['token']; ?>" target="_blank" class="link"><img src="https://ng.expiringsoon.shop/img/btn-confirm.png" width="200"></a></td>
-														</tr>
-														<!--<tr>
-															<td class="text-btn-large" bgcolor="#cd6502" style="font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; border:0px solid #cd6502; padding:15px 35px;">
-																<a href="https://grabbr.ng/verify.php?token=<?php echo $token; ?>&uid=<?php echo $uqr['id']; ?>" target="_blank" class="link-2" style="color:#fff; text-decoration:none;"><span class="link-2" style="color:#fff; text-decoration:none;">Confirm Your Email</span></a>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
+																<div style="margin:auto;width:80%"><span style="font-weight:600">Delivery Address</span><br />
+																	21, Irewunmi Badru Street, Ojota Lagos
+																</div>
 															</td>
-														</tr> -->
+														</tr>
+														<tr>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<div style="margin:auto;width:80%">
+																	<span style="font-weight:600">Recipient Details</span><br />
+																	Suluman Israel<br />090656565645
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+															<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
+																Order #: 34343<br />
+																Date: 12/12/2020<br />
+															</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
+																<div class="cart-row">
+																	<div class="cart-item-name" style="font-weight: 600;">Item</div>
+																	<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
+																	<div class="cart-item" style="font-weight: 600;">Price</div>
+																	<div class="cart-item" style="font-weight: 600;">Total</div>
+																</div>
+																
+																<div class="cart-row">
+																	<div class="cart-item-name">Yam</div>
+																	<div class="cart-item-qty">12</div>
+																	<div class="cart-item">N123232</div>
+																	<div class="cart-item">N123,232</div>
+																</div>
+															
+																<div class="cart-row-ttl">
+																	<div class="cart-item-name">&nbsp;</div>
+																	<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
+																	<div class="cart-item">N34343</div>
+	
+																		<div class="cart-item-name">&nbsp;</div>
+																		<div class="cart-item"><span style="font-weight: 600;">VAT (5%)</span></div>
+																		<div class="cart-item">N34343</div>
+	
+																		<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
+																		<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
+																		<div class="cart-item">N3433</div>
+	
+																		<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
+																		<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
+																		<div class="cart-item"><span style="font-weight: 600;">N3455</span></div>
+																</div>
+																<div class="cart-row">
+																	<div class="cart-item-name">Payment Method</div>
+																	<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
+																	<div class="cart-item">&nbsp</div>
+																	<div class="cart-item">&nbsp</div>
+																</div>
+															</td>
+														</tr>
+														<!-- Button -->
+														<tr>
+															<td align="center">
+																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+																	<tr>
+																		<td class="text-button" style="padding:12px">
+																			<a href="https://ng.expiringsoon.shop/account.php" target="_blank" class="link">
+																				<img src="{{asset('img/btn-orderdetails.png')}}" width="175">
+																			</a>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<!-- END Button -->
 													</table>
 												</td>
 											</tr>
@@ -174,7 +250,11 @@ $vqr = mysqli_fetch_assoc($vqq);
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="https://ng.expiringsoon.shop/img/t2_instagram.jpg" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
+																<a href="#" target="_blank">
+																	<img src="{{asset('img/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</td>

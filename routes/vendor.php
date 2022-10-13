@@ -8,9 +8,12 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
     Route::post('shop/store', [App\Http\Controllers\ShopController::class, 'store'])->name('shop.store');    
 
     Route::get('plans',[App\Http\Controllers\SubscriptionController::class, 'plans'])->name('plans');
-    Route::post('subscription/plans', [App\Http\Controllers\SubscriptionController::class, 'plan_subscription'])->name('subscription.plan');   
-    Route::post('subscription/features', [App\Http\Controllers\SubscriptionController::class, 'feature_subscription'])->name('subscription.feature');   
+    Route::post('subscription/plans', [App\Http\Controllers\SubscriptionController::class, 'plan_subscription'])->name('subscription.plan');
     Route::post('subscription/cancel-renew', [App\Http\Controllers\SubscriptionController::class, 'subscription_cancel_renew'])->name('subscription.cancel_renew');   
+    Route::post('applycoupon',[App\Http\Controllers\CouponController::class, 'apply'])->name('applycoupon');
+
+    Route::post('subscription/features', [App\Http\Controllers\SubscriptionController::class, 'feature_subscription'])->name('subscription.feature');   
+    
     Route::post('feature/cancel-renew', [App\Http\Controllers\SubscriptionController::class, 'feature_cancel_renew'])->name('feature.cancel_renew');   
     
     Route::get('transactions',[App\Http\Controllers\PaymentController::class,'index'])->name('payments');
@@ -31,5 +34,5 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
     
     Route::post('adverts/manage',[App\Http\Controllers\AdvertController::class,'remove'])->name('advert.remove');
 
-    // Route::get('analytics',[App\Http\Controllers\HomeController::class, 'analytics'])->name('analytics');
+    
 });

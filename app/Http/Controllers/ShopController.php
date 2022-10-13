@@ -74,7 +74,7 @@ class ShopController extends Controller
                 $products = $products->orderBy('price','desc');
             }
         }
-        $products = $products->paginate(16);
+        $products = $products->paginate(2);
         return view('frontend.shop.view',compact('shop','categories','products','category'));
     }
 

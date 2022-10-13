@@ -1,33 +1,5 @@
-<?php
-include("dbconnect.php");
-$oqq = mysqli_query($con, "SELECT * FROM orders WHERE orderid='".$_GET['ref']."'");
-$oqr = mysqli_fetch_assoc($oqq);
-
-$uqq = mysqli_query($con, "SELECT * FROM users WHERE id='".$oqr['userid']."'");
-$uqr = mysqli_fetch_assoc($uqq);
-
-$stq = mysqli_query($con, "SELECT * FROM settings");
-$stqr = mysqli_fetch_assoc($stq);
-
-$sum = "SELECT sum(total) as inv_ttl FROM cart WHERE userid='".$uqr['id']."' AND orderid='".$_GET['ref']."'";
-$res = mysqli_query($con, $sum);
-while ($row = mysqli_fetch_array($res)){
-$inv_orderttl = $row['inv_ttl'];
-}
-$inv_vat = ($stqr['vat'] / 100) * $inv_orderttl;
-$finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!DOCTYPE html>
 <head>
-	<!--[if gte mso 9]>
-	<xml>
-		<o:OfficeDocumentSettings>
-		<o:AllowPNG/>
-		<o:PixelsPerInch>96</o:PixelsPerInch>
-		</o:OfficeDocumentSettings>
-	</xml>
-	<![endif]-->
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -35,19 +7,13 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 	<meta name="format-detection" content="address=no" />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="x-apple-disable-message-reformatting" />
-    <!--[if !mso]><!-->
+    
 	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900,900i" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!--<![endif]-->
-	<title>Order Receipt No. <?php echo $oqr['orderid']; ?> | Expiring Soon</title>
-	<!--[if gte mso 9]>
-	<style type="text/css" media="all">
-		sup { font-size: 100% !important; }
-	</style>
-	<![endif]-->
-
-	<!-- site Favicon -->
+	
+	<title>Order Receipt No. 4343 | Expiring Soon</title>
+	
 	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
 	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
 	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
@@ -123,7 +89,11 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 												<th class="column-top" width="145" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="https://ng.expiringsoon.shop" target="_blank"><img src="https://ng.expiringsoon.shop/src/images/logo.png" width="125" border="0" alt="" /></a></td>
+															<td style="font-size:0pt; line-height:0pt; text-align:left;">
+																<a href="https://expiringsoon.shop" target="_blank">
+																	<img src="{{asset('src/images/logo.png')}}" width="125" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</th>
@@ -146,7 +116,9 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img"><img src="https://ng.expiringsoon.shop/img/img-welcome.jpg" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img">
+										<img src="{{asset('img/img-delivered.jpg')}}" border="0" width="100%" alt="" />
+									</td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
@@ -160,81 +132,79 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">Dear <?php echo $uqr['fname']; ?>,</span><br />Thank you for shopping with Expiring Soon!<br /> Your order <b><?php echo $oqr['orderid']; ?></b> has been confirmed successfully.
-
-															<br /><br />It will be packed and shipped as soon as possible. You will receive a notification from us once the item(s) are available for door delivery.</td>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">Dear Mike Okeji,</span><br />Thank you for shopping with Expiring Soon.</b>
+															<br /><br />Please help us improve our service by taking a moment to rate your experience with our services or the products(s) you ordered.</td>
 														</tr>
 														<tr>
-															<td class="fluid-img" align="center"><img src="https://ng.expiringsoon.shop/img/tracking-bar-accepted.jpg" border="0" width="100%" alt="" /></td>
+															<td class="fluid-img" align="center">
+																<img src="{{asset('img/tracking-bar-delivered.jpg')}}" border="0" width="100%" alt="" />
+															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Please Note:</span><br />If you ordered multiple items, you may receive them on different days. This is because they are sold by different vendors on our platform and we want to make each item available to you as quickly as possible.</div>
+															<div style="margin:auto;width:80%"><span style="font-weight:600">Please Note:</span><br />You can rate from <span style="color:#00b207">★</span> (very poor) to <span style="color:#00b207">★★★★★</span> (Excellent) on the <a href="https://expiringsoon.shop/invoice.php?ref=123232" target="_blank" style="color:#00b207">Order Details</a> page.<br /><br />
+																In case you are not happy with your purchase, you may still be able to return it. At Expiring Soon, we have an option for Easy Return & Quick Refund.<br /><br />
+															You have the option to return an item within 7 days of delivery if it's not matching your expectation (wrong/defective/damaged), and in some cases for change of mind too.</div>
 															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
 															<div style="margin:auto;width:80%"><span style="font-weight:600">Delivery Address</span><br />
-															<?php echo $oqr['deliveryaddress']; ?></div>
+															25, Odunlade street, Isaleko Lagos</div>
 															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Recipient Details</span><br />
-															<?php echo $oqr['recipient']; ?><br /><?php echo $oqr['deliverycontact']; ?></div>
+																<div style="margin:auto;width:80%"><span style="font-weight:600">Recipient Details</span><br />
+																	Damilola Odunlade<br />
+																	08038493984343
+																</div>
 															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
-															Order #: <?php echo $oqr['orderid']; ?><br />
-															Date: <?php echo $oqr['dateadded']; ?><br />
-															</div>
+																<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
+																	Order #: 123232<br />
+																	Date: 12/12/2022<br />
+																</div>
 															</td>
 														</tr>
 														<tr>
 															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
 																<div class="cart-row">
-																<div class="cart-item-name" style="font-weight: 600;">Item</div>
-																<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
-																<div class="cart-item" style="font-weight: 600;">Price</div>
-																<div class="cart-item" style="font-weight: 600;">Total</div>
+																	<div class="cart-item-name" style="font-weight: 600;">Item</div>
+																	<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
+																	<div class="cart-item" style="font-weight: 600;">Price</div>
+																	<div class="cart-item" style="font-weight: 600;">Total</div>
 																</div>
-																<?php
-																$query = "SELECT * FROM cart WHERE userid='".$uqr['id']."' AND orderid='".$_GET['ref']."' ORDER BY date DESC";
-																$qq = mysqli_query($con, $query);
-																while ($value = mysqli_fetch_array($qq)){
-
-																$pqq = mysqli_query($con, "SELECT * FROM products WHERE id='".$value['productid']."'");
-																$pqr = mysqli_fetch_assoc($pqq);
-																?>
+																
 																<div class="cart-row">
-																<div class="cart-item-name"><?php echo $pqr['product']; ?></div>
-																<div class="cart-item-qty"><?php echo $value['qty']; ?></div>
-																<div class="cart-item">N<?php echo number_format($pqr['price'], 0); ?></div>
-																<div class="cart-item">N<?php echo number_format($pqr['price'] * $value['qty'], 0); ?></div>
+																	<div class="cart-item-name">yam</div>
+																	<div class="cart-item-qty">4</div>
+																<div class="cart-item">N3422</div>
+																<div class="cart-item">N23800</div>
 																</div>
-															<?php } ?>
+															
 															<div class="cart-row-ttl">
 																<div class="cart-item-name">&nbsp;</div>
 																<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
-																<div class="cart-item">N<?php echo number_format($inv_orderttl, 0); ?></div>
+																<div class="cart-item">N45465656</div>
 
 																	<div class="cart-item-name">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">VAT (<?php echo $stqr['vat']; ?>%)</span></div>
-																	<div class="cart-item">N<?php echo number_format($inv_vat, 0); ?></div>
+																	<div class="cart-item"><span style="font-weight: 600;">VAT (5%)</span></div>
+																	<div class="cart-item">N454646</div>
 
 																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
 																	<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
-																	<div class="cart-item">N<?php echo $oqr['deliveryfee']; ?></div>
+																	<div class="cart-item">N5,644</div>
 
 																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
 																	<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
-																	<div class="cart-item"><span style="font-weight: 600;">N<?php echo number_format($finalttl, 0); ?></span></div>
+																	<div class="cart-item"><span style="font-weight: 600;">N4,545,456</span></div>
 															</div>
 															<div class="cart-row">
 															<div class="cart-item-name">Payment Method</div>
-															<div class="cart-item-qty"><span style="font-weight: 600;"><?php echo $oqr['paymentmethod']; ?></span></div>
+															<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
 															<div class="cart-item">&nbsp</div>
 															<div class="cart-item">&nbsp</div>
 															</div>
@@ -245,14 +215,15 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/invoice.php?ref=<?php echo $oqr['orderid']; ?>" target="_blank" class="link"><img src="https://ng.expiringsoon.shop/img/btn-orderdetails.png" width="175"></a></td>
+																		<td class="text-button" style="padding:12px">
+																			<a href="https://expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link">
+																				<img src="{{asset('img/btn-orderdetails.png')}}" width="175"></a></td>
 																	</tr>
 																</table>
 															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;">
-															<div style="margin:auto;width:80%"><strong style="font-size:14px">Thank you for shopping with us!</strong><br />
 															</td>
 														</tr>
 														<!-- END Button -->
@@ -274,7 +245,11 @@ $finalttl = $inv_orderttl + ($inv_vat + $oqr['deliveryfee']);
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="https://ng.expiringsoon.shop/img/t2_instagram.jpg" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
+																<a href="#" target="_blank">
+																	<img src="{{asset('img/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</td>

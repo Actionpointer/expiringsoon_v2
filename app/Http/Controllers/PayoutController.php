@@ -30,8 +30,8 @@ class PayoutController extends Controller
     public function bank_info(Shop $shop,Request $request){
         // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'bvn' => Rule::requiredIf(session('location')['country']->iso =='NG'),'string','size:11',
-            'branch_id' => Rule::requiredIf(session('location')['country']->iso =='GH'),'string',
+            'bvn' => Rule::requiredIf(cache('settings')['country_iso'] =='NG'),'string','size:11',
+            'branch_id' => Rule::requiredIf(cache('settings')['country_iso'] =='GH'),'string',
             'bank_id' => 'required|string',
             'account_number' => 'required|string'
         ]);
@@ -104,26 +104,21 @@ class PayoutController extends Controller
 
     public function admin_manage(Request $request)
     {
-       
         if($request->action == 'pay'){
             foreach($request->payouts as $req){ 
                 $payout = Payout::find($req);
                 $payout->status = 'processing';
                 $payout->save();
                 event(new DisbursePayout($payout));
-                return redirect()->back()->with(['result'=> '1','message'=> 'Payout Processing']);
             }
+            return redirect()->back()->with(['result'=> '1','message'=> 'Payout Processing']);
         }else{
             $payout = Payout::whereIn('id',$request->payouts)->update(['status'=> 'rejected']);
             return redirect()->back()->with(['result'=> '1','message'=> 'Payout Rejected']);
         }   
-        
     }
     
-    public function create()
-    {
-        //
-    }
+    
 
     
 }
