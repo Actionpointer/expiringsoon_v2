@@ -122,7 +122,7 @@
                                       </div>
                                       <div class="col-lg-12 order-lg-0 order-1">
                                         <div class="contact-form-btn">
-                                          <button class="button button--md" type="submit"> Save Details</button>
+                                          <button class="button button--md submit" type="button"> Save Details</button>
                                         </div>
                                       </div>
                                     </div>
@@ -163,7 +163,7 @@
                                       </div>
                                     </div>
                                     <div class="contact-form-btn">
-                                      <button class="button button--md" type="submit"> Save Details</button>
+                                      <button class="button button--md submit" type="button"> Save Details</button>
                                   </div>
                                   </form>
                                 </div>
@@ -232,7 +232,7 @@
                                         </tr>
                                       </table>
                                       <div class="contact-form-btn">
-                                        <button class="button button--md" type="submit">Save Discount</button>
+                                        <button class="button button--md submit" type="button">Save Discount</button>
                                       </div>
                                     </div>
                                   </form>   
@@ -390,7 +390,7 @@
                                   </div>
 
                                     <div class="contact-form-btn">
-                                      <button class="button button--md" type="submit" id="btn-doc">
+                                      <button class="button button--md submit" type="button" id="btn-doc">
                                           Save Document
                                       </button>
                                     </div>
@@ -443,7 +443,7 @@
                                           </div>
                                       </div>
                                       <div class="contact-form-btn">
-                                          <button class="button button--md" type="submit"> + Create Staff </button>
+                                          <button class="button button--md submit" type="button"> + Create Staff </button>
                                       </div>
                                     </div>
                                 </form>
@@ -560,7 +560,7 @@
                                     </div>
                                     
                                     <div class="contact-form-btn">
-                                        <button class="button button--md" type="submit">
+                                        <button class="button button--md submit" type="button">
                                         + Add Shipping Rate
                                         </button>
                                     </div>

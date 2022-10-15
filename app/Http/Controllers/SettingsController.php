@@ -16,12 +16,14 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Traits\GeoLocationTrait;
+use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\RateLimiter;
 
 class SettingsController extends Controller
 {
-    use GeoLocationTrait;
+    use GeoLocationTrait,SecurityTrait;
 
     public function __construct()
     {
@@ -29,6 +31,7 @@ class SettingsController extends Controller
     }
     
     public function index(){
+        
         $users = User::whereNotIn('role',['shopper','vendor'])->get();
         $countries = Country::all();
         $states = State::within()->get();
@@ -40,6 +43,9 @@ class SettingsController extends Controller
     }
 
     public function settings(Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         foreach($request->except('_token') as $key => $value){
             if($request->country_id){
                 $country = Country::find($request->country_id);

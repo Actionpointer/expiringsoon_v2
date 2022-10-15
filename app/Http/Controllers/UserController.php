@@ -7,18 +7,22 @@ use App\Models\User;
 use App\Models\State;
 use App\Models\Address;
 use App\Models\Country;
-use App\Models\Setting;
-use App\Notifications\OTPNotification;
 use Illuminate\Http\Request;
+use App\Rules\OtpValidateRule;
+use App\Models\OneTimePassword;
+use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    use SecurityTrait;
+
     public function __construct(){
         $this->middleware('auth');
     }
+
     public function profile(){
         $user = auth()->user();
         $banks = Bank::all();
@@ -74,8 +78,6 @@ class UserController extends Controller
         else return redirect()->back()->with(['result' => '1','message'=>'Something went wrong']);
     }
 
-
-
     public function address(Request $request){
         $user= auth()->user();
         if($request->main){
@@ -99,28 +101,32 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function generateOTP(){
+    public function generate_otp(){
         $user = auth()->user();
-        $otp = uniqid();
-        $user->notify(new OTPNotification($otp));
-        return response()->json(200);
+        $otp = OneTimePassword::where('user_id',auth()->id())->whereBetween('created_at',[now()->subMinutes(cache('settings')['throttle_otp_time']),now()])->latest()->first();
+        //dd($otp);
+        if(!$otp){
+            $otp = OneTimePassword::create(['user_id'=> $user->id,'code'=> strtoupper(substr(uniqid(),4,6))]);
+        }
+        $result = $this->checkOTP($otp->code);
+        return response()->json(['otp'=> $result['result'],'message'=> $result['message']],200);
     }
 
     public function pin(Request $request){
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
-            'pin' => 'required','string','confirmed',
-            'otp' => 'required',
+            'pin' => 'required | string |confirmed',
+            'otp' => ['required',new OtpValidateRule($request->otp)]
         ]);
         if ($validator->fails()) {
             return redirect()->back()
                         ->withErrors($validator)
-                        ->withInput()->with(['result'=> '0','message'=> 'You missed something!']);
+                        ->withInput()->with(['result'=> '0','message'=> 'PIN operation was not successful!']);
         }
         
         $user->pin = Hash::make($request->pin);
         $user->save();
-        return redirect()->back()->with(['result' => '1','message'=>'Pin changed successfully']); //with success
+        return redirect()->back()->with(['result' => '1','message'=>'Pin operation was successfully completed']); //with success
     }
 
     public function notifications(){
@@ -136,9 +142,11 @@ class UserController extends Controller
         // dd($users);
         return view('admin.users.list',compact('users'));
     }
+
     public function user_show(User $user){
         return view('admin.users.view',compact('user'));
     }
+
     public function user_manage(Request $request){
         $user = User::find($request->user_id);
         $user->status = $request->status;

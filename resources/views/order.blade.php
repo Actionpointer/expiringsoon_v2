@@ -319,7 +319,7 @@
                               </div>
                           </div>
                           <div class="contact-form-btn" style="margin-top:-5px">
-                              <button class="button button--md" type="submit" id="btn-update">
+                              <button class="button button--md submit" type="button" id="btn-update">
                               Save Status
                               </button>
                           </div>

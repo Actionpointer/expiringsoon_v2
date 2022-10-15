@@ -24,6 +24,7 @@ Route::get('account', [App\Http\Controllers\HomeController::class, 'home'])->nam
 //for users
 Route::get('profile', [App\Http\Controllers\UserController::class, 'profile'])->name('profile');
 Route::post('profile/update',[App\Http\Controllers\UserController::class, 'update'])->name('profile.update');
+Route::get('generate/otp',[App\Http\Controllers\UserController::class, 'generate_otp'])->name('generate_otp');
 Route::get('support', [App\Http\Controllers\MessageController::class, 'index'])->name('messages');
 Route::post('support',[App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
 
@@ -58,7 +59,10 @@ Route::get('transactions',[App\Http\Controllers\PaymentController::class,'index'
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
 Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
 Route::get('adset/description/',[App\Http\Controllers\AdvertController::class,'description'])->name('adsets');
+
+
 Route::get('runjob',[App\Http\Controllers\ShipmentController::class,'index'])->name('runjob');
+
 include('vendor.php');
 include('shop.php');
 include('admin.php');

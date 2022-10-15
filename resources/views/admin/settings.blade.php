@@ -87,7 +87,7 @@
                                     <h5 class="font-body--xl-500">Global</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                    <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                    <form action="{{route('admin.settings')}}" method="post" id="global">@csrf
                                         <div class="contact-form__content">
                                             <div class="contact-form-input">
                                                 <label for="country">Country</label>
@@ -120,23 +120,95 @@
                                                                                                   
                                                 </select>
                                             </div>
-                                            <div class="contact-form-input">
-                                                <label for="number1">Throttle request</label>
-                                                <div class="input-group d-flex">
-                                                    <div class="prepend">
-                                                        <label for="number1">Count</label>
-                                                        <input type="number" name="throttle_request_count" class="form-control" value="{{$settings->firstWhere('name','throttle_request_count')->value}}" placeholder="Throttle count" />
-                                                    </div>
-                                                    <div>
-                                                        <label for="number1">Every (minutes)</label>
-                                                    <input type="number" name="throttle_request_minutes" class="form-control" value="{{$settings->firstWhere('name','throttle_request_minutes')->value}}" placeholder="Throttle minutes"  />
-                                                    </div>
-                                                    
-                                                </div>
-                                                
-                                            </div>
+                                            
                                             <div class="contact-form-btn">
-                                                <button class="button button--md" type="submit"> Save
+                                                <button class="button button--md submit" type="button"> Save </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="dashboard__content-card">
+                                <div class="dashboard__content-card-header">
+                                    <h5 class="font-body--xl-500">Throttle</h5>
+                                </div>
+                                <div class="dashboard__content-card-body">
+                                    <form action="{{route('admin.settings')}}" method="post" >@csrf
+                                        <div class="contact-form__content">
+                                            <div class="contact-form-input row ">
+                                                <div class="col-md-2">
+                                                    <label for="number1" class="pt-3">Login Throttle</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <input type="number" name="throttle_login_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_login_attempt')->value}}" placeholder="Maximum Attempt" />
+                                                            <i class="small text-sm text-muted">Maximum attempt</i>
+                                                        </div>
+                                                        <div>
+                                                            <input type="number" name="throttle_login_time" class="form-control" value="{{$settings->firstWhere('name','throttle_login_time')->value}}" placeholder="Timeframe"  />
+                                                            <i class="small text-sm text-muted">Timeframe (minutes)</i>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="contact-form-input row ">
+                                                <div class="col-md-2">
+                                                    <label for="number1" class="pt-3">PIN Throttle</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <input type="number" name="throttle_pin_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_pin_attempt')->value}}" placeholder="Maximum Attempt" />
+                                                            <i class="small text-sm text-muted">Maximum attempt</i>
+                                                        </div>
+                                                        <div>
+                                                            <input type="number" name="throttle_pin_time" class="form-control" value="{{$settings->firstWhere('name','throttle_pin_time')->value}}" placeholder="Timeframe"  />
+                                                            <i class="small text-sm text-muted">Timeframe (minutes)</i>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="contact-form-input row ">
+                                                <div class="col-md-2">
+                                                    <label for="number1" class="pt-3">BVN Throttle</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <input type="number" name="throttle_bvn_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_bvn_attempt')->value}}" placeholder="Maximum Attempt" />
+                                                            <i class="small text-sm text-muted">Maximum attempt</i>
+                                                        </div>
+                                                        <div>
+                                                            <input type="number" name="throttle_bvn_time" class="form-control" value="{{$settings->firstWhere('name','throttle_bvn_time')->value}}" placeholder="Timeframe"  />
+                                                            <i class="small text-sm text-muted">Timeframe (minutes)</i>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="contact-form-input row ">
+                                                <div class="col-md-2">
+                                                    <label for="number4" class="pt-3">OTP Throttle</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <input type="number" name="throttle_otp_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_otp_attempt')->value}}" placeholder="Maximum Attempt" />
+                                                            <i class="small text-sm text-muted">Maximum attempt</i>
+                                                        </div>
+                                                        <div>
+                                                            <input type="number" name="throttle_otp_time" class="form-control" value="{{$settings->firstWhere('name','throttle_otp_time')->value}}" placeholder="Timeframe"  />
+                                                            <i class="small text-sm text-muted">Timeframe (minutes)</i>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="contact-form-btn">
+                                                <button class="button button--md submit" type="button"> Save
                                                 </button>
                                             </div>
                                         </div>
@@ -150,7 +222,7 @@
                                             <h5 class="font-body--xl-500">Products</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                            <form action="{{route('admin.settings')}}" method="post" id="product">@csrf
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--md-400">
                                                         <label for="min_stck_level" class="col-8">Minimum stock level</label>
@@ -236,7 +308,7 @@
                                                        
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md" type="submit"> Save
+                                                        <button class="button button--md submit" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -250,7 +322,7 @@
                                             <h5 class="font-body--xl-500">Orders</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                            <form action="{{route('admin.settings')}}" method="post" id="orders">@csrf
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--md-400">
                                                         <label for="max_del_hours" class="col-8 ">Maximum Delivery Hours</label>
@@ -286,7 +358,7 @@
                                                         </tr>
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md" type="submit"> Save
+                                                        <button class="button button--md submit" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -303,7 +375,7 @@
                                             <h5 class="font-body--xl-500">Shop</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                            <form action="{{route('admin.settings')}}" method="post" id="shop">@csrf
                                                 <div class="contact-form__content">
                                                     <table>
                                                         
@@ -382,7 +454,7 @@
                                                         
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md" type="submit"> Save
+                                                        <button class="button button--md submit" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -396,7 +468,7 @@
                                             <h5 class="font-body--xl-500">Advert</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="vat">@csrf
+                                            <form action="{{route('admin.settings')}}" method="post" id="advert">@csrf
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--md-400">
                                                         <label for="max_del_hours" class="col-8 font-body--400">Minimum Advert Days</label>
@@ -503,7 +575,7 @@
             
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md" type="submit"> Save
+                                                        <button class="button button--md submit" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -578,7 +650,7 @@
                                             </div>
                                         </div>
                                         <div class="contact-form-btn">
-                                            <button class="button button--md" type="submit"> + Create Admin </button>
+                                            <button class="button button--md submit" type="button"> + Create Admin </button>
                                         </div>
                                     </div>
                                 </form>
@@ -661,7 +733,7 @@
                                                                 
                                                                 
                                                                 <div class="contact-form-btn">
-                                                                    <button class="button button--md" type="submit"> Update Admin </button>
+                                                                    <button class="button button--md submit" type="button"> Update Admin </button>
                                                                     <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='none'"> Cancel </button>
                                                                 </div>
                                                             </div>
@@ -810,7 +882,7 @@
                                                                     </div>
                                                                     
                                                                     <div class="contact-form-btn">
-                                                                        <button class="button button--md" type="submit"> Update Plan </button>
+                                                                        <button class="button button--md submit" type="button"> Update Plan </button>
                                                                         <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('planedit'+{{$plan->id}}).style.display='none'"> Cancel </button>
                                                                     </div>
                                                                 </div>
@@ -830,7 +902,7 @@
                                         <h5 class="font-body--xl-500">New Plan</h5>
                                     </div>
                                     <div class="dashboard__content-card-body">
-                                        <form method="post" action="{{route('admin.plans')}}" id="admin" class="mb-3">@csrf
+                                        <form method="post" action="{{route('admin.plans')}}" id="plan" class="mb-3">@csrf
                                             <div class="contact-form__content">
                                                 
                                                 <div class="contact-form-input">
@@ -908,7 +980,7 @@
                                                 </div>
                                                 
                                                 <div class="contact-form-btn">
-                                                    <button class="button button--md" type="submit"> Create Plan </button>
+                                                    <button class="button button--md submit" type="button"> Create Plan </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -965,7 +1037,7 @@
                                                 
                                             </tbody></table>
                                             <div class="contact-form-btn">
-                                                <button class="button button--md" type="submit"> Save
+                                                <button class="button button--md submit" type="button"> Save
                                                 </button>
                                             </div>
                                         </div>
@@ -1017,7 +1089,7 @@
                                         </div>
 
                                         <div class="contact-form-btn">
-                                            <button class="button button--md" type="submit">
+                                            <button class="button button--md submit" type="button">
                                             + Add Shipping Rate
                                             </button>
                                         </div>
@@ -1102,7 +1174,7 @@
                                                                     </div>
                                                             
                                                                     <div class="contact-form-btn">
-                                                                        <button class="button button--md" type="submit">
+                                                                        <button class="button button--md submit" type="button">
                                                                             Update Shipping Rate
                                                                         </button>
                                                                         <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
@@ -1138,8 +1210,6 @@
   </div>
   <!-- dashboard Secton  End  -->
   
-  
-  
 @endsection
 @push('scripts')
 <script src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
@@ -1152,6 +1222,7 @@
 <script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script>
 
 <script>
+    // var submittedform;
     $(document).ready(function() {
         $('#datatable').DataTable({
             "pagingType": "full_numbers",
@@ -1170,5 +1241,11 @@
             }
         });
     });
+    
+    //onclick that submit,
+    //display modal with enter pin
+    //on click save for pin..
+    //append this pin to the form
+    //then submit form
 </script>
 @endpush

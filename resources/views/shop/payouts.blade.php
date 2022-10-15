@@ -88,7 +88,7 @@
                                             
                                         </div>
                                         <div class="contact-form-btn">
-                                            <button class="button button--md @if(!$shop->bankaccount) button--disable @endif" type="submit" id="btn-payout1">Submit Request</button>
+                                            <button class="button button--md submit @if(!$shop->bankaccount) button--disable @endif" type="button" id="btn-payout1">Submit Request</button>
                                         </div>
                                         </form>
                                     </div>
@@ -219,7 +219,7 @@
                                               @endif
                                           </div>
                                           <div class="contact-form-btn">
-                                              <button class="button button--md" type="submit"> Update Details</button>
+                                              <button class="button button--md submit" type="button"> Update Details</button>
                                               <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('bankedit'+{{$shop->bankaccount->id}}).style.display='none'"> Cancel</button>
                                           </div>
                                       </form>
@@ -260,7 +260,7 @@
                                         </div>
 
                                         <div class="contact-form-btn">
-                                            <button class="button button--md" type="submit"> Save Details</button>
+                                            <button class="button button--md submit" type="button"> Save Details</button>
                                         </div>
                                     </form>
                                 @endif

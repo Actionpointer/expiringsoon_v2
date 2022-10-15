@@ -4,41 +4,24 @@ retry payout with job -
 what happens when admin approves kyc? 
 
 notification
-OTP ,PIN SET,USE PIN TO VALIDATE
-throttle
-REVIEW
-
-
-notification EMAILS
+REVIEW customer rate product, rate shop..after order is completed, 
+REFUND
+SHOP MANAGE SHIPPING
 TAGS ON PRODUCT PAGE
+REPORT SHOPS/PRODUCT
 
-(check ID Card name against the bvn validation result name, phone, dob)
-throttle bvn validation
-login throttle, bvn validation, transaction confirmation error, id verification mismatch, 
 revisit security alert - once someone is throttled 
 add password strength meter
 
-
-8.REVIEW
-customer rate product, rate shop..after order is completed, refund
-
 if customer does not raise query xdays after delivery, change order to completed
 
-REPORT SHOPS/PRODUCT
+
 reviews : product rating.. show in index, product, hotdeals
 
 
 categories homepage
 
-notifications - email and inapp
-
 hot deals mobile view (home page & hot deals page)
-
-REFUND
-
-coupon
-
-
 
 cron job for running jobs 
 if user is downgrading, show the impact of the plan to the user.

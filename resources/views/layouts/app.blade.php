@@ -442,7 +442,32 @@
     <!-- Header  Section start -->
     @yield('main')
     
-
+    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            {{-- <div class="modal-header">
+              <h5 class="modal-title" id="pinModalLabel">Enter Access Pin</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> --}}
+            <div class="modal-body">
+                <div class="contact-form__content my-3">
+                    <div class="contact-form-input">
+                        <label for="pin">Enter Your Access Pin</label>
+                        <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                    </div>
+                    <div class="contact-form-btn">
+                        <button class="button button--md" id="pinsubmit" type="button"> Save </button>
+                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-start">
+              <span class="small text-muted">Set or reset your access pin from your <a href="{{route('profile')}}">profile</a></span>
+            </div>
+          </div>
+        </div>
+    </div>
+      
     <!--Footer Section Start  -->
     <footer class="footer footer--one">
         <div class="container">

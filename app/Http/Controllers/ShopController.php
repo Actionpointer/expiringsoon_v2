@@ -14,12 +14,14 @@ use App\Models\Category;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
+use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
+    use SecurityTrait;
     public function __construct()
     {
         $this->middleware('auth')->except(['index','show']);
@@ -125,6 +127,9 @@ class ShopController extends Controller
     }
 
     public function profile(Shop $shop,Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $shop->name = $request->name;
         $shop->email = $request->email;
         $shop->phone = $request->phone;
@@ -140,6 +145,9 @@ class ShopController extends Controller
     }
 
     public function address(Shop $shop,Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $shop->address = $request->address;
         $shop->state_id = $request->state_id;
         $shop->city_id = $request->city_id;
@@ -148,6 +156,9 @@ class ShopController extends Controller
     }
 
     public function discounts(Shop $shop,Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $shop->discount30 = $request->discount30;
         $shop->discount60 = $request->discount60;
         $shop->discount90 = $request->discount90;
@@ -158,6 +169,9 @@ class ShopController extends Controller
 
     public function kyc(Shop $shop,Request $request){
         // dd($request->all());
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         if(!$request->idcard && !$request->addressproof && !$request->companydoc)
         return redirect()->back()->with(['result'=> 0,'message'=> 'Nothing was uploaded']);
         foreach(['idcard','addressproof','companydoc'] as $type){

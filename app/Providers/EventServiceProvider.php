@@ -23,6 +23,7 @@ use App\Events\SubscriptionExpired;
 use App\Listeners\AutoRenewFeature;
 use App\Listeners\DisbursingPayout;
 use App\Listeners\DeactivateAdverts;
+use App\Listeners\ActivateProducts;
 use App\Listeners\DeactivateProducts;
 use App\Listeners\RemoveFromWishList;
 use Illuminate\Support\Facades\Event;

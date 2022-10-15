@@ -35,6 +35,8 @@ Table Contents
         16.12   Blog Post Slider
     17. Dropdown
     18. Select2
+    19. Multi Select List
+    20. Pin Validation
 
  */
 
@@ -1244,4 +1246,19 @@ $('#checkbox_master').change(function() {
   if($(this).is(':checked')){
       $('.checkboxes').prop('checked',true)
   }else $('.checkboxes').prop('checked',false)
+})
+
+//20. Pin validation
+$('.submit').on('click',function(){
+  window.submittedform = $(this).closest('form');
+ $('#pinModal').modal('show')
+})
+$('#pinsubmit').on('click',function(){
+ let pin = $(this).closest('.modal-body').find('#pin');
+ if(pin.val() != ''){
+     $('#pinModal').modal('hide')
+     pin.attr('type','hidden');
+     submittedform.append(pin);
+     submittedform.submit();
+ }
 })

@@ -55,10 +55,20 @@
                             <label for="fname">First Name </label>
                             <input type="text" name="fname" value="{{$user->fname}}" placeholder="First Name"/>
                           </div>
+                          @error('fname')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                           <div class="contact-form-input">
                             <label for="lname2">Last Name </label>
                             <input type="text" name="lname" value="{{$user->lname}}" placeholder="Last Name" />
                           </div>
+                          @error('lname')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                           <div class="contact-form-input">
                             <label for="number1">Phone Number</label>
                             <div class="input-group d-flex">
@@ -71,9 +81,12 @@
                                 </div>
                                 <input type="number" name="phone" class="form-control" value="{{$user->phone}}" placeholder="Phone Number" onkeypress="validate(event)" />
                             </div>
-                            
                           </div>
-                          
+                          @error('phone')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                           {{-- <div class="contact-form-btn">
                             <button class="button button--md" type="submit"> Save Details</button>
                           </div> --}}
@@ -88,7 +101,11 @@
                               <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
                               <button type="button" class="button w-100 mt-3 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Avatar/Logo</button>
                             </div>
-                            
+                            @error('photo')
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
                         </div>
                       </div>
                       <div class="col-lg-12 order-lg-0 order-1">
@@ -200,6 +217,11 @@
                             <label for="street">Address</label>
                             <input type="text" name="street" placeholder="Street" required />
                         </div>
+                        @error('street')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                         <div class="contact-form__content-group location">
                           <div class="contact-form-input">
                             <label for="state_id">State</label>
@@ -209,22 +231,42 @@
                                 @endforeach 
                             </select>
                           </div>
+                          @error('state_id')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                           <div class="contact-form-input">
                             <label for="password">City</label>
                             <select name="city_id" id="city_id" class="select2 cities">
                                 <option value="90" selected>Somewhere</option>
                             </select>
                           </div>
+                          @error('city_id')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                         </div>
                         <div class="contact-form__content-group">
                             <div class="contact-form-input"> 
                               <label for="contact_name">Contact Name</label>
                               <input type="text" name="contact_name" placeholder="Contact Name" required />
                             </div>
+                            @error('contact_name')
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
                             <div class="contact-form-input">
                               <label for="contact_phone">Phone</label>
                               <input type="text" name="contact_phone" placeholder="Contact Phone" required />
                             </div>
+                            @error('contact_phone')
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
                         </div>
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" name="main" value="1" id="main0" />
@@ -257,12 +299,28 @@
                           </svg>
                         </span>
                       </div>
+                      @error('oldpassword')
+                        <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                      @enderror
                       <div class="contact-form__content-group">
                         <!-- New Password  -->
-                        <div class="contact-form-input"> <label for="npassword">New Password </label>
+                        <div class="contact-form-input"> 
+                          <label for="npassword">New Password </label>
                           <input   type="password" id="newPassword" name="password" placeholder="" autocomplete="new-password" required />
-                          <span class="icon" onclick="showPassword('npassword',this)"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> <circle cx="12" cy="12" r="3"></circle> </svg> </span>
+                          <span class="icon" onclick="showPassword('npassword',this)"> 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > 
+                              <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> 
+                              <circle cx="12" cy="12" r="3"></circle> 
+                            </svg> 
+                          </span>
                         </div>
+                        @error('newPassword')
+                        <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                         <!-- confirm  Password  -->
                         <div class="contact-form-input">
                           <label for="confirmPassword">Confirm Password</label>
@@ -287,7 +345,7 @@
               @if(auth()->user()->role != 'shopper')
               <div class="dashboard__content-card">
                 <div class="dashboard__content-card-header">
-                  <h5 class="font-body--xl-500">Transaction Pin</h5>
+                  <h5 class="font-body--xl-500">Access Pin</h5>
                 </div>
                 <div class="dashboard__content-card-body">
                   <form method="post" action="{{route('edit-pin')}}" id="editPassword">@csrf
@@ -295,14 +353,20 @@
                       
                       <div class="contact-form__content-group">
                         <!-- New Password  -->
-                        <div class="contact-form-input"> <label for="npassword">New Pin </label>
-                          <input   type="password" id="newPassword" name="password" placeholder="" autocomplete="new-password" required />
+                        <div class="contact-form-input"> <label for="newPin">New Pin </label>
+                          <input   type="password" id="newPin" name="pin" placeholder="" autocomplete="new-pin" required />
                           <span class="icon" onclick="showPassword('npassword',this)"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> <circle cx="12" cy="12" r="3"></circle> </svg> </span>
                         </div>
+                        @error('pin')
+                        <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                        
                         <!-- confirm  Password  -->
                         <div class="contact-form-input">
-                          <label for="confirmPassword">Confirm Pin</label>
-                          <input   type="password"   id="confirmPassword"   name="password_confirmation"  autocomplete="new-password" placeholder=""   required />
+                          <label for="confirmPin">Confirm Pin</label>
+                          <input   type="password"   id="confirmPin"   name="pin_confirmation"  autocomplete="new-pin" placeholder=""   required />
                           <span   class="icon"   onclick="showPassword('confirmPassword',this)">   
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
                               <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> 
@@ -315,17 +379,21 @@
                       <div class="contact-form-input">
                         <label for="number1">One Time Password</label>
                         <div class="input-group d-flex">
-                           <input type="number" name="otp" class="form-control" placeholder="Enter OTP" />
+                           <input type="text" name="otp" class="form-control" placeholder="Enter OTP" />
                         
                             <div class="append">
-                                <button class="btn btn-dark">Generate</button>
+                                <button class="btn btn-dark btn-lg" type="button" id="generate">Generate</button>
                             </div>
                           </div>
-                        
                       </div>
+                      @error('otp')
+                        <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                      @enderror
                       <div id="passmatch" style="font-size:13px;font-weight:450"></div>
                       <div class="contact-form-btn">
-                        <button type="submit" class="button button--md" type="submit"> Save New Password
+                        <button type="submit" class="button button--md" type="submit"> Save New Pin
                         </button>
                       </div>
                     </div>
@@ -381,6 +449,20 @@
             cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
           });
           cities.select2();
+        },
+        error: function (data, textStatus, errorThrown) {
+            console.log(data);
+        },
+      })
+  })
+
+  $(document).on('click','#generate',function(){
+      $.ajax({
+        type:'GET',
+        dataType: 'json',
+        url: "{{route('generate_otp')}}",
+        success:function(data) {
+            console.log(data);
         },
         error: function (data, textStatus, errorThrown) {
             console.log(data);

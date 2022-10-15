@@ -48,5 +48,13 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60);
         });
+        
+        RateLimiter::for('pin', function (Request $request) {
+            return Limit::perMinutes(cache('settings')['throttle_pin_time'],cache('settings')['throttle_pin_attempt']);
+        });
+        
+        RateLimiter::for('bvn', function (Request $request) {
+            return Limit::perMinutes(cache('settings')['throttle_bvn_time'],cache('settings')['throttle_bvn_attempt']);
+        });
     }
 }

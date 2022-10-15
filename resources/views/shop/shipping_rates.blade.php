@@ -70,7 +70,7 @@
                       </div>
                     
                     <div class="contact-form-btn">
-                      <button class="button button--md" type="submit">
+                      <button class="button button--md submit" type="button">
                         + Add Shipping Rate
                       </button>
                     </div>
