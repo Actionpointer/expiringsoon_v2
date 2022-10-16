@@ -263,8 +263,6 @@ class ShopController extends Controller
     public function notifications(Shop $shop){
         
     }
-    
-
 
 /* Admin area */
     public function admin_index(){

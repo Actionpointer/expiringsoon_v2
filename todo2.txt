@@ -1,4 +1,4 @@
-BVN validation (revisit)
+BVN validation (revisit) 
 fetch payout
 retry payout with job - 
 what happens when admin approves kyc? 
