@@ -135,5 +135,10 @@ class Shop extends Model
     public function reviews(){
         return $this->morphMany(Review::class,'reviewable');
     }
+    public function ratings(){
+        if($this->morphMany(Review::class,'reviewable')->count())
+        return $this->morphMany(Review::class,'reviewable')->sum('rating') / $this->morphMany(Review::class,'reviewable')->count();
+        else return 0;
+    }
     
 }

@@ -34,9 +34,9 @@ class OrderController extends Controller
     public function review(Request $request){
         // dd($request->all());
         if($request->shop_id){
-            $review = Review::create(['reviewable_id'=> $request->shop_id,'reviewable_type'=> 'App\Models\Shop','order_id'=> $request->order_id,' rating'=> $request-> rating,'comment'=> $request->comment]);
+            $review = Review::create(['reviewable_id'=> $request->shop_id,'reviewable_type'=> 'App\Models\Shop','order_id'=> $request->order_id,' rating'=> $request->rating,'comment'=> $request->comment]);
         }else{
-            $review = Review::create(['reviewable_id'=> $request->product_id,'reviewable_type'=> 'App\Models\Product','order_id'=> $request->order_id,' rating'=> $request-> rating,'comment'=> $request->comment]);
+            $review = Review::create(['reviewable_id'=> $request->product_id,'reviewable_type'=> 'App\Models\Product','order_id'=> $request->order_id,' rating'=> $request->rating,'comment'=> $request->comment]);
         }
         return redirect()->back()->with(['result'=> 1,'message'=> 'Review successfully added']);
     }
