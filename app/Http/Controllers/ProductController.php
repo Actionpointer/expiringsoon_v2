@@ -21,8 +21,8 @@ class ProductController extends Controller
     }
     
     public function index(){
-        // product is visible, product is in locale, 
         $category = null;
+        $tag = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
         $products = Product::edible()->approved()->active()->accessible()->available()->visible();
@@ -35,6 +35,10 @@ class ProductController extends Controller
         if(request()->query() && request()->query('category_id')){
             $products = $products->where('category_id',request()->query('category_id'));
             $category = Category::find(request()->query('category_id'));
+        }
+        if(request()->query() && request()->query('tag')){
+            $products = $products->where('tags','like',"%".request()->query('tag')."%");
+            $tag = request()->query('tag');
         }
         if(request()->query() && request()->query('sortBy')){
             if(request()->query('sortBy') == 'price_asc'){
@@ -56,7 +60,8 @@ class ProductController extends Controller
             $advert->views = $advert->views + 1;
             $advert->save();
         }
-        return view('frontend.product.list',compact('advert','products','category','categories','states','state_id'));
+        // dd(array_filter($products->pluck('tags')->flatten()->toArray()));
+        return view('frontend.product.list',compact('advert','products','tag','category','categories','states','state_id'));
     }
 
     public function show(Product $product){
@@ -105,6 +110,7 @@ class ProductController extends Controller
     }
 
     public function update(Shop $shop,ProductRequest $request){
+        // dd($request->all());
         $product = Product::find($request->product_id);
         if($request->hasFile('photo')){
             if($product->photo) Storage::delete('public/'.$product->photo);

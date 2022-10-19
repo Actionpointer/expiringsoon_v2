@@ -109,6 +109,15 @@
                                 </select>
                             </div>
                             <div class="select-box--item" style="min-width: 200px!important">
+                                <select name="tag" id="tag_id" class="select2 w-100" onchange="document.getElementById('filterform').submit();">
+                                    <option value="0" >All Tags</option>
+                                        @foreach (array_filter($products->pluck('tags')->flatten()->toArray()) as $tags)
+                                            <option value="{{$tags}}" @if($tag && $tag == $tags) selected @endif>{{$tags}}</option>
+                                        @endforeach
+                                </select>
+                            </div>
+                            {{-- dd(array_filter($products->pluck('tags')->toArray())); --}}
+                            <div class="select-box--item" style="min-width: 200px!important">
                                 <select name="state_id" id="state_id" class="select2" onchange="document.getElementById('filterform').submit();">
                                     <option value="0" @if($state_id == 0) selected @endif>All States</option>
                                     @foreach ($states as $state)

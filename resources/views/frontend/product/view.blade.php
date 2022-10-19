@@ -207,12 +207,12 @@
                     <!-- Tags  -->
                     <div class="products__content">
                         <h5 class="products__content-category font-body--md-500">Category: <a href="{{route('product.list')}}?category_id={{$product->category_id}}">{{$product->category->name}}</a></h5>
-                        @if($product->tags && $product->tags->isNotEmpty())
+                        @if($product->tags && count($product->tags))
                         <div class="products__content-tags">
                             <h5 class="font-body--md-500">Tag :</h5>
                             <div class="products__content-tags-item">
-                                @foreach ($tags as $tag)
-                                    <a href="#" class="font-body--md-400">{{$tag}}</a>
+                                @foreach ($product->tags as $tag)
+                                    <a href="{{route('product.list')}}?tag={{$tag}}" class="font-body--md-400">{{$tag}}</a>
                                 @endforeach
                                 
                                 

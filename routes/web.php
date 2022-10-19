@@ -34,7 +34,7 @@ Route::post('edit-pin',[App\Http\Controllers\UserController::class, 'pin'])->nam
 Route::post('topup',[App\Http\Controllers\PaymentController::class, 'topup'])->name('topup');
 Route::get('orders', [App\Http\Controllers\OrderController::class, 'index'])->name('orders');
 Route::get('order/{order}',[App\Http\Controllers\OrderController::class, 'show'])->name('order-details');
-
+Route::post('order/review',[App\Http\Controllers\OrderController::class, 'review'])->name('order.review');
 Route::post('order/message',[App\Http\Controllers\OrderController::class, 'message'])->name('order.message');
 
 Route::get('cart', [App\Http\Controllers\CartController::class, 'cart'])->name('cart');

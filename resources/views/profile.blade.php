@@ -386,6 +386,7 @@
                             </div>
                           </div>
                       </div>
+                      <span id="otp_response"></span>
                       @error('otp')
                         <span class="invalid-feedback d-block text-danger mb-4" role="alert">
                             <strong>{{ $message }}</strong>
@@ -462,7 +463,13 @@
         dataType: 'json',
         url: "{{route('generate_otp')}}",
         success:function(data) {
-            console.log(data);
+          console.log(data)
+          if(data.otp){
+            $('#otp_response').addClass('text-success')
+          }else {
+            $('#otp_response').addClass('text-danger')
+          }
+          $('#otp_response').text(data.message)
         },
         error: function (data, textStatus, errorThrown) {
             console.log(data);

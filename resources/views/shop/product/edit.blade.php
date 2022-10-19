@@ -73,7 +73,7 @@
                             @enderror
                           </div>
                           <div class="contact-form--input contact-form--input-area">
-                            <textarea name="description" cols="auto" class="w-100" placeholder="Product Description" required >{{ $product->description }}</textarea>
+                            <textarea name="description" cols="auto" class="w-100" placeholder="Product Description" required >{{ $product->description ?? old('description') }}</textarea>
                             @error('description')
                                 <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -106,7 +106,7 @@
                             @enderror
                           </div>
                           <div class="contact-form-input">
-                            <label for="tags">Sub Category</label>
+                            <label for="tags">Sub Categories (tags)</label>
                             <select name="tags[]" id="tags" class="select2" multiple >
                               @foreach ($tags as $tag)
                                 <option value="{{$tag->name}}" @if(is_Array($product->tags) && in_array($tag->name,$product->tags)) selected @endif>{{$tag->name}}</option>

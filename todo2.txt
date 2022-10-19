@@ -1,13 +1,13 @@
+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
+
 BVN validation (revisit) 
 fetch payout
 retry payout with job - 
 what happens when admin approves kyc? 
 
 notification
-REVIEW customer rate product, rate shop..after order is completed, 
+
 REFUND
-SHOP MANAGE SHIPPING
-TAGS ON PRODUCT PAGE
 REPORT SHOPS/PRODUCT
 
 revisit security alert - once someone is throttled 

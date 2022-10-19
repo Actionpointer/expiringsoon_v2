@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Shop;
 use App\Models\Order;
+use App\Models\Review;
 use App\Models\OrderMessage;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,16 @@ class OrderController extends Controller
         $order = Order::find($request->order_id);
         $message = OrderMessage::create(['user_id'=> $order->user_id,'order_id'=> $order->id,'shop_id'=> $order->shop_id,'body'=> $request->body,'sender'=> $request->sender,'receiver' => $request->receiver]);
         return redirect()->back();
+    }
+
+    public function review(Request $request){
+        // dd($request->all());
+        if($request->shop_id){
+            $review = Review::create(['reviewable_id'=> $request->shop_id,'reviewable_type'=> 'App\Models\Shop','order_id'=> $request->order_id,' rating'=> $request-> rating,'comment'=> $request->comment]);
+        }else{
+            $review = Review::create(['reviewable_id'=> $request->product_id,'reviewable_type'=> 'App\Models\Product','order_id'=> $request->order_id,' rating'=> $request-> rating,'comment'=> $request->comment]);
+        }
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Review successfully added']);
     }
 
     //vendors

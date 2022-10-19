@@ -249,7 +249,9 @@
                         <th scope="col" class="dashboard__order-history-table-title"> Price </th>
                         <th scope="col" class="dashboard__order-history-table-title" > quantity </th>
                         <th scope="col" class="dashboard__order-history-table-title"> Subtotal </th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Review </th>
+                        @if($order->reviews->where('reviewable_type','App\Models\Product')->isEmpty())
+                          <th scope="col" class="dashboard__order-history-table-title"> Review </th>
+                        @endif
                       </tr>
                     </thead>
                     <tbody>
@@ -285,8 +287,90 @@
                               <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
                                   <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($order->total, 0)}}</p>
                               </td>
-                              <td>Review Product</td>
+                              <td class="align-middle">
+                                
+                                @if($order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$cart->product->id)->isEmpty())
+                                  <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#review{{$cart->product->id}}">Review Product</button>
+                                @endif
+                                @if($order->status == 'completed' &&  $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$cart->product->id)->isNotEmpty())
+                                Reviewed
+                                @endif
+                              </td>
+
                           </tr>
+                          <div class="modal fade" id="review{{$cart->product->id}}" aria-labelledby="review{{$cart->product->id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="review{{$cart->product->id}}Label">Review Product</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <h4 class="mb-3">Reviewing:  {{$cart->product->name}}</h4>
+                                  <form method="post" id="rateService" action="{{route('order.review')}}">@csrf
+                                    <input type="hidden" name="order_id" value="{{$order->id}}">
+                                    <input type="hidden" name="product_id" value="{{$cart->product->id}}">
+                                    <div class="contact-form__content">
+                                      <div class="bill-card__payment-method-item">
+                                        <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="rating" id="vpoor" value="1"/>
+                                          <label class="form-check-label font-body--400" >
+                                            <span class="fa fa-star star"></span>
+                                            (Very Bad)
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="rating" id="poor" value="2" />
+                                          <label class="form-check-label font-body--400" >
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            (Bad)
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="rating" id="fair" value="3" />
+                                          <label class="form-check-label font-body--400" >
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            (Fair)
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="rating" id="good" value="4" />
+                                          <label class="form-check-label font-body--400" >
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            (Good)
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="rating" id="excellent" value="5" />
+                                          <label class="form-check-label font-body--400" >
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            <span class="fa fa-star star"></span>
+                                            (Excellent)
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div class="contact-form-input contact-form-textarea" style="margin-top:20px">
+                                        <textarea name="comment" id="note" placeholder="Leave a Comment (Optional)"></textarea>
+                                      </div>
+                                      <div class="form-button">
+                                        <button type="submit" id="btn-submit" class="button button--md w-100">Submit</button>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
                       @endforeach
                     </tbody>
                   </table>
@@ -384,42 +468,79 @@
                       </select>
                     </div>
                     <div class="d-flex py-0">
-                        <textarea name="body" class="form-control" placeholder="Write Message"></textarea>
+                        <textarea name="body" class="form-control" rows="3" placeholder="Write Message"></textarea>
                         <button class="button button--outline rounded-0 my-0">Send</button>
                     </div>
                   </form>
                 </div>
               @endif
 
-              {{-- @if($order->status == 'completed') --}}
+              @if($order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Shop')->isEmpty())
                 <div class="col-lg-12" style="margin-top:20px">
-                    
                     <div class="comment-box">
-                      <h5 class="font-body--xxxl-500">Review Vendor</h5>
-        
-                      <form action="#" class="my-3">
-                        <div class="contact-form-group">
-                          <div class="contact-form--input">
-                            <label for="name">Rating</label>
-                            <input type="text" placeholder="rating"  id="name">
+                      <h5 class="font-body--xxxl-500">Review Vendor</h5>          
+                      <form method="post" id="rateService" action="{{route('order.review')}}">@csrf
+                        <input type="hidden" name="order_id" value="{{$order->id}}">
+                        <input type="hidden" name="shop_id" value="{{$order->shop_id}}">
+                        <div class="contact-form__content">
+                          <div class="bill-card__payment-method-item d-md-flex justify-content-between">
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="rating" id="vpoor" value="1"/>
+                              <label class="form-check-label font-body--400" >
+                                <span class="fa fa-star star"></span>
+                                (Very Poor)
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="rating" id="poor" value="2" />
+                              <label class="form-check-label font-body--400" >
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                (Poor)
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="rating" id="fair" value="3" />
+                              <label class="form-check-label font-body--400" >
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                (Fair)
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="rating" id="good" value="4" />
+                              <label class="form-check-label font-body--400" >
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                (Good)
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="rating" id="excellent" value="5" />
+                              <label class="form-check-label font-body--400" >
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                <span class="fa fa-star star"></span>
+                                (Excellent)
+                              </label>
+                            </div>
                           </div>
-                          
-                        </div>
-        
-                        <div class="contact-form--input contact-form--input-area mb-0" id="comments">
-                          <label for="message">Message</label>
-                          <textarea name="message" id="message" placeholder="Write your comment here…"></textarea>
-                        </div>
-                        
-                        <div class="contact-form-button">
-                          <button class="button button--md" type="submit">
-                            Post Review
-                          </button>
+                          <div class="contact-form-input contact-form-textarea" style="margin-top:20px">
+                            <textarea name="comment" id="note" placeholder="Leave a Comment (Optional)"></textarea>
+                          </div>
+                          <div class="form-button">
+                            <button type="submit" id="btn-submit" class="button button--md w-100">Submit</button>
+                          </div>
                         </div>
                       </form>
                     </div>
                 </div>
-              {{-- @endif --}}
+              @endif
               
               
             </div>
