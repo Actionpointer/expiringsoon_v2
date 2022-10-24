@@ -1,42 +1,51 @@
 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
 
-BVN validation (revisit) 
-fetch payout
+1.BVN validation (revisit) 
+user cannot create withdrawals, bvn validation, 
+
+2.fetch payout
 retry payout with job - 
-what happens when admin approves kyc? 
 
-notification
+3.what happens when admin approves kyc? 
 
-REFUND
-REPORT SHOPS/PRODUCT
+4.notification
 
-revisit security alert - once someone is throttled 
-add password strength meter
+5. REFUND
+customer does not raise query xdays after delivery, change order to completed
 
-if customer does not raise query xdays after delivery, change order to completed
+6. REPORT SHOPS/PRODUCT
+
+7. revisit security alert - once someone is throttled 
+
+8. add password strength meter
+
+9. reviews : product rating.. show in index, product, hotdeals
 
 
-reviews : product rating.. show in index, product, hotdeals
+10. categories homepage
 
+11. hot deals mobile view (home page & hot deals page)
 
-categories homepage
+12. cron job for running jobs 
 
-hot deals mobile view (home page & hot deals page)
-
-cron job for running jobs 
+13. subscriptions
 if user is downgrading, show the impact of the plan to the user.
 if user wants to be restored to the previous existing plan, make it possible... but no refund
-
 on subscription expiry, change all his shop status to false, and all his product status to false.. leave only the number allocated by free
 if user does not have subscription[
-    
-    2. he cannot create withdrawals, bvn validation, 
-    3. his products, shops and ads that are deactivated will show shop/product deactivated at the top
-    5. when user subscribes, activate only the number of shops & products that the subscription can buy
-    6. add coupon for buying subscriptions ? Coupon value + percentage
-  
+- his products, shops and ads that are deactivated will show shop/product deactivated at the top
+- when user subscribes, activate only the number of shops & products that the subscription can buy
 
-revisit advert page to edit advert status
+14.revisit advert page to edit advert status
 
-on product page .. redo wishlist, similar products, 
-clean all orders with status new
+15. on product page .. redo wishlist, similar products, 
+Product additional information
+
+- expiry date
+- discount price countdown
+- can be delivered to [list of places]
+- report product
+--------
+Show reviews
+
+16. clean all orders with status new
