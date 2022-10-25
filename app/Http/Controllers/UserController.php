@@ -10,6 +10,7 @@ use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Rules\OtpValidateRule;
 use App\Models\OneTimePassword;
+use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -33,16 +34,16 @@ class UserController extends Controller
 
     public function update(Request $request){
         // dd($request->all());
+        $user = auth()->user();
         $validator = Validator::make($request->all(), [
             'fname' => 'nullable|string',
             'lname' => 'nullable|string',
-            'phone' => 'nullable|string|unique:users',
+            'phone' => ['nullable','string',Rule::unique('users')->ignore($user)],
             'photo' => 'nullable|max:1024',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        $user = auth()->user();
         if($request->fname) $user->fname = $request->fname;
         if($request->lname) $user->lname = $request->lname;
         if($request->phone) {
