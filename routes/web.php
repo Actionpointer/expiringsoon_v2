@@ -1,8 +1,14 @@
 <?php
 
+use App\Notifications\WelcomeNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::get('sendemail',function(){
+    $user = \App\Models\User::find(31);
+    $user->notify(new WelcomeNotification());
+    return 'done';
+});
 Route::view('email','emails.completed');
 
 Auth::routes();

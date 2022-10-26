@@ -58,14 +58,29 @@
                             <label for="fname">Shop Name *</label>
                             <input type="text" name="name" placeholder=" Name" required/>
                           </div>
+                          @error('name')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                           <div class="contact-form-input">
                             <label for="lname2">Shop Email * </label>
                             <input type="email" name="email" placeholder="Email" required/>
                           </div>
+                          @error('email')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                           <div class="contact-form-input">
                             <label for="number1">Phone Number *</label>
                             <input type="number" name="phone" placeholder="Phone Number in local format. e.g 080945432" required/>
                           </div>
+                          @error('phone')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
                         </div>
                       </div>
                       <div class="col-lg-5 order-lg-0 order-1">
@@ -75,12 +90,12 @@
                               <img src="{{asset('img/avatar.png')}}" alt="logo"  onclick="performClick('theFile');"  id="imgPreview"   />
                             </div>
                             <div>
-                              <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" required/>
+                              <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg"/>
                               @error('photo')
-                <span class="invalid-feedback d-block" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+                                  <span class="invalid-feedback d-block" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
                               <button type="button" class="button w-100 mt-3 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Logo/Banner </button>
                             </div>
                             
@@ -92,15 +107,25 @@
                               <label for="address">Street Address *</label>
                               <input type="text" name="address" placeholder="Store Address" required/>
                             </div>
+                            @error('address')
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
                             <div class="contact-form__content-group row">
                               <!-- states -->
                               <div class="contact-form-input col-lg-6">
                                 <label for="states">state *</label>
-                                <select id="states" name="state" class="contact-form-input__dropdown" required>
+                                <select id="states" name="state_id" class="contact-form-input__dropdown" required>
                                   @foreach ($states as $state)
                                     <option value="{{$state->id}}">{{$state->name}}</option>
                                   @endforeach
                                 </select>
+                                @error('state_id')
+                                <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
                               </div>
                               <div class="contact-form-input col-lg-6">
                                 <label for="city">city *</label>
@@ -109,6 +134,11 @@
                                       <option value="{{$city->id}}">{{ucwords(strtolower($city->name))}}</option>
                                     @endforeach
                                 </select>
+                                @error('city_id')
+                                <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
                               </div>
                             </div>
                           </div>

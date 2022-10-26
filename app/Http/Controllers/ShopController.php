@@ -14,6 +14,7 @@ use App\Models\Category;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
+use App\Http\Requests\ShopRequest;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -94,20 +95,13 @@ class ShopController extends Controller
         return view('vendor.shop.create',compact('states','cities'));
     }
 
-    public function store(Request $request){
-        $user = auth()->user();
-        $validator = Validator::make($request->all(), [
-            'photo' => 'required|max:1024',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+    public function store(ShopRequest $request){
         if($request->hasFile('photo')){
             $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$banner);
         }
         $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
-        'address'=> $request->address,'state_id'=> $request->state,'city_id'=> $request->city_id,'published'=> $request->published]);
+        'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
         
         return redirect()->route('shop.settings',$shop);
     }
