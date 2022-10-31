@@ -162,7 +162,7 @@
                         </div>
                         <div class="contact-form-input">
                           <label for="number1">Expiry Date</label>
-                          <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{ $product->expire_at->format('m-d-Y') }}" id="datepicker"/>
+                          <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{ $product->expire_at->format('Y-m-d') }}" id="datepicker"/>
                           @error('expiry')
                             <span class="invalid-feedback d-block" role="alert">
                                 <strong>{{ $message }}</strong>
