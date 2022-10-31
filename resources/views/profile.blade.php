@@ -316,7 +316,7 @@
                             </svg> 
                           </span>
                         </div>
-                        @error('newPassword')
+                        @error('password')
                         <span class="invalid-feedback d-block text-danger mb-4" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

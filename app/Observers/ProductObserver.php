@@ -16,7 +16,7 @@ class ProductObserver
     {
         if(cache('settings')['auto_approve_product'])
         $product->approved = true;
-        $product->status = $product->shop->owner()->allowedProducts() < $product->shop->owner()->products->count() ? true:false;
+        $product->status = $product->shop->owner()->allowedProducts() >= $product->shop->owner()->products->count() ? true:false;
         $product->save();
     }
 

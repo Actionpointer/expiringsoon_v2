@@ -23,7 +23,7 @@ class ShopObserver
         $shop->users()->attach($user->id,['role' =>'owner']);
         if(cache('settings')['auto_approve_shop'])
         $shop->approved = true;
-        $shop->status = $shop->owner()->allowedShops() < $user->shops->count() ? true:false;
+        $shop->status = $shop->owner()->allowedShops() >= $user->shops->count() ? true:false;
         $shop->save();
         $shop->notify(new ShopWelcomeNotification);
     }

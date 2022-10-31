@@ -10,6 +10,8 @@ trait GeoLocationTrait
         $state = State::where('name',$current_state)->first();
         return $state;
     }
+
+    
     
 }
 
