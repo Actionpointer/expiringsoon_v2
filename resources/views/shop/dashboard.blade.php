@@ -89,7 +89,7 @@
                       @if($shop->status) 
                         <span class="iconify" style="color:#00b207" data-icon="akar-icons:check-box-fill" data-width="20" data-height="20">Active </span>
                        @else 
-                        <span class="iconify" style="color:#b20000" data-icon="akar-icons:check-box-fill" data-width="20" data-height="20">Active </span>
+                        <span class="iconify" style="color:#b20000" data-icon="akar-icons:check-box-fill" data-width="20" data-height="20">Inactive </span>
                       @endif
                     </h5>
                     <p class="dashboard__user-billing-location font-body--md-400"> {{$shop->address}}, {{$shop->state->name}} </p>
@@ -121,7 +121,7 @@
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Status:</h5>
                         <p class="font-body--md-500">
-                            Active
+                          @if($shop->status) Active @else Inactive @endif
                         </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
