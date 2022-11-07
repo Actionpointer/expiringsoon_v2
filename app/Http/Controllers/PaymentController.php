@@ -86,7 +86,6 @@ class PaymentController extends Controller
         return redirect()->route('home')->with(['result'=> 1,'message'=> 'Payment Successful']);
     }
     
-    
     public function index(){
         $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
         return view('payments',compact('payments'));

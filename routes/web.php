@@ -4,6 +4,10 @@ use App\Notifications\WelcomeNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::view('havron/donation','havron');
+Route::post('havron/payment',[App\Http\Controllers\HavronController::class, 'store'])->name('havron.pay');
+Route::get('havron/callback',[App\Http\Controllers\HavronController::class, 'callback'])->name('havron.callback');
+
 Route::get('sendemail',function(){
     $user = \App\Models\User::find(31);
     $user->notify(new WelcomeNotification());

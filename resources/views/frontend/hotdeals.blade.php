@@ -18,12 +18,14 @@
                                 <div class="col-lg-6">
                                     <div class="banner--04__img-wrapper">
                                         <img src="{{Storage::url($item->shop->banner)}}" alt="banner" class="img-fluid" />
-                                        {{-- <div class="off-sale">
-                                            <p>
-                                                <span>70%</span>
-                                                off
-                                            </p>
-                                        </div> --}}
+                                        {{-- 
+                                            <div class="off-sale">
+                                                <p>
+                                                    <span>70%</span>
+                                                    off
+                                                </p>
+                                            </div> 
+                                        --}}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
