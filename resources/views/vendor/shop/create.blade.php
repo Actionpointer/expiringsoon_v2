@@ -87,7 +87,7 @@
                         <div class="dashboard__content-card-img flex-column">
                             
                             <div class="dashboard__content-img-wrapper" id="avatar">
-                              <img src="{{asset('img/avatar.png')}}" alt="logo"  onclick="performClick('theFile');"  id="imgPreview"   />
+                              <img src="{{asset('src/images/site/avatar.png')}}" alt="logo"  onclick="performClick('theFile');"  id="imgPreview"   />
                             </div>
                             <div>
                               <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg"/>

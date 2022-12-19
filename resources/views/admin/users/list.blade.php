@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/>
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 
 @endpush
 @section('title')Users @endsection
@@ -64,7 +64,7 @@
                       <td class="cart-table-item align-middle" style="background-color:#fff;padding-top:12px !important">
                           <div class="cart-table__product-item-img">
                             <a href="{{route('admin.user.show',$user)}}">
-                            <img src="{{Storage::url($user->pic)}}" alt="{{$user->name}}" onerror="this.src='{{asset('img/avatar.png')}}'" /></a>
+                            <img src="{{Storage::url($user->pic)}}" alt="{{$user->name}}" onerror="this.src='{{asset('src/images/site/avatar.png')}}'" /></a>
                           </div>
                       </td>
                       <td class="cart-table-item order-date align-middle">
@@ -110,7 +110,7 @@
                     </tr>
                   @empty
                     <tr style="margin:auto;padding:1%;text-align:center">
-                      <td colspan="5"> <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                      <td colspan="5"> <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                         <br/>There are no registered customers at this time.</span>
                       </td>
                     </tr>
@@ -127,14 +127,14 @@
 
 @endsection
 @push('scripts')
-<script type="text/javascript" src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/demo.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/jszip.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/pdfmake.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/vfs_fonts.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/buttons.html5.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/jszip.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/pdfmake.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/vfs_fonts.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.html5.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.print.min.js')}}"></script>
 <script>
     $(document).ready(function() {
         $('#datatable').DataTable({

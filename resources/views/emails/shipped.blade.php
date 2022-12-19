@@ -124,7 +124,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="fluid-img">
-										<img src="{{asset('img/img-shipped.jpg')}}" border="0" width="100%" alt="" />
+										<img src="{{asset('src/images/site/img-shipped.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -149,7 +149,7 @@
 														</tr>
 														<tr>
 															<td class="fluid-img" align="center">
-																<img src="{{asset('img/tracking-bar-shipped.jpg')}}" border="0" width="100%" alt="" /></td>
+																<img src="{{asset('src/images/site/tracking-bar-shipped.jpg')}}" border="0" width="100%" alt="" /></td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
@@ -226,7 +226,7 @@
 																	<tr>
 																		<td class="text-button" style="padding:12px">
 																			<a href="https://expiringsoon.shop/invoice.php?ref=34343" target="_blank" class="link">
-																				<img src="{{asset('img/btn-orderdetails.png')}}" width="175">
+																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
 																			</a>
 																		</td>
 																	</tr>
@@ -258,7 +258,7 @@
 														<tr>
 															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
 																<a href="#" target="_blank">
-																	<img src="{{asset('img/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																	<img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
 																</a>
 															</td>
 														</tr>

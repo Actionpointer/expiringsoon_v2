@@ -159,7 +159,7 @@
                                     <div class="cards-md cards-md--four w-100">
                                         <div class="cards-md__img-wrapper">
                                             <a href="{{route('product.show',$product)}}">
-                                                <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" onerror="this.src='{{asset('img/no-image.png')}}';" />
+                                                <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" onerror="this.src='{{asset('src/images/site/no-image.png')}}';" />
                                             </a>
                                                 @if($product->price > $product->amount)
                                                 <span class="tag blue font-body--md-400" style="font-size:13px">Sale {{floor($product->discount)}}% off</span>

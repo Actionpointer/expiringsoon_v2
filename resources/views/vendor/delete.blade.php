@@ -77,7 +77,7 @@
                         <div class="dashboard__content-card-img flex-column">
                             
                             <div class="dashboard__content-img-wrapper" id="avatar">
-                              <img @if(!$user->pic) src="{{asset('img/avatar.png')}}"  @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->name}}"  onclick="performClick('theFile');"  id="imgPreview"   />
+                              <img @if(!$user->pic) src="{{asset('src/images/site/avatar.png')}}"  @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->name}}"  onclick="performClick('theFile');"  id="imgPreview"   />
                             </div>
                             <div>
                               <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />

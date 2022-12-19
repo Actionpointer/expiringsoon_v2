@@ -9,13 +9,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') | Expiring Soon</title>
     <link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
-    <link rel="stylesheet" href="{{asset('src/lib/css/swiper-bundle.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('src/lib/css/bvselect.css')}}" />
-    <link rel="stylesheet" href="{{asset('src/lib/css/venobox.css')}}" />
-    <link rel="stylesheet" href="{{asset('src/lib/css/bootstrap.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('src/lib/css/font-awesome.min.css')}}" />
-    <link rel="stylesheet" type="text/css" href="{{asset('src/select2/css/select2.min.css')}}"/>
-    <link rel="stylesheet" type="text/css" href="{{asset('src/select2/css/custom.css')}}"/>
+    <link rel="stylesheet" href="{{asset('src/plugins/swiper-bundle/style.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('src/plugins/bvselect/style.css')}}" />
+    <link rel="stylesheet" href="{{asset('src/plugins/venobox/style.css')}}" />
+    <link rel="stylesheet" href="{{asset('src/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('src/css/font-awesome.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/select2/css/select2.min.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/select2/css/custom.css')}}"/>
     <link rel="stylesheet" href="{{asset('src/css/style.css')}}" />
     
     <style>
@@ -661,7 +661,7 @@
                         </div>
                     @empty
                         <div class="cart-empty" style="margin:auto;padding:10%;text-align:center">
-                            <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                            <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                             <br/>Your cart is empty.<br />
                             <a href="{{route('product.list')}}">
                                 <span style="font-size:13px;color:#00b207">Start Shopping Now!</span>
@@ -671,7 +671,7 @@
                     
                 </div>
                 <div class="cart-empty" style="margin:auto;padding:10%;text-align:center;display:none;">
-                    <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                    <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                     <br/>Your cart is empty.<br />
                     <a href="{{route('product.list')}}">
                         <span style="font-size:13px;color:#00b207">Start Shopping Now!</span>
@@ -691,12 +691,12 @@
             </div>
             <!-- Shopping Cart sidebar end -->
     </div>
-    <script src="{{asset('src/lib/js/jquery.min.js')}}"></script>
-    <script src="{{asset('src/lib/js/swiper-bundle.min.js')}}"></script>
-    <script src="{{asset('src/lib/js/bvselect.js')}}"></script>
-    <script src="{{asset('src/lib/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('src/lib/js/jquery.syotimer.min.js')}}"></script>
-    <script src="{{asset('src/select2/js/select2.min.js')}}"></script>
+    <script src="{{asset('src/js/jquery.min.js')}}"></script>
+    <script src="{{asset('src/plugins/swiper-bundle/script.min.js')}}"></script>
+    <script src="{{asset('src/plugins/bvselect/script.js')}}"></script>
+    <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('src/js/jquery.syotimer.min.js')}}"></script>
+    <script src="{{asset('src/plugins/select2/js/select2.min.js')}}"></script>
     <script src="{{asset('src/js/main.js')}}"></script>
     {{-- <script src="{{asset('src/js/products.js')}}"></script> --}}
 

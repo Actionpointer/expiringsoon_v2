@@ -119,7 +119,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
 								<tr>
 									<td class="fluid-img" align="center" style="padding:10px">
-										<img src="{{asset('img/icon-check.jpg')}}" border="0" width="200" alt="" />
+										<img src="{{asset('src/images/site/icon-check.jpg')}}" border="0" width="200" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -166,7 +166,7 @@
 														<tr>
 															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
 																<a href="#" target="_blank">
-																	<img src="{{asset('img/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																	<img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
 																</a>
 															</td>
 														</tr>

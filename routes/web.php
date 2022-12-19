@@ -4,17 +4,22 @@ use App\Notifications\WelcomeNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('havron/donation','havron');
-Route::post('havron/payment',[App\Http\Controllers\HavronController::class, 'store'])->name('havron.pay');
-Route::get('havron/callback',[App\Http\Controllers\HavronController::class, 'callback'])->name('havron.callback');
-
 Route::get('sendemail',function(){
     $user = \App\Models\User::find(31);
     $user->notify(new WelcomeNotification());
     return 'done';
 });
-Route::view('email','emails.completed');
 
+Route::view('email','emails.completed');
+Route::view('help','help.index')->name('help.index');
+Route::view('help/shoppers','help.shoppers')->name('help.shoppers');
+Route::view('help/vendors','help.vendors')->name('help.vendors');
+Route::view('help/api/documentation','help.apidocumentation')->name('help.documentation');
+Route::view('help/faq','help.faq')->name('help.faq');
+Route::view('help/download','help.download')->name('help.download');
+Route::view('help/contact','help.contact')->name('help.contact');
+
+Route::view('email','emails.completed');
 Auth::routes();
 Route::view('start-selling','auth.register')->name('start-selling');
 Route::get('notifications',[App\Http\Controllers\UserController::class, 'notifications'])->name('notifications');

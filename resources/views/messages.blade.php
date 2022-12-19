@@ -60,7 +60,7 @@
                   <div class="d-flex py-4 border-bottom  @if((in_array(auth()->user()->role,['vendor','shopper']) && $message->receiver_id ) || (!in_array(auth()->user()->role,['vendor','shopper']) && blank($message->receiver_id) )) justify-content-end @endif ">
                     <div class="d-flex w-50">
                       <div class="user-img">
-                          <img class="rounded-circle" alt="user-photo" @if($message->sender->pic) src="{{Storage::url($message->sender->pic)}}" @else src="{{asset('img/avatar.png')}}" @endif>
+                          <img class="rounded-circle" alt="user-photo" @if($message->sender->pic) src="{{Storage::url($message->sender->pic)}}" @else src="{{asset('src/images/site/avatar.png')}}" @endif>
                       </div>
 
                       <div class="user-message-info">

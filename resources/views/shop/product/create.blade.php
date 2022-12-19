@@ -119,7 +119,7 @@
                     <div class="col-lg-5 order-lg-0 order-1">
                       <div class="dashboard__content-card-img flex-column">
                           <div class="dashboard__content-img-wrapper" id="avatar">
-                            <img  src="{{asset('img/no-image.jpg')}}" class="rounded-circle" alt="Product Photo" onclick="performClick('theFile');" id="imgPreview"    />
+                            <img  src="{{asset('src/images/site/no-image.jpg')}}" class="rounded-circle" alt="Product Photo" onclick="performClick('theFile');" id="imgPreview"    />
                           </div>
                           <div>
                             <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg"/>

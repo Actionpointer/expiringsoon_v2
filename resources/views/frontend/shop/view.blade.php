@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @push('styles')
-    <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" />
-    {{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/> --}}
-    <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/> --}}
+    <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 @endpush
 
 @section('title') Vendor Products | Expiring Soon @endsection
@@ -164,7 +164,7 @@
                                                                 <div class="cards-md cards-md--four w-100">
                                                                     <div class="cards-md__img-wrapper">
                                                                         <a href="{{route('product.show',$product)}}">
-                                                                            <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" onerror="this.src='{{asset('img/no-image.png')}}';" />
+                                                                            <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" onerror="this.src='{{asset('src/images/site/no-image.png')}}';" />
                                                                         </a>
                                                                             @if($product->price > $product->amount)
                                                                             <span class="tag blue font-body--md-400" style="font-size:13px">Sale {{floor($product->discount)}}% off</span>
@@ -222,7 +222,7 @@
                                                             </div>
                                                         @empty
                                                             <div style="margin:auto;padding:10%;text-align:center">
-                                                                <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                                                                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                                                                 <br />No Products in this Shop</span>
                                                             </div>
                                                         @endforelse
@@ -281,7 +281,7 @@
                                                             <div class="products-tab__feedback-content-top">
                                                                 <div class="user-details">
                                                                     <div class="user-details__img">
-                                                                        <img @if(!$review->order->user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($review->order->user->pic)}}" @endif alt="user-img">
+                                                                        <img @if(!$review->order->user->pic) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($review->order->user->pic)}}" @endif alt="user-img">
                                                                     </div>
                                                                     <div class="user-details__info">
                                                                         <h2 class="user-name">{{$review->order->user->name}}</h2>
@@ -342,11 +342,11 @@
     <script>
         $('.select2').select2()
     </script>
-    <script type="text/javascript" src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-    {{-- <script src="{{asset('src/datatable/assets/buttons/demo.js')}}"></script> --}}
-    <script src="{{asset('src/datatable/assets/buttons/vfs_fonts.js')}}"></script>
-    {{-- <script src="{{asset('src/datatable/assets/buttons/buttons.html5.min.js')}}"></script> --}}
-    {{-- <script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script> --}}
+    <script type="text/javascript" src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
+    {{-- <script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script> --}}
+    <script src="{{asset('src/plugins/datatable/assets/buttons/vfs_fonts.js')}}"></script>
+    {{-- <script src="{{asset('src/plugins/datatable/assets/buttons/buttons.html5.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('src/plugins/datatable/assets/buttons/buttons.print.min.js')}}"></script> --}}
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({

@@ -26,9 +26,9 @@ $orderid = $_SESSION['orderid'];
       type="image/png"
       href="src/images/favicon/favicon-16x16.png"
     />
-    <link rel="stylesheet" href="src/lib/css/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="src/lib/css/bvselect.css" />
-    <link rel="stylesheet" href="src/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/plugins/swiper-bundle/script.min.css" />
+    <link rel="stylesheet" href="src/plugins/bvselect/style.css" />
+    <link rel="stylesheet" href="src/css/bootstrap.min.css" />
     <link rel="stylesheet" href="src/css/style.css" />
   </head>
 
@@ -489,10 +489,10 @@ endeavors except those that are specifically endorsed or approved by Expiringsoo
     <?php include("footer.php"); ?>
     <!-- Footer Area End -->
 
-    <script src="src/lib/js/jquery.min.js"></script>
-    <script src="src/lib/js/swiper-bundle.min.js"></script>
-    <script src="src/lib/js/bvselect.js"></script>
-    <script src="src/lib/js/bootstrap.bundle.min.js"></script>
+    <script src="src/js/jquery.min.js"></script>
+    <script src="src/plugins/swiper-bundle/script.min.js"></script>
+    <script src="src/plugins/bvselect/script.js"></script>
+    <script src="src/js/bootstrap.bundle.min.js"></script>
     <script src="src/js/main.js"></script>
     <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

@@ -117,7 +117,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="fluid-img">
-										<img src="{{asset('img/img-delivered.jpg')}}" border="0" width="100%" alt="" />
+										<img src="{{asset('src/images/site/img-delivered.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -137,7 +137,7 @@
 														</tr>
 														<tr>
 															<td class="fluid-img" align="center">
-																<img src="{{asset('img/tracking-bar-delivered.jpg')}}" border="0" width="100%" alt="" />
+																<img src="{{asset('src/images/site/tracking-bar-delivered.jpg')}}" border="0" width="100%" alt="" />
 															</td>
 														</tr>
 														<tr>
@@ -217,7 +217,7 @@
 																	<tr>
 																		<td class="text-button" style="padding:12px">
 																			<a href="https://expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link">
-																				<img src="{{asset('img/btn-orderdetails.png')}}" width="175"></a></td>
+																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175"></a></td>
 																	</tr>
 																</table>
 															</td>
@@ -247,7 +247,7 @@
 														<tr>
 															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
 																<a href="#" target="_blank">
-																	<img src="{{asset('img/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																	<img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
 																</a>
 															</td>
 														</tr>

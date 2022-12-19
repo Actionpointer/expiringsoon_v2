@@ -124,7 +124,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;">
-										<img src="{{asset('img/img-verify.jpg')}}" border="0" width="100%" alt="" />
+										<img src="{{asset('src/images/site/img-verify.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -148,7 +148,7 @@
 														 {{-- <tr>
 															<td align="center">
 																<a href="https://ng.expiringsoon.shop/verify.php?token=11111" target="_blank" class="link">
-																	<img src="{{asset('img/btn-confirm.png')}}" width="200">
+																	<img src="{{asset('src/images/site/btn-confirm.png')}}" width="200">
 																</a>
 															</td>
 														</tr>  --}}

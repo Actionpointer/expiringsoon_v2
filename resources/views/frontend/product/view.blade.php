@@ -87,7 +87,7 @@
                               <h2 class="font-body--md-400">Vendor:<br />
                               <a href="{{route('vendor.show',$product->shop)}}" style="color:#00b207;font-weight:500">{{$product->shop->username}}</a></h2>
                               <a href="{{route('vendor.show',$product->shop)}}" class="brand-name-logo">
-                                  <img @if(!$product->shop->banner) src="{{asset('img/avatar.png')}}"  @else src="{{Storage::url($product->shop->banner)}}" @endif alt="{{$product->shop->username}}" style="width:45px;border-radius:50px;border:1px solid #bababa;padding:2px" />
+                                  <img @if(!$product->shop->banner) src="{{asset('src/images/site/avatar.png')}}"  @else src="{{Storage::url($product->shop->banner)}}" @endif alt="{{$product->shop->username}}" style="width:45px;border-radius:50px;border:1px solid #bababa;padding:2px" />
                               </a>
                           </div>
                             <div class="social-site">

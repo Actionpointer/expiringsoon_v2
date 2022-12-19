@@ -45,7 +45,7 @@
               <div class="col-lg-7">
                 <div class="dashboard__user-profile dashboard-card">
                   <div class="dashboard__user-profile-img">
-                    <img @if(!$shop->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($shop->banner)}}" @endif alt="{{$shop->name}}" />
+                    <img @if(!$shop->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($shop->banner)}}" @endif alt="{{$shop->name}}" />
                   </div>
                   <div class="dashboard__user-profile-info">
                     <h5 class="font-body--xl-500 name">{{$shop->name}} </h5>
@@ -213,7 +213,7 @@
                                     <tr>
                                       <td colspan="3" class="text-center">
                                         <div style="padding:1%;margin-bottom:5%">
-                                          <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                                          <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                                           <br />You have no payouts at this time.
                                         </div>
                                       </td>
@@ -272,7 +272,7 @@
                                   
                               @empty
                               <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                                  <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                                  <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                                   <br />You have no orders at this time.
                               </div>
                             @endforelse

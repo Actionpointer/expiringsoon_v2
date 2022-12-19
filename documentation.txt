@@ -1,0 +1,134 @@
+SHOPPERS
+Introduction: 
+    Welcome to expiringsoon marketplace, the only online platform where you can buy items at huge discounted rate.
+    All products on expiringsoon are categorized by their expiry date and discounted for you with reference to 
+    the date difference between the date of purchase and the expiry date.
+
+How it works: 
+    For example, lets assume today's date is January 1st 2022. Let's also assume a cake has been uploaded
+    by a vendor with the expiry date as December 25th 2022, and with the following discount prices
+        *Normal Price: 5000
+        *Discount Price 120 days: 4500          120 days to the expiry date (i.e Between August 27th and September 2th), you will pay the discount price of 4500 
+        *Discount Price 90 days: 4000           90 days to the expiry date (i.e Between September 26th and October 26th), you will pay the discount price of 4000
+        *Discount Price 60 days: 3000           60 days to the expiry date (i.e Between October 27th and  November 25th), you will pay the discounted price of 3000
+        *Discount Price 30 days: 2500           30 days to the expiry date (i.e Between November 26th and December 25th), you will pay the discount price of 2500
+
+    New prices automatically appear on the product with respect to its discount timeline. 
+    Note that some products may not be discount and prices are subject to change before orders are made. 
+    Once you make payment for an order, the price at which the order was made is final even if the product price is adjusted upwards or downwards minutes after 
+    your order is received
+
+Site Navigation:
+    Home: 
+        On the homepage, you will find featured products and shops within your locality. All products are categorized based on their nature, e.g Food items
+        Electronics, House hold items, etc
+        The hot deals section on the homepage shows products whose current discounted price are atleast 50% below their normal price.
+
+    Products: 
+        We list all products in grid format to help you search, sort, and filter as you wish. You can search for products by name, sort by price or expiry date, 
+        filter by category, tags, and location.
+
+    Hot Deals:
+        Everybody likes awoof, so we've created a page for you to find the hottest deals on expiringsoon. You will find items featured according
+        to their current discount percentage. 
+
+    Vendor:
+        You can browse expiringsoon by vendors. This allows you to browse all the product offerings of a particular vendor. It can be very useful
+        when you want to buy several items of similar nature or category. Also when you shop from a particular vendor, all your delivery comes
+        from one single point, therefore reducing your cost of logistics.
+        You can also filter and sort shops based on different criteria. 
+
+----------------------------------------------------------------------------------------------------------------
+
+VENDORS
+    Thank you for deciding to sell on expiringsoon marketplace. We have created numerous tools for you to give you a smooth business 
+    expirience on expiringsoon.
+
+Start Selling: 
+    The first step towards becoming a vendor is registering a vendor account. 
+    Click on Start-Selling at the top right section of the home page to create a vendor account. 
+    You will be redirected to create your shop after successfully creating your vendor account.
+
+Dashboard:
+    The vendor dashboard show...
+
+Adverts:    
+
+Transactions:
+
+Shop:
+    create shop:
+    dashboard:
+
+    Products:
+        create product:
+    Orders:
+    Settings:
+        basic:
+        store pickup:
+        shop discount:
+        verification:
+        staff:
+        shipping:
+    Earning:
+    Payouts:
+        Bank Account:
+        Account verification:
+
+Adverts:    
+
+Transactions:
+------------------------------------------------------------------------------------------------------------------
+
+API DOCUMENTATION
+
+Getting Started:
+    get_token:
+    re-issue-token:
+    delete-tokens:
+    access-pin:
+Subscription:
+    plans:
+    subscribe
+Shops
+    create:
+    update:
+    
+    shipping:
+        destination:
+            new:
+            all:
+            update:
+            delete:
+    
+
+Products:
+    new:
+    all:
+    update:
+    delete:
+
+Orders:
+    web-hook:
+    get_all_orders:
+    view_order:
+    fulfil_order:
+
+Payout:
+    bankaccount:
+    withdrawal:
+
+Miscellaneous:
+    states:
+    cities:
+    categories:
+    tags:
+
+DOWNLOAD
+    vendors app:
+    shoppers app: coming soon
+
+FAQ
+
+
+CONTACT

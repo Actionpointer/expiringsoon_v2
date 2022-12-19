@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @push('styles')
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" /> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/> --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" /> --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/> --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/> --}}
 
 @endpush
 @section('title') Payments | Expiring Soon @endsection
@@ -87,7 +87,7 @@
                                       </tr>   
                                   @empty
                                       <div style="margin:auto;padding:1%;text-align:center">
-                                          <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                                          <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                                           <br />No Settlement at this time.</span>
                                       </div>
                                   @endforelse

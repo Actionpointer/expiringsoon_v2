@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" /> 
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/>
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" /> 
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 @endpush
 @section('title') Admin Settings | Expiring Soon @endsection
 @section('main')
@@ -1212,14 +1212,14 @@
   
 @endsection
 @push('scripts')
-<script src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/demo.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/jszip.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/pdfmake.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/vfs_fonts.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/buttons.html5.min.js')}}"></script>
-<script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/jszip.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/pdfmake.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/vfs_fonts.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.html5.min.js')}}"></script>
+<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.print.min.js')}}"></script>
 
 <script>
     // var submittedform;

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @push('styles')
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" /> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/> --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" /> --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/> --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/> --}}
 
 @endpush
 @section('title')Admin Dashboard | Expiring Soon @endsection
@@ -46,7 +46,7 @@
               <div class="col-lg-7">
                 <div class="dashboard__user-profile dashboard-card">
                   <div class="dashboard__user-profile-img">
-                    <img src="{{asset('img/avatar.png')}}" alt="{{$user->name}}" />
+                    <img src="{{asset('src/images/site/avatar.png')}}" alt="{{$user->name}}" />
                   </div>
                   <div class="dashboard__user-profile-info">
                     <h5 class="font-body--xxl-500 name">Hi, {{$user->name}}</h5>
@@ -97,9 +97,9 @@
                                 <!-- Order Id  -->
                                 <td class="dashboard__order-history-table-item order-id" >
                                     @if($document->verifiable_type == 'App\Models\Shop')
-                                      <img @if($document->verifiable->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                      <img @if($document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
                                     @else
-                                    <img @if($document->verifiable->owner()->photo) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($document->verifiable->owner()->photo)}}" @endif alt="{{$document->verifiable->owner()->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                    <img @if($document->verifiable->owner()->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->owner()->photo)}}" @endif alt="{{$document->verifiable->owner()->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
                                     @endif
                                 </td>
                                 <!-- Date  -->
@@ -134,7 +134,7 @@
                             </tr>
                         @empty
                             <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                                <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                                 <br />No pending documents at this time
                             </div>
                         @endforelse
@@ -270,7 +270,7 @@
                         </tr>
                       @empty
                       <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                            <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}"><br />You have no orders at this time.
+                            <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}"><br />You have no orders at this time.
                         </div>
                       @endforelse
                     

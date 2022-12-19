@@ -111,7 +111,7 @@
             </div>
           @empty
             <div id="cart-empty" style="margin:auto;padding:10%;text-align:center">
-                <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                 <br/>Your cart is empty.<br />
                 <a href="{{route('product.list')}}">
                     <span style="font-size:13px;color:#00b207">Start Shopping Now!</span>
@@ -119,7 +119,7 @@
             </div>
           @endforelse
           <div id="cart-empty" style="margin:auto;padding:10%;text-align:center;display:none">
-            <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+            <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
             <br/>Your cart is empty.<br />
             <a href="{{route('product.list')}}">
                 <span style="font-size:13px;color:#00b207">Start Shopping Now!</span>
@@ -161,7 +161,7 @@
               </div>
             @empty
             <div class="cart-empty" style="margin:auto;padding:10%;text-align:center">
-                <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                 <br/>Your cart is empty.<br />
                 <a href="{{route('product.list')}}">
                     <span style="font-size:13px;color:#00b207">Start Shopping Now!</span>

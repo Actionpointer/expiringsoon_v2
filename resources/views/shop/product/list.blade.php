@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/>
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 
 @endpush
 @section('title')My Products | Expiring Soon @endsection
@@ -185,7 +185,7 @@
                           </tr>   
                         @empty
                           <div style="margin:auto;padding:1%;text-align:center">
-                              <img style="padding:10px;width:100px" src="{{asset('img/exclamation.png')}}">
+                              <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                               <br/><span>There are no products at this time.</span></a>
                           </div>
                         
@@ -205,7 +205,7 @@
 @endsection
 @push('scripts')
 
-    <script type="text/javascript" src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({

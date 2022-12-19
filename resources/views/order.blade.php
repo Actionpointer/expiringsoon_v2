@@ -420,11 +420,11 @@
                           <div class="d-flex py-4 border-bottom">
                               <div class="user-img">
                                   @if($message->sender == 'shopper')
-                                    <img class="rounded-circle" alt="user-photo" @if(!$order->user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->user->pic)}}" @endif > 
+                                    <img class="rounded-circle" alt="user-photo" @if(!$order->user->pic) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($order->user->pic)}}" @endif > 
                                   @elseif($message->sender == 'vendor')
-                                  <img class="rounded-circle" alt="user-photo" @if(!$order->shop->banner) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($order->shop->banner)}}" @endif >
+                                  <img class="rounded-circle" alt="user-photo" @if(!$order->shop->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($order->shop->banner)}}" @endif >
                                   @else
-                                  <img class="rounded-circle" alt="user-photo" src="{{asset('img/avatar.png')}}"> 
+                                  <img class="rounded-circle" alt="user-photo" src="{{asset('src/images/site/avatar.png')}}"> 
                                   @endif
                               </div>
                               <div class="user-message-info">

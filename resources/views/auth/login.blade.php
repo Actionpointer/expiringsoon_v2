@@ -25,56 +25,56 @@
     </div>
       <!-- breedcrumb section end   -->
   
-      @include('layouts.session')
-      <!-- Sign-in Section Start  -->
-      <section class="sign-in section section--xl">
-        <div class="container">
-          <div class="form-wrapper">
-            <h6 class="font-title--sm" style="font-size:16px">Sign in</h6>
-            <form method="POST" action="{{ route('login') }}">
-              @csrf
-              <div class="form-input">
-                <input type="email" name="email" placeholder="Email" />
-              </div>
-              @error('email')
+    @include('layouts.session')
+    <!-- Sign-in Section Start  -->
+    <section class="sign-in section section--xl">
+      <div class="container">
+        <div class="form-wrapper">
+          <h6 class="font-title--sm" style="font-size:16px">Sign in</h6>
+          <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="form-input">
+              <input type="email" name="email" placeholder="Email" />
+            </div>
+            @error('email')
+            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+            <div class="form-input">
+              <input type="password" name="password" placeholder="Password" id="password" />
+              <button type="button" class="icon icon-eye" onclick="showPassword('password',this)" >
+                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" > 
+                  <path   d="M1.66663 10.5003C1.66663 10.5003 4.69663 4.66699 9.99996 4.66699C15.3033 4.66699 18.3333 10.5003 18.3333 10.5003C18.3333 10.5003 15.3033 16.3337 9.99996 16.3337C4.69663 16.3337 1.66663 10.5003 1.66663 10.5003Z"   stroke="currentColor"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round"/>
+                  <path   d="M10 13C10.663 13 11.2989 12.7366 11.7678 12.2678C12.2366 11.7989 12.5 11.163 12.5 10.5C12.5 9.83696 12.2366 9.20107 11.7678 8.73223C11.2989 8.26339 10.663 8 10 8C9.33696 8 8.70107 8.26339 8.23223 8.73223C7.76339 9.20107 7.5 9.83696 7.5 10.5C7.5 11.163 7.76339 11.7989 8.23223 12.2678C8.70107 12.7366 9.33696 13 10 13V13Z"   stroke="currentColor"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" />
+                </svg>
+              </button>
+              
+            </div>
+            @error('password')
               <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-              @enderror
-              <div class="form-input">
-                <input type="password" name="password" placeholder="Password" id="password" />
-                <button type="button" class="icon icon-eye" onclick="showPassword('password',this)" >
-                  <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" > 
-                    <path   d="M1.66663 10.5003C1.66663 10.5003 4.69663 4.66699 9.99996 4.66699C15.3033 4.66699 18.3333 10.5003 18.3333 10.5003C18.3333 10.5003 15.3033 16.3337 9.99996 16.3337C4.69663 16.3337 1.66663 10.5003 1.66663 10.5003Z"   stroke="currentColor"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round"/>
-                    <path   d="M10 13C10.663 13 11.2989 12.7366 11.7678 12.2678C12.2366 11.7989 12.5 11.163 12.5 10.5C12.5 9.83696 12.2366 9.20107 11.7678 8.73223C11.2989 8.26339 10.663 8 10 8C9.33696 8 8.70107 8.26339 8.23223 8.73223C7.76339 9.20107 7.5 9.83696 7.5 10.5C7.5 11.163 7.76339 11.7989 8.23223 12.2678C8.70107 12.7366 9.33696 13 10 13V13Z"   stroke="currentColor"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" />
-                  </svg>
-                </button>
-                
+                  <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+            <div class="form-wrapper__content">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="remember" />
+                <label class="form-check-label" for="remember"> Remember Me
+                </label>
               </div>
-              @error('password')
-                <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-              @enderror
-              <div class="form-wrapper__content">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="remember" />
-                  <label class="form-check-label" for="remember"> Remember Me
-                  </label>
-                </div>
-                <a href="{{ route('password.request') }}">Forgot Password?</a>
-              </div>
-              <div class="form-button">
-                <button type="submit" class="button button--md w-100">Login</button>
-              </div>
-              <div class="form-register">
-                Don't have account? <a href="{{route('register')}}">Register</a>
-              </div>
-            </form>
-          </div>
+              <a href="{{ route('password.request') }}">Forgot Password?</a>
+            </div>
+            <div class="form-button">
+              <button type="submit" class="button button--md w-100">Login</button>
+            </div>
+            <div class="form-register">
+              Don't have account? <a href="{{route('register')}}">Register</a>
+            </div>
+          </form>
         </div>
-      </section>
-      <!-- Sign-in Section end  -->
+      </div>
+    </section>
+    <!-- Sign-in Section end  -->
 @endsection
 
 @push('scripts')

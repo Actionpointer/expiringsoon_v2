@@ -45,7 +45,7 @@
               <div class="col-lg-12">
                 <div class="dashboard__user-profile dashboard-card">
                   <div class="dashboard__user-profile-img">
-                    <img @if(!$user->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->name}}" />
+                    <img @if(!$user->pic) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->name}}" />
                   </div>
                   <div class="dashboard__user-profile-info">
                     <h5 class="font-body--xl-500 name">{{$user->name}}</h5>

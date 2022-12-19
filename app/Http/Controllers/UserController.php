@@ -105,7 +105,6 @@ class UserController extends Controller
     public function generate_otp(){
         $user = auth()->user();
         $otp = OneTimePassword::where('user_id',auth()->id())->whereBetween('created_at',[now()->subMinutes(cache('settings')['throttle_otp_time']),now()])->latest()->first();
-        //dd($otp);
         if(!$otp){
             $otp = OneTimePassword::create(['user_id'=> $user->id,'code'=> strtoupper(substr(uniqid(),4,6))]);
         }
@@ -140,8 +139,10 @@ class UserController extends Controller
 
     public function users(){
         $users = User::whereIn('role',['shopper','vendor'])->get();
-        // dd($users);
-        return view('admin.users.list',compact('users'));
+        return request()->expectsJson()
+        ? response()->json(['data' => $users], 200)
+        : view('admin.users.list',compact('users'));
+        
     }
 
     public function user_show(User $user){

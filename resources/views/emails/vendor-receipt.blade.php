@@ -132,7 +132,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="fluid-img">
-										<img src="{{asset('img/img-welcome.jpg')}}" border="0" width="100%" alt="" />
+										<img src="{{asset('src/images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -224,7 +224,7 @@
 																	<tr>
 																		<td class="text-button" style="padding:12px">
 																			<a href="https://ng.expiringsoon.shop/account.php" target="_blank" class="link">
-																				<img src="{{asset('img/btn-orderdetails.png')}}" width="175">
+																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
 																			</a>
 																		</td>
 																	</tr>
@@ -252,7 +252,7 @@
 														<tr>
 															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
 																<a href="#" target="_blank">
-																	<img src="{{asset('img/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																	<img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
 																</a>
 															</td>
 														</tr>

@@ -111,7 +111,7 @@
                                         <div class="dashboard__content-card-img flex-column">
                                             
                                             <div class="dashboard__content-img-wrapper" id="avatar">
-                                              <img @if(!$shop->banner) src="{{asset('img/avatar.png')}}"  @else src="{{Storage::url($shop->banner)}}" @endif alt="{{$shop->fname}} {{$shop->lname}}"  onclick="performClick('theFile');"  id="imgPreview"   />
+                                              <img @if(!$shop->banner) src="{{asset('src/images/site/avatar.png')}}"  @else src="{{Storage::url($shop->banner)}}" @endif alt="{{$shop->fname}} {{$shop->lname}}"  onclick="performClick('theFile');"  id="imgPreview"   />
                                             </div>
                                             <div>
                                               <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
@@ -259,7 +259,7 @@
                                     @if($shop->idcard)
                                       <div class="docimg">
                                         <a href="{{Storage::url($shop->idcard->document)}}" target="_blank">
-                                          <img @if($shop->idcard->doctype =='PDF') src="{{asset('img/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->idcard->document)}}" @endif id="idcardpreview">
+                                          <img @if($shop->idcard->doctype =='PDF') src="{{asset('src/images/site/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->idcard->document)}}" @endif id="idcardpreview">
                                         </a>
                                         
                                       </div>
@@ -283,7 +283,7 @@
                                     @else
                                     <div class="docimg">
                                       <a href="javascript:void()" onclick="performClick('idcard');" target="_blank">
-                                        <img src="{{asset('img/icon-jpg.jpg')}}" id="idcardpreview">
+                                        <img src="{{asset('src/images/site/icon-jpg.jpg')}}" id="idcardpreview">
                                       </a>
                                       
                                     </div>
@@ -305,7 +305,7 @@
                                     @if($shop->addressproof)
                                       <div class="docimg">
                                         <a href="{{Storage::url($shop->addressproof->document)}}" target="_blank">
-                                          <img @if($shop->addressproof->doctype =='PDF') src="{{asset('img/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->addressproof->document)}}" @endif id="addressproofpreview">
+                                          <img @if($shop->addressproof->doctype =='PDF') src="{{asset('src/images/site/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->addressproof->document)}}" @endif id="addressproofpreview">
                                         </a>
                                       </div>
                                       <div class="docinfo d-flex justify-content-between align-items-center">
@@ -328,7 +328,7 @@
                                     @else
                                     <div class="docimg">
                                       <a href="javascript:void()" onclick="performClick('addressproof');" target="_blank">
-                                        <img src="{{asset('img/icon-jpg.jpg')}}" id="addressproofpreview">
+                                        <img src="{{asset('src/images/site/icon-jpg.jpg')}}" id="addressproofpreview">
                                       </a>
                                       
                                     </div>
@@ -349,7 +349,7 @@
                                     @if($shop->companydoc)
                                       <div class="docimg">
                                         <a href="{{Storage::url($shop->companydoc->document)}}" target="_blank">
-                                          <img @if($shop->companydoc->doctype =='PDF') src="{{asset('img/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->companydoc->document)}}" @endif id="companydocpreview">
+                                          <img @if($shop->companydoc->doctype =='PDF') src="{{asset('src/images/site/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->companydoc->document)}}" @endif id="companydocpreview">
                                         </a>
                                       </div>
                                       <div class="docinfo d-flex justify-content-between align-items-center">
@@ -371,7 +371,7 @@
                                     @else
                                     <div class="docimg">
                                       <a href="javascript:void()" onclick="performClick('companydoc');" target="_blank">
-                                        <img src="{{asset('img/icon-jpg.jpg')}}" id="companydocpreview">
+                                        <img src="{{asset('src/images/site/icon-jpg.jpg')}}" id="companydocpreview">
                                       </a>
                                       
                                     </div>

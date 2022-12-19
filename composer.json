@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "ixudra/curl": "^6.22",
         "laravel/framework": "^8.0",
+        "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4"
     },
@@ -28,7 +29,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.3"
+        }
          
     },
     "extra": {
@@ -62,4 +66,5 @@
             "@php artisan key:generate --ansi"
         ]
     }
+    
 }

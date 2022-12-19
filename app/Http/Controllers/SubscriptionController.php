@@ -78,6 +78,7 @@ class SubscriptionController extends Controller
         $subscription->save();
         return redirect()->back();
     }
+    
     public function feature_cancel_renew(Request $request){
         $feature = Feature::find($request->feature_id);
         $feature->auto_renew = false;

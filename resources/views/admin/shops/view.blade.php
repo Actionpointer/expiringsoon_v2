@@ -52,7 +52,7 @@
                     <div class="col-lg-5 order-lg-0 order-1">
                         <div class="dashboard__content-card-img flex-column">
                             <div class="dashboard__content-img-wrapper" id="avatar">
-                              <img @if(!$shop->banner) src="{{asset('img/avatar.png')}}"  @else src="{{Storage::url($shop->banner)}}" @endif alt="{{$shop->name}}" />
+                              <img @if(!$shop->banner) src="{{asset('src/images/site/avatar.png')}}"  @else src="{{Storage::url($shop->banner)}}" @endif alt="{{$shop->name}}" />
                             </div>  
                             <div class="dropdown">
                               <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

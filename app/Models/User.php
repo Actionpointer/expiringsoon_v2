@@ -16,6 +16,7 @@ use App\Models\Payment;
 use App\Models\Settlement;
 use App\Models\Subscription;
 use App\Observers\UserObserver;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -24,7 +25,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,Sluggable;
+    use HasFactory, Notifiable,Sluggable,HasApiTokens;
 
     protected $fillable = [
         'slug', 'fname','lname','email', 'password','phone_prefix','phone','country_id','role','state_id','status'
@@ -140,6 +141,7 @@ class User extends Authenticatable
             return \App\Models\Plan::where('slug','free_plan')->first()->products;
         }
     }
+    
     public function allowedShops(){
         if($this->activeSubscription){
             return $this->activeSubscription->plan->shops;

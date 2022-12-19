@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 <style> 
   .shoping-cart__content .cart-table{display: block!important}
 </style>
@@ -317,7 +317,7 @@
 
 @endsection
 @push('scripts')
-<script type="text/javascript" src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
 <script>
     $(document).ready(function() {
         $('#datatable').DataTable({

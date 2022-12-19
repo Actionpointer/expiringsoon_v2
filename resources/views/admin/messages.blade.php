@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/css/jquery.dataTables.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/assets/buttons/demo.css')}}"/>
-<link rel="stylesheet" type="text/css" href="{{asset('src/datatable/custom.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 
 <style>
   .user-img{
@@ -71,7 +71,7 @@
                                 <a href="{{route('admin.message',$message->sender)}}" class="d-block text-dark">
                                   <div class="d-flex">
                                     <div class="user-img">
-                                      <img @if(!$message->sender->pic) src="{{asset('img/avatar.png')}}" @else src="{{Storage::url($message->sender->pic)}}" @endif class="rounded-circle" alt="user-photo">
+                                      <img @if(!$message->sender->pic) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($message->sender->pic)}}" @endif class="rounded-circle" alt="user-photo">
                                     </div>
           
                                     <div class="user-message-info">
@@ -111,11 +111,11 @@
 
 @endsection
 @push('scripts')
-<script type="text/javascript" src="{{asset('src/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-{{-- <script src="{{asset('src/datatable/assets/buttons/demo.js')}}"></script> --}}
-<script src="{{asset('src/datatable/assets/buttons/vfs_fonts.js')}}"></script>
-{{-- <script src="{{asset('src/datatable/assets/buttons/buttons.html5.min.js')}}"></script> --}}
-{{-- <script src="{{asset('src/datatable/assets/buttons/buttons.print.min.js')}}"></script> --}}
+<script type="text/javascript" src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
+{{-- <script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script> --}}
+<script src="{{asset('src/plugins/datatable/assets/buttons/vfs_fonts.js')}}"></script>
+{{-- <script src="{{asset('src/plugins/datatable/assets/buttons/buttons.html5.min.js')}}"></script> --}}
+{{-- <script src="{{asset('src/plugins/datatable/assets/buttons/buttons.print.min.js')}}"></script> --}}
 <script>
     $(document).ready(function() {
         $('#datatable').DataTable({
