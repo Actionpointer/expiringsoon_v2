@@ -73,7 +73,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function issue_token(Request $request)
+    public function login_vendor(Request $request)
     {
         try {
             $validateUser = Validator::make($request->all(), 
@@ -98,10 +98,16 @@ class AuthController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-
+            if($user->role != 'vendor'){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized Login Attempt',
+                ], 401);
+            }
+            $user->tokens()->delete();
             return response()->json([
                 'status' => true,
-                'message' => 'Token Re-issued successfully',
+                'message' => 'Login successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
 

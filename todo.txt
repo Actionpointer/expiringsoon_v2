@@ -1,43 +1,14 @@
 1|ReCNE8KWIC64NM8KphYZS91WJK0p7TQbYeztIHOQ
+
 google how to scrap script from image.
 separate vendor signup and redirect to orientation page
-hybrid mobile developer for vendor
 
-duplicate expiringsoon for 
-
-usa, -> stripe
-uk, -> stripe
-he will get back to us on the other payment gateway
-
-uae, 
-ghana, 
-germany, 
-southafrica
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+duplicate expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafrica
 
 when placing advert, let submit description of shop
 place notification and profile icon at the top of vendor & shop
 
 advert is showing single product three times
-
-
 
 NOTIFICATIONS
 
@@ -63,3 +34,13 @@ DASHBOARD - [current subscription, total shops, total products, total amount, to
 
 shop menu
 PRODUCTS [  show featured]
+
+
+https://stripe.com/docs/payments?payments=popular
+Perishable Key:
+pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9o
+gEXPAvVevVsN008FW9r6qi
+Secret Key:
+sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWybhZt
+eJtqIzn8rY5oE00IgYVeL2p
+https://developer.paypal.com/docs/checkout/

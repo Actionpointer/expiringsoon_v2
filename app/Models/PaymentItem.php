@@ -22,4 +22,6 @@ class PaymentItem extends Model
         parent::observe(new PaymentItemObserver);
     }
 
+    // public function 
+
 }

@@ -192,7 +192,7 @@
                           <tr>
                             <!-- Product item  -->
                             <td class="dashboard__order-history-table-item align-middle">
-                              <h5 class="font-body--md-400"> {{$item->paymentable->plan->name}}</h5>
+                              <h5 class="font-body--md-400"> {{$item->paymentable_type == 'App\Models\Subscription' ? 'Subscription: '.$item->paymentable->plan->name : 'Adset: '.$item->paymentable->adplan->name}}</h5>
                             </td>
                             <!-- Price  -->
                             <td class="dashboard__order-history-table-item order-date align-middle">
