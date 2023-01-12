@@ -54,7 +54,7 @@ class ShopController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'error' => $validateUser->errors()->first()
                 ], 401);
             }
             //'https://imageonline.co/image.jpg'

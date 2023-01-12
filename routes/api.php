@@ -14,10 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('get-started', [App\Http\Controllers\ApiControllers\AuthController::class, 'index']);
+Route::post('register', [App\Http\Controllers\ApiControllers\AuthController::class, 'register']);
 Route::post('login/vendor', [App\Http\Controllers\ApiControllers\AuthController::class, 'login_vendor']);
 Route::post('login/shopper', [App\Http\Controllers\ApiControllers\AuthController::class, 'login_shopper']);
-
 
 
 // Route::post('register' ,[App\Http\Controllers\Auth\RegisterController::class,'register'])->name('register');

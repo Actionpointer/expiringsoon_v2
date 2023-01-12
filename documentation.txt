@@ -29,8 +29,8 @@ Site Navigation:
         filter by category, tags, and location.
 
     Hot Deals:
-        Everybody likes awoof, so we've created a page for you to find the hottest deals on expiringsoon. You will find items featured according
-        to their current discount percentage. 
+        Everybody likes awoof, so we've created a page for you to find the hottest deals on expiringsoon. 
+        You will find items featured according to their current discount percentage. 
 
     Vendor:
         You can browse expiringsoon by vendors. This allows you to browse all the product offerings of a particular vendor. It can be very useful

@@ -80,7 +80,7 @@ class ProductController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'error' => $validateUser->errors()->first()
                 ], 401);
             }
             

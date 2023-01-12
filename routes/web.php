@@ -14,7 +14,7 @@ Route::view('email','emails.completed');
 Route::view('help','help.index')->name('help.index');
 Route::view('help/shoppers','help.shoppers')->name('help.shoppers');
 Route::view('help/vendors','help.vendors')->name('help.vendors');
-Route::view('help/api/documentation','help.apidocumentation')->name('help.documentation');
+Route::view('help/api/documentation','help.apidocumentation')->name('help.api_documentation');
 Route::view('help/faq','help.faq')->name('help.faq');
 Route::view('help/download','help.download')->name('help.download');
 Route::view('help/contact','help.contact')->name('help.contact');

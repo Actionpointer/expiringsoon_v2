@@ -71,6 +71,9 @@
                             <a class="nav-link scrollto heading" href="#account">Account</a>
                             <ul class="nav doc-sub-menu nav flex-column">
                                 <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#authentication">Authentication</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link scrollto" href="#dashboard">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
@@ -92,9 +95,7 @@
                             </ul><!--//nav-->
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link scrollto heading" href="#authentication">Authentication</a>
-                        </li>
+                        
                         
                     </ul><!--//doc-menu-->
                 </div><!--//doc-nav-->
@@ -232,20 +233,26 @@
                             <h3 class="block-title">Products</h3>
                             <p>
                                 We list all products in grid format to help you search, sort, and filter as you wish. You can search for products by name, sort by price or expiry date, 
-                                filter by category, tags, and location.
+                                filter by category, tags, and location. It is probably more profitable to filter products by your preferred location in order to reduce the cost of shipment or even pick up the product from the vendor
+                                by yourself.
+                            </p>
+                            <p>
+                                Sometimes you will find 'no product in this selection'. This simply means that the filter returned no product, or the products available have expired or run out of stock. Simply search for another product or re-filter the products to 
+                                display more options. 
                             </p>
                             <div class="row simplelightbox-gallery-3">
                                 <div class="col-md-6 col-12">
-                                    <h6>Discussions Overview</h6>
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.</p>
+                                    <h6>Products Overview</h6>
+                                    <p>When you have products listed, you may add product to cart or to wishlist when logged in. 
+                                    </p>
                                     <div class="screenshot-holder">
                                         <a href="{{asset('src/images/demo/appify-discussions.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-discussions-thumb.jpg')}}" alt="screenshot" /></a>
                                         
                                     </div> 
                                 </div>
                                 <div class="col-md-6 col-12">
-                                    <h6>Discussion Details</h6>
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.</p>
+                                    <h6>Product Details</h6>
+                                    <p>In product details page, which you find by clicking on a product, you find more description of the product. </p>
                                     <div class="screenshot-holder">
                                         <a href="{{asset('src/images/demo/appify-discussion.jpg')}}" ><img class="img-fluid" src="{{asset('src/images/demo/appify-discussion-thumb.jpg')}}" alt="screenshot" /></a>
                                     </div> 
@@ -256,19 +263,33 @@
                         <div id="hot-deals" class="section-block">
                             <h3 class="block-title">Hot Deals</h3>
                             <p>
-                                Everybody likes awoof, so we've created a page for you to find the hottest deals on expiringsoon. You will find items featured according
-                                to their current discount percentage. 
+                                Everybody likes awoof, so here's the page for you to find the hottest deals on expiringsoon.
+                                Items are featured and categorized according to their current discount percentage. You will find items
+                                with 20% discounts, 30%, 40 and 50% discounts. 
                             </p>
                             <div class="row simplelightbox-gallery-4">
                                 <div class="col-md-6 col-12">
-                                    <h6>Members Overview</h6>
+                                    <h6>Slider Area</h6>
                                     <div class="screenshot-holder">
                                         <a href="{{asset('src/images/demo/appify-members.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-members-thumb.jpg')}}" alt="screenshot" /></a>
+                                    </div> 
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <h6>Deals Section</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-member.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-member-thumb.jpg')}}" alt="screenshot" /></a>
                                         
                                     </div> 
                                 </div>
                                 <div class="col-md-6 col-12">
-                                    <h6>Individual Member</h6>
+                                    <h6>Shop Adverts</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-member.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-member-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <h6>Featured Products</h6>
                                     <div class="screenshot-holder">
                                         <a href="{{asset('src/images/demo/appify-member.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-member-thumb.jpg')}}" alt="screenshot" /></a>
                                         
@@ -289,48 +310,15 @@
                                 You can also filter and sort shops based on different criteria. 
                             </p>
                             <div class="row simplelightbox-gallery-5">
-                                <div class="col-md-4 col-sm-4 col-xs-6">
-                                    <h6>User Profile</h6>
-                                    <div class="screenshot-holder">
+                                <div class="col-md-12">
+                                    <h6>Vendors</h6>
+                                    <div class="">
                                         <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
                                         
                                     </div> 
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-xs-6">
-                                    <h6>User Settings</h6>
-                                    <div class="screenshot-holder">
-                                        <a href="{{asset('src/images/demo/appify-account-settings.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-settings-thumb.jpg')}}" alt="screenshot" /></a>
-                                        
-                                    </div> 
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-6">
-                                    <h6>User Billing</h6>
-                                    <div class="screenshot-holder">
-                                        <a href="{{asset('src/images/demo/appify-account-billing.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-billing-thumb.jpg')}}" alt="screenshot" /></a>
-                                        
-                                    </div> 
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-6">
-                                    <h6>User Messages</h6>
-                                    <div class="screenshot-holder">
-                                        <a href="{{asset('src/images/demo/appify-account-messages.jpg')}}" ><img class="img-fluid" src="{{asset('src/images/demo/appify-account-messages-thumb.jpg')}}" alt="screenshot" /></a>
-                                        
-                                    </div> 
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-6">
-                                    <h6>User Drive</h6>
-                                    <div class="screenshot-holder">
-                                        <a href="{{asset('src/images/demo/appify-account-drive.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-drive-thumb.jpg')}}" alt="screenshot" /></a>
-                                        
-                                    </div> 
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-6">
-                                    <h6>User Reminders</h6>
-                                    <div class="screenshot-holder">
-                                        <a href="{{asset('src/images/demo/appify-account-reminders.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-reminders-thumb.jpg')}}" alt="screenshot" /></a>
-                                        
-                                    </div> 
-                                </div>
+                                
+                                
                             </div><!--//row-->  
                         </div><!--//section-block-->
                         
@@ -340,6 +328,53 @@
                     
                     <section  id="account" class="doc-section">
                         <h2 class="section-title">Account</h2>
+
+                        <div id="authentication" class="section-block">
+                            <h3 class="block-title">Authentication</h3>
+                            <div class="section-block">
+                                <p>For example, lets assume today's date is January 1st 2022. Let's also assume a cake has been uploaded
+                                    by a vendor with the expiry date as December 25th 2022, and with the following discount prices
+                                </p>
+                            </div>
+                            <div class="row simplelightbox-gallery-6">
+                                <div class="col-md-6">
+                                    <h6>Shoppers Register</h6>
+                                    <p>You need to have an account to use expiring soon. You can get one <a href="#">here</a> by registering with your personal details</p>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-tickets.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-tickets-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Vendors Register</h6>
+                                    <p>There's a different  <a href="#">link</a> for vendors to register. The first step from that link will be to register yourself. After that, you will get further details on how to proceed to create new shops </p>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-timeline.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-timeline-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Login</h6>
+                                    <p>Use your email and password to login to your dashboard from <a href="#">here</a> to login to your dashboard </p>
+                                    
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-activities.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-activities-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h6>Forgot Password</h6>
+                                    <p>Incase you forgot your password, use this link to recover your password </p>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-inbox.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-inbox-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div>
+                            <!--//row-->  
+                        </div><!--//section-block-->
 
                         <div id="dashboard" class="section-block">
                             <h3 class="block-title">Dashboard</h3>
@@ -376,13 +411,288 @@
                             <!--//row-->  
                         </div><!--//section-block-->
 
-                        <div class="section-block">
-                            <p class="text-center">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.</p>
-                            <div class="center-block text-center">
-                                    <a class="btn btn-primary" href="#" target="_blank">More App Components</a>
-                            </div>
+                        <div id="orders" class="section-block">
+                            <h3 class="block-title">Orders</h3>
+                            <p>
+                                Browse through orders you've made in recent past. You can view details of a particular order and message the vendor 
+                                if the order is still open. When the vendor changes the status of an order, you will receive notifications about the change
+                            </p>
+                           
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-6">
+                                    <h6>Order List</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Order Details</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div><!--//row-->  
                         </div><!--//section-block-->
+
+                        <div id="wishlist" class="section-block">
+                            <h3 class="block-title">Wishlist</h3>
+                            <p>
+                                When you browse through products, you can save/keep those products as wishlists. Click on the heart icon on a product to save it to your wishlist. Though the status of the products in your wishlist may change, the items continue to exist
+                                in your wishlist as long as the product is exist on the platform. 
+                            </p>
+                            
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-6">
+                                    <h6>Wishlist</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Cart</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div><!--//row-->  
+                        </div><!--//section-block-->
+
+                        <div id="transactions" class="section-block">
+                            <h3 class="block-title">Transactions</h3>
+                            <p>
+                                This page shows the record of all your transactions on expiringsoon. 
+                            </p>
+                            
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-12">
+                                    
+                                    <div class="">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                                
+                            </div><!--//row-->  
+                        </div><!--//section-block-->
+
+                        <div id="profile" class="section-block">
+                            <h3 class="block-title">Profile</h3>
+                            <p>
+                                Here's where you edit your personal profile information  
+                            </p>
+                            
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-12">
+                                    <div class="">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div id="notifications" class="section-block">
+                            <h3 class="block-title">Notification</h3>
+                            <p>
+                                You will find all your notificationshe product offerings of a particular vendor. It can be very useful
+                                when you want to buy several items of similar nature or category. 
+                            </p>
+                            <p>
+                                Also when you shop from a particular vendor, all your delivery comes
+                                from one single point, therefore reducing your cost of logistics.
+                                You can also filter and sort shops based on different criteria. 
+                            </p>
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-6">
+                                    <h6>Wishlist</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Cart</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div><!--//row-->  
+                        </div><!--//section-block-->
+
                     </section>
+
+                    {{-- <section  id="account" class="doc-section">
+                        <h2 class="section-title">Account</h2>
+
+                        
+
+                        <div id="dashboard" class="section-block">
+                            <h3 class="block-title">Dashboard</h3>
+                            <div class="row simplelightbox-gallery-6">
+                                <div class="col-md-3 col-sm-3 col-xs-6">
+                                    <h6>Activities</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-activities.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-activities-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">
+                                    <h6>Tickets</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-tickets.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-tickets-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">
+                                    <h6>Inbox</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-inbox.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-inbox-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">
+                                    <h6>Timeline</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-timeline.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-timeline-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                            </div>
+                            <!--//row-->  
+                        </div><!--//section-block-->
+
+                        <div id="orders" class="section-block">
+                            <h3 class="block-title">Orders</h3>
+                            <p>
+                                You can browse expiringsoon by vendors. This allows you to browse all the product offerings of a particular vendor. It can be very useful
+                                when you want to buy several items of similar nature or category. 
+                            </p>
+                            <p>
+                                Also when you shop from a particular vendor, all your delivery comes
+                                from one single point, therefore reducing your cost of logistics.
+                                You can also filter and sort shops based on different criteria. 
+                            </p>
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-6">
+                                    <h6>Order List</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Order Details</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div><!--//row-->  
+                        </div><!--//section-block-->
+
+                        <div id="wishlist" class="section-block">
+                            <h3 class="block-title">Wishlist</h3>
+                            <p>
+                                You can browse expiringsoon by vendors. This allows you to browse all the product offerings of a particular vendor. It can be very useful
+                                when you want to buy several items of similar nature or category. 
+                            </p>
+                            <p>
+                                Also when you shop from a particular vendor, all your delivery comes
+                                from one single point, therefore reducing your cost of logistics.
+                                You can also filter and sort shops based on different criteria. 
+                            </p>
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-6">
+                                    <h6>Wishlist</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Cart</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div><!--//row-->  
+                        </div><!--//section-block-->
+
+                        <div id="transactions" class="section-block">
+                            <h3 class="block-title">Transactions</h3>
+                            <p>
+                                You can browse expiringsoon by vendors. This allows you to browse all the product offerings of a particular vendor. It can be very useful
+                                when you want to buy several items of similar nature or category. 
+                            </p>
+                            <p>
+                                Also when you shop from a particular vendor, all your delivery comes
+                                from one single point, therefore reducing your cost of logistics.
+                                You can also filter and sort shops based on different criteria. 
+                            </p>
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-6">
+                                    <h6>Wishlist</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Cart</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div><!--//row-->  
+                        </div><!--//section-block-->
+
+                        <div id="profile" class="section-block">
+                            <h3 class="block-title">Profile</h3>
+                            <p>
+                                You can browse expiringsoon by vendors. This allows you to browse all the product offerings of a particular vendor. It can be very useful
+                                when you want to buy several items of similar nature or category. 
+                            </p>
+                            <p>
+                                Also when you shop from a particular vendor, all your delivery comes
+                                from one single point, therefore reducing your cost of logistics.
+                                You can also filter and sort shops based on different criteria. 
+                            </p>
+                            <div class="row simplelightbox-gallery-5">
+                                <div class="col-md-6">
+                                    <h6>Wishlist</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Cart</h6>
+                                    <div class="screenshot-holder">
+                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
+                                        
+                                    </div> 
+                                </div>
+                                
+                            </div><!--//row-->  
+                        </div><!--//section-block-->
+
+                        
+
+                    </section> --}}
                     
                 </div><!--//content-inner-->
             </div><!--//doc-content-->

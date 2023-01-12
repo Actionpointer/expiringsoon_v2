@@ -404,7 +404,16 @@ select {
     margin-top: 0;
     font-size: 36px;
 }
+.doc-header .doc-title.doc-green {
+    color: #75c181;
+}
 .body-green .doc-header .doc-title {
+    
+}
+.doc-header .doc-title.doc-green {
+    color: #75c181;
+}
+.doc-header .doc-title.doc-green {
     color: #75c181;
 }
 .body-blue .doc-header .doc-title {

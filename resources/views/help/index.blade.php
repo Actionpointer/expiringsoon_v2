@@ -54,7 +54,7 @@
                         </div><!--//icon-holder-->
                         <h3 class="title">Vendors</h3>
                         <p class="intro">Useful for shop/store owners and staff</p>
-                        <a class="link" href="start.html"><span></span></a>
+                        <a class="link" href="{{route('help.vendors')}}"><span></span></a>
                     </div><!--//item-inner-->
                 </div><!--//item-->
                 
@@ -65,7 +65,7 @@
                         </div><!--//icon-holder-->
                         <h3 class="title">Api Documentation</h3>
                         <p class="intro">Useful for developers </p>
-                        <a class="link" href="charts.html"><span></span></a>
+                        <a class="link" href="{{route('help.api_documentation')}}"><span></span></a>
                     </div><!--//item-inner-->
                 </div><!--//item-->
                 <div class="item item-purple col-lg-4 col-6">
@@ -75,7 +75,7 @@
                         </div><!--//icon-holder-->
                         <h3 class="title">FAQs</h3>
                         <p class="intro">Here are questions we think you might want to ask</p>
-                        <a class="link" href="faqs.html"><span></span></a>
+                        <a class="link" href="{{route('help.faq')}}"><span></span></a>
                     </div><!--//item-inner-->
                 </div><!--//item-->
                 <div class="item item-primary col-lg-4 col-6">
@@ -85,7 +85,7 @@
                         </div><!--//icon-holder-->
                         <h3 class="title">Download App</h3>
                         <p class="intro">Download our Android and iOS Apps for Vendors</p>
-                        <a class="link" href="showcase.html"><span></span></a>
+                        <a class="link" href="{{route('help.download')}}"><span></span></a>
                     </div><!--//item-inner-->
                 </div><!--//item-->
                 <div class="item item-orange col-lg-4 col-6">
@@ -95,7 +95,7 @@
                         </div><!--//icon-holder-->
                         <h3 class="title">Contact Us</h3>
                         <p class="intro">We love feedbacks and we love to solve problems.</p>
-                        <a class="link" href="license.html"><span></span></a>
+                        <a class="link" href="{{route('help.contact')}}"><span></span></a>
                     </div><!--//item-inner-->
                 </div><!--//item-->
             </div><!--//cards-->

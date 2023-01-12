@@ -20,7 +20,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function register(Request $request)
     {
         try {
             //Validated
@@ -31,13 +31,14 @@ class AuthController extends Controller
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'phone' => ['required', 'string', 'unique:users'],
                 'password' => ['required', 'string', 'min:8'],
+                'role' => ['required', 'string'],
             ]);
 
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'error' => $validateUser->errors()->first()
                 ], 401);
             }
 
@@ -50,7 +51,7 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'phone_prefix' => cache('settings')['dialing_code'],
                 'state_id' => $this->currentState()->id,
-                'role' => 'shopper',
+                'role' => $request->role ?? 'shopper',
             ]);
 
             return response()->json([
@@ -86,7 +87,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'error' => $validateUser->errors()->first()
                 ], 401);
             }
 
