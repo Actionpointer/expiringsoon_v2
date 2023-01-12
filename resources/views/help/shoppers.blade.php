@@ -501,30 +501,18 @@
                         <div id="notifications" class="section-block">
                             <h3 class="block-title">Notification</h3>
                             <p>
-                                You will find all your notificationshe product offerings of a particular vendor. It can be very useful
-                                when you want to buy several items of similar nature or category. 
+                                You will find all your notifications on the notification page. These will include
+                                notifications about orders you have made, payments, price drops, etc. 
                             </p>
-                            <p>
-                                Also when you shop from a particular vendor, all your delivery comes
-                                from one single point, therefore reducing your cost of logistics.
-                                You can also filter and sort shops based on different criteria. 
-                            </p>
+                            
                             <div class="row simplelightbox-gallery-5">
-                                <div class="col-md-6">
-                                    <h6>Wishlist</h6>
-                                    <div class="screenshot-holder">
+                                <div class="col-md-12">
+                                    <div class="">
                                         <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
                                         
                                     </div> 
                                 </div>
-                                <div class="col-md-6">
-                                    <h6>Cart</h6>
-                                    <div class="screenshot-holder">
-                                        <a href="{{asset('src/images/demo/appify-account-profile.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-account-profile-thumb.jpg')}}" alt="screenshot" /></a>
-                                        
-                                    </div> 
-                                </div>
-                                
+
                             </div><!--//row-->  
                         </div><!--//section-block-->
 

@@ -52,6 +52,7 @@ class HomeController extends Controller
     
     public function home(){
         $user = auth()->user(); 
+
         request()->session()->reflash();
         if($user->role == 'shopper'){
             return view('customer.dashboard',compact('user'));
@@ -64,6 +65,7 @@ class HomeController extends Controller
                 return redirect()->route('vendor.dashboard');
             }
         }
+       
         return redirect()->route('admin.dashboard');
     }
 

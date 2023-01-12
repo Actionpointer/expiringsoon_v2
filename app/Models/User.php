@@ -31,6 +31,8 @@ class User extends Authenticatable
         'slug', 'fname','lname','email', 'password','phone_prefix','phone','country_id','role','state_id','status'
     ];
 
+    protected $appends = ['balance'];
+
     
     protected $hidden = [
         'password', 'remember_token',
@@ -40,8 +42,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function boot()
-    {
+    public static function boot(){
         parent::boot();
         parent::observe(new UserObserver);
     }
@@ -58,13 +59,14 @@ class User extends Authenticatable
     public function getRouteKeyName(){
         return 'slug';
     }
-    public function getNameAttribute()
-    {
+    public function getNameAttribute(){
         return ucwords($this->fname.' '.$this->lname);   
     }
-    public function getMobileAttribute()
-    {
+    public function getMobileAttribute(){
         return $this->phone_prefix.intval($this->phone);   
+    }
+    public function getBalanceAttribute(){
+        return $this->shops->sum('wallet');   
     }
     public function country(){
         return $this->belongsTo(Country::class);

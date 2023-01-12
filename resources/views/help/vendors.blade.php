@@ -45,56 +45,67 @@
                         <li class="nav-item">
                             <a class="nav-link scrollto heading" href="#introduction">Introduction</a>
                         </li>
+                        
                         <li class="nav-item">
-                            <a class="nav-link scrollto heading" href="#how-it-works">How it Works</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link scrollto heading" href="#site-navigation">Site Navigation</a>
-                            <ul class="nav doc-sub-menu nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link scrollto" href="#home">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link scrollto" href="#products">Products</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link scrollto" href="#hot-deals">Hot Deals</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link scrollto" href="#vendors">Vendors</a>
-                                </li>
-                                
-                            </ul><!--//nav-->
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link scrollto heading" href="#account">Account</a>
+                            <a class="nav-link scrollto heading" href="#vendors">Vendors</a>
                             <ul class="nav doc-sub-menu nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link scrollto" href="#dashboard">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link scrollto" href="#orders">Orders</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link scrollto" href="#wishlist">Wishlist</a>
+                                    <a class="nav-link scrollto" href="#subscriptions">Subscriptions</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link scrollto" href="#transactions">Transactions</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link scrollto" href="#profile">Profile</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link scrollto" href="#notifications">Notifications</a>
                                 </li>
+                                
                                 
                             </ul><!--//nav-->
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link scrollto heading" href="#authentication">Authentication</a>
+                            <a class="nav-link scrollto heading" href="#shop">Shop</a>
+                            <ul class="nav doc-sub-menu nav flex-column">
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#storefront">Storefront</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#products">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#orders">Orders</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#settings">Settings</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#earnings">Earnings</a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#payouts">Payouts</a>
+                                </li>
+                                
+                            </ul><!--//nav-->
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link scrollto heading" href="#account">Advert</a>
+                            <ul class="nav doc-sub-menu nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#dashboard">Adsets</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link scrollto" href="#orders">Ads</a>
+                                </li>
+                                
+                                
+                            </ul><!--//nav-->
+                        </li>
+                        
                         
                     </ul><!--//doc-menu-->
                 </div><!--//doc-nav-->
@@ -105,25 +116,28 @@
                         <h2 class="section-title">Introduction</h2>
                         <div class="section-block">
                             <p class="font-body--md-300 text-secondary">
-                                Welcome to expiringsoon marketplace, the only online platform where you can buy items at huge discounted rate.
-                                All products on expiringsoon are categorized by their expiry date and discounted for you with reference to 
-                                the date difference between the date of purchase and the expiry date.
+                                Thank you for deciding to sell on expiringsoon marketplace. We have created numerous tools for you to give you a smooth business 
+                                expirience on expiringsoon.
                             </p>
-                            {{-- <ul class="list list-inline my-3">
-                                <li class="list-inline-item"><a class="btn btn-cta btn-pink" href="https://themes.3rdwavemedia.com/bootstrap-templates/product/prettydocs-free-bootstrap-theme-for-developers-and-startups/" target="_blank"><i class="fa fa-external-link"></i> View Details</a></li>
-                                <li class="list-inline-item"><a class="btn btn-cta btn-primary" href="https://themes.3rdwavemedia.com/bootstrap-templates/product/prettydocs-free-bootstrap-theme-for-developers-and-startups/" target="_blank"><i class="fa fa-eye"></i> View Demo</a></li>
-                            </ul> --}}
-                            
                         </div><!--//section-block-->
                         
-                        
+                        <div class="section-block">
+                            <h3 class="block-title">Start-Selling</h3>
+                            <p>
+                                The first step towards becoming a vendor is registering a vendor account. 
+                                Click on Start-Selling at the top right section of the home page to create a vendor account. 
+                                You will be redirected to create your shop after successfully creating your vendor account.
+                            </p>
+                        </div>
                     </section><!--//doc-section-->
 
-                    <section id="how-it-works" class="doc-section active">
-                        <h2 class="section-title">How it works</h2>
+                    {{-- <section id="how-it-works" class="doc-section active">
+                        <h2 class="section-title">Start-Selling</h2>
                         <div class="section-block">
-                            <p>For example, lets assume today's date is January 1st 2022. Let's also assume a cake has been uploaded
-                                by a vendor with the expiry date as December 25th 2022, and with the following discount prices
+                            <p>
+                                The first step towards becoming a vendor is registering a vendor account. 
+                                Click on Start-Selling at the top right section of the home page to create a vendor account. 
+                                You will be redirected to create your shop after successfully creating your vendor account.
                             </p>
                         </div>
                         <div class="section-block">
@@ -174,23 +188,21 @@
                             </p>
                         </div>
                        
-                    </section>
+                    </section> --}}
                     
-                    <section id="site-navigation" class="doc-section">
-                        <h2 class="section-title">Site Navigation</h2>
+                    <section id="vendor" class="doc-section">
+                        <h2 class="section-title">Vendors</h2>
 
-                        <div id="home" class="section-block">
-                            <h3 class="block-title">Home</h3>
+                        <div id="dashboard" class="section-block">
+                            <h3 class="block-title">Dasbhoard</h3>
                             <p>
-                                On the homepage, you will find featured products and shops within your locality. All products are categorized based on their nature, for example; Food items
-                                Electronics, House hold items, etc 
+                                The vendor dashboard presents you information about your current subscription and the total number of assets which your subscription affords you,
+                                your recent transactions, and notifications. Use the menu on the right side to navigate other areas of the vendor dashboard
                             </p>
                             <div class="">
                                 <a href="{{asset('src/images/demo/appify-discussions.jpg')}}"><img class="img-fluid" src="{{asset('src/images/demo/appify-discussions-thumb.jpg')}}" alt="screenshot" /></a>
                             </div> 
-                            <p>
-                                The home page contains some advert positions where ads (for shops or products) are displayed. 
-                            </p>
+                            
                             
                             <div class="row simplelightbox-gallery-3">
                                 <div class="col-md-6 col-12">
