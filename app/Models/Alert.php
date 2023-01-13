@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Alert extends Model
 {
     use HasFactory;
+    protected $fillable = ['severity','description','Webhook','status'];
 }

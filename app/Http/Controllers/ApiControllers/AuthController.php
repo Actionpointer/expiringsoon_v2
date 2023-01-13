@@ -17,10 +17,14 @@ class AuthController extends Controller
     use GeoLocationTrait;
     
     public function webhook(Request $request){
-        $alert = \App\Models\Alert::create(['severity'=> 1,'description'=> 'Webhook','status'=> 1]);
+        logger()->info([
+            'payload' => $request->all(),
+            'headers' => $request->headers,
+        ]);
+        // $alert = \App\Models\Alert::create(['severity'=> 1,'description'=> 'Webhook','status'=> 1]);
         return response()->json(200);
     }
-    
+
     public function register(Request $request)
     {
         try {
