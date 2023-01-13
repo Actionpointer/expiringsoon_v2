@@ -15,11 +15,12 @@ class AuthController extends Controller
 {
 
     use GeoLocationTrait;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    public function webhook(Request $request){
+        $alert = \App\Models\Alert::create(['severity'=> 1,'description'=> 'Webhook','status'=> 1]);
+        return response()->json(200);
+    }
+    
     public function register(Request $request)
     {
         try {
@@ -150,38 +151,5 @@ class AuthController extends Controller
             'message' => 'Tokens Revoked'
         ];
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+  
 }

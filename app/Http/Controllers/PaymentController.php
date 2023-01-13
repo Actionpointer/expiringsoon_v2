@@ -21,11 +21,6 @@ class PaymentController extends Controller
         // $this->middleware('auth');
     }
 
-    public function webhook(Request $request){
-        $alert = \App\Models\Alert::create(['severity'=> 1,'description'=> 'Webhook','status'=> 1]);
-        return response()->json(200);
-    }
-
     public function paymentcallback(){
         // dd(request()->query);
         // ["trxref" => "632889cbaa15f","reference" => "632889cbaa15f"]
