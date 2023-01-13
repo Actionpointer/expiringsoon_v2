@@ -18,6 +18,8 @@ Route::post('webhook',function(Request $request){
         'payload' => $request->all(),
         'headers' => $request->headers,
     ]);
+    return response()->json(200);
+    
 })->name('test.webhook');
 
 Route::post('register', [App\Http\Controllers\ApiControllers\AuthController::class, 'register']);
