@@ -180,46 +180,6 @@ class ShopController extends Controller
         return redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
     }
 
-    public function staff(Shop $shop,Request $request){
-        if($request->user_id){
-            if($request->delete){
-                //detach user from shop
-                $shop->users()->detach($request->user_id);
-                $user = User::destroy($request->user_id);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
-            }else{
-                //update
-                $user = User::find($request->user_id);
-                $validator = Validator::make($request->all(), [
-                    'name' => 'required|string',
-                    'email' => ['required',Rule::unique('users')->ignore($user)],
-                    'phone' => ['required',Rule::unique('users')->ignore($user)],
-                    'status' => 'required|numeric'
-                ]);
-                if($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
-                }
-                $user = User::where('id',$request->user_id)->update(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'status'=> $request->status,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone]);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
-            }
-        }else{
-            //create
-            $validator = Validator::make($request->all(), [
-                'fname' => 'required|string',
-                'lname' => 'required|string',
-                'email' => 'required|string|unique:users',
-                'phone' => 'required|string|unique:users',
-                'password' => 'required','string','confirmed'
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
-            }
-            $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'role'=> 'vendor','email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password),'state_id'=> $shop->state_id]);
-            $shop->users()->attach($user->id,['role' =>'staff']);
-            return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
-        }   
-    }
-
     public function shipping(Shop $shop,Request $request){
         if($request->rate_id){
             if($request->delete){

@@ -460,7 +460,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($shop->staff() as $user)
+                                        @foreach ($shop->staff as $user)
                                             <tr>
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->email}} <br> {{$user->mobile}}</td>

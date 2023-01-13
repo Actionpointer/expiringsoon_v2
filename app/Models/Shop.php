@@ -27,8 +27,8 @@ class Shop extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','email','phone','phone_prefix','banner','address','state_id','city_id','published','status'];
-    
+    protected $fillable = ['name','slug','user_id','email','phone','phone_prefix','banner','address','state_id','city_id','published','status'];
+    protected $appends = ['staff'];
 
     public static function boot()
     {
@@ -70,8 +70,12 @@ class Shop extends Model
     public function isCertified(){
         return $this->status && $this->approved && $this->published;
     }
-    public function users(){
-        return $this->belongsToMany(User::class)->withPivot('role','status');
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    public function getStaffAttribute(){
+        $users = User::where('shop_id',$this->id)->get();
+        return $users;
     }
     public function kyc(){
         return $this->MorphMany(Kyc::class,'verifiable');
@@ -85,12 +89,7 @@ class Shop extends Model
     public function companydoc(){
         return $this->MorphOne(Kyc::class,'verifiable')->where('type','companydoc');
     }
-    public function staff(){
-        return $this->users->where('pivot.role','!=','owner');
-    }
-    public function owner(){
-        return $this->users->where('pivot.role','owner')->first();
-    }
+    
     public function country(){
         return $this->belongsTo(Country::class);
     }
@@ -114,6 +113,7 @@ class Shop extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
+    
     public function adverts(){
         return $this->morphMany(Advert::class,'advertable');
     }

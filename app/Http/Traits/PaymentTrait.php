@@ -1,20 +1,28 @@
 <?php
 namespace App\Http\Traits;
 use App\Models\Payment;
-use Ixudra\Curl\Facades\Curl;
+use App\Models\PaymentItem;
+use App\Http\Traits\PaystackTrait;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\FlutterwaveTrait;
 
 
 trait PaymentTrait
 {
+    use FlutterwaveTrait,PaystackTrait;
+
     protected function initializePayment($amount,$items,$type){
         $gateway = cache('settings')['active_payment_gateway'];
         $user = Auth::user();
         $payment = Payment::create(['user_id'=> $user->id,'reference'=> uniqid(),'amount'=> $amount ,'vat'=> cache('settings')['vat']]);
+        foreach($items as $item){
+            PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
+        }
+        
         switch($gateway){
-            case 'paystack': $link = $this->initiatePaystack($payment,$items,$type);
+            case 'paystack': $link = $this->initiatePaystack($payment);
             break;
-            case 'flutter': $link = $this->initiateFlutterWave($payment,$items,$type);
+            case 'flutter': $link = $this->initiateFlutterWave($payment);
             break;
             default: dd('which one is this');
             break;
@@ -22,56 +30,6 @@ trait PaymentTrait
         return $link;
     }
     
-    protected function initiateFlutterWave(Payment $payment,$items,$type){
-        $response = Curl::to('https://api.flutterwave.com/v3/payments')
-        ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-        ->withData( array('customer' => ['email'=> $payment->user->email,'phonenumber'=> $payment->user->phone,'name'=> $payment->user->fname.' '.$payment->user->lname],
-                        'tx_ref'=> $payment->reference,"currency" => cache('settings')['currency_iso'],"payment_options"=>"card,account,ussd",
-                        "redirect_url"=> route('payment.callback'),'amount'=> $payment->amount,
-                        'meta' => ['user_id'=> $payment->user->id,'items' => json_encode($items),'type'=> $type],
-                        "customizations"=> [
-                            "title" => "Expiring Soon",
-                            "description" => "Payment",
-                            "logo" => asset('src/images/logo.png')
-                        ]) )
-        ->asJson()
-        ->post();
-        if($response && $response->status == 'success')
-            return $response->data->link;
-        else return false;
-    }
-    
-    protected function verifyFlutterWavePayment($value){
-        $paymentDetails = Curl::to('https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref='.$value)
-         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-         ->asJson()
-         ->get();
-        return $paymentDetails;
-    }
-
-    public function initiatePaystack(Payment $payment,$items,$type){
-      $response = Curl::to('https://api.paystack.co/transaction/initialize')
-      ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-      ->withHeader('Content-Type: application/json')
-      ->withData( array('email'=> $payment->user->email,'amount'=> $payment->amount*100,'currency'=> cache('settings')['currency_iso'],
-                      'reference'=> $payment->reference,"callback_url"=> route('payment.callback'),
-                      'metadata' => json_encode(['user_id'=> $payment->user->id,'items' => json_encode($items),'type'=> $type])
-                      ) )
-      
-      ->asJson()                
-      ->post();
-      if($response && $response->status)
-        return $response->data->authorization_url;
-      else return false;
-    }
-
-    protected function verifyPaystackPayment($value){
-        $paymentDetails = Curl::to('https://api.paystack.co/transaction/verify/'.$value)
-         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-         ->asJson()
-         ->get();
-        return $paymentDetails;
-    }
 
     protected function getPaymentData($option,$value){
         
@@ -84,10 +42,6 @@ trait PaymentTrait
             case 'amount': return $gateway == 'paystack' ? $value->data->amount/100 : $value->data->amount;
                 break;
             case 'reference': return $gateway == 'paystack' ? $value->data->reference : $value->data->tx_ref;
-                break;
-            case 'items': return $gateway == 'paystack' ? json_decode($value->data->metadata->items) : json_decode($value->data->meta->items);
-                break;
-            case 'type': return $gateway == 'paystack' ? $value->data->metadata->type : $value->data->meta->type;
                 break;
             case 'method': return $gateway == 'paystack' ? $value->data->channel : $value->data->payment_type;
                 break;

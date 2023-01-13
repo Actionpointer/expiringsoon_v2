@@ -30,9 +30,8 @@ class DeactivateProducts implements ShouldQueue
         // $event->subscription
         $user = $event->subscription->user;
         $allowed_products = $user->allowedProducts();
-        $user_products = $user->products;
-        $current_products = $user_products->count();
-        Product::whereIn('id',[$user_products->pluck('id')->toArray()])->take($current_products - $allowed_products)->update(['status'=> false]);
+        $current_products = $user->products->count();
+        Product::whereIn('id',[$user->products->pluck('id')->toArray()])->take($current_products - $allowed_products)->update(['status'=> false]);
         
     }
 }

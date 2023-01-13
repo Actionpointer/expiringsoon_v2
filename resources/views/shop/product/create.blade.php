@@ -45,10 +45,10 @@
               <div class="dashboard__content-card">
                 <div class="dashboard__order-history-title" style="border-bottom:1px solid #ddd">
                   <h2 class="font-body--xxl-500">Add New Product</h2>
-                  @if($shop->owner()->products->count() >= $shop->owner()->allowedProducts()) 
+                  @if($shop->user->products->count() >= $shop->user->allowedProducts()) 
                   <span>
                     You have exhausted your product quota
-                    @if(auth()->id() == $shop->owner()->id) <a href="{{route('vendor.plans')}}" class="font-body--lg-500"> <u>UPGRADE</u></a> @endif
+                    @if(auth()->id() == $shop->user->id) <a href="{{route('vendor.plans')}}" class="font-body--lg-500"> <u>UPGRADE</u></a> @endif
                   </span>
                   @endif
                 </div>
@@ -241,7 +241,7 @@
                         </div>
 
                       </div>
-                      @if($shop->owner()->products->count() >= $shop->owner()->allowedProducts()) 
+                      @if($shop->user->products->count() >= $shop->user->allowedProducts()) 
                       <h3 class="text-danger">The status of this product will be <strong>INACTIVE</strong></h3>
                       @endif
                       <div class="contact-form-btn">

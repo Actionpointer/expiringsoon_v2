@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\User;
 use App\Models\Account;
+use App\Models\Subscription;
 use App\Notifications\WelcomeNotification;
 
 class UserObserver
@@ -11,14 +12,22 @@ class UserObserver
     
     public function created(User $user)
     {
-        switch($user->role){
-            case 'shopper': $user->notify(new WelcomeNotification);
-                break;
-            case 'vendor': 
-                break;
-            default:
-                break;
+        $user->notify(new WelcomeNotification);
+        if($user->role == 'vendor' && !$user->shop_id){
+            $subscription = Subscription::create(
+                ['user_id'=> $user->id,
+                'plan_id'=> 1,
+                'amount'=> 0.0,
+                'start_at'=> now(),
+                'renew_at'=> null,
+                'end_at'=> null,
+                'coupon' => null,
+                'auto_renew'=> false
+            ]);
+            $user->subscription_id = $subscription->id;
+            $user->save();
         }
+    
     }
 
     /**
@@ -30,9 +39,8 @@ class UserObserver
     public function updated(User $user)
     {
         if($user->isDirty('fname') || $user->isDirty('fname')){
-            if($user->staff->where('role','owner')->isNotEmpty()){
-                $shops = $user->staff->where('role','owner')->pluck('shop_id')->toArray();
-                Account::whereIn('shop_id',$shops)->update(['status'=> false]);
+            if($user->shops->isNotEmpty()){
+                Account::whereIn('shop_id',$user->shops->pluck('id')->toArray())->update(['status'=> false]);
             }
             if($user->idcard){
                 $user->idcard->status = false;

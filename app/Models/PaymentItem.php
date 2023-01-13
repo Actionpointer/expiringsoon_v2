@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Observers\PaymentItemObserver;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,11 +16,7 @@ class PaymentItem extends Model
         return $this->morphTo();
     }
 
-    public static function boot()
-    {
-        parent::boot();
-        parent::observe(new PaymentItemObserver);
-    }
+    
 
     // public function 
 

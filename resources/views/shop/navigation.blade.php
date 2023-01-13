@@ -36,7 +36,7 @@
           </a>
         </li>
         
-        @if(auth()->user()->role == 'vendor' && auth()->user()->staff->where('role','owner')->isNotEmpty())
+        @if(auth()->user()->role == 'vendor' && !auth()->user()->subscription_id)
           <!--  Settings   -->
           <li class="dashboard__nav-item-link">
             <a href="{{route('shop.settings',$shop)}}" class="font-body--lg-400">

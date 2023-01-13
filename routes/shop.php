@@ -13,8 +13,8 @@ Route::group(['prefix'=>'vendor/{shop}','as'=> 'shop.'],function (){
     Route::post('address',[App\Http\Controllers\ShopController::class, 'address'])->name('address');
     Route::post('discounts',[App\Http\Controllers\ShopController::class, 'discounts'])->name('discounts');
     Route::post('kyc',[App\Http\Controllers\ShopController::class, 'kyc'])->name('kyc');
-    Route::post('staff',[App\Http\Controllers\ShopController::class, 'staff'])->name('staff');
     Route::post('shipping',[App\Http\Controllers\ShopController::class, 'shipping'])->name('shipping');
+    Route::post('staff',[App\Http\Controllers\StaffController::class, 'index'])->name('staff');
     
 
     

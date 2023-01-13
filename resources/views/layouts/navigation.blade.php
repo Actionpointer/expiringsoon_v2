@@ -2,11 +2,12 @@
     @include('customer.navigation')
 @endif
 @if(auth()->user()->role == 'vendor')
-    {{-- @if(auth()->user()->staff->where('role','owner')->isNotEmpty()) --}}
-    @if(auth()->user()->staff->where('role','staff')->isNotEmpty())
-        @include('shop.navigation')
+    
+    @if(auth()->user()->subscription_id)
+        @include('vendor.navigation')
     @else  
-        @include('vendor.navigation') @endif
+        @include('shop.navigation')
+    @endif
 
 
 @endif

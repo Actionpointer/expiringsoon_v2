@@ -5,9 +5,26 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('sendemail',function(){
-    $user = \App\Models\User::find(31);
-    $user->notify(new WelcomeNotification());
+    // $user = \App\Models\User::find(31);
+    // $user->notify(new WelcomeNotification());
+    // return 'done';
+    $users = \App\Models\User::where('role','vendor')->whereNull('subscription_id')->get();
+    foreach($users as $user){
+        $subscription = \App\Models\Subscription::create(
+            ['user_id'=> $user->id,
+            'plan_id'=> 1,
+            'amount'=> 0.0,
+            'start_at'=> now(),
+            'renew_at'=> null,
+            'end_at'=> null,
+            'coupon' => null,
+            'auto_renew'=> false
+        ]);
+        $user->subscription_id = $subscription->id;
+        $user->save();
+    }
     return 'done';
+
 });
 
 Route::view('email','emails.completed');

@@ -44,3 +44,8 @@ Secret Key:
 sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWybhZt
 eJtqIzn8rY5oE00IgYVeL2p
 https://developer.paypal.com/docs/checkout/
+
+add to user table
+plan_id = 
+auto_renewal = 
+subscription_expiry = 

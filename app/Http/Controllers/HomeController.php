@@ -57,13 +57,12 @@ class HomeController extends Controller
         if($user->role == 'shopper'){
             return view('customer.dashboard',compact('user'));
         }
-        if($user->role == 'vendor'){
-            if($staff = $user->staff->where('role','staff')->first()){
-                $shop = $staff->shop;
-                return redirect()->route('shop.dashboard',$shop);
-            }else{
-                return redirect()->route('vendor.dashboard');
-            }
+        if($user->role == 'vendor' && $user->shop_id){
+            $shop = $user->shop;
+            return redirect()->route('shop.dashboard',$shop);
+        }
+        if($user->role == 'vendor' && !$user->shop_id){
+            return redirect()->route('vendor.dashboard');
         }
        
         return redirect()->route('admin.dashboard');
@@ -71,6 +70,8 @@ class HomeController extends Controller
 
     public function vendor(){
         $user = auth()->user(); 
+        // return $user;
+        // dd($user->activeSubscription());
         return view('vendor.dashboard',compact('user'));
     }
     

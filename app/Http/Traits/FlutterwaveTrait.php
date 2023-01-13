@@ -1,0 +1,111 @@
+<?php
+namespace App\Http\Traits;
+use App\Models\Payout;
+use App\Models\Payment;
+use Ixudra\Curl\Facades\Curl;
+
+
+trait FlutterwaveTrait
+{
+    
+    protected function initiateFlutterWave(Payment $payment){
+        $response = Curl::to('https://api.flutterwave.com/v3/payments')
+        ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+        ->withData( array('customer' => ['email'=> $payment->user->email,'phonenumber'=> $payment->user->phone,'name'=> $payment->user->fname.' '.$payment->user->lname],
+                        'tx_ref'=> $payment->reference,"currency" => cache('settings')['currency_iso'],"payment_options"=>"card,account,ussd",
+                        "redirect_url"=> route('payment.callback'),'amount'=> $payment->amount,
+                        "customizations"=> [
+                            "title" => "Expiring Soon",
+                            "description" => "Payment",
+                            "logo" => asset('src/images/logo.png')
+                        ]) )
+        ->asJson()
+        ->post();
+        if($response && $response->status == 'success')
+            return $response->data->link;
+        else return false;
+    }
+    
+    protected function verifyFlutterWavePayment($value){
+        $paymentDetails = Curl::to('https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref='.$value)
+         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+         ->asJson()
+         ->get();
+        return $paymentDetails;
+    }
+
+    protected function fetchFlutterWave(Payout $payout){
+        $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id")
+            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+            ->asJson()
+            ->get(); 
+    }
+    //payouts
+    protected function resolveBankAccountByFlutter($account_number,$bank,$bvn){
+        // $response = Curl::to('https://api.flutterwave.com/v3/accounts/resolve')
+        // $response = Curl::to('https://api.flutterwave.com/v3/kyc/bvns/'.$bvn)
+        //         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+        //         ->withHeader('Content-Type: application/json')
+        //         // ->withData( array('bvn'=> $bvn) )
+        //         ->asJson()
+        //         ->get();
+        // dd($response);
+        // $result['name'] = $response->data->firstname;
+        // $response = Curl::to('https://api.flutterwave.com/v3/accounts/resolve')
+        //     ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+        //     // ->withHeader('Content-Type: application/json')
+        //     ->withData( json_encode(array("account_number" => $account_number,"account_bank" => $bank)) )
+        //     ->asJson()
+        //     ->post();
+        // dd($response);
+        if($account_number && $bank && $bvn)
+        return 'Ronaldo Messi';
+        else return false;
+        
+    }
+
+    protected function retryFlutterWave(Payout $payout){
+        $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id/retries")
+            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+            ->asJson()
+            ->get();
+        //check the status and update
+    }
+
+    protected function payoutFlutterWave(Payout $payout){
+        $currency = cache('settings')['currency_iso'];
+        
+        $response = Curl::to('https://api.flutterwave.com/v3/transfers')
+        ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+        // ->withData( array('account_number'=> $payout->account->account_number,'account_bank'=> $payout->account->bank->code,
+        ->withData( array('account_number'=> '0690000032','account_bank'=> '044',
+            'amount'=> $payout->amount,'narration'=> "Vendor payout with reference $payout->reference",'reference'=> $payout->reference,
+                        "currency"=> $currency,'callback_url '=> route('payout.callback'),
+                        "customizations"=> [
+                            "title"=>"Expiring Soon",
+                            "description"=>"Payment",
+                            "logo"=> asset('src/images/logo.png')
+                        ]) )
+        ->asJson()
+        ->post();
+        dd($response);
+        if(!$response || $response->status == 'error' || $response->data->status = 'FAILED'){
+            $payout->transfer_id = $response->data->id ?? '';
+            $payout->status = 'failed';
+            $payout->save();
+            return false;
+        }
+        if($response && $response->status == 'success' || $response->data->status = 'NEW'){
+            $payout->transfer_id = $response->data->id ?? '';
+            $payout->status = 'processing';
+            $payout->save();
+            return true;
+        }
+        
+    }
+
+    protected function getBanksByFlutterWave(){
+        
+    }
+
+}

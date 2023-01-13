@@ -2,9 +2,10 @@
 
 namespace App\Listeners;
 
+use App\Models\User;
 use App\Events\DeleteShop;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ShopDeleteProcesses implements ShouldQueue
 {
@@ -28,7 +29,7 @@ class ShopDeleteProcesses implements ShouldQueue
     {
         
         $event->shop->adverts->delete();
-        $event->shop->users()->detach();
+        User::destroy($event->shop->staff->pluck('id')->toArray());
         $event->shop->orders->delete();
         $event->shop->carts->delete();
         $event->shop->products->delete();

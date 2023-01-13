@@ -28,7 +28,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable,Sluggable,HasApiTokens;
 
     protected $fillable = [
-        'slug', 'fname','lname','email', 'password','phone_prefix','phone','country_id','role','state_id','status'
+        'slug', 'fname','lname','email','shop_id','password','phone_prefix','phone','country_id','role','state_id','status'
     ];
 
     protected $appends = ['balance'];
@@ -97,19 +97,23 @@ class User extends Authenticatable
     }
 
     public function shops(){
-        return $this->belongsToMany(Shop::class)->withPivot('role','status');
+        return $this->belongsToMany(Shop::class);
+    }
+
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 
     public function products(){  
-        return $this->hasManyThrough(Product::class,ShopUser::class,'user_id','shop_id');
-    }
-
-    public function staff(){
-        return $this->hasMany(ShopUser::class);
+        return $this->hasManyThrough(Product::class,Shop::class,'user_id','shop_id');
     }
 
     public function idcard(){
         return $this->morphOne(Kyc::class,'verifiable')->where('type','idcard');
+    }
+
+    public function subscription(){
+        return $this->belongsTo(Subscription::class);
     }
 
     public function subscriptions(){
@@ -117,7 +121,7 @@ class User extends Authenticatable
     }
 
     public function activeSubscription(){
-        return $this->hasOne(Subscription::class)->where('end_at', '>', now())->where('status',true); 
+        return $this->subscription;
     }
     
     public function features(){
@@ -137,36 +141,21 @@ class User extends Authenticatable
     }
 
     public function allowedProducts(){
-        if($this->activeSubscription){
-            return $this->activeSubscription->plan->products;
-        }else{
-            return \App\Models\Plan::where('slug','free_plan')->first()->products;
-        }
+        return $this->subscription->plan->products;
     }
     
     public function allowedShops(){
-        if($this->activeSubscription){
-            return $this->activeSubscription->plan->shops;
-        }else{
-            return \App\Models\Plan::where('slug','free_plan')->first()->shops;
-        }
+        return $this->subscription->plan->products;
     }
     public function allowedAdverts(){
 
     }
     public function minimum_payout(){
-        if($this->activeSubscription){
-            return $this->activeSubscription->plan->minimum_payout;
-        }else{
-            return \App\Models\Plan::where('slug','free_plan')->first()->minimum_payout;
-        }
+        return $this->subscription->plan->minimum_payout;
+        
     }
     public function maximum_payout(){
-        if($this->activeSubscription){
-            return $this->activeSubscription->plan->maximum_payout;
-        }else{
-            return \App\Models\Plan::where('slug','free_plan')->first()->maximum_payout;
-        }
+        return $this->subscription->plan->maximum_payout;
     }
 
 }
