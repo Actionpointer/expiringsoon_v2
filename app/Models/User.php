@@ -31,7 +31,7 @@ class User extends Authenticatable
         'slug', 'fname','lname','email','shop_id','password','phone_prefix','phone','country_id','role','state_id','status'
     ];
 
-    protected $appends = ['balance'];
+    protected $appends = ['balance','subscription_name'];
 
     
     protected $hidden = [
@@ -68,6 +68,19 @@ class User extends Authenticatable
     public function getBalanceAttribute(){
         return $this->shops->sum('wallet');   
     }
+    public function getSubscriptionNameAttribute(){
+        if($this->subscription_id){
+            return $this->subscription->plan->name;
+        }else return null;
+           
+    }
+    public function subscription(){
+        return $this->belongsTo(Subscription::class)->withDefault();
+    }
+
+    public function subscriptions(){
+        return $this->hasMany(Subscription::class);
+    }
     public function country(){
         return $this->belongsTo(Country::class);
     }
@@ -97,7 +110,7 @@ class User extends Authenticatable
     }
 
     public function shops(){
-        return $this->belongsToMany(Shop::class);
+        return $this->hasMany(Shop::class);
     }
 
     public function shop(){
@@ -112,17 +125,7 @@ class User extends Authenticatable
         return $this->morphOne(Kyc::class,'verifiable')->where('type','idcard');
     }
 
-    public function subscription(){
-        return $this->belongsTo(Subscription::class);
-    }
-
-    public function subscriptions(){
-        return $this->hasMany(Subscription::class);
-    }
-
-    public function activeSubscription(){
-        return $this->subscription;
-    }
+    
     
     public function features(){
         return $this->hasMany(Feature::class);

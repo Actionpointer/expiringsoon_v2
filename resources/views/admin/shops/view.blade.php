@@ -108,7 +108,7 @@
                                     {{$shop->mobile}}
                                 </span>
                             </p>
-                            <p class="font-body--md-400">Owned by: {{$shop->owner()->name}}</p>
+                            <p class="font-body--md-400">Owned by: {{$shop->user->name}}</p>
                         </div>
                         
                         <div class="card">
@@ -121,8 +121,8 @@
                                   <tr>
                                     <td>Subscription </td>
                                     <td align="right">
-                                        @if($shop->owner()->activeSubscription)
-                                        {{$shop->owner()->activeSubscription->plan->name}} Subscription
+                                        @if($shop->user->activeSubscription)
+                                        {{$shop->user->activeSubscription->plan->name}} Subscription
                                         @else Free Subscription
                                         @endif
                                     </td>

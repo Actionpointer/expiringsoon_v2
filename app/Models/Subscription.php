@@ -15,7 +15,7 @@ class Subscription extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable = ['user_id','plan_id','amount','start_at','renew_at','end_at','auto_renew','coupon'];
-    
+    protected $appends = ['active','duration','is_free'];
     protected $dates = ['start_at','end_at'];
 
     public static function boot()
@@ -40,21 +40,11 @@ class Subscription extends Model
         return $this->start_at->diffInMonths($this->end_at);   
     }
 
-    public function expiring(){
-        switch($this->duration){
-            case '1': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 7;
-                break;
-            case '3': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 14;
-                break;
-            case '6': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 21;
-                break;
-            case '12': return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 28;
-                break;
-        }
+    public function getActiveAttribute(){
+        return  $this->start_at < now() && $this->end_at > now() && $this->status;
     }
-
-    public function active(){
-        return $this->start_at < now() && $this->end_at > now() && $this->status;
+    public function getIsFreeAttribute(){
+        return  !$this->renew_at && !$this->end_at;
     }
 
     public function expired(){

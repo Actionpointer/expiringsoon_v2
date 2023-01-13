@@ -53,28 +53,27 @@
                   </div>
                   <div class="dashboard__user-profile-info">
                     <h5 class="font-body--xl-500 name">{{$user->name}}</h5>
-                    <h6 class="my-2 text-dark">
-            
-                      @if($user->activeSubscription)
-                          <h6 class="my-2 text-dark">{{$user->activeSubscription->plan->name}}</h6>
-                          @if($user->activeSubscription->expiring())
-                            <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
-                              <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
-                              <p>Subscription about to expire ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
-                              <button type="submit"><u>Renew</u></button> | <a href="{{route('vendor.plans')}}"><u>Change plan</u></a> </p>
-                            </form> 
-                          @elseif($user->activeSubscription->auto_renew) 
-                            <form class="" action="{{route('vendor.subscription.cancel_renew')}}" method="POST"> @csrf 
-                              <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
-                              <p>Plan will auto-renew on ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
-                              <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
-                            </form> 
-                          @else 
-                            <p>Plan will expire on {{$user->activeSubscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p>
-                          @endif
-                      @else
-                      <h6 class="my-2 text-dark">Free Subscription| <a href="{{route('vendor.plans')}}"><u>upgrade</u></a> </h6>
-                      @endif
+                    <h6 class="my-2 text-dark">{{$user->subscription->plan->name}} Subscription @if($user->subscription->is_free) | <a href="{{route('vendor.plans')}}"><u>upgrade</u></a> @endif </h6>
+                      @if($user->subscription->end_at && $user->subscription->end_at > now())
+                            
+                        @if($user->subscription->renew_at <= now())
+                          <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
+                            <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
+                            <p>Subscription about to expire ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
+                            <button type="submit"><u>Renew</u></button> | <a href="{{route('vendor.plans')}}"><u>Change plan</u></a> </p>
+                          </form> 
+                        @endif
+                        @elseif($user->activeSubscription->auto_renew) 
+                          <form class="" action="{{route('vendor.subscription.cancel_renew')}}" method="POST"> @csrf 
+                            <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
+                            <p>Plan will auto-renew on ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
+                            <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
+                          </form> 
+                        @else 
+                          <p>Plan will expire on {{$user->activeSubscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p>
+                        @endif
+                        
+                     
                         
                     
                     <div class="d-flex justify-content-center">

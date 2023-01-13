@@ -10,11 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(){
         $user = auth()->user();
         $shops = $user->shops;
@@ -35,7 +31,8 @@ class ShopController extends Controller
         }   
     }
 
-    public function store(Request $request){
+    public function save(Request $request){
+        $user = auth()->user();
         try {
             //Validated
             $validateUser = Validator::make($request->all(), 
@@ -47,7 +44,6 @@ class ShopController extends Controller
                 'email' => 'required|string|unique:users',
                 'phone' => 'required|string|unique:users',
                 'photo_url' => 'required|string',
-                'photo_extension' => 'required|string',
             ]);
 
             if($validateUser->fails()){
@@ -61,13 +57,58 @@ class ShopController extends Controller
             $banner = 'uploads/'.time().'.'.$request->photo_extension;
             $response = Curl::to($request->photo_url)->withContentType('image/png')->download('storage/'.$banner);
             if(!$response) $banner = null;
-            $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
+            $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
             'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> 1]);
             
             return response()->json([
                 'status' => true,
                 'message' => 'Shop Created Successfully',
                 'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,'owner'=> auth()->user(),'products'=> $shop->products->count() ,'create_shops_remaining'=> $shop->owner()->allowedShops()]
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function store(Request $request){
+        $user = auth()->user();
+        try {
+            //Validated
+            $validateUser = Validator::make($request->all(), 
+            [
+                'name' => 'required|max:255',
+                'address' => 'required|string',
+                'state_id' => 'required|string',
+                'city_id' => 'required|string',
+                'email' => 'required|string|unique:users',
+                'phone' => 'required|string|unique:users',
+                'photo' => 'required|max:1024|image',
+                'published' => 'required|string',
+            ]);
+
+            if($validateUser->fails()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'error' => $validateUser->errors()->first()
+                ], 401);
+            }
+
+            if($request->hasFile('photo')){
+                $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+                $request->file('photo')->storeAs('public/',$banner);
+            }
+            $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
+            'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Shop Created Successfully',
+                'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,'products'=> $shop->products->count() ,'create_shops_remaining'=> $shop->user->allowedShops()]
             ], 200);
 
         } catch (\Throwable $th) {

@@ -40,8 +40,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::resource('shops','App\Http\Controllers\ApiControllers\ShopController');
+    Route::get('shops',[App\Http\Controllers\ApiControllers\ShopController::class,'index']);
+    Route::get('shops/{shop_id}',[App\Http\Controllers\ApiControllers\ShopController::class,'show']);
+    Route::post('shops/store',[App\Http\Controllers\ApiControllers\ShopController::class,'store']);
+    Route::post('shops/update',[App\Http\Controllers\ApiControllers\ShopController::class,'update']);
+    Route::post('shops/delete',[App\Http\Controllers\ApiControllers\ShopController::class,'delete']);
     Route::get('shop/{shop_id}/products',[App\Http\Controllers\ApiControllers\ProductController::class,'index']);
     Route::resource('products','App\Http\Controllers\ApiControllers\ProductController');
-    Route::resource('subscriptions','App\Http\Controllers\ApiControllers\SubscriptionController');
-
+    Route::group(['prefix'=>'subscriptions'],function (){
+        Route::get('plans',[App\Http\Controllers\ApiControllers\SubscriptionController::class,'index']);
+        Route::post('store',[App\Http\Controllers\ApiControllers\SubscriptionController::class,'store']);
+    });
 });

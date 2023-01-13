@@ -31,6 +31,7 @@ class ShopRequest extends FormRequest
             'email' => 'required|string|unique:users',
             'phone' => 'required|string|unique:users',
             'photo' => 'required|max:1024|image',
+            'published' => 'required|string',
         ];
     }
 

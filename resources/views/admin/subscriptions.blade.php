@@ -101,7 +101,7 @@
                                                 
                                                   @if($subscription->expired())
                                                       <button class="badge btn-danger">Expired </button>
-                                                  @elseif($subscription->expiring())
+                                                  @elseif($subscription->renew_at && $subscription->renew_at < now())
                                                       <button class="badge btn-warning">Expiring </button>
                                                   @elseif(!$subscription->status)
                                                       <button class="badge btn-danger">Not Active </button>

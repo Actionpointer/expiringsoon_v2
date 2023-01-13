@@ -96,11 +96,12 @@ class ShopController extends Controller
     }
 
     public function store(ShopRequest $request){
+        $user = auth()->user();
         if($request->hasFile('photo')){
             $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$banner);
         }
-        $shop = Shop::create(['name'=> $request->name,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
+        $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
         'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
         
         return redirect()->route('shop.settings',$shop);

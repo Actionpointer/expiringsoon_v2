@@ -28,9 +28,6 @@ class PaymentObserver
      */
     public function updated(Payment $payment)
     {
-        if($payment->isDirty('status') && $payment->status){
-            
-        }
         
     }
 
