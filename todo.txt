@@ -1,8 +1,10 @@
 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
 
-product
-google how to scrap script from image for when product image is uploaded via url.. from product import
+delete shop event & listener.. figure out adverts delete
+
 separate vendor signup and redirect to orientation page
+
+
 
 duplicate expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafrica
 

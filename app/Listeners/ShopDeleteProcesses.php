@@ -27,6 +27,11 @@ class ShopDeleteProcesses implements ShouldQueue
      */
     public function handle(DeleteShop $event)
     {
+        //orders
+        //staff
+        //carts
+        //products
+        //advert containing shop
         
         $event->shop->adverts->delete();
         User::destroy($event->shop->staff->pluck('id')->toArray());

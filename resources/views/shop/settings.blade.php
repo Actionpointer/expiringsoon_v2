@@ -542,7 +542,7 @@
                                     <div class="contact-form__content-group">
                                         <div class="contact-form-input">
                                         <label for="states">State </label>
-                                        <select id="statez" name="state_id" class="states select2">
+                                        <select id="statez" name="destination_id" class="states select2">
                                             @foreach ($states as $state)
                                                 <option value="{{$state->id}}">{{$state->name}}</option>
                                             @endforeach
@@ -618,7 +618,7 @@
                                                                   
                                                                   <div class="contact-form-input">
                                                                       <label for="destination">Destination </label>
-                                                                      <select id="destination" name="state_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted" >
+                                                                      <select id="destination" name="destination_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted" >
                                                                           @foreach ($states as $state)
                                                                               <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
                                                                           @endforeach

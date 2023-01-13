@@ -5,7 +5,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('dashboard',[App\Http\Controllers\HomeController::class, 'admin'])->name('dashboard');
     Route::get('settings',[App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
     Route::post('settings',[App\Http\Controllers\SettingsController::class, 'settings'])->name('settings');
-    Route::post('shipping-rates',[App\Http\Controllers\SettingsController::class, 'shipping_rates'])->name('shipments');
+    Route::post('shipping-rates',[App\Http\Controllers\ShipmentController::class, 'admin_shipping_rates'])->name('shipments');
     Route::post('staff',[App\Http\Controllers\SettingsController::class, 'admins'])->name('staff');
     Route::post('plans',[App\Http\Controllers\SettingsController::class, 'plans'])->name('plans');
     Route::post('adplans',[App\Http\Controllers\SettingsController::class, 'adplans'])->name('adplans');
@@ -41,6 +41,6 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('messages',[App\Http\Controllers\MessageController::class, 'admin_index'])->name('messages');
     Route::get('message/{user}',[App\Http\Controllers\MessageController::class, 'admin_conversation'])->name('message');
     Route::post('message/{user}',[App\Http\Controllers\MessageController::class, 'admin_createConversation'])->name('message');
-    Route::get('shipping',[App\Http\Controllers\ShipmentController::class, 'shipping'])->name('shipping');
+    
     Route::get('security',[App\Http\Controllers\SecurityController::class, 'index'])->name('security');
 });

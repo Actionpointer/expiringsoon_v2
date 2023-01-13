@@ -181,38 +181,7 @@ class ShopController extends Controller
         return redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
     }
 
-    public function shipping(Shop $shop,Request $request){
-        if($request->rate_id){
-            if($request->delete){
-                $user = ShippingRate::destroy($request->rate_id);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Shipping Rate']);
-            }else{
-                //update
-                $validator = Validator::make($request->all(), [
-                    'state_id' => 'required|numeric',
-                    'hours' => 'required|numeric',
-                    'amount' => 'required|numeric',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update shipping rate']);
-                }
-                $rate = ShippingRate::where('id',$request->rate_id)->update(['destination_id'=> $request->state_id,'hours'=> $request->hours,'amount'=> $request->amount]);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated Shipping Rate']);
-            }
-        }else{
-            //create
-            $validator = Validator::make($request->all(), [
-                'state_id' => 'required|numeric',
-                'hours' => 'required|numeric',
-                'amount' => 'required|numeric',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create shipping rate']);
-            }
-            $rate = ShippingRate::create(['shop_id'=> $shop->id ,'origin_id'=> $shop->state_id,'destination_id'=> $request->state_id,'hours'=> $request->hours,'amount'=> $request->amount]);
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Shipping Rate created successfully']);
-        } 
-    }
+    
 
 
     public function notifications(Shop $shop){

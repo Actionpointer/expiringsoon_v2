@@ -1,10 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ShopController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PayoutController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\ProductController;
+
    
 Route::group(['prefix'=>'vendor/{shop}','as'=> 'shop.'],function (){
     Route::get('dashboard', [App\Http\Controllers\ShopController::class, 'dashboard'])->name('dashboard');
@@ -13,7 +9,7 @@ Route::group(['prefix'=>'vendor/{shop}','as'=> 'shop.'],function (){
     Route::post('address',[App\Http\Controllers\ShopController::class, 'address'])->name('address');
     Route::post('discounts',[App\Http\Controllers\ShopController::class, 'discounts'])->name('discounts');
     Route::post('kyc',[App\Http\Controllers\ShopController::class, 'kyc'])->name('kyc');
-    Route::post('shipping',[App\Http\Controllers\ShopController::class, 'shipping'])->name('shipping');
+    Route::post('shipping',[App\Http\Controllers\ShipmentController::class, 'vendor_shipping_rates'])->name('shipping');
     Route::post('staff',[App\Http\Controllers\StaffController::class, 'index'])->name('staff');
     
 

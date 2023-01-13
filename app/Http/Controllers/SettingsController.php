@@ -19,7 +19,6 @@ use App\Http\Traits\GeoLocationTrait;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\RateLimiter;
 
 class SettingsController extends Controller
 {
@@ -65,28 +64,7 @@ class SettingsController extends Controller
         return redirect()->back()->with(['result'=>1,'message'=> 'Settings Saved']);
     }
 
-    public function shipping_rates(Request $request){
-        if($request->rate_id){
-            if($request->delete){
-                $rate = ShippingRate::where('id',$request->rate_id)->delete();
-            }else{
-                $rate = ShippingRate::find($request->rate_id);
-                $rate->origin_id = $request->origin_id;
-                $rate->destination_id = $request->destination_id;
-                $rate->hours = $request->hours;
-                $rate->amount = $request->amount;
-                $rate->save();
-            }  
-        }else{
-            $rate = new ShippingRate;
-            $rate->origin_id = $request->origin_id;
-            $rate->destination_id = $request->destination_id;
-            $rate->hours = $request->hours;
-            $rate->amount = $request->amount;
-            $rate->save();
-        }
-        return redirect()->back()->with(['result'=>1,'message'=> 'Shipping Settings Saved']);
-    }
+    
 
     public function admins(Request $request){
         

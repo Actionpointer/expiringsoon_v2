@@ -45,8 +45,13 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('shops/store',[App\Http\Controllers\ApiControllers\ShopController::class,'store']);
     Route::post('shops/import',[App\Http\Controllers\ApiControllers\ShopController::class,'import']);
     Route::post('shops/update',[App\Http\Controllers\ApiControllers\ShopController::class,'update']);
-    Route::post('shops/delete',[App\Http\Controllers\ApiControllers\ShopController::class,'delete']);
-    
+    Route::post('shops/delete',[App\Http\Controllers\ApiControllers\ShopController::class,'destroy']);
+    Route::group(['prefix'=>'shipping/rates'],function (){
+        Route::get('/{shop_id}',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_index']);
+        Route::post('store',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_store']);
+        Route::post('update',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_update']);
+        Route::post('delete',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_delete']);
+    });
 
     Route::get('shop/{shop_id}/products',[App\Http\Controllers\ApiControllers\ProductController::class,'index']);
     Route::post('shop/products',[App\Http\Controllers\ApiControllers\ProductController::class,'store']);
