@@ -13,13 +13,14 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::webhooks('webhooks-test');
 Route::post('webhook',function(Request $request){
     logger()->info([
         'payload' => $request->all(),
         'headers' => $request->headers,
     ]);
     return response()->json(200);
-    
+
 })->name('test.webhook');
 
 Route::post('register', [App\Http\Controllers\ApiControllers\AuthController::class, 'register']);
