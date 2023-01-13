@@ -22,6 +22,7 @@ class UserObserver
                 'renew_at'=> null,
                 'end_at'=> null,
                 'coupon' => null,
+                'status'=> 1,
                 'auto_renew'=> false
             ]);
             $user->subscription_id = $subscription->id;

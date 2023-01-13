@@ -1,6 +1,7 @@
 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
 
-google how to scrap script from image.
+product
+google how to scrap script from image for when product image is uploaded via url.. from product import
 separate vendor signup and redirect to orientation page
 
 duplicate expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafrica
