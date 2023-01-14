@@ -61,8 +61,8 @@ class ShopController extends Controller
             [
                 'name' => 'required|max:255',
                 'address' => 'required|string',
-                'state_id' => 'required|string',
-                'city_id' => 'required|string',
+                'state_id' => 'required|numeric',
+                'city_id' => 'required|numeric',
                 'email' => 'required|string|unique:users',
                 'photo' => ['required','string','url','not-regex:(.svg|.gif)']
             ]);
@@ -104,12 +104,12 @@ class ShopController extends Controller
             [
                 'name' => 'required|max:255',
                 'address' => 'required|string',
-                'state_id' => 'required|string',
-                'city_id' => 'required|string',
+                'state_id' => 'required|numeric',
+                'city_id' => 'required|numeric',
                 'email' => 'required|string|unique:users',
                 'phone' => 'required|string|unique:users',
                 'photo' => 'required|max:1024|image',
-                'published' => 'required|string',
+                'published' => 'required|numeric',
             ]);
 
             if($validator->fails()){
@@ -141,21 +141,21 @@ class ShopController extends Controller
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request){
         $user = auth()->user();
         try {
                 $validator = Validator::make($request->all(), 
                 [
-                    'shop_id' => 'required|string',
-                    'pin' => 'required|string',
+                    'shop_id' => 'required|numeric',
+                    'pin' => 'required|numeric',
                     'name' => 'nullable|string',
                     'email' => 'nullable|string',
                     'phone' => 'nullable|string',
-                    'published' => 'nullable|string',
+                    'published' => 'nullable|numeric',
                     'photo' => 'nullable|string',
                     'address' => 'nullable|string',
-                    'state_id' => 'nullable|string',
-                    'city_id' => 'nullable|string',
+                    'state_id' => 'nullable|numeric',
+                    'city_id' => 'nullable|numeric',
                     'discount30' => 'nullable|string',
                     'discount60' => 'nullable|string',
                     'discount90' => 'nullable|string',
@@ -231,7 +231,7 @@ class ShopController extends Controller
             //Validated
             $validator = Validator::make($request->all(), 
             [
-                'shop_id' => 'required|string',
+                'shop_id' => 'required|numeric',
             ]);
 
             if($validator->fails()){
@@ -285,7 +285,7 @@ class ShopController extends Controller
         try {
             $validator = Validator::make($request->all(), 
             [
-                'shop_id' => 'required|string',
+                'shop_id' => 'required|numeric',
                 'destination_id' => 'required|numeric',
                 'hours' => 'required|string',
                 'amount' => 'required|string',
@@ -363,7 +363,7 @@ class ShopController extends Controller
         try {
                 $validator = Validator::make($request->all(), 
                 [
-                    'shop_id' => 'required|string',
+                    'shop_id' => 'required|numeric',
                     'rate_id' => 'required|numeric',
                 ]);
 
