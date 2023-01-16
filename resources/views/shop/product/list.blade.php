@@ -49,7 +49,7 @@
               <div class="dashboard__order-history-title d-flex flex-column flex-md-row justify-content-between">
                 <h2 class="font-body--xl-500 ">My Products</h2>
                 <div class="my-2 my-md-0">
-                  @if(auth()->id() == $shop->owner()->id)
+                  @if(auth()->id() == $shop->user_id)
                   <button type="button" class="btn btn-primary" onclick="featureform();">Feature</button>
                   @endif
                   <button type="button" class="btn btn-success" onclick="if(confirm('Are you sure you want to publish?')) publishform();">Publish</button>
@@ -163,7 +163,7 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                   <a class="dropdown-item" href="{{route('shop.product.edit',[$shop,$product])}}">Edit</a>
-                                  @if(auth()->id() == $shop->owner()->id)
+                                  @if(auth()->id() == $shop->user_id)
                                   <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
                                     <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                     <input type="hidden" name="products[]" value="{{$product->id}}">

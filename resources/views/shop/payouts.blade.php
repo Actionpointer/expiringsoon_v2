@@ -74,7 +74,7 @@
                                             <div class="contact-form__content-group">
                                               <div class="contact-form-input"> 
                                                 <label for="address">Enter Amount *</label>
-                                                <input type="number" name="amount" min="{{$shop->owner()->minimum_payout()}}" max="{{$shop->owner()->maximum_payout() > $shop->wallet ? $shop->wallet : $shop->owner()->maximum_payout()}}" id="amount" placeholder="Minimum ({{$shop->owner()->minimum_payout()}}) and Maximum ({{$shop->owner()->maximum_payout() > $shop->wallet ? $shop->wallet : $shop->owner()->maximum_payout()}})" autocomplete="off" required="">
+                                                <input type="number" name="amount" min="{{$shop->user->minimum_payout()}}" max="{{$shop->owner()->maximum_payout() > $shop->wallet ? $shop->wallet : $shop->owner()->maximum_payout()}}" id="amount" placeholder="Minimum ({{$shop->user->minimum_payout()}}) and Maximum ({{$shop->owner()->maximum_payout() > $shop->wallet ? $shop->wallet : $shop->owner()->maximum_payout()}})" autocomplete="off" required="">
                                               </div>
                                               <div class="contact-form-input">
                                                 @if($shop->bankaccount)

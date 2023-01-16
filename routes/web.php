@@ -5,10 +5,25 @@ use Illuminate\Support\Facades\Route;
 use App\Notifications\WelcomeNotification;
 
 Route::get('sendemail',function(){
-    $user = \App\Models\User::find(31);
-    $user->notify(new WelcomeNotification());
+    // $user = \App\Models\User::find(31);
+    // $user->notify(new WelcomeNotification());
+    // return 'done';
+    $subscriptions = \App\Models\Subscription::whereNotNull('start_at')->whereNotNull('end_at')->get();
+    foreach($subscriptions as $subscription){
+        $duration = $subscription->start_at->diffInMonths($subscription->end_at);
+        switch($duration){
+            case '1': $subscription->renew_at = $subscription->end_at->subWeeks(1);
+            break;
+            case '3': $subscription->renew_at = $subscription->end_at->subWeeks(2);
+            break;
+            case '6': $subscription->renew_at = $subscription->end_at->subWeeks(3);
+            break;
+            case '12': $subscription->renew_at = $subscription->end_at->subWeeks(4);
+            break;
+        }
+        $subscription->save();
+    }
     return 'done';
-    
 });
 
 Route::view('email','emails.completed');

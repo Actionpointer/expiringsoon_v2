@@ -69,7 +69,7 @@
                           </div>
                       </div>
                     </div>
-                    @if($shop->owner()->id == auth()->id())
+                    @if($shop->user_id == auth()->id())
                     <div>
                         <a href="{{route('shop.payouts',$shop)}}" class="edit font-body--lg-500">Request Payout</a>
                     </div>
@@ -81,7 +81,7 @@
               <div class="col-lg-5">
                 <div class="dashboard__user-billing dashboard-card">
                   <h2 class="dashboard__user-billing-title font-body--md-500">
-                    Shop Details
+                    Shop Info
                   </h2>
                   <div class="dashboard__user-billing-info">
                     <h5 class="dashboard__user-billing-name font-body--xl-500" >
@@ -96,7 +96,7 @@
                     <p class="dashboard__user-billing-email font-body--lg-400" > {{$shop->email}} </p>
                     <p class="dashboard__user-billing-number font-body--lg-400" > {{$shop->mobile}} </p>
                   </div>
-                  @if($shop->owner()->id == auth()->id())
+                  @if($shop->user_id == auth()->id())
                   <a href="{{route('shop.settings',$shop)}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Edit Profile</a>
                   @endif
                 </div>

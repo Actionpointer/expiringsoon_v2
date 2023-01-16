@@ -46,7 +46,7 @@
             <!-- User Info -->
             <div class="row">
               <!-- User Profile  -->
-              <div class="col-lg-12">
+              <div class="col-lg-6">
                 <div class="dashboard__user-profile dashboard-card">
                   <div class="dashboard__user-profile-img">
                     <img @if(!$user->pic) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($user->pic)}}" @endif alt="{{$user->name}}" />
@@ -58,36 +58,33 @@
                             
                           @if($user->subscription->renew_at < now())
                             <p>Subscription will expire on {{$user->subscription->end_at->format('d-M-Y')}} </p>
-                            <p>Plan will expire on {{$user->activeSubscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p>
+                            
                           @else
                           
                             @if($user->subscription->auto_renew) 
-                              <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
-                                <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
-                                <p>Your subscription will auto-renew on {{$user->subscription->end_at->format('d-M-Y')}}) |
-                                <button type="submit"><u>Renew Now </u></button> | 
-                              </form>  
+                                
                               <form class="" action="{{route('vendor.subscription.cancel_renew')}}" method="POST"> @csrf 
-                                  <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
+                                  <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
                                   <p>Plan will auto-renew on ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
                                   <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
-                                </form>  </p>
                               </form> 
-                          
+                              <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
+                                <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
+                                <button type="submit"><u>Renew Now </u></button>
+                              </form>
                             @else
-                              <form class="" action="{{route('vendor.subscription.cancel_renew')}}" method="POST"> @csrf 
-                                <input type="hidden" name="subscription_id" value="{{$user->activeSubscription->id}}"> 
-                                <p>Plan will auto-renew on ({{$user->activeSubscription->end_at->format('d-M-Y')}}) | 
-                                <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
-                              </form> 
+
+                              <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
+                                <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
+                                <p>Plan will expire on {{$user->activeSubscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p> |
+                                <button type="submit"><u>Renew Now </u></button>
+                              </form>
+
                             @endif 
-                          
+                            
                           @endif
                       @endif
                         
-                     
-                        
-                    
                     <div class="d-flex justify-content-center">
                       <div style="float:left;padding-right:20px;margin-right:20px;border-right:2px solid #e0dfdf">
                           <p align="left" class="font-body--md-400 designation">Total Shops</p>
@@ -111,168 +108,184 @@
                   </div>
                 </div>
               </div>
-              
-            </div>
-
-            <!-- Recent Transactions  -->
-            @if($user->payments->whereBetween('created_at',[now(),now()->subMonth()])->isNotEmpty())
-              <div class="dashboard__order-history" style="margin-top: 24px">
-                <div class="dashboard__order-history-title">
-                    <h2 class="font-body--xl-500">Recent Transactions</h2>
-                    <a href="{{route('vendor.payments')}}" class="font-body--lg-500">
-                      View All</a>
-                </div>
-                <div class="dashboard__order-history-table">
-                    <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                          <tr>
-                              <th scope="col" class="dashboard__order-history-table-title"> Date </th>
-                              <th scope="col" class="dashboard__order-history-table-title"> Payment Reference  </th>
-                              <th scope="col" class="dashboard__order-history-table-title"> Total  </th>
-                              <th scope="col" class="dashboard__order-history-table-title"> Status  </th>
-                              <th scope="col" class="dashboard__order-history-table-title"></th>
-                          </tr>
-                        </thead>
-                        <tbody>                     
-                            @foreach($user->payments->whereBetween('created_at',[now(),now()->subMonth()]) as $payment)        
-                                <tr>
-                                    <!-- Order Id  -->
-                                    <td class="dashboard__order-history-table-item order-id"> 
-                                        <span style="font-weight:500">{{$payment->created_at->format('Y-m-d')}}</span><br/>
-                                    </td>
-                                    
-                                    <!-- Vendor Split  -->
-                                    <td class="dashboard__order-history-table-item order-total "> 
-                                        <p class="order-total-price">   #{{$payment->reference}} </p>
-                                    </td>
-                                    <!-- Site Split  -->
-                                    <td class="dashboard__order-history-table-item order-total"> 
-                                        <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($payment->amount, 0)}} </p>
-                                    </td>
-                                    <!-- Status -->
-                                    <td class="dashboard__order-history-table-item   order-status "> {{$payment->status}}</td>
-                                    <!-- Details page  -->
-                                    <td class="dashboard__order-history-table-item   order-details "> 
-                                        <a href="{{route('invoice',$payment)}}">
-                                            <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Invoice</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            
-                            @endforeach
-                        </tbody>
-                    </table>
+              <div class="col-lg-6">
+                <div class="dashboard__totalpayment-card">
+                  <div class="dashboard__totalpayment-card-header">
+                    <div class="dashboard__totalpayment-card-header">
+                      <div class="dashboard__totalpayment-card-header-item">
+                        <h5 class="title">Unread Notifications</h5>
+                        
+                      </div>
                     </div>
-                </div>
-              </div>
-            @endif
+                  </div>
 
-            <!-- susbcriptions -->
-            <div class="dashboard__order-history" style="margin-top: 24px">
-              <div class="dashboard__order-history-title">
-                <h2 class="font-body--xl-500">Current Subscriptions</h2>
-              </div>
-              <div class="dashboard__order-history-table">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"> Plan</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Start</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> End</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Status</th>
-                        <th scope="col" class="dashboard__order-history-table-title"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @forelse($user->subscriptions as $subscription)
-                        <tr>
-                          <!-- Order Id  -->
-                          <td class="dashboard__order-history-table-item order-status"> 
-                              <span style="font-weight:500">
-                                @if($subscription->plan_id) 
-                                  {{$subscription->plan->description}}
-                                @else 
-                                  Enterprise plan
-                                @endif
-                              </span>
-                          </td>
-                          <!-- Date  -->
-                          <td class="dashboard__order-history-table-item   order-date "> {{ $subscription->start_at->format('d M, Y h:i A')}}</td>
-                          <!-- Total  -->
-                          <td class="   dashboard__order-history-table-item   order-total ">  {{ $subscription->end_at->format('d M, Y h:i A')}} </td>
-                          <!-- Status -->
-                          <td class="dashboard__order-history-table-item order-status ">
-                            @if($subscription->deleted_at || $subscription->end_at < now())
-                              <button class="badge btn-danger">Expired </button>
-                            @elseif($subscription->expiring() && $subscription->status)
-                                <button class="badge btn-warning">Expiring </button>
-                            @elseif(!$subscription->status)
-                                <button class="badge btn-danger">Not Active </button>
-                              @else
-                                <button class="badge btn-success">Active </button>
-                            @endif
-                          </td>
-                          <td></td>
-                        </tr> 
-                        @empty
-                        <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                            <br />You have no subscription at this time.
+                  <div class="dashboard__totalpayment-card-body">
+                      @forelse($user->unreadNotifications as $notification)
+                        <div class="dashboard__totalpayment-card-body-item">
+                          <div class="d-flex">
+                              <div>
+                                <small class="muted font-body--sm-400 text-nowrap">12-May</small>
+                              </div>
+                              
+                              <h5 class="font-body--sm-400 px-2"> 
+                                {{$notification->data}}
+                              </h5>
+                              <div>
+                                <button class="btn btn-sm btn-outline-dark">View</button>
+                              </div>
+                              
+                          </div>
+                        </div>
+                      @empty
+                        <div class="dashboard__totalpayment-card-body-item pt-5 justify-content-center">
+                          <h5 class="font-body--lg-600">No Unread Notification</h5>
                         </div>
                       @endforelse
-                    </tbody>
-                  </table>
+                  </div>
                 </div>
               </div>
             </div>
 
-            @if($user->unreadNotifications->isNotEmpty())
-            <div class="dashboard__order-history" style="margin-top: 24px">
-              <div class="dashboard__order-history-title">
-                <h2 class="font-body--xl-500">Recent Notifications  </h2>
-                <a href="{{route('notifications')}}" class="font-body--lg-500">
-                  View All</a>
-              </div>
-              <div class="dashboard__order-history-table">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"> Plan</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Start</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> End</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Status</th>
-                        <th scope="col" class="dashboard__order-history-table-title"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($user->unreadNotifications as $notification)
-                        <tr>
-                          <!-- Order Id  -->
-                          <td class="dashboard__order-history-table-item order-status"> 
-                              <span style="font-weight:500">
-                                
-                              </span>
-                          </td>
-                          <!-- Date  -->
-                          <td class="dashboard__order-history-table-item   order-date "> </td>
-                          <!-- Total  -->
-                          <td class="   dashboard__order-history-table-item   order-total ">   </td>
-                          <!-- Status -->
-                          <td class="dashboard__order-history-table-item order-status ">
-                            <button class="badge btn-success">Active </button>
-                          </td>
-                          <td></td>
-                        </tr> 
-                        
-                      @endforeach
-                    </tbody>
-                  </table>
+
+            <!-- Shop status and notifications  -->
+            <div class="my-3">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="dashboard__totalpayment-card">
+                    <div class="dashboard__totalpayment-card-header">
+                      <div class="dashboard__totalpayment-card-header">
+                        <div class="dashboard__totalpayment-card-header-item">
+                          <h5 class="title">Shops Overview</h5>
+                          {{-- <p class="details order-id"> {{$order->trackingcode}}</p> --}}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="dashboard__totalpayment-card-body">
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Active Shops:</h5>
+                        <p class="font-body--md-500"> 23 </p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Shops Visible:</h5>
+                        <p class="font-body--md-500">2/3</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Shops Approved:</h5>
+                        <p class="font-body--md-500">2</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Shop Orders:</h5>
+                        <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} 5</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Running Ads:</h5>
+                        <p class="font-body--md-500">4</p>
+                      </div>
+                      
+                      
+                    </div>
+                  </div>
                 </div>
+                <div class="col-lg-6">
+                  <div class="dashboard__totalpayment-card">
+                    <div class="dashboard__totalpayment-card-header">
+                      <div class="dashboard__totalpayment-card-header">
+                        <div class="dashboard__totalpayment-card-header-item">
+                          <h5 class="title">Products Overview</h5>
+                          {{-- <p class="details order-id"> {{$order->trackingcode}}</p> --}}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="dashboard__totalpayment-card-body">
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Active Products:</h5>
+                        <p class="font-body--md-500"> 23/60 </p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Shops Visible:</h5>
+                        <p class="font-body--md-500">2/3</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Products Approved:</h5>
+                        <p class="font-body--md-500">23/23</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Shop Orders:</h5>
+                        <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} 5</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Running Ads:</h5>
+                        <p class="font-body--md-500">4</p>
+                      </div>
+                      
+                      
+                    </div>
+                  </div>
+                </div>
+                
               </div>
             </div>
-            @endif
+
+            <div class="my-3">
+              <div class="row">
+                
+                <div class="col-lg-12">
+                  <div class="dashboard__order-history">
+                    <div class="dashboard__order-history-title">
+                        <h2 class="font-body--xl-500">Opened Orders</h2>
+                        <a href="#" class="font-body--lg-500"> View All</a>
+                    </div>
+                    <div class="dashboard__order-history-table">
+                        <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="dashboard__order-history-table-title"> Date </th>
+                                <th scope="col" class="dashboard__order-history-table-title"> Shop </th>
+                                <th scope="col" class="dashboard__order-history-table-title"> Status</th>   
+                                <th scope="col" class="dashboard__order-history-table-title"> View</th>   
+                            </tr>
+                            </thead>
+                            <tbody>                     
+                                {{-- @forelse($shop->payouts->sortByDesc('updated_at')->take(5) as $payout)                                        
+                                    <tr>
+                                        <td class="dashboard__order-history-table-item order-date "> 
+                                          {{$payout->created_at->format('Y-m-d')}}
+                                        </td>
+                                        <!-- Vendor Split  -->
+                                        <td class="dashboard__order-history-table-item order-total "> 
+                                            <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($payout->amount, 0)}} 
+                                            </p>
+                                        </td>
+                                        
+                                        <td class="dashboard__order-history-table-item order-details" style="text-align: left!important"> 
+                                            <span class="@if($payout->status == 'pending' || $payout->status == 'processing') text-warning @elseif($payout->status == 'rejected') text-danger @else text-success @endif">
+                                                {{$payout->status}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                 @empty --}}
+                                    <tr>
+                                      <td colspan="3" class="text-center">
+                                        <div style="padding:1%;margin-bottom:5%">
+                                          <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
+                                          <br />You have no opened order at this time.
+                                        </div>
+                                      </td>
+                                    </tr> 
+                                {{-- @endforelse --}}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+              </div>
+            </div>
           </div>
         </div>
       </div>
