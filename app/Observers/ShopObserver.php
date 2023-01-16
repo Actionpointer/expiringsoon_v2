@@ -17,13 +17,10 @@ class ShopObserver
      */
     public function created(Shop $shop)
     {
-        $user = auth()->user();
-        $user->role = 'vendor';
-        $user->save();
-        $shop->users()->attach($user->id,['role' =>'owner']);
+
         if(cache('settings')['auto_approve_shop'])
         $shop->approved = true;
-        $shop->status = $shop->owner()->allowedShops() >= $user->shops->count() ? true:false;
+        $shop->status = $shop->user->allowedShops() >= $shop->user->shops->count() ? true:false;
         $shop->save();
         $shop->notify(new ShopWelcomeNotification);
     }
