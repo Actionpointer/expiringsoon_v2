@@ -69,7 +69,7 @@
                                 </td>
                                 <!-- Price  -->
                                 <td class="cart-table-item order-date align-middle">
-                                    {{$shop->owner()->name}}
+                                    {{$shop->user->name}}
                                 </td>
                                 <td class="cart-table-item order-date align-middle">
                                   <p class="">{!!cache('settings')['currency_symbol']!!}{{ number_format($shop->orders->sum('subtotal'), 2)}}</p>

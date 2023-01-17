@@ -112,7 +112,7 @@ class ShopController extends Controller
     public function dashboard(Shop $shop){      
         // event(new DeleteShop($shop->user));
         // return $shop->user->total_products;
-        return $shop->products->first();
+        
         return view('shop.dashboard',compact('shop'));
     }
 
@@ -179,7 +179,7 @@ class ShopController extends Controller
                 $doctype = explode('/',$request->file($type)->getClientMimeType())[0];
                 $document = 'uploads/'.time().'.'.$request->file($type)->getClientOriginalExtension();
                 $request->file($type)->storeAs('public/',$document);
-                $kyc = Kyc::updateOrCreate(['verifiable_id'=> $type == 'idcard'? $shop->owner()->id: $shop->id,'verifiable_type'=> $type == 'idcard'? 'App\Models\User': 'App\Models\Shop','type'=> $type],['doctype'=> $doctype,'document'=> $document,'reason'=> '']);
+                $kyc = Kyc::updateOrCreate(['verifiable_id'=> $type == 'idcard'? $shop->user_id: $shop->id,'verifiable_type'=> $type == 'idcard'? 'App\Models\User': 'App\Models\Shop','type'=> $type],['doctype'=> $doctype,'document'=> $document,'reason'=> '']);
             } 
         }
         return redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);

@@ -34,9 +34,9 @@ class ShopDeleteProcesses implements ShouldQueue
         //advert containing shop
         //reset remaining shop status
         //reset remaining prpducts status
-        
-        $event->shop->adverts->delete();
-        User::destroy($event->shop->staff->pluck('id')->toArray());
+        $user = $event->user;
+        $user->adverts->delete();
+        User::where('shop_id',$event->user->shops->pluck('id')->toArray())->delete();
         $event->shop->orders->delete();
         $event->shop->carts->delete();
         $event->shop->products->delete();

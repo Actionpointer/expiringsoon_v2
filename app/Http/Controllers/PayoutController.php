@@ -61,8 +61,8 @@ class PayoutController extends Controller
     public function payout(Shop $shop,Request $request){
         // payout
         // dd($request->all());
-        $user = $shop->owner();
-        if($request->amount < $shop->owner()->minimum_payout() || $request->amount > $shop->owner()->maximum_payout()){
+        $user = $shop->user;
+        if($request->amount < $shop->user->minimum_payout() || $request->amount > $shop->user->maximum_payout()){
             return redirect()->back()->with(['result'=> '0','message'=> 'Adjust payout to match minimum and maximum payout']);
         }
         if($request->amount > $shop->wallet){

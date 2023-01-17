@@ -80,6 +80,9 @@ class User extends Authenticatable
     public function products(){  
         return $this->hasManyThrough(Product::class,Shop::class,'user_id','shop_id');
     }
+    public function adverts(){  
+        return $this->hasManyThrough(Advert::class,Feature::class,'user_id','feature_id');
+    }
 
     public function subscription(){
         return $this->belongsTo(Subscription::class)->withDefault();

@@ -66,7 +66,7 @@ class ProductController extends Controller
 
     public function show(Product $product){
         // if(!$product->isCertified()){
-        //     if(auth()->check() && auth()->id() == $product->shop->owner()->id){
+        //     if(auth()->check() && auth()->id() == $product->shop->user_id){
         //         return view('frontend.product.view',compact('product'));
         //     }
         //     abort(404,'Product is not available');

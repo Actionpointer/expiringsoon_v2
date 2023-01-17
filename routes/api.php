@@ -66,6 +66,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     });
 
     Route::get('shop/{shop_id}/products',[App\Http\Controllers\ApiControllers\ProductController::class,'index']);
+    Route::get('product/{product_id}',[App\Http\Controllers\ApiControllers\ProductController::class,'show']);
     Route::post('shop/products',[App\Http\Controllers\ApiControllers\ProductController::class,'store']);
 
     Route::resource('products','App\Http\Controllers\ApiControllers\ProductController');

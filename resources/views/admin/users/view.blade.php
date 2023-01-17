@@ -108,7 +108,7 @@
                                     {{$user->mobile}}
                                 </span>
                             </p>
-                            {{-- <p class="font-body--md-400">Owned by: {{$user->owner()->name}}</p> --}}
+                            {{-- <p class="font-body--md-400">Owned by: {{$user->user->name}}</p> --}}
                         </div>
                         
                         <div class="card">

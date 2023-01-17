@@ -29,7 +29,6 @@ class ProductResource extends JsonResource
             "amount"=> $this->amount,
             "stock"=> $this->stock,
             "published"=> $this->published,
-            "timeline"=> $this->timeline,
             "expire_at"=> $this->expire_at,
             "status"=> $this->status,
             "approved"=> $this->approved,

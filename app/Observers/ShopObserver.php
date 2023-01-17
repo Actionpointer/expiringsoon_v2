@@ -20,7 +20,7 @@ class ShopObserver
 
         if(cache('settings')['auto_approve_shop'])
         $shop->approved = true;
-        $shop->status = $shop->user->max_shops >= $shop->user->total_shops ? true:false;
+        $shop->status = $shop->user->max_shops > $shop->user->total_shops ? true:false;
         $shop->save();
         $shop->notify(new ShopWelcomeNotification);
     }
@@ -40,7 +40,7 @@ class ShopObserver
                 $shop->addressproof->save();
                 $shop->approved = false;
                 $shop->save();
-                $shop->owner()->notify(new ShopStatusNotification('disapproved','Shop new address does not match address proof document'));
+                $shop->user->notify(new ShopStatusNotification('disapproved','Shop new address does not match address proof document'));
             }
             
         }
@@ -51,7 +51,7 @@ class ShopObserver
                 $shop->companydoc->save();
                 $shop->approved = false;
                 $shop->save();
-                $shop->owner()->notify(new ShopStatusNotification('disapproved','Shop new name does not match kyc document'));
+                $shop->user->notify(new ShopStatusNotification('disapproved','Shop new name does not match kyc document'));
             }
             
         }
@@ -59,7 +59,7 @@ class ShopObserver
 
     public function deleting(Shop $shop)
     {
-        $shop->owner()->notify(new ShopStatusNotification('deleted'));
+        $shop->user->notify(new ShopStatusNotification('deleted'));
         event(new DeleteShop($shop));
     }
 

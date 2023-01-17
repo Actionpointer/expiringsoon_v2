@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -20,13 +21,13 @@ class ProductController extends Controller
     public function index($shop_id){
         $user = auth()->user();
         $shop = Shop::find($shop_id);
-        if($shop && $shop->owner()->id == $user->id){
+        if($shop && $shop->user_id == $user->id){
             $products = Product::where('shop_id',$shop_id)->orderBy('expire_at','desc')->get();
             if($products->count()){
                 return response()->json([
                     'status' => true,
                     'message' => 'Products retrieved Successfully',
-                    'data' => $products,
+                    'data' => ProductResource::collection($products),
                     'count' => $products->count()
                 ], 200);
             }else{
@@ -108,11 +109,11 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        if($product && $product->shop->owner()->id == auth()->id()){
+        if($product && $product->shop->user_id == auth()->id()){
             return response()->json([
                 'status' => true,
                 'message' => 'Shop retrieved Successfully',
-                'data' => $product
+                'data' => new ProductResource($product)
             ], 200);
         }else{
             return response()->json([

@@ -88,7 +88,7 @@ class Shop extends Model
         return $this->MorphMany(Kyc::class,'verifiable');
     }
     public function idcard(){
-        return $this->owner()->morphOne(Kyc::class,'verifiable')->where('type','idcard');
+        return $this->user->morphOne(Kyc::class,'verifiable')->where('type','idcard');
     }
     public function addressproof(){
         return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
