@@ -31,7 +31,7 @@ class User extends Authenticatable
         'slug', 'fname','lname','email','shop_id','password','phone_prefix','phone','country_id','role','state_id','status'
     ];
 
-    protected $appends = ['balance','image','subscription_name','max_products','total_products','total_shops','max_shops'];
+    protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];
 
     
     protected $hidden = [

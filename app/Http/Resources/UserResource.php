@@ -3,7 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Models\Shop;
+use App\Models\Subscription;
 use App\Http\Resources\ShopResource;
+use App\Http\Resources\SubscriptionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -33,8 +35,14 @@ class UserResource extends JsonResource
             "state_name"=> $this->state->name,
             "status"=> $this->status,
             "balance"=> $this->shops->sum('wallet'),
-            "subscription"=> $this->subscription_id ? $this->subscription :null,
-            "shops"=> $this->shop_id ? null: ShopResource::collection(Shop::where('user_id',$this->id)->get()),
+            'max_products' => $this->max_products,
+            'total_products' => $this->total_products,
+            'total_shops' => $this->total_shops,
+            'max_shops' => $this->max_shops,
+            "balance"=> $this->shops->sum('wallet'),
+            "subscription"=> $this->subscription_id ? new SubscriptionResource(Subscription::findOrFail($this->subscription_id)) :null,
+            "shops"=> $this->when(!$this->shop_id, ShopResource::collection(Shop::where('user_id',$this->id)->get())),
+            // "shop"=> $this->when($this->shop_id, new ShopResource(Shop::findOrFail($this->shop_id))),
         ];
     }
 }

@@ -33,12 +33,13 @@ class ProductResource extends JsonResource
             "expire_at"=> $this->expire_at,
             "status"=> $this->status,
             "approved"=> $this->approved,
+            "discount"=> $this->discount,
             "discount30"=> $this->discount30,
-            "discount60"=> $this->price,
-            "discount90"=> $this->price,
-            "discount120"=> $this->price,
-            "created_at"=> $this->price,
-            "updated_at"=> $this->price,
+            "discount60"=> $this->discount60,
+            "discount90"=> $this->discount90,
+            "discount120"=> $this->discount120,
+            "created_at"=> $this->created_at,
+            "updated_at"=> $this->updated_at,
             
         ];
     }
