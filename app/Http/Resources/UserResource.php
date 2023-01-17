@@ -35,6 +35,8 @@ class UserResource extends JsonResource
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
             "status"=> $this->status,
+            "pin"=> $this->pin? true:false,
+            "created_at"=> $this->created_at,
             "balance"=> $this->when($this->role == 'vendor', $this->shops->sum('wallet')),
             'max_products' => $this->when($this->role == 'vendor', $this->max_products),
             'total_products' => $this->when($this->role == 'vendor', $this->total_products),
