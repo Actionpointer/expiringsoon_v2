@@ -52,3 +52,8 @@ add to user table
 plan_id = 
 auto_renewal = 
 subscription_expiry = 
+
+when subscription is renewed, or when user buys new subscription or when subscription changes, or when shop is deleted, or when product is deleted{
+    mark status true for all shops within the allowed shops, mark status false for the rest
+    mark status true for all products within the allowed products, mark status false for the rest
+}

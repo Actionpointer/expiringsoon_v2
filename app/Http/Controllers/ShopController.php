@@ -107,8 +107,7 @@ class ShopController extends Controller
         return redirect()->route('shop.settings',$shop);
     }
     
-    public function dashboard(Shop $shop){
-        // dd($shop->user);
+    public function dashboard(Shop $shop){        
         return view('shop.dashboard',compact('shop'));
     }
 

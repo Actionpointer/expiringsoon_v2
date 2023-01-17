@@ -29,10 +29,9 @@ class SubscriptionObserver
     public function updated(Subscription $subscription)
     {
         if($subscription->isDirty('status') && $subscription->status){
-            if($subscription->end_at->diffInMonths(now()) < 1){
+            // if($subscription->created_at->diffInMonths(now()) > 1){
+            if($subscription->start_at->diffInHours($subscription->updated_at) > 24){
                 //it was renewed
-                $subscription->end_at = now()->addMonths($subscription->duration);
-                $subscription->save();
                 $subscription->user->notify(new SubscriptionRenewalNotification($subscription));
                 
             }else{

@@ -31,7 +31,7 @@ class User extends Authenticatable
         'slug', 'fname','lname','email','shop_id','password','phone_prefix','phone','country_id','role','state_id','status'
     ];
 
-    protected $appends = ['balance','subscription_name'];
+    protected $appends = ['balance','image','subscription_name','max_products','existing_shops','max_shops'];
 
     
     protected $hidden = [
@@ -62,22 +62,53 @@ class User extends Authenticatable
     public function getNameAttribute(){
         return ucwords($this->fname.' '.$this->lname);   
     }
+    
     public function getMobileAttribute(){
         return $this->phone_prefix.intval($this->phone);   
     }
+    public function getImageAttribute(){
+        return $this->pic ? config('app.url')."\/storage\/".$this->pic:null;   
+    }
+
+    public function shops(){
+        return $this->hasMany(Shop::class);
+    }
+    
     public function getBalanceAttribute(){
         return $this->shops->sum('wallet');   
+    }
+    public function products(){  
+        return $this->hasManyThrough(Product::class,Shop::class,'user_id','shop_id');
+    }
+
+    public function subscription(){
+        return $this->belongsTo(Subscription::class)->withDefault();
     }
     public function getSubscriptionNameAttribute(){
         if($this->subscription_id){
             return $this->subscription->plan->name;
-        }else return null;
-           
+        }else return null;    
     }
-    public function subscription(){
-        return $this->belongsTo(Subscription::class)->withDefault();
+    public function getMaxProductsAttribute(){
+        return $this->shop->user->shops->products;
     }
+    public function allowedProducts(){
+        return $this->subscription->plan->products;
+    }
+    
+    public function allowedShops(){
+        return $this->subscription->plan->products;
+    }
+    public function allowedAdverts(){
 
+    }
+    public function minimum_payout(){
+        return $this->subscription->plan->minimum_payout;
+        
+    }
+    public function maximum_payout(){
+        return $this->subscription->plan->maximum_payout;
+    }
     public function subscriptions(){
         return $this->hasMany(Subscription::class);
     }
@@ -109,24 +140,18 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
-    public function shops(){
-        return $this->hasMany(Shop::class);
-    }
+    
 
     public function shop(){
         return $this->belongsTo(Shop::class);
     }
 
-    public function products(){  
-        return $this->hasManyThrough(Product::class,Shop::class,'user_id','shop_id');
-    }
+    
 
     public function idcard(){
         return $this->morphOne(Kyc::class,'verifiable')->where('type','idcard');
     }
 
-    
-    
     public function features(){
         return $this->hasMany(Feature::class);
     }
@@ -143,22 +168,6 @@ class User extends Authenticatable
         return in_array($this->role,$value);
     }
 
-    public function allowedProducts(){
-        return $this->subscription->plan->products;
-    }
     
-    public function allowedShops(){
-        return $this->subscription->plan->products;
-    }
-    public function allowedAdverts(){
-
-    }
-    public function minimum_payout(){
-        return $this->subscription->plan->minimum_payout;
-        
-    }
-    public function maximum_payout(){
-        return $this->subscription->plan->maximum_payout;
-    }
 
 }

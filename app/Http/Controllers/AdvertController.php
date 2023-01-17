@@ -35,7 +35,8 @@ class AdvertController extends Controller
     public function adsets(){
         $user = auth()->user();
         $adplans = Adplan::all();
-        return view('vendor.features.adsets',compact('user','adplans'));
+        $features = Feature::where('user_id',$user->id)->where('status',true)->get();
+        return view('vendor.features.adsets',compact('user','features','adplans'));
     }
 
     public function ads(Feature $feature){

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,7 +47,8 @@ Route::get('tags/{category_id}', [App\Http\Controllers\ApiControllers\ResourcesC
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    // return $request->user();
+    return new UserResource(User::findOrFail($request->user()->id));
 });
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::resource('shops','App\Http\Controllers\ApiControllers\ShopController');

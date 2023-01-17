@@ -29,7 +29,7 @@ class FeatureObserver
     public function updated(Feature $feature)
     {
         if($feature->isDirty('status') && $feature->status){
-            if($feature->end_at->diffInHours(now()) < 5){
+            if($feature->start_at->diffInHours($feature->updated_at) > 24){
                 //it was renewed
                 $feature->end_at = now()->addMonths($feature->duration);
                 $feature->save();

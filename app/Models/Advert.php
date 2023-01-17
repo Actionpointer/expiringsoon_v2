@@ -16,8 +16,9 @@ class Advert extends Model
     use HasFactory,SoftDeletes,GeoLocationTrait;
 
     protected $fillable = [
-        'advertable_id','advertable_type','feature_id','status','state_id','position','approved'
+        'advertable_id','advertable_type','feature_id','state_id','position','approved'
     ];
+    protected $appends = ['status'];
 
     public static function boot()
     {
@@ -41,6 +42,10 @@ class Advert extends Model
         return $this->belongsTo(Feature::class);
     }
 
+    public function getStatusAttribute(){
+        return $this->feature->active;
+    }
+
     public function scopeState($query,$state_id=null){
         if(!$state_id){
             $state = $this->currentState();
@@ -49,7 +54,7 @@ class Advert extends Model
         return $query->where('state_id',$state_id);
     }
     public function scopeRunning($query){
-        return $query->where('approved',true)->where('status',true)->whereHas('feature', function (Builder $qry) 
+        return $query->where('approved',true)->whereHas('feature', function (Builder $qry) 
             { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); });
     }
     public function scopeCertifiedProduct($query){
@@ -66,9 +71,6 @@ class Advert extends Model
     }
     public function scopeApproved($query){
         return $query->where('approved',true);
-    }
-    public function scopeActive($query){
-        return $query->where('status',true);
     }
     
 

@@ -37,7 +37,7 @@ class ShopController extends Controller
 
     public function show($shop_id){
         $shop = Shop::find($shop_id);
-        if($shop && $shop->owner()->id == auth()->id()){
+        if($shop && $shop->user_id == auth()->id()){
             return response()->json([
                 'status' => true,
                 'message' => 'Shop retrieved Successfully',

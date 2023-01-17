@@ -11,8 +11,6 @@ class AdvertObserver
     {
         if(($advert->advertable_type =='App\Models\Shop' && cache('settings')['auto_approve_shop_advert']) || ($advert->advertable_type =='App\Models\Product' && cache('settings')['auto_approve_product_advert']))
             $advert->approved = true;
-        if($advert->feature->user->activeSubscription)
-        $advert->status = true;
         $advert->save();
     }
 

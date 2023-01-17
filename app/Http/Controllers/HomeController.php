@@ -52,7 +52,7 @@ class HomeController extends Controller
     
     public function home(){
         $user = auth()->user(); 
-
+        // return $user->subscription->name;
         request()->session()->reflash();
         if($user->role == 'shopper'){
             return view('customer.dashboard',compact('user'));
@@ -70,15 +70,13 @@ class HomeController extends Controller
 
     public function vendor(){
         $user = auth()->user(); 
-        //return $user;
-        // dd($user->activeSubscription());
         return view('vendor.dashboard',compact('user'));
     }
     
-    public function shop(Shop $shop){
-        $user = auth()->user(); 
-        return view('shop.dashboard',compact('user'));
-    }
+    // public function shop(Shop $shop){
+    //     $user = auth()->user(); 
+    //     return view('shop.dashboard',compact('user'));
+    // }
 
     public function admin(){
         $user = auth()->user();

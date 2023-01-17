@@ -28,7 +28,7 @@ class Shop extends Model
     use HasFactory,Notifiable,Sluggable;
     
     protected $fillable = ['name','slug','user_id','email','phone','phone_prefix','banner','address','state_id','city_id','published','status'];
-    protected $appends = ['staff'];
+    protected $appends = ['image','number_of_products'];
 
     public static function boot()
     {
@@ -55,6 +55,9 @@ class Shop extends Model
     public function getMobileAttribute(){
         return $this->phone_prefix.intval($this->phone);   
     }
+    public function getImageAttribute(){
+        return $this->banner ? config('app.url')."\/storage\/".$this->banner:null;   
+    }
     public function scopeApproved($query){
         return $query->where('approved',true);
     }
@@ -74,8 +77,9 @@ class Shop extends Model
         return $this->belongsTo(User::class);
     }
     public function getStaffAttribute(){
-        $users = User::where('shop_id',$this->id)->get();
-        return $users;
+        return $this->hasMany(User::class);
+        // $users = User::where('shop_id',$this->id)->get();
+        // return $users;
     }
     public function kyc(){
         return $this->MorphMany(Kyc::class,'verifiable');

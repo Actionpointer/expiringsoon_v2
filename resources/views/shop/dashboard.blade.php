@@ -97,7 +97,7 @@
                     <p class="dashboard__user-billing-number font-body--lg-400" > {{$shop->mobile}} </p>
                   </div>
                   @if($shop->user_id == auth()->id())
-                  <a href="{{route('shop.settings',$shop)}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Edit Profile</a>
+                  <a href="{{route('shop.settings',$shop)}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Shop Settings</a>
                   @endif
                 </div>
               </div>

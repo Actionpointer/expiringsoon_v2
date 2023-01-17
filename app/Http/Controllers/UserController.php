@@ -51,7 +51,7 @@ class UserController extends Controller
             $user->phone = intval($request->phone);
         }
         if($request->hasFile('photo')){
-            if($user->image) Storage::delete('public/'.$user->pic);
+            if($user->pic) Storage::delete('public/'.$user->pic);
             $name = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $request->file('photo')->storeAs('public/',$name);
             $user->pic = $name;

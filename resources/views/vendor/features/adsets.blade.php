@@ -69,16 +69,17 @@
                                   <thead>
                                     <tr>  
                                       <th scope="col" class="dashboard__order-history-table-title"> Details</th>
-                                      <th scope="col" class="dashboard__order-history-table-title">Status</th>
+                                      <th scope="col" class="dashboard__order-history-table-title d-none d-md-block">Status</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    @forelse($user->activeFeatures as $feature)
+                                    @forelse($features as $feature)
                                     <tr style="border-color:#eee">
                                         <td>
                                           <div class="cards-blog__info">
-                                          <a href="single-blog.html" class="blog-title font-body--xl-500 d-block">
-                                            {{$feature->adplan->name}}-{{$feature->slug}}</a>
+                                            <a href="single-blog.html" class="blog-title font-body--xl-500 d-block">
+                                              {{$feature->adplan->name}}-{{$feature->slug}}
+                                            </a>
                                             <div class="cards-blog__info-tags d-flex flex-column flex-md-row">
                                               <div class="cards-blog__info-tags-item">
                                                 <span>
@@ -111,47 +112,61 @@
                                                 </span>
                                                 {{$feature->start_at->format('M d, Y')}} - {{$feature->end_at->format('M d, Y')}}
                                               </div>
+
+                                              <div class="cards-blog__info-tags-item">
+                                                <span class="icon">
+                                                  <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M14.25 3.5H3.75C2.92157 3.5 2.25 4.17157 2.25 5V15.5C2.25 16.3284 2.92157 17 3.75 17H14.25C15.0784 17 15.75 16.3284 15.75 15.5V5C15.75 4.17157 15.0784 3.5 14.25 3.5Z" stroke="#00B307" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M12 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M6 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M2.25 8H15.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                  </svg>
+                                                </span>
+                                                {{$feature->start_at->format('M d, Y')}} - {{$feature->end_at->format('M d, Y')}}
+                                              </div>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="{{route('vendor.adverts',$feature)}}" class="btn btn-success mt-3 text-white">
+                                                  Manage Ads
+                                                  <span>
+                                                    <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                      <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                  </span>
+                                                </a>
+                                                @if(!$feature->active)
+                                                  <form action="{{route('vendor.subscription.feature')}}" method="post" >@csrf
+                                                    <input type="hidden" name="feature_id" value="{{$feature->id}}">
+                                                    <button class="btn btn-primary text-white mt-3">
+                                                      Renew
+                                                      <span>
+                                                      <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                          <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                      </span>
+                                                    </button>
+                                                  </form>
+                                                @endif
+                                                @if($feature->active && $feature->auto_renew)
+                                                  <form action="{{route('vendor.feature.cancel_renew')}}" method="post">@csrf
+                                                    <input type="hidden" name="feature_id" value="{{$feature->id}}">
+                                                    <button class="btn btn-warning text-white">
+                                                      Cancel Auto Renew
+                                                      <span>
+                                                      <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                          <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                      </span>
+                                                    </button>
+                                                  </form>
+                                                @endif
                                             </div>
                                             
-                                            <a href="{{route('vendor.adverts',$feature)}}" class="btn btn-success text-white">
-                                              Manage Ads
-                                              <span>
-                                                <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                  <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                  <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                </svg>
-                                              </span>
-                                            </a>
-                                            @if(!$feature->active())
-                                              <form action="{{route('vendor.subscription.feature')}}" method="post">@csrf
-                                                <input type="hidden" name="feature_id" value="{{$feature->id}}">
-                                                <button class="btn btn-primary text-white">
-                                                  Renew
-                                                  <span>
-                                                  <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </svg>
-                                                  </span>
-                                                </button>
-                                              </form>
-                                            @endif
-                                            @if($feature->active() && $feature->auto_renew)
-                                              <form action="{{route('vendor.feature.cancel_renew')}}" method="post">@csrf
-                                                <input type="hidden" name="feature_id" value="{{$feature->id}}">
-                                                <button class="btn btn-warning text-white">
-                                                  Cancel Auto Renew
-                                                  <span>
-                                                  <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </svg>
-                                                  </span>
-                                                </button>
-                                              </form>
-                                            @endif
                                           </div>
                                         </td>
-                                        <td style="padding:20px;vertical-align:middle">
-                                          @if($feature->active())
+                                        <td style="padding:20px;vertical-align:middle" class="d-none d-md-block">
+                                          @if($feature->active)
                                             <button class="badge btn-success">Active </button>
                                           @elseif($feature->expiring())
                                             <button class="badge btn-warning">Expiring </button>
