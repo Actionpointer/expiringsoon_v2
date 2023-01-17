@@ -31,7 +31,7 @@ class Product extends Model
     }
     
     protected $fillable = ['name','shop_id','slug','description','stock','category_id','published','status', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
-    protected $appends = ['amount'];
+    protected $appends = ['amount','image'];
 
     protected $dates = ['expire_at','uploaded'];
     protected $casts = ['tags'=> 'array'];
@@ -84,6 +84,9 @@ class Product extends Model
 
     public function getAmountAttribute(){
         return $this->price - ($this->discount*$this->price/100);
+    }
+    public function getImageAttribute(){
+        return $this->photo ? config('app.url')."\/storage\/".$this->photo:null;   
     }
     public function adverts(){
         return $this->morphMany(Advert::class,'advertable');

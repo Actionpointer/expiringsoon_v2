@@ -2,11 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\RenewFeature;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Product;
+use App\Events\UserSubscribed;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AutoRenewFeature
+class ResetProductStatus implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -21,11 +22,11 @@ class AutoRenewFeature
     /**
      * Handle the event.
      *
-     * @param  \App\Events\RenewFeature  $event
+     * @param  \App\Events\UserSubscribed  $event
      * @return void
      */
-    public function handle(RenewFeature $event)
+    public function handle(UserSubscribed $event)
     {
-        //handle the payment of the feature
+        
     }
 }

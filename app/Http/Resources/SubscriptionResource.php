@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Plan;
+use App\Http\Resources\PlanResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SubscriptionResource extends JsonResource
@@ -14,25 +16,26 @@ class SubscriptionResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
-        "subscription": {
-            "id": 21,
-            "user_id": 49,
-            "plan_id": 1,
-            "coupon": null,
-            "amount": 0,
-            "start_at": "2023-01-16T16:39:16.000000Z",
-            "renew_at": null,
-            "end_at": null,
-            "status": 1,
-            "auto_renew": 0,
-            "deleted_at": null,
-            "created_at": "2023-01-16T17:38:51.000000Z",
-            "updated_at": "2023-01-16T17:38:51.000000Z",
-            "active": false,
-            "duration": 0,
-            "is_free": true,
+        // return parent=>=>toArray($request);
+        return [
+            "id"=> $this->id,
+            "user_id"=> $this->user_id,
+            "plan_id"=> $this->plan_id,
+            "coupon"=> $this->coupon,
+            "amount"=> $this->amount,
+            "start_at"=> $this->start_at,
+            "renew_at"=> $this->renew_at,
+            "end_at"=> $this->end_at,
+            "status"=> $this->status,
+            "auto_renew"=> $this->auto_renew,
+            "deleted_at"=> $this->deleted_at,
+            "created_at"=> $this->created_at,
+            "updated_at"=> $this->updated_at,
+            "active"=> $this->active,
+            "duration"=> $this->duration,
+            "is_free"=> $this->is_free,
+            "plan"=> new PlanResource(Plan::findOrFail($this->plan_id))
             
-        }
+        ];
     }
 }

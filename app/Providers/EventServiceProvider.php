@@ -5,26 +5,20 @@ namespace App\Providers;
 use App\Events\DeleteShop;
 use App\Events\RetryPayout;
 use App\Events\RenewFeature;
-use App\Events\UserFeatured;
 use App\Events\DisbursePayout;
-use App\Events\FeatureExpired;
 use App\Events\OrderCompleted;
 use App\Events\OrderPurchased;
 use App\Events\UserSubscribed;
 use App\Listeners\SettleVendor;
-use App\Listeners\ActivateShops;
+use App\Listeners\ResetShopStatus;
 use App\Events\CheckPayoutStatus;
 use App\Events\RenewSubscription;
 use App\Listeners\RetryingPayout;
-use App\Listeners\ActivateAdverts;
-use App\Listeners\DeactivateShops;
 use App\Listeners\DecreaseProduct;
 use App\Events\SubscriptionExpired;
 use App\Listeners\AutoRenewFeature;
 use App\Listeners\DisbursingPayout;
-use App\Listeners\DeactivateAdverts;
-use App\Listeners\ActivateProducts;
-use App\Listeners\DeactivateProducts;
+use App\Listeners\ResetProductStatus;
 use App\Listeners\RemoveFromWishList;
 use Illuminate\Support\Facades\Event;
 use App\Listeners\ShopDeleteProcesses;
@@ -60,31 +54,7 @@ class EventServiceProvider extends ServiceProvider
             SettleVendor::class,
             RemoveFromWishList::class,
         ],
-        SubscriptionExpired::class => [
-            DeactivateProducts::class,
-            DeactivateShops::class,
-            DeactivateAdverts::class
-        ],
-        UserSubscribed::class => [
-            ActivateProducts::class,
-            ActivateShops::class,
-            ActivateAdverts::class
-        ],
-        FeatureExpired::class => [
-            DeactivateAdverts::class
-        ],
-        UserFeatured::class => [
-            ActivateAdverts::class
-        ],
-        RenewSubscription::class => [
-            AutoRenewSubscription::class
-        ],
-        RenewFeature::class => [
-            AutoRenewFeature::class
-        ],
-        DeleteShop::class => [
-            ShopDeleteProcesses::class
-        ],
+        
         DisbursePayout::class => [
             DisbursingPayout::class
         ],
@@ -95,6 +65,10 @@ class EventServiceProvider extends ServiceProvider
             CheckingPayoutStatus::class
         ],
         
+    ];
+
+    protected $subscribe = [
+        'App\Listeners\ResetShopsAndProductsStatus',
     ];
 
     /**

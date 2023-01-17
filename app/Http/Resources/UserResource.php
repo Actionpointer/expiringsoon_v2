@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Shop;
 use App\Http\Resources\ShopResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,7 +34,7 @@ class UserResource extends JsonResource
             "status"=> $this->status,
             "balance"=> $this->shops->sum('wallet'),
             "subscription"=> $this->subscription_id ? $this->subscription :null,
-            "shops"=> $this->shop_id ? null: ShopResource::collection($this->shops),
+            "shops"=> $this->shop_id ? null: ShopResource::collection(Shop::where('user_id',$this->id)->get()),
         ];
     }
 }

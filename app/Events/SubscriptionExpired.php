@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -20,17 +20,14 @@ class SubscriptionExpired
      *
      * @return void
      */
-    public $subscription;
-    public function __construct(Subscription $subscription)
+    public $user;
+    public function __construct(User $user)
     {
-        $this->subscription = $subscription;
+        $this->user = $user;
     }
 
     /**
      * Get the channels the event should broadcast on.
-     *DeactivateProducts::class,
-     *DeactivateShops::class,
-     *DeactivateAdverts::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

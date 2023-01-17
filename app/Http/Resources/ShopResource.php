@@ -2,6 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
+use App\Models\Product;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ShopResource extends JsonResource
@@ -35,10 +39,11 @@ class ShopResource extends JsonResource
             "discount90"=> $this->discount90,
             "discount120"=> $this->discount120,
             "status"=> $this->status,
-            "approved"=> 1,
-            "published"=> 1,
-            "wallet"=> 0,
-            "staff": []
+            "approved"=> $this->approved,
+            "published"=> $this->published,
+            "wallet"=> $this->wallet,
+            "products"=> $this->products,
+            "staff" => UserResource::collection(User::where('shop_id',$this->id)->get())
         ];
     }
 }

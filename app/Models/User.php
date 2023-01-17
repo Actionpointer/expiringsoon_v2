@@ -31,7 +31,7 @@ class User extends Authenticatable
         'slug', 'fname','lname','email','shop_id','password','phone_prefix','phone','country_id','role','state_id','status'
     ];
 
-    protected $appends = ['balance','image','subscription_name','max_products','existing_shops','max_shops'];
+    protected $appends = ['balance','image','subscription_name','max_products','total_products','total_shops','max_shops'];
 
     
     protected $hidden = [
@@ -89,19 +89,27 @@ class User extends Authenticatable
             return $this->subscription->plan->name;
         }else return null;    
     }
-    public function getMaxProductsAttribute(){
-        return $this->shop->user->shops->products;
+    public function getTotalProductsAttribute(){
+        if($this->shop_id)
+            return $this->shop->user->products->count();
+        else return $this->products->count();
     }
-    public function allowedProducts(){
-        return $this->subscription->plan->products;
+    public function getTotalShopsAttribute(){
+        if($this->shop_id)
+            return $this->shop->user->shops->count();
+        else return $this->shops->count();
+    }
+    public function getMaxShopsAttribute(){
+        if($this->shop_id)
+            return $this->shop->user->subscription->plan->shops;
+        else return $this->subscription->plan->shops;
+    }
+    public function getMaxProductsAttribute(){
+        if($this->shop_id)
+            return $this->shop->user->subscription->plan->products;
+        else return $this->subscription->plan->products;
     }
     
-    public function allowedShops(){
-        return $this->subscription->plan->products;
-    }
-    public function allowedAdverts(){
-
-    }
     public function minimum_payout(){
         return $this->subscription->plan->minimum_payout;
         

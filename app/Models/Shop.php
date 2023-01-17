@@ -55,6 +55,9 @@ class Shop extends Model
     public function getMobileAttribute(){
         return $this->phone_prefix.intval($this->phone);   
     }
+    public function getNumberOfProductsAttribute(){
+        return $this->products->count();   
+    }
     public function getImageAttribute(){
         return $this->banner ? config('app.url')."\/storage\/".$this->banner:null;   
     }

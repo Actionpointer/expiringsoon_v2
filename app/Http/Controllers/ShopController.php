@@ -11,7 +11,9 @@ use App\Models\State;
 use App\Models\Advert;
 use App\Models\Product;
 use App\Models\Category;
+use App\Events\DeleteShop;
 use App\Models\ShippingRate;
+use App\Events\DeleteProduct;
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
 use App\Http\Requests\ShopRequest;
@@ -107,7 +109,10 @@ class ShopController extends Controller
         return redirect()->route('shop.settings',$shop);
     }
     
-    public function dashboard(Shop $shop){        
+    public function dashboard(Shop $shop){      
+        // event(new DeleteShop($shop->user));
+        // return $shop->user->total_products;
+        return $shop->products->first();
         return view('shop.dashboard',compact('shop'));
     }
 

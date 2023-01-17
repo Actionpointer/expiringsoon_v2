@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Shop;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -20,15 +20,14 @@ class DeleteShop
      *
      * @return void
      */
-    public $shop;
-    public function __construct(Shop $shop)
+    public $user;
+    public function __construct(User $user)
     {
-        $this->shop = $shop;
+        $this->user = $user;
     }
 
     /**
      * Get the channels the event should broadcast on.
-     *ShopDeleteProcesses::class
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

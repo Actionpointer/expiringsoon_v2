@@ -2,11 +2,12 @@
 
 namespace App\Listeners;
 
+use App\Models\Shop;
 use App\Events\UserSubscribed;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ActivateProducts implements ShouldQueue
+class ResetShopStatus implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -26,6 +27,10 @@ class ActivateProducts implements ShouldQueue
      */
     public function handle(UserSubscribed $event)
     {
-        //
+        $user = $event->user;
+        $allowed_shops = $user->allowedShops();
+        $user_shops = $user->shops;
+        $current_shops = $user_shops->count();
+        Shop::whereIn('id',$user_shops->pluck('id')->toArray())->take($current_shops - $allowed_shops)->update(['status'=> false]);
     }
 }

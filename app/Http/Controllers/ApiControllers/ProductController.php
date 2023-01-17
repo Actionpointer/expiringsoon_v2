@@ -93,7 +93,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Product Created Successfully',
-                'data' => ['product_id'=> $product->id,'name'=> $product->name,'shop'=> $product->shop->name,'create_products_remaining'=> $product->shop->owner()->allowedProducts()]
+                'data' => ['product_id'=> $product->id,'name'=> $product->name,'shop'=> $product->shop->name]
             ], 200);
 
         } catch (\Throwable $th) {

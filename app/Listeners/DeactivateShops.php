@@ -28,10 +28,6 @@ class DeactivateShops implements ShouldQueue
      */
     public function handle(SubscriptionExpired $event)
     {
-        $user = $event->subscription->user;
-        $allowed_shops = $user->allowedShops();
-        $user_shops = $user->shops;
-        $current_shops = $user_shops->count();
-        Shop::whereIn('id',$user_shops->pluck('id')->toArray())->take($current_shops - $allowed_shops)->update(['status'=> false]);
+        
     }
 }

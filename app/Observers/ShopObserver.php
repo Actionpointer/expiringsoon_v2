@@ -20,7 +20,7 @@ class ShopObserver
 
         if(cache('settings')['auto_approve_shop'])
         $shop->approved = true;
-        $shop->status = $shop->user->allowedShops() >= $shop->user->shops->count() ? true:false;
+        $shop->status = $shop->user->max_shops >= $shop->user->total_shops ? true:false;
         $shop->save();
         $shop->notify(new ShopWelcomeNotification);
     }
