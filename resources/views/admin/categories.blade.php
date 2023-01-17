@@ -48,72 +48,104 @@
               </div>
               <div class="dashboard__content-card-body">
                 <form method="post" action="{{route('admin.categories.management')}}" id="addcategory">@csrf
-                  <div class="contact-form__content">
+                  <div class="row">  
+                    <div class="col-lg-7 order-lg-0 order-2">
+                      <div class="contact-form__content">
+                        
+                        <div class="contact-form-input">
+                          <label for="category">Name</label>
+                          <input type="text" name="category" placeholder="" />
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="subcat">Subcategories <small class="text-muted">(Hint: You can add new)</small></label>
+                            <select id="subcat" name="tags[]" class="select2" multiple>
+                                @foreach ($tags as $tag)
+                                    <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div class="contact-form-input">
-                      <label for="address">Name</label>
-                      <input type="text" name="category" placeholder="" />
+                      </div>
                     </div>
-
-                    <div class="form-group">
-                      <label for="subcat">Subcategories <small class="text-muted">(Hint: You can add new)</small></label>
-                        <select id="subcat" name="tags[]" class="select2" multiple>
-                            @foreach ($tags as $tag)
-                                <option value="{{$tag->id}}">{{$tag->name}}</option>
-                            @endforeach
-                        </select>
+                    <div class="col-lg-5 order-lg-0 order-1">
+                      <div class="dashboard__content-card-img flex-column"> 
+                          <div class="dashboard__content-img-wrapper rounded-0 mb-0 w-75 h-75" id="avatar">
+                            <img src="{{asset('src/images/site/avatar.png')}}" width="150px" alt="category"  onclick="performClick('theFile');"  id="imgPreview"   />
+                          </div>
+                          <div>
+                            <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
+                            <button type="button" class="button w-100 mt-3 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Category Image</button>
+                          </div>
+                          @error('photo')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
+                      </div>
                     </div>
-
-                    
-                    
-                    <div class="contact-form-btn">
-                      <button class="button button--md" type="submit">
-                        + Add Category
-                      </button>
+                    <div class="col-lg-12">
+                      <div class="contact-form-btn">
+                        <button class="button button--md" type="submit">
+                          + Add Category
+                        </button>
+                      </div>
                     </div>
-                    <div id="process" style="font-size:13px;margin-top:10px"></div>
                   </div>
                 </form>
                 <!-- Button trigger modal -->
               </div>
             </div>   
 
-            <!-- Manage Categories  -->
             <div class="dashboard__content-card">
               <div class="dashboard__content-card-header">
                 <h5 class="font-body--xl-500">Manage Categories</h5>
               </div>
-              <div class="dashboard__content-card-body">
-                <div id="process3">
-                  <table id="datatable" class="table display" style="width:100%;font-size:13px">
-                    <thead>
+              <div class="dashboard__content-card-body px-0">
+                <div class="">
+                  <div class="table-responsive">
+                    <table class="table" id="datatable">
+                      <thead>
                         <tr>
-                          <th scope="col" class="cart-table-title">S/N</th>
-                          <th scope="col" class="cart-table-title">Name</th>
+                          <th scope="col" class="cart-table-title">Category</th>
                           <th scope="col" class="cart-table-title">Subcategories</th>
                           <th scope="col" class="cart-table-title">Items</th>
                           <th scope="col" class="cart-table-title">Action</th>
+                          
                         </tr>
-                    </thead>
-                    <tbody>
+                      </thead>
+                      <tbody>
                         @foreach ($categories as $category)
-                          <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$category->name}}</td>
-                            <td>
+                        <tr>
+                          <!-- Product item  -->
+                          <td class="cart-table-item align-middle">
+                            <a href="product-details.html" class="cart-table__product-item">
+                              <div class="cart-table__product-item-img">
+                                <img src="{{asset('src/images/products/img-01.png')}}" alt="product">
+                              </div>
+                              <h5 class="font-body--lg-400">{{$category->name}}</h5>
+                            </a>
+                          </td>
+                          <!-- Price  -->
+                          <td class="cart-table-item order-date align-middle">
                                 @foreach ($category->subcategories as $subcategory)
                                     {{$subcategory->name}},
                                 @endforeach
-                            </td>
-                            <td>{{$category->products->count()}}</td>
-                            <td>
+                          </td>
+                          <!-- quantity -->
+                          <td class="cart-table-item order-total align-middle">
+                            {{$category->products->count()}}
+                          </td>
+                          <!-- Subtotal  -->
+                          <td class="cart-table-item order-subtotal align-middle">
+                            <div class="d-flex justify-content-between align-items-center ">
                                 <button class="edit_button" data-bs-toggle="modal" data-bs-target="#editcategory{{$category->id}}">Edit</button> | 
                                 <form action="{{route('admin.categories.management')}}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this category?');">@csrf
                                     <input type="hidden" name="category_id" value="{{$category->id}}">
                                     <button type="submit" name="action" value="delete">Delete</button>
                                 </form>
-                            </td>
-                          </tr>
+                            </div>
+                          </td>
                           <div class="modal fade" id="editcategory{{$category->id}}" aria-labelledby="editcategory{{$category->id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
@@ -150,9 +182,14 @@
                               </div>
                             </div>
                           </div>
+                        </tr>
                         @endforeach
-                    </tbody>
-                  </table>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- Action Buttons  -->
+                  
                 </div>
                 
               </div>
@@ -198,6 +235,28 @@
             }
         });
     });
+
+    
+
+    function performClick(elemId) {
+      var elem = document.getElementById(elemId);
+      if(elem && document.createEvent) {
+          var evt = document.createEvent("MouseEvents");
+          evt.initEvent("click", true, false);
+          elem.dispatchEvent(evt);
+      }
+    }
+          
+    function readURL(input,output) {
+        console.log(input.id);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+            $('#'+output).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 <script>
     $('.edit_button').on('click',function(){

@@ -218,7 +218,7 @@
                                 
                             @empty
                                 <div style="margin:auto;padding:10%;text-align:center">
-                                    <img style="padding:10px;width:100px" src="img/exclamation.png">
+                                    <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                                     <br />No Products in this Category</span>
                                 </div>
                             @endforelse

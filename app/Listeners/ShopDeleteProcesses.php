@@ -37,8 +37,8 @@ class ShopDeleteProcesses implements ShouldQueue
         $user = $event->user;
         $user->adverts->delete();
         User::where('shop_id',$event->user->shops->pluck('id')->toArray())->delete();
-        $event->shop->orders->delete();
-        $event->shop->carts->delete();
-        $event->shop->products->delete();
+        // $event->shop->orders->delete();
+        // $event->shop->carts->delete();
+        // $event->shop->products->delete();
     }
 }

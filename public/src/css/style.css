@@ -1023,9 +1023,10 @@ a {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
+  /* -webkit-box-align: center;
       -ms-flex-align: center;
-          align-items: center; }
+          align-items: center;  */
+  }
   @media (max-width: 767px) {
     .header--two .header__bottom-left, .header--two .header__category-content {
       width: 100%; } }

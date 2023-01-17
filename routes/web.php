@@ -28,6 +28,7 @@ Route::get('notifications',[App\Http\Controllers\UserController::class, 'notific
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
 Route::get('products', [App\Http\Controllers\ProductController::class, 'index'])->name('product.list');
 Route::get('product/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
+Route::get('categories',[App\Http\Controllers\ProductController::class,'categories'])->name('product.categories');
 Route::get('advert/{advert}', [App\Http\Controllers\AdvertController::class, 'redirect'])->name('advert.redirect');
 Route::post('getSubcategories', [App\Http\Controllers\ProductController::class, 'getSubcategories'])->name('product.getSubcategories');
 Route::post('getCities', [App\Http\Controllers\HomeController::class, 'cities'])->name('cities');

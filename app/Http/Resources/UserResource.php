@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Shop;
+use App\Models\Order;
 use App\Models\Subscription;
 use App\Http\Resources\ShopResource;
 use App\Http\Resources\SubscriptionResource;
@@ -34,17 +35,22 @@ class UserResource extends JsonResource
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
             "status"=> $this->status,
-            "balance"=> $this->shops->sum('wallet'),
-            'max_products' => $this->max_products,
-            'total_products' => $this->total_products,
-            'total_shops' => $this->total_shops,
-            'max_shops' => $this->max_shops,
-            "balance"=> $this->shops->sum('wallet'),
+            "balance"=> $this->when($this->role == 'vendor', $this->shops->sum('wallet')),
+            'max_products' => $this->when($this->role == 'vendor', $this->max_products),
+            'total_products' => $this->when($this->role == 'vendor', $this->total_products),
+            'total_shops' => $this->when($this->role == 'vendor', $this->total_shops),
+            'max_shops' => $this->when($this->role == 'vendor', $this->max_shops),
+            "balance"=> $this->when($this->role == 'vendor', $this->shops->sum('wallet')),
             "subscription"=> $this->subscription_id ? new SubscriptionResource(Subscription::findOrFail($this->subscription_id)) :null,
             "shops"=> $this->when(!$this->shop_id, ShopResource::collection(Shop::where('user_id',$this->id)->get())),
             "shop"=> $this->when($this->shop_id, function(){ 
                 return new ShopResource(Shop::findOrFail($this->shop_id)); 
             }),
+            "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
+                return RecentOrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
+            }),
+            
+            
         ];
     }
 }

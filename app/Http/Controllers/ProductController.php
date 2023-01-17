@@ -64,6 +64,12 @@ class ProductController extends Controller
         return view('frontend.product.list',compact('advert','products','tag','category','categories','states','state_id'));
     }
 
+    public function categories(){
+        $categories = Category::all();
+        $advert_Z = Advert::with('product')->state()->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
+        return view('frontend.product.categories',compact('categories','advert_Z'));
+    }
+
     public function show(Product $product){
         // if(!$product->isCertified()){
         //     if(auth()->check() && auth()->id() == $product->shop->user_id){

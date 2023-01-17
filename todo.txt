@@ -1,6 +1,6 @@
 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
 
-delete shop event & listener.. figure out adverts delete
+figure out adverts delete
 
 separate vendor signup and redirect to orientation page
 

@@ -80,6 +80,9 @@ class User extends Authenticatable
     public function products(){  
         return $this->hasManyThrough(Product::class,Shop::class,'user_id','shop_id');
     }
+    public function shopOrders(){
+        return $this->hasManyThrough(Order::class,Shop::class,'user_id','shop_id');
+    } 
     public function adverts(){  
         return $this->hasManyThrough(Advert::class,Feature::class,'user_id','feature_id');
     }
@@ -135,6 +138,7 @@ class User extends Authenticatable
     public function orders(){
         return $this->hasMany(Order::class);
     }
+      
     public function likes(){
         return $this->hasMany(Like::class);
     }
@@ -151,13 +155,11 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
-    
 
     public function shop(){
         return $this->belongsTo(Shop::class);
     }
 
-    
 
     public function idcard(){
         return $this->morphOne(Kyc::class,'verifiable')->where('type','idcard');

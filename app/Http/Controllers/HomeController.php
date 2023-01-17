@@ -73,10 +73,10 @@ class HomeController extends Controller
         return view('vendor.dashboard',compact('user'));
     }
     
-    // public function shop(Shop $shop){
-    //     $user = auth()->user(); 
-    //     return view('shop.dashboard',compact('user'));
-    // }
+    public function verification(){
+        $user = auth()->user(); 
+        return view('vendor.verification',compact('user'));
+    }
 
     public function admin(){
         $user = auth()->user();

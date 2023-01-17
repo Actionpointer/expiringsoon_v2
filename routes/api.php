@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::webhooks('webhooks-test');
+
 Route::post('webhook',function(Request $request){
     logger()->info([
         'payload' => $request->all(),

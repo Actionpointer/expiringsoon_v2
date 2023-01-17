@@ -33,6 +33,6 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
     Route::post('adverts/store/shop',[App\Http\Controllers\AdvertController::class,'store_shop_advert'])->name('advert.store.shops');
     
     Route::post('adverts/manage',[App\Http\Controllers\AdvertController::class,'remove'])->name('advert.remove');
-
+    Route::get('verification',[App\Http\Controllers\HomeController::class,'verification'])->name('verification');
     
 });
