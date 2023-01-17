@@ -42,7 +42,7 @@ class ShopResource extends JsonResource
             "approved"=> $this->approved,
             "published"=> $this->published,
             "wallet"=> $this->wallet,
-            "products"=> $this->products,
+            // "products"=> $this->products,
             "staff" => UserResource::collection(User::where('shop_id',$this->id)->get())
         ];
     }
