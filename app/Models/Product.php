@@ -86,7 +86,7 @@ class Product extends Model
         return $this->price - ($this->discount*$this->price/100);
     }
     public function getImageAttribute(){
-        return $this->photo ? config('app.url')."\/storage\/".$this->photo:null;   
+        return $this->photo ? config('app.url')."/storage/$this->photo":null;  
     }
     public function adverts(){
         return $this->morphMany(Advert::class,'advertable');

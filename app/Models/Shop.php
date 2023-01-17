@@ -59,7 +59,7 @@ class Shop extends Model
         return $this->products->count();   
     }
     public function getImageAttribute(){
-        return $this->banner ? config('app.url')."\/storage\/".$this->banner:null;   
+        return $this->banner ? config('app.url')."/storage/$this->banner":null;   
     }
     public function scopeApproved($query){
         return $query->where('approved',true);

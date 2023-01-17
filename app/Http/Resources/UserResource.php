@@ -42,7 +42,9 @@ class UserResource extends JsonResource
             "balance"=> $this->shops->sum('wallet'),
             "subscription"=> $this->subscription_id ? new SubscriptionResource(Subscription::findOrFail($this->subscription_id)) :null,
             "shops"=> $this->when(!$this->shop_id, ShopResource::collection(Shop::where('user_id',$this->id)->get())),
-            // "shop"=> $this->when($this->shop_id, new ShopResource(Shop::findOrFail($this->shop_id))),
+            "shop"=> $this->when($this->shop_id, function(){ 
+                return new ShopResource(Shop::findOrFail($this->shop_id)); 
+            }),
         ];
     }
 }

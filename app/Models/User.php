@@ -67,7 +67,7 @@ class User extends Authenticatable
         return $this->phone_prefix.intval($this->phone);   
     }
     public function getImageAttribute(){
-        return $this->pic ? config('app.url')."\/storage\/".$this->pic:null;   
+        return $this->pic ? config('app.url')."/storage/$this->pic":null;  
     }
 
     public function shops(){
