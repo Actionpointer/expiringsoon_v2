@@ -101,11 +101,8 @@ class UserController extends Controller
 
     public function generate_otp(){
         $user = auth()->user();
-        $otp = OneTimePassword::where('user_id',auth()->id())->whereBetween('created_at',[now()->subMinutes(cache('settings')['throttle_otp_time']),now()])->latest()->first();
-        if(!$otp){
-            $otp = OneTimePassword::create(['user_id'=> $user->id,'code'=> strtoupper(substr(uniqid(),4,6))]);
-        }
-        $result = $this->checkOTP($otp->code);
+        $otp = $this->generateOTP($user);
+        $result = $this->sendOTP($user,$otp->code);
         return response()->json(['status'=> true ,'data'=> $result['result'],'message'=> $result['message']],200);
     }
 

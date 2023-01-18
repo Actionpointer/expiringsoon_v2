@@ -10,15 +10,15 @@ use Illuminate\Notifications\Notification;
 class OTPNotification extends Notification
 {
     use Queueable;
-
+    public $code;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($code)
     {
-        //
+        $this->code = $code;
     }
 
     /**
@@ -41,9 +41,8 @@ class OTPNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        ->line('This is your OTP : '.$this->code)
+        ->line('Thank you for using our application!');
     }
 
     /**
