@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 
 use Carbon\Carbon;
@@ -85,12 +85,6 @@ class CouponController extends Controller
         
     
         
-    }
-
-    public function apply(Request $request){
-        $code = $request->code;
-        $amount = $request->amount;
-        return $this->getCoupon($code,$amount);
     }
    
 }

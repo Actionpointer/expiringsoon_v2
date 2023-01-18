@@ -348,7 +348,7 @@
                   <h5 class="font-body--xl-500">Access Pin</h5>
                 </div>
                 <div class="dashboard__content-card-body">
-                  <form method="post" action="{{route('edit-pin')}}" id="editPassword">@csrf
+                  <form method="post" action="{{route('vendor.edit-pin')}}" id="editPassword">@csrf
                     <div class="contact-form__content">
                       
                       <div class="contact-form__content-group">
@@ -461,10 +461,10 @@
       $.ajax({
         type:'GET',
         dataType: 'json',
-        url: "{{route('generate_otp')}}",
+        url: "{{route('vendor.generate_otp')}}",
         success:function(data) {
           console.log(data)
-          if(data.otp){
+          if(data.data){
             $('#otp_response').addClass('text-success')
           }else {
             $('#otp_response').addClass('text-danger')

@@ -47,7 +47,7 @@
                 <h5 class="font-body--xl-500">Add Category</h5>
               </div>
               <div class="dashboard__content-card-body">
-                <form method="post" action="{{route('admin.categories.management')}}" id="addcategory">@csrf
+                <form method="post" action="{{route('admin.categories.management')}}" id="addcategory" enctype="multipart/form-data">@csrf
                   <div class="row">  
                     <div class="col-lg-7 order-lg-0 order-2">
                       <div class="contact-form__content">
@@ -65,17 +65,21 @@
                                 @endforeach
                             </select>
                         </div>
-
+                        <div class="contact-form-btn mt-3">
+                          <button class="button button--md" type="submit">
+                            + Add Category
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-5 order-lg-0 order-1">
-                      <div class="dashboard__content-card-img flex-column"> 
-                          <div class="dashboard__content-img-wrapper rounded-0 mb-0 w-75 h-75" id="avatar">
-                            <img src="{{asset('src/images/site/avatar.png')}}" width="150px" alt="category"  onclick="performClick('theFile');"  id="imgPreview"   />
+                      <div class="dashboard__content-card-img flex-column align-items-center"> 
+                          <div class="dashboard__content-img-wrapper rounded-0 w-50 h-50" id="avatar">
+                            <img src="{{asset('src/images/site/no-image.png')}}" style="width:100%;height:100%;" alt="category"  onclick="performClick('theFile');"  id="imgPreview"   />
                           </div>
                           <div>
                             <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
-                            <button type="button" class="button w-100 mt-3 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Category Image</button>
+                            <button type="button" class="button w-100 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Category Image</button>
                           </div>
                           @error('photo')
                           <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -84,13 +88,7 @@
                           @enderror
                       </div>
                     </div>
-                    <div class="col-lg-12">
-                      <div class="contact-form-btn">
-                        <button class="button button--md" type="submit">
-                          + Add Category
-                        </button>
-                      </div>
-                    </div>
+                    
                   </div>
                 </form>
                 <!-- Button trigger modal -->

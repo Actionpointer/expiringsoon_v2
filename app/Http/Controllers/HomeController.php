@@ -22,29 +22,7 @@ class HomeController extends Controller
     public function __construct(){
         $this->middleware('auth')->except(['index','hotdeals']);
     }
-
-    public function index(){
-        $categories = Category::orderBy('name','ASC')->take(8)->get();
-        $state = $this->currentState();
-        $state_id = $state->id;
-        $advert_A = Advert::state($state_id)->running()->certifiedShop()->where('position',"A")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_B = Advert::state($state_id)->running()->certifiedShop()->where('position',"B")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_Z = Advert::with('product')->state($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
-        return view('frontend.index',compact('categories','advert_A','advert_B','advert_Z'));
-    }
-
-    public function hotdeals(){
-        $state = $this->currentState();
-        $state_id = $state->id;
-        $categories = Category::orderBy('name','ASC')->take(8)->get();
-        $advert_C = Advert::state($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_D = Advert::state($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_E = Advert::state($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_Z = Advert::with('product')->state($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
-        // dd($advert_Z);
-        
-        return view('frontend.hotdeals',compact('categories','advert_C','advert_D','advert_E','advert_Z'));
-    }
+    
     public function cities(Request $request){
         $cities = City::where('state_id',$request->state_id)->get();
         return response()->json($cities,200);
@@ -59,7 +37,7 @@ class HomeController extends Controller
         }
         if($user->role == 'vendor' && !$user->subscription_id){
             $shop = $user->shop;
-            return redirect()->route('shop.dashboard',$shop);
+            return redirect()->route('shop.show',$shop);
         }
         if($user->role == 'vendor' && $user->subscription_id){
             return redirect()->route('vendor.dashboard');
@@ -67,16 +45,7 @@ class HomeController extends Controller
        
         return redirect()->route('admin.dashboard');
     }
-
-    public function vendor(){
-        $user = auth()->user(); 
-        return view('vendor.dashboard',compact('user'));
-    }
     
-    public function verification(){
-        $user = auth()->user(); 
-        return view('vendor.verification',compact('user'));
-    }
 
     public function admin(){
         $user = auth()->user();

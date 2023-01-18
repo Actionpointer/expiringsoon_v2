@@ -136,7 +136,7 @@
                                                   </span>
                                                 </a>
                                                 @if(!$feature->active)
-                                                  <form action="{{route('vendor.subscription.feature')}}" method="post" >@csrf
+                                                  <form action="{{route('vendor.feature.subscribe')}}" method="post" >@csrf
                                                     <input type="hidden" name="feature_id" value="{{$feature->id}}">
                                                     <button class="btn btn-primary text-white mt-3">
                                                       Renew
@@ -198,7 +198,7 @@
                 <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
                   <div class="products-tab__description">
                     <section class="shoping-cart section section--xl pt-0">
-                      <form action="{{route('vendor.subscription.feature')}}" method="post">@csrf
+                      <form action="{{route('vendor.feature.subscribe')}}" method="post">@csrf
                         <div class="row shoping-cart__content">
                           <div class="col-lg-12">
                             <a href="#" class="small text-muted"><u>View detailed description on all the adset plans</u></a>

@@ -68,13 +68,13 @@
                                   <p>Subscription will auto-renew on ({{$user->subscription->end_at->format('d-M-Y')}}) | 
                                   <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
                               </form> 
-                              <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
+                              <form class="" action="{{route('plans.subscribe')}}" method="POST"> @csrf 
                                 <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
                                 <button type="submit"><u>Renew Now </u></button>
                               </form>
                             @else
 
-                              <form class="" action="{{route('vendor.subscription.plan')}}" method="POST"> @csrf 
+                              <form class="" action="{{route('plans.subscribe')}}" method="POST"> @csrf 
                                 <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
                                 <p>Subscription will expire on {{$user->subscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p> 
                                 <button type="submit"><u>Renew Now </u></button>

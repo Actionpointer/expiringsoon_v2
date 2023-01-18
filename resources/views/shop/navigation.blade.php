@@ -4,12 +4,12 @@
         Shop navigation
       </h5>
       <ul class="dashboard__nav-item">
-        <li class="dashboard__nav-item-link @if(Route::is('shop.dashboard')) active @endif">
-          <a href="{{route('shop.dashboard',$shop)}}" class="font-body--lg-400">
+        <li class="dashboard__nav-item-link @if(Route::is('shop.show')) active @endif">
+          <a href="{{route('shop.show',$shop)}}" class="font-body--lg-400">
             <span class="icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path   d="M21 21H13V15H21V21ZM11 21H3V11H11V21ZM21 13H13V3H21V13ZM11 9H3V3H11V9Z"   fill="currentColor" /></svg>
             </span>
-            <span class="name">Dashboard</span>
+            <span class="name">Storefront</span>
           </a>
         </li>
         <!-- My Products  -->

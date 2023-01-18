@@ -68,7 +68,7 @@
                                 <td class="dashboard__order-history-table-item   order-details ">
                                     {{$alert->description}}
                                 </td>
-                                <td class="dashboard__order-history-table-item   order-status "> {{$order->severity}}</td>
+                                <td class="dashboard__order-history-table-item   order-status "> {{$alert->severity}}</td>
                                 
                                 <td class="dashboard__order-history-table-item order-details ">
                                     <button class="btn btn-success"> Resolved</button>

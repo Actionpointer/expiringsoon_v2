@@ -77,7 +77,8 @@
                                   <h5 class="font-body--xl-500">Account Settings </h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                  <form method="post" id="editinfo" action="{{route('shop.profile',$shop)}}" enctype="multipart/form-data">@csrf
+                                  <form method="post" id="editinfo" action="{{route('vendor.shop.update')}}" enctype="multipart/form-data">@csrf
+                                    <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                     <div class="row">
                                       <div class="col-lg-7 order-lg-0 order-2">
                                         <div class="contact-form__content">
@@ -136,7 +137,8 @@
                                   <h5 class="font-body--xl-500"> Store/Pick-Up Address</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                  <form method="post" id="editaddress" action="{{route('shop.address',$shop)}}">@csrf
+                                  <form method="post" id="editaddress" action="{{route('vendor.shop.update')}}">@csrf
+                                    <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                     <div class="contact-form__content">
                                       <div class="contact-form-input">
                                         <label for="address">Street Address *</label>

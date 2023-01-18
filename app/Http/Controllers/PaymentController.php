@@ -7,12 +7,10 @@ use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Feature;
 use App\Models\Payment;
-
 use App\Models\Settlement;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Http\Traits\PaymentTrait;
-
 
 class PaymentController extends Controller
 {
@@ -75,7 +73,7 @@ class PaymentController extends Controller
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
         }
         if($payment->amount != $this->getPaymentData('amount',$details)){
-            return redirect('account')->with('statuss','Payment was not successful. Please try again');
+            return redirect('home')->with('statuss','Payment was not successful. Please try again');
         }
         $payment->status = 'success';
         $payment->method = $this->getPaymentData('method',$details);
@@ -123,14 +121,11 @@ class PaymentController extends Controller
         }
         
     }
-    
-    public function index(){
-        $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
-        return view('payments',compact('payments'));
-    }
+
     public function invoice(Payment $payment){
         return view('invoice',compact('payment'));
     }
+    
     public function receipt(Settlement $settlement){
         return view('receipt',compact('settlement'));
     }
@@ -169,16 +164,9 @@ class PaymentController extends Controller
     //         return redirect()->back()->with(['result'=> '0','message'=> 'Error Processing Payment']);
     // }
 
-    public function shop_index(Shop $shop){
-        $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
-        return view('shop.payments',compact('shop','settlements'));
-    }
     
-    public function admin_index(){
-        $payments = Payment::where('status','success')->get();
-        $settlements = Settlement::all();
-        return view('admin.payments',compact('payments','settlements'));
-    }
+    
+    
     
     
 

@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Vendor;
 
-use App\Events\DisbursePayout;
 use App\Models\Bank;
 use App\Models\Shop;
 use App\Models\Payout;
 use App\Models\Account;
 use App\Models\Setting;
+use App\Models\Settlement;
 use Illuminate\Http\Request;
+use App\Events\DisbursePayout;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class PayoutController extends Controller
+class PaymentController extends Controller
 {
     use PayoutTrait;
     public function __construct(){
@@ -21,8 +23,7 @@ class PayoutController extends Controller
     }
 
     //vendor
-    public function index(Shop $shop)
-    {
+    public function index(Shop $shop){
         $banks = Bank::all();
         return view('shop.payouts',compact('shop','banks'));
     }
@@ -58,7 +59,7 @@ class PayoutController extends Controller
         return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);
     }
 
-    public function payout(Shop $shop,Request $request){
+    public function store(Shop $shop,Request $request){
         // payout
         // dd($request->all());
         $user = $shop->user;
@@ -92,33 +93,18 @@ class PayoutController extends Controller
         else {
             $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
         }
-    }
-    
+    }  
 
-    /** Admin */
-    public function admin_index()
-    {
-        $payouts = Payout::orderBy('created_at','desc')->get();
-        return view('admin.payouts',compact('payouts'));
+    public function shop_index(Shop $shop){
+        $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
+        return view('shop.payments',compact('shop','settlements'));
     }
 
-    public function admin_manage(Request $request)
-    {
-        if($request->action == 'pay'){
-            foreach($request->payouts as $req){ 
-                $payout = Payout::find($req);
-                $payout->status = 'processing';
-                $payout->save();
-                event(new DisbursePayout($payout));
-            }
-            return redirect()->back()->with(['result'=> '1','message'=> 'Payout Processing']);
-        }else{
-            $payout = Payout::whereIn('id',$request->payouts)->update(['status'=> 'rejected']);
-            return redirect()->back()->with(['result'=> '1','message'=> 'Payout Rejected']);
-        }   
+    public function apply(Request $request){
+        $code = $request->code;
+        $amount = $request->amount;
+        return $this->getCoupon($code,$amount);
     }
-    
-    
 
     
 }

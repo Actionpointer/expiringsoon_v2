@@ -1,41 +1,53 @@
 <?php
 
-namespace App\Http\Controllers\ApiControllers;
+namespace App\Http\Controllers\Vendor;
 
+use App\Models\Kyc;
+use App\Models\Bank;
+use App\Models\City;
 use App\Models\Shop;
+use App\Models\User;
+use App\Models\State;
+use App\Models\Advert;
+use App\Models\Product;
+use App\Models\Category;
 use App\Events\DeleteShop;
 use App\Models\ShippingRate;
-use Illuminate\Http\Request;
+use App\Events\DeleteProduct;
+use Illuminate\Http\Request; 
+use Illuminate\Validation\Rule;
+use App\Http\Requests\ShopRequest;
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ShopResource;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
     use SecurityTrait;
-
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
+    
     public function index(){
         $user = auth()->user();
-        $shops = $user->shops;
-        if($shops->count()){
-            return response()->json([
-                'status' => true,
-                'message' => 'Shops retrieved Successfully',
-                'data' => $shops,
-                'count' => $shops->count()
-            ], 200);
-        }else{
-            return response()->json([
-                'status' => true,
-                'message' => 'No Shops retrieved',
-                'data' => null,
-                'count' => 0
-            ], 200);
-        }   
+        return request()->expectsJson() ?  
+        response()->json([
+            'status' => true,
+            'message' => $user->shops->count() ? 'Shops retrieved Successfully':'No Shops retrieved',
+            'data' => ShopResource::collection($user->shops),
+            'count' => $user->shops->count()
+        ], 200) : view('vendor.shop.list',compact('user'));
     }
 
-    public function show($shop_id){
+    public function show(Shop $shop){
+        return view('shop.dashboard',$shop);
+    }
+
+    public function details($shop_id){
         $shop = Shop::find($shop_id);
         if($shop && $shop->user_id == auth()->id()){
             return response()->json([
@@ -51,6 +63,12 @@ class ShopController extends Controller
                 'count' => 0
             ], 200);
         }
+    }
+
+    public function create(){
+        $states = State::all();
+        $cities = City::all();
+        return view('vendor.shop.create',compact('states','cities'));
     }
 
     public function import(Request $request){
@@ -113,11 +131,9 @@ class ShopController extends Controller
             ]);
 
             if($validator->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
-                ], 401);
+                return request()->expectsJson()
+                ? response()->json(['status' => false, 'message' => 'validation error', 'error' => $validator->errors()->first() ], 401) :
+                redirect()->back()->withErrors($validator)->withInput();
             }
 
             if($request->hasFile('photo')){
@@ -127,11 +143,12 @@ class ShopController extends Controller
             $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
             'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
             
-            return response()->json([
-                'status' => true,
-                'message' => 'Shop Created Successfully',
-                'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,'products'=> $shop->products->count() ,'create_shops_remaining'=> $shop->user->allowedShops()]
-            ], 200);
+            return request()->expectsJson()
+                ? response()->json(['status' => true, 'message' => 'Shop Created Successfully', 
+                    'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,
+                    'products'=> $shop->products->count() ,
+                    'create_shops_remaining'=> $shop->user->allowedShops()]], 200) :
+                    redirect()->route('shop.settings',$shop);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -143,6 +160,9 @@ class ShopController extends Controller
 
     public function update(Request $request){
         $user = auth()->user();
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         try {
                 $validator = Validator::make($request->all(), 
                 [
@@ -163,11 +183,9 @@ class ShopController extends Controller
                 ]);
 
                 if($validator->fails()){
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'validation error',
-                        'error' => $validator->errors()->first()
-                    ], 401);
+                    return request()->expectsJson() ?  
+                         response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
+                         redirect()->back()->withErrors($validator)->withInput();
                 }
 
                 if(!$this->checkPin($request)['result']){
@@ -210,10 +228,12 @@ class ShopController extends Controller
                 $request->discount90 ? $shop->discount90 = $request->discount90:'';
                 $request->discount120 ? $shop->discount120 = $request->discount120:'';
                 $shop->save();
-                return response()->json([
+                return request()->expectsJson() ?  
+                 response()->json([
                     'status' => true,
                     'message' => 'Successfully Updated Shop',
-                ], 200);
+                ], 200) :
+                redirect()->back()->with(['result'=> '1','message'=> 'Shop Details Updated Successfully']);
         
     
         } catch (\Throwable $th) {
@@ -263,127 +283,84 @@ class ShopController extends Controller
             ], 500);
         }
     }
+    
+    
 
-    public function shipping_index($shop_id){
-        try {
-        $shop = Shop::find($shop_id);
+    public function settings(Shop $shop){
+        $user = auth()->user();
+        $banks = Bank::all();
+        $states = State::all();
+        $cities = City::where('state_id',$shop->state_id)->get();
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
-        return response()->json([
-            'status' => true,
-            'message' => 'Shipping rates fetched Successfully',
-            'data'=> $rates
-        ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
+        return view('shop.settings',compact('user','shop','banks','states','cities','rates'));
     }
 
-    public function shipping_store(Request $request){
-        try {
-            $validator = Validator::make($request->all(), 
-            [
-                'shop_id' => 'required|numeric',
-                'destination_id' => 'required|numeric',
-                'hours' => 'required|string',
-                'amount' => 'required|string',
-            ]);
-
-            if($validator->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
-                ], 401);
-            }
-            $shop = Shop::find($request->shop_id);
-            $rate = new ShippingRate;
-            $rate->origin_id = $shop->state_id;
-            $rate->destination_id = $request->destination_id;
-            $rate->hours = $request->hours;
-            $rate->amount = $request->amount;
-            $rate->save();
-            return response()->json([
-                'status' => true,
-                'message' => 'Successfully Created Shipping Rate',
-            ], 200);
-            
-        
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
+    public function profile(Shop $shop,Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
         }
+        $shop->name = $request->name;
+        $shop->email = $request->email;
+        $shop->phone = $request->phone;
+        $shop->published = $request->published;
+        if($request->hasFile('photo')){
+            if($shop->banner) Storage::delete('public/'.$shop->banner);
+            $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
+            $request->file('photo')->storeAs('public/',$banner);
+            $shop->banner = $banner;
+        } 
+        $shop->save();
         
     }
 
-    public function shipping_update(Request $request){
-        try {
-            $validator = Validator::make($request->all(), [
-                'shop_id' => 'required|numeric',
-                'rate_id' => 'required|numeric',
-                'destination_id' => 'required|numeric',
-                'hours' => 'required|string',
-                'amount' => 'required|string',
-            ]);
-            if($validator->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
-                ], 401);
-            }
-            $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->first();
-            if(!$rate){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Shipping Rate Not found',
-
-                ], 401);
-            }
-            $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->update(['destination_id'=> $request->destination_id,'hours'=> $request->hours,'amount'=> $request->amount]);
-            
-            return response()->json([
-                'status' => true,
-                'message' => 'Successfully Updated Shipping Rate',
-            ], 200);
-            
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
+    public function address(Shop $shop,Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
         }
+        $shop->address = $request->address;
+        $shop->state_id = $request->state_id;
+        $shop->city_id = $request->city_id;
+        $shop->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
     }
 
-    public function shipping_delete(Request $request){
-        try {
-                $validator = Validator::make($request->all(), 
-                [
-                    'shop_id' => 'required|numeric',
-                    'rate_id' => 'required|numeric',
-                ]);
-
-                if($validator->fails()){
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'validation error',
-                        'error' => $validator->errors()->first()
-                    ], 401);
-                }
-                $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->delete();
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Successfully Deleted Shipping Rate',
-                ], 200);
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'status' => false,
-                    'message' => $th->getMessage()
-                ], 500);
-            }
+    public function discounts(Shop $shop,Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
+        $shop->discount30 = $request->discount30;
+        $shop->discount60 = $request->discount60;
+        $shop->discount90 = $request->discount90;
+        $shop->discount120 = $request->discount120;
+        $shop->save();
+        return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
     }
+
+    public function kyc(Shop $shop,Request $request){
+        // dd($request->all());
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
+        if(!$request->idcard && !$request->addressproof && !$request->companydoc)
+        return redirect()->back()->with(['result'=> 0,'message'=> 'Nothing was uploaded']);
+        foreach(['idcard','addressproof','companydoc'] as $type){
+            if($request[$type] && $request->hasFile($type)){
+                if($shop[$type]) Storage::delete('public/'.$shop[$type]->document);
+                $doctype = explode('/',$request->file($type)->getClientMimeType())[0];
+                $document = 'uploads/'.time().'.'.$request->file($type)->getClientOriginalExtension();
+                $request->file($type)->storeAs('public/',$document);
+                $kyc = Kyc::updateOrCreate(['verifiable_id'=> $type == 'idcard'? $shop->user_id: $shop->id,'verifiable_type'=> $type == 'idcard'? 'App\Models\User': 'App\Models\Shop','type'=> $type],['doctype'=> $doctype,'document'=> $document,'reason'=> '']);
+            } 
+        }
+        return redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
+    }
+
+    
+
+
+    public function notifications(Shop $shop){
+        
+    }
+
+    
 }

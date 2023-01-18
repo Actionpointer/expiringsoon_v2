@@ -12,7 +12,7 @@ class UserObserver
     
     public function created(User $user)
     {
-        $user->notify(new WelcomeNotification);
+        
         if($user->role == 'vendor' && !$user->shop_id){
             $subscription = Subscription::create(
                 ['user_id'=> $user->id,
@@ -28,6 +28,8 @@ class UserObserver
             $user->subscription_id = $subscription->id;
             $user->save();
         }
+        
+        $user->notify(new WelcomeNotification);
     
     }
 

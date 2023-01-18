@@ -64,15 +64,6 @@ class ResourcesController extends Controller
         }
     }
 
-    public function plans(){
-        $plans = Plan::orderBy('id','asc')->get();
-        return response()->json([
-            'status' => true,
-            'message' => 'Plans retrieved Successfully',
-            'data' => $plans
-        ], 200);
-    }
-
     public function states()
     {
         $states = State::select('id','name','iso')->get();

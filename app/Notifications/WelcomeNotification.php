@@ -32,26 +32,22 @@ class WelcomeNotification extends Notification
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        if($notifiable->role == 'vendor' && !$notifiable->shop_id){
+            $view = 'emails.welcome_vendor';
+        }
+        if($notifiable->role == 'vendor' && $notifiable->shop_id){
+            $view = 'emails.welcome_staff';
+        }
+        if($notifiable->role == 'shopper'){
+            $view = 'emails.welcome';
+        }
+        return (new MailMessage)->subject('Welcome Aboard')->view(
+            $view, ['user' => $notifiable]
+        );
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function toArray($notifiable)
     {
         return [

@@ -96,7 +96,7 @@
 												<th class="column-top" width="145" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="https://ng.expiringsoon.shop" target="_blank"><img src="https://ng.expiringsoon.shop/src/images/logo.png" width="125" border="0" alt="" /></a></td>
+															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="{{url(config('app.url'))}}" target="_blank"><img src="{{asset('src/images/logo.png')}}" width="125" border="0" alt="" /></a></td>
 														</tr>
 													</table>
 												</th>
@@ -119,7 +119,7 @@
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;"><img src="https://ng.expiringsoon.shop/img/img-welcome.jpg" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;"><img src="{{asset('src/images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
@@ -133,7 +133,7 @@
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#000000; font-family:'Playfair Display', Georgia,serif; font-size:25px; line-height:35px; text-align:center; padding-bottom:15px;"><span style="font-size:18px">Hi, Tolu</span><br /><i>Welcome to Expiring Soon!</i></td>
+															<td class="h1 pb25" style="color:#000000; font-family:'Playfair Display', Georgia,serif; font-size:25px; line-height:35px; text-align:center; padding-bottom:15px;"><span style="font-size:18px">Hi, {{$user->fname}}</span><br /><i>Welcome to Expiring Soon!</i></td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-bottom:25px;">
@@ -144,7 +144,7 @@
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/" target="_blank" class="link"><img src="https://ng.expiringsoon.shop/img/btn-welcome.png" width="200"></a></td>
+																		<td class="text-button" style="padding:12px"><a href="{{url(config('app.url'))}}" target="_blank" class="link"><img src="{{asset('src/images/site/btn-welcome.png')}}" width="200"></a></td>
 																	</tr>
 																</table>
 															</td>
@@ -168,7 +168,7 @@
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="https://ng.expiringsoon.shop/img/t2_instagram.jpg" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
 														</tr>
 													</table>
 												</td>

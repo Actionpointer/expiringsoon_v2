@@ -1,29 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Models\Alert;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class ReviewController extends Controller
+class SecurityController extends Controller
 {
-    
-    public function review(Order $order,Request $request){
-        if($request->product_id == 'all'){
-            foreach($order->details as $detail){
-                $this->createReview($order->user_id,$request->body,$request->rating,$detail->product->id,$order->id);
-            }
-        }else{
-            $this->createReview($order->user_id,$request->body,$request->rating,$request->product_id,$order->id);
-        }
-        return redirect()->back();
-    }
-    
-    public function createReview($user,$body,$rating,$product,$order){
-        $review = Review::create(['user_id'=> $user,'body'=> $body,'product_id'=> $product,'order_id'=> $order]);
+    public function __construct(){
+        $this->middleware('auth');
     }
     public function index()
     {
-        //
+        $alerts = Alert::orderBy('severity','desc')->orderBy('status','asc')->get();
+        return view('admin.security',compact('alerts'));
     }
 
     /**

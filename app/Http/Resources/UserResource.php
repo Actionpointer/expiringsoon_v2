@@ -34,6 +34,7 @@ class UserResource extends JsonResource
             "phone"=> $this->phone,
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
+            "state_name"=> $this->state->name,
             "status"=> $this->status,
             "pin"=> $this->pin? true:false,
             "created_at"=> $this->created_at,
@@ -50,8 +51,7 @@ class UserResource extends JsonResource
             }),
             "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
                 return RecentOrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
-            }),
-            
+            }),            
             
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\ApiControllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Support\Facades\Validator;
 
-class AuthController extends Controller
+class ApiController extends Controller
 {
 
     use GeoLocationTrait;
@@ -129,22 +129,6 @@ class AuthController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
-    }
-
-    public function generate_otp(){
-        $user = auth()->user();
-        $otp = OneTimePassword::where('user_id',auth()->id())->whereBetween('created_at',[now()->subMinutes(cache('settings')['throttle_otp_time']),now()])->latest()->first();
-        if(!$otp){
-            $otp = OneTimePassword::create(['user_id'=> $user->id,'code'=> strtoupper(substr(uniqid(),4,6))]);
-        }
-        $result = $this->checkOTP($otp->code);
-        return response()->json(['otp'=> $result['result'],'message'=> $result['message']],200);
-    }
-
-    
-    public function access_pin(Request $request)
-    {
-        //
     }
 
     /**

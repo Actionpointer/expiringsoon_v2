@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Vendor;
 
 use App\Models\Plan;
 use App\Models\Shop;
@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Traits\PaymentTrait;
+use App\Http\Controllers\Controller;
 use App\Http\Traits\GeoLocationTrait;
 
 class AdvertController extends Controller
@@ -22,22 +23,8 @@ class AdvertController extends Controller
         $this->middleware('auth')->except('redirect');
     }
 
-    public function redirect(Advert $advert){
-        $advert->clicks =+ 1;
-        $advert->save();
-        if($advert->advertable_type == 'App\Models\Product'){
-            return redirect()->route('product.show',$advert->advertable);
-        }else{
-            return redirect()->route('vendor.show',$advert->advertable);
-        } 
-    }
-
-    public function adsets(){
-        $user = auth()->user();
-        $adplans = Adplan::all();
-        $features = Feature::where('user_id',$user->id)->where('status',true)->get();
-        return view('vendor.features.adsets',compact('user','features','adplans'));
-    }
+    
+    
 
     public function ads(Feature $feature){
         // $feature = auth()->user()->features->where('subscribable_id',$feature->id)->first();
@@ -118,24 +105,6 @@ class AdvertController extends Controller
             return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
         else
         return redirect()->to($link);
-    }
-
-
-    public function admin_index(){
-        $adverts = Advert::all();
-        return view('admin.adverts',compact('adverts'));
-    }
-
-    public function admin_manage(Request $request){
-        $advert = Advert::find($request->advert_id);
-        if($request->delete){
-            $advert->delete();
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Deleted Successfully']);
-        }else{
-            $advert->approved = $request->approved;
-            $advert->save();
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Updated Successfully']);
-        }
     }
 
 }

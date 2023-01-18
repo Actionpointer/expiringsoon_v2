@@ -19,12 +19,12 @@
               </a>
             </li>
             <li>
-              <a href="{{route('shop.dashboard',$shop)}}">
+              <a href="{{route('shop.show',$shop)}}">
                 Vendor
                 <span> > </span>
               </a>
             </li>
-            <li class="active"><a href="#">Dashboard</a></li>
+            <li class="active"><a href="#">Storefront</a></li>
           </ul>
         </div>
       </div>

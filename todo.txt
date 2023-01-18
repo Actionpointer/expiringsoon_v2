@@ -4,6 +4,7 @@ figure out adverts delete
 
 separate vendor signup and redirect to orientation page
 
+create general category so when a category is deleted, all products in that category are transfered to new category
 
 
 duplicate expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafrica

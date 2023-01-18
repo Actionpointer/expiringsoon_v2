@@ -1,30 +1,44 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Shopper;
 
 use App\Models\Cart;
 use App\Models\City;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\State;
+use App\Models\Review;
 use App\Models\Address;
 use App\Models\Country;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Models\OrderMessage;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
-class CartController extends Controller
+class OrderController extends Controller
 {
     use CartTrait,WishlistTrait,PaymentTrait;
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
-    public function __construct(){
-        $this->middleware('auth')->only(['wishlist','addtowish','removefromwish','checkout','confirmcheckout']);
+    public function index(){
+        $user = auth()->user();
+        return view('customer.orders.list',compact('user'));
+    }
+    public function show(Order $order){
+        $user = auth()->user();
+        OrderMessage::where('order_id',$order->id)->where('user_id',$user->id)->where('receiver',$user->role)->whereNull('read_at')->update(['read_at'=>now()]);
+        return view('order',compact('order'));
     }
 
     public function wishlist(){
@@ -32,53 +46,9 @@ class CartController extends Controller
         return view('customer.wishlist',compact('user'));
     }
 
-    public function cart(){
-        $items = request()->session()->get('cart');
-        $shops = collect([]);
-        if($items && count($items)){
-            $shop_ids = array_column($items, 'shop_id');
-            $shops = Shop::whereIn('id',$shop_ids)->get();
-        }
-        return view('frontend.cart',compact('items','shops'));
-    }
-
-    public function addtocart(Request $request){
-        // $request->session()->flush();
-        $product = Product::find($request->product_id);
-        if(!$product)
-        abort(404);
-        $quantity = $request->quantity ?? 1;
-        $update = $request->update ?? false;
-        $cart = $this->addToCartSession($product,$quantity,$update);
-        if(auth()->check())
-        $this->addToCartDb($product,$quantity,$update);
-        return response()->json(['cart_count'=> count((array)$cart),'cart'=> $cart],200);
-    }
-
-    public function removefromcart(Request $request){
-        $product = Product::find($request->product_id);
-        if(!$product)
-        abort(404);
-        $cart = $this->removeFromCartSession($product);
-        if(auth()->check())
-        $this->removeFromCartDb($product);
-        return response()->json(['cart_count'=> count((array)$cart),'cart'=> $cart],200);
-    }
-
-    public function addtowish(Request $request){
-        $product = Product::find($request->product_id);
-        if(!$product)
-        abort(404);
-        $wish = $this->addWishlist($product);
-        return response()->json(['wish_count'=> $wish],200);
-    }
-
-    public function removefromwish(Request $request){
-        $product = Product::find($request->product_id);
-        if(!$product)
-        abort(404);
-        $wish = $this->removeWishlist($product);
-        return response()->json(['wish_count'=> $wish],200);
+    public function transactions(){
+        $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
+        return view('payments',compact('payments'));
     }
 
     public function checkout(Request $request){
@@ -147,15 +117,22 @@ class CartController extends Controller
         return redirect()->to($link);
     }
 
-    public function edit($id){
-        //
+    public function message(Request $request){
+        $order = Order::find($request->order_id);
+        $message = OrderMessage::create(['user_id'=> $order->user_id,'order_id'=> $order->id,'shop_id'=> $order->shop_id,'body'=> $request->body,'sender'=> $request->sender,'receiver' => $request->receiver]);
+        return redirect()->back();
     }
 
-    public function update(Request $request, $id){
-        //
+    public function review(Request $request){
+        // dd($request->all());
+        if($request->shop_id){
+            $review = Review::create(['reviewable_id'=> $request->shop_id,'reviewable_type'=> 'App\Models\Shop','order_id'=> $request->order_id,' rating'=> $request->rating,'comment'=> $request->comment]);
+        }else{
+            $review = Review::create(['reviewable_id'=> $request->product_id,'reviewable_type'=> 'App\Models\Product','order_id'=> $request->order_id,' rating'=> $request->rating,'comment'=> $request->comment]);
+        }
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Review successfully added']);
     }
 
-    public function destroy($id){
-        //
-    }
+    
+    
 }

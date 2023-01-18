@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Tag;
 use App\Models\Plan;
@@ -14,9 +14,10 @@ use Illuminate\Support\Arr;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Traits\SecurityTrait;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Traits\GeoLocationTrait;
-use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
@@ -142,6 +143,7 @@ class SettingsController extends Controller
     }
 
     public function categories_management(Request $request){
+        dd($request->all());
         if($request->category_id){
             $category = Category::find($request->category_id);
             if($request->delete){
@@ -178,6 +180,29 @@ class SettingsController extends Controller
                 }
             }
         }
+    }
+
+    public function shipping_rates(Request $request){
+        if($request->rate_id){
+            if($request->delete){
+                $rate = ShippingRate::where('id',$request->rate_id)->delete();
+            }else{
+                $rate = ShippingRate::find($request->rate_id);
+                $rate->origin_id = $request->origin_id;
+                $rate->destination_id = $request->destination_id;
+                $rate->hours = $request->hours;
+                $rate->amount = $request->amount;
+                $rate->save();
+            }  
+        }else{
+            $rate = new ShippingRate;
+            $rate->origin_id = $request->origin_id;
+            $rate->destination_id = $request->destination_id;
+            $rate->hours = $request->hours;
+            $rate->amount = $request->amount;
+            $rate->save();
+        }
+        return redirect()->back()->with(['result'=>1,'message'=> 'Shipping Settings Saved']);
     }
 
     

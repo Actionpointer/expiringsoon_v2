@@ -4,6 +4,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Route;
+use App\Notifications\WelcomeNotification;
+use App\Http\Controllers\Auth\ApiController;
+use App\Http\Controllers\Vendor\ShopController;
+use App\Http\Controllers\Vendor\UserController;
+use App\Http\Controllers\Vendor\ProductController;
+use App\Http\Controllers\Vendor\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +32,9 @@ Route::post('webhook',function(Request $request){
 
 })->name('test.webhook');
 
-Route::post('register', [App\Http\Controllers\ApiControllers\AuthController::class, 'register']);
-Route::post('login/vendor', [App\Http\Controllers\ApiControllers\AuthController::class, 'login_vendor']);
-Route::post('login/shopper', [App\Http\Controllers\ApiControllers\AuthController::class, 'login_shopper']);
+Route::post('register', [ApiController::class, 'register']);
+Route::post('login/vendor', [ApiController::class, 'login_vendor']);
+Route::post('login/shopper', [ApiController::class, 'login_shopper']);
 
 
 // Route::post('register' ,[App\Http\Controllers\Auth\RegisterController::class,'register'])->name('register');
@@ -38,8 +44,6 @@ Route::post('login/shopper', [App\Http\Controllers\ApiControllers\AuthController
 // Route::post('password/email',[App\Http\Controllers\Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');                    
 // Route::post('password/reset',[App\Http\Controllers\Auth\ResetPasswordController::class,'reset'])->name('password.update');                  
 
-
-Route::post('access-pin', [App\Http\Controllers\ApiControllers\AuthController::class, 'access_pin']);
 Route::get('plans', [App\Http\Controllers\ApiControllers\ResourcesController::class, 'plans']);
 Route::get('states', [App\Http\Controllers\ApiControllers\ResourcesController::class, 'states']);
 Route::get('cities/{state_id}', [App\Http\Controllers\ApiControllers\ResourcesController::class, 'cities']);
@@ -52,29 +56,39 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return new UserResource(User::findOrFail($request->user()->id));
 });
 Route::group(['middleware'=>'auth:sanctum'],function () {
-    Route::resource('shops','App\Http\Controllers\ApiControllers\ShopController');
-    Route::get('shops',[App\Http\Controllers\ApiControllers\ShopController::class,'index']);
-    Route::get('shops/{shop_id}',[App\Http\Controllers\ApiControllers\ShopController::class,'show']);
-    Route::post('shops/store',[App\Http\Controllers\ApiControllers\ShopController::class,'store']);
-    Route::post('shops/import',[App\Http\Controllers\ApiControllers\ShopController::class,'import']);
-    Route::post('shops/update',[App\Http\Controllers\ApiControllers\ShopController::class,'update']);
-    Route::post('shops/delete',[App\Http\Controllers\ApiControllers\ShopController::class,'destroy']);
-    Route::group(['prefix'=>'shipping/rates'],function (){
-        Route::get('/{shop_id}',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_index']);
-        Route::post('store',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_store']);
-        Route::post('update',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_update']);
-        Route::post('delete',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_delete']);
+    Route::group(['prefix'=> 'user'],function(){
+        Route::get('generate-otp',[UserController::class, 'generate_otp']);
+        Route::post('pin', [UserController::class, 'pin']);
+        Route::post('profile', [UserController::class, 'update']);
     });
 
-    Route::get('shop/{shop_id}/products',[App\Http\Controllers\ApiControllers\ProductController::class,'index']);
-    Route::get('product/{product_id}',[App\Http\Controllers\ApiControllers\ProductController::class,'show']);
-    Route::post('shop/products',[App\Http\Controllers\ApiControllers\ProductController::class,'store']);
+    Route::group(['prefix'=> 'shops'],function(){
+        Route::get('shops',[ShopController::class,'index']);
+        Route::get('shops/{shop_id}',[ShopController::class,'details']);
+        Route::post('shops/store',[ShopController::class,'store']);
+        Route::post('shops/import',[ShopController::class,'import']);
+        Route::post('shops/update',[ShopController::class,'update']);
+        Route::post('shops/delete',[ShopController::class,'destroy']);
+        Route::group(['prefix'=>'shipping/rates'],function (){
+            Route::get('/{shop_id}',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_index']);
+            Route::post('store',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_store']);
+            Route::post('update',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_update']);
+            Route::post('delete',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_delete']);
+        });
+    });
+    
+    Route::get('shops/{shop_id}/products',[ProductController::class,'index']);
+    Route::get('shops/{shop_id}/product/{product_id}',[ProductController::class,'show']);
+    Route::post('products/store',[ProductController::class,'store']);
+    Route::post('products/update',[ProductController::class,'update']);
+    Route::post('products/delete',[ProductController::class,'destroy']);
 
-    Route::resource('products','App\Http\Controllers\ApiControllers\ProductController');
+    
 
-    Route::group(['prefix'=>'subscriptions'],function (){
-        Route::get('plans',[App\Http\Controllers\ApiControllers\SubscriptionController::class,'index']);
-        Route::post('store',[App\Http\Controllers\ApiControllers\SubscriptionController::class,'store']);
+    Route::group(['prefix'=>'subscription'],function (){
+        Route::get('plans',[SubscriptionController::class,'plans']);
+        Route::post('store',[SubscriptionController::class,'store']);
+        Route::post('cancel_renewal',[SubscriptionController::class,'cancel_renewal']);
         
     });
 });
