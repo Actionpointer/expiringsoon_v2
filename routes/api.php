@@ -4,10 +4,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Route;
-use App\Notifications\WelcomeNotification;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\ApiController;
 use App\Http\Controllers\Vendor\ShopController;
-use App\Http\Controllers\Vendor\UserController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\SubscriptionController;
 
@@ -60,6 +59,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('generate-otp',[UserController::class, 'generate_otp']);
         Route::post('pin', [UserController::class, 'pin']);
         Route::post('profile', [UserController::class, 'update']);
+        Route::post('password', [UserController::class, 'password']);
     });
 
     Route::group(['prefix'=> 'shops'],function(){
