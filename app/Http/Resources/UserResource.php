@@ -45,7 +45,7 @@ class UserResource extends JsonResource
             'max_shops' => $this->when($this->role == 'vendor', $this->max_shops),
             "balance"=> $this->when($this->role == 'vendor', $this->shops->sum('wallet')),
             "subscription"=> $this->subscription_id ? new SubscriptionResource(Subscription::findOrFail($this->subscription_id)) :null,
-            "shops"=> $this->when(!$this->shop_id, ShopResource::collection(Shop::where('user_id',$this->id)->get())),
+            // "shops"=> $this->when(!$this->shop_id, ShopResource::collection(Shop::where('user_id',$this->id)->get())),
             "shop"=> $this->when($this->shop_id, function(){ 
                 return new ShopResource(Shop::findOrFail($this->shop_id)); 
             }),

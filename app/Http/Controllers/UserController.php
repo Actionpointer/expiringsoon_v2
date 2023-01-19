@@ -95,7 +95,7 @@ class UserController extends Controller
                 'status' => false,
                 'message' => 'Something went wrong',
             ], 401) :
-            redirect()->back()->with(['result' => '1','message'=>'Something went wrong']);
+            redirect()->back()->with(['result' => '1','message'=>'Your old Password Does not Match']);
         }
     }
 
