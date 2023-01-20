@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
 {
-    protected $stopOnFirstFailure = true;
+    // protected $stopOnFirstFailure = true;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,18 +26,7 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'stock' => 'required|numeric|gt:1',
-            'category_id' => 'required|numeric',
-            'tags' => 'nullable',
-            'photo' => Rule::requiredIf(!request()->product_id),'image',
-            'expiry' => 'required|date|after:today',
-            'price' => 'required|numeric',
-            'discount120' => 'nullable|lt:price|gt:discount90',
-            'discount90' => 'nullable|lt:price|gt:discount60',
-            'discount60' => 'nullable|lt:price|gt:discount30',
-            'discount30' => 'nullable|lt:price',    
+            
         ];
     }
 

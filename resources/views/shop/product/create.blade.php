@@ -56,6 +56,7 @@
                   <div class="row">
                     <div class="col-lg-7 order-lg-0 order-2">
                       <form action="{{route('shop.product.store',$shop)}}" method="post" id="addproduct"  enctype="multipart/form-data">@csrf
+                        <input type="hidden" name="shop_id" value="{{$shop->id}}">
                         <div class="contact-form__content">
                           <div class="contact-form-input">
                             <label for="name">Product </label>
