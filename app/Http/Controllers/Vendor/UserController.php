@@ -21,8 +21,8 @@ class UserController extends Controller
 
     
 
-    public function notifications(){
-        
+    public function orientation(){
+        return view('vendor.orientation');
     }
 
     public function verification(){

@@ -103,7 +103,7 @@ class ShopController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Shop Created Successfully',
-                'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,'owner'=> auth()->user(),'products'=> $shop->products->count() ,'create_shops_remaining'=> $shop->user->allowedShops()]
+                'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,'owner'=> auth()->user(),'products'=> $shop->products->count() ,'create_shops_remaining'=> $shop->user->max_shops]
             ], 200);
 
         } catch (\Throwable $th) {
@@ -147,7 +147,7 @@ class ShopController extends Controller
                 ? response()->json(['status' => true, 'message' => 'Shop Created Successfully', 
                     'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,
                     'products'=> $shop->products->count() ,
-                    'create_shops_remaining'=> $shop->user->allowedShops()]], 200) :
+                    'create_shops_remaining'=> $shop->user->max_shops]], 200) :
                     redirect()->route('shop.settings',$shop);
 
         } catch (\Throwable $th) {

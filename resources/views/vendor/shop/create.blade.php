@@ -45,7 +45,7 @@
               <div class="dashboard__content-card">
                 <div class="dashboard__order-history-title border-bottom">
                   <h5 class="font-body--xl-500">Create Shop </h5>
-                  @if(auth()->user()->shops->count() >= auth()->user()->allowedShops())
+                  @if(auth()->user()->shops->count() >= auth()->user()->max_shops)
                   <a href="{{route('vendor.plans')}}" class="small">You've exhausted your shop quota. <u>UPGRADE</u></a>@endif
                 </div>
                 <div class="dashboard__content-card-body">
@@ -144,7 +144,7 @@
                           </div>
                       </div>
                       <div class="col-lg-12 order-lg-0 order-1">
-                        @if(auth()->user()->shops->count() >= auth()->user()->allowedShops()) 
+                        @if(auth()->user()->shops->count() >= auth()->user()->max_shops) 
                         <h3 class="text-danger">The status of this shop will be <strong>INACTIVE</strong></h3>
                         @endif
                         <div class="contact-form-btn">

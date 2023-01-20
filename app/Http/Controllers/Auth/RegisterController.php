@@ -95,6 +95,7 @@ class RegisterController extends Controller
             'phone_prefix' => cache('settings')['dialing_code'],
             'role' => $data['role'] ?? 'shopper',
             'state_id' => $this->currentState()->id,
+            'country_id' => $this->currentCountry()->id,
         ]);
     }
 }

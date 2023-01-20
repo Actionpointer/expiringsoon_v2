@@ -12,7 +12,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller

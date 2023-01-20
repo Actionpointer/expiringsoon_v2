@@ -375,7 +375,7 @@
                                             <span id="total" class="ms-0">0</span> 
                                         </span>
                                     </div>
-                                    <form action="{{route('plans.subscribe')}}" method="post" >@csrf
+                                    <form action="{{route('vendor.plans.subscribe')}}" method="post" >@csrf
                                         <input type="hidden" name="plan" id="plan">
                                         <input type="hidden" name="duration" id="duration">
                                         <input type="hidden" name="amount" id="amount">

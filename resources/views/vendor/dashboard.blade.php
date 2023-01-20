@@ -102,7 +102,7 @@
                       
                     </div>
                     {{-- <div>
-                        <a href="#" class="edit font-body--lg-500">Request Payout</a>
+                        <a href="#" class="edit font-body--lg-500">Request order</a>
                     </div> --}}
                    
                   </div>
@@ -164,23 +164,23 @@
                     <div class="dashboard__totalpayment-card-body">
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Active Shops:</h5>
-                        <p class="font-body--md-500"> 23 </p>
+                        <p class="font-body--md-500"> {{$user->shops->where('status',true)->count()}} / {{$user->shops->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shops Visible:</h5>
-                        <p class="font-body--md-500">2/3</p>
+                        <p class="font-body--md-500"> {{$user->shops->where('published',true)->count()}} / {{$user->shops->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shops Approved:</h5>
-                        <p class="font-body--md-500">2</p>
+                        <p class="font-body--md-500">{{$user->shops->where('approved',true)->count()}} / {{$user->shops->count()}}</p>
                       </div>
-                      <div class="dashboard__totalpayment-card-body-item">
+                      {{-- <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Orders:</h5>
                         <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} 5</p>
-                      </div>
+                      </div> --}}
                       <div class="dashboard__totalpayment-card-body-item">
-                        <h5 class="font-body--md-400">Running Ads:</h5>
-                        <p class="font-body--md-500">4</p>
+                        <h5 class="font-body--md-400">Ads Running:</h5>
+                        <p class="font-body--md-500">{{$user->adverts->where('advertable_type','App\Models\Shop')->count()}}</p>
                       </div>
                       
                       
@@ -201,23 +201,23 @@
                     <div class="dashboard__totalpayment-card-body">
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Active Products:</h5>
-                        <p class="font-body--md-500"> 23/60 </p>
+                        <p class="font-body--md-500"> {{$user->products->where('status',true)->count()}} / {{$user->products->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
-                        <h5 class="font-body--md-400">Shops Visible:</h5>
-                        <p class="font-body--md-500">2/3</p>
+                        <h5 class="font-body--md-400">Products Visible:</h5>
+                        <p class="font-body--md-500">{{$user->products->where('published',true)->count()}} / {{$user->products->count()}}</p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Products Approved:</h5>
-                        <p class="font-body--md-500">23/23</p>
+                        <p class="font-body--md-500">{{$user->products->where('approved',true)->count()}} / {{$user->products->count()}}</p>
                       </div>
-                      <div class="dashboard__totalpayment-card-body-item">
+                      {{-- <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Orders:</h5>
                         <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} 5</p>
-                      </div>
+                      </div> --}}
                       <div class="dashboard__totalpayment-card-body-item">
-                        <h5 class="font-body--md-400">Running Ads:</h5>
-                        <p class="font-body--md-500">4</p>
+                        <h5 class="font-body--md-400">Ads Running:</h5>
+                        <p class="font-body--md-500">{{$user->adverts->where('advertable_type','App\Models\Product')->count()}}</p>
                       </div>
                       
                       
@@ -235,7 +235,6 @@
                   <div class="dashboard__order-history">
                     <div class="dashboard__order-history-title">
                         <h2 class="font-body--xl-500">Opened Orders</h2>
-                        <a href="#" class="font-body--lg-500"> View All</a>
                     </div>
                     <div class="dashboard__order-history-table">
                         <div class="table-responsive">
@@ -249,33 +248,32 @@
                             </tr>
                             </thead>
                             <tbody>                     
-                                {{-- @forelse($shop->payouts->sortByDesc('updated_at')->take(5) as $payout)                                        
+                                @forelse($user->shopOrders->sortByDesc('updated_at')->take(5) as $order)                                        
                                     <tr>
                                         <td class="dashboard__order-history-table-item order-date "> 
-                                          {{$payout->created_at->format('Y-m-d')}}
+                                          {{$order->created_at->format('Y-m-d')}}
                                         </td>
                                         <!-- Vendor Split  -->
                                         <td class="dashboard__order-history-table-item order-total "> 
-                                            <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($payout->amount, 0)}} 
-                                            </p>
+                                            <p class="order-total-price"> {{$order->shop->name}} </p>
                                         </td>
                                         
                                         <td class="dashboard__order-history-table-item order-details" style="text-align: left!important"> 
-                                            <span class="@if($payout->status == 'pending' || $payout->status == 'processing') text-warning @elseif($payout->status == 'rejected') text-danger @else text-success @endif">
-                                                {{$payout->status}}
+                                            <span class="@if($order->status == 'pending' || $order->status == 'processing') text-warning @elseif($order->status == 'rejected') text-danger @else text-success @endif">
+                                                {{$order->status}}
                                             </span>
                                         </td>
                                     </tr>
-                                 @empty --}}
+                                 @empty 
                                     <tr>
-                                      <td colspan="3" class="text-center">
+                                      <td colspan="4" class="text-center border-0">
                                         <div style="padding:1%;margin-bottom:5%">
                                           <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
                                           <br />You have no opened order at this time.
                                         </div>
                                       </td>
                                     </tr> 
-                                {{-- @endforelse --}}
+                                @endforelse
                             </tbody>
                         </table>
                         </div>

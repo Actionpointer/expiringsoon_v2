@@ -28,7 +28,7 @@ class ResetShopStatus implements ShouldQueue
     public function handle(UserSubscribed $event)
     {
         $user = $event->user;
-        $allowed_shops = $user->allowedShops();
+        $allowed_shops = $user->max_shops;
         $user_shops = $user->shops;
         $current_shops = $user_shops->count();
         Shop::whereIn('id',$user_shops->pluck('id')->toArray())->take($current_shops - $allowed_shops)->update(['status'=> false]);
