@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,13 +26,37 @@ class ProductController extends Controller
    
     public function index(Shop $shop){
         $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->get();
-        return view('shop.product.list',compact('shop','products'));
+        return request()->expectsJson() ?  
+        response()->json([
+            'status' => true,
+            'message' => $shop->products->count() ? 'Products retrieved Successfully':'No Shops retrieved',
+            'data' => ProductResource::collection($products),
+            'count' => $shop->products->count()
+        ], 200) : view('shop.product.list',compact('shop','products'));
     }
 
     public function create(Shop $shop){
         $categories = Category::all();
         $tags = Tag::all(); 
         return view('shop.product.create',compact('shop','categories','tags'));
+    }
+
+    public function details($shop_id,$product_id){
+        $product = Product::find($product_id);
+        if($product && $product->shop_id == $shop_id){
+            return response()->json([
+                'status' => true,
+                'message' => 'Shop retrieved Successfully',
+                'data' => new ProductResource($product)
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Shop does not exist',
+                'data' => null,
+                'count' => 0
+            ], 401);
+        }
     }
 
     public function store(Shop $shop,Request $request){
@@ -84,7 +109,9 @@ class ProductController extends Controller
         'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
         'discount90'=> $request->discount90,'discount120'=> $request->discount120,
         'published'=> $request->published]);
-        return redirect()->route('shop.product.list',$shop);
+        return request()->expectsJson()
+                ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
+                    redirect()->route('shop.product.list',$shop);
     }
 
     public function edit(Shop $shop,Product $product){

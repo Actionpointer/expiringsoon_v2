@@ -63,25 +63,26 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     });
 
     Route::group(['prefix'=> 'shops'],function(){
-        Route::get('shops',[ShopController::class,'index']);
-        Route::get('shops/{shop_id}',[ShopController::class,'details']);
-        Route::post('shops/store',[ShopController::class,'store']);
-        Route::post('shops/import',[ShopController::class,'import']);
-        Route::post('shops/update',[ShopController::class,'update']);
-        Route::post('shops/delete',[ShopController::class,'destroy']);
+        Route::get('/',[ShopController::class,'index']);
+        Route::get('{shop_id}',[ShopController::class,'details']);
+        Route::post('store',[ShopController::class,'store']);
+        Route::post('import',[ShopController::class,'import']);
+        Route::post('update',[ShopController::class,'update']);
+        Route::post('delete',[ShopController::class,'destroy']);
         Route::group(['prefix'=>'shipping/rates'],function (){
             Route::get('/{shop_id}',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_index']);
             Route::post('store',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_store']);
             Route::post('update',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_update']);
             Route::post('delete',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_delete']);
         });
+        Route::get('{shop_id}/products',[ProductController::class,'index']);
+        Route::get('{shop_id}/product/{product_id}',[ProductController::class,'details']);
+        Route::post('products/store',[ProductController::class,'store']);
+        Route::post('products/update',[ProductController::class,'update']);
+        Route::post('products/delete',[ProductController::class,'destroy']);
     });
     
-    Route::get('shops/{shop_id}/products',[ProductController::class,'index']);
-    Route::get('shops/{shop_id}/product/{product_id}',[ProductController::class,'show']);
-    Route::post('products/store',[ProductController::class,'store']);
-    Route::post('products/update',[ProductController::class,'update']);
-    Route::post('products/delete',[ProductController::class,'destroy']);
+    
 
     
 

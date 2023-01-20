@@ -53,7 +53,7 @@ class ShopController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Shop retrieved Successfully',
-                'data' => ['shop_id'=> $shop->id,'name'=> $shop->name,'wallet_balance'=> 0,'owner'=> auth()->user()->name,'products'=> $shop->products->count()]
+                'data' => new ShopResource(Shop::find($shop_id))
             ], 200);
         }else{
             return response()->json([
@@ -61,7 +61,7 @@ class ShopController extends Controller
                 'message' => 'Shop does not exist',
                 'data' => null,
                 'count' => 0
-            ], 200);
+            ], 401);
         }
     }
 
