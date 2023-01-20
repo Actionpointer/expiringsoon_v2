@@ -93,9 +93,9 @@ class UserController extends Controller
             return request()->expectsJson() ? 
             response()->json([
                 'status' => false,
-                'message' => 'Something went wrong',
+                'message' => 'Your old Password Does not Match',
             ], 401) :
-            redirect()->back()->with(['result' => '1','message'=>'Your old Password Does not Match']);
+            redirect()->back()->with(['result' => '1','message'=>'Something went wrong']);
         }
     }
 
