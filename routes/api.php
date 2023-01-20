@@ -69,17 +69,17 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('import',[ShopController::class,'import']);
         Route::post('update',[ShopController::class,'update']);
         Route::post('delete',[ShopController::class,'destroy']);
+        Route::get('{shop_id}/products',[ProductController::class,'list']);
+        Route::get('{shop_id}/products/{product_id}',[ProductController::class,'details']);
+        Route::post('products/store',[ProductController::class,'store']);
+        Route::post('products/update',[ProductController::class,'update']);
+        Route::post('products/delete',[ProductController::class,'destroy']);
         Route::group(['prefix'=>'shipping/rates'],function (){
             Route::get('/{shop_id}',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_index']);
             Route::post('store',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_store']);
             Route::post('update',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_update']);
             Route::post('delete',[App\Http\Controllers\ApiControllers\ShopController::class,'shipping_delete']);
         });
-        Route::get('{shop_id}/products',[ProductController::class,'index']);
-        Route::get('{shop_id}/product/{product_id}',[ProductController::class,'details']);
-        Route::post('products/store',[ProductController::class,'store']);
-        Route::post('products/update',[ProductController::class,'update']);
-        Route::post('products/delete',[ProductController::class,'destroy']);
     });
     
     

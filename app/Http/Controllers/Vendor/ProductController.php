@@ -26,13 +26,17 @@ class ProductController extends Controller
    
     public function index(Shop $shop){
         $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->get();
-        return request()->expectsJson() ?  
-        response()->json([
+        return view('shop.product.list',compact('shop','products'));
+    }
+
+    public function list($shop_id){
+        $products = Product::where('shop_id',$shop_id)->orderBy('expire_at','desc')->get();
+        return response()->json([
             'status' => true,
-            'message' => $shop->products->count() ? 'Products retrieved Successfully':'No Shops retrieved',
+            'message' => $products->count() ? 'Products retrieved Successfully':'No Products retrieved',
             'data' => ProductResource::collection($products),
-            'count' => $shop->products->count()
-        ], 200) : view('shop.product.list',compact('shop','products'));
+            'count' => $products->count()
+        ], 200);
     }
 
     public function create(Shop $shop){
@@ -46,13 +50,13 @@ class ProductController extends Controller
         if($product && $product->shop_id == $shop_id){
             return response()->json([
                 'status' => true,
-                'message' => 'Shop retrieved Successfully',
+                'message' => 'Products retrieved Successfully',
                 'data' => new ProductResource($product)
             ], 200);
         }else{
             return response()->json([
                 'status' => false,
-                'message' => 'Shop does not exist',
+                'message' => 'Product does not exist',
                 'data' => null,
                 'count' => 0
             ], 401);
@@ -159,7 +163,9 @@ class ProductController extends Controller
                 $product->update(['photo'=> $photo]);
             } 
             $product->update(['name'=> $request->name,'shop_id'=> $product->shop_id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published]);
-            return redirect()->route('shop.product.list',$product->shop);
+            return request()->expectsJson()
+                ? response()->json(['status' => true, 'message' => 'Product Updated Successfully'], 200) :
+                    redirect()->route('shop.product.list',$product->shop);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
