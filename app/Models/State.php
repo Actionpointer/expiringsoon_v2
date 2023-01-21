@@ -20,7 +20,7 @@ class State extends Model
         return $this->hasManyThrough(Product::class,Shop::class);
     }
     public function scopeWithin($query){
-        $country = cache('settings')['country_id'];
+        $country = session('locale')['country_id'];
         return $query->where('country_id',$country);
     }
 }

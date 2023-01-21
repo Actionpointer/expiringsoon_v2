@@ -289,6 +289,7 @@ class ShopController extends Controller
         $user = auth()->user();
         $banks = Bank::all();
         $states = State::all();
+        $cities = City::where('state_id',$shop->state_id)->get();
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
         return view('shop.settings',compact('user','shop','banks','states','cities','rates'));
     }

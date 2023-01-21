@@ -12,7 +12,7 @@ use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
 
 Route::get('sendemail',function(){
-    $user = \App\Models\User::find(31);
+    $user = \App\Models\User::find(10);
     $user->notify(new WelcomeNotification());
     return (new App\Notifications\WelcomeNotification())
                     ->toMail($user);
