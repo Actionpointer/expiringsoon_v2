@@ -117,7 +117,7 @@
                                   <tr><td>No of Products</td><td align="right">{{$shop->products->count()}}</td></tr>
                                   <tr><td>No of Staff</td><td align="right">{{$shop->staff->count()}}</td></tr>
                                   <tr><td>Orders</td><td align="right">{{$shop->orders->count()}}</td></tr>
-                                  <tr><td>Wallet</td><td align="right">{!! cache('settings')['currency_symbol'] !!} {{number_format($shop->wallet,2)}}</td></tr>
+                                  <tr><td>Wallet</td><td align="right">{!! session('locale')['currency_symbol'] !!} {{number_format($shop->wallet,2)}}</td></tr>
                                   <tr>
                                     <td>Subscription </td>
                                     <td align="right">

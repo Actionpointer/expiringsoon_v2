@@ -62,7 +62,7 @@
                                             </a>
                                             @else
                                             <a href="{{route('vendor.feature.description',$feature)}}" class="button button--md">
-                                                Starts at {!!cache('settings')['currency_symbol']!!}{{number_format($feature->price_per_day)}}
+                                                Starts at {!!session('locale')['currency_symbol']!!}{{number_format($feature->price_per_day)}}
                                                 <span>
                                                     <svg width="17" height="15" viewBox="-1.14 0 30 30" xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="_19_-_Lock" data-name="19 - Lock" >
                                                         <path id="Path_201" data-name="Path 201" d="M29.857,28V14a3,3,0,0,0-3-3H5.143a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H26.857A3,3,0,0,0,29.857,28Zm-2-14V28a1,1,0,0,1-1,1H5.143a1,1,0,0,1-1-1V14a1,1,0,0,1,1-1H26.857A1,1,0,0,1,27.857,14Z" transform="translate(-2.143 -1)" fill-rule="evenodd"/>

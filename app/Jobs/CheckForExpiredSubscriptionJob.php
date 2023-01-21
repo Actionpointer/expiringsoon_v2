@@ -15,8 +15,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use App\Notifications\FeatureExpiredNotification;
-use App\Notifications\SubscriptionExpiredNotification;
+use App\Notifications\FeatureStatusNotification;
+use App\Notifications\SubscriptionStatusNotification;
+
 
 class CheckForExpiredSubscriptionJob implements ShouldQueue
 {
@@ -43,13 +44,13 @@ class CheckForExpiredSubscriptionJob implements ShouldQueue
         
         Subscription::whereIn('id',$subscriptions->pluck('id')->toArray())->update(['status'=> false]);
         $users = User::whereIn('id',$subscriptions->pluck('user_id')->toArray())->get();
-        Notification::send($users,new SubscriptionExpiredNotification);
+        Notification::send($users,new SubscriptionStatusNotification);
         foreach($subscriptions as $sub){
             event(new SubscriptionExpired($sub));
         }
         $features = Feature::where('status',true)->expired()->get();
         $userz = User::whereIn('id',$features->pluck('user_id')->toArray())->get();
         Feature::whereIn('id',$features->pluck('id')->toArray())->update(['status'=> false]);
-        Notification::send($userz,new FeatureExpiredNotification);
+        Notification::send($userz,new FeatureStatusNotification);
     }
 }

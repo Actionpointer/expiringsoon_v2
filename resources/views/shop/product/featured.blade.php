@@ -89,7 +89,7 @@
                             <!-- Price  -->
                             <td class="cart-table-item order-date align-middle">
                               <p class="font-body--lg-500">
-                                {!!cache('settings')['currency_symbol']!!}{{number_format($product->price , 2)}}
+                                {!!session('locale')['currency_symbol']!!}{{number_format($product->price , 2)}}
                               </p>
                             </td>
                             <!-- Stock Status  -->

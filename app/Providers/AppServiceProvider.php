@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength(191);        
+        Schema::defaultStringLength(191);  
+        $settings = Cache::rememberForever('settings', function () {
+            return \App\Models\Setting::select(['name','value'])->get()->pluck('value','name')->toArray();
+        });      
     }
 }

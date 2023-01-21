@@ -49,7 +49,7 @@
                   </div>
                   <div class="dashboard__user-profile-info">
                     <h5 class="font-body--xl-500 name">{{$user->name}}</h5>
-                        <p class="font-body--lg-400 designation">{{$user->state->name}},{{cache('settings')['country']}}</p>
+                        <p class="font-body--lg-400 designation">{{$user->state->name}},{{session('locale')['country_name']}}</p>
                         <span class="text-muted small">
                           <svg width="16" height="16" viewBox="0 0 46 42" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M2 15.5V38.25C2 38.7141 2.18437 39.1592 2.51256 39.4874C2.84075 39.8156 3.28587 40 3.75 40H42.25C42.7141 40 43.1592 39.8156 43.4874 39.4874C43.8156 39.1592 44 38.7141 44 38.25V15.5L23 1.5L2 15.5Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -117,7 +117,7 @@
                               <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
                               <!-- Total  -->
                               <td class="   dashboard__order-history-table-item   order-total "> 
-                                  <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
+                                  <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
                               </td>
                               <!-- Status -->
                               <td class="dashboard__order-history-table-item   order-status "> 

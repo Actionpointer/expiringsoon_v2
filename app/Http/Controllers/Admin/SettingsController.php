@@ -88,7 +88,7 @@ class SettingsController extends Controller
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update user']);
                 }
-                $user = User::where('id',$request->user_id)->update(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone]);
+                $user = User::where('id',$request->user_id)->update(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'email'=> $request->email,'phone'=> $request->phone]);
                 return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
             }
         }else{
@@ -105,7 +105,7 @@ class SettingsController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
             }
-            $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'state_id'=> $this->currentState()->id,'email'=> $request->email,'phone_prefix'=> cache('settings')['dialing_code'] ,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+            $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'state_id'=> session('locale')['state_id'],'country_id'=> session('locale')['country_id'],'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
             return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
         }   
     }

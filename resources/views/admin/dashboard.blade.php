@@ -63,7 +63,7 @@
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Shops :</span> <strong>{{\App\Models\Shop::count()}}</strong></p>
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Adverts :</span> <strong>{{\App\Models\Advert::count()}}</strong></p>
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Customers :</span> <strong>{{\App\Models\User::where('role','shopper')->count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Sales :</span> <strong>{!!cache('settings')['currency_symbol']!!} {{App\Models\Order::where('status','completed')->sum('total')}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Sales :</span> <strong>{!!session('locale')['currency_symbol']!!} {{App\Models\Order::where('status','completed')->sum('total')}}</strong></p>
                     
                   </div>
                 </div>
@@ -182,7 +182,7 @@
                       
                       {{-- <div class="dashboard__totalpayment-card-body-item total" >
                         <h5 class="font-body--xl-400">Total:</h5>
-                        <p class="font-body--xl-500">{!!cache('settings')['currency_symbol']!!} {{number_format($order->total, 2)}}</p>
+                        <p class="font-body--xl-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->total, 2)}}</p>
                       </div> --}}
                     </div>
                   </div>
@@ -248,7 +248,7 @@
                             </td>
                             <!-- Total  -->
                             <td class="   dashboard__order-history-table-item   order-total "> 
-                                <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{ number_format($order->total)}} </p>
+                                <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{ number_format($order->total)}} </p>
                             </td>
                             <!-- Status -->
                             <td class="   dashboard__order-history-table-item   order-status "> 

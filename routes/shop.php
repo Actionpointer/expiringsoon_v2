@@ -13,7 +13,7 @@ Route::group(['prefix'=>'vendor/{shop}','as'=> 'shop.'],function (){
     Route::get('settings',[ShopController::class, 'settings'])->name('settings');
     Route::post('address',[ShopController::class, 'address'])->name('address');
     Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
-    Route::post('kyc',[ShopController::class, 'kyc'])->name('kyc');
+    
     Route::post('shipping',[ShipmentController::class, 'vendor_shipping_rates'])->name('shipping');
     Route::post('staff',[StaffController::class, 'index'])->name('staff');
     

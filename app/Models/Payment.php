@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Currency;
 use App\Models\PaymentItem;
 use App\Observers\PaymentObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,9 @@ class Payment extends Model
     }
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    public function currency(){
+        return $this->belongsTo(Currency::class);
     }
     public function getRouteKeyName(){
         return 'reference';

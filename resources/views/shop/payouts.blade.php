@@ -65,7 +65,7 @@
                                 <div class="dashboard__content-card">
                                     <div class="dashboard__content-card-header d-flex justify-content-between">
                                         <h5 class="font-body--xl-500">Request Payout</h5>
-                                        <a href="#" class="font-body--lg-500 text-dark">{!!cache('settings')['currency_symbol']!!}{{ number_format($shop->wallet, 2)}}<span class="text-success"> Balance</span> </a>
+                                        <a href="#" class="font-body--lg-500 text-dark">{!!session('locale')['currency_symbol']!!}{{ number_format($shop->wallet, 2)}}<span class="text-success"> Balance</span> </a>
                                     </div>
                                     <div class="dashboard__content-card-body">
                                         <form method="post" action="{{route('shop.payout',$shop)}}">@csrf
@@ -88,7 +88,7 @@
                                             
                                         </div>
                                         <div class="contact-form-btn">
-                                            <button class="button button--md submit @if(!$shop->bankaccount) button--disable @endif" type="button" id="btn-payout1">Submit Request</button>
+                                            <button class="button button--md askpin @if(!$shop->bankaccount) button--disable @endif" type="button" id="btn-payout1">Submit Request</button>
                                         </div>
                                         </form>
                                     </div>
@@ -118,7 +118,7 @@
                                                         </td>
                                                         <!-- Price  -->
                                                         <td class="cart-table-item order-date align-middle">
-                                                            <p class="font-body--lg-500" style="color:#00b207">{!!cache('settings')['currency_symbol']!!}{{ number_format($payout->amount, 2)}}</p>
+                                                            <p class="font-body--lg-500" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{ number_format($payout->amount, 2)}}</p>
                                                         </td>
                                                         <td class="cart-table-item order-date align-middle">
                                                           {{$payout->account->bank->name.''.$payout->account->account_number}}
@@ -195,7 +195,7 @@
                                                           @endforeach
                                                   </select>
                                               </div>
-                                              @if(cache('settings')['country_iso'] == 'GH' && $branches->isNotEmpty())
+                                              @if(session('locale')['country_iso'] == 'GH' && $branches->isNotEmpty())
                                                 <div class="contact-form-input">
                                                     <label for="branch">Branch *</label>
                                                     <select id="branch" name="branch_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
@@ -211,7 +211,7 @@
                                                   <input type="text" name="account_number" id="account_number" value="{{$shop->bankaccount->account_number}}"   autocomplete="off"   maxlength="10"   required />
                                               </div>
 
-                                              @if(cache('settings')['country_iso'] == 'NG')
+                                              @if(session('locale')['country_iso'] == 'NG')
                                               <div class="contact-form-input">
                                                   <label for="address">BVN. *</label>
                                                   <input   type="text"   name="bvn"   id="bvn" autocomplete="off"  maxlength="11"   required />
@@ -219,7 +219,7 @@
                                               @endif
                                           </div>
                                           <div class="contact-form-btn">
-                                              <button class="button button--md submit" type="button"> Update Details</button>
+                                              <button class="button button--md askpin" type="button"> Update Details</button>
                                               <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('bankedit'+{{$shop->bankaccount->id}}).style.display='none'"> Cancel</button>
                                           </div>
                                       </form>
@@ -237,7 +237,7 @@
                                                         @endforeach
                                                 </select>
                                             </div>
-                                            @if(cache('settings')['country_iso'] == 'GH' && $branches->isNotEmpty())
+                                            @if(session('locale')['country_iso'] == 'GH' && $branches->isNotEmpty())
                                               <div class="contact-form-input">
                                                   <label for="branch">Branch *</label>
                                                   <select id="branch" name="branch_id" class="form-control-lg w-100 contact-form-input__dropdown border text-muted">
@@ -251,7 +251,7 @@
                                                 <label for="account_number">Account No *</label>
                                                 <input   type="text"  id="acctnumber"  name="account_number"   placeholder="Account Number"   required />
                                             </div>
-                                            @if(cache('settings')['country_iso'] == 'NG')
+                                            @if(session('locale')['country_iso'] == 'NG')
                                               <div class="contact-form-input">
                                                   <label for="address">BVN. *</label>
                                                   <input   type="text"  name="bvn" id="bvn" autocomplete="off"  maxlength="11"   required />
@@ -260,7 +260,7 @@
                                         </div>
 
                                         <div class="contact-form-btn">
-                                            <button class="button button--md submit" type="button"> Save Details</button>
+                                            <button class="button button--md askpin" type="button"> Save Details</button>
                                         </div>
                                     </form>
                                 @endif

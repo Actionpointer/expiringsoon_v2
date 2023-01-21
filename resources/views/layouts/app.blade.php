@@ -324,7 +324,7 @@
                                 </button>
                                 <div class="header__cart-item-content-info">
                                     <h5>Shopping cart:</h5>
-                                    <span class="price">{!!cache('settings')['currency_symbol']!!}<span class="cart-ttl-amount">{{number_format($total,2)}}</span>
+                                    <span class="price">{!!session('locale')['currency_symbol']!!}<span class="cart-ttl-amount">{{number_format($total,2)}}</span>
                                 </div>
                             </div>
                         </div>
@@ -648,7 +648,7 @@
                                 </div>
                                 <div class="text-content">
                                     <h5 class="font-body--md-400 product-title">{{$cart['product']->name}}</h5>
-                                    <p class="font-body--md-400">{{$cart['quantity']}} x <span class="font-body--md-500">{!!cache('settings')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}</span></p>
+                                    <p class="font-body--md-400">{{$cart['quantity']}} x <span class="font-body--md-500">{!!session('locale')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}</span></p>
                                 </div>
                             </div>
                             <button class="delete-item">
@@ -680,7 +680,7 @@
                 <div class="shopping-cart-bottom">
                     <div class="shopping-cart-product-info">
                         <p class="product-count font-body--lg-400"><span class="cart-ttl">{{count((array) session('cart'))}}</span> Items</p>
-                        <span class="product-price font-body--lg-500">{!!cache('settings')['currency_symbol']!!}<span class="cart-ttl-amount">{{number_format($total,2)}}</span></span>
+                        <span class="product-price font-body--lg-500">{!!session('locale')['currency_symbol']!!}<span class="cart-ttl-amount">{{number_format($total,2)}}</span></span>
                     </div>
                     <form action="{{route('checkout')}}" method="post">@csrf
                         <input type="hidden" name="shop_id" value="0">

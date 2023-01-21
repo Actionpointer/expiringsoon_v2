@@ -72,7 +72,7 @@
                                 <td> {{$payment->created_at->format('Y-m-d')}}</td>
                                 <!-- Total  -->
                                 <td> 
-                                    <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($payment->amount, 0)}} </p>
+                                    <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($payment->amount, 0)}} </p>
                                 </td>
                                 <!-- Status -->
                                 <td> {{$payment->status}}</td>
@@ -87,10 +87,15 @@
                                 </td>
                             </tr>   
                         @empty
-                        <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                            <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
-                            <br />You have no payments at this time.
-                        </div>
+                        <tr>
+                           <td colspan="5">
+                              <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
+                                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
+                                <br />You have no payments at this time.
+                            </div>
+                           </td>
+                        </tr>
+                        
                       @endforelse
                       
                     </tbody>

@@ -27,7 +27,7 @@ class ShopRequest extends FormRequest
             'name' => 'required|max:255',
             'address' => 'required|string',
             'state_id' => 'required|string',
-            'city_id' => 'required|string',
+            'city' => 'required|string',
             'email' => 'required|string|unique:users',
             'phone' => 'required|string|unique:users',
             'photo' => 'required|max:1024|image',

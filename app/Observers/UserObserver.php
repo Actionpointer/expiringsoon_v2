@@ -28,8 +28,15 @@ class UserObserver
             $user->subscription_id = $subscription->id;
             $user->save();
         }
+        try{
+            $user->notify(new WelcomeNotification);
+        }catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
         
-        $user->notify(new WelcomeNotification);
     
     }
 

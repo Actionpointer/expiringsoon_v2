@@ -84,7 +84,6 @@ class RegisterController extends Controller
     
     protected function create(array $data)
     {
-        //dd($data);
         return User::create([
             // 'username' => $data['username'],
             'email' => $data['email'],
@@ -92,10 +91,9 @@ class RegisterController extends Controller
             'fname' => $data['fname'],
             'lname' => $data['lname'],
             'phone' => $data['phone'],
-            'phone_prefix' => cache('settings')['dialing_code'],
             'role' => $data['role'] ?? 'shopper',
-            'state_id' => $this->currentState()->id,
-            'country_id' => $this->currentCountry()->id,
+            'country_id' => session('locale')['country_id'],
+            'state_id' => session('locale')['state_id'],
         ]);
     }
 }

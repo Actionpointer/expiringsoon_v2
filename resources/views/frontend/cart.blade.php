@@ -67,7 +67,7 @@
                                 </td>
                                 <!-- Price  -->
                                 <td class="cart-table-item order-date align-middle">
-                                    {!!cache('settings')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}
+                                    {!!session('locale')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}
                                 </td>
                                 <!-- quantity -->
                                 <td class="cart-table-item order-total align-middle">
@@ -84,7 +84,7 @@
                                 <!-- Subtotal  -->
                                 <td class="cart-table-item order-subtotal align-middle">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} <span class="product-total">{{$cart['total']}}</span> </p>
+                                        <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} <span class="product-total">{{$cart['total']}}</span> </p>
                                         <button class="delete-item remove-item" data-product="{{$key}}product">
                                         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 23.5C18.0748 23.5 23 18.5748 23 12.5C23 6.42525 18.0748 1.5 12 1.5C5.92525 1.5 1 6.42525 1 12.5C1 18.5748 5.92525 23.5 12 23.5Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
@@ -105,7 +105,7 @@
                 <div class="cart-table-action-btn d-flex">
                   <a href="{{route('vendor.show',$shop)}}" class="button button--md shop">Return to Shop</a>
                   <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                  <button type="submit" class="button button--md update bg-success text-white">Checkout: {!!cache('settings')['currency_symbol']!!}<span class="subtotal mx-0">{{collect($items)->where('shop_id',$shop->id)->sum('total')}}</span></button>
+                  <button type="submit" class="button button--md update bg-success text-white">Checkout: {!!session('locale')['currency_symbol']!!}<span class="subtotal mx-0">{{collect($items)->where('shop_id',$shop->id)->sum('total')}}</span></button>
                 </div>
               </form>
             </div>
@@ -136,7 +136,7 @@
                 </h5>
 
                 <h6 class="shoping-card__product-price font-body--lg-400">
-                  {!!cache('settings')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}
+                  {!!session('locale')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}
                 </h6>
 
                 <div class="counter-btn-wrapper">
@@ -149,7 +149,7 @@
                   </button>
                 </div>
                 <h6 class="shoping-card__product-totalprice font-body--lg-600">
-                  {!!cache('settings')['currency_symbol']!!} <span class="product-total"></span> {{$cart['total']}}
+                  {!!session('locale')['currency_symbol']!!} <span class="product-total"></span> {{$cart['total']}}
                 </h6>
                 <button class="close-btn remove-item" data-product="{{$key}}product">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -200,7 +200,7 @@
                   <div class="bill-card__memo-item total">
                     <p class="font-body--lg-400">Total:</p>
                     <span class="font-body--xl-500">
-                      {!!cache('settings')['currency_symbol']!!} 
+                      {!!session('locale')['currency_symbol']!!} 
                       <span id="grandtotal">
                         {{number_format(collect($items)->sum('total'))}}
                       </span>

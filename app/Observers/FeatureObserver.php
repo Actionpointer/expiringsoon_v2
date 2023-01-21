@@ -3,9 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Feature;
-use App\Notifications\FeatureRenewalNotification;
-use App\Notifications\FeaturePurchasedNotification;
-use App\Notifications\FeatureRenewalCancelNotification;
+use App\Notifications\FeatureStatusNotification;
+
 
 class FeatureObserver
 {
@@ -33,14 +32,12 @@ class FeatureObserver
                 //it was renewed
                 $feature->end_at = now()->addMonths($feature->duration);
                 $feature->save();
-                $feature->user->notify(new FeatureRenewalNotification($feature));
-            }else{
-                $feature->user->notify(new FeaturePurchasedNotification($feature));
+                $feature->user->notify(new FeatureStatusNotification($feature));
             }
             
         }
         if($feature->isDirty('auto_renew') && !$feature->auto_renew){
-            $feature->user->notify(new FeatureRenewalCancelNotification($feature));
+            $feature->user->notify(new FeatureStatusNotification($feature));
         }
     }
 

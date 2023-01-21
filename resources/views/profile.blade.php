@@ -71,16 +71,7 @@
                           @enderror
                           <div class="contact-form-input">
                             <label for="number1">Phone Number</label>
-                            <div class="input-group d-flex">
-                                <div class="prepend">
-                                    <select name="code" id="code" class="select2">
-                                      @foreach ($countries as $country)
-                                        <option class="small" value="+{{$country->dial}}" @if($country->dial == $user->phone_prefix) selected @endif>{{$country->name}} +{{$country->dial}}</option>
-                                      @endforeach  
-                                    </select>
-                                </div>
-                                <input type="number" name="phone" class="form-control" value="{{$user->phone}}" placeholder="Phone Number" onkeypress="validate(event)" />
-                            </div>
+                            <input type="number" name="phone" class="form-control" value="{{$user->phone}}" placeholder="Phone Number" onkeypress="validate(event)" />
                           </div>
                           @error('phone')
                           <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -102,7 +93,7 @@
                               <button type="button" class="button w-100 mt-3 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Avatar/Logo</button>
                             </div>
                             @error('photo')
-                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <span class="invalid-feedback d-block text-danger text-center mb-4" role="alert">
                                   <strong>{{ $message }}</strong>
                               </span>
                             @enderror
@@ -142,7 +133,7 @@
                               <tr>
                                   <td>{{$address->contact_name}}</td>
                                   <td>{{$address->contact_phone}}</td>
-                                  <td>{{$address->street.' '.$address->city->name.','.$address->state->name}}</td>
+                                  <td>{{$address->street.' '.$address->city.','.$address->state->name}}</td>
                                   <td>@if($address->main) main @endif</td>
                                   <td>
                                     <div class="d-flex">
@@ -169,6 +160,10 @@
                                           </div>
                                           <div class="contact-form__content-group location">
                                             <div class="contact-form-input">
+                                              <label for="city{{$address->id}}">City</label>
+                                              <input type="text" name="city" placeholder="Enter city" value="" required />
+                                            </div>
+                                            <div class="contact-form-input">
                                               <label for="state_id{{$address->id}}">State</label>
                                               <select name="state_id" id="state_id{{$address->id}}" class="select2 states">
                                                   @foreach ($states as $state)
@@ -177,12 +172,8 @@
                                                   
                                               </select>
                                             </div>
-                                            <div class="contact-form-input">
-                                              <label for="city_id{{$address->id}}">City</label>
-                                              <select name="city_id" id="city_id{{$address->id}}" class="select2 cities">
-                                                  <option value="{{$address->city_id}}">{{$address->city->name}}</option>
-                                              </select>
-                                            </div>
+                                            
+
                                           </div>
                                           <div class="contact-form__content-group">
                                               <div class="contact-form-input"> 
@@ -224,10 +215,19 @@
                         @enderror
                         <div class="contact-form__content-group location">
                           <div class="contact-form-input">
+                            <label for="city">City</label>
+                            <input type="text" name="city" placeholder="City" required />
+                          </div>
+                          @error('city')
+                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                          @enderror
+                          <div class="contact-form-input">
                             <label for="state_id">State</label>
                             <select name="state_id" id="state_id" class="select2 states">
                                 @foreach ($states as $state)
-                                  <option value="{{$state->id}}">{{$state->name}}</option> 
+                                  <option value="{{$state->id}}" @if($user->state_id == $state->id) selected @endif>{{$state->name}}</option> 
                                 @endforeach 
                             </select>
                           </div>
@@ -236,17 +236,7 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                           @enderror
-                          <div class="contact-form-input">
-                            <label for="password">City</label>
-                            <select name="city_id" id="city_id" class="select2 cities">
-                                <option value="90" selected>Somewhere</option>
-                            </select>
-                          </div>
-                          @error('city_id')
-                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                          @enderror
+                          
                         </div>
                         <div class="contact-form__content-group">
                             <div class="contact-form-input"> 

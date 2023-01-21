@@ -160,7 +160,10 @@ class User extends Authenticatable
         return $this->belongsTo(Shop::class);
     }
 
-
+    public function kyc(){
+        return $this->hasMany(Kyc::class);
+    }
+    
     public function idcard(){
         return $this->morphOne(Kyc::class,'verifiable')->where('type','idcard');
     }

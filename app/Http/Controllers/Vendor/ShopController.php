@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Models\Kyc;
 use App\Models\Bank;
-use App\Models\City;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\State;
@@ -97,7 +96,7 @@ class ShopController extends Controller
             $banner = 'public/uploads/'.time().'.'.$extension;
             $contents = file_get_contents($request->photo);
             Storage::put($banner, $contents);
-            $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
+            $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
             'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> 1]);
             
             return response()->json([
@@ -140,7 +139,7 @@ class ShopController extends Controller
                 $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
                 $request->file('photo')->storeAs('public/',$banner);
             }
-            $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone_prefix'=> cache('settings')['dialing_code'],'phone'=>$request->phone,'banner'=>$banner,
+            $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
             'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
             
             return request()->expectsJson()
@@ -290,7 +289,6 @@ class ShopController extends Controller
         $user = auth()->user();
         $banks = Bank::all();
         $states = State::all();
-        $cities = City::where('state_id',$shop->state_id)->get();
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
         return view('shop.settings',compact('user','shop','banks','states','cities','rates'));
     }
@@ -336,24 +334,7 @@ class ShopController extends Controller
         return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
     }
 
-    public function kyc(Shop $shop,Request $request){
-        // dd($request->all());
-        if(!$this->checkPin($request)['result']){
-            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-        }
-        if(!$request->idcard && !$request->addressproof && !$request->companydoc)
-        return redirect()->back()->with(['result'=> 0,'message'=> 'Nothing was uploaded']);
-        foreach(['idcard','addressproof','companydoc'] as $type){
-            if($request[$type] && $request->hasFile($type)){
-                if($shop[$type]) Storage::delete('public/'.$shop[$type]->document);
-                $doctype = explode('/',$request->file($type)->getClientMimeType())[0];
-                $document = 'uploads/'.time().'.'.$request->file($type)->getClientOriginalExtension();
-                $request->file($type)->storeAs('public/',$document);
-                $kyc = Kyc::updateOrCreate(['verifiable_id'=> $type == 'idcard'? $shop->user_id: $shop->id,'verifiable_type'=> $type == 'idcard'? 'App\Models\User': 'App\Models\Shop','type'=> $type],['doctype'=> $doctype,'document'=> $document,'reason'=> '']);
-            } 
-        }
-        return redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
-    }
+    
 
     
 

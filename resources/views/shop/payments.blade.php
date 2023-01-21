@@ -68,7 +68,7 @@
                                           </td>
                                           
                                           <td class="cart-table-item order-date align-middle">
-                                              <p class="font-body--lg-500" style="color:#00b207">{!!cache('settings')['currency_symbol']!!}{{ number_format($settlement->amount, 2)}}</p>
+                                              <p class="font-body--lg-500" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{ number_format($settlement->amount, 2)}}</p>
                                           </td>
                                           <td class="cart-table-item order-date align-middle">{{$settlement->order->id}}</td>
                                           <!-- Stock Status  -->

@@ -26,8 +26,12 @@ class KycObserver
      */
     public function updated(Kyc $kyc)
     {
+        if($kyc->isDirty('document')){
+            $kyc->status = 0;
+            $kyc->save();
+        }
         if($kyc->isDirty('reason') && $kyc->reason){
-            // $kyc->shop->notify(new KycRejectionNotification($kyc));
+            $kyc->shop->notify(new KycRejectionNotification($kyc));
         }
     }
 

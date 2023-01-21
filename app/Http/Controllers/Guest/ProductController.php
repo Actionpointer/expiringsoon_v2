@@ -88,8 +88,8 @@ class ProductController extends Controller
     }
 
     public function hotdeals(){
-        $state = $this->currentState();
-        $state_id = $state->id;
+
+        $state_id = session('locale')['state_id'];
         $categories = Category::orderBy('name','ASC')->take(8)->get();
         $advert_C = Advert::state($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
         $advert_D = Advert::state($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });

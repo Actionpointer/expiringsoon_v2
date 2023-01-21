@@ -74,11 +74,11 @@
                                     </td>
                                     <!-- Site Split  -->
                                     <td class="dashboard__order-history-table-item order-total"> 
-                                        <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($shop->orders->sum('total'), 0)}} </p>
+                                        <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($shop->orders->sum('total'), 0)}} </p>
                                     </td>
                                     <!-- Status -->
-                                    <td class="dashboard__order-history-table-item   order-status "> {!!cache('settings')['currency_symbol']!!} {{number_format($shop->settlements->sum('amount'),2)}}</td>
-                                    <td class="dashboard__order-history-table-item   order-status "> {!!cache('settings')['currency_symbol']!!} {{number_format($shop->wallet,2)}}</td>
+                                    <td class="dashboard__order-history-table-item   order-status "> {!!session('locale')['currency_symbol']!!} {{number_format($shop->settlements->sum('amount'),2)}}</td>
+                                    <td class="dashboard__order-history-table-item   order-status "> {!!session('locale')['currency_symbol']!!} {{number_format($shop->wallet,2)}}</td>
                                     <!-- Details page  -->
                                     <td class="dashboard__order-history-table-item   order-details "> 
                                         <a href="{{route('shop.show',$shop)}}">

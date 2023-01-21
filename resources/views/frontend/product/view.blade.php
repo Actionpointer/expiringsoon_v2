@@ -72,11 +72,11 @@
                         <div class="products__content-price">
                           @if($product->expire_at!='' && $product->expire_at->diffInDays(now()) < 90)
                             <h2 class="font-body--xxxl-500">
-                                <del class="font-body--xxl-400">{!!cache('settings')['currency_symbol']!!}{{number_format($product->price, 0)}}</del> 
-                                {!!cache('settings')['currency_symbol']!!}{{number_format($product->amount, 0)}}</h2>
+                                <del class="font-body--xxl-400">{!!session('locale')['currency_symbol']!!}{{number_format($product->price, 0)}}</del> 
+                                {!!session('locale')['currency_symbol']!!}{{number_format($product->amount, 0)}}</h2>
                             <span class="label sale-off">{{floor($product->discount)}}% off </span>
                           @else
-                            <h2 class="font-body--xxxl-500">{!!cache('settings')['currency_symbol']!!}{{number_format($product->price, 2)}}</h2>
+                            <h2 class="font-body--xxxl-500">{!!session('locale')['currency_symbol']!!}{{number_format($product->price, 2)}}</h2>
                           @endif
                         </div>
                     </div>
@@ -272,10 +272,10 @@
                                         <h6 class="font-body--md-400 product-title">{{$item->product}}</h6>
                                         <div class="cards-md__info-price">
                                         @if($item->expire_at!='' && $item->discount) 
-                                            <span class="font-body--lg-500">{!!cache('settings')['currency_symbol']!!}{{number_format($product->amount, 0)}}></span>
-                                            <del class="font-body--lg-400" style="color:#00b207">{!!cache('settings')['currency_symbol']!!}{{number_format($item->price, 0)}}></del>
+                                            <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($product->amount, 0)}}></span>
+                                            <del class="font-body--lg-400" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{number_format($item->price, 0)}}></del>
                                         @else 
-                                            <span class="font-body--lg-500">{!!cache('settings')['currency_symbol']!!}{{number_format($item->price, 0)}}></span>
+                                            <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($item->price, 0)}}></span>
                                         @endif
                                         </div>
                                         <ul class="d-flex" style="color:#888;font-size:12px">

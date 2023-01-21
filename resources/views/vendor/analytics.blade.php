@@ -66,7 +66,7 @@
                       <div style="float:left;margin-right:10px">
                           <p align="left" class="font-body--md-400 designation">Balance</p>
                           <div style="margin-top:-10px">
-                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!cache('settings')['currency_symbol']!!}{{number_format($user->shops->sum('wallet'), 2)}}</a>
+                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!session('locale')['currency_symbol']!!}{{number_format($user->shops->sum('wallet'), 2)}}</a>
                           </div>
                       </div>
                     </div>
@@ -134,11 +134,11 @@
                                     </td>
                                     <!-- Site Split  -->
                                     <td class="dashboard__order-history-table-item order-total"> 
-                                        <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($shop->orders->sum('total'), 0)}} </p>
+                                        <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($shop->orders->sum('total'), 0)}} </p>
                                     </td>
                                     <!-- Status -->
-                                    <td class="dashboard__order-history-table-item   order-status "> {!!cache('settings')['currency_symbol']!!} {{number_format($shop->settlements->sum('amount'),2)}}</td>
-                                    <td class="dashboard__order-history-table-item   order-status "> {!!cache('settings')['currency_symbol']!!} {{number_format($shop->wallet,2)}}</td>
+                                    <td class="dashboard__order-history-table-item   order-status "> {!!session('locale')['currency_symbol']!!} {{number_format($shop->settlements->sum('amount'),2)}}</td>
+                                    <td class="dashboard__order-history-table-item   order-status "> {!!session('locale')['currency_symbol']!!} {{number_format($shop->wallet,2)}}</td>
                                     <!-- Details page  -->
                                     <td class="dashboard__order-history-table-item   order-details "> 
                                         <a href="{{route('shop.show',$shop)}}">

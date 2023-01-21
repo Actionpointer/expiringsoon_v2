@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Models\Shop;
+use App\Models\State;
+use App\Models\Advert;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +18,7 @@ class ShopController extends Controller
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
         
-        $shops = Shop::active()->approved()->visible()->selling();
+        $shops = Shop::native()->active()->approved()->visible()->selling();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $shops = $shops->where('state_id',$state_id);

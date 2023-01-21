@@ -89,18 +89,18 @@
                                 <div class="dashboard__content-card-body">
                                     <form action="{{route('admin.settings')}}" method="post" id="global">@csrf
                                         <div class="contact-form__content">
-                                            <div class="contact-form-input">
+                                            {{-- <div class="contact-form-input">
                                                 <label for="country">Country</label>
                                                 <select name="country_id" id="countries" class="select2">
                                                     @foreach ($countries as $country)
-                                                        <option value="{{$country->id}}" @if(cache('settings')['country_id'] == $country->id) selected @endif>{{$country->name}}</option>
+                                                        <option value="{{$country->id}}" @if(session('locale')['country_id'] == $country->id) selected @endif>{{$country->name}}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
-                                            <div class="contact-form-input">
+                                            </div> --}}
+                                            {{-- <div class="contact-form-input">
                                                 <label for="vat">VAT %</label>
                                                 <input type="text" name="vat" placeholder="Set VAT Percentage" value="{{$settings->firstWhere('name','vat')->value}}" />
-                                            </div>
+                                            </div> --}}
 
                                             <div class="contact-form-input">
                                                 <label for="gateway">Payment Gateway</label>
@@ -122,7 +122,7 @@
                                             </div>
                                             
                                             <div class="contact-form-btn">
-                                                <button class="button button--md submit" type="button"> Save </button>
+                                                <button class="button button--md askpin" type="button"> Save </button>
                                             </div>
                                         </div>
                                     </form>
@@ -208,7 +208,7 @@
                                             </div>
 
                                             <div class="contact-form-btn">
-                                                <button class="button button--md submit" type="button"> Save
+                                                <button class="button button--md askpin" type="button"> Save
                                                 </button>
                                             </div>
                                         </div>
@@ -308,7 +308,7 @@
                                                        
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md submit" type="button"> Save
+                                                        <button class="button button--md askpin" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -358,7 +358,7 @@
                                                         </tr>
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md submit" type="button"> Save
+                                                        <button class="button button--md askpin" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -454,7 +454,7 @@
                                                         
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md submit" type="button"> Save
+                                                        <button class="button button--md askpin" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -575,7 +575,7 @@
             
                                                     </table>
                                                     <div class="contact-form-btn">
-                                                        <button class="button button--md submit" type="button"> Save
+                                                        <button class="button button--md askpin" type="button"> Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -650,7 +650,7 @@
                                             </div>
                                         </div>
                                         <div class="contact-form-btn">
-                                            <button class="button button--md submit" type="button"> + Create Admin </button>
+                                            <button class="button button--md askpin" type="button"> + Create Admin </button>
                                         </div>
                                     </div>
                                 </form>
@@ -733,7 +733,7 @@
                                                                 
                                                                 
                                                                 <div class="contact-form-btn">
-                                                                    <button class="button button--md submit" type="button"> Update Admin </button>
+                                                                    <button class="button button--md askpin" type="button"> Update Admin </button>
                                                                     <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='none'"> Cancel </button>
                                                                 </div>
                                                             </div>
@@ -783,8 +783,8 @@
                                                             6 Months: {{$plan->months_6}} <br> 1 Year: {{$plan->months_12}}
                                                         </td>
                                                         <td>
-                                                            @if($plan->commission_percentage){{$plan->commission_percentage}}% @endif @if($plan->commission_percentage && $plan->commission_fixed) + @endif @if($plan->commission_fixed) {!!cache('settings')['currency_symbol']!!}{{$plan->commission_fixed}} @endif
-                                                            <!-- {{$plan->commission_percentage}}% + {!!cache('settings')['currency_symbol']!!}{{$plan->commission_fixed}} -->
+                                                            @if($plan->commission_percentage){{$plan->commission_percentage}}% @endif @if($plan->commission_percentage && $plan->commission_fixed) + @endif @if($plan->commission_fixed) {!!session('locale')['currency_symbol']!!}{{$plan->commission_fixed}} @endif
+                                                            <!-- {{$plan->commission_percentage}}% + {!!session('locale')['currency_symbol']!!}{{$plan->commission_fixed}} -->
                                                         
                                                         </td>
                                                         <td>
@@ -882,7 +882,7 @@
                                                                     </div>
                                                                     
                                                                     <div class="contact-form-btn">
-                                                                        <button class="button button--md submit" type="button"> Update Plan </button>
+                                                                        <button class="button button--md askpin" type="button"> Update Plan </button>
                                                                         <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('planedit'+{{$plan->id}}).style.display='none'"> Cancel </button>
                                                                     </div>
                                                                 </div>
@@ -980,7 +980,7 @@
                                                 </div>
                                                 
                                                 <div class="contact-form-btn">
-                                                    <button class="button button--md submit" type="button"> Create Plan </button>
+                                                    <button class="button button--md askpin" type="button"> Create Plan </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -1037,7 +1037,7 @@
                                                 
                                             </tbody></table>
                                             <div class="contact-form-btn">
-                                                <button class="button button--md submit" type="button"> Save
+                                                <button class="button button--md askpin" type="button"> Save
                                                 </button>
                                             </div>
                                         </div>
@@ -1089,7 +1089,7 @@
                                         </div>
 
                                         <div class="contact-form-btn">
-                                            <button class="button button--md submit" type="button">
+                                            <button class="button button--md askpin" type="button">
                                             + Add Shipping Rate
                                             </button>
                                         </div>
@@ -1174,7 +1174,7 @@
                                                                     </div>
                                                             
                                                                     <div class="contact-form-btn">
-                                                                        <button class="button button--md submit" type="button">
+                                                                        <button class="button button--md askpin" type="button">
                                                                             Update Shipping Rate
                                                                         </button>
                                                                         <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>

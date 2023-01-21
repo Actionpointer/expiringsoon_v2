@@ -75,7 +75,7 @@
                                     </td>
                                     <!-- Site Split  -->
                                     <td class="dashboard__order-history-table-item order-total"> 
-                                        <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($shop->orders->sum('total'), 0)}} </p>
+                                        <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($shop->orders->sum('total'), 0)}} </p>
                                     </td>
                                     <!-- Status -->
                                     <td class="dashboard__order-history-table-item   order-status "> unavailable</td>

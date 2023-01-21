@@ -48,14 +48,13 @@ class ApiController extends Controller
             }
 
             $user = User::create([
-                'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'fname' => $request->fname,
                 'lname' => $request->lname,
                 'phone' => $request->phone,
-                'phone_prefix' => cache('settings')['dialing_code'],
-                'state_id' => $this->currentState()->id,
+                'country_id' => session('locale')['country_id'],
+                'state_id' => session('locale')['state_id'],
                 'role' => $request->role ?? 'shopper',
             ]);
 

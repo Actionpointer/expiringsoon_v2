@@ -41,7 +41,7 @@
             <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
                 <div class="dashboard__order-history-title" style="margin:auto;width:95%;border-bottom:1px solid #ddd;margin-bottom:10px">
                 <p class="font-body--xl-500">Shipping History</p>
-                <a href="#" class="font-body--lg-500">{!!cache('settings')['currency_symbol']!!}{{number_format($shippings->count(), 2)}} Total</a>
+                <a href="#" class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($shippings->count(), 2)}} Total</a>
                 </div>
                 <div class="container">
                 <div style="margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:10px">
@@ -73,7 +73,7 @@
                             </td>
                             <!-- Price  -->
                             <td class="cart-table-item order-date align-middle">
-                            <p class="font-body--lg-500" style="color:#000">{!!cache('settings')['currency_symbol']!!}{{number_format($shipping->amount, 2)}}</p>
+                            <p class="font-body--lg-500" style="color:#000">{!!session('locale')['currency_symbol']!!}{{number_format($shipping->amount, 2)}}</p>
                             </td>
                             <!-- Stock Status  -->
                             <td class="cart-table-item order-date align-middle">

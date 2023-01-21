@@ -12,7 +12,7 @@ trait FlutterwaveTrait
         $response = Curl::to('https://api.flutterwave.com/v3/payments')
         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
         ->withData( array('customer' => ['email'=> $payment->user->email,'phonenumber'=> $payment->user->phone,'name'=> $payment->user->fname.' '.$payment->user->lname],
-                        'tx_ref'=> $payment->reference,"currency" => cache('settings')['currency_iso'],"payment_options"=>"card,account,ussd",
+                        'tx_ref'=> $payment->reference,"currency" => session('locale')['currency_iso'],"payment_options"=>"card,account,ussd",
                         "redirect_url"=> route('payment.callback'),'amount'=> $payment->amount,
                         "customizations"=> [
                             "title" => "Expiring Soon",
@@ -73,7 +73,7 @@ trait FlutterwaveTrait
     }
 
     protected function payoutFlutterWave(Payout $payout){
-        $currency = cache('settings')['currency_iso'];
+        $currency = session('locale')['currency_iso'];
         
         $response = Curl::to('https://api.flutterwave.com/v3/transfers')
         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))

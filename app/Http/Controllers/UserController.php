@@ -12,14 +12,13 @@ use Illuminate\Http\Request;
 use App\Rules\OtpValidateRule;
 use App\Models\OneTimePassword;
 use Illuminate\Validation\Rule;
-use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    use SecurityTrait;
+    
 
     public function __construct(){
         $this->middleware('auth:sanctum');
@@ -28,7 +27,7 @@ class UserController extends Controller
     public function profile(){
         $user = auth()->user();
         $banks = Bank::all();
-        $states = State::all();
+        $states = State::where('country_id',$user->country_id)->get();
         $countries = Country::all();
         return view('profile',compact('user','banks','states','countries'));
     }
@@ -40,15 +39,16 @@ class UserController extends Controller
             'fname' => 'nullable|string',
             'lname' => 'nullable|string',
             'phone' => ['nullable','string',Rule::unique('users')->ignore($user)],
-            'photo' => 'nullable|max:1024',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'state_id' => 'nullable|numeric',
+        ],[
+            'photo.max' => 'The image is too heavy. Standard size is 2mb',
         ]);
         if ($validator->fails()) {
             return request()->expectsJson() ? 
             response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
             redirect()->back()->withErrors($validator)->withInput();
         }
-
         if($request->fname) $user->fname = $request->fname;
         if($request->lname) $user->lname = $request->lname;
         if($request->state_id) $user->state_id = $request->state_id;
@@ -99,36 +99,7 @@ class UserController extends Controller
         }
     }
 
-    public function generate_otp(){
-        $user = auth()->user();
-        $otp = $this->generateOTP($user);
-        $result = $this->sendOTP($user,$otp->code);
-        return response()->json(['status'=> true ,'data'=> $result['result'],'message'=> $result['message']],200);
-    }
-
-    public function pin(Request $request){
-        $user = auth()->user();
-        $validator = Validator::make($request->all(), [
-            'pin' => 'required|string',
-            'otp' => ['required',new OtpValidateRule($request->otp)]
-        ]);
-        if ($validator->fails()) {
-            return request()->expectsJson() ? 
-            response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
-            redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput()->with(['result'=> '0','message'=> 'PIN operation was not successful!']);
-        }
-        
-        $user->pin = Hash::make($request->pin);
-        $user->save();
-        return request()->expectsJson() ? 
-            response()->json([
-                'status' => true,
-                'message' => 'Pin operation was successfully completed',
-            ], 200) :
-             redirect()->back()->with(['result' => '1','message'=>'Pin operation was successfully completed']); //with success
-    }
+    
 
     public function address(Request $request){
         $user= auth()->user();

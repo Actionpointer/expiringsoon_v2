@@ -72,7 +72,7 @@
                                     {{$shop->user->name}}
                                 </td>
                                 <td class="cart-table-item order-date align-middle">
-                                  <p class="">{!!cache('settings')['currency_symbol']!!}{{ number_format($shop->orders->sum('subtotal'), 2)}}</p>
+                                  <p class="">{!!session('locale')['currency_symbol']!!}{{ number_format($shop->orders->sum('subtotal'), 2)}}</p>
                                 </td>
                                 <!-- Stock Status  -->
                                 <td class="cart-table-item stock-status order-date align-middle">

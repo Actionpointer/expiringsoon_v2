@@ -48,7 +48,7 @@ class OrderController extends Controller
 
     public function transactions(){
         $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
-        return view('payments',compact('payments'));
+        return view('customer.payments',compact('payments'));
     }
 
     public function checkout(Request $request){

@@ -14,7 +14,7 @@ trait PaystackTrait
       $response = Curl::to('https://api.paystack.co/transaction/initialize')
       ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
       ->withHeader('Content-Type: application/json')
-      ->withData( array('email'=> $payment->user->email,'amount'=> $payment->amount*100,'currency'=> cache('settings')['currency_iso'],
+      ->withData( array('email'=> $payment->user->email,'amount'=> $payment->amount*100,'currency'=> session('locale')['currency_iso'],
                       'reference'=> $payment->reference,"callback_url"=> route('payment.callback') ) )
       ->asJson()                
       ->post();
@@ -33,7 +33,7 @@ trait PaystackTrait
 
     public function payoutPaystack(Payout $payout){
         $user = auth()->user();
-        $currency = cache('settings')['currency_iso'];
+        $currency = session('locale')['currency_iso'];
         $response = Curl::to('https://api.paystack.co/transaction/initialize')
         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
         ->withHeader('Content-Type: application/json')

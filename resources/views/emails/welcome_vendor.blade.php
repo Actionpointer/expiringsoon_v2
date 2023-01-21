@@ -9,7 +9,7 @@
 	<!--[if !mso]><!-->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<!--<![endif]-->
-	<title></title>
+	<title>Welcone</title>
 	<!--[if !mso]><!-->
 	<!--<![endif]-->
 	<style type="text/css">
@@ -184,7 +184,7 @@
 											<!--<![endif]-->
 											<div class="img-container left fixedwidth" align="left" style="padding-right: 0px;padding-left: 25px;">
 												<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 25px;" align="left"><![endif]-->
-												<div style="font-size:1px;line-height:5px">&nbsp;</div><img class="left fixedwidth" border="0" src="https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1826/joblogo.png" alt="Alternate text" title="Alternate text" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 100%; max-width: 150px; display: block;" width="150">
+												<div style="font-size:1px;line-height:5px">&nbsp;</div><img class="left fixedwidth" border="0" src="{{asset('src/images/logo.png')}}" alt="Alternate text" title="Alternate text" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 100%; max-width: 150px; display: block;" width="150">
 												<!--[if mso]></td></tr></table><![endif]-->
 											</div>
 											<!--[if (!mso)&(!IE)]><!-->
@@ -224,7 +224,7 @@
 											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 25px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, sans-serif"><![endif]-->
 											<div style="color:#61697a;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:25px;">
 												<div style="line-height: 1.2; font-size: 12px; color: #61697a; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 14px;">
-													<p style="font-size: 14px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 17px; margin: 0;">Hi Mike,</p>
+													<p style="font-size: 14px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 17px; margin: 0;">Hi {{$user->name}},</p>
 												</div>
 											</div>
 											<!--[if mso]></td></tr></table><![endif]-->

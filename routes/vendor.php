@@ -6,13 +6,13 @@ use App\Http\Controllers\Vendor\AdvertController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\FeatureController;
 use App\Http\Controllers\Vendor\SubscriptionController;
-use App\Http\Controllers\Vendor\UserController;
+use App\Http\Controllers\Vendor\StaffController;
 
 Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],function () {
-    Route::get('get-started',[UserController::class, 'orientation'])->name('orientation');
-    Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::get('verification',[UserController::class,'verification'])->name('verification');
-
+    Route::get('get-started',[StaffController::class, 'orientation'])->name('orientation');
+    Route::get('dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
+    Route::get('verification',[StaffController::class,'verification'])->name('verification');
+    Route::post('kyc',[StaffController::class,'kyc'])->name('kyc');
     Route::get('shops', [ShopController::class, 'index'])->name('shops');
     Route::get('shop/create', [ShopController::class, 'create'])->name('shop.create');
     Route::post('shop/store', [ShopController::class, 'store'])->name('shop.store');    
@@ -27,8 +27,8 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
      Route::post('subscription/features', [FeatureController::class, 'subscribe'])->name('feature.subscribe');   
      Route::post('feature/cancel-renewal', [FeatureController::class, 'cancel_renewal'])->name('feature.cancel_renew');   
      
-    Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
-    Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
+    Route::get('generate/otp',[StaffController::class, 'generate_otp'])->name('generate_otp');
+    Route::post('edit-pin',[StaffController::class, 'pin'])->name('edit-pin');
 
     Route::post('applycoupon',[PaymentController::class, 'apply'])->name('applycoupon');
     Route::get('transactions',[PaymentController::class,'index'])->name('payments');

@@ -6,24 +6,36 @@ use App\Models\Bank;
 use App\Models\Shop;
 use App\Models\Payout;
 use App\Models\Account;
-use App\Models\Setting;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
-use App\Events\DisbursePayout;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\VendorPaymentResource;
 
 class PaymentController extends Controller
 {
     use PayoutTrait;
+
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('auth:sanctum');
     }
 
-    //vendor
-    public function index(Shop $shop){
+    //vendor payments to us
+    public function index(){
+        $user = auth()->user();
+        $payments = $user->payments->where('status','success');
+        return request()->expectsJson() ?  
+        response()->json([
+            'status' => true,
+            'message' => $payments->count() ? 'Payments retrieved Successfully':'No Payment retrieved',
+            'data' => VendorPaymentResource::collection($payments),
+            'count' => $payments->count()
+        ], 200) : view('vendor.payments',compact('payments'));
+    }
+    //our payouts to shops
+    public function payouts(Shop $shop){
         $banks = Bank::all();
         return view('shop.payouts',compact('shop','banks'));
     }
@@ -31,8 +43,8 @@ class PaymentController extends Controller
     public function bank_info(Shop $shop,Request $request){
         // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'bvn' => Rule::requiredIf(cache('settings')['country_iso'] =='NG'),'string','size:11',
-            'branch_id' => Rule::requiredIf(cache('settings')['country_iso'] =='GH'),'string',
+            'bvn' => [Rule::requiredIf(session('locale')['country_iso'] =='NG'),'string','size:11'],
+            'branch_id' => [Rule::requiredIf(session('locale')['country_iso'] =='GH'),'string'],
             'bank_id' => 'required|string',
             'account_number' => 'required|string'
         ]);

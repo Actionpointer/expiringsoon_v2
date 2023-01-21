@@ -1249,10 +1249,11 @@ $('#checkbox_master').change(function() {
 })
 
 //20. Pin validation
-$('.submit').on('click',function(){
+$('.askpin').on('click',function(){
   window.submittedform = $(this).closest('form');
  $('#pinModal').modal('show')
 })
+
 $('#pinsubmit').on('click',function(){
  let pin = $(this).closest('.modal-body').find('#pin');
  if(pin.val() != ''){

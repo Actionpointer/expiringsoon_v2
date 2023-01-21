@@ -3,9 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Subscription;
-use App\Notifications\SubscriptionPurchasedNotification;
-use App\Notifications\SubscriptionRenewalCancelNotification;
-use App\Notifications\SubscriptionRenewalNotification;
+use App\Notifications\SubscriptionStatusNotification;
+
 
 class SubscriptionObserver
 {
@@ -32,15 +31,13 @@ class SubscriptionObserver
             // if($subscription->created_at->diffInMonths(now()) > 1){
             if($subscription->start_at->diffInHours($subscription->updated_at) > 24){
                 //it was renewed
-                $subscription->user->notify(new SubscriptionRenewalNotification($subscription));
+                $subscription->user->notify(new SubscriptionStatusNotification($subscription));
                 
-            }else{
-                $subscription->user->notify(new SubscriptionPurchasedNotification($subscription));
             }
             
         }
         if($subscription->isDirty('auto_renew') && !$subscription->auto_renew){
-            $subscription->user->notify(new SubscriptionRenewalCancelNotification($subscription));
+            $subscription->user->notify(new SubscriptionStatusNotification($subscription));
         }
     }
 

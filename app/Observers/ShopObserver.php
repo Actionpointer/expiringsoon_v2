@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\Shop;
 use App\Events\DeleteShop;
 use App\Notifications\ShopStatusNotification;
-use App\Notifications\ShopWelcomeNotification;
+
 
 class ShopObserver
 {
@@ -22,7 +22,6 @@ class ShopObserver
         $shop->approved = true;
         $shop->status = $shop->user->max_shops > $shop->user->total_shops ? true:false;
         $shop->save();
-        $shop->notify(new ShopWelcomeNotification);
     }
 
     /**
@@ -60,7 +59,7 @@ class ShopObserver
     public function deleting(Shop $shop)
     {
         $shop->user->notify(new ShopStatusNotification('deleted'));
-        event(new DeleteShop($shop));
+        event(new DeleteShop($shop->user));
     }
 
     public function deleted(Shop $shop){

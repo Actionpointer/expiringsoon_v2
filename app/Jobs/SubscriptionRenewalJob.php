@@ -7,7 +7,6 @@ use Illuminate\Bus\Queueable;
 use App\Events\RenewSubscription;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Notifications\InvoiceNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 

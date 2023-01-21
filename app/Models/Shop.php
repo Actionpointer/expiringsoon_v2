@@ -61,6 +61,9 @@ class Shop extends Model
     public function getImageAttribute(){
         return $this->banner ? config('app.url')."/storage/$this->banner":null;   
     }
+    public function scopeNative($query){
+        return $query->where('country_id',session('locale')['country_id']);
+    }
     public function scopeApproved($query){
         return $query->where('approved',true);
     }
@@ -87,9 +90,7 @@ class Shop extends Model
     public function kyc(){
         return $this->MorphMany(Kyc::class,'verifiable');
     }
-    public function idcard(){
-        return $this->user->morphOne(Kyc::class,'verifiable')->where('type','idcard');
-    }
+    
     public function addressproof(){
         return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
     }

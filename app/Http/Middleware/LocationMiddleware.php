@@ -25,29 +25,21 @@ class LocationMiddleware
             $ip = request()->ip() == '::1'|| request()->ip() == '127.0.0.1'? '197.211.58.12' : request()->ip();
             //check location table first
             if($location = $this->getLocation($ip)){
+                
                 session(['locale'=> $this->getLocale($location)]);
             }else{
                 //check outside
                 $result = Curl::to('http://www.geoplugin.net/php.gp?ip='.$ip)->get();
                 $geo_location =  unserialize($result);
-                if($geo_location && $geo_location['geoplugin_countryCode']){
-                    //save location
-                    $location = $this->saveLocation($geo_location);
-                    //store session
-                    session(['locale'=> $this->getLocale($location)]);
+                $location = $this->saveLocation($geo_location);
+                if($geo_location &&  $geo_location['geoplugin_countryCode']){
+                    session(['locale'=> $this->getLocale($location)]);   
+                    
                 }else{
-                    //store fake place in session
-                    $ip = '197.211.58.12';
-                    $location = $this->getLocation($ip);
-                    session(['locale'=> $this->getLocale($location)]);
-                }  
-                
+                    session(['locale'=> $this->getLocale()]);      
+                }
             }
-        }
-
-            
-            
-            
+        }    
         return $next($request);
     }
 }

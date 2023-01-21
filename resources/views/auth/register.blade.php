@@ -56,7 +56,7 @@
         @enderror
 
         <div class="form-input">
-          <input type="tel" name="phone" id="phone" placeholder="Phone number in {{cache('settings')['country']}}local format. e.g 08023456789" required />
+          <input type="tel" name="phone" id="phone" placeholder="Phone number in {{session('locale')['country_name']}}local format. e.g 08023456789" required />
         </div>
         @error('phone')
           <span class="invalid-feedback d-block mb-4" role="alert">

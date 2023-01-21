@@ -53,19 +53,19 @@
                         <div style="float:left;padding-right:20px;margin-right:20px;border-right:2px solid #e0dfdf">
                             <p align="left" class="font-body--md-400 designation">Total Earnings</p>
                                 <div style="margin-top:-10px">
-                                    <a href="{{route('shop.order.list',$shop)}}" class="edit font-body--lg-500" style="font-size:20px">{!!cache('settings')['currency_symbol']!!}{{number_format($shop->settlements->where('status',true)->sum('amount'), 2)}}</a>
+                                    <a href="{{route('shop.order.list',$shop)}}" class="edit font-body--lg-500" style="font-size:20px">{!!session('locale')['currency_symbol']!!}{{number_format($shop->settlements->where('status',true)->sum('amount'), 2)}}</a>
                                 </div>
                         </div>
                         <div style="float:left;margin-right:20px;padding-right:20px;border-right:2px solid #e0dfdf">
                             <p align="left" class="font-body--md-400 designation">Balance</p>
                             <div style="margin-top:-10px">
-                                <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!cache('settings')['currency_symbol']!!}{{number_format($shop->wallet, 2)}}</a>
+                                <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!session('locale')['currency_symbol']!!}{{number_format($shop->wallet, 2)}}</a>
                             </div>
                         </div>
                         <div style="float:left;margin-right:10px">
                           <p align="left" class="font-body--md-400 designation">Unavailable Balance</p>
                           <div style="margin-top:-10px">
-                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!cache('settings')['currency_symbol']!!}{{number_format($shop->settlements->where('status',false)->sum('amount'), 2)}}</a>
+                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!session('locale')['currency_symbol']!!}{{number_format($shop->settlements->where('status',false)->sum('amount'), 2)}}</a>
                           </div>
                       </div>
                     </div>
@@ -134,7 +134,7 @@
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Orders:</h5>
-                        <p class="font-body--md-500">{!!cache('settings')['currency_symbol']!!} {{number_format($shop->orders->where('status','!=','new')->sum('subtotal'), 2)}}</p>
+                        <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($shop->orders->where('status','!=','new')->sum('subtotal'), 2)}}</p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Products:</h5>
@@ -143,7 +143,7 @@
                       
                       {{-- <div class="dashboard__totalpayment-card-body-item total" >
                         <h5 class="font-body--xl-400">Total:</h5>
-                        <p class="font-body--xl-500">{!!cache('settings')['currency_symbol']!!} {{number_format($order->total, 2)}}</p>
+                        <p class="font-body--xl-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->total, 2)}}</p>
                       </div> --}}
                     </div>
                   </div>
@@ -199,7 +199,7 @@
                                         </td>
                                         <!-- Vendor Split  -->
                                         <td class="dashboard__order-history-table-item order-total "> 
-                                            <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($payout->amount, 0)}} 
+                                            <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($payout->amount, 0)}} 
                                             </p>
                                         </td>
                                         
@@ -254,7 +254,7 @@
                                       <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
                                       <!-- Total  -->
                                       <td class="   dashboard__order-history-table-item   order-total "> 
-                                          <p class="order-total-price">   {!!cache('settings')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
+                                          <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
                                       </td>
                                       <!-- Status -->
                                       <td class="dashboard__order-history-table-item   order-status "> {{$order->status}}</td>
