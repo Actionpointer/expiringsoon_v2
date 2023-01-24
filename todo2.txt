@@ -29,7 +29,6 @@ customer does not raise query xdays after delivery, change order to completed
 12. cron job for running jobs 
 
 13. subscriptions
-if user is downgrading, show the impact of the plan to the user.
 if user wants to be restored to the previous existing plan, make it possible... but no refund
 on subscription expiry, change all his shop status to false, and all his product status to false.. leave only the number allocated by free
 if user does not have subscription[
