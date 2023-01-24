@@ -28,7 +28,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable,Sluggable,HasApiTokens;
 
     protected $fillable = [
-        'slug', 'fname','lname','email','shop_id','password','phone_prefix','phone','country_id','role','state_id','status'
+        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role','state_id','status'
     ];
 
     protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];
@@ -64,7 +64,7 @@ class User extends Authenticatable
     }
     
     public function getMobileAttribute(){
-        return $this->phone_prefix.intval($this->phone);   
+        return $this->country->dial.intval($this->phone);   
     }
     public function getImageAttribute(){
         return $this->pic ? config('app.url')."/storage/$this->pic":null;  

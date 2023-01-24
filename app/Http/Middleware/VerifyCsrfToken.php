@@ -15,8 +15,5 @@ class VerifyCsrfToken extends Middleware
         '/payout/callback',
         'webhook',
         'api/webhook',
-        
-        'webhooks-test',
-        'api/webhooks-test'
     ];
 }

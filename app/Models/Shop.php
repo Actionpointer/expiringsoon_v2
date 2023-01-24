@@ -27,7 +27,7 @@ class Shop extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','user_id','email','phone','phone_prefix','banner','address','state_id','city_id','published','status'];
+    protected $fillable = ['name','slug','user_id','email','phone','banner','address','state_id','city_id','published','status'];
     protected $appends = ['image','number_of_products'];
 
     public static function boot()
@@ -53,7 +53,7 @@ class Shop extends Model
         return 'slug';
     }
     public function getMobileAttribute(){
-        return $this->phone_prefix.intval($this->phone);   
+        return $this->country->dial.intval($this->phone);   
     }
     public function getNumberOfProductsAttribute(){
         return $this->products->count();   

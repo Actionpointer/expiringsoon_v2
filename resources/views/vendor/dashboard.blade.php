@@ -68,13 +68,13 @@
                                   <p>Subscription will auto-renew on ({{$user->subscription->end_at->format('d-M-Y')}}) | 
                                   <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
                               </form> 
-                              <form class="" action="{{route('plans.subscribe')}}" method="POST"> @csrf 
+                              <form class="" action="{{route('vendor.plans.subscribe')}}" method="POST"> @csrf 
                                 <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
                                 <button type="submit"><u>Renew Now </u></button>
                               </form>
                             @else
 
-                              <form class="" action="{{route('plans.subscribe')}}" method="POST"> @csrf 
+                              <form class="" action="{{route('vendor.plans.subscribe')}}" method="POST"> @csrf 
                                 <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
                                 <p>Subscription will expire on {{$user->subscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p> 
                                 <button type="submit"><u>Renew Now </u></button>
@@ -180,7 +180,7 @@
                       </div> --}}
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Ads Running:</h5>
-                        <p class="font-body--md-500">{{$user->adverts->where('advertable_type','App\Models\Shop')->count()}}</p>
+                        <p class="font-body--md-500">{{$user->adverts->where('advertable_type','App\Models\Shop')->where('status',true)->count()}}</p>
                       </div>
                       
                       
@@ -217,7 +217,7 @@
                       </div> --}}
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Ads Running:</h5>
-                        <p class="font-body--md-500">{{$user->adverts->where('advertable_type','App\Models\Product')->count()}}</p>
+                        <p class="font-body--md-500">{{$user->adverts->where('advertable_type','App\Models\Product')->where('status',true)->count()}}</p>
                       </div>
                       
                       
