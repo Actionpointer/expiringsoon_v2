@@ -37,7 +37,7 @@ class PaymentController extends Controller
     //our payouts to shops
     public function payouts(Shop $shop){
         $banks = Bank::all();
-        return view('shop.payouts',compact('shop','banks'));
+        return view('vendor.shop.payouts',compact('shop','banks'));
     }
 
     public function bank_info(Shop $shop,Request $request){
@@ -109,7 +109,7 @@ class PaymentController extends Controller
 
     public function shop_index(Shop $shop){
         $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
-        return view('shop.payments',compact('shop','settlements'));
+        return view('vendor.shop.payments',compact('shop','settlements'));
     }
 
     public function apply(Request $request){

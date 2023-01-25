@@ -35,6 +35,7 @@ class OrderController extends Controller
         $user = auth()->user();
         return view('customer.orders.list',compact('user'));
     }
+    
     public function show(Order $order){
         $user = auth()->user();
         OrderMessage::where('order_id',$order->id)->where('user_id',$user->id)->where('receiver',$user->role)->whereNull('read_at')->update(['read_at'=>now()]);

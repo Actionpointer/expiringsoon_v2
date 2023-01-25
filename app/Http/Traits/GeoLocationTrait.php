@@ -25,6 +25,7 @@ trait GeoLocationTrait
             'state_id'=> $location->state->id,
             'dial'=> $location->country->dial,
             'currency_id'=> $location->country->currency_id,
+            'currency_iso'=> $location->country->currency->iso,
             'currency_name'=> $location->country->currency->name,
             'currency_symbol'=> $location->country->currency->symbol,  
         ];

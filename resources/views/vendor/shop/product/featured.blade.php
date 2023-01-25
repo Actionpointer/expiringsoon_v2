@@ -27,7 +27,7 @@
                 <span> > </span>
               </a>
             </li>
-            <li class="active"><a href="{{route('shop.product.list',$shop)}}">My Products</a></li>
+            <li class="active"><a href="{{route('vendor.shop.product.list',$shop)}}">My Products</a></li>
           </ul>
         </div>
       </div>
@@ -48,7 +48,7 @@
             <div class="dashboard__order-history" style="padding:10px;font-size:13px">
               <div class="dashboard__order-history-title d-flex justify-content-between">
                 <h2 class="font-body--xl-500 ">My Products</h2>
-                <a href="{{route('shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
+                <a href="{{route('vendor.shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
               </div>
               <div class="dashboard__order-history-table">
                 <div class="table-responsive">
@@ -107,7 +107,7 @@
                             </td>
                             <td class="cart-table-item add-cart align-middle">
                               <div class="add-cart__wrapper">
-                                <a href="{{route('shop.product.edit',[$shop,$product])}}" class="cart-table__product-item">
+                                <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="cart-table__product-item">
                                   <span class="iconify" style="color:#00b207" data-icon="eva:edit-2-outline" data-width="20" data-height="20">
                                 </a>
                               </div>

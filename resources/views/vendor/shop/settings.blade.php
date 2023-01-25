@@ -177,7 +177,7 @@
                                 <h5 class="font-body--xl-500">Discounts</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                  <form method="post" id="discount_form" action="{{route('shop.discounts',$shop)}}">@csrf
+                                  <form method="post" id="discount_form" action="{{route('vendor.shop.discounts',$shop)}}">@csrf
                                     <div class="table-responsive">
                                       <table class="table">
                                         <tr>
@@ -256,7 +256,7 @@
                               </div>
                               <div class="dashboard__content-card-body">
                                 <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-bottom:10px;font-size:13px">Upload any of the following documents so we can authenticate your account</div>
-                                <form method="post" enctype="multipart/form-data" id="uploadDoc" action="{{route('shop.kyc',$shop)}}">@csrf
+                                <form method="post" enctype="multipart/form-data" id="uploadDoc" action="{{route('vendor.shop.kyc',$shop)}}">@csrf
                                   <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
                                     @if($shop->idcard)
                                       <div class="docimg">
@@ -412,7 +412,7 @@
                                 <h5 class="font-body--xl-500">Manage Staff</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" action="{{route('shop.staff',$shop)}}" id="admin" class="mb-3">@csrf
+                                <form method="post" action="{{route('vendor.shop.staff',$shop)}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
                                       <div class="contact-form__content-group">
                                           <div class="contact-form-input">
@@ -471,7 +471,7 @@
                                             <td>
                                                 @if($user->id != Auth::id()) 
                                                 <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit</a> | 
-                                                <form class="d-inline" action="{{route('shop.staff',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                <form class="d-inline" action="{{route('vendor.shop.staff',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
                                                   <input type="hidden" name="user_id" value="{{$user->id}}">
                                                   <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
                                                 </form>
@@ -481,7 +481,7 @@
                                             @if($user->id != Auth::id())
                                             <tr>
                                               <td colspan="6" style="border:none;padding:0px">
-                                                  <form action="{{route('shop.staff',$shop)}}" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                  <form action="{{route('vendor.shop.staff',$shop)}}" method="post" id="adminedit{{$user->id}}" style="display:none">
                                                       @csrf 
                                                       <input type="hidden" name="user_id" value="{{$user->id}}">
                                                       <div class="contact-form__content">
@@ -538,7 +538,7 @@
                                 <h5 class="font-body--xl-500">Add Destination</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" id="editcategory" action="{{route('shop.shipping',$shop)}}" >@csrf
+                                <form method="post" id="editcategory" action="{{route('vendor.shop.shipping',$shop)}}" >@csrf
                                     <div class="contact-form__content">
                 
                                     <div class="contact-form__content-group">
@@ -599,7 +599,7 @@
                                             <td> 
                                                 <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit</a> | 
                                                 
-                                                <form class="d-inline" action="{{route('shop.shipping',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete shipping rate?');">@csrf
+                                                <form class="d-inline" action="{{route('vendor.shop.shipping',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete shipping rate?');">@csrf
                                                   <input type="hidden" name="rate_id" value="{{$rate->id}}">
                                                   <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
                                                 </form>
@@ -612,7 +612,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                   </div>
                                                   <div class="modal-body">
-                                                      <form action="{{route('shop.shipping',$shop)}}" method="post" id="rateedit{{$rate->id}}">
+                                                      <form action="{{route('vendor.shop.shipping',$shop)}}" method="post" id="rateedit{{$rate->id}}">
                                                           @csrf 
                                                           <input type="hidden" name="rate_id" value="{{$rate->id}}">
                                                           <div class="contact-form__content my-3">

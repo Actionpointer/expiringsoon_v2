@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Models\Kyc;
 use App\Models\Bank;
+use App\Models\City;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\State;
@@ -43,7 +44,7 @@ class ShopController extends Controller
     }
 
     public function show(Shop $shop){
-        return view('shop.dashboard',$shop);
+        return view('vendor.shop.dashboard',$shop);
     }
 
     public function details($shop_id){
@@ -147,7 +148,7 @@ class ShopController extends Controller
                     'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,
                     'products'=> $shop->products->count() ,
                     'create_shops_remaining'=> $shop->user->max_shops]], 200) :
-                    redirect()->route('shop.settings',$shop);
+                    redirect()->route('vendor.shop.settings',$shop);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -291,7 +292,7 @@ class ShopController extends Controller
         $states = State::all();
         $cities = City::where('state_id',$shop->state_id)->get();
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
-        return view('shop.settings',compact('user','shop','banks','states','cities','rates'));
+        return view('vendor.shop.settings',compact('user','shop','banks','states','cities','rates'));
     }
 
     public function profile(Shop $shop,Request $request){

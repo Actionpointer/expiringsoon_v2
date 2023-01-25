@@ -14,7 +14,7 @@ trait PaymentTrait
     protected function initializePayment($amount,$items,$type){
         $gateway = cache('settings')['active_payment_gateway'];
         $user = Auth::user();
-        $payment = Payment::create(['user_id'=> $user->id,'reference'=> uniqid(),'amount'=> $amount ,'vat'=> $user->country->vat]);
+        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> session('locale')['currency_id'],'reference'=> uniqid(),'amount'=> $amount ,'vat'=> $user->country->vat]);
         foreach($items as $item){
             PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
         }

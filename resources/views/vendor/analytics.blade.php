@@ -141,7 +141,7 @@
                                     <td class="dashboard__order-history-table-item   order-status "> {!!session('locale')['currency_symbol']!!} {{number_format($shop->wallet,2)}}</td>
                                     <!-- Details page  -->
                                     <td class="dashboard__order-history-table-item   order-details "> 
-                                        <a href="{{route('shop.show',$shop)}}">
+                                        <a href="{{route('vendor.shop.show',$shop)}}">
                                             <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">
                                             </span>Go to Storefront
                                         </a>

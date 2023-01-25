@@ -27,7 +27,7 @@
                 <span> > </span>
               </a>
             </li>
-            <li class="active"><a href="{{route('shop.product.list',$shop)}}">My Products</a></li>
+            <li class="active"><a href="{{route('vendor.shop.product.list',$shop)}}">My Products</a></li>
           </ul>
         </div>
       </div>
@@ -56,19 +56,19 @@
                   <button type="button" class="btn btn-secondary" onclick="if(confirm('Are you sure you want to draft?')) draftform();">Draft </button>
                   <button type="button" class="btn btn-danger" onclick="if(confirm('Are you sure you want to delete?')) deleteform();">Delete</button>
                 </div>
-                <a href="{{route('shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
+                <a href="{{route('vendor.shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
               </div>
               <div class="">
                 <form id="featureform" action="{{route('vendor.feature.products')}}" method="POST">@csrf
                   <input type="hidden" name="shop_id" value="{{$shop->id}}" >
                 </form>
-                <form id="deleteform" action="{{route('shop.products.manage',$shop)}}" method="POST">@csrf
+                <form id="deleteform" action="{{route('vendor.shop.products.manage',$shop)}}" method="POST">@csrf
                   <input type="hidden" name="delete" value="1" >
                 </form>
-                <form id="publishform" action="{{route('shop.products.manage',$shop)}}" method="POST">@csrf
+                <form id="publishform" action="{{route('vendor.shop.products.manage',$shop)}}" method="POST">@csrf
                   <input type="hidden" name="published" value="1" >
                 </form>
-                <form id="draftform" action="{{route('shop.products.manage',$shop)}}" method="POST">@csrf
+                <form id="draftform" action="{{route('vendor.shop.products.manage',$shop)}}" method="POST">@csrf
                   <input type="hidden" name="draft" value="1" >
                 </form>
               </div>
@@ -162,7 +162,7 @@
                                   Manage
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                  <a class="dropdown-item" href="{{route('shop.product.edit',[$shop,$product])}}">Edit</a>
+                                  <a class="dropdown-item" href="{{route('vendor.shop.product.edit',[$shop,$product])}}">Edit</a>
                                   @if(auth()->id() == $shop->user_id)
                                   <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
                                     <input type="hidden" name="shop_id" value="{{$shop->id}}">
@@ -170,7 +170,7 @@
                                     <button type="submit" class="dropdown-item">Feature</button>
                                   </form>
                                   @endif
-                                  <form class="d-inline" action="{{route('shop.products.manage',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
+                                  <form class="d-inline" action="{{route('vendor.shop.products.manage',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
                                     <input type="hidden" name="products[]" value="{{$product->id}}">
                                     <input type="hidden" name="delete" value="1">
                                     <button type="submit" class="dropdown-item">Delete</button>

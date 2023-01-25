@@ -18,7 +18,7 @@ class OrderController extends Controller
 
     //vendors
     public function index(Shop $shop){
-        return view('shop.orders.list',compact('shop'));
+        return view('vendor.shop.orders.list',compact('shop'));
     }
 
     public function show(Shop $shop,Order $order){

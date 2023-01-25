@@ -46,7 +46,7 @@ class KycRejectionNotification extends Notification
                     ->line('The '.$this->kyc->type.' document you submit was rejected')
                     ->line('Reason: '.$this->kyc->reason)
                     ->line('You will need to submit valid documents to have your account fully operational')
-                    ->action('Submit Documents', route('shop.settings',$this->kyc->shop))
+                    ->action('Submit Documents', route('vendor.shop.settings',$this->kyc->shop))
                     ->line('Thank you for using our application!');
     }
 

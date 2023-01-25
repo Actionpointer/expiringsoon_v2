@@ -47,6 +47,6 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
     Route::post('adverts/store/shop',[AdvertController::class,'store_shop_advert'])->name('advert.store.shops');
     
     Route::post('adverts/manage',[AdvertController::class,'remove'])->name('advert.remove');
-    
+    include('shop.php');
     
 });

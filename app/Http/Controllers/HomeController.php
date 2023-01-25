@@ -37,7 +37,7 @@ class HomeController extends Controller
         }
         if($user->role == 'vendor' && !$user->subscription_id){
             $shop = $user->shop;
-            return redirect()->route('shop.show',$shop);
+            return redirect()->route('vendor.shop.show',$shop);
         }
         if($user->role == 'vendor' && $user->subscription_id){
             return redirect()->route('vendor.dashboard');

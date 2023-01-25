@@ -383,7 +383,7 @@
               @if($order->status !== 'completed' )
                 @if(auth()->user()->role != 'shopper')
                   <div class="col-lg-4" style="margin-top:20px">
-                      <form method="post" id="orderstatus" action="{{route('shop.order.manage',$order->shop)}}">@csrf
+                      <form method="post" id="orderstatus" action="{{route('vendor.shop.order.manage',$order->shop)}}">@csrf
                           <input type="hidden" name="order_id" value=" {{$order->id}}">
                           <div class="contact-form__content-group">
                               <div class="contact-form-input">

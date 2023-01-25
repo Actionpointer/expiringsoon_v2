@@ -68,7 +68,7 @@
                                         <a href="#" class="font-body--lg-500 text-dark">{!!session('locale')['currency_symbol']!!}{{ number_format($shop->wallet, 2)}}<span class="text-success"> Balance</span> </a>
                                     </div>
                                     <div class="dashboard__content-card-body">
-                                        <form method="post" action="{{route('shop.payout',$shop)}}">@csrf
+                                        <form method="post" action="{{route('vendor.shop.payout',$shop)}}">@csrf
 
                                           <div class="contact-form__content">
                                             <div class="contact-form__content-group">
@@ -184,7 +184,7 @@
                                               <a href="#" onclick="event.preventDefault();document.getElementById('bankedit'+{{$shop->bankaccount->id}}).style.display='block'">Edit</a>
                                           </div>
                                       </div>
-                                      <form method="post" id="bankedit{{$shop->bankaccount->id}}" action="{{route('shop.bank-info',$shop)}}" style="display: none">@csrf
+                                      <form method="post" id="bankedit{{$shop->bankaccount->id}}" action="{{route('vendor.shop.bank-info',$shop)}}" style="display: none">@csrf
                                           <input type="hidden" name="account_id" value="{{$shop->bankaccount->id}}">
                                           <div class="contact-form__content-group">
                                               <div class="contact-form-input">
@@ -225,7 +225,7 @@
                                       </form>
                                     </div>
                                 @else
-                                    <form class="my-3" method="post" id="bankinfo" action="{{route('shop.bank-info',$shop)}}">@csrf
+                                    <form class="my-3" method="post" id="bankinfo" action="{{route('vendor.shop.bank-info',$shop)}}">@csrf
                                         <h4>Add New Bank Account</h4>
                                         <div class="contact-form__content-group mt-3">  
                                             <div class="contact-form-input">

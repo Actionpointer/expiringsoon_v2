@@ -24,7 +24,7 @@
                 <span> > </span>
               </a>
             </li>
-            <li class="active"><a href="{{route('shop.product.list',$shop)}}">My Products</a></li>
+            <li class="active"><a href="{{route('vendor.shop.product.list',$shop)}}">My Products</a></li>
           </ul>
         </div>
       </div>
@@ -55,7 +55,7 @@
                 <div class="dashboard__content-card-body">
                   <div class="row">
                     <div class="col-lg-7 order-lg-0 order-2">
-                      <form action="{{route('shop.product.store',$shop)}}" method="post" id="addproduct"  enctype="multipart/form-data">@csrf
+                      <form action="{{route('vendor.shop.product.store',$shop)}}" method="post" id="addproduct"  enctype="multipart/form-data">@csrf
                         <input type="hidden" name="shop_id" value="{{$shop->id}}">
                         <div class="contact-form__content">
                           <div class="contact-form-input">

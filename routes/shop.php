@@ -8,7 +8,7 @@ use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
 
    
-Route::group(['prefix'=>'vendor/{shop}','as'=> 'shop.'],function (){
+Route::group(['prefix'=>'{shop}','as'=> 'shop.'],function (){
     Route::get('dashboard', [ShopController::class, 'show'])->name('show');
     Route::get('settings',[ShopController::class, 'settings'])->name('settings');
     Route::post('address',[ShopController::class, 'address'])->name('address');

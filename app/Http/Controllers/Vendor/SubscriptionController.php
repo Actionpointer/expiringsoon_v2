@@ -17,7 +17,7 @@ class SubscriptionController extends Controller
     use PaymentTrait,OrderTrait;
 
     public function __construct(){
-        $this->middleware('auth')->except('plans');
+        $this->middleware('auth:sanctum');
     }
 
     public function plans(){

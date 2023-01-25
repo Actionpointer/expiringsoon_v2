@@ -19,7 +19,7 @@
               </a>
             </li>
             <li>
-              <a href="{{route('shop.show',$shop)}}">
+              <a href="{{route('vendor.shop.show',$shop)}}">
                 Vendor
                 <span> > </span>
               </a>
@@ -53,7 +53,7 @@
                         <div style="float:left;padding-right:20px;margin-right:20px;border-right:2px solid #e0dfdf">
                             <p align="left" class="font-body--md-400 designation">Total Earnings</p>
                                 <div style="margin-top:-10px">
-                                    <a href="{{route('shop.order.list',$shop)}}" class="edit font-body--lg-500" style="font-size:20px">{!!session('locale')['currency_symbol']!!}{{number_format($shop->settlements->where('status',true)->sum('amount'), 2)}}</a>
+                                    <a href="{{route('vendor.shop.order.list',$shop)}}" class="edit font-body--lg-500" style="font-size:20px">{!!session('locale')['currency_symbol']!!}{{number_format($shop->settlements->where('status',true)->sum('amount'), 2)}}</a>
                                 </div>
                         </div>
                         <div style="float:left;margin-right:20px;padding-right:20px;border-right:2px solid #e0dfdf">
@@ -71,7 +71,7 @@
                     </div>
                     @if($shop->user_id == auth()->id())
                     <div>
-                        <a href="{{route('shop.payouts',$shop)}}" class="edit font-body--lg-500">Request Payout</a>
+                        <a href="{{route('vendor.shop.payouts',$shop)}}" class="edit font-body--lg-500">Request Payout</a>
                     </div>
                     @endif
                   </div>
@@ -97,7 +97,7 @@
                     <p class="dashboard__user-billing-number font-body--lg-400" > {{$shop->mobile}} </p>
                   </div>
                   @if($shop->user_id == auth()->id())
-                  <a href="{{route('shop.settings',$shop)}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Shop Settings</a>
+                  <a href="{{route('vendor.shop.settings',$shop)}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Shop Settings</a>
                   @endif
                 </div>
               </div>
@@ -179,7 +179,7 @@
                   <div class="dashboard__order-history">
                     <div class="dashboard__order-history-title">
                         <h2 class="font-body--xl-500">Recent Payouts</h2>
-                        <a href="{{route('shop.payouts',$shop)}}" class="font-body--lg-500"> View All</a>
+                        <a href="{{route('vendor.shop.payouts',$shop)}}" class="font-body--lg-500"> View All</a>
                     </div>
                     <div class="dashboard__order-history-table">
                         <div class="table-responsive">
@@ -230,7 +230,7 @@
                   <div class="dashboard__order-history">
                     <div class="dashboard__order-history-title">
                       <h2 class="font-body--xl-500">Recent Order</h2>
-                      <a href="{{route('shop.order.list',$shop)}}" class="font-body--lg-500">
+                      <a href="{{route('vendor.shop.order.list',$shop)}}" class="font-body--lg-500">
                         View All</a>
                     </div>
                     <div class="dashboard__order-history-table">

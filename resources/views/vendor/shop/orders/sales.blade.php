@@ -27,7 +27,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="{{route('shop.order.list',$shop)}}">Sales History</a></li>
+          <li class="active"><a href="{{route('vendor.shop.order.list',$shop)}}">Sales History</a></li>
         </ul>
       </div>
     </div>

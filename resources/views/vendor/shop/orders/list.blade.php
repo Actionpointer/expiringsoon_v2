@@ -27,7 +27,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="{{route('shop.order.list',$shop)}}">Order History</a></li>
+          <li class="active"><a href="{{route('vendor.shop.order.list',$shop)}}">Order History</a></li>
         </ul>
       </div>
     </div>
@@ -83,7 +83,7 @@
                                     Vendor
                                 </td>
                                 <td>
-                                    <a href="{{route('shop.order.view',[$shop,$order])}}">
+                                    <a href="{{route('vendor.shop.order.view',[$shop,$order])}}">
                                         <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">
                                           View
                                         </span>

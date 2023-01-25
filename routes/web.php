@@ -88,7 +88,6 @@ Route::post('order/review',[OrderController::class, 'review'])->name('order.revi
 Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
 
 include('vendor.php');
-include('shop.php');
 include('admin.php');
 
 
