@@ -258,10 +258,19 @@
                                             <p class="order-total-price"> {{$order->shop->name}} </p>
                                         </td>
                                         
-                                        <td class="dashboard__order-history-table-item order-details" style="text-align: left!important"> 
-                                            <span class="@if($order->status == 'pending' || $order->status == 'processing') text-warning @elseif($order->status == 'rejected') text-danger @else text-success @endif">
-                                                {{$order->status}}
-                                            </span>
+                                        <td class="dashboard__order-history-table-item order-status">
+                                          {{ ucwords($order->status)}}
+                                        </td>
+                                        <td class="dashboard__order-history-table-item order-details">
+                                          <a href="{{route('shop.order.list',$order)}}"> View Details
+                                            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                              <path data-name="layer2" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M11 2v60h44V18L39 2H11z" stroke-linejoin="round" stroke-linecap="round"></path>
+                                              <path data-name="layer2" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M39 2v16h16" stroke-linejoin="round" stroke-linecap="round"></path>
+                                              <path data-name="layer1" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M19 26v28h26" stroke-linejoin="round" stroke-linecap="round"></path>
+                                              <path data-name="layer1" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M19 46l10-10 6 4.9L45 30" stroke-linejoin="round" stroke-linecap="round"></path>
+                                            </svg>
+                                            
+                                          </a>
                                         </td>
                                     </tr>
                                  @empty 

@@ -22,6 +22,9 @@ class StaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(){
+        $this->middleware('auth:sanctum');
+    }
     public function dashboard(){
         $user = auth()->user(); 
         return view('vendor.dashboard',compact('user'));
@@ -112,8 +115,7 @@ class StaffController extends Controller
         }
     }
 
-    public function index(Shop $shop,Request $request)
-    {
+    public function index(Shop $shop,Request $request){
         if($request->user_id){
             if($request->delete){
                 //detach user from shop
@@ -151,11 +153,7 @@ class StaffController extends Controller
         }  
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
         //
