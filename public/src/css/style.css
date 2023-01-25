@@ -4435,19 +4435,19 @@ body.overlay {
     .contact-form-input input::-webkit-input-placeholder {
       font-size: inherit;
       line-height: inherit;
-      color: #666666; }
+      color: #999999; }
     .contact-form-input input:-ms-input-placeholder {
       font-size: inherit;
       line-height: inherit;
-      color: #666666; }
+      color: #999999; }
     .contact-form-input input::-ms-input-placeholder {
       font-size: inherit;
       line-height: inherit;
-      color: #666666; }
+      color: #999999; }
     .contact-form-input input::placeholder {
       font-size: inherit;
       line-height: inherit;
-      color: #666666; }
+      color: #999999; }
       @media (max-width: 767px) {
         .contact-form-input input::-webkit-input-placeholder {
           font-size: 12px; }

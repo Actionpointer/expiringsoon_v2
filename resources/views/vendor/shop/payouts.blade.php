@@ -37,7 +37,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('shop.navigation')
+        @include('layouts.shop_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           <div class="container">
             <div class="products-tab__btn">
@@ -110,7 +110,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($shop->payouts as $payout)
+                                                @forelse ($payouts as $payout)
                                                     <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                                                         <!-- item  -->
                                                         <td class="cart-table-item order-date align-middle">

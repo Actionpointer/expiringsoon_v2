@@ -262,7 +262,7 @@
                                           {{ ucwords($order->status)}}
                                         </td>
                                         <td class="dashboard__order-history-table-item order-details" style="text-align: left!important">
-                                          <a href="{{route('vendor.shop.order.list',$order)}}" > View Order
+                                          <a href="{{route('vendor.shop.order.view',[$order->shop,$order])}}" > View Order
                                             <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" xmlns:xlink="http://www.w3.org/1999/xlink">
                                               <path data-name="layer2" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M11 2v60h44V18L39 2H11z" stroke-linejoin="round" stroke-linecap="round"></path>
                                               <path data-name="layer2" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M39 2v16h16" stroke-linejoin="round" stroke-linecap="round"></path>

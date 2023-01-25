@@ -56,7 +56,7 @@
                           
                           <div class="contact-form-input">
                             <label for="fname">Shop Name *</label>
-                            <input type="text" name="name" placeholder=" Name" required/>
+                            <input type="text" name="name" value="{{old('name')}}" placeholder="Name" required/>
                           </div>
                           @error('name')
                           <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -65,7 +65,7 @@
                           @enderror
                           <div class="contact-form-input">
                             <label for="lname2">Shop Email * </label>
-                            <input type="email" name="email" placeholder="Email" required/>
+                            <input type="email" name="email" value="{{old('email')}}" placeholder="Email" required/>
                           </div>
                           @error('email')
                           <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -73,8 +73,11 @@
                             </span>
                           @enderror
                           <div class="contact-form-input">
-                            <label for="number1">Phone Number *</label>
-                            <input type="number" name="phone" placeholder="Phone Number in local format. e.g 080945432" required/>
+                              <label for="number1">Phone Number *</label>
+                              <div class="input-group  d-flex">
+                                  <button class="btn btn-outline-secondary" type="button">+{{session('locale')['dial']}}</button>
+                                  <input type="number" name="phone" value="{{old('phone')}}" class="form-control" placeholder="Phone Number" required/>
+                              </div>
                           </div>
                           @error('phone')
                           <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -105,18 +108,18 @@
                         <div class="contact-form__content">
                             <div class="contact-form-input">
                               <label for="address">Street Address *</label>
-                              <input type="text" name="address" placeholder="Store Address" required/>
+                              <input type="text" name="address" value="{{old('address')}}" placeholder="Store Address" required/>
                             </div>
                             @error('address')
                             <span class="invalid-feedback d-block text-danger mb-4" role="alert">
                                   <strong>{{ $message }}</strong>
                               </span>
                             @enderror
-                            <div class="contact-form__content-group row">
+                            <div class="contact-form__content-group row location">
                               <!-- states -->
                               <div class="contact-form-input col-lg-6">
                                 <label for="states">state *</label>
-                                <select id="states" name="state_id" class="contact-form-input__dropdown" required>
+                                <select id="statess" name="state_id" class="select2 states" required>
                                   @foreach ($states as $state)
                                     <option value="{{$state->id}}">{{$state->name}}</option>
                                   @endforeach
@@ -129,7 +132,7 @@
                               </div>
                               <div class="contact-form-input col-lg-6">
                                 <label for="city">city *</label>
-                                <select name="city_id" class="select2" required>
+                                <select name="city_id" class="select2 cities" required>
                                     @foreach ($cities as $city)
                                       <option value="{{$city->id}}">{{ucwords(strtolower($city->name))}}</option>
                                     @endforeach
@@ -190,6 +193,32 @@
           reader.readAsDataURL(input.files[0]);
       }
   }
+
+  $(document).on('change','.states',function(){
+    
+      var state_id = $(this).val();
+      cities = $(this).closest('.location').find('.cities');
+      // console.log.val())
+      $.ajax({
+        type:'POST',
+        dataType: 'json',
+        url: "{{route('cities')}}",
+        data:{
+            '_token' : $('meta[name="csrf-token"]').attr('content'),
+            'state_id': state_id,
+        },
+        success:function(data) {
+          cities.children().remove()
+          data.forEach(element => {
+            cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
+          });
+          cities.select2();
+        },
+        error: function (data, textStatus, errorThrown) {
+            console.log(data);
+        },
+      })
+  })
 
 </script>
 @endpush

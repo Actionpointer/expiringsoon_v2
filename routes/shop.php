@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StaffController;
+use App\Http\Controllers\Vendor\StaffController;
 use App\Http\Controllers\Vendor\ShopController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\PaymentController;
@@ -9,7 +9,7 @@ use App\Http\Controllers\Vendor\ShipmentController;
 
    
 Route::group(['prefix'=>'{shop}','as'=> 'shop.'],function (){
-    Route::get('dashboard', [ShopController::class, 'show'])->name('show');
+    
     Route::get('settings',[ShopController::class, 'settings'])->name('settings');
     Route::post('address',[ShopController::class, 'address'])->name('address');
     Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
@@ -18,8 +18,8 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.'],function (){
     Route::post('staff',[StaffController::class, 'index'])->name('staff');
     
 
-    
-    Route::get('payouts',[PaymentController::class, 'index'])->name('payouts');
+    Route::get('earnings',[PaymentController::class, 'earnings'])->name('earnings');
+    Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');
     Route::post('bank-info',[PaymentController::class, 'bank_info'])->name('bank-info');
     Route::post('payout',[PaymentController::class, 'payout'])->name('payout');
     
@@ -32,8 +32,8 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.'],function (){
     Route::post('product/update', [ProductController::class, 'update'])->name('product.update');
     Route::post('product/manage', [ProductController::class, 'manage'])->name('products.manage');
 
-    Route::get('orders', [OrderController::class, 'shop_orders'])->name('order.list');
-    Route::get('order/{order}', [OrderController::class, 'shop_order_view'])->name('order.view');
+    Route::get('orders', [OrderController::class, 'index'])->name('order.list');
+    Route::get('order/{order}', [OrderController::class, 'show'])->name('order.view');
     Route::post('order/manage', [OrderController::class, 'manage'])->name('order.manage');
-    Route::get('payments',[PaymentController::class, 'shop_index'])->name('payments');
+    
 });

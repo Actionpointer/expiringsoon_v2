@@ -35,7 +35,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('vendor.navigation')
+        @include('layouts.vendor_navigation')
         <div class="col-lg-9 section--xl pt-0">
             <div class="container">
                 <section class="section sales-banner--two">

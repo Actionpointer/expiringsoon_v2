@@ -4,9 +4,9 @@
 @if(auth()->user()->role == 'vendor')
     
     @if(auth()->user()->subscription_id)
-        @include('vendor.navigation')
+        @include('layouts.vendor_navigation')
     @else  
-        @include('shop.navigation')
+        @include('layouts.shop_navigation')
     @endif
 
 

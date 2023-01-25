@@ -26,7 +26,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
-    use SecurityTrait;
+    // use SecurityTrait;
+
     public function __construct()
     {
         $this->middleware('auth:sanctum');
@@ -44,7 +45,7 @@ class ShopController extends Controller
     }
 
     public function show(Shop $shop){
-        return view('vendor.shop.dashboard',$shop);
+        return view('vendor.shop.dashboard',compact('shop'));
     }
 
     public function details($shop_id){
@@ -98,7 +99,7 @@ class ShopController extends Controller
             $contents = file_get_contents($request->photo);
             Storage::put($banner, $contents);
             $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
-            'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> 1]);
+            'address'=> $request->address,'country_id'=> $user->country_id ,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> 1]);
             
             return response()->json([
                 'status' => true,
@@ -141,14 +142,14 @@ class ShopController extends Controller
                 $request->file('photo')->storeAs('public/',$banner);
             }
             $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
-            'address'=> $request->address,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
+            'address'=> $request->address,'country_id'=> $user->country_id ,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
             
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Shop Created Successfully', 
                     'data' => ['shop_id'=> $shop->id,'name'=> $shop->id,'wallet_balance'=> 0,
                     'products'=> $shop->products->count() ,
                     'create_shops_remaining'=> $shop->user->max_shops]], 200) :
-                    redirect()->route('vendor.shop.settings',$shop);
+                    redirect()->route('vendor.shop.settings',$shop)->with(['result'=> 1,'message'=> 'Shop Created Successfully.']);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -283,8 +284,6 @@ class ShopController extends Controller
             ], 500);
         }
     }
-    
-    
 
     public function settings(Shop $shop){
         $user = auth()->user();
@@ -335,11 +334,6 @@ class ShopController extends Controller
         $shop->save();
         return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
     }
-
-    
-
-    
-
 
     public function notifications(Shop $shop){
         

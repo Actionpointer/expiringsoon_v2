@@ -13,6 +13,7 @@ use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\VendorPaymentResource;
+use App\Http\Resources\ShopSettlementResource;
 
 class PaymentController extends Controller
 {
@@ -34,10 +35,22 @@ class PaymentController extends Controller
             'count' => $payments->count()
         ], 200) : view('vendor.payments',compact('payments'));
     }
+    //shop earnings
+    public function earnings(Shop $shop){
+        $settlements = $shop->settlements;
+        return request()->expectsJson() ?  
+        response()->json([
+            'status' => true,
+            'message' => $settlements->count() ? 'Earnings retrieved Successfully':'No earnings retrieved',
+            'data' => ShopSettlementResource::collection($settlements),
+            'count' => $settlements->count()
+        ], 200) : view('vendor.shop.earnings',compact('shop','settlements'));
+    }
     //our payouts to shops
     public function payouts(Shop $shop){
         $banks = Bank::all();
-        return view('vendor.shop.payouts',compact('shop','banks'));
+        $payouts = $shop->payouts;
+        return view('vendor.shop.payouts',compact('shop','banks','payouts'));
     }
 
     public function bank_info(Shop $shop,Request $request){
@@ -109,7 +122,7 @@ class PaymentController extends Controller
 
     public function shop_index(Shop $shop){
         $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
-        return view('vendor.shop.payments',compact('shop','settlements'));
+        return view('vendor.shop.earnings',compact('shop','settlements'));
     }
 
     public function apply(Request $request){

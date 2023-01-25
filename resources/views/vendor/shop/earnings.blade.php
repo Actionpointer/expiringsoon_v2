@@ -37,7 +37,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('shop.navigation')
+        @include('layouts.shop_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           <div class="container">
             
@@ -46,7 +46,7 @@
                 <div class="products-tab__description">
                     <div class="dashboard__content-card">
                         <div class="dashboard__content-card-header">
-                            <h5 class="font-body--xl-500">Payments</h5>
+                            <h5 class="font-body--xl-500">Earnings</h5>
                         </div>
                         <div class="dashboard__content-card-body">
                           <table id="datatable" class="table display" style="width:100%;font-size:13px">

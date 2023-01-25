@@ -29,7 +29,6 @@ class StaffController extends Controller
         $user = auth()->user(); 
         return view('vendor.dashboard',compact('user'));
     }
-
     
 
     public function orientation(){

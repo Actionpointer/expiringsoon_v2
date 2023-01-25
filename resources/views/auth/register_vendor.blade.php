@@ -54,10 +54,13 @@
             <strong>{{ $message }}</strong>
         </span>
         @enderror
-
-        <div class="form-input">
-          <input type="tel" name="phone" id="phone" placeholder="Phone number in {{session('locale')['country_name']}}local format. e.g 08023456789" required />
+        <div class="contact-form-input">
+          <div class="input-group  d-flex">
+              <button class="btn btn-outline-secondary" type="button">+{{session('locale')['dial']}}</button>
+              <input type="number" name="phone" class="form-control" value="" placeholder="Phone" required/>
+          </div>
         </div>
+        
         @error('phone')
           <span class="invalid-feedback d-block mb-4" role="alert">
               <strong>{{ $message }}</strong>

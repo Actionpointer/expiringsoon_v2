@@ -34,7 +34,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('shop.navigation')
+        @include('layouts.shop_navigation')
         <div class="col-lg-9 section--xl pt-0">
           <div class="container">
             <div class="products-tab__btn">
@@ -45,11 +45,7 @@
                               General
                           </button>
                       </li>
-                      <li class="nav-item" role="presentation">
-                          <button class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" data-bs-target="#pills-plans" type="button" role="tab" aria-controls="pills-plans" aria-selected="false">
-                            Verification
-                          </button>
-                      </li>
+                      
                       <li class="nav-item" role="presentation">
                           <button class="nav-link" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="false">
                               Staff
@@ -95,9 +91,13 @@
                                             <input type="email" name="email" value="{{$shop->email}}" placeholder="Email" />
                                           </div>
                                           <div class="contact-form-input">
-                                            <label for="number1">Phone Number</label>
-                                            <input type="number" name="phone" value="{{$shop->phone}}" placeholder="Phone Number" onkeypress="validate(event)" />
+                                            <label for="number">Phone Number</label>
+                                            <div class="input-group  d-flex">
+                                                <button class="btn btn-outline-secondary" type="button">+{{session('locale')['dial']}}</button>
+                                                <input type="number" name="phone" class="form-control" value="{{$shop->phone}}" placeholder="Phone Number"/>
+                                            </div>
                                           </div>
+                                          
                                           <div class="contact-form-input">
                                             <label for="visibility">Visibility</label>
                                             <select class="form-control-lg w-100 text-muted border" name="published">
@@ -244,165 +244,7 @@
                           </div>
                       </div>
 
-                      <!-- Plan  -->
-                      <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
-                        <div class="products-tab__description">
-                            <!-- Verification -->
-                            <div class="dashboard__content-card">
-                              
-                              <div class="dashboard__content-card-header">
-                                <h5 class="font-body--xl-500">Verification Document</h5>
-                                <p style="font-size:11px;color:#888;text-transform:uppercase">Documents required for payout requests</p>
-                              </div>
-                              <div class="dashboard__content-card-body">
-                                <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-bottom:10px;font-size:13px">Upload any of the following documents so we can authenticate your account</div>
-                                <form method="post" enctype="multipart/form-data" id="uploadDoc" action="{{route('vendor.shop.kyc',$shop)}}">@csrf
-                                  <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
-                                    @if($shop->idcard)
-                                      <div class="docimg">
-                                        <a href="{{Storage::url($shop->idcard->document)}}" target="_blank">
-                                          <img @if($shop->idcard->doctype =='PDF') src="{{asset('src/images/site/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->idcard->document)}}" @endif id="idcardpreview">
-                                        </a>
-                                        
-                                      </div>
-                                      <div class="docinfo d-flex justify-content-between align-items-center">
-                                        <div>
-                                          <span style="font-size:14px">Owner ID</span>
-                                            <br />
-                                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->idcard->status ) #00b207; @else #ff0000; @endif">
-                                              @if($shop->idcard->status) Approved
-                                              @elseif($shop->idcard->reason) Rejected
-                                              @else Pending Approval
-                                              @endif
-                                            </span>
-                                            @if($shop->idcard->reason)
-                                              <span class="d-block font-body--sm-400 text-danger">{{$shop->idcard->reason}}</span>
-                                            @endif
-                                        </div>
-                                        <button class="btn btn-primary" type="button" onclick="performClick('idcard');">@if(!$shop->idcard->reason) Uploaded @else Upload @endif</button>
-                                    
-                                      </div>
-                                    @else
-                                    <div class="docimg">
-                                      <a href="javascript:void()" onclick="performClick('idcard');" target="_blank">
-                                        <img src="{{asset('src/images/site/icon-jpg.jpg')}}" id="idcardpreview">
-                                      </a>
-                                      
-                                    </div>
-                                    <div class="docinfo d-flex justify-content-between align-items-center">
-                                      <div>
-                                        <span style="font-size:14px">Owner ID</span>
-                                          <br />
-                                          <span style="font-weight:500;font-size:12px;text-transform:uppercase">
-                                          Upload National ID Card / Driver's License / International Passport
-                                        </span>
-                                      </div>
-                                      <button class="btn btn-primary" type="button" onclick="performClick('idcard');">Upload</button>
-                                      
-                                    </div>
-                                    @endif
-                                    <input type="file" style="display: none" name="idcard" id="idcard" onchange="readURL(this,'idcardpreview')" accept=".pdf, .png, .jpg, .jpeg" />
-                                  </div>
-                                  <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
-                                    @if($shop->addressproof)
-                                      <div class="docimg">
-                                        <a href="{{Storage::url($shop->addressproof->document)}}" target="_blank">
-                                          <img @if($shop->addressproof->doctype =='PDF') src="{{asset('src/images/site/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->addressproof->document)}}" @endif id="addressproofpreview">
-                                        </a>
-                                      </div>
-                                      <div class="docinfo d-flex justify-content-between align-items-center">
-                                        <div>
-                                          <span style="font-size:14px">Address Proof</span>
-                                            <br />
-                                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->addressproof->status ) #00b207; @else #ff0000; @endif">
-                                              @if($shop->addressproof->status) Approved
-                                              @elseif($shop->addressproof->reason) Rejected
-                                              @else Pending Approval
-                                              @endif
-                                            </span>
-                                            @if($shop->addressproof->reason)
-                                              <span class="d-block font-body--sm-400 text-danger">{{$shop->addressproof->reason}}</span>
-                                            @endif
-                                        </div>
-                    
-                                        <button class="btn btn-primary" type="button" onclick="performClick('addressproof');">@if(!$shop->addressproof->reason) Uploaded @else Upload @endif</button>
-                                      </div>
-                                    @else
-                                    <div class="docimg">
-                                      <a href="javascript:void()" onclick="performClick('addressproof');" target="_blank">
-                                        <img src="{{asset('src/images/site/icon-jpg.jpg')}}" id="addressproofpreview">
-                                      </a>
-                                      
-                                    </div>
-                                    <div class="docinfo d-flex justify-content-between align-items-center">
-                                      <div>
-                                        <span style="font-size:14px">Address Proof</span>
-                                          <br />
-                                          <span style="font-weight:500;font-size:12px;text-transform:uppercase">
-                                          Upload Utility Bill e.g Electricity Bill, Waste Bill etc
-                                        </span>
-                                      </div>
-                                      <button class="btn btn-primary" type="button" onclick="performClick('addressproof');">Upload</button>
-                                    </div>
-                                    @endif
-                                    <input type="file" style="display: none" name="addressproof" id="addressproof" onchange="readURL(this,'addressproofpreview')" accept=".pdf, .png, .jpg, .jpeg" />
-                                  </div>
-                                  <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
-                                    @if($shop->companydoc)
-                                      <div class="docimg">
-                                        <a href="{{Storage::url($shop->companydoc->document)}}" target="_blank">
-                                          <img @if($shop->companydoc->doctype =='PDF') src="{{asset('src/images/site/icon-pdf.jpg')}}" @else src="{{Storage::url($shop->companydoc->document)}}" @endif id="companydocpreview">
-                                        </a>
-                                      </div>
-                                      <div class="docinfo d-flex justify-content-between align-items-center">
-                                        <div>
-                                          <span style="font-size:14px">Company Document</span>
-                                            <br />
-                                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->companydoc->status ) #00b207; @else #ff0000; @endif">
-                                              @if($shop->companydoc->status) Approved
-                                              @elseif($shop->companydoc->reason) Rejected
-                                              @else Pending Approval
-                                              @endif
-                                            </span>
-                                            @if($shop->companydoc->reason)
-                                              <span class="d-block font-body--sm-400 text-danger">{{$shop->companydoc->reason}}</span>
-                                            @endif
-                                        </div>
-                                        <button class="btn btn-primary"  type="button" onclick="performClick('companydoc');">@if(!$shop->companydoc->reason) Uploaded @else Upload @endif</button>
-                                      </div>
-                                    @else
-                                    <div class="docimg">
-                                      <a href="javascript:void()" onclick="performClick('companydoc');" target="_blank">
-                                        <img src="{{asset('src/images/site/icon-jpg.jpg')}}" id="companydocpreview">
-                                      </a>
-                                      
-                                    </div>
-                                    <div class="docinfo d-flex justify-content-between align-items-center">
-                                      <div>
-                                        <span style="font-size:14px">Company Document</span>
-                                          <br />
-                                          <span style="font-weight:500;font-size:12px;text-transform:uppercase">
-                                          Upload CAC
-                                        </span>
-                                      </div>
-                                      <button class="btn btn-primary" type="button" onclick="performClick('companydoc');">Upload</button>
-                                    </div>
-                                    @endif
-                                    <input type="file" style="display: none" name="companydoc" id="companydoc" onchange="readURL(this,'companydocpreview')" accept=".pdf, .png, .jpg, .jpeg" />
-                                  </div>
-
-                                    <div class="contact-form-btn">
-                                      <button class="button button--md askpin" type="button" id="btn-doc">
-                                          Save Document
-                                      </button>
-                                    </div>
-                                
-                                </form>
-                              
-                              </div>
-                            </div>
-                        </div>
-                      </div>
+                      
                       <!-- Admin -->
                       <div class="tab-pane fade" id="pills-information" role="tabpanel" aria-labelledby="pills-information-tab">
                           <div class="products-tab__information">
@@ -430,8 +272,12 @@
                                           <input type="email" name="email" placeholder="Enter Email" required />
                                           </div>
                                           <div class="contact-form-input">
-                                          <label for="phone">Phone</label>
-                                          <input type="text" name="phone" placeholder="Enter Phone" required />
+                                            <label for="phone">Phone</label>
+                                            <div class="input-group  d-flex">
+                                              <button class="btn btn-outline-secondary" type="button">+{{$shop->country->dial}}</button>
+                                              <input type="number" name="phone" value="{{old('phone')}}" class="form-control" placeholder="Phone Number" required/>
+                                            </div>
+                                            
                                           </div>
                                       </div>
                                       <div class="contact-form__content-group">

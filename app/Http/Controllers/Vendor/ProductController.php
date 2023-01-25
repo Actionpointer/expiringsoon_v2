@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth')->except(['index','show','getSubcategories']);
+        $this->middleware('auth:sanctum')
     }
    
     public function index(Shop $shop){
@@ -64,58 +64,61 @@ class ProductController extends Controller
     }
 
     public function store(Shop $shop,Request $request){
-        try {
-            $validator = Validator::make($request->all(), 
-            [
-                'shop_id' => 'required|numeric',
-                'name' => 'required|max:255',
-                'description' => 'required',
-                'stock' => 'required|numeric|gt:1',
-                'category_id' => 'required|numeric',
-                'tags' => 'nullable',
-                'photo' => 'required|max:1024|image',
-                'expiry' => 'required|date|after:today',
-                'price' => 'required|numeric',
-                'discount120' => 'nullable|lt:price|gt:discount90',
-                'discount90' => 'nullable|lt:price|gt:discount60',
-                'discount60' => 'nullable|lt:price|gt:discount30',
-                'discount30' => 'nullable|lt:price',    
-                'published' => 'required|numeric',   
-            ],[
-                'discount120.gt' => 'This discount must be greater than 61 to 90 days discount',
-                'discount90.gt' => 'This discount must be greater than 31 to 60 days discount',
-                'discount60.gt' => 'This discount must be greater than 1 to 31 days discount',
-                'lt' => 'This discount price must be less than actual price',
-            ]);
-            if($validator->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
-                ], 401);
-            }
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
+        // try {
+        //     $validator = Validator::make($request->all(), 
+        //     [
+        //         'shop_id' => 'required|numeric',
+        //         'name' => 'required|max:255',
+        //         'description' => 'required',
+        //         'stock' => 'required|numeric|gt:1',
+        //         'category_id' => 'required|numeric',
+        //         'tags' => 'nullable',
+        //         'photo' => 'required|max:1024|image',
+        //         'expiry' => 'required|date|after:today',
+        //         'price' => 'required|numeric',
+        //         'discount120' => 'nullable|lt:price|gt:discount90',
+        //         'discount90' => 'nullable|lt:price|gt:discount60',
+        //         'discount60' => 'nullable|lt:price|gt:discount30',
+        //         'discount30' => 'nullable|lt:price',    
+        //         'published' => 'required|numeric',   
+        //     ],[
+        //         'discount120.gt' => 'This discount must be greater than 61 to 90 days discount',
+        //         'discount90.gt' => 'This discount must be greater than 31 to 60 days discount',
+        //         'discount60.gt' => 'This discount must be greater than 1 to 31 days discount',
+        //         'lt' => 'This discount price must be less than actual price',
+        //     ]);
+        //     if($validator->fails()){
+        //         return response()->json([
+        //             'status' => false,
+        //             'message' => 'validation error',
+        //             'error' => $validator->errors()->first()
+        //         ], 401);
+        //     }
+        // } catch (\Throwable $th) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => $th->getMessage()
+        //     ], 500);
+        // }
         
-        $user = auth()->user();
-        $shop = Shop::where('id',$request->shop_id)->where('user_id',$user->id)->first();
-        if($request->hasFile('photo')){
-            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $request->file('photo')->storeAs('public/',$photo);
-        } 
-        $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,
-        'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id,
-        'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),
-        'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
-        'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-        'published'=> $request->published]);
-        return request()->expectsJson()
-                ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
-                    redirect()->route('vendor.shop.product.list',$shop);
+        // $user = auth()->user();
+        // $shop = Shop::where('id',$request->shop_id)->where('user_id',$user->id)->first();
+        // if($request->hasFile('photo')){
+        //     $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+        //     $request->file('photo')->storeAs('public/',$photo);
+        // } 
+        // $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,
+        // 'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id,
+        // 'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),
+        // 'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
+        // 'discount90'=> $request->discount90,'discount120'=> $request->discount120,
+        // 'published'=> $request->published]);
+        // return request()->expectsJson()
+        //         ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
+        //             redirect()->route('vendor.shop.product.list',$shop);
+        
+        return response()->json(['data'=> 'i am working'],200);
+    
     }
 
     public function edit(Shop $shop,Product $product){

@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
+use App\Http\Resources\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class OrderDetailsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,6 +18,8 @@ class OrderResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
+            'items' => ProductResource::collection(Product::whereIn('id',$this->items->pluck('product_id')->toArray())->get()),
+            'messages' => ProductResource::collection(Product::whereIn('id',$this->items->pluck('product_id')->toArray())->get()),
             'slug' => $this->slug,
             'id'=> $this->id,
             'user_id' => $this->user_id,

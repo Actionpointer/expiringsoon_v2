@@ -71,7 +71,10 @@
                           @enderror
                           <div class="contact-form-input">
                             <label for="number1">Phone Number</label>
-                            <input type="number" name="phone" class="form-control" value="{{$user->phone}}" placeholder="Phone Number" onkeypress="validate(event)" />
+                            <div class="input-group  d-flex">
+                              <button class="btn btn-outline-secondary" type="button">+{{$user->country->dial}}</button>
+                              <input type="number" name="phone" class="form-control" value="{{$user->phone}}" placeholder="Phone Number"/>
+                            </div>
                           </div>
                           @error('phone')
                           <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -133,7 +136,7 @@
                               <tr>
                                   <td>{{$address->contact_name}}</td>
                                   <td>{{$address->contact_phone}}</td>
-                                  <td>{{$address->street.' '.$address->city.','.$address->state->name}}</td>
+                                  <td>{{$address->street.' '.$address->city->name.','.$address->state->name}}</td>
                                   <td>@if($address->main) main @endif</td>
                                   <td>
                                     <div class="d-flex">
@@ -159,10 +162,7 @@
                                               <input type="text" name="street" placeholder="Enter Street" value="{{$address->street}}" required />
                                           </div>
                                           <div class="contact-form__content-group location">
-                                            <div class="contact-form-input">
-                                              <label for="city{{$address->id}}">City</label>
-                                              <input type="text" name="city" placeholder="Enter city" value="" required />
-                                            </div>
+                                            
                                             <div class="contact-form-input">
                                               <label for="state_id{{$address->id}}">State</label>
                                               <select name="state_id" id="state_id{{$address->id}}" class="select2 states">
@@ -172,7 +172,16 @@
                                                   
                                               </select>
                                             </div>
-                                            
+                                            <div class="contact-form-input">
+                                              <label for="city{{$address->id}}">City</label>
+                                              <select name="city_id" class="select2 cities" required>
+                                                <option>Select City</option>
+                                                @foreach ($address->state->cities as $city)
+                                                  <option value="{{$city->id}}" @if($city->id == $address->city_id) selected @endif>{{ucwords(strtolower($city->name))}}</option>
+                                                @endforeach
+                                              </select>
+                                              
+                                            </div>
 
                                           </div>
                                           <div class="contact-form__content-group">
@@ -182,7 +191,11 @@
                                               </div>
                                               <div class="contact-form-input">
                                                 <label for="contact_phone">Phone</label>
-                                                <input type="text" name="contact_phone" value="{{$address->contact_phone}}" placeholder="Enter Phone" required />
+                                                <div class="input-group  d-flex">
+                                                  <button class="btn btn-outline-secondary" type="button">+{{$user->country->dial}}</button>
+                                                  <input type="number" name="contact_phone" class="form-control" value="{{$address->contact_phone}}" placeholder="Phone Number" required/>
+                                                </div>
+                                                
                                               </div>
                                           </div>
                                           <div class="form-check">
@@ -215,27 +228,35 @@
                         @enderror
                         <div class="contact-form__content-group location">
                           <div class="contact-form-input">
-                            <label for="city">City</label>
-                            <input type="text" name="city" placeholder="City" required />
-                          </div>
-                          @error('city')
-                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                          @enderror
-                          <div class="contact-form-input">
                             <label for="state_id">State</label>
                             <select name="state_id" id="state_id" class="select2 states">
                                 @foreach ($states as $state)
                                   <option value="{{$state->id}}" @if($user->state_id == $state->id) selected @endif>{{$state->name}}</option> 
                                 @endforeach 
                             </select>
+                            @error('state_id')
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
                           </div>
-                          @error('state_id')
-                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                          @enderror
+                          <div class="contact-form-input">
+                            <label for="city">City</label>
+                            <select name="city_id" class="select2 cities" required>
+                              <option>Select State First</option>
+                              @foreach ($user->state->cities as $city)
+                                <option value="{{$city->id}}">{{ucwords(strtolower($city->name))}}</option>
+                              @endforeach
+                            </select>
+                            @error('city_id')
+                              <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
+                          </div>
+                          
+                          
+                          
                           
                         </div>
                         <div class="contact-form__content-group">
@@ -250,7 +271,11 @@
                             @enderror
                             <div class="contact-form-input">
                               <label for="contact_phone">Phone</label>
-                              <input type="text" name="contact_phone" placeholder="Contact Phone" required />
+                              <div class="input-group  d-flex">
+                                <button class="btn btn-outline-secondary" type="button">+{{$user->country->dial}}</button>
+                                <input type="number" name="contact_phone" class="form-control" value="{{$address->contact_phone}}" placeholder="Contact Phone Number" required/>
+                              </div>
+                              
                             </div>
                             @error('contact_phone')
                             <span class="invalid-feedback d-block text-danger mb-4" role="alert">
