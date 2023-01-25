@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\ApiControllers;
+namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Plan;
 use App\Models\State;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ResourcesController extends Controller
 {

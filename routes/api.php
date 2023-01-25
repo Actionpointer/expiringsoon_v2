@@ -12,7 +12,7 @@ use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
 use App\Http\Controllers\Vendor\SubscriptionController;
-use App\Http\Controllers\ApiControllers\ResourcesController;
+use App\Http\Controllers\ResourcesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +47,7 @@ Route::post('login/shopper', [ApiController::class, 'login_shopper']);
 // Route::post('password/email',[App\Http\Controllers\Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');                    
 // Route::post('password/reset',[App\Http\Controllers\Auth\ResetPasswordController::class,'reset'])->name('password.update');                  
 
-Route::get('plans', [ResourcesController::class, 'plans']);
+Route::get('plans', [SubscriptionController::class, 'plans']);
 Route::get('states', [ResourcesController::class, 'states']);
 Route::get('cities/{state_id}', [ResourcesController::class, 'cities']);
 Route::get('categories', [ResourcesController::class, 'categories']);
