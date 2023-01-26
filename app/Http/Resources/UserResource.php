@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Subscription;
 use App\Http\Resources\ShopResource;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\SubscriptionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -50,7 +51,7 @@ class UserResource extends JsonResource
                 return new ShopResource(Shop::findOrFail($this->shop_id)); 
             }),
             "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
-                return RecentOrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
+                return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
             }),            
             
         ];

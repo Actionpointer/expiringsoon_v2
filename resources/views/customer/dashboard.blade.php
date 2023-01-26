@@ -36,7 +36,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('customer.navigation')
+        @include('layouts.customer_navigation')
         <div class="col-lg-9 section--xl pt-0">
           <div class="container">
             <!-- User Info -->

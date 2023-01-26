@@ -73,9 +73,11 @@ Route::get('home', [HomeController::class, 'home'])->name('home');
 //for users
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
 Route::post('profile/update',[UserController::class, 'update'])->name('profile.update');
-
-Route::post('address',[UserController::class, 'address'])->name('address');
 Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
+
+Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
+Route::post('address',[UserController::class, 'address'])->name('address');
+
 
 Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
 Route::post('checkout',[OrderController::class,'checkout'])->name('checkout');

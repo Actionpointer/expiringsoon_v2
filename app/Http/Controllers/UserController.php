@@ -28,8 +28,7 @@ class UserController extends Controller
         $user = auth()->user();
         $banks = Bank::all();
         $states = State::where('country_id',$user->country_id)->get();
-        $countries = Country::all();
-        return view('profile',compact('user','banks','states','countries'));
+        return view('profile',compact('user','banks','states'));
     }
 
     public function update(Request $request){
@@ -99,7 +98,11 @@ class UserController extends Controller
         }
     }
 
-    
+    public function addresses(){
+        $user = auth()->user();
+        $states = State::where('country_id',$user->country_id)->get();
+        return view('customer.address',compact('user','states'));
+    }
 
     public function address(Request $request){
         $user= auth()->user();

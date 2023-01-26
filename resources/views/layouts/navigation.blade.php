@@ -1,5 +1,5 @@
 @if(auth()->user()->role == 'shopper')
-    @include('customer.navigation')
+    @include('layouts.customer_navigation')
 @endif
 @if(auth()->user()->role == 'vendor')
     

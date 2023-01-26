@@ -141,9 +141,9 @@ class ProductController extends Controller
                 'photo' => 'nullable|max:2048|image',
                 'expiry' => 'required|date|after:today',
                 'price' => 'required|numeric',
-                'discount120' => 'nullable|lt:price|gt:discount90',
-                'discount90' => 'nullable|lt:price|gt:discount60',
-                'discount60' => 'nullable|lt:price|gt:discount30',
+                'discount120' => [Rule::requiredIf($request->discount90),'numeric','lt:price','gt:discount90'],
+                'discount90' => [Rule::requiredIf($request->discount60),'numeric','lt:price','gt:discount60'],
+                'discount60' => [Rule::requiredIf($request->discount30),'numeric','lt:price','gt:discount30'],
                 'discount30' => 'nullable|lt:price',   
                 'published' => 'required|numeric',  
             ],[
