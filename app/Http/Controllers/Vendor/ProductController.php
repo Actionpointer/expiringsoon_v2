@@ -83,9 +83,9 @@ class ProductController extends Controller
                 'published' => 'required|numeric',   
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 2mb',
-                'discount120.gt' => 'This discount must be greater than 61 to 90 days discount',
-                'discount90.gt' => 'This discount must be greater than 31 to 60 days discount',
-                'discount60.gt' => 'This discount must be greater than 1 to 31 days discount',
+                'discount120.gt' => 'Discount for 90 to 120 days must be higher than that for 61 to 90 days',
+                'discount90.gt' => 'Discount for 61 to 90 days must be higher than that for 31 to 60 days',
+                'discount60.gt' => 'Discount for 31 to 60 days must be higher than that for 1 to 31 days',
                 'lt' => 'This discount price must be less than actual price',
             ]);
             if($validator->fails()){
@@ -141,18 +141,19 @@ class ProductController extends Controller
                 'photo' => 'nullable|max:2048|image',
                 'expiry' => 'required|date|after:today',
                 'price' => 'required|numeric',
-                'discount120' => 'sometimes|lt:price|gt:discount90',
-                'discount90' => 'sometimes|lt:price|gt:discount60',
-                'discount60' => 'sometimes|lt:price|gt:discount30',
-                'discount30' => 'sometimes|lt:price',   
+                'discount120' => 'nullable|lt:price|gt:discount90',
+                'discount90' => 'nullable|lt:price|gt:discount60',
+                'discount60' => 'nullable|lt:price|gt:discount30',
+                'discount30' => 'nullable|lt:price',   
                 'published' => 'required|numeric',  
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 2mb',
-                'discount120.gt' => 'This discount must be greater than 61 to 90 days discount',
-                'discount90.gt' => 'This discount must be greater than 31 to 60 days discount',
-                'discount60.gt' => 'This discount must be greater than 1 to 31 days discount',
+                'discount120.gt' => 'Discount for 90 to 120 days must be higher than that for 61 to 90 days',
+                'discount90.gt' => 'Discount for 61 to 90 days must be higher than that for 31 to 60 days',
+                'discount60.gt' => 'Discount for 31 to 60 days must be higher than that for 1 to 31 days',
                 'lt' => 'This discount price must be less than actual price',
             ]);
+            
             if($validator->fails()){
                 return response()->json([
                     'status' => false,
@@ -175,7 +176,7 @@ class ProductController extends Controller
             } 
             $product->update(['name'=> $request->name,'shop_id'=> $product->shop_id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published]);
             return request()->expectsJson()
-                ? response()->json(['status' => true, 'message' => 'Product Updated Successfully'], 200) :
+                ? response()->json(['status' => true, 'message' => 'Product Updated Successfully','data'=> $product], 200) :
                     redirect()->route('vendor.shop.product.list',$product->shop);
         } catch (\Throwable $th) {
             return response()->json([
