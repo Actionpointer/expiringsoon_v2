@@ -11,11 +11,16 @@ use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
 
-Route::get('sendemail',function(){
-    $user = \App\Models\User::find(10);
-    $user->notify(new WelcomeNotification());
-    return (new App\Notifications\WelcomeNotification())
-                    ->toMail($user);
+Route::get('runonce',function(){
+    $products = \App\Models\Product::all();
+    // $user->notify(new WelcomeNotification());
+    // return (new App\Notifications\WelcomeNotification())
+    //                 ->toMail($user);
+    foreach($products as $product){
+        $product->expire_at = $product->expire_at->addMonths(6);
+        $product->save();
+    }
+    return 'done';
     
 });
 
