@@ -34,7 +34,7 @@ class RecentOrderResource extends JsonResource
             'vat' => $this->vat,
             'subtotal' => $this->subtotal,
             'total' => $this->total,
-            
+            'currency'=> $this->shop->country->currency->symbol,
         ];
     }
 }

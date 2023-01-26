@@ -127,8 +127,10 @@ class ShopController extends Controller
                 'city_id' => 'required|numeric',
                 'email' => 'required|string|unique:users',
                 'phone' => 'required|string|unique:users',
-                'photo' => 'required|max:1024|image',
+                'photo' => 'required|max:2048|image',
                 'published' => 'required|numeric',
+            ],[
+                'photo.max' => 'The image is too heavy. Standard size is 2mb',
             ]);
 
             if($validator->fails()){
@@ -173,7 +175,7 @@ class ShopController extends Controller
                     'email' => 'nullable|string',
                     'phone' => 'nullable|string',
                     'published' => 'nullable|numeric',
-                    'photo' => 'nullable|string',
+                    'photo' => 'nullable|max:2048|image',
                     'address' => 'nullable|string',
                     'state_id' => 'nullable|numeric',
                     'city_id' => 'nullable|numeric',
@@ -181,6 +183,8 @@ class ShopController extends Controller
                     'discount60' => 'nullable|string',
                     'discount90' => 'nullable|string',
                     'discount120' => 'nullable|string',
+                ],[
+                    'photo.max' => 'The image is too heavy. Standard size is 2mb',
                 ]);
 
                 if($validator->fails()){

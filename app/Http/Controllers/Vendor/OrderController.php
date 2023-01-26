@@ -22,6 +22,7 @@ class OrderController extends Controller
     public function index(Shop $shop){
         return view('vendor.shop.orders.list',compact('shop'));
     }
+    
     public function api_index($shop_id,$status = null){
         if($status == 'opened'){
             $orders = Order::where('shop_id',$shop_id)->whereIn('status',['new','processing','shipped','delivered'])->get();

@@ -11,6 +11,7 @@ use App\Http\Controllers\Vendor\ShopController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
+use App\Http\Controllers\Vendor\StaffController;
 use App\Http\Controllers\Vendor\SubscriptionController;
 use App\Http\Controllers\ResourcesController;
 
@@ -60,11 +61,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=> 'user'],function(){
-        Route::get('transactions',[PaymentController::class, 'index']);
-        Route::get('generate-otp',[UserController::class, 'generate_otp']);
-        Route::post('pin', [UserController::class, 'pin']);
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
+    });
+    Route::group(['prefix'=> 'vendor'],function(){
+        Route::get('transactions',[PaymentController::class, 'index']);
+        Route::get('generate-otp',[StaffController::class, 'generate_otp']);
+        Route::post('pin', [StaffController::class, 'pin']);
     });
 
     Route::group(['prefix'=> 'shops'],function(){
