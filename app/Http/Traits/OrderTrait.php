@@ -17,11 +17,12 @@ trait OrderTrait
 {
 
     protected function getOrder($carts = null){
+        $user = auth()->user();
         $cart = $carts ? $carts->toArray() : request()->session()->get('cart');
         if(!$cart)
-        $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=> $this->getVat(),'shipping'=> 0];
+        $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=> $user->country->vat,'shipping'=> 0];
         else
-        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $this->getVat()/100 * $this->getSubtotal($cart),'vat_percent'=>$this->getVat(),'shipping'=> $this->getShipping($cart)];
+        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $user->country->vat/100 * $this->getSubtotal($cart),'vat_percent'=> $user->country->vat,'shipping'=> $this->getShippingCost($cart)];
         $grandtotal = $order['subtotal'] + $order['vat'] + $order['shipping'];
         $order['grandtotal'] = $grandtotal;
         return $order;
@@ -36,12 +37,8 @@ trait OrderTrait
         return $subtotal;
     }
 
-    protected function getVat(){
-        $vat = Setting::where('name','vat')->first()->value;
-        return $vat;
-    }
 
-    protected function getShipping(Array $cart){
+    protected function getShippingCost(Array $cart){
         $user = auth()->user();
         $state_id = $user->addresses->where('main',true)->first() ? $user->addresses->where('main',true)->first()->state_id : 0;
         $shop_ids = array_unique(array_column($cart, 'shop_id'));
@@ -67,6 +64,7 @@ trait OrderTrait
             $state_id = Address::find($address_id)->state_id;
         else 
             $state_id = auth()->user()->state_id;
+            
         if(ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
             $hours = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->hours;
             $amount = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->amount;
@@ -78,7 +76,7 @@ trait OrderTrait
     }
 
     protected function getEachShipment($carts,$address_id){
-        $total = $this->getShipping($carts);
+        $total = $this->getShippingCost($carts); // to the main address from either shop or admin
         $shop_ids = array_unique(array_column($carts, 'shop_id'));
         // dd($shop_ids);
         $result = [];

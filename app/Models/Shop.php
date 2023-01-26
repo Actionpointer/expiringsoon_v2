@@ -28,7 +28,7 @@ class Shop extends Model
     use HasFactory,Notifiable,Sluggable;
     
     protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','status'];
-    protected $appends = ['image','number_of_products'];
+    protected $appends = ['image'];
 
     public static function boot()
     {
@@ -55,9 +55,9 @@ class Shop extends Model
     public function getMobileAttribute(){
         return $this->country->dial.intval($this->phone);   
     }
-    public function getNumberOfProductsAttribute(){
-        return $this->products->count();   
-    }
+    // public function getNumberOfProductsAttribute(){
+    //     return $this->products->count();   
+    // }
     public function getImageAttribute(){
         return $this->banner ? config('app.url')."/storage/$this->banner":null;   
     }

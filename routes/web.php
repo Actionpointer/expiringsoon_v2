@@ -81,11 +81,12 @@ Route::post('profile/update',[UserController::class, 'update'])->name('profile.u
 Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
 
 Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
+
 Route::post('address',[UserController::class, 'address'])->name('address');
 
 
 Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
-Route::post('checkout',[OrderController::class,'checkout'])->name('checkout');
+Route::get('checkout/{shop?}',[OrderController::class,'checkout'])->name('checkout');
 Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('checkout.shipment');
 Route::post('checkout/confirm',[OrderController::class,'confirmcheckout'])->name('confirmcheckout');
 Route::get('orders', [OrderController::class, 'index'])->name('orders');

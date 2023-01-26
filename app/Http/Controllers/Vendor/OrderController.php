@@ -33,7 +33,7 @@ class OrderController extends Controller
         if(!$status){
             $orders = Order::where('shop_id',$shop_id)->get();
         }
-        response()->json([
+        return response()->json([
             'status' => true,
             'message' => $orders->count() ? 'Shop Orders retrieved Successfully':'No Order retrieved',
             'data' => OrderResource::collection($orders),

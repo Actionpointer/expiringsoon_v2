@@ -108,12 +108,14 @@ class User extends Authenticatable
     public function getMaxShopsAttribute(){
         if($this->shop_id)
             return $this->shop->user->subscription->plan->shops;
-        else return $this->subscription->plan->shops;
+        elseif($this->subscription_id)
+            return $this->subscription->plan->shops;
     }
     public function getMaxProductsAttribute(){
         if($this->shop_id)
             return $this->shop->user->subscription->plan->products;
-        else return $this->subscription->plan->products;
+        elseif($this->subscription_id)
+             return $this->subscription->plan->products;
     }
     
     public function minimum_payout(){

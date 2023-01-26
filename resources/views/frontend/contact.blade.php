@@ -11,7 +11,7 @@
         <link rel="icon" type="image/png" href="src/images/favicon/favicon-16x16.png" />
         <link rel="stylesheet" href="src/plugins/swiper-bundle/script.min.css" />
         <link rel="stylesheet" href="src/plugins/bvselect/style.css" />
-        <link rel="stylesheet" href="{{asset('src/plugins/venobox/style.css" />
+        <link rel="stylesheet" href="{{asset('src/plugins/venobox/style.css')}}" />
         <link rel="stylesheet" href="src/css/bootstrap.min.css" />
         <link rel="stylesheet" href="src/css/style.css" />
 

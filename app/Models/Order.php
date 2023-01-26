@@ -75,15 +75,18 @@ class Order extends Model
     public function messages(){
         return $this->hasMany(OrderMessage::class);
     }
+    
     public function reviews(){
         return $this->hasMany(Review::class);
     }
+
     public function commission(){
         $plan = $this->shop->user->activeSubscription ? $this->shop->user->activeSubscription->plan : Plan::where('slug','free_plan')->first();
         $fixed = $plan->commission_fixed; 
         $percentage = $plan->commission_percentage; 
         return ($this->subtotal * ($percentage / 100)) + $fixed;
     }
+
     public function earning(){
         return $this->subtotal - $this->commission();
     }

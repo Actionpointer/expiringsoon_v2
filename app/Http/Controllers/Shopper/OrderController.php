@@ -52,8 +52,10 @@ class OrderController extends Controller
         return view('customer.payments',compact('payments'));
     }
 
-    public function checkout(Request $request){
+    public function checkout(Shop $shop = null){
+        
         $user = auth()->user();
+        
         $items = request()->session()->get('cart');
         if(!isset($items)){
             return redirect()->back();
@@ -63,8 +65,8 @@ class OrderController extends Controller
         }
 
         $carts = Cart::where('user_id',$user->id);
-        if($request->shop_id){
-            $carts = $carts->where('shop_id',$request->shop_id);
+        if($shop){
+            $carts = $carts->where('shop_id',$shop->id);
         }
         $carts = $carts->whereIn('product_id',array_keys($items))->get();
         $countries = Country::all();

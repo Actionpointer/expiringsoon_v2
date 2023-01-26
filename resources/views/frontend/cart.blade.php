@@ -100,14 +100,10 @@
                     </tbody>
                   </table>               
               </div>
-              <!-- Action Buttons  -->
-              <form action="{{route('checkout')}}" method="POST">@csrf
                 <div class="cart-table-action-btn d-flex">
                   <a href="{{route('vendor.show',$shop)}}" class="button button--md shop">Return to Shop</a>
-                  <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                  <button type="submit" class="button button--md update bg-success text-white">Checkout: {!!session('locale')['currency_symbol']!!}<span class="subtotal mx-0">{{collect($items)->where('shop_id',$shop->id)->sum('total')}}</span></button>
+                  <a href="{{route('checkout',$shop)}}" class="button button--md update bg-success text-white">Checkout: {!!session('locale')['currency_symbol']!!}<span class="subtotal mx-0">{{collect($items)->where('shop_id',$shop->id)->sum('total')}}</span></a>
                 </div>
-              </form>
             </div>
           @empty
             <div id="cart-empty" style="margin:auto;padding:10%;text-align:center">
@@ -209,12 +205,9 @@
                   </div>
                 </div>
                 @if($shops->isNotEmpty())
-                <form action="{{route('checkout')}}" method="POST">@csrf
-                  <input type="hidden" name="shop_id" value="0">
-                  <button type="submit" class="button button--lg w-100" style="margin-top: 20px" type="submit">
+                  <a href="{{route('checkout')}}" class="button button--lg w-100" style="margin-top: 20px" type="submit">
                     Place Order
-                  </button>
-                </form>
+                  </a>
                 @endif
               </div>
             </div>

@@ -682,10 +682,9 @@
                         <p class="product-count font-body--lg-400"><span class="cart-ttl">{{count((array) session('cart'))}}</span> Items</p>
                         <span class="product-price font-body--lg-500">{!!session('locale')['currency_symbol']!!}<span class="cart-ttl-amount">{{number_format($total,2)}}</span></span>
                     </div>
-                    <form action="{{route('checkout')}}" method="post">@csrf
-                        <input type="hidden" name="shop_id" value="0">
-                        <button type="submit" class="button button--lg w-100 text-center" href="{{route('checkout')}}">Checkout</button>
-                    </form>
+                    
+                    <a href="{{route('checkout')}}" class="button button--lg w-100 text-center my-2">Checkout</a>
+                    
                     <a class="button button--lg w-100 text-center" href="{{route('cart')}}" style="background: #56ac591a;color:#00b207;">Go to Cart</a>
                 </div>
             </div>

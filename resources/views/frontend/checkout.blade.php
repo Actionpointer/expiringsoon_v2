@@ -34,6 +34,7 @@
 @include('layouts.session')
 <section class="section billing section--xl pt-0">
     <div class="container">
+      <form id="set_address_form" action="{{route('address')}}" method="POST" style="display: none">@csrf</form>
       <form action="{{route('confirmcheckout')}}" method="POST">@csrf
         <div class="row billing__content">
           <div class="col-lg-8">
@@ -68,11 +69,11 @@
                         <label for="address">Street Address </label>
                         <input type="text" name="street" id="street" placeholder="Your Address" >
                     </div>
-                    <div class="contact-form__content-group row">
+                    <div class="contact-form__content-group row location">
                         <div class="col-md-4">
                           <div class="contact-form-input">
                               <label for="states">states </label>
-                              <select id="states" name="state_id" class="contact-form-input__dropdown">
+                              <select id="statess" name="state_id" class="select2">
                                   @foreach ($states as $state)
                                     <option value="{{$state->id}}" @if($state->id == $user->state_id) selected @endif>{{$state->name}}</option> 
                                   @endforeach
@@ -83,8 +84,8 @@
                         <div class="col-md-4">
                             <div class="contact-form-input">
                               <label for="zip">City</label>
-                              <select id="zip" name="city_id" class="contact-form-input__dropdown">
-                                  @foreach ($cities as $city)
+                              <select id="zips" name="city_id" class="select2 cities">
+                                  @foreach ($user->state->cities as $city)
                                     <option data-state="{{$city->state_id}}" value="{{$city->id}}">{{$city->name}}</option> 
                                   @endforeach
                               </select>
@@ -95,7 +96,7 @@
                         <div class="col-md-4">
                           <div class="contact-form-input">
                             <label for="postal_code">Postal Code</label>
-                            <input id="postal" name="postal_id" id="postal_code" placeholder="Postal Code">
+                            <input id="postals" name="postal_id" id="postal_code" placeholder="Postal Code">
                           </div>
                         </div>
                     </div>
@@ -106,7 +107,10 @@
                       </div>
                       <div class="contact-form-input">
                         <label for="contact_phone"> Contact Phone </label>
-                        <input type="text" name="contact_phone" id="contact_phone" placeholder="Phone number">
+                        <div class="input-group  d-flex">
+                          <button class="btn btn-outline-secondary" type="button">+{{$user->country->dial}}</button>
+                          <input type="number" name="contact_phone" class="form-control" value="{{old('contact_phone')}}" placeholder="Contact Phone Number" required/>
+                        </div>
                       </div>
                     </div>
                     <div class="contact-form-input">
@@ -115,6 +119,7 @@
                 </div>    
               </div>
             </div>
+
             <div class="billing__content-card">
               <div class="billing__content-card-header">
                 <h2 class="font-body--xxxl-500">Delivery Options</h2>
@@ -181,6 +186,7 @@
               </div>
             </div>
           </div>
+
           <div class="col-lg-4">
             <div class="bill-card">
               <div class="bill-card__content">
@@ -262,8 +268,29 @@
 @endsection
 @push('scripts')
 <script>
-    $(document).on('#states','change',function(){
-        console.log('a');
+    $(document).on('select2:select','#statess',function(){
+      var state_id = $(this).val();
+      cities = $(this).closest('.location').find('.cities');
+      // console.log.val())
+      $.ajax({
+        type:'POST',
+        dataType: 'json',
+        url: "{{route('cities')}}",
+        data:{
+            '_token' : $('meta[name="csrf-token"]').attr('content'),
+            'state_id': state_id,
+        },
+        success:function(data) {
+          cities.children().remove()
+          data.forEach(element => {
+            cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
+          });
+          cities.select2();
+        },
+        error: function (data, textStatus, errorThrown) {
+            console.log(data);
+        },
+      })
     })
     $('input[type=radio][name=delivery_address]').change(function(){
         if(this.value == 'new'){
@@ -290,7 +317,7 @@
               $('#shipping_cost').text(data.total);
               $('#shipping_cost').attr('data-value',data.total);
               $.each( data.shipments, function( key, value ) {
-                // console.log(value)
+                console.log(value)
                   if(value.amount){
                     $('#shopdelivery'+value.shop_id).attr('disabled',false);
                     $('#shopdelivery'+value.shop_id).prop('checked',true);
@@ -302,7 +329,7 @@
                     $('#shopdelivery'+value.shop_id).prop('checked',false);
                     $('#nodelivery'+value.shop_id).prop('checked',true);
                     $('#deliverytext'+value.shop_id).text(' Delivery is not available ');
-
+                    $('#deliverytime'+value.shop_id).text('');
                   }
               });
               recalculateGrandTotal()
@@ -366,15 +393,12 @@
         _token = $('meta[name=csrf-token]').attr('content');
         elements = {'street':street,'state_id':state_id,'city_id':city_id,'contact_name':contact_name,'contact_phone':contact_phone,'_token':_token};
         if(street && state_id && city_id && contact_name && contact_phone){
-          var form = $(document.createElement('form'));
-          $('.breedcrumb').append(form);
-          $(form).attr("action", "{{route('address')}}");
-          $(form).attr("method", "POST");
+          var myform = $('#set_address_form');
           $.each(elements, function(key,value){
               var input = $("<input>").attr("type", "hidden").attr("name", key).val(value);
-              $(form).append($(input));
+              $(myform).append($(input));
           });
-          $(form).submit();
+          $(myform).submit();
         }
         
     })

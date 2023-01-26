@@ -54,3 +54,5 @@ plan_id =
 auto_renewal = 
 subscription_expiry = 
 
+
+checkout [id | ]

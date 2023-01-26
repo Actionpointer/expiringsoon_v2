@@ -14,7 +14,7 @@ class City extends Model
         return $this->belongsTo(State::class);
     }
 
-    public function country(){
-        return $this->belongsTo(State::class)->belongsTo(Country::class);
-    }
+    // public function country(){
+    //     return $this->belongsTo(State::class)->belongsTo(Country::class);
+    // }
 }
