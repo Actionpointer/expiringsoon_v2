@@ -20,6 +20,7 @@ use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
 use App\Http\Controllers\Controller;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -47,16 +48,16 @@ class OrderController extends Controller
         return view('customer.wishlist',compact('user'));
     }
 
-    public function transactions(){
-        $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
-        return view('customer.payments',compact('payments'));
-    }
+    // public function transactions(){
+    //     $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
+    //     return view('customer.payments',compact('payments'));
+    // }
 
     public function checkout(Shop $shop = null){
         
         $user = auth()->user();
         
-        $items = request()->session()->get('cart');
+        $items = session('cart');
         if(!isset($items)){
             return redirect()->back();
         }
@@ -103,8 +104,7 @@ class OrderController extends Controller
                     'deliveryfee'=> $shipping_fee,'expected_at'=> $shipping_hours ? now()->addHours($shipping_hours) : null
                 ]);
                 foreach($carts->where('shop_id',$shop_id) as $cart){
-                    $cart->order_id = $order->id;
-                    $cart->save();
+                    $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->total]);
                     $subtotal += $cart->total;
                 }
                 $order->subtotal = $subtotal;
@@ -123,6 +123,7 @@ class OrderController extends Controller
             ], 500);
         }
     }
+    
 
     public function message(Request $request){
         $order = Order::find($request->order_id);

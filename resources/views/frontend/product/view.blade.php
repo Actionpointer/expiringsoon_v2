@@ -152,7 +152,7 @@
                             <!-- add to cart  -->
                             <form method="post" id="addtocart">
                             <input type="hidden" name="pid" id="product_id" value="{{$product->id}}">
-                            @if($product->stock == 0)
+                            @if(!$product->isAvailable())
                               <button type="button" class="button button--md products__content-action-item button--disable">
                               @else
                                 

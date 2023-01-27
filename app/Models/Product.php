@@ -95,13 +95,16 @@ class Product extends Model
     public function isEdible(){
         return $this->expire_at > now();
     }
+    public function isAvailable(){
+        return $this->stock > cache('settings')['minimum_stock_level'];
+    }
     
     public function isAccessible(){
         return $this->shop->status && $this->shop->approved && $this->shop->published;
     }
 
     public function isCertified(){
-        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->status && $this->published && $this->stock;
+        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->status && $this->published && $this->isAvailable();
     }
     
     public function scopeEdible($query){
@@ -120,7 +123,7 @@ class Product extends Model
         return $query->whereHas('shop',function ($q) { $q->where('status',true)->where('approved',true)->where('published',true); } );
     }
     public function scopeAvailable($query){
-        return $query->where('stock','>',0);
+        return $query->where('stock','>',cache('settings')['minimum_stock_level']);
     }
     
     public function reviews(){

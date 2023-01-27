@@ -169,7 +169,7 @@
                                                                             @if($product->price > $product->amount)
                                                                             <span class="tag blue font-body--md-400" style="font-size:13px">Sale {{floor($product->discount)}}% off</span>
                                                                             @endif
-                                                                            @if($product->stock == 0)
+                                                                            @if(!$product->isAvailable())
                                                                                 <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                                                             @endif
                                                                             @if(Auth::check() && $product->like->where('user_id',Auth::id())->count() == 0)

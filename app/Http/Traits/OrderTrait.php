@@ -18,7 +18,7 @@ trait OrderTrait
 
     protected function getOrder($carts = null){
         $user = auth()->user();
-        $cart = $carts ? $carts->toArray() : request()->session()->get('cart');
+        $cart = $carts ? $carts->toArray() : session('cart');
         if(!$cart)
         $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=> $user->country->vat,'shipping'=> 0];
         else

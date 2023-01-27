@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UserLoggedOut implements ShouldQueue
+class UserLoggedOut
 {
     use CartTrait;
     /**
@@ -31,11 +31,11 @@ class UserLoggedOut implements ShouldQueue
     public function handle(Logout $event)
     {
         //give session cart to database
-        $cart = request()->session()->get('cart');
-        if($cart){
-            foreach($cart as $key => $value){
-                $this->addToCartDb($value['product'],$value['quantity'],true);
-            }
-        }
+        // $cart = request()->session()->get('cart');
+        // if($cart){
+        //     foreach($cart as $key => $value){
+        //         $this->addToCartDb($value['product'],$value['quantity'],true);
+        //     }
+        // }
     }
 }

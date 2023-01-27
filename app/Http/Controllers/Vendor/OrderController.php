@@ -48,7 +48,7 @@ class OrderController extends Controller
 
     public function api_show($order_id){
         $order = Order::find($order_id);
-        response()->json([
+        return response()->json([
             'status' => true,
             'message' => 'Order Details retrieved Successfully',
             'data' => new OrderDetailsResource($order),

@@ -32,7 +32,7 @@ class OrderObserver
     {
         if($order->isDirty('status') && $order->status == 'processing'){
             $delivery = $order->deliveryByVendor() ? $order->deliveryfee : 0;
-            $settlement = Settlement::create(['receiver_id'=> $order->shop_id,'receiver_type'=> 'App\Models\Shop','order_id'=> $order->id,'amount'=> $order->earning() + $delivery,'reference'=> uniqid()]);
+            // $settlement = Settlement::create(['receiver_id'=> $order->shop_id,'receiver_type'=> 'App\Models\Shop','order_id'=> $order->id,'amount'=> $order->earning() + $delivery,'reference'=> uniqid()]);
             event(new OrderPurchased($order));
             $order->shop->notify(new OrderStatusVendorNotification($order));
         }

@@ -199,7 +199,7 @@
                                         @if($advert->product->price > $advert->product->amount)
                                             <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
-                                        @if($advert->product->stock == 0)
+                                        @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
                                         @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
@@ -578,7 +578,7 @@
                                         @if($advert->product->price > $advert->product->amount)
                                             <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
-                                        @if($advert->product->stock == 0)
+                                        @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
                                         @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
@@ -958,7 +958,7 @@
                                         @if($advert->product->price > $advert->product->amount)
                                             <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off </span>
                                         @endif
-                                        @if($advert->product->stock == 0)
+                                        @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
                                         @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
@@ -1338,7 +1338,7 @@
                                         @if($advert->product->price > $advert->product->amount)
                                             <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
-                                        @if($advert->product->stock == 0)
+                                        @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
                                         @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
@@ -1718,7 +1718,7 @@
                                         @if($advert->product->price > $advert->product->amount)
                                             <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off</span>
                                         @endif
-                                        @if($advert->product->stock == 0)
+                                        @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
                                         @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)

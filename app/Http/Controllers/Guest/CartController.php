@@ -30,7 +30,7 @@ class CartController extends Controller
     }
 
     public function cart(){
-        $items = request()->session()->get('cart');
+        $items = session('cart');
         $shops = collect([]);
         if($items && count($items)){
             $shop_ids = array_column($items, 'shop_id');

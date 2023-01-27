@@ -10,11 +10,12 @@ use App\Models\Payment;
 use App\Models\Settlement;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 
 class PaymentController extends Controller
 {
-    use PaymentTrait;
+    use PaymentTrait,CartTrait;
     public function __construct(){
         // $this->middleware('auth');
     }
@@ -89,6 +90,11 @@ class PaymentController extends Controller
                     $order = Order::find($item->paymentable_id);
                     $order->status = 'processing';
                     $order->save();
+                    foreach($order->items as $order_item){
+                        $product = $order_item->product;
+                        $cart = $this->removeFromCartSession($product);
+                        $this->removeFromCartDb($product);
+                    }
                 }
                 if($item->paymentable_type == 'App\Models\Feature'){
                     $feature = Feature::find($item->paymentable_id);

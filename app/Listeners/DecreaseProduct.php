@@ -29,10 +29,6 @@ class DecreaseProduct implements ShouldQueue
         foreach($event->order->items as $cart){
             $cart->product->stock -= $cart->quantity;
             $cart->product->save();
-            if($cart->product->stock <= cache('settings')['minimum_stock_level']){
-                $cart->product->status = false;
-                $cart->product->save();
-            }
         }
 
     }

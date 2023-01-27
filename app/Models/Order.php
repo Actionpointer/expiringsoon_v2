@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Cart;
 use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\Product;
+use App\Models\OrderItem;
 use App\Models\Settlement;
 use App\Models\PaymentItem;
 use App\Models\OrderMessage;
@@ -57,7 +57,7 @@ class Order extends Model
     }
 
     public function items(){
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(OrderItem::class);
     }
 
     public function payment(){

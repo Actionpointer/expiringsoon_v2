@@ -10,18 +10,14 @@ use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
+use App\Models\User;
 
 Route::get('runonce',function(){
-    $products = \App\Models\Product::all();
-    // $user->notify(new WelcomeNotification());
-    // return (new App\Notifications\WelcomeNotification())
-    //                 ->toMail($user);
-    foreach($products as $product){
-        $product->expire_at = $product->expire_at->addMonths(6);
-        $product->save();
-    }
+    $user = App\Models\User::find(1);
+    $user->notify(new WelcomeNotification());
+    return (new App\Notifications\WelcomeNotification())
+                    ->toMail($user);
     return 'done';
-    
 });
 
 Route::view('email','emails.completed');
@@ -79,9 +75,7 @@ Route::get('home', [HomeController::class, 'home'])->name('home');
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
 Route::post('profile/update',[UserController::class, 'update'])->name('profile.update');
 Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
-
 Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
-
 Route::post('address',[UserController::class, 'address'])->name('address');
 
 
@@ -91,10 +85,12 @@ Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('c
 Route::post('checkout/confirm',[OrderController::class,'confirmcheckout'])->name('confirmcheckout');
 Route::get('orders', [OrderController::class, 'index'])->name('orders');
 Route::get('order/{order}',[OrderController::class, 'show'])->name('order-details');
-Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
+// Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
 Route::post('order/review',[OrderController::class, 'review'])->name('order.review');
+
+Route::get('message',[OrderController::class, 'message'])->name('order.message');
 Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
-Route::get('vendor/{shop}/dashboard', [App\Http\Controllers\Vendor\ShopController::class, 'show'])->name('vendor.shop.show');
+
 include('vendor.php');
 include('admin.php');
 

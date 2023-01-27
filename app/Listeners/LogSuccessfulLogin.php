@@ -8,9 +8,9 @@ use App\Models\Subscription;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class LogSuccessfulLogin implements ShouldQueue
+
+class LogSuccessfulLogin
 {
     use CartTrait;
     /**

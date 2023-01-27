@@ -249,22 +249,22 @@
                         <th scope="col" class="dashboard__order-history-table-title"> Price </th>
                         <th scope="col" class="dashboard__order-history-table-title" > quantity </th>
                         <th scope="col" class="dashboard__order-history-table-title"> Subtotal </th>
-                        @if($order->reviews->where('reviewable_type','App\Models\Product')->isEmpty())
+                        @if($order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Product')->isEmpty())
                           <th scope="col" class="dashboard__order-history-table-title"> Review </th>
                         @endif
                       </tr>
                     </thead>
                     <tbody>
                       
-                      @foreach($order->items as $cart)
+                      @foreach($order->items as $item)
                           <tr>
                               <!-- Product item  -->
                               <td class="dashboard__order-history-table-item align-middle">
                                   <a href="#" class="dashboard__product-item" >
                                       <div class="dashboard__product-item-img">
-                                          <img src="{{Storage::url($cart->product->photo)}}" alt=" {{$cart->product->name}}" />
+                                          <img src="{{Storage::url($item->product->photo)}}" alt=" {{$item->product->name}}" />
                                       </div>
-                                      <h5 class="font-body--md-400"> {{$cart->product->name}}</h5>
+                                      <h5 class="font-body--md-400"> {{$item->product->name}}</h5>
                                       {{-- <div style="margin-top:-20px">
                                           <a href="{{route('admin.shop.show',$order->shop)}}" target="_blank" style="color:#00b207;font-weight:500">
                                               <div style="font-size:12px">
@@ -277,11 +277,11 @@
                               </td>
                               <!-- Price  -->
                               <td class="dashboard__order-history-table-item order-date align-middle "     >
-                                  {!!session('locale')['currency_symbol']!!} {{number_format($cart->amount, 0)}}
+                                  {!!session('locale')['currency_symbol']!!} {{number_format($item->amount, 0)}}
                               </td>
                               <!-- quantity -->
                               <td class="dashboard__order-history-table-item         order-total         align-middle         "     >
-                                  <p class="order-total-price">x  {{$cart->quantity}}</p>
+                                  <p class="order-total-price">x  {{$item->quantity}}</p>
                               </td>
                               <!-- Subtotal  -->     
                               <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
@@ -289,27 +289,27 @@
                               </td>
                               <td class="align-middle">
                                 
-                                @if($order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$cart->product->id)->isEmpty())
-                                  <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#review{{$cart->product->id}}">Review Product</button>
+                                @if($order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$item->product_id)->isEmpty())
+                                  <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#review{{$item->product_id}}">Review Product</button>
                                 @endif
-                                @if($order->status == 'completed' &&  $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$cart->product->id)->isNotEmpty())
+                                @if($order->status == 'completed' &&  $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$item->product_id)->isNotEmpty())
                                 Reviewed
                                 @endif
                               </td>
 
                           </tr>
-                          <div class="modal fade" id="review{{$cart->product->id}}" aria-labelledby="review{{$cart->product->id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
+                          <div class="modal fade" id="review{{$item->product_id}}" aria-labelledby="review{{$item->product_id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="review{{$cart->product->id}}Label">Review Product</h5>
+                                  <h5 class="modal-title" id="review{{$item->product_id}}Label">Review Product</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  <h4 class="mb-3">Reviewing:  {{$cart->product->name}}</h4>
+                                  <h4 class="mb-3">Reviewing:  {{$item->product->name}}</h4>
                                   <form method="post" id="rateService" action="{{route('order.review')}}">@csrf
                                     <input type="hidden" name="order_id" value="{{$order->id}}">
-                                    <input type="hidden" name="product_id" value="{{$cart->product->id}}">
+                                    <input type="hidden" name="product_id" value="{{$item->product_id}}">
                                     <div class="contact-form__content">
                                       <div class="bill-card__payment-method-item">
                                         <div class="form-check">
@@ -457,6 +457,7 @@
                     <input type="hidden" name="sender" value=" {{auth()->user()->role}}">
 
                     <div class="contact-form-input mb-0 mt-3">
+                      <h2 class="font-body--xl-500">Send Message</h2>
                       <select id="ordermessage" name="receiver" class="form-control" required >
                           <option value="" selected disabled> Send Message -</option>
                           @if(auth()->user()->role != 'shopper')

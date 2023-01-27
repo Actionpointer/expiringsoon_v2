@@ -12,7 +12,7 @@ trait CartTrait
     use OrderTrait;
 
     protected function addToCartSession(Product $product,$quantity = 1,$update = false){
-        $cart = request()->session()->get('cart');
+        $cart = session('cart');
         // if cart is empty then this is the first product
         if(!$cart) {
             $cart = [
@@ -24,7 +24,7 @@ trait CartTrait
                         "total" => $product->amount * $quantity,
                     ]
             ];
-            request()->session()->put('cart', $cart);
+            session(['cart' => $cart]);
         }else{
             // if cart not empty then check if this product exist then increment quantity
             if(isset($cart[$product->id])) {
@@ -36,7 +36,7 @@ trait CartTrait
                     $cart[$product->id]['quantity'] = $cart[$product->id]['quantity'] + $quantity;
                     $cart[$product->id]['total'] = $product->amount * $cart[$product->id]['quantity'];
                 }   
-                request()->session()->put('cart', $cart);
+                session(['cart' => $cart]);
             }else{
                 // if item not exist in cart then add to cart with quantity = 1
                 $cart[$product->id] = [
@@ -46,7 +46,7 @@ trait CartTrait
                     "amount" => $product->amount,
                     "total" => $product->amount * $quantity,
                 ];
-                request()->session()->put('cart', $cart);
+                session(['cart' => $cart]);
             }
         }
         return $cart;
@@ -54,9 +54,9 @@ trait CartTrait
 
 
     protected function removeFromCartSession(Product $product){
-        $oldcart = request()->session()->get('cart');
+        $oldcart = session('cart');
         $cart = Arr::except($oldcart, ["$product->id"]);
-        request()->session()->put('cart', $cart);
+        session(['cart' => $cart]);
         return $cart;
     }
 
