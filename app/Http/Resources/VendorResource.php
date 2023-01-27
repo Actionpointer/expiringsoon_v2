@@ -65,6 +65,7 @@ class VendorResource extends JsonResource
             }),
             // "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
             //     return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
+
             // }),
             
             
