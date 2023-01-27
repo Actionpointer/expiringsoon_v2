@@ -52,7 +52,7 @@
                   <div class="contact px-5">
                       @foreach ($user->addresses as $address)
                         <div class="form-check d-flex">
-                          <input class="form-check-input previous_addresses px-2" type="radio" name="address_id" value="{{$address->id}}" id="address{{$address->id}}" @if($address->main) checked @endif >
+                          <input class="form-check-input previous_addresses px-2" type="radio" name="address_id" data-main="{{$address->main}}" value="{{$address->id}}" id="address{{$address->id}}" @if($address->main) checked @endif >
                           <label class="form-check-label font-body--400" for="existing"> 
                               {{$address->contact_name.'('.$address->contact_phone.'): '.$address->street.', '.$address->city->name.', '.$address->state->name}}
                           </label>
@@ -109,7 +109,7 @@
                         <label for="contact_phone"> Contact Phone </label>
                         <div class="input-group  d-flex">
                           <button class="btn btn-outline-secondary" type="button">+{{$user->country->dial}}</button>
-                          <input type="number" name="contact_phone" class="form-control" value="{{old('contact_phone')}}" placeholder="Contact Phone Number" required/>
+                          <input type="number" name="contact_phone" class="form-control" value="{{old('contact_phone')}}" placeholder="Contact Phone Number" />
                         </div>
                       </div>
                     </div>
@@ -158,7 +158,7 @@
                                             </span>
                                           </label>
                                       @else
-                                        <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value='0' disabled>
+                                        <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value='0' data-state="unchecked" disabled>
                                         <label class="form-check-label font-body--400" for="cash">
                                           <span id="deliveryamount{{$item->shop_id}}"></span>
                                           <span id="deliverytext{{$item->shop_id}}"> Delivery is not available</span>
@@ -296,11 +296,23 @@
         if(this.value == 'new'){
           $('#new_address_form').show();
           $('.previous_addresses').prop('checked',false)
+          $('#new_address_form input,#new_address_form select').each(function(){
+              $(this).attr('required',true)
+          })
         }
-        else $('#new_address_form').hide();
+        else {
+          $('#new_address_form input,#new_address_form select').each(function(){
+              $(this).removeAttr('required')
+          })
+          $('#new_address_form').hide();
+          $('.previous_addresses[data-main=1]').prop('checked',true)
+        }
     })
     $('.previous_addresses').change(function(){
         $('#new_address_form').hide();
+        $('#new_address_form input,#new_address_form select').each(function(){
+              $(this).removeAttr('required')
+          })
         $('#existingaddress').prop('checked',true);
         //make ajax call to get shipping cost & time
         $.ajax({
@@ -313,20 +325,22 @@
               'address_id': $(this).val(),
           },
           success:function(data) {
-              console.log(data);
+              //console.log(data);
               $('#shipping_cost').text(data.total);
               $('#shipping_cost').attr('data-value',data.total);
               $.each( data.shipments, function( key, value ) {
-                console.log(value)
+                
                   if(value.amount){
                     $('#shopdelivery'+value.shop_id).attr('disabled',false);
                     $('#shopdelivery'+value.shop_id).prop('checked',true);
+                    $('#shopdelivery'+value.shop_id).val(value.amount);
                     $('#deliveryamount'+value.shop_id).text(value.amount);
                     $('#deliverytext'+value.shop_id).text(' for delivery latest by ');
                     $('#deliverytime'+value.shop_id).text(value.time);
                   }else{
                     $('#shopdelivery'+value.shop_id).attr('disabled',true);
                     $('#shopdelivery'+value.shop_id).prop('checked',false);
+                    $('#shopdelivery'+value.shop_id).val(value.amount);
                     $('#nodelivery'+value.shop_id).prop('checked',true);
                     $('#deliverytext'+value.shop_id).text(' Delivery is not available ');
                     $('#deliverytime'+value.shop_id).text('');
@@ -343,6 +357,7 @@
 
         //replace shipping cost & time on delivery options for each shop
     $('.shopdelivery').change(function(){
+        
         if($(this).val() != 0 && $(this).attr('data-state')=='unchecked'){
           str = $(this).attr('id');
           shop = str.replace('shopdelivery','');
@@ -350,7 +365,7 @@
           $(this).attr('data-state','checked')
           recalculateShipping('add',$(this).val())//add this value to the grandtotal shipping
         }
-        if($(this).val() == 0 && $(this).attr('data-state')=='unchecked'){
+        if($(this).val() == 0){
           str = $(this).attr('id')
           shop = str.replace('nodelivery','');
           $('#shopdelivery'+shop).attr('data-state','unchecked')
@@ -368,7 +383,7 @@
       }else{
         shipping_cost -= parseInt(amount)
       }
-      console.log(shipping_cost)
+      // console.log(shipping_cost)
       $('#shipping_cost').text(shipping_cost);
       $('#shipping_cost').attr('data-value',shipping_cost);
       recalculateGrandTotal()

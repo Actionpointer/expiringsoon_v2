@@ -38,6 +38,8 @@ class OrderDetailsResource extends JsonResource
             'subtotal' => $this->subtotal,
             'total' => $this->total,
             'currency'=> $this->shop->country->currency->symbol,
+            'status'=> $this->status,
+            'created_at'=> $this->created_at
             
         ];
     }

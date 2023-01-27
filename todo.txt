@@ -2,7 +2,7 @@ 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
 
 figure out adverts delete
 kyc notification should be in-app
-separate vendor signup and redirect to orientation page
+
 
 create general category so when a category is deleted, all products in that category are transfered to new category
 

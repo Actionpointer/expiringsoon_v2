@@ -84,40 +84,44 @@ class OrderController extends Controller
     }
 
     public function confirmcheckout(Request $request){
-        // dd($request->all());
-        $user = auth()->user();
-        $carts = Cart::whereIn('id',$request->carts)->get();
-        $vat = Setting::where('name','vat')->first()->value;
-        $orders = collect([]);
-        foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
-            $subtotal = 0;
-            $shipping_fee = 0;
-            $shipping_hours = null;
-            if($request->shop_delivery[$shop_id]){
-                $shipping_fee = $this->getShopShipment($shop_id,$request->address_id)['amount'];
-                $shipping_hours = $this->getShopShipment($shop_id,$request->address_id)['hours'];
+        try{
+            $user = auth()->user();
+            $carts = Cart::whereIn('id',$request->carts)->get();
+            $vat = $user->country->vat;
+            $address = Address::find($request->address_id);
+            $orders = collect([]);
+            foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
+                $subtotal = 0;
+                $shipping_fee = 0;
+                $shipping_hours = null;
+                if($request->shop_delivery[$shop_id]){
+                    $shipping_fee = $this->getShopShipment($shop_id,$address->state_id)['amount'];
+                    $shipping_hours = $this->getShopShipment($shop_id,$address->state_id)['hours'];
+                }
+                //dd($shipping_fee);
+                $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
+                    'deliveryfee'=> $shipping_fee,'expected_at'=> $shipping_hours ? now()->addHours($shipping_hours) : null
+                ]);
+                foreach($carts->where('shop_id',$shop_id) as $cart){
+                    $cart->order_id = $order->id;
+                    $cart->save();
+                    $subtotal += $cart->total;
+                }
+                $order->subtotal = $subtotal;
+                $order->vat = $vat * $subtotal / 100;
+                $order->total = ($vat * $subtotal / 100) + $subtotal + $shipping_fee;
+                $order->save();
+                $orders->push($order);
             }
-            //dd($shipping_fee);
-            $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
-                'deliveryfee'=> $shipping_fee,'expected_at'=> $shipping_hours ? now()->addHours($shipping_hours) : null
-            ]);
-            foreach($carts->where('shop_id',$shop_id) as $cart){
-                $cart->order_id = $order->id;
-                $cart->save();
-                $subtotal += $cart->total;
-            }
-            $order->subtotal = $subtotal;
-            $order->vat = $vat * $subtotal / 100;
-            $order->total = ($vat * $subtotal / 100) + $subtotal + $shipping_fee;
-            $order->save();
-            $orders->push($order);
+            //take payment
+            $link = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
+            return redirect()->to($link); 
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
-        //take payment
-        $link = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
-        if(!$link)
-        return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
-        else
-        return redirect()->to($link);
     }
 
     public function message(Request $request){

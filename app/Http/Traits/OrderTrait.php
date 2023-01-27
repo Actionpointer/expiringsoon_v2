@@ -22,7 +22,7 @@ trait OrderTrait
         if(!$cart)
         $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=> $user->country->vat,'shipping'=> 0];
         else
-        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $user->country->vat/100 * $this->getSubtotal($cart),'vat_percent'=> $user->country->vat,'shipping'=> $this->getShippingCost($cart)];
+        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $user->country->vat/100 * $this->getSubtotal($cart),'vat_percent'=> $user->country->vat,'shipping'=> $this->getEachShipment($cart)['total']];
         $grandtotal = $order['subtotal'] + $order['vat'] + $order['shipping'];
         $order['grandtotal'] = $grandtotal;
         return $order;
@@ -37,34 +37,9 @@ trait OrderTrait
         return $subtotal;
     }
 
-
-    protected function getShippingCost(Array $cart){
-        $user = auth()->user();
-        $state_id = $user->addresses->where('main',true)->first() ? $user->addresses->where('main',true)->first()->state_id : 0;
-        $shop_ids = array_unique(array_column($cart, 'shop_id'));
-        $shops = Shop::whereIn('id',$shop_ids)->get();
-        $shipping = 0;
-        $company_rate = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first();
-        foreach($shops as $shop){
-            if($shop->shippingRates->isNotEmpty() && $shop->shippingRates->where('destination_id',$state_id)->first()){
-                $shipping+= $shop->shippingRates->where('destination_id',$state_id)->first()->amount;
-            }elseif($company_rate){
-                $shipping+= $company_rate->amount;
-            }else{
-                $shipping+=0;
-            }
-        }
-        return $shipping;
-    }
-
-    protected function getShopShipment($shop_id,$address_id = null){
+    protected function getShopShipment($shop_id,$state_id){
         $hours = 0;
         $amount = 0;
-        if($address_id)
-            $state_id = Address::find($address_id)->state_id;
-        else 
-            $state_id = auth()->user()->state_id;
-            
         if(ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
             $hours = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->hours;
             $amount = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->amount;
@@ -75,16 +50,23 @@ trait OrderTrait
         return ['hours'=> $hours,'amount'=>$amount];
     }
 
-    protected function getEachShipment($carts,$address_id){
-        $total = $this->getShippingCost($carts); // to the main address from either shop or admin
-        $shop_ids = array_unique(array_column($carts, 'shop_id'));
-        // dd($shop_ids);
-        $result = [];
-        foreach($shop_ids as $shopId){
-            $res = $this->getShopShipment($shopId,$address_id);
-            $result[] = array_merge($res,['shop_id'=> $shopId,'time'=> now()->addHours($res['hours'])->format('l jS \of\ F')]);
+    protected function getEachShipment($carts,$address_id = null){
+        $user = auth()->user();
+        if($address_id){
+            $state_id = $user->addresses->where('id',$address_id)->first() ? $user->addresses->where('id',$address_id)->first()->state_id : 0;
+        }else{
+            $state_id = $user->addresses->where('main',true)->first() ? $user->addresses->where('main',true)->first()->state_id : 0;
         }
-        return ['total'=> $total,'shipments'=> $result];
+        $shop_ids = array_unique(array_column($carts, 'shop_id'));
+        $shipping = 0;
+        $result = [];
+        foreach($shop_ids as $shop_id){
+            $trip = $this->getShopShipment($shop_id,$state_id);
+            $shipping+= $trip['amount'];
+            $result[] = array_merge($trip,['shop_id'=> $shop_id,'time'=> now()->addHours($trip['hours'])->format('l jS \of\ F')]);
+        }
+        return ['total'=> $shipping,'shipments'=> $result];
+    
     }
 
     // protected function getDeliveryCharge(){
