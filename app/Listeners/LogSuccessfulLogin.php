@@ -46,7 +46,7 @@ class LogSuccessfulLogin
             }
         }
         //then give cart database to session
-        $dbcarts = Cart::where('user_id',$user->id)->whereNull('order_id')->get();
+        $dbcarts = Cart::where('user_id',$user->id)->get();
         if($dbcarts->isNotEmpty()){
             foreach($dbcarts as $dbcart){
                $cart =  $this->addToCartSession($dbcart->product,$dbcart->quantity,true);

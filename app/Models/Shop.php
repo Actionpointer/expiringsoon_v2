@@ -16,6 +16,7 @@ use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Settlement;
+use App\Models\OrderMessage;
 use App\Models\ShippingRate;
 use App\Observers\ShopObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -130,6 +131,9 @@ class Shop extends Model
     }
     public function orders(){
         return $this->hasMany(Order::class);
+    }
+    public function orderMessages(){
+        return $this->morphOne(OrderMessage::class, 'sender');
     }
     
     public function payouts(){

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderDetailsResource;
+use App\Http\Resources\OrderMessageResource;
 
 class OrderController extends Controller
 {
@@ -51,7 +52,7 @@ class OrderController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Order Details retrieved Successfully',
-            'data' => new OrderDetailsResource($order),
+            'data' => OrderDetailsResource::collection($order->items),
         ], 200);
     }
 
@@ -66,5 +67,21 @@ class OrderController extends Controller
         ], 200) :
          redirect()->back();
     }
-    
+
+    public function messages(Shop $shop,Order $order){
+
+    }
+    public function api_messages($shop_id,$order_id){
+        $order = Order::where('id',$order_id)->where('shop_id',$shop_id)->first();
+        return response()->json([
+            'status' => true,
+            'message' => 'Order Message',
+            'date' => OrderMessageResource::collection($order->messages),
+        ], 200);
+    }
+    // public function message(Request $request){
+    //     $order = Order::find($request->order_id);
+    //     $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','body'=> $request->body]);
+    //     return redirect()->back();
+    // }
 }

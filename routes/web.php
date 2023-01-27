@@ -88,7 +88,7 @@ Route::get('order/{order}',[OrderController::class, 'show'])->name('order-detail
 // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
 Route::post('order/review',[OrderController::class, 'review'])->name('order.review');
 
-Route::get('message',[OrderController::class, 'message'])->name('order.message');
+Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
 Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
 
 include('vendor.php');

@@ -91,7 +91,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('{shop_id}/orders/{status?}',[OrderController::class,'api_index']);
         Route::get('orders/view/{order_id}',[OrderController::class,'api_show']);
         Route::post('orders/update',[OrderController::class,'update']);
-        Route::post('orders/message',[OrderController::class,'message']);
+        Route::get('{shop_id}/orders/{order_id}/messages',[OrderController::class,'api_messages']);
+        Route::post('orders/message',[App\Http\Controllers\Shopper\OrderController::class,'message']);
 
     });
     

@@ -419,9 +419,9 @@
                          
                           <div class="d-flex py-4 border-bottom">
                               <div class="user-img">
-                                  @if($message->sender == 'shopper')
+                                  @if($message->sender_type == 'App\Models\User')
                                     <img class="rounded-circle" alt="user-photo" @if(!$order->user->pic) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($order->user->pic)}}" @endif > 
-                                  @elseif($message->sender == 'vendor')
+                                  @elseif($message->sender_type == 'App\Models\Shop')
                                   <img class="rounded-circle" alt="user-photo" @if(!$order->shop->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($order->shop->banner)}}" @endif >
                                   @else
                                   <img class="rounded-circle" alt="user-photo" src="{{asset('src/images/site/avatar.png')}}"> 
@@ -430,9 +430,9 @@
                               <div class="user-message-info">
                                   <div class="d-flex ">
                                     
-                                      @if($message->sender == 'vendor')
+                                      @if($message->sender_type == 'App\Models\Shop')
                                         <h5 class="font-body--md-500"> {{$order->shop->name}} </h5>
-                                      @elseif($message->sender == 'shopper')
+                                      @elseif($message->sender_type == 'App\Models\User')
                                         <h5 class="font-body--md-500"> {{$order->user->name}}  </h5> 
                                       @else
                                         <h5 class="font-body--md-500">   Admin </h5>
@@ -450,24 +450,16 @@
                       @endforeach
                     </div>
                   @endif
-                  <form action="{{route('order.message',$order->shop)}}" method="POST"> @csrf
+                  
+                  <form action="{{route('order.message')}}" method="POST"> @csrf
                     <input type="hidden" name="order_id" value=" {{$order->id}}">
-                    <input type="hidden" name="shop_id" value=" {{$order->shop_id}}">
-                    <input type="hidden" name="user_id" value=" {{$order->user_id}}">
-                    <input type="hidden" name="sender" value=" {{auth()->user()->role}}">
-
-                    <div class="contact-form-input mb-0 mt-3">
-                      <h2 class="font-body--xl-500">Send Message</h2>
-                      <select id="ordermessage" name="receiver" class="form-control" required >
-                          <option value="" selected disabled> Send Message -</option>
-                          @if(auth()->user()->role != 'shopper')
-                          <option value="buyer" @if(isset($shop) && $shop->id == $order->shop_id) selected @endif>To Buyer</option>
-                          @endif
-                          @if(auth()->user()->role != 'vendor')
-                            <option value="vendor" @if($order->user_id == auth()->id()) selected @endif > To Vendor </option>
-                          @endif
-                      </select>
-                    </div>
+                    @if($order->user_id == auth()->id())
+                    <input type="hidden" name="sender_id" value=" {{$order->user_id}}">
+                    <input type="hidden" name="sender_type" value="App\Models\User">
+                    @else
+                    <input type="hidden" name="sender_id" value="{{$order->shop_id}}">
+                    <input type="hidden" name="sender_type" value="App\Models\Shop">
+                    @endif
                     <div class="d-flex py-0">
                         <textarea name="body" class="form-control" rows="3" placeholder="Write Message"></textarea>
                         <button class="button button--outline rounded-0 my-0">Send</button>

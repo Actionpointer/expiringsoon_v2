@@ -34,6 +34,9 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.'],function (){
 
     Route::get('orders', [OrderController::class, 'index'])->name('order.list');
     Route::get('order/{order}', [OrderController::class, 'show'])->name('order.view');
-    Route::post('order/manage', [OrderController::class, 'manage'])->name('order.manage');
+    Route::post('order/manage', [OrderController::class, 'update'])->name('order.manage');
+    
+    Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
+    Route::post('order/message',[OrderController::class, 'message'])->name('order.message');    
     
 });

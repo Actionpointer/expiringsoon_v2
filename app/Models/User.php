@@ -14,6 +14,7 @@ use App\Models\Address;
 use App\Models\Country;
 use App\Models\Payment;
 use App\Models\Settlement;
+use App\Models\OrderMessage;
 use App\Models\Subscription;
 use App\Observers\UserObserver;
 use Laravel\Sanctum\HasApiTokens;
@@ -139,6 +140,9 @@ class User extends Authenticatable
     }
     public function orders(){
         return $this->hasMany(Order::class);
+    }
+    public function orderMessages(){
+        return $this->morphOne(OrderMessage::class, 'sender');
     }
       
     public function likes(){

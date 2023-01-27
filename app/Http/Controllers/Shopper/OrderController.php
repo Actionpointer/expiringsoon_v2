@@ -39,7 +39,7 @@ class OrderController extends Controller
     
     public function show(Order $order){
         $user = auth()->user();
-        OrderMessage::where('order_id',$order->id)->where('user_id',$user->id)->where('receiver',$user->role)->whereNull('read_at')->update(['read_at'=>now()]);
+        OrderMessage::where('order_id',$order->id)->where('sender_id',$user->id)->where('sender_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
         return view('order',compact('order'));
     }
 
@@ -124,11 +124,18 @@ class OrderController extends Controller
         }
     }
     
-
+    public function messages(Order $order){
+        
+    }
     public function message(Request $request){
         $order = Order::find($request->order_id);
-        $message = OrderMessage::create(['user_id'=> $order->user_id,'order_id'=> $order->id,'shop_id'=> $order->shop_id,'body'=> $request->body,'sender'=> $request->sender,'receiver' => $request->receiver]);
-        return redirect()->back();
+        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','body'=> $request->body]);
+        return request()->expectsJson() ? 
+        response()->json([
+            'status' => true,
+            'message' => 'Message Sent Successfully',
+        ], 200) :
+         redirect()->back();
     }
 
     public function review(Request $request){

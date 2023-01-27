@@ -11,16 +11,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class OrderMessage extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','order_id','shop_id','body','sender','receiver','read_at'];
+    protected $fillable = ['sender_id','order_id','sender_type','body','read_at'];
     protected $dates = ['read_at'];
 
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'sender_id')->where('sender_type','App\Models\User');
     }
     public function shop(){
-        return $this->belongsTo(Shop::class);
+        return $this->belongsTo(Shop::class,'sender_id')->where('sender_type','App\Models\Shop');
     }
     public function order(){
         return $this->belongsTo(Order::class);
+    }
+    public function sender(){
+        return $this->morphTo();
     }
 }
