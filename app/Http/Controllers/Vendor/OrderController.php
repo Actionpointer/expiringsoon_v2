@@ -86,6 +86,11 @@ class OrderController extends Controller
     public function message(Shop $shop,Request $request){
         $order = Order::find($request->order_id);
         $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','body'=> $request->body]);
-        return redirect()->back();
+        return request()->expectsJson() ? 
+        response()->json([
+            'status' => true,
+            'message' => 'Message Sent Successfully',
+        ], 200) :
+         redirect()->back();
     }
 }
