@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
 {
-    protected $fillable = ['name','code','country_id'];
+    protected $fillable = ['name','iso','country_id'];
 
     public function cities(){
         return $this->hasMany(City::class);

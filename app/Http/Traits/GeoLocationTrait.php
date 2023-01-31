@@ -35,14 +35,18 @@ trait GeoLocationTrait
         $country = Country::where('iso',$iso)->first();
         return $country;
     }
-    protected function getState($country_id,$state){
-        $state = State::where('country_id',$country_id)->where('name','LIKE',"%".$state."%")->first();
+    protected function getState($country_id,$state_name,$state_code){
+        // $state = State::where('country_id',$country_id)->where('name','LIKE',"%".$state_name."%")->first();
+        $state = State::where('country_id',$country_id)->where('iso',$state_code)->first();
+        if(!$state){
+            $state = State::create(['country_id'=> $country_id,'iso'=> $state_code,'name'=> $state_name]);
+        }
         return $state;
     }
 
     public function saveLocation($geo_location){
         $country = $this->getCountryByIso($geo_location['geoplugin_countryCode']);
-        $state = $this->getState($country->id,$geo_location['geoplugin_region']);
+        $state = $this->getState($country->id,$geo_location['geoplugin_region'],$geo_location['geoplugin_regionCode']);
         if($country && $state){
             $location = Location::updateOrCreate([
                 'ipaddress'=> $geo_location['geoplugin_request'],

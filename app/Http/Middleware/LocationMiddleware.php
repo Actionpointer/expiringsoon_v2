@@ -25,7 +25,6 @@ class LocationMiddleware
             $ip = request()->ip() == '::1'|| request()->ip() == '127.0.0.1'? '197.211.58.12' : request()->ip();
             //check location table first
             if($location = $this->getLocation($ip)){
-                
                 session(['locale'=> $this->getLocale($location)]);
             }else{
                 //check outside
