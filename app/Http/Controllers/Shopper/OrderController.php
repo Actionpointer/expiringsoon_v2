@@ -38,10 +38,9 @@ class OrderController extends Controller
     }
     
     public function show(Order $order){
-        $user = auth()->user();
-        OrderMessage::where('order_id',$order->id)->where('sender_id',$user->id)->where('sender_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
-        return view('order',compact('order'));
+        return view('order.view',compact('order'));
     }
+    
 
     public function wishlist(){
         $user = auth()->user();
@@ -125,8 +124,11 @@ class OrderController extends Controller
     }
     
     public function messages(Order $order){
-        
+        $user = auth()->user();
+        OrderMessage::where('order_id',$order->id)->where('sender_id',$user->id)->where('sender_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
+        return view('order.messages',compact('order'));
     }
+    
     public function message(Request $request){
         $order = Order::find($request->order_id);
         $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','body'=> $request->body]);

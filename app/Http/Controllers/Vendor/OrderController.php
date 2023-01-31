@@ -43,8 +43,9 @@ class OrderController extends Controller
     }
 
     public function show(Shop $shop,Order $order){
-        OrderMessage::where('order_id',$order->id)->where('shop_id',$shop->id)->where('receiver','vendor')->whereNull('read_at')->update(['read_at'=>now()]);
-        return view('order',compact('shop','order'));
+        
+        // OrderMessage::where('order_id',$order->id)->where('shop_id',$shop->id)->where('receiver','vendor')->whereNull('read_at')->update(['read_at'=>now()]);
+        return view('order.view',compact('shop','order'));
     }
 
     public function api_show($order_id){
@@ -69,8 +70,10 @@ class OrderController extends Controller
     }
 
     public function messages(Shop $shop,Order $order){
-
+        OrderMessage::where('order_id',$order->id)->where('sender_id',$shop->id)->where('sender_type','App\Models\Shop')->whereNull('read_at')->update(['read_at'=>now()]);
+        return view('order.messages',compact('shop','order'));
     }
+
     public function api_messages($shop_id,$order_id){
         $order = Order::where('id',$order_id)->where('shop_id',$shop_id)->first();
         return response()->json([
@@ -79,9 +82,10 @@ class OrderController extends Controller
             'date' => OrderMessageResource::collection($order->messages),
         ], 200);
     }
-    // public function message(Request $request){
-    //     $order = Order::find($request->order_id);
-    //     $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','body'=> $request->body]);
-    //     return redirect()->back();
-    // }
+
+    public function message(Shop $shop,Request $request){
+        $order = Order::find($request->order_id);
+        $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','body'=> $request->body]);
+        return redirect()->back();
+    }
 }

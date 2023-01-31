@@ -51,7 +51,7 @@
               <div class="dashboard__order-history-title">
                 <h2 class="font-body--xl-500">Order Details</h2>
                 {{-- <h2 class="font-body--md-400">Vendor:<br /> --}}
-                {{-- <a href="{{route('admin.orders')}}">back to list</a> --}}
+                <a href="{{route('order.messages',$order)}}">Messages: {{$order->messages->count()}}</a>
               </div>
 
               <div class="dashboard__details-content">

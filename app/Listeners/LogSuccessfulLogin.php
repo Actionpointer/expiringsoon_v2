@@ -39,7 +39,7 @@ class LogSuccessfulLogin
             }
         }
         //first give session cart to database
-        $cart = request()->session()->get('cart');
+        $cart = session('cart');
         if($cart){
             foreach($cart as $key => $value){
                 $this->addToCartDb($value['product'],$value['quantity'],true);
