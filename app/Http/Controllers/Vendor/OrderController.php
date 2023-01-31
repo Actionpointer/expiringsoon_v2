@@ -79,7 +79,7 @@ class OrderController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Order Message',
-            'date' => OrderMessageResource::collection($order->messages),
+            'data' => OrderMessageResource::collection($order->messages),
         ], 200);
     }
 
