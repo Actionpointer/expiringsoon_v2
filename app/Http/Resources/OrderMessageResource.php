@@ -18,7 +18,7 @@ class OrderMessageResource extends JsonResource
         return [
             'id' => $this->id,
             'order_id' => $this->order_id,
-            'sender_name' => $this->sender_type == 'App\Models\User' ? $this->user->name:$this->shop->name,
+            'sender_name' => $this->sender_type == 'App\Models\User' ? $this->order->user->name :$this->order->shop->name,
             'body' => $this->body,
             'read_at' => $this->read_at,
             'created_at'=> $this->created_at
