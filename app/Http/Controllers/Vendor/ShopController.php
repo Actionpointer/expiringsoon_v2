@@ -243,9 +243,10 @@ class ShopController extends Controller
             $request->phone ? $shop->phone = $request->phone:'';
             $request->published ? $shop->published = $request->published:'';
             if($request->photo){
-                if($request->hasFile('banner')){
-                    if($shop->banner) Storage::delete('public/'.$shop->banner);
-                    $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
+                if($request->hasFile('photo')){
+                    if($shop->banner) 
+                    Storage::delete('public/'.$shop->banner);
+                    $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
                     $request->file('photo')->storeAs('public/',$banner);
                 }else{
                     $size = getimagesize($request->photo);

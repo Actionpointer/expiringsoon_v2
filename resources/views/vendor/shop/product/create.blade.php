@@ -191,7 +191,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                   
-                              <input class="form-control-sm border-light percent" type="number" name="discount120" id="discount120percent" value="{{ old('discount120') }}">
+                              <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount120" id="discount120percent" value="{{ old('discount120') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">%</span>
                               </div>
@@ -201,7 +201,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                   
-                              <input class="form-control-sm border-light discountprice" type="number" name="discount120" id="discount120" value="{{ old('discount120') }}">
+                              <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120" value="{{ old('discount120') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">.0</span>
                               </div>
@@ -220,7 +220,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                   
-                              <input class="form-control-sm border-light percent" type="number" name="discount90" id="discount90percent" value="{{ old('discount90') }}">
+                              <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount90" id="discount90percent" value="{{ old('discount90') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">%</span>
                               </div>
@@ -230,7 +230,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                   
-                              <input class="form-control-sm border-light discountprice" type="number" name="discount90" id="discount90" value="{{ old('discount90') }}">
+                              <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount90" id="discount90" value="{{ old('discount90') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">.0</span>
                               </div>
@@ -250,7 +250,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                   
-                              <input class="form-control-sm border-light percent" type="number" name="discount60" id="discount60percent" value="{{ old('discount60') }}">
+                              <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount60" id="discount60percent" value="{{ old('discount60') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">%</span>
                               </div>
@@ -259,7 +259,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                   
-                              <input class="form-control-sm border-light discountprice" type="number" name="discount60" id="discount60" value="{{ old('discount60') }}">
+                              <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount60" id="discount60" value="{{ old('discount60') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">.0</span>
                               </div>
@@ -279,7 +279,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                 
-                              <input class="form-control-sm border-light percent" type="number" name="discount30" id="discount30percent" value="{{ old('discount30') }}">
+                              <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount30" id="discount30percent" value="{{ old('discount30') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">%</span>
                               </div>
@@ -289,7 +289,7 @@
                           <td>
                             <div class="input-group d-flex flex-nowrap">
                                 
-                              <input class="form-control-sm border-light discountprice" type="number" name="discount30" id="discount30" value="{{ old('discount30') }}">
+                              <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount30" id="discount30" value="{{ old('discount30') }}">
                               <div class="input-group-append">
                                 <span class="input-group-text">.0</span>
                               </div>
@@ -363,16 +363,23 @@
         //     $(this).closest('.discount').find('.discountoptions').hide()
         // })
         $(document).on('input blur change',"#prices",function(){
-          price = Math.ceil($(this).val() * 0.1);
-          $('.discountprice').attr({"max" : $(this).val(),"min" : price})
+          price = $(this).val();
+          // $('.discountprice').attr({"max" : $(this).val(),"min" : price})
           $('.percent').each(function(){
-            $('#'+$(this).attr('id').split('percent')[0]).val($(this).val() /100 * price);
+            let result = $(this).val() /100 * price;
+            $('#'+$(this).attr('id').split('percent')[0]).val(result.toFixed(3));
           })         // values (or variables) here
         });
         $(document).on('input blur change',".percent",function(){
           let p = $(this).attr('id').split('percent')[0];
           let q = $(this).val() /100 * price;
-          $('#'+p).val(q);
+          $('#'+p).val(q.toFixed(3));
+            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+        });
+        $(document).on('input blur change',".discountprice",function(){
+          let p = $(this).attr('id')+'percent';
+          let q = $(this).val() * 100 / price;
+          $('#'+p).val(q.toFixed(3));
             // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
         });
 
