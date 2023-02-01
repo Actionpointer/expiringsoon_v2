@@ -398,7 +398,7 @@
                                 <h5 class="font-body--xl-500">Add Destination</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" id="editcategory" action="{{route('vendor.shop.shipping',$shop)}}" >@csrf
+                                <form method="post" id="editcategory" action="{{route('vendor.shop.shipping.store',$shop)}}" >@csrf
                                     <div class="contact-form__content">
                 
                                     <div class="contact-form__content-group">
@@ -459,7 +459,7 @@
                                             <td> 
                                                 <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit</a> | 
                                                 
-                                                <form class="d-inline" action="{{route('vendor.shop.shipping',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete shipping rate?');">@csrf
+                                                <form class="d-inline" action="{{route('vendor.shop.shipping.delete',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete shipping rate?');">@csrf
                                                   <input type="hidden" name="rate_id" value="{{$rate->id}}">
                                                   <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
                                                 </form>
@@ -472,8 +472,9 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                   </div>
                                                   <div class="modal-body">
-                                                      <form action="{{route('vendor.shop.shipping',$shop)}}" method="post" id="rateedit{{$rate->id}}">
+                                                      <form action="{{route('vendor.shop.shipping.update',$shop)}}" method="post" id="rateedit{{$rate->id}}">
                                                           @csrf 
+                                                          <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                                           <input type="hidden" name="rate_id" value="{{$rate->id}}">
                                                           <div class="contact-form__content my-3">
                                                               <div class="contact-form__content-group">

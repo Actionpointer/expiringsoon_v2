@@ -83,11 +83,11 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('products/store',[ProductController::class,'store']);
         Route::post('products/update',[ProductController::class,'update']);
         Route::post('products/delete',[ProductController::class,'destroy']);
-        Route::get('/{shop_id}/shipping/rates',[ShipmentController::class,'shipping_index']);
+        Route::get('/{shop_id}/shipping/rates',[ShipmentController::class,'index']);
         Route::group(['prefix'=>'shipping/rates'],function (){
-            Route::post('store',[ShipmentController::class,'shipping_store']);
-            Route::post('update',[ShipmentController::class,'shipping_update']);
-            Route::post('delete',[ShipmentController::class,'shipping_delete']);
+            Route::post('store',[ShipmentController::class,'store']);
+            Route::post('update',[ShipmentController::class,'update']);
+            Route::post('delete',[ShipmentController::class,'delete']);
         });
         Route::get('{shop_id}/orders/{status?}',[OrderController::class,'api_index']);
         Route::get('orders/view/{order_id}',[OrderController::class,'api_show']);

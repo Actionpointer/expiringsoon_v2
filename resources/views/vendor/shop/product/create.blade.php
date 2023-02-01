@@ -84,41 +84,10 @@
                                 </span>
                             @enderror
                           </div>
-                          
-                          <div class="contact-form-input">
-                            <label for="states">Category</label>
-                            <select id="category_id" name="category_id" class="select2" required>
-                                <option value="" selected>Select</option>
-                                @foreach ($categories as $category)
-                                    <option value={{$category->id}}>{{$category->name}}</option>
-                                @endforeach
-
-                            </select>
-                            @error('category_id')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                          </div>
-                          <div class="contact-form-input">
-                            <label for="tags">Sub Category</label>
-                            <select name="tags[]" id="tags" class="select2" multiple >
-                              @foreach ($tags as $tag)
-                                <option value="{{$tag->name}}">{{$tag->name}}</option>
-                              @endforeach
-                              
-                            </select>
-                            @error('tags')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                          </div>
-                          
                         </div>
                     </div>
                     <div class="col-lg-5 order-lg-0 order-1">
-                      <div class="dashboard__content-card-img flex-column">
+                      <div class="dashboard__content-card-img flex-column align-items-center">
                           <div class="dashboard__content-img-wrapper" id="avatar">
                             <img  src="{{asset('src/images/site/no-image.jpg')}}" class="rounded-circle" alt="Product Photo" onclick="performClick('theFile');" id="imgPreview"    />
                           </div>
@@ -135,126 +104,221 @@
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <!-- Billing Address  -->
-              <div class="dashboard__content-card">
-                <div class="dashboard__content-card-header">
-                  <h5 class="font-body--xxl-500">Product Details</h5>
-                </div>
-                
-                <div class="dashboard__content-card-body">
-                    <div class="contact-form__content">
-                      <div class="contact-form__content-group">
-                        <div class="contact-form-input">
-                          <label for="lname2">Unit Price </label>
-                          <input type="number" name="price" id="prices" value="{{ old('price') }}" placeholder="Price for each" required />
-                          @error('price')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                          @enderror
-                        </div>
-                        <div class="contact-form-input">
-                          <label for="number1">Expiry Date</label>
-                          <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{ old('expiry') }}" id="datepicker"/>
-                          @error('expiry')
+                  <div class="row">
+                    <div class="col-lg-12">
+                        <div class="contact-form__content">
+                          <div class="contact-form__content-group">
+                            <div class="contact-form-input">
+                              <label for="states">Category</label>
+                              <select id="category_id" name="category_id" class="select2" required>
+                                  <option value="" selected>Select</option>
+                                  @foreach ($categories as $category)
+                                      <option value={{$category->id}}>{{$category->name}}</option>
+                                  @endforeach
+  
+                              </select>
+                              @error('category_id')
                                   <span class="invalid-feedback d-block" role="alert">
                                       <strong>{{ $message }}</strong>
                                   </span>
-                            @enderror
-                        </div>
-                      </div>
-                      <h6 class="mb-3">Discount Prices:</h6>
-                      
-                      <div class="contact-form__content-group">
-
-                        <div class="contact-form-input discount">
-                          
-                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 1 month</button>
-                          
-                          <div class="discountoptions" @if(!old('discount30')) style="display:none" @endif>
-                            <label for="number1">1 to 30days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount30" id="discount30" value="{{ old('discount30') }}" placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
+                              @enderror
                             </div>
-                            @error('discount30')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
+                            <div class="contact-form-input">
+                              <label for="tags">Sub Category</label>
+                              <select name="tags[]" id="tags" class="select2" multiple >
+                                @foreach ($tags as $tag)
+                                  <option value="{{$tag->name}}">{{$tag->name}}</option>
+                                @endforeach
+                                
+                              </select>
+                              @error('tags')
+                                  <span class="invalid-feedback d-block" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                            </div> 
                           </div>
                         </div>
-                        <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 2months</button>
-                          <div class="discountoptions"  @if(!old('discount30')) style="display:none" @endif>
-                            <label for="number1">31 to 60days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount60" value="{{ old('discount60') }}" id="discount60" placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
-                            </div>
-                            @error('discount60')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-                          </div>
-                        </div>
-                        <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 3months</button>
-                          <div class="discountoptions"  @if(!old('discount30')) style="display:none" @endif>
-                            <label for="number1">61 to 90days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount90" id="discount90" value="{{ old('discount90') }}"  placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
-                            </div>
-                            @error('discount90')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-                          </div>
-                        </div>
-                        <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" @if(old('discount30')) style="display:none" @endif type="button">When expiry date is below 4months</button>
-                          <div class="discountoptions"  @if(!old('discount30')) style="display:none" @endif>
-                            <label for="number1">91 to 120days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount120" id="discount120" value="{{ old('discount120') }}"  placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
-                            </div>
-                            @error('discount120')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-                          </div>  
-                        </div>
-
-                      </div>
-                      @if($shop->user->total_products >= $shop->user->max_products) 
-                      <h3 class="text-danger">The status of this product will be <strong>INACTIVE</strong></h3>
-                      @endif
-                      <div class="contact-form-btn">
-                        <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
-                          Save as Draft
-                        </button>
-                        <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
-                          Publish Product
-                        </button>
-                      </div>
                     </div>
-                  </form>
+                </div>
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <div class="contact-form__content">
+                            <div class="contact-form__content-group">
+                              <div class="contact-form-input">
+                                <label for="lname2">Unit Price </label>
+                                <input type="number" name="price" id="prices" value="{{ old('price') }}" placeholder="Price for each" required />
+                                @error('price')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                              </div>
+                              <div class="contact-form-input">
+                                <label for="number1">Expiry Date</label>
+                                <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{ old('expiry') }}" id="datepicker"/>
+                                @error('expiry')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                  @enderror
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+             
+              <div class="dashboard__content-card">
+                <div class="dashboard__content-card-header">
+                <h5 class="font-body--xl-500">Product Discounts</h5>
+                </div>
+                <div class="dashboard__content-card-body">
+                  <div class="table-responsive">
+                    <table class="table w-auto">
+                      <tbody>
+                        <tr>
+                            <th class="text-nowrap">Expiry in</th>
+                            <th>Discount in %</th>
+                            <th></th>
+                            <th>Discount in 0.0</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                          <td>120 Days</td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                  
+                              <input class="form-control-sm border-light percent" type="number" name="discount120" id="discount120percent" value="{{ old('discount120') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                              </div>
+                          </div>
+                          </td>
+                          <td>OR</td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                  
+                              <input class="form-control-sm border-light discountprice" type="number" name="discount120" id="discount120" value="{{ old('discount120') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">.0</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            @error('discount120')
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>90 Days</td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                  
+                              <input class="form-control-sm border-light percent" type="number" name="discount90" id="discount90percent" value="{{ old('discount90') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>OR</td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                  
+                              <input class="form-control-sm border-light discountprice" type="number" name="discount90" id="discount90" value="{{ old('discount90') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">.0</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                              @error('discount90')
+                              <span class="invalid-feedback d-block" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                              @enderror
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>60 Days</td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                  
+                              <input class="form-control-sm border-light percent" type="number" name="discount60" id="discount60percent" value="{{ old('discount60') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                              </div>
+                            </div>
+                          </td><td>OR</td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                  
+                              <input class="form-control-sm border-light discountprice" type="number" name="discount60" id="discount60" value="{{ old('discount60') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">.0</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            @error('discount60')
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>30 Days</td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                
+                              <input class="form-control-sm border-light percent" type="number" name="discount30" id="discount30percent" value="{{ old('discount30') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td><div class="">OR</div></td>
+                          <td>
+                            <div class="input-group d-flex flex-nowrap">
+                                
+                              <input class="form-control-sm border-light discountprice" type="number" name="discount30" id="discount30" value="{{ old('discount30') }}">
+                              <div class="input-group-append">
+                                <span class="input-group-text">.0</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                              @error('discount30')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                              @enderror
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    
+                  </div>
+
+                  @if($shop->user->total_products >= $shop->user->max_products) 
+                  <h3 class="text-danger">The status of this product will be <strong>INACTIVE</strong></h3>
+                  @endif
+                  <div class="contact-form-btn">
+                    <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
+                      Save as Draft
+                    </button>
+                    <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
+                      Publish Product
+                    </button>
+                  </div>  
                 </div>
               </div>
             </div>
@@ -267,6 +331,7 @@
 @endsection
 @push('scripts')
     <script>
+      var price = 0;
       // console.log(tags);
       function performClick(elemId) {
         var elem = document.getElementById(elemId);
@@ -288,19 +353,29 @@
           }
       }
   
-        $('.adddiscount').on('click',function(){
-            $(this).closest('.discount').find('.discountoptions').show();
-            $(this).hide();
-        })
-        $('.removediscount').on('click',function(){
-            $(this).closest('.discount').find('.adddiscount').show();
-            $(this).closest('.discount').find('.discountoptions input').val('')
-            $(this).closest('.discount').find('.discountoptions').hide()
-        })
+        // $('.adddiscount').on('click',function(){
+        //     $(this).closest('.discount').find('.discountoptions').show();
+        //     $(this).hide();
+        // })
+        // $('.removediscount').on('click',function(){
+        //     $(this).closest('.discount').find('.adddiscount').show();
+        //     $(this).closest('.discount').find('.discountoptions input').val('')
+        //     $(this).closest('.discount').find('.discountoptions').hide()
+        // })
         $(document).on('input blur change',"#prices",function(){
-          let m = Math.ceil($(this).val() * 0.1);
-            $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+          price = Math.ceil($(this).val() * 0.1);
+          $('.discountprice').attr({"max" : $(this).val(),"min" : price})
+          $('.percent').each(function(){
+            $('#'+$(this).attr('id').split('percent')[0]).val($(this).val() /100 * price);
+          })         // values (or variables) here
         });
+        $(document).on('input blur change',".percent",function(){
+          let p = $(this).attr('id').split('percent')[0];
+          let q = $(this).val() /100 * price;
+          $('#'+p).val(q);
+            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+        });
+
         $(document).on('change','#category_id',function(){
           let tags = @json($tags);
           let v = $(this).find(':selected').text()

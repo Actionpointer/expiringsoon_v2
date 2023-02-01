@@ -14,8 +14,10 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
     // Route::post('address',[ShopController::class, 'address'])->name('address');
     // Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
     
-    Route::post('shipping',[ShipmentController::class, 'vendor_shipping_rates'])->name('shipping');
-    
+    Route::post('shipping/store',[ShipmentController::class, 'store'])->name('shipping.store');
+    Route::post('shipping/update',[ShipmentController::class,'update'])->name('shipping.update');
+    Route::post('shipping/delete',[ShipmentController::class,'delete'])->name('shipping.delete');
+
     Route::post('staff/store',[StaffController::class, 'store'])->name('staff.store');
     Route::post('staff/update',[StaffController::class, 'update'])->name('staff.update');
     Route::post('staff/delete',[StaffController::class, 'destroy'])->name('staff.destroy');

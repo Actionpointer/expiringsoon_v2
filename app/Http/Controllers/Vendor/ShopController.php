@@ -54,7 +54,7 @@ class ShopController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Shop retrieved Successfully',
-                'data' => new ShopResource(Shop::find($shop_id))
+                'data' => new ShopResource($shop)
             ], 200);
         }else{
             return response()->json([
@@ -268,6 +268,7 @@ class ShopController extends Controller
                 response()->json([
                 'status' => true,
                 'message' => 'Successfully Updated Shop',
+                'data' => new ShopResource($shop)
             ], 200) :
             redirect()->back()->with(['result'=> '1','message'=> 'Shop Details Updated Successfully']);
     
