@@ -177,7 +177,7 @@
                                 <h5 class="font-body--xl-500">Discounts</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                  <form method="post" id="discount_form" action="{{route('vendor.shop.discounts',$shop)}}">@csrf
+                                  <form method="post" id="discount_form" action="{{route('vendor.shop.update')}}">@csrf
                                     <div class="table-responsive">
                                       <table class="table">
                                         <tr>

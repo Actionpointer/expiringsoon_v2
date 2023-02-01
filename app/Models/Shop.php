@@ -83,10 +83,8 @@ class Shop extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function getStaffAttribute(){
+    public function staff(){
         return $this->hasMany(User::class);
-        // $users = User::where('shop_id',$this->id)->get();
-        // return $users;
     }
     public function kyc(){
         return $this->MorphMany(Kyc::class,'verifiable');

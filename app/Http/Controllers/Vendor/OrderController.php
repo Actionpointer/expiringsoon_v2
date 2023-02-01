@@ -76,6 +76,7 @@ class OrderController extends Controller
 
     public function api_messages($shop_id,$order_id){
         $order = Order::where('id',$order_id)->where('shop_id',$shop_id)->first();
+        OrderMessage::where('order_id',$order->id)->where('sender_id',$shop_id)->where('sender_type','App\Models\Shop')->whereNull('read_at')->update(['read_at'=>now()]);
         return response()->json([
             'status' => true,
             'message' => 'Order Message',

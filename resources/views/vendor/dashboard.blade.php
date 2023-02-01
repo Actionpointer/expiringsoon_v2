@@ -164,15 +164,15 @@
                     <div class="dashboard__totalpayment-card-body">
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Active Shops:</h5>
-                        <p class="font-body--md-500"> {{$user->shops->where('status',true)->count()}} / {{$user->shops->count()}} </p>
+                        <p class="font-body--md-500"> {{$user->shops->where('status',true)->count()}} of {{$user->shops->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shops Visible:</h5>
-                        <p class="font-body--md-500"> {{$user->shops->where('published',true)->count()}} / {{$user->shops->count()}} </p>
+                        <p class="font-body--md-500"> {{$user->shops->where('published',true)->count()}} of {{$user->shops->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shops Approved:</h5>
-                        <p class="font-body--md-500">{{$user->shops->where('approved',true)->count()}} / {{$user->shops->count()}}</p>
+                        <p class="font-body--md-500">{{$user->shops->where('approved',true)->count()}} of {{$user->shops->count()}}</p>
                       </div>
                       {{-- <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Orders:</h5>
@@ -201,15 +201,15 @@
                     <div class="dashboard__totalpayment-card-body">
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Active Products:</h5>
-                        <p class="font-body--md-500"> {{$user->products->where('status',true)->count()}} / {{$user->products->count()}} </p>
+                        <p class="font-body--md-500"> {{$user->products->where('status',true)->count()}} of {{$user->products->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Products Visible:</h5>
-                        <p class="font-body--md-500">{{$user->products->where('published',true)->count()}} / {{$user->products->count()}}</p>
+                        <p class="font-body--md-500">{{$user->products->where('published',true)->count()}} of {{$user->products->count()}}</p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Products Approved:</h5>
-                        <p class="font-body--md-500">{{$user->products->where('approved',true)->count()}} / {{$user->products->count()}}</p>
+                        <p class="font-body--md-500">{{$user->products->where('approved',true)->count()}} of {{$user->products->count()}}</p>
                       </div>
                       {{-- <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Orders:</h5>
@@ -248,7 +248,7 @@
                             </tr>
                             </thead>
                             <tbody>                     
-                                @forelse($user->shopOrders->sortByDesc('updated_at')->take(5) as $order)                                        
+                                @forelse($user->shopOrders->whereIn('status',['processing','shipped','delivered'])->sortByDesc('updated_at')->take(5) as $order)                                        
                                     <tr>
                                         <td class="dashboard__order-history-table-item order-date "> 
                                           {{$order->created_at->format('Y-m-d')}}

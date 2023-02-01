@@ -10,6 +10,7 @@ use App\Rules\OtpValidateRule;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -50,7 +51,7 @@ class StaffController extends Controller
     public function pin(Request $request){
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
-            'pin' => 'required|string',
+            'pin' => 'required|string|max:4|min:4',
             'otp' => ['required',new OtpValidateRule($request->otp)]
         ]);
         if ($validator->fails()) {
@@ -114,7 +115,7 @@ class StaffController extends Controller
         }
     }
 
-    public function index(Shop $shop,Request $request){
+    public function store(Shop $shop,Request $request){
         if($request->user_id){
             if($request->delete){
                 //detach user from shop
@@ -153,9 +154,13 @@ class StaffController extends Controller
     }
 
     
-    public function create()
-    {
-        //
+    public function index($shop_id){
+        $shop = Shop::find($shop_id);
+        return response()->json([
+            'status' => true,
+            'message' => 'Shop Staff retrieved Successfully',
+            'data' => UserResource::collection($shop->staff),
+        ], 200);
     }
 
     /**
@@ -164,10 +169,6 @@ class StaffController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.

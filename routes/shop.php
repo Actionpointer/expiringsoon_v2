@@ -11,11 +11,11 @@ use App\Http\Controllers\Vendor\ShipmentController;
 Route::group(['prefix'=>'{shop}','as'=> 'shop.'],function (){
     Route::get('dashboard', [ShopController::class, 'show'])->name('show');
     Route::get('settings',[ShopController::class, 'settings'])->name('settings');
-    Route::post('address',[ShopController::class, 'address'])->name('address');
-    Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
+    // Route::post('address',[ShopController::class, 'address'])->name('address');
+    // Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
     
     Route::post('shipping',[ShipmentController::class, 'vendor_shipping_rates'])->name('shipping');
-    Route::post('staff',[StaffController::class, 'index'])->name('staff');
+    Route::post('staff',[StaffController::class, 'store'])->name('staff');
     
 
     Route::get('earnings',[PaymentController::class, 'earnings'])->name('earnings');

@@ -1,14 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-<style>
-  .user-img{
-    margin-right:5px;
-    width:40px;
-    height:40px;
-    
-  }
- 
-</style>
+
 @endpush
 @section('title') Order Details #{{$order->id}} | Expiring Soon @endsection
 @section('main')
@@ -51,7 +43,11 @@
               <div class="dashboard__order-history-title">
                 <h2 class="font-body--xl-500">Order Details</h2>
                 {{-- <h2 class="font-body--md-400">Vendor:<br /> --}}
-                <a href="{{route('order.messages',$order)}}">Messages: {{$order->messages->count()}}</a>
+                <a href="{{route('order.messages',$order)}}">{{$order->messages->count()}} Messages 
+                    @if(auth()->id() == $order->user_id), {{$order->messages->where('sender_type','App\Models\User')->whereNull('read_at')->count()}}   
+                    @else , {{$order->messages->where('sender_type','App\Models\Shop')->whereNull('read_at')->count()}}
+                    @endif unread
+                </a>
               </div>
 
               <div class="dashboard__details-content">
@@ -380,8 +376,7 @@
 
             <!-- Order Status -->
             <div class="row">
-              @if($order->status !== 'completed' )
-                @if(auth()->user()->role != 'shopper')
+              @if($order->status !== 'completed' && auth()->user()->role != 'shopper')
                   <div class="col-lg-4" style="margin-top:20px">
                       <form method="post" id="orderstatus" action="{{route('vendor.shop.order.manage',$order->shop)}}">@csrf
                           <input type="hidden" name="order_id" value=" {{$order->id}}">
@@ -409,63 +404,6 @@
                           </div>
                       </form>
                   </div>
-                @endif
-                <!-- Send Message -->
-                <div class="conversation my-4">
-                  @if($order->messages->isNotEmpty())
-                    <h5 class="font-body--xxxl d-flex justify-content-between pb-3"><span>Conversation</span></h5>
-                    <div class="user-comments__list" style="overflow-y:scroll;">
-                      @foreach ($order->messages as $message)
-                         
-                          <div class="d-flex py-4 border-bottom">
-                              <div class="user-img">
-                                  @if($message->sender_type == 'App\Models\User')
-                                    <img class="rounded-circle" alt="user-photo" @if(!$order->user->pic) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($order->user->pic)}}" @endif > 
-                                  @elseif($message->sender_type == 'App\Models\Shop')
-                                  <img class="rounded-circle" alt="user-photo" @if(!$order->shop->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($order->shop->banner)}}" @endif >
-                                  @else
-                                  <img class="rounded-circle" alt="user-photo" src="{{asset('src/images/site/avatar.png')}}"> 
-                                  @endif
-                              </div>
-                              <div class="user-message-info">
-                                  <div class="d-flex ">
-                                    
-                                      @if($message->sender_type == 'App\Models\Shop')
-                                        <h5 class="font-body--md-500"> {{$order->shop->name}} </h5>
-                                      @elseif($message->sender_type == 'App\Models\User')
-                                        <h5 class="font-body--md-500"> {{$order->user->name}}  </h5> 
-                                      @else
-                                        <h5 class="font-body--md-500">   Admin </h5>
-                                      @endif
-                                    
-                                    <ul class="inside"><li class="text-muted border-top border-white">{{$message->created_at->format('d M,Y h:i A')}}</li></ul>
-                                  </div>
-        
-                                  <p class="font-body--sm-400">
-                                    {{$message->body}}
-                                  </p>
-                              </div>
-                          </div>
-                          
-                      @endforeach
-                    </div>
-                  @endif
-                  
-                  <form action="{{route('order.message')}}" method="POST"> @csrf
-                    <input type="hidden" name="order_id" value=" {{$order->id}}">
-                    @if($order->user_id == auth()->id())
-                    <input type="hidden" name="sender_id" value=" {{$order->user_id}}">
-                    <input type="hidden" name="sender_type" value="App\Models\User">
-                    @else
-                    <input type="hidden" name="sender_id" value="{{$order->shop_id}}">
-                    <input type="hidden" name="sender_type" value="App\Models\Shop">
-                    @endif
-                    <div class="d-flex py-0">
-                        <textarea name="body" class="form-control" rows="3" placeholder="Write Message"></textarea>
-                        <button class="button button--outline rounded-0 my-0">Send</button>
-                    </div>
-                  </form>
-                </div>
               @endif
 
               @if($order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Shop')->isEmpty())

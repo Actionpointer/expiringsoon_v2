@@ -32,6 +32,7 @@ class UserResource extends JsonResource
             "role"=> $this->role,
             "slug"=> $this->slug,
             "phone"=> $this->phone,
+            "prefix"=> $this->country->dial,
             "mobile"=> $this->mobile,
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,

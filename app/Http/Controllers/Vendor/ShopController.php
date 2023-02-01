@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
-    // use SecurityTrait;
+    use SecurityTrait;
 
     public function __construct()
     {
@@ -161,85 +161,113 @@ class ShopController extends Controller
         }
     }
 
+    public function settings(Shop $shop){
+        $user = auth()->user();
+        $banks = Bank::all();
+        $states = State::all();
+        $cities = City::where('state_id',$shop->state_id)->get();
+        $rates = ShippingRate::where('shop_id',$shop->id)->get();
+        return view('vendor.shop.settings',compact('user','shop','banks','states','cities','rates'));
+    }
+
+    // public function address(Shop $shop,Request $request){
+    //     if(!$this->checkPin($request)['result']){
+    //         return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+    //     }
+    //     $shop->address = $request->address;
+    //     $shop->state_id = $request->state_id;
+    //     $shop->city_id = $request->city_id;
+    //     $shop->save();
+    //     return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
+    // }
+
+    // public function discounts(Shop $shop,Request $request){
+    //     if(!$this->checkPin($request)['result']){
+    //         return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+    //     }
+    //     $shop->discount30 = $request->discount30;
+    //     $shop->discount60 = $request->discount60;
+    //     $shop->discount90 = $request->discount90;
+    //     $shop->discount120 = $request->discount120;
+    //     $shop->save();
+    //     return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
+    // }
+
     public function update(Request $request){
         $user = auth()->user();
-        if(!$this->checkPin($request)['result']){
-            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-        }
         try {
-                $validator = Validator::make($request->all(), 
-                [
-                    'shop_id' => 'required|numeric',
-                    'pin' => 'required|numeric',
-                    'name' => 'nullable|string',
-                    'email' => 'nullable|string',
-                    'phone' => 'nullable|string',
-                    'published' => 'nullable|numeric',
-                    'photo' => 'nullable|max:2048|image',
-                    'address' => 'nullable|string',
-                    'state_id' => 'nullable|numeric',
-                    'city_id' => 'nullable|numeric',
-                    'discount30' => 'nullable|string',
-                    'discount60' => 'nullable|string',
-                    'discount90' => 'nullable|string',
-                    'discount120' => 'nullable|string',
-                ],[
-                    'photo.max' => 'The image is too heavy. Standard size is 2mb',
-                ]);
+            $validator = Validator::make($request->all(), 
+            [
+                'shop_id' => 'required|numeric',
+                'pin' => 'required|numeric',
+                'name' => 'nullable|string',
+                'email' => 'nullable|string',
+                'phone' => 'nullable|string',
+                'published' => 'nullable|numeric',
+                'photo' => 'nullable|max:2048|image',
+                'address' => 'nullable|string',
+                'state_id' => 'nullable|numeric',
+                'city_id' => 'nullable|numeric',
+                'discount30' => 'nullable|string',
+                'discount60' => 'nullable|string',
+                'discount90' => 'nullable|string',
+                'discount120' => 'nullable|string',
+            ],[
+                'photo.max' => 'The image is too heavy. Standard size is 2mb',
+            ]);
 
-                if($validator->fails()){
-                    return request()->expectsJson() ?  
-                         response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
-                         redirect()->back()->withErrors($validator)->withInput();
-                }
-
-                if(!$this->checkPin($request)['result']){
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Invalid Pin',
-                    ], 401);
-                }
-
-                $shop = Shop::find($request->shop_id);
-                if(!$shop){
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Shop Not found',
-                    ], 401);
-                }
-                $request->name ? $shop->name = $request->name:'';
-                $request->email ? $shop->email = $request->email:'';
-                $request->phone ? $shop->phone = $request->phone:'';
-                $request->published ? $shop->published = $request->published:'';
-                if($request->photo){
-                    if($request->hasFile('banner')){
-                        if($shop->banner) Storage::delete('public/'.$shop->banner);
-                        $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
-                        $request->file('photo')->storeAs('public/',$banner);
-                    }else{
-                        $size = getimagesize($request->photo);
-                        $extension = image_type_to_extension($size[2]);
-                        $banner = 'public/uploads/'.time().'.'.$extension;
-                        $contents = file_get_contents($request->photo);
-                        Storage::put($banner, $contents);
-                    }
-                    $shop->banner = $banner;
-                } 
-                $request->address ? $shop->address = $request->address:'';
-                $request->state_id ? $shop->state_id = $request->state_id:'';
-                $request->city_id ? $shop->city_id = $request->city_id:'';
-                $request->discount30 ? $shop->discount30 = $request->discount30:'';
-                $request->discount60 ? $shop->discount60 = $request->discount60:'';
-                $request->discount90 ? $shop->discount90 = $request->discount90:'';
-                $request->discount120 ? $shop->discount120 = $request->discount120:'';
-                $shop->save();
+            if($validator->fails()){
                 return request()->expectsJson() ?  
-                 response()->json([
-                    'status' => true,
-                    'message' => 'Successfully Updated Shop',
-                ], 200) :
-                redirect()->back()->with(['result'=> '1','message'=> 'Shop Details Updated Successfully']);
-        
+                        response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
+                        redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            if(!$this->checkPin($request)['result']){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid Pin',
+                ], 401);
+            }
+
+            $shop = Shop::find($request->shop_id);
+            if(!$shop){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Shop Not found',
+                ], 401);
+            }
+            $request->name ? $shop->name = $request->name:'';
+            $request->email ? $shop->email = $request->email:'';
+            $request->phone ? $shop->phone = $request->phone:'';
+            $request->published ? $shop->published = $request->published:'';
+            if($request->photo){
+                if($request->hasFile('banner')){
+                    if($shop->banner) Storage::delete('public/'.$shop->banner);
+                    $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
+                    $request->file('photo')->storeAs('public/',$banner);
+                }else{
+                    $size = getimagesize($request->photo);
+                    $extension = image_type_to_extension($size[2]);
+                    $banner = 'public/uploads/'.time().'.'.$extension;
+                    $contents = file_get_contents($request->photo);
+                    Storage::put($banner, $contents);
+                }
+                $shop->banner = $banner;
+            } 
+            $request->address ? $shop->address = $request->address:'';
+            $request->state_id ? $shop->state_id = $request->state_id:'';
+            $request->city_id ? $shop->city_id = $request->city_id:'';
+            $request->discount30 ? $shop->discount30 = $request->discount30:'';
+            $request->discount60 ? $shop->discount60 = $request->discount60:'';
+            $request->discount90 ? $shop->discount90 = $request->discount90:'';
+            $request->discount120 ? $shop->discount120 = $request->discount120:'';
+            $shop->save();
+            return request()->expectsJson() ?  
+                response()->json([
+                'status' => true,
+                'message' => 'Successfully Updated Shop',
+            ], 200) :
+            redirect()->back()->with(['result'=> '1','message'=> 'Shop Details Updated Successfully']);
     
         } catch (\Throwable $th) {
             return response()->json([
@@ -289,55 +317,27 @@ class ShopController extends Controller
         }
     }
 
-    public function settings(Shop $shop){
-        $user = auth()->user();
-        $banks = Bank::all();
-        $states = State::all();
-        $cities = City::where('state_id',$shop->state_id)->get();
-        $rates = ShippingRate::where('shop_id',$shop->id)->get();
-        return view('vendor.shop.settings',compact('user','shop','banks','states','cities','rates'));
-    }
+    
 
-    public function profile(Shop $shop,Request $request){
-        if(!$this->checkPin($request)['result']){
-            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-        }
-        $shop->name = $request->name;
-        $shop->email = $request->email;
-        $shop->phone = $request->phone;
-        $shop->published = $request->published;
-        if($request->hasFile('photo')){
-            if($shop->banner) Storage::delete('public/'.$shop->banner);
-            $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
-            $request->file('photo')->storeAs('public/',$banner);
-            $shop->banner = $banner;
-        } 
-        $shop->save();
+    // public function profile(Shop $shop,Request $request){
+    //     if(!$this->checkPin($request)['result']){
+    //         return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+    //     }
+    //     $shop->name = $request->name;
+    //     $shop->email = $request->email;
+    //     $shop->phone = $request->phone;
+    //     $shop->published = $request->published;
+    //     if($request->hasFile('photo')){
+    //         if($shop->banner) Storage::delete('public/'.$shop->banner);
+    //         $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
+    //         $request->file('photo')->storeAs('public/',$banner);
+    //         $shop->banner = $banner;
+    //     } 
+    //     $shop->save();
         
-    }
+    // }
 
-    public function address(Shop $shop,Request $request){
-        if(!$this->checkPin($request)['result']){
-            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-        }
-        $shop->address = $request->address;
-        $shop->state_id = $request->state_id;
-        $shop->city_id = $request->city_id;
-        $shop->save();
-        return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
-    }
-
-    public function discounts(Shop $shop,Request $request){
-        if(!$this->checkPin($request)['result']){
-            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-        }
-        $shop->discount30 = $request->discount30;
-        $shop->discount60 = $request->discount60;
-        $shop->discount90 = $request->discount90;
-        $shop->discount120 = $request->discount120;
-        $shop->save();
-        return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
-    }
+    
 
     public function notifications(Shop $shop){
         

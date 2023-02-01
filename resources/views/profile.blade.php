@@ -185,7 +185,7 @@
                       <div class="contact-form__content-group">
                         <!-- New Password  -->
                         <div class="contact-form-input"> <label for="newPin">New Pin </label>
-                          <input   type="password" id="newPin" name="pin" placeholder="" autocomplete="new-pin" required />
+                          <input   type="password" id="newPin" name="pin" minlength="4" maxlength="4" placeholder="" autocomplete="new-pin" required />
                           <span class="icon" onclick="showPassword('npassword',this)"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> <circle cx="12" cy="12" r="3"></circle> </svg> </span>
                         </div>
                         @error('pin')
@@ -197,7 +197,7 @@
                         <!-- confirm  Password  -->
                         <div class="contact-form-input">
                           <label for="confirmPin">Confirm Pin</label>
-                          <input   type="password"   id="confirmPin"   name="pin_confirmation"  autocomplete="new-pin" placeholder=""   required />
+                          <input   type="password"   id="confirmPin"   name="pin_confirmation" minlength="4" maxlength="4"  autocomplete="new-pin" placeholder=""   required />
                           <span   class="icon"   onclick="showPassword('confirmPassword',this)">   
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
                               <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> 
