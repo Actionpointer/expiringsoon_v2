@@ -82,7 +82,8 @@ class ShopController extends Controller
                 'address' => 'required|string',
                 'state_id' => 'required|numeric',
                 'city_id' => 'required|numeric',
-                'email' => 'required|string|unique:users',
+                'email' => 'required|string|unique:shops',
+                'phone' => 'required|string|unique:shops',
                 'photo' => ['required','string','url','not-regex:(.svg|.gif)']
             ]);
 
@@ -125,8 +126,8 @@ class ShopController extends Controller
                 'address' => 'required|string',
                 'state_id' => 'required|numeric',
                 'city_id' => 'required|numeric',
-                'email' => 'required|string|unique:users',
-                'phone' => 'required|string|unique:users',
+                'email' => 'required|string|unique:shops',
+                'phone' => 'required|string|unique:shops',
                 'photo' => 'required|max:2048|image',
                 'published' => 'required|numeric',
             ],[
@@ -199,10 +200,10 @@ class ShopController extends Controller
             $validator = Validator::make($request->all(), 
             [
                 'shop_id' => 'required|numeric',
-                'pin' => 'required|numeric',
+                // 'pin' => 'required|numeric',
                 'name' => 'nullable|string',
-                'email' => 'nullable|string',
-                'phone' => 'nullable|string',
+                'email' => 'nullable|string|unique:shops',
+                'phone' => 'nullable|string|unique:shops',
                 'published' => 'nullable|numeric',
                 'photo' => 'nullable|max:2048|image',
                 'address' => 'nullable|string',
@@ -219,16 +220,17 @@ class ShopController extends Controller
             if($validator->fails()){
                 return request()->expectsJson() ?  
                         response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
-                        redirect()->back()->withErrors($validator)->withInput();
+                        redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-
-            if(!$this->checkPin($request)['result']){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Invalid Pin',
-                ], 401);
-            }
-
+            // if(!$this->checkPin($request)['result']){
+            //     return request()->expectsJson() ?  
+            //      response()->json([
+            //         'status' => false,
+            //         'message' => 'Invalid Pin',
+            //     ], 401) :
+            //     redirect()->back()->with(['result'=> '0','message'=> 'Invalid Pin']);
+            // }
+            
             $shop = Shop::find($request->shop_id);
             if(!$shop){
                 return response()->json([

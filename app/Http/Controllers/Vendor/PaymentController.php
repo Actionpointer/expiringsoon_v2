@@ -62,7 +62,7 @@ class PaymentController extends Controller
             'account_number' => 'required|string'
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
         }
         $bank = Bank::find($request->bank_id);
         $result = $this->verifybankaccount($request->account_number,$bank->code,$request->bvn,$request->branch_id);

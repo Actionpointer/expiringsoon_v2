@@ -123,7 +123,7 @@
                                       </div>
                                       <div class="col-lg-12 order-lg-0 order-1">
                                         <div class="contact-form-btn">
-                                          <button class="button button--md askpin" type="button"> Save Details</button>
+                                          <button class="button button--md" type="submit"> Save Details</button>
                                         </div>
                                       </div>
                                     </div>
@@ -165,7 +165,7 @@
                                       </div>
                                     </div>
                                     <div class="contact-form-btn">
-                                      <button class="button button--md askpin" type="button"> Save Details</button>
+                                      <button class="button button--md" type="submit"> Save Details</button>
                                   </div>
                                   </form>
                                 </div>
@@ -178,11 +178,13 @@
                                 </div>
                                 <div class="dashboard__content-card-body">
                                   <form method="post" id="discount_form" action="{{route('vendor.shop.update')}}">@csrf
+                                    <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                     <div class="table-responsive">
                                       <table class="table">
                                         <tr>
                                             <th class="text-nowrap">Expiry Period</th>
                                             <th>Discount</th>
+                                            <th></th>
                                         </tr>
                                         <tr>
                                             <td>30 Days</td>
@@ -195,6 +197,7 @@
                                                   </div>
                                               </div>
                                             </td>
+                                            <td>@error('discount30') {{$message}}  @enderror</td>
                                         </tr>
                                         <tr>
                                           <td>60 Days</td>
@@ -207,6 +210,7 @@
                                               </div>
                                           </div>
                                           </td>
+                                          <td>@error('discount60') {{$message}}  @enderror</td>
                                         </tr>
                                         <tr>
                                           <td>90 Days</td>
@@ -219,6 +223,7 @@
                                               </div>
                                           </div>
                                           </td>
+                                          <td>@error('discount90') {{$message}}  @enderror</td>
                                         </tr>
                                         <tr>
                                           <td>120 Days</td>
@@ -231,10 +236,11 @@
                                               </div>
                                           </div>
                                           </td>
+                                          <td>@error('discount120') {{$message}}  @enderror</td>
                                         </tr>
                                       </table>
                                       <div class="contact-form-btn">
-                                        <button class="button button--md askpin" type="button">Save Discount</button>
+                                        <button class="button button--md" type="submit">Save Discount</button>
                                       </div>
                                     </div>
                                   </form>   
@@ -254,7 +260,7 @@
                                 <h5 class="font-body--xl-500">Manage Staff</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" action="{{route('vendor.shop.staff',$shop)}}" id="admin" class="mb-3">@csrf
+                                <form method="post" action="{{route('vendor.shop.staff.store',$shop)}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
                                       <div class="contact-form__content-group">
                                           <div class="contact-form-input">
@@ -291,7 +297,7 @@
                                           </div>
                                       </div>
                                       <div class="contact-form-btn">
-                                          <button class="button button--md askpin" type="button"> + Create Staff </button>
+                                          <button class="button button--md" type="submit"> + Create Staff </button>
                                       </div>
                                     </div>
                                 </form>
@@ -310,61 +316,69 @@
                                     <tbody>
                                         @foreach ($shop->staff as $user)
                                             <tr>
-                                            <td>{{$user->name}}</td>
-                                            <td>{{$user->email}} <br> {{$user->mobile}}</td>
-                                            <td>@if($user->status) Active @else Suspended @endif</td>
-                                           
-                                            <td>
-                                                @if($user->id != Auth::id()) 
-                                                <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block'">Edit</a> | 
-                                                <form class="d-inline" action="{{route('vendor.shop.staff',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
-                                                  <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                  <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
-                                                </form>
-                                                @endif
-                                            </td> 
-                                            </tr>
-                                            @if($user->id != Auth::id())
-                                            <tr>
-                                              <td colspan="6" style="border:none;padding:0px">
-                                                  <form action="{{route('vendor.shop.staff',$shop)}}" method="post" id="adminedit{{$user->id}}" style="display:none">
-                                                      @csrf 
-                                                      <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                      <div class="contact-form__content">
-                                                      <div class="contact-form__content-group my-3">
-                                                          <div class="contact-form-input">
-                                                            <label for="address">Full Name @error('name') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                            <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" readonly/>
-                                                          </div>
-                                                          <div class="contact-form-input">
-                                                            <label for="stat">Status @error('status') <span class="text-danger">{{$status}}</span> @enderror</label>
-                                                            <select id="abc{{$user->id}}" name="status" class="form-control-lg w-100 border text-muted" >
-                                                              <option value='1' @if($user->status) selected @endif>Active</option>
-                                                              <option value='0' @if(!$user->status) selected @endif>Suspended</option>
-                                                          </select>
-                                                          </div>
-                                                      </div>
-                                                      <div class="contact-form__content-group">
-                                                          <div class="contact-form-input"> 
-                                                          <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                          <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" readonly/>
-                                                          </div>
-                                                          <div class="contact-form-input">
-                                                          <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                          <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" readonly/>
-                                                          </div>
-                                                      </div>
-                                                      
-                                                      
-                                                      <div class="contact-form-btn">
-                                                          <button class="button button--md" type="submit"> Update Staff </button>
-                                                          <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='none'"> Cancel </button>
-                                                      </div>
-                                                      </div>
+                                              <td>{{$user->name}}</td>
+                                              <td>{{$user->email}} <br> {{$user->mobile}}</td>
+                                              <td>@if($user->status) Active @else Suspended @endif</td>
+                                            
+                                              <td>
+                                                  
+                                                  <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#editstaff{{$user->id}}" >Edit</a> | 
+                                                  <form class="d-inline" action="{{route('vendor.shop.staff.destroy',$shop)}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                    <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                    <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
                                                   </form>
-                                              </td>
+                                                  
+                                              </td> 
+                                              <div class="modal fade" id="editstaff{{$user->id}}" tabindex="-1" aria-labelledby="editstaff{{$user->id}}ModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="editstaff{{$user->id}}ModalLabel">Edit Staff</h5>
+                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{route('vendor.shop.staff.update',$shop)}}" method="post" id="editstaff{{$user->id}}"> @csrf 
+                                                          @csrf 
+                                                          <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                          <div class="contact-form__content">
+                                                            <div class="contact-form__content-group my-3">
+                                                                <div class="contact-form-input">
+                                                                  <label for="address">Full Name @error('name') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                  <input type="text" name="name" value="{{$user->name}}" placeholder="Enter Full Name" readonly/>
+                                                                </div>
+                                                                <div class="contact-form-input">
+                                                                  <label for="stat">Status @error('status') <span class="text-danger">{{$status}}</span> @enderror</label>
+                                                                  <select id="abc{{$user->id}}" name="status" class="form-control-lg w-100 border text-muted" >
+                                                                    <option value='1' @if($user->status) selected @endif>Active</option>
+                                                                    <option value='0' @if(!$user->status) selected @endif>Suspended</option>
+                                                                </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="contact-form__content-group">
+                                                                <div class="contact-form-input"> 
+                                                                <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" readonly/>
+                                                                </div>
+                                                                <div class="contact-form-input">
+                                                                <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" readonly/>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            
+                                                            <div class="contact-form-btn">
+                                                                <button class="button button--md" type="submit"> Update Staff </button>
+                                                                <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal" > Cancel </button>
+                                                            </div>
+                                                          </div>
+                                                        </form>
+                                                    </div>
+                                                    
+                                                  </div>
+                                                </div>
+                                              </div>
                                             </tr>
-                                            @endif
+                                            
                                         @endforeach
                                     </tbody>
                                     </table>
@@ -408,7 +422,7 @@
                                     </div>
                                     
                                     <div class="contact-form-btn">
-                                        <button class="button button--md askpin" type="button">
+                                        <button class="button button--md " type="submit">
                                         + Add Shipping Rate
                                         </button>
                                     </div>
@@ -437,7 +451,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($rates as $rate)
-                                            <tr>
+                                          <tr>
                                             <td>{{$rate->origin->name}}</td>
                                             <td>{{$rate->destination->name}}</td>
                                             <td>{{$rate->hours}}</td>
@@ -498,8 +512,8 @@
                                                   
                                                 </div>
                                               </div>
-                                          </div>
-                                            </tr>
+                                            </div>
+                                          </tr>
                                         @endforeach
                                     </tbody>
                                     </table>

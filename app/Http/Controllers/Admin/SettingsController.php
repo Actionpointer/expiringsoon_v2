@@ -143,7 +143,6 @@ class SettingsController extends Controller
     }
 
     public function categories_management(Request $request){
-        dd($request->all());
         if($request->category_id){
             $category = Category::find($request->category_id);
             if($request->delete){

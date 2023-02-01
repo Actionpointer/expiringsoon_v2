@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,15 +11,16 @@ use Illuminate\Notifications\Notification;
 class OrderStatusCustomerNotification extends Notification
 {
     use Queueable;
+    public $order;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Order $order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -40,10 +42,21 @@ class OrderStatusCustomerNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        if($this->order->status == 'processing'){
+            $view = 'emails.receipt';
+        }
+        if($this->order->status == 'shipped'){
+            $view = 'emails.shipped';
+        }
+        if($this->order->status == 'delivered'){
+            $view = 'emails.delivered';
+        }
+        if($this->order->status == 'completed'){
+            $view = 'emails.completed';
+        }
+        return (new MailMessage)->subject('Welcome Aboard')->view(
+            $view, ['user' => $notifiable]
+        );
     }
 
     /**

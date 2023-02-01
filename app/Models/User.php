@@ -29,7 +29,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable,Sluggable,HasApiTokens;
 
     protected $fillable = [
-        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role','state_id','status'
+        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role','state_id','status','require_password_change'
     ];
 
     protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];

@@ -10,15 +10,15 @@ use Illuminate\Notifications\Notification;
 class NewStaffNotification extends Notification
 {
     use Queueable;
-
+    public $password;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($password)
     {
-        //
+        $this->password = $password;
     }
 
     /**
@@ -40,10 +40,10 @@ class NewStaffNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new MailMessage)->subject('Welcome Aboard')->view(
+            'emails.staff', ['user' => $notifiable,'password'=> $this->password]
+        );
+    
     }
 
     /**

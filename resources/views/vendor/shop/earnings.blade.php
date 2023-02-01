@@ -5,7 +5,7 @@
 {{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/> --}}
 
 @endpush
-@section('title') Payments | Expiring Soon @endsection
+@section('title') Earnings | Expiring Soon @endsection
 @section('main')
     <!-- breedcrumb section start  -->
   <div class="section breedcrumb">

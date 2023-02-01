@@ -7,7 +7,7 @@ kyc notification should be in-app
 create general category so when a category is deleted, all products in that category are transfered to new category
 
 
-duplicate expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafrica
+expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafrica
 
 when placing advert, let submit description of shop
 place notification and profile icon at the top of vendor & shop
@@ -32,9 +32,7 @@ PRODUCTS [add confirmation with password to manage verification | autosend email
 
 PAYMENTS [add profit, revenue & payout to settlement]
 
-vendor menu (add kyc to profile)
-DASHBOARD - [current subscription, total shops, total products, total amount, total orders, 
-            recent transactions,recent notification]
+
 
 shop menu
 PRODUCTS [  show featured]

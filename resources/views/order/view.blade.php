@@ -43,11 +43,15 @@
               <div class="dashboard__order-history-title">
                 <h2 class="font-body--xl-500">Order Details</h2>
                 {{-- <h2 class="font-body--md-400">Vendor:<br /> --}}
-                <a href="{{route('order.messages',$order)}}">{{$order->messages->count()}} Messages 
-                    @if(auth()->id() == $order->user_id), {{$order->messages->where('sender_type','App\Models\User')->whereNull('read_at')->count()}}   
-                    @else , {{$order->messages->where('sender_type','App\Models\Shop')->whereNull('read_at')->count()}}
-                    @endif unread
+                @if(auth()->id() == $order->user_id)
+                <a href="{{route('order.messages',$order)}}">
+                  {{$order->messages->count()}} Messages, {{$order->messages->where('sender_type','App\Models\User')->whereNull('read_at')->count()}} unread
                 </a>
+                @else
+                <a href="{{route('vendor.shop.order.messages',[$order->shop,$order])}}">
+                  {{$order->messages->count()}} Messages, {{$order->messages->where('sender_type','App\Models\Shop')->whereNull('read_at')->count()}} unread
+                </a>
+                @endif
               </div>
 
               <div class="dashboard__details-content">
@@ -384,7 +388,7 @@
                               <div class="contact-form-input">
                                   <label for="states" style="margin-bottom:15px">Update Order Status</label>
                                   <select id="" name="status" class="form-control" required>
-                                      
+                                      <option selected disabled>Select </option>
                                       @if($order->status== 'processing')
                                       <option value="shipped">Shipped for Delivery</option>
                                       @endif

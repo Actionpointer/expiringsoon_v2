@@ -8,14 +8,17 @@ use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
 
    
-Route::group(['prefix'=>'{shop}','as'=> 'shop.'],function (){
+Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],function (){
     Route::get('dashboard', [ShopController::class, 'show'])->name('show');
     Route::get('settings',[ShopController::class, 'settings'])->name('settings');
     // Route::post('address',[ShopController::class, 'address'])->name('address');
     // Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
     
     Route::post('shipping',[ShipmentController::class, 'vendor_shipping_rates'])->name('shipping');
-    Route::post('staff',[StaffController::class, 'store'])->name('staff');
+    
+    Route::post('staff/store',[StaffController::class, 'store'])->name('staff.store');
+    Route::post('staff/update',[StaffController::class, 'update'])->name('staff.update');
+    Route::post('staff/delete',[StaffController::class, 'destroy'])->name('staff.destroy');
     
 
     Route::get('earnings',[PaymentController::class, 'earnings'])->name('earnings');

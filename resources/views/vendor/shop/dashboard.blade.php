@@ -174,7 +174,7 @@
 
             <div class="my-3">
               <div class="row">
-                
+                @if($shop->user_id == auth()->id())
                 <div class="col-lg-6">
                   <div class="dashboard__order-history">
                     <div class="dashboard__order-history-title">
@@ -225,7 +225,7 @@
                     </div>
                   </div>
                 </div>
-                
+                @endif
                 <div class="col-lg-6">
                   <div class="dashboard__order-history">
                     <div class="dashboard__order-history-title">

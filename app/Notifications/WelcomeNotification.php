@@ -37,9 +37,6 @@ class WelcomeNotification extends Notification
         if($notifiable->role == 'vendor' && !$notifiable->shop_id){
             $view = 'emails.welcome_vendor';
         }
-        if($notifiable->role == 'vendor' && $notifiable->shop_id){
-            $view = 'emails.welcome_staff';
-        }
         if($notifiable->role == 'shopper'){
             $view = 'emails.welcome';
         }

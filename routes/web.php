@@ -13,11 +13,11 @@ use App\Http\Controllers\Guest\FrontendController;
 use App\Models\User;
 
 Route::get('runonce',function(){
-    $user = App\Models\User::find(1);
-    $user->notify(new WelcomeNotification());
-    return (new App\Notifications\WelcomeNotification())
-                    ->toMail($user);
-    return 'done';
+    $order = App\Models\Order::find(103);
+    // $user->notify(new WelcomeNotification());
+    return (new App\Notifications\OrderStatusCustomerNotification($order))
+                    ->toMail($order->user);
+    
 });
 
 Route::view('email','emails.completed');
@@ -31,6 +31,8 @@ Route::view('help/contact','help.contact')->name('help.contact');
 
 Route::view('email','emails.completed');
 Auth::routes();
+Route::view('change_password','auth.forcepassword')->name('forcepassword');
+Route::post('change_password',[App\Http\Controllers\Auth\LoginController::class, 'forcepassword'] )->name('forcepassword');
 Route::view('start-selling','auth.register_vendor')->name('start-selling');
 
 Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');

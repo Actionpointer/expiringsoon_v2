@@ -14,6 +14,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\NewStaffNotification;
 
 class StaffController extends Controller
 {
@@ -116,102 +117,51 @@ class StaffController extends Controller
     }
 
     public function store(Shop $shop,Request $request){
-        if($request->user_id){
-            if($request->delete){
-                //detach user from shop
-                $user = User::where('id',$request->user_id)->where('shop_id',$shop->id)->delete();
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
-            }else{
-                //update
-                $user = User::where('id',$request->user_id)->where('shop_id',$shop->id)->first();
-                $validator = Validator::make($request->all(), [
-                    'name' => 'required|string',
-                    'email' => ['required',Rule::unique('users')->ignore($user)],
-                    'phone' => ['required',Rule::unique('users')->ignore($user)],
-                    'status' => 'required|numeric'
-                ]);
-                if($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
-                }
-                $user = User::where('id',$request->user_id)->update(['fname'=> explode(' ',$request->name)[0],'lname'=> explode(' ',$request->name)[1],'status'=> $request->status,'email'=> $request->email,'phone'=> $request->phone]);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
-            }
-        }else{
-            //create
-            $validator = Validator::make($request->all(), [
-                'fname' => 'required|string',
-                'lname' => 'required|string',
-                'email' => 'required|string|unique:users',
-                'phone' => 'required|string|unique:users',
-                'password' => 'required','string','confirmed'
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
-            }
-            $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'role'=> 'vendor','shop_id'=> $shop->id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password),'state_id'=> $shop->state_id,'country_id'=> $shop->country_id]);
-            return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
-        }  
+        // add staff should send an email to the person
+        $validator = Validator::make($request->all(), [
+            'fname' => 'required|string',
+            'lname' => 'required|string',
+            'email' => 'required|string|unique:users',
+            'phone' => 'required|string|unique:users',
+            'password' => 'required','string','confirmed'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
+        }
+        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'role'=> 'vendor','shop_id'=> $shop->id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password),
+        'state_id'=> $shop->state_id,'country_id'=> $shop->country_id,'require_password_change'=> true]);
+        $user->notify(new NewStaffNotification($request->password));
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Staff created successfully']);
+       
     }
 
     
-    public function index($shop_id){
-        $shop = Shop::find($shop_id);
-        return response()->json([
-            'status' => true,
-            'message' => 'Shop Staff retrieved Successfully',
-            'data' => UserResource::collection($shop->staff),
-        ], 200);
+    // public function index($shop_id){
+    //     $shop = Shop::find($shop_id);
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Shop Staff retrieved Successfully',
+    //         'data' => UserResource::collection($shop->staff),
+    //     ], 200);
+    // }
+
+    
+    public function update(Shop $shop,Request $request){
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|numeric'
+        ]);
+        if($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
+        }
+        $user = User::where('id',$request->user_id)->where('shop_id',$shop->id)->first();
+        $user->status = $request->status;
+        $user->save(); 
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated Staff']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function destroy(Shop $shop,Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $user = User::where('id',$request->user_id)->where('shop_id',$shop->id)->delete();
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
     }
 }

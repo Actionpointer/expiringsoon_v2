@@ -96,7 +96,7 @@
                 <div class="user-comments">
                   <h5 class="font-body--xxxl">Messages</h5>
                   <div class="user-comments__list" style="overflow-y:scroll;">
-                    @forelse ($order->messages as $message)
+                    @forelse ($order->messages->sortByDesc('created_at') as $message)
                     <div class="user">
                       <div class="user-img">
                         @if($message->sender_type == 'App\Models\User')
