@@ -31,9 +31,9 @@ class AdvertController extends Controller
         $user = auth()->user();
         $shops = $user->shops->where('status',true)->where('published',true)->where('approved',true);
         $states = State::all();
-        $state_id = session('locale')[state_id'];
+        $state_id = session('locale')['state_id'];
         if($feature->adplan->type == 'products'){
-            $products = Product::edible()->approved()->active()->accessible()->available()->visible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
+            $products = Product::withinCountry()->valid()->approved()->active()->accessible()->available()->visible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
             $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
             return view('vendor.features.products',compact('feature','products','categories','shops','states','state_id'));
         }else
@@ -85,10 +85,10 @@ class AdvertController extends Controller
     }
 
     public function feature_products(Request $request){
-        $products = Product::whereIn('id',$request->products)->edible()->approved()->active()->accessible()->available()->visible()->get();
-        $allproducts = Product::where('shop_id',$request->shop_id)->edible()->approved()->active()->accessible()->available()->visible()->get();
+        $products = Product::whereIn('id',$request->products)->valid()->approved()->active()->accessible()->available()->visible()->get();
+        $allproducts = Product::where('shop_id',$request->shop_id)->valid()->approved()->active()->accessible()->available()->visible()->get();
         $states = State::all();
-        $state_id = session('locale')[state_id'];
+        $state_id = session('locale')['state_id'];
         $adplan = Adplan::where('position','Z')->first();
         return view('vendor.features.ads',compact('allproducts','products','states','state_id','adplan'));
     }

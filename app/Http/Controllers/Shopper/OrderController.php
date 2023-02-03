@@ -73,7 +73,7 @@ class OrderController extends Controller
         $states = State::all();
         $cities = City::all();
         $order = $this->getOrder($carts);
-        $rates = ShippingRate::whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
+        $rates = ShippingRate::where('country_id',$user->country_id)->whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
         return view('frontend.checkout',compact('carts','user','countries','states','cities','order','rates'));
     }
 

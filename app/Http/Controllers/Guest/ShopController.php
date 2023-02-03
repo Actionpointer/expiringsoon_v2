@@ -49,7 +49,7 @@ class ShopController extends Controller
         abort(404,'Shop is not available');
         $category = null;
         $categories = Category::has('products')->get();
-        $products = Product::where('shop_id',$shop->id)->edible()->approved()->active()->accessible()->available()->visible();
+        $products = Product::where('shop_id',$shop->id)->valid()->approved()->active()->accessible()->available()->visible();
         if(request()->query() && request()->query('category_id')){
             $products = $products->where('category_id',request()->query('category_id'));
             $category = Category::find(request()->query('category_id'));

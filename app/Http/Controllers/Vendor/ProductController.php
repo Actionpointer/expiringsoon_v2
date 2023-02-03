@@ -83,9 +83,9 @@ class ProductController extends Controller
                 'published' => 'required|numeric',   
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 2mb',
-                'discount120.gt' => 'Discount for 120 days must be higher than that for 90 days',
-                'discount90.gt' => 'Discount for 90 days must be higher than that for 60 days',
-                'discount60.gt' => 'Discount for 60 days must be higher than that for 30 days',
+                'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
+                'discount90.gt' => 'Discount price for 90 days must be higher than that for 60 days',
+                'discount60.gt' => 'Discount price for 60 days must be higher than that for 30 days',
                 'lt' => 'This discount price must be less than actual price',
             ]);
             if($validator->fails()){
@@ -97,7 +97,7 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            dd($shop)
+            // dd($request->all());
             $user = auth()->user();
             $shop = Shop::where('id',$request->shop_id)->where('user_id',$user->id)->first();
             if($request->hasFile('photo')){
@@ -151,9 +151,9 @@ class ProductController extends Controller
                 'published' => 'required|numeric',  
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 2mb',
-                'discount120.gt' => 'Discount for 120 days must be higher than that for 90 days',
-                'discount90.gt' => 'Discount for 90 days must be higher than that for 60 days',
-                'discount60.gt' => 'Discount for 60 days must be higher than that for 30 days',
+                'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
+                'discount90.gt' => 'Discount price for 90 days must be higher than that for 60 days',
+                'discount60.gt' => 'Discount price for 60 days must be higher than that for 30 days',
                 'lt' => 'This discount price must be less than actual price',
             ]);
             

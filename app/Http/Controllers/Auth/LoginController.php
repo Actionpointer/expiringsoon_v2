@@ -41,8 +41,8 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except(['logout','forcepassword']);
-        $this->decayMinutes = cache('settings')['throttle_login_time'];
-        $this->maxAttempts = cache('settings')['throttle_login_attempt'];
+        $this->decayMinutes = cache('settings')['throttle_security_time'];
+        $this->maxAttempts = cache('settings')['throttle_security_attempt'];
     }
     public function showLoginForm()
     {

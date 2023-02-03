@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Price;
 use App\Models\Subscription;
+use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Plan extends Model
 {
@@ -32,4 +33,8 @@ class Plan extends Model
     public function activeSubscriptions(){
         return $this->hasMany(Subscription::class)->where('end_at', '>', now())->where('status',true);
     }
+    public function prices(){
+        return $this->morphMany(Price::class,'priceable');
+    }
+    
 }

@@ -154,7 +154,7 @@
                         </tr>
                         @if($user->idcard)
                         <tr>
-                          <td><a href="{{Storage::url($user->idcard->document)}}">Owner ID</a></td>
+                          <td><a href="{{Storage::url($user->idcard->document)}}" target="_blank">Owner ID</a></td>
                           <td>
                               {{$user->idcard->created_at->format('d-m-Y')}}
                           </td>

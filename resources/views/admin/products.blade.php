@@ -108,8 +108,8 @@
                                         <span class="font-body--md-400 out"> Active</span>
                                     @endif
 
-                                    @if($product->isEdible())
-                                      <span class="font-body--md-400 in"> Edible</span>
+                                    @if($product->isValid())
+                                      <span class="font-body--md-400 in"> Valid</span>
                                     @else 
                                         <span class="font-body--md-400 out"> Expired</span>
                                     @endif

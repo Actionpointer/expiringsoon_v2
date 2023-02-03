@@ -52,211 +52,280 @@
         <div class="col-lg-9 section--xl pt-0">
             <div class="container">
               <!-- Edit Product  -->
-              <div class="dashboard__content-card">
-                <div class="dashboard__order-history-title" style="border-bottom:1px solid #ddd">
-                  <h2 class="font-body--xxl-500">Edit Product</h2>
-                  <a href="#" class="font-body--lg-500"> Visibility: @if($product->published) Published @else Draft @endif </a>
-                </div>
-                <div class="dashboard__content-card-body">
-                  <div class="row">
-                    <div class="col-lg-7 order-lg-0 order-2">
-                      <form action="{{route('vendor.shop.product.update',$shop)}}" method="post" id="addproduct"  enctype="multipart/form-data">@csrf
-                        <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                        <input type="hidden" name="product_id" value="{{$product->id}}">
-                        <div class="contact-form__content">
-                          <div class="contact-form-input">
-                            <label for="name">Product </label>
-                            <input type="text" id="name" name="name" value="{{$product->name}}" placeholder="Product Name" required />
-                            @error('name')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+              <form action="{{route('vendor.shop.product.update',$shop)}}" method="post" id="addproduct"  enctype="multipart/form-data">@csrf
+                <div class="dashboard__content-card">
+                  <div class="dashboard__order-history-title" style="border-bottom:1px solid #ddd">
+                    <h2 class="font-body--xxl-500">Edit Product</h2>
+                    <a href="#" class="font-body--lg-500"> Visibility: @if($product->published) Published @else Draft @endif </a>
+                  </div>
+                  <div class="dashboard__content-card-body">
+                    <div class="row">
+                      <div class="col-lg-7 order-lg-0 order-2">
+                        
+                          <input type="hidden" name="shop_id" value="{{$shop->id}}">
+                          <input type="hidden" name="product_id" value="{{$product->id}}">
+                          <div class="contact-form__content">
+                            <div class="contact-form-input">
+                              <label for="name">Product </label>
+                              <input type="text" id="name" name="name" value="{{$product->name ?? old('name')}}" placeholder="Product Name" required />
+                              @error('name')
+                                  <span class="invalid-feedback d-block" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                            </div>
+                            <div class="contact-form--input contact-form--input-area">
+                              <textarea name="description" cols="auto" class="w-100" placeholder="Product Description" required >{{ $product->description ?? old('description') }}</textarea>
+                              @error('description')
+                                  <span class="invalid-feedback d-block" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                            </div>
+                            <div class="contact-form-input">
+                              <label for="number1">Stock</label>
+                              <input type="number" name="stock" value="{{ $product->stock }}" placeholder="Quantity Available"  required/>
+                              @error('stock')
+                                  <span class="invalid-feedback d-block" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                            </div>
                           </div>
-                          <div class="contact-form--input contact-form--input-area">
-                            <textarea name="description" cols="auto" class="w-100" placeholder="Product Description" required >{{ $product->description ?? old('description') }}</textarea>
-                            @error('description')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                          </div>
-                          <div class="contact-form-input">
-                            <label for="number1">Stock</label>
-                            <input type="number" name="stock" value="{{ $product->stock }}" placeholder="Quantity Available"  required/>
-                            @error('stock')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                          </div>
-                          
-                          <div class="contact-form-input">
-                            <label for="states">Category</label>
-                            <select id="category_id" name="category_id" class="select2" required>
-                                <option value="" selected>Select</option>
-                                @foreach ($categories as $category)
-                                    <option value={{$category->id}} @if($product->category_id == $category->id) selected @endif>{{$category->name}}</option>
-                                @endforeach
-
-                            </select>
-                            @error('category_id')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                          </div>
-                          <div class="contact-form-input">
-                            <label for="tags">Sub Categories (tags)</label>
-                            <select name="tags[]" id="tags" class="select2" multiple >
-                              @foreach ($tags as $tag)
-                                <option value="{{$tag->name}}" @if(is_Array($product->tags) && in_array($tag->name,$product->tags)) selected @endif>{{$tag->name}}</option>
-                              @endforeach
-                              
-                            </select>
-                            @error('tags')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                          </div>
-                          
-                        </div>
-                    </div>
-                    <div class="col-lg-5 order-lg-0 order-1">
-                      <div class="dashboard__content-card-img flex-column">
-                          <div class="dashboard__content-img-wrapper" id="avatar">
-                            <img @if($product->photo) src="{{Storage::url($product->photo)}}" @else src="{{asset('src/images/site/no-image.jpg')}}" @endif class="rounded-circle" alt="Product Photo" onclick="performClick('theFile');" id="imgPreview"    />
-                          </div>
-                          <div>
-                            <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
-                            @error('photo')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                          </div>
-                          {{-- <p class="d-block">Nothing </p> --}}
                       </div>
+                      <div class="col-lg-5 order-lg-0 order-1">
+                        <div class="dashboard__content-card-img flex-column align-items-center">
+                            <div class="dashboard__content-img-wrapper" id="avatar">
+                              <img @if($product->photo) src="{{Storage::url($product->photo)}}" @else src="{{asset('src/images/site/no-image.jpg')}}" @endif class="rounded-circle" alt="Product Photo" onclick="performClick('theFile');" id="imgPreview"    />
+                            </div>
+                            <div>
+                              <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg"/>
+                              @error('photo')
+                                  <span class="invalid-feedback d-block" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                            </div>
+                            {{-- <p class="d-block">Nothing </p> --}}
+                            
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-12">
+                          <div class="contact-form__content">
+                            <div class="contact-form__content-group">
+                              <div class="contact-form-input">
+                                <label for="states">Category</label>
+                                <select id="category_id" name="category_id" class="select2" required>
+                                  <option value="" selected>Select</option>
+                                  @foreach ($categories as $category)
+                                      <option value={{$category->id}} @if($product->category_id == $category->id) selected @endif>{{$category->name}}</option>
+                                  @endforeach
+  
+                              </select>
+                                @error('category_id')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                              </div>
+                              <div class="contact-form-input">
+                                <label for="tags">Sub Category</label>
+                                <select name="tags[]" id="tags" class="select2" multiple >
+                                  @foreach ($tags as $tag)
+                                    <option value="{{$tag->name}}" @if(is_Array($product->tags) && in_array($tag->name,$product->tags)) selected @endif>{{$tag->name}}</option>
+                                  @endforeach
+                                  
+                                </select>
+                                @error('tags')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                              </div> 
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="contact-form__content">
+                              <div class="contact-form__content-group">
+                                <div class="contact-form-input">
+                                  <label for="lname2">Unit Price </label>
+                                  <input type="number" name="price" id="prices" value="{{ $product->price }}" placeholder="Price for each" required />
+                                  @error('price')
+                                      <span class="invalid-feedback d-block" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
+                                </div>
+                                <div class="contact-form-input">
+                                  <label for="number1">Expiry Date</label>
+                                  <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{ $product->expire_at->format('Y-m-d') }}" id="datepicker"/>
+                                    @error('expiry')
+                                      <span class="invalid-feedback d-block" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                    @enderror
+                                </div>
+                              </div>
+                            </div>
+                        </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Billing Address  -->
-              <div class="dashboard__content-card">
-                <div class="dashboard__content-card-header">
-                  <h5 class="font-body--xxl-500">Product Details</h5>
-                </div>
-                
-                <div class="dashboard__content-card-body">
-                    <div class="contact-form__content">
-                      <div class="contact-form__content-group">
-                        <div class="contact-form-input">
-                          <label for="lname2">Unit Price </label>
-                          <input type="number" name="price" id="prices" value="{{ $product->price }}" placeholder="Price for each" required />
-                          @error('price')
+              
+                <div class="dashboard__content-card">
+                  <div class="dashboard__content-card-header">
+                  <h5 class="font-body--xl-500">Product Discounts</h5>
+                  </div>
+                  <div class="dashboard__content-card-body">
+                    <div class="table-responsive">
+                      <table class="table w-auto">
+                        <tbody>
+                          <tr>
+                              <th class="text-nowrap">Expiry in</th>
+                              <th>Discount %</th>
+                              <th></th>
+                              <th>Discounted Price</th>
+                              <th></th>
+                          </tr>
+                          <tr>
+                            <td>120 Days</td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                    
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount120percent" id="discount120percent" value="{{round(100 - ($product->discount120 * 100 / $product->price))}}">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            </td>
+                            <td>OR</td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
+                                </div>   
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120" value="{{$product->discount120}}">
+                                
+                              </div>
+                            </td>
+                            <td>
+                              @error('discount120')
                               <span class="invalid-feedback d-block" role="alert">
                                   <strong>{{ $message }}</strong>
                               </span>
-                          @enderror
-                        </div>
-                        <div class="contact-form-input">
-                          <label for="number1">Expiry Date</label>
-                          <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{ $product->expire_at->format('Y-m-d') }}" id="datepicker"/>
-                          @error('expiry')
-                            <span class="invalid-feedback d-block" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                          @enderror
-                        </div>
-                      </div>
-                      <h6 class="mb-3">Discount Prices:</h6>
+                              @enderror
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>90 Days</td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                    
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount90percent" id="discount90percent" value="{{round(100 - ($product->discount90 * 100 / $product->price))}}">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">%</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td>OR</td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
+                                </div>   
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount90" id="discount90" value="{{ $product->discount90}}">
+                                
+                              </div>
+                            </td>
+                            <td>
+                                @error('discount90')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>60 Days</td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                    
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount60percent" id="discount60percent" value="{{ round(100 - ($product->discount60 * 100 / $product->price)) }}">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">%</span>
+                                </div>
+                              </div>
+                            </td><td>OR</td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
+                                </div>   
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount60" id="discount60" value="{{ $product->discount60}}">
+                                
+                              </div>
+                            </td>
+                            <td>
+                              @error('discount60')
+                              <span class="invalid-feedback d-block" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                              @enderror
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>30 Days</td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                  
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount30percent" id="discount30percent" value="{{ round(100 - ($product->discount30 * 100 / $product->price)) }}">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">%</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td><div class="">OR</div></td>
+                            <td>
+                              <div class="input-group d-flex flex-nowrap">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
+                                </div>
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount30" id="discount30" value="{{ $product->discount30}}">
+                                
+                              </div>
+                            </td>
+                            <td>
+                                @error('discount30')
+                                  <span class="invalid-feedback d-block" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                       
-                      <div class="contact-form__content-group">
-
-                        <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" style="display:none" type="button">When expiry date is below 1 month</button>
-                          <div class="discountoptions">
-                            <label for="number1">1 to 30days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount30" id="discount30" value="{{ $product->discount30}}" placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
-                            </div>
-                            @error('discount30')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-                          </div>
-                        </div>
-                        <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" style="display:none" type="button">When expiry date is below 2months</button>
-                          <div class="discountoptions">
-                            <label for="number1">31 to 60days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount60" value="{{ $product->discount60 }}" id="discount60" placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
-                            </div>
-                            @error('discount60')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-                          </div>
-                        </div>
-                        <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" style="display:none" type="button">When expiry date is below 3months</button>
-                          <div class="discountoptions">
-                            <label for="number1">61 to 90days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount90" id="discount90" value="{{ $product->discount90}}"  placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
-                            </div>
-                            @error('discount90')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-                          </div>
-                        </div>
-                        <div class="contact-form-input discount">
-                          <button class="font-body--md-400 adddiscount btn btn-primary" style="display:none" type="button">When expiry date is below 4months</button>
-                          <div class="discountoptions">
-                            <label for="number1">91 to 120days discount price</label>
-                            <div class="input-group d-flex">
-                              <input type="number" name="discount120" id="discount120" value="{{ $product->discount120}}"  placeholder="Sales Price" class="form-control discountprice"/>
-                              <div class="input-group-append">
-                                <button class="btn btn-sm btn-danger h-100 removediscount" type="button"><i class="fa fa-times"></i></button>
-                              </div>
-                            </div>
-                            @error('discount120')
-                              <span class="invalid-feedback d-block" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-                          </div>  
-                        </div>
-
-                      </div>
-                      <div class="contact-form-btn">
-                        <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
-                          Save as Draft
-                        </button>
-                        <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
-                          Publish Product
-                        </button>
-                      </div>
                     </div>
-                  </form>
+
+                    <div class="contact-form-btn">
+                      <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
+                        Save as Draft
+                      </button>
+                      <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
+                        Publish Product
+                      </button>
+                    </div>  
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
       </div>
@@ -267,6 +336,7 @@
 @endsection
 @push('scripts')
     <script>
+      var price = @json($product->price);
       // console.log(tags);
       function performClick(elemId) {
         var elem = document.getElementById(elemId);
@@ -288,19 +358,36 @@
           }
       }
   
-        $('.adddiscount').on('click',function(){
-            $(this).closest('.discount').find('.discountoptions').show();
-            $(this).hide();
-        })
-        $('.removediscount').on('click',function(){
-            $(this).closest('.discount').find('.adddiscount').show();
-            $(this).closest('.discount').find('.discountoptions input').val('')
-            $(this).closest('.discount').find('.discountoptions').hide()
-        })
+        // $('.adddiscount').on('click',function(){
+        //     $(this).closest('.discount').find('.discountoptions').show();
+        //     $(this).hide();
+        // })
+        // $('.removediscount').on('click',function(){
+        //     $(this).closest('.discount').find('.adddiscount').show();
+        //     $(this).closest('.discount').find('.discountoptions input').val('')
+        //     $(this).closest('.discount').find('.discountoptions').hide()
+        // })
         $(document).on('input blur change',"#prices",function(){
-          let m = Math.ceil($(this).val() * 0.1);
-            $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+          price = $(this).val();
+          // $('.discountprice').attr({"max" : $(this).val(),"min" : price})
+          $('.percent').each(function(){
+            let result = price - ($(this).val() /100 * price);
+            $('#'+$(this).attr('id').split('percent')[0]).val(result.toFixed(3));
+          })         // values (or variables) here
         });
+        $(document).on('input blur change',".percent",function(){
+          let p = $(this).attr('id').split('percent')[0];
+          let q = price - ($(this).val() /100 * price);
+          $('#'+p).val(q.toFixed(3));
+            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+        });
+        $(document).on('input blur change',".discountprice",function(){
+          let p = $(this).attr('id')+'percent';
+          let q = $(this).val() * 100 / price;
+          $('#'+p).val(q.toFixed(3));
+            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+        });
+
         $(document).on('change','#category_id',function(){
           let tags = @json($tags);
           let v = $(this).find(':selected').text()
@@ -314,6 +401,16 @@
           });
           $('#tags').select2();
         })
-        
+        // $('#addproduct').one('submit',function(e){
+        //   e.preventDefault();
+        //   let checker = 1;
+        //   $('.discountprice').each(function(){
+        //     if($(this).val() > $(this).attr('max'))
+        //     checker = 0;
+        //   })
+        //   if(checker){
+        //     $('#addproduct').submit();
+        //   }
+        // })
     </script>
 @endpush

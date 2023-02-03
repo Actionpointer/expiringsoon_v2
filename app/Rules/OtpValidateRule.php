@@ -31,7 +31,7 @@ class OtpValidateRule implements Rule
         if(!$otp){
             return false;
         }
-        if($otp->created_at->addMinutes(cache('settings')['throttle_otp_time']) < now()){
+        if($otp->created_at->addMinutes(cache('settings')['throttle_service_time']) < now()){
             return false;
         }
         return true;

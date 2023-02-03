@@ -165,7 +165,7 @@ class ShopController extends Controller
     public function settings(Shop $shop){
         $user = auth()->user();
         $banks = Bank::all();
-        $states = State::all();
+        $states = $shop->country->states;
         $cities = City::where('state_id',$shop->state_id)->get();
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
         return view('vendor.shop.settings',compact('user','shop','banks','states','cities','rates'));

@@ -97,9 +97,9 @@
                                 <!-- Order Id  -->
                                 <td class="dashboard__order-history-table-item order-id" >
                                     @if($document->verifiable_type == 'App\Models\Shop')
-                                      <img @if($document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                      <img @if(!$document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
                                     @else
-                                    <img @if($document->verifiable->user->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->user->photo)}}" @endif alt="{{$document->verifiable->user->name}}" style="width:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                    <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
                                     @endif
                                 </td>
                                 <!-- Date  -->
@@ -128,7 +128,7 @@
                                   @if($document->verifiable_type == 'App\Models\Shop')
                                     <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
                                   @else
-                                    <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
+                                    <a href="{{route('admin.user.show',$document->verifiable)}}"> View User</a>
                                   @endif
                                 </td>
                             </tr>

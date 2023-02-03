@@ -22,8 +22,8 @@ class ProductController extends Controller
         $category = null;
         $tag = null;
         $categories = Category::has('products')->get();
-        $states = State::has('products')->get();
-        $products = Product::edible()->approved()->active()->accessible()->available()->visible();
+        $states = State::has('products')->where('country_id',session('locale')['country_id'])->get();
+        $products = Product::withinCountry()->valid()->approved()->active()->accessible()->available()->visible();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $products = $products->whereHas('shop',function($qry) use($state_id){

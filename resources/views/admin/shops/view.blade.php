@@ -162,7 +162,7 @@
                         @forelse($shop->kyc->sortByDesc('user_id') as $kyc)
                             @if($kyc->user_id)
                             <tr>
-                              <td><a href="{{Storage::url($kyc->document)}}">Owner ID</a></td>
+                              <td><a href="{{Storage::url($kyc->document)}}" target="_blank">Owner ID</a></td>
                               <td>
                                   {{$kyc->created_at->format('d-m-Y')}}
                               </td>

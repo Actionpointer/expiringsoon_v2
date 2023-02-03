@@ -35,6 +35,7 @@ class ShipmentController extends Controller
             }
             $shop = Shop::find($request->shop_id);
             $rate = new ShippingRate;
+            $rate->country_id = $shop->country_id;
             $rate->origin_id = $shop->state_id;
             $rate->destination_id = $request->destination_id;
             $rate->hours = $request->hours;

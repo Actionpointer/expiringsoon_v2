@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Kyc;
 use App\Models\City;
-use App\Models\Shop;
 use App\Models\Order;
 use App\Models\State;
-use App\Models\Advert;
 use App\Models\Payout;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Traits\GeoLocationTrait;
 // use Illuminate\Support\Facades\Cache;
@@ -21,6 +18,11 @@ class HomeController extends Controller
     
     public function __construct(){
         $this->middleware('auth')->except(['index','hotdeals']);
+    }
+    
+    public function states(Request $request){
+        $states = State::where('country_id',$request->country_id)->get();
+        return response()->json($states,200);
     }
     
     public function cities(Request $request){

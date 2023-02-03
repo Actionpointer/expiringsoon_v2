@@ -179,7 +179,7 @@
                   <h5 class="font-body--xl-500">Access Pin</h5>
                 </div>
                 <div class="dashboard__content-card-body">
-                  <form method="post" action="{{route('vendor.edit-pin')}}" id="editPassword">@csrf
+                  <form method="post" action="{{route('edit-pin')}}" id="editPassword">@csrf
                     <div class="contact-form__content">
                       
                       <div class="contact-form__content-group">
@@ -210,11 +210,12 @@
                       <div class="contact-form-input">
                         <label for="number1">One Time Password</label>
                         <div class="input-group d-flex">
+                          <div class="append">
+                            <button class="btn btn-dark btn-lg" type="button" id="generate">Click to Generate OTP</button>
+                          </div>
                            <input type="text" name="otp" class="form-control" placeholder="Enter OTP" />
                         
-                            <div class="append">
-                                <button class="btn btn-dark btn-lg" type="button" id="generate">Generate</button>
-                            </div>
+                            
                           </div>
                       </div>
                       <span id="otp_response"></span>
@@ -292,7 +293,7 @@
       $.ajax({
         type:'GET',
         dataType: 'json',
-        url: "{{route('vendor.generate_otp')}}",
+        url: "{{route('generate_otp')}}",
         success:function(data) {
           console.log(data)
           if(data.data){

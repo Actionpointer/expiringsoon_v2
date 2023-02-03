@@ -13,10 +13,10 @@ trait SecurityTrait
         $access = Hash::check(request()->pin, auth()->user()->pin);
         $executed = RateLimiter::attempt(
             'access-pin:'.auth()->user()->id,
-            $perMinute = cache('settings')['throttle_pin_attempt'],
+            $perMinute = cache('settings')['throttle_security_attempt'],
             function() use($access) {
                 return $access;
-            },$decaySeconds = cache('settings')['throttle_pin_time']*60
+            },$decaySeconds = cache('settings')['throttle_security_time']*60
         );
         if(!$executed) {
             $seconds = RateLimiter::availableIn('access-pin:'.auth()->id());

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Price;
 use App\Models\Advert;
 use App\Models\Feature;
 use Illuminate\Database\Eloquent\Model;
@@ -16,5 +17,8 @@ class Adplan extends Model
     }
     public function features(){
         return $this->hasMany(Feature::class);
+    }
+    public function prices(){
+        return $this->morphMany(Price::class,'priceable');
     }
 }

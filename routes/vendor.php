@@ -26,9 +26,6 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],
      Route::get('adsets', [FeatureController::class, 'index'])->name('adsets');   
      Route::post('subscription/features', [FeatureController::class, 'subscribe'])->name('feature.subscribe');   
      Route::post('feature/cancel-renewal', [FeatureController::class, 'cancel_renewal'])->name('feature.cancel_renew');   
-     
-    Route::get('generate/otp',[StaffController::class, 'generate_otp'])->name('generate_otp');
-    Route::post('edit-pin',[StaffController::class, 'pin'])->name('edit-pin');
 
     Route::post('applycoupon',[PaymentController::class, 'apply'])->name('applycoupon');
     Route::get('transactions',[PaymentController::class,'index'])->name('payments');

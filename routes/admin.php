@@ -11,15 +11,27 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SubscriptionController;
 
 Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,customercare,security,auditor'],function(){
     Route::get('dashboard',[HomeController::class, 'admin'])->name('dashboard');
     Route::get('settings',[SettingsController::class, 'index'])->name('settings');
+    Route::get('settings/country/{country}',[SettingsController::class, 'country'])->name('country');
     Route::post('settings',[SettingsController::class, 'settings'])->name('settings');
-    Route::post('shipping-rates',[SettingsController::class, 'shipping_rates'])->name('shipments');
+
+    Route::group(['prefix'=> 'shipment','as'=>'shipments.'],function(){
+        Route::get('index',[ShipmentController::class, 'index'])->name('index');
+        Route::post('store',[ShipmentController::class, 'store'])->name('store');
+        Route::post('update',[ShipmentController::class, 'update'])->name('update');
+        Route::post('destroy',[ShipmentController::class, 'destroy'])->name('delete');
+        
+    });
+    
+
     Route::post('staff',[SettingsController::class, 'admins'])->name('staff');
     Route::post('plans',[SettingsController::class, 'plans'])->name('plans');
+    Route::post('plans/pricing',[SettingsController::class, 'plans'])->name('plans.pricing');
     Route::post('adplans',[SettingsController::class, 'adplans'])->name('adplans');
     Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
     Route::post('coupons/manage',[CouponController::class, 'manage'])->name('coupon.manage');

@@ -50,11 +50,11 @@ class RouteServiceProvider extends ServiceProvider
         });
         
         RateLimiter::for('pin', function (Request $request) {
-            return Limit::perMinutes(cache('settings')['throttle_pin_time'],cache('settings')['throttle_pin_attempt']);
+            return Limit::perMinutes(cache('settings')['throttle_security_time'],cache('settings')['throttle_security_attempt']);
         });
         
         RateLimiter::for('bvn', function (Request $request) {
-            return Limit::perMinutes(cache('settings')['throttle_bvn_time'],cache('settings')['throttle_bvn_attempt']);
+            return Limit::perMinutes(cache('settings')['throttle_service_time'],cache('settings')['throttle_service_attempt']);
         });
     }
 }

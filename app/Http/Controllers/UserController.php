@@ -12,13 +12,14 @@ use Illuminate\Http\Request;
 use App\Rules\OtpValidateRule;
 use App\Models\OneTimePassword;
 use Illuminate\Validation\Rule;
+use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    
+    use SecurityTrait;
 
     public function __construct(){
         $this->middleware('auth:sanctum');
@@ -97,6 +98,38 @@ class UserController extends Controller
             redirect()->back()->with(['result' => '1','message'=>'Something went wrong']);
         }
     }
+
+    public function generate_otp(){
+        $user = auth()->user();
+        $otp = $this->generateOTP($user);
+        $result = $this->sendOTP($user,$otp->code);
+        return response()->json(['status'=> true ,'data'=> $result['result'],'message'=> $result['message']],200);
+    }
+
+    public function pin(Request $request){
+        $user = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'pin' => 'required|string|max:4|min:4',
+            'otp' => ['required',new OtpValidateRule($request->otp)]
+        ]);
+        if ($validator->fails()) {
+            return request()->expectsJson() ? 
+            response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
+            redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput()->with(['result'=> '0','message'=> 'PIN operation was not successful!']);
+        }
+        
+        $user->pin = Hash::make($request->pin);
+        $user->save();
+        return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Pin operation was successfully completed',
+            ], 200) :
+             redirect()->back()->with(['result' => '1','message'=>'Pin operation was successfully completed']); //with success
+    }
+
 
     public function addresses(){
         $user = auth()->user();

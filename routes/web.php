@@ -47,6 +47,7 @@ Route::get('categories',[ProductController::class,'categories'])->name('product.
 Route::post('getSubcategories', [ProductController::class, 'getSubcategories'])->name('product.getSubcategories');
 
 
+Route::post('getStates', [HomeController::class, 'states'])->name('states');
 Route::post('getCities', [HomeController::class, 'cities'])->name('cities');
 
 Route::get('vendors', [ShopController::class, 'index'])->name('vendors');
@@ -77,6 +78,8 @@ Route::get('home', [HomeController::class, 'home'])->name('home');
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
 Route::post('profile/update',[UserController::class, 'update'])->name('profile.update');
 Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
+Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
+Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
 Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
 Route::post('address',[UserController::class, 'address'])->name('address');
 

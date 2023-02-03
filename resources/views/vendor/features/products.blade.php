@@ -97,7 +97,7 @@
                                             @elseif(!$advert->product->status)
                                               <button class="badge btn-danger">Suspended </button>
 
-                                            @elseif(!$advert->product->isEdible())
+                                            @elseif(!$advert->product->isValid())
                                               <button class="badge btn-danger">Expired </button>
                                             
                                             @elseif(!$advert->product->published)

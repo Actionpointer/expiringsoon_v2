@@ -58,13 +58,13 @@ class Advert extends Model
     }
     public function scopeCertifiedProduct($query){
         return $query->whereHas('product', function (Builder $qry){ 
-                 $qry->edible()->approved()->active()->visible()->accessible()->available();});
+                 $qry->valid()->approved()->active()->visible()->accessible()->available();});
     }
     public function scopeCertifiedShop($query){
         return $query->whereHas('shop', function (Builder $qry)  { 
             $qry->where('status',true)->where('approved',true)->where('published',true)
             ->whereHas('products',function(Builder $q){
-                $q->edible()->approved()->active()->visible()->accessible()->available();
+                $q->valid()->approved()->active()->visible()->accessible()->available();
             });
         });
     }

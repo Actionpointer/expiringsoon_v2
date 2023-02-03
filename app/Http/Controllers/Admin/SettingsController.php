@@ -10,6 +10,7 @@ use App\Models\Adplan;
 use App\Models\Country;
 use App\Models\Setting;
 use App\Models\Category;
+use App\Models\Currency;
 use Illuminate\Support\Arr;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request;
@@ -34,28 +35,21 @@ class SettingsController extends Controller
         
         $users = User::whereNotIn('role',['shopper','vendor'])->get();
         $countries = Country::all();
-        $states = State::within()->get();
+        $states = State::all();
         $plans = Plan::all();
         $adplans = Adplan::all();
         $settings = Setting::all();
         $rates = ShippingRate::whereNull('shop_id')->get();
-        return view('admin.settings',compact('plans','adplans','users','countries','settings','rates','states'));
+        $currencies = Currency::all();
+        return view('admin.settings',compact('plans','adplans','currencies','users','countries','settings','rates','states'));
     }
 
     public function settings(Request $request){
+        
         if(!$this->checkPin($request)['result']){
             return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
         }
         foreach($request->except('_token') as $key => $value){
-            if($request->country_id){
-                $country = Country::find($request->country_id);
-                Setting::where('name','country')->update(['value'=> $country->name]);
-                Setting::where('name','country_iso')->update(['value'=> $country->iso]);
-                Setting::where('name','dialing_code')->update(['value'=> $country->dial]);
-                Setting::where('name','currency_name')->update(['value'=> $country->currency_name]);
-                Setting::where('name','currency_iso')->update(['value'=> $country->currency_iso]);
-                Setting::where('name','currency_symbol')->update(['value'=> $country->currency_symbol]);
-            }
             Setting::where('name',$key)->update(['value'=> $value]);
         }
         Cache::forget('settings');
@@ -65,7 +59,9 @@ class SettingsController extends Controller
         return redirect()->back()->with(['result'=>1,'message'=> 'Settings Saved']);
     }
 
-    
+    public function country(Request $request){
+        return redirect()->back();
+    }
 
     public function admins(Request $request){
         
@@ -181,29 +177,7 @@ class SettingsController extends Controller
         }
     }
 
-    public function shipping_rates(Request $request){
-        if($request->rate_id){
-            if($request->delete){
-                $rate = ShippingRate::where('id',$request->rate_id)->delete();
-            }else{
-                $rate = ShippingRate::find($request->rate_id);
-                $rate->origin_id = $request->origin_id;
-                $rate->destination_id = $request->destination_id;
-                $rate->hours = $request->hours;
-                $rate->amount = $request->amount;
-                $rate->save();
-            }  
-        }else{
-            $rate = new ShippingRate;
-            $rate->origin_id = $request->origin_id;
-            $rate->destination_id = $request->destination_id;
-            $rate->hours = $request->hours;
-            $rate->amount = $request->amount;
-            $rate->save();
-        }
-        return redirect()->back()->with(['result'=>1,'message'=> 'Shipping Settings Saved']);
-    }
-
+    
     
     
 

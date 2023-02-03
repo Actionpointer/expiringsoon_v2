@@ -6,9 +6,7 @@ use App\Models\Kyc;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Rules\OtpValidateRule;
 use Illuminate\Validation\Rule;
-use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +16,6 @@ use App\Notifications\NewStaffNotification;
 
 class StaffController extends Controller
 {
-    use SecurityTrait;
     /**
      * Display a listing of the resource.
      *
@@ -42,37 +39,7 @@ class StaffController extends Controller
         return view('vendor.verification',compact('user'));
     }
 
-    public function generate_otp(){
-        $user = auth()->user();
-        $otp = $this->generateOTP($user);
-        $result = $this->sendOTP($user,$otp->code);
-        return response()->json(['status'=> true ,'data'=> $result['result'],'message'=> $result['message']],200);
-    }
-
-    public function pin(Request $request){
-        $user = auth()->user();
-        $validator = Validator::make($request->all(), [
-            'pin' => 'required|string|max:4|min:4',
-            'otp' => ['required',new OtpValidateRule($request->otp)]
-        ]);
-        if ($validator->fails()) {
-            return request()->expectsJson() ? 
-            response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
-            redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput()->with(['result'=> '0','message'=> 'PIN operation was not successful!']);
-        }
-        
-        $user->pin = Hash::make($request->pin);
-        $user->save();
-        return request()->expectsJson() ? 
-            response()->json([
-                'status' => true,
-                'message' => 'Pin operation was successfully completed',
-            ], 200) :
-             redirect()->back()->with(['result' => '1','message'=>'Pin operation was successfully completed']); //with success
-    }
-
+    
     public function kyc(Request $request){
         // dd($request->all());
         $user = auth()->user();

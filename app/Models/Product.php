@@ -92,7 +92,7 @@ class Product extends Model
         return $this->morphMany(Advert::class,'advertable');
     }
 
-    public function isEdible(){
+    public function isValid(){
         return $this->expire_at > now();
     }
     public function isAvailable(){
@@ -104,10 +104,12 @@ class Product extends Model
     }
 
     public function isCertified(){
-        return $this->isEdible() && $this->isAccessible() && $this->approved && $this->status && $this->published && $this->isAvailable();
+        return $this->isValid() && $this->isAccessible() && $this->approved && $this->status && $this->published && $this->isAvailable();
     }
-    
-    public function scopeEdible($query){
+    public function scopeWithinCountry($query){
+        return $query->whereHas('shop',function ($q) { $q->where('country_id',session('locale')['country_id']); } );
+    }
+    public function scopeValid($query){
         return $query->where('expire_at','>',now());
     }
     public function scopeApproved($query){

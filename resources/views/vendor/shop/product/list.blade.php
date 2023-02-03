@@ -126,26 +126,24 @@
                                   </div>
 
                                   <div>
-                                    <p class="d-flex flex-column flex-md-row text-nowrap" style="margin-top:10px;color:#888;font-size:12px">          
-                                      @if(!$product->isEdible())
-                                        <span class="font-body--md-400 mx-1 text-danger">Product expired</span> 
-                                      @elseif($product->expire_at->diffInDays(now()) <= 7)
-                                        <span class="mx-1 text-warning">Expires in {{$product->expire_at->diffInDays(now())}} days  </span> 
+                                    <div class="d-flex flex-md-row text-nowrap" style="margin-top:10px;color:#888;font-size:12px">          
+                                      @if(!$product->isValid())
+                                        <span class="font-body--md-400 rounded px-1 mx-1 text-white bg-danger">Expired</span> 
                                       @else
-                                        <span class="font-body--md-400 mx-1">Expires on {{$product->expire_at->format('M jS Y')}}  </span> 
+                                        Expires in <span class="font-body--md-400 rounded px-1 mx-1 text-white @if($product->expire_at->diffInDays(now()) <= 7) bg-warning @else bg-success  @endif">{{$product->expire_at->diffInDays(now())}} days  </span>  
                                       @endif
-                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->stock  > 10) bg-success text-white @else bg-danger text-white @endif ">{{$product->stock}} remaining</span>  
-                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->status) bg-primary text-white @else text-danger @endif"> 
+                                      Stock:<span class="font-body--md-400 rounded px-1 mx-1 text-white @if($product->stock  > 10) bg-success  @else bg-danger @endif ">{{$product->stock}} remaining</span>  
+                                      Status: <span class="font-body--md-400 rounded px-1 mx-1 text-white @if($product->status) bg-success @else bg-danger @endif"> 
                                         @if($product->status) Active  @else Inactive @endif 
                                       </span> 
-                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->approved) text-success  @else text-warning @endif"> 
-                                        @if($product->approved) Approved  @else Pending Approval @endif 
+                                      Approval: <span class="font-body--md-400 rounded px-1 mx-1 text-white @if($product->approved) bg-success  @else bg-warning @endif"> 
+                                        @if($product->approved) Approved  @else Pending @endif 
                                       </span> 
-                                      <span class="font-body--md-400 rounded px-1 mx-1 @if($product->published) bg-dark text-white @else text-muted @endif"> 
+                                      Visibility: <span class="font-body--md-400 rounded px-1 mx-1 text-white @if($product->published) bg-success @else bg-dark @endif"> 
                                         @if($product->published) Published  @else Draft @endif 
                                       </span>
                                       {{-- @if($product->adverts->isNotEmpty()) | Featured @endif --}}
-                                    <p>
+                                    <div>
                                   </div>
                               </div>
                             </td>
@@ -157,7 +155,12 @@
                             </td>
 
                             <td class="cart-table-item add-cart align-middle">
-                              <div class="dropdown">
+                              <div class="d-flex flex-column">
+                                  <button class="btn btn-sm  btn-secondary">Edit</button>
+                                  <button class="btn btn-sm my-1 btn-primary">Feature</button>
+                                  <button class="btn btn-sm btn-danger">Delete</button>
+                              </div>
+                              {{-- <div class="dropdown">
                                 <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                   Manage
                                 </button>
@@ -178,7 +181,7 @@
                                   
                                   
                                 </div>
-                              </div>
+                              </div> --}}
                             </td>
                             
     
