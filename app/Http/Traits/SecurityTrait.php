@@ -10,22 +10,26 @@ use Illuminate\Support\Facades\RateLimiter;
 trait SecurityTrait
 {
     protected function checkPin(Request $request){
-        $access = Hash::check(request()->pin, auth()->user()->pin);
+        
         $executed = RateLimiter::attempt(
             'access-pin:'.auth()->user()->id,
             $perMinute = cache('settings')['throttle_security_attempt'],
-            function() use($access) {
-                return $access;
+            function() {
+                $access = Hash::check(request()->pin, auth()->user()->pin);
+                if(!$access){
+                    return ['result'=> 0,'message'=> 'Wrong Pin'];
+                }
+                return  ['result'=> 1];
             },$decaySeconds = cache('settings')['throttle_security_time']*60
         );
         if(!$executed) {
             $seconds = RateLimiter::availableIn('access-pin:'.auth()->id());
             return ['result'=> 0,'message'=> 'Too many tries. Try again in about '.ceil($seconds/60).' minutes.'];
+        }else{
+            return $executed;
         }
-        if(!$access){
-            return ['result'=> 0,'message'=> 'Wrong Pin'];
-        }
-        return ['result'=> 1];
+        
+        
     }
 
     public function generateOTP(User $user){

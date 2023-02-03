@@ -4,12 +4,18 @@ namespace App\Models;
 use App\Models\City;
 use App\Models\Shop;
 use App\Models\Product;
+use App\Observers\StateObserver;
 use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
 {
     protected $fillable = ['name','iso','country_id'];
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new StateObserver);
+    }
     public function cities(){
         return $this->hasMany(City::class);
     }

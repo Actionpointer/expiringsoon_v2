@@ -34,6 +34,7 @@ return [
     ],
     'paystack'=>[
         'secret'=> env('PAYSTACK_TEST_SECRET'),
-    ]
+    ],
+    'countrystatecity' => env('COUNTRYSTATECITY')
 
 ];

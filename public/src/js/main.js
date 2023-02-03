@@ -1252,6 +1252,7 @@ $('#checkbox_master').change(function() {
 $('.askpin').on('click',function(){
   window.submittedform = $(this).closest('form');
  $('#pinModal').modal('show')
+ console.log(submittedform.html())
 })
 
 $('#pinsubmit').on('click',function(){

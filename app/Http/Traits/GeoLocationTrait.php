@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Traits;
+
 use App\Models\State;
 use App\Models\Country;
 use App\Models\Location;
+use App\Jobs\CreateStatesJob;
 use Illuminate\Support\Facades\Auth;
 
 trait GeoLocationTrait
@@ -40,6 +42,7 @@ trait GeoLocationTrait
         $state = State::where('country_id',$country_id)->where('iso',$state_code)->first();
         if(!$state){
             $state = State::create(['country_id'=> $country_id,'iso'=> $state_code,'name'=> $state_name]);
+            CreateStatesJob::dispatch($country_id);
         }
         return $state;
     }

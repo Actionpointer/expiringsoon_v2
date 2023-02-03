@@ -16,9 +16,14 @@ use App\Http\Controllers\Admin\SubscriptionController;
 
 Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,customercare,security,auditor'],function(){
     Route::get('dashboard',[HomeController::class, 'admin'])->name('dashboard');
-    Route::get('settings',[SettingsController::class, 'index'])->name('settings');
-    Route::get('settings/country/{country}',[SettingsController::class, 'country'])->name('country');
-    Route::post('settings',[SettingsController::class, 'settings'])->name('settings');
+    
+    Route::group(['prefix'=> 'settings','as'=>'settings.'],function(){
+        Route::get('/',[SettingsController::class, 'index'])->name('global');
+        Route::post('store',[SettingsController::class, 'store'])->name('store');
+        Route::post('country/basic',[SettingsController::class, 'country_basic'])->name('country.basic');
+        Route::post('country/states',[SettingsController::class, 'settings'])->name('country.states');
+    });
+    
 
     Route::group(['prefix'=> 'shipment','as'=>'shipments.'],function(){
         Route::get('index',[ShipmentController::class, 'index'])->name('index');

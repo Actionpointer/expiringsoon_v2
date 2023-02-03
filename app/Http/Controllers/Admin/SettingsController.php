@@ -32,7 +32,6 @@ class SettingsController extends Controller
     }
     
     public function index(){
-        
         $users = User::whereNotIn('role',['shopper','vendor'])->get();
         $countries = Country::all();
         $states = State::all();
@@ -44,7 +43,7 @@ class SettingsController extends Controller
         return view('admin.settings',compact('plans','adplans','currencies','users','countries','settings','rates','states'));
     }
 
-    public function settings(Request $request){
+    public function store(Request $request){
         
         if(!$this->checkPin($request)['result']){
             return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
@@ -59,8 +58,15 @@ class SettingsController extends Controller
         return redirect()->back()->with(['result'=>1,'message'=> 'Settings Saved']);
     }
 
-    public function country(Request $request){
-        return redirect()->back();
+    public function country_basic(Request $request){
+        dd($request->all());
+        $country = Country::find($request->country_id);
+        $country->currency_id = $request->currency_id;
+        $country->payment_gateway_receiving = $request->payment_gateway_receiving;
+        $country->payment_gateway_transfering = $request->payment_gateway_transfering;
+        $country->vat = $request->vat;
+        $country->bank_digits = $request->bank_digits;
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Udpated Country Settings']);
     }
 
     public function admins(Request $request){

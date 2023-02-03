@@ -35,6 +35,8 @@ class ShopResource extends JsonResource
             "city"=> $this->city->name,
             "state_id"=> $this->state_id,
             "state"=> $this->state->name,
+            "country_id"=> $this->country_id,
+            "country"=> $this->country->name,
             "discount30"=> $this->discount30,
             "discount60"=> $this->discount60,
             "discount90"=> $this->discount90,

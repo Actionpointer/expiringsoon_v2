@@ -132,7 +132,7 @@
                                     <h5 class="font-body--xl-500">Throttle</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                    <form action="{{route('admin.settings')}}" method="post" >@csrf
+                                    <form action="{{route('admin.settings.global')}}" method="post" >@csrf
                                         <div class="contact-form__content">
                                             <div class="contact-form-input row ">
                                                 <div class="col-md-2">
@@ -142,11 +142,11 @@
                                                     <div class="input-group d-flex">
                                                         <div class="prepend">
                                                             <input type="number" name="throttle_security_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_security_attempt')->value}}" placeholder="Maximum Attempt" />
-                                                            <i class="small text-sm text-muted">Maximum attempt</i>
+                                                            <i class="small text-sm text-muted">Maximum attempt per minute</i>
                                                         </div>
                                                         <div>
                                                             <input type="number" name="throttle_security_time" class="form-control" value="{{$settings->firstWhere('name','throttle_security_time')->value}}" placeholder="Timeframe"  />
-                                                            <i class="small text-sm text-muted">Timeframe (minutes)</i>
+                                                            <i class="small text-sm text-muted">Delay Timeframe (minutes)</i>
                                                         </div>
                                                     </div>
                                                 </div>  
@@ -162,11 +162,11 @@
                                                     <div class="input-group d-flex">
                                                         <div class="prepend">
                                                             <input type="number" name="throttle_service_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_service_attempt')->value}}" placeholder="Maximum Attempt" />
-                                                            <i class="small text-sm text-muted">Maximum attempt</i>
+                                                            <i class="small text-sm text-muted">Maximum attempt per minute</i>
                                                         </div>
                                                         <div>
                                                             <input type="number" name="throttle_service_time" class="form-control" value="{{$settings->firstWhere('name','throttle_service_time')->value}}" placeholder="Timeframe"  />
-                                                            <i class="small text-sm text-muted">Timeframe (minutes)</i>
+                                                            <i class="small text-sm text-muted">Delay Timeframe (minutes)</i>
                                                         </div>
                                                     </div>
                                                 </div>  
@@ -189,7 +189,7 @@
                                             <h5 class="font-body--xl-500">Products</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="product">@csrf
+                                            <form action="{{route('admin.settings.global')}}" method="post" id="product">@csrf
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--md-400">
                                                         <label for="min_stck_level" class="col-8">Minimum stock level</label>
@@ -289,7 +289,7 @@
                                             <h5 class="font-body--xl-500">Orders</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="orders">@csrf
+                                            <form action="{{route('admin.settings.global')}}" method="post" id="orders">@csrf
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--md-400">
                                                         <label for="max_del_hours" class="col-8 ">Maximum Delivery Hours</label>
@@ -342,7 +342,7 @@
                                             <h5 class="font-body--xl-500">Shop</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="shop">@csrf
+                                            <form action="{{route('admin.settings.global')}}" method="post" id="shop">@csrf
                                                 <div class="contact-form__content">
                                                     <table>
                                                         
@@ -435,7 +435,7 @@
                                             <h5 class="font-body--xl-500">Advert</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings')}}" method="post" id="advert">@csrf
+                                            <form action="{{route('admin.settings.global')}}" method="post" id="advert">@csrf
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--md-400">
                                                         <label for="max_del_hours" class="col-8 font-body--400">Minimum Advert Days</label>
@@ -588,11 +588,11 @@
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                            <h5 class="modal-title" id="country_basic{{$country->id}}ModalLabel">Edit Shipping Rate</h5>
+                                                            <h5 class="modal-title" id="country_basic{{$country->id}}ModalLabel">Edit {{$country->name}} Setting</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form action="#" method="post" id="country_basic{{$country->id}}form">
+                                                                <form action="{{route('admin.settings.country.basic')}}" method="post" id="country_basic{{$country->id}}form">
                                                                     @csrf 
                                                                     <input type="hidden" name="country_id" value="{{$country->id}}">
                                                                     <div class="contact-form__content my-3">
@@ -607,20 +607,22 @@
                                                                         <div class="contact-form__content-group">
                                                                             <div class="contact-form-input">
                                                                                 <label for="destination">Receiving Payment Gateway </label>
-                                                                                <select id="destination" name="gateways['receiving']" class="form-control">
-                                                                                    <option value="paystack">Paystack</option>
-                                                                                    <option value="flutterwave">Flutterwave</option>
-                                                                                    <option value="paypal">Paypal</option>
-                                                                                    <option value="stripe">Stripe</option>
+                                                                                <select id="destination" name="payment_gateway_receiving" class="form-control">
+                                                                                    <option value="">Select</option>
+                                                                                    <option value="paystack" @if($country->payment_gateway_receiving == 'paystack') selected @endif>Paystack</option>
+                                                                                    <option value="flutterwave" @if($country->payment_gateway_receiving == 'flutterwave') selected @endif>Flutterwave</option>
+                                                                                    <option value="paypal" @if($country->payment_gateway_receiving == 'paypal') selected @endif>Paypal</option>
+                                                                                    <option value="stripe" @if($country->payment_gateway_receiving == 'stripe') selected @endif>Stripe</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="contact-form-input">
                                                                                 <label for="destination">Transfering Payment Gateway </label>
-                                                                                <select id="destination" name="gateways['transfering']" class="form-control">
-                                                                                    <option value="paystack">Paystack</option>
-                                                                                    <option value="flutterwave">Flutterwave</option>
-                                                                                    <option value="paypal">Paypal</option>
-                                                                                    <option value="stripe">Stripe</option>
+                                                                                <select id="destination" name="payment_gateway_transfering" class="form-control">
+                                                                                    <option value="">Select</option>
+                                                                                    <option value="paystack" @if($country->payment_gateway_transfering == 'paystack') selected @endif >Paystack</option>
+                                                                                    <option value="flutterwave" @if($country->payment_gateway_transfering == 'flutterwave') selected @endif >Flutterwave</option>
+                                                                                    <option value="paypal" @if($country->payment_gateway_transfering == 'paypal') selected @endif >Paypal</option>
+                                                                                    <option value="stripe" @if($country->payment_gateway_transfering == 'stripe') selected @endif >Stripe</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -628,17 +630,20 @@
                                                                         <div class="contact-form__content-group">
                                                                             <div class="contact-form-input">
                                                                                 <label for="hours">Vat</label>
-                                                                                <input type="number" step="0.1" name="vat" value="" placeholder="vat" />
+                                                                                <input type="number" step="0.1" name="vat" value="{{$country->vat}}" placeholder="vat" />
                                                                             </div>
                                                                 
                                                                             <div class="contact-form-input">
                                                                                 <label for="amounts">Bank Account Digits</label>
-                                                                                <input type="number" name="digits" value="" placeholder="e.g 10" />
+                                                                                <input type="number" name="bank_digits" value="{{$country->bank_digits}}" placeholder="e.g 10" />
                                                                             </div>
                                                                         </div>
-                                                                
+                                                                        <div class="contact-form-input">
+                                                                            <label for="pin">Enter Your Access Pin</label>
+                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                        </div>
                                                                         <div class="contact-form-btn">
-                                                                            <button class="button button--md askpin" type="button">
+                                                                            <button class="button button--md " type="submit">
                                                                                 Update Basic Settings
                                                                             </button>
                                                                             <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
