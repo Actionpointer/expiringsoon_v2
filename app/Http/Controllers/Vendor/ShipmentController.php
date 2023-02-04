@@ -16,6 +16,22 @@ class ShipmentController extends Controller
         $this->middleware('auth');
     }
 
+    public function index($shop_id){
+        try {
+            $rates = ShippingRate::where('shop_id',$shop_id)->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Shipping rates fetched Successfully',
+                'data'=> $rates
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
     public function store(Request $request){
         try {
             $validator = Validator::make($request->all(), 
@@ -36,6 +52,7 @@ class ShipmentController extends Controller
             $shop = Shop::find($request->shop_id);
             $rate = new ShippingRate;
             $rate->country_id = $shop->country_id;
+            $rate->shop_id = $shop->id;
             $rate->origin_id = $shop->state_id;
             $rate->destination_id = $request->destination_id;
             $rate->hours = $request->hours;
@@ -57,25 +74,6 @@ class ShipmentController extends Controller
         }
         
     }
-
-
-    public function index($shop_id){
-        try {
-        $shop = Shop::find($shop_id);
-        $rates = ShippingRate::where('shop_id',$shop->id)->get();
-        return response()->json([
-            'status' => true,
-            'message' => 'Shipping rates fetched Successfully',
-            'data'=> $rates
-        ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
-
     
     public function update(Request $request){
         try {

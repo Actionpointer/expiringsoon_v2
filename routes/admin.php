@@ -21,22 +21,29 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
         Route::get('/',[SettingsController::class, 'index'])->name('global');
         Route::post('store',[SettingsController::class, 'store'])->name('store');
         Route::post('country/basic',[SettingsController::class, 'country_basic'])->name('country.basic');
-        Route::post('country/states',[SettingsController::class, 'settings'])->name('country.states');
+        Route::post('country/states',[SettingsController::class, 'country_states'])->name('country.states');
+        Route::post('country/cities',[SettingsController::class, 'country_cities'])->name('country.cities');
     });
     
-
     Route::group(['prefix'=> 'shipment','as'=>'shipments.'],function(){
         Route::get('index',[ShipmentController::class, 'index'])->name('index');
         Route::post('store',[ShipmentController::class, 'store'])->name('store');
         Route::post('update',[ShipmentController::class, 'update'])->name('update');
         Route::post('destroy',[ShipmentController::class, 'destroy'])->name('delete');
-        
+    });
+
+    Route::group(['prefix'=> 'staff','as'=>'staff.'],function(){
+        Route::post('store',[UserController::class, 'store'])->name('store');
+        Route::post('update',[UserController::class, 'update'])->name('update');
+        Route::post('delete',[UserController::class, 'destroy'])->name('delete');
+    });
+    
+    Route::group(['prefix'=> 'plans','as'=>'plan.'],function(){
+        Route::post('/',[SettingsController::class, 'plans'])->name('update');
+        Route::post('pricing',[SettingsController::class, 'pricing'])->name('pricing');
     });
     
 
-    Route::post('staff',[SettingsController::class, 'admins'])->name('staff');
-    Route::post('plans',[SettingsController::class, 'plans'])->name('plans');
-    Route::post('plans/pricing',[SettingsController::class, 'plans'])->name('plans.pricing');
     Route::post('adplans',[SettingsController::class, 'adplans'])->name('adplans');
     Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
     Route::post('coupons/manage',[CouponController::class, 'manage'])->name('coupon.manage');

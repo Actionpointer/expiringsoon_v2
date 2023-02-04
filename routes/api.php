@@ -83,6 +83,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('products/store',[ProductController::class,'store']);
         Route::post('products/update',[ProductController::class,'update']);
         Route::post('products/delete',[ProductController::class,'destroy']);
+        
         Route::get('/{shop_id}/shipping/rates',[ShipmentController::class,'index']);
         Route::group(['prefix'=>'shipping/rates'],function (){
             Route::post('store',[ShipmentController::class,'store']);

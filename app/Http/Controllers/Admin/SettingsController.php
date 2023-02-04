@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Tag;
+use App\Models\City;
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\Price;
 use App\Models\State;
 use App\Models\Adplan;
 use App\Models\Country;
@@ -14,6 +16,7 @@ use App\Models\Currency;
 use Illuminate\Support\Arr;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request;
+use Ixudra\Curl\Facades\Curl;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
@@ -59,75 +62,67 @@ class SettingsController extends Controller
     }
 
     public function country_basic(Request $request){
-        dd($request->all());
+        
         $country = Country::find($request->country_id);
         $country->currency_id = $request->currency_id;
         $country->payment_gateway_receiving = $request->payment_gateway_receiving;
         $country->payment_gateway_transfering = $request->payment_gateway_transfering;
         $country->vat = $request->vat;
         $country->bank_digits = $request->bank_digits;
+        $country->save();
         return redirect()->back()->with(['result'=> 1,'message'=> 'Udpated Country Settings']);
     }
-
-    public function admins(Request $request){
-        
-        if($request->user_id){
-            if($request->delete){
-                $user = User::destroy($request->user_id);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted User']);
-            }else{
-                //update
-                // dd($request->all());
-                $user = User::find($request->user_id);
-                $validator = Validator::make($request->all(), [
-                    'fname' => 'nullable|string',
-                    'lname' => 'nullable|string',
-                    'status' => 'nullable|numeric',
-                    'role' => 'nullable|string',
-                    'email' => ['nullable',Rule::unique('users')->ignore($user)],
-                    'phone' => ['nullable',Rule::unique('users')->ignore($user)],
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update user']);
-                }
-                $user = User::where('id',$request->user_id)->update(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'email'=> $request->email,'phone'=> $request->phone]);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
+    public function country_states(Request $request){
+        $country = Country::find($request->country_id);
+        if($request->type == 'manual' && $request->states){
+            foreach(explode(',',$request->states) as $line){
+                if(strpos($line,':') === false)
+                continue;
+                $state = State::updateOrCreate(['iso'=> explode(':',$line)[0],'country_id'=> $country->id],['name'=> explode(':',$line)[1]]);
             }
         }else{
-            //create
-            $validator = Validator::make($request->all(), [
-                'fname' => 'required|string',
-                'lname' => 'required|string',
-                'status' => 'required|numeric',
-                'role' => 'required|string',
-                'email' => 'required|string|unique:users',
-                'phone' => 'required|string|unique:users',
-                'password' => 'required','string','confirmed'
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
+            $responses = Curl::to("https://api.countrystatecity.in/v1/countries/$country->iso/states")
+            ->withHeader('X-CSCAPI-KEY: '.config('services.countrystatecity'))
+            ->asJson()
+            ->get();
+            foreach($responses as $response){
+                $state = State::updateOrCreate(['iso'=> $response->iso2,'country_id'=> $country->id],['name'=> $response->name]);
             }
-            $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'state_id'=> session('locale')['state_id'],'country_id'=> session('locale')['country_id'],'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
-            return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
-        }   
+        }
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Udpated Country States']);
+    }
+    public function country_cities(Request $request){
+        $country = Country::find($request->country_id);
+        $state = Country::find($request->state_id);
+        if($request->type == 'manual' && $request->cities){
+            foreach(explode(',',$request->cities) as $line){
+                if($line){
+                    $city = State::updateOrCreate(['state_id'=> $state->id,'name'=> $line]);
+                }   
+            }
+        }else{
+            $responses = Curl::to("https://api.countrystatecity.in/v1/countries/$country->iso/states/$state->iso/cities")
+            ->withHeader('X-CSCAPI-KEY: '.config('services.countrystatecity'))
+            ->asJson()
+            ->get();
+            foreach($responses as $response){
+                $city = City::updateOrCreate(['state_id'=> $state->id,'name'=> $response->name]);
+            }
+        }
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Udpated Country States']);
     }
     
     public function plans(Request $request){
-        if($request->plan_id){
-            if($request->delete){
-                $plan = Plan::find($request->plan_id);
-                if($plan->activeSubscriptions->isEmpty()){
-                    $plan->delete();
-                    return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Deleted Successfully']);
-                }else return redirect()->back()->with(['result'=> 0,'message'=> 'Unable to delete plan which has active subscriptions']);
-            }else{
-                $plan = Plan::where('id',$request->plan_id)->update(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
-                return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Updated Successfully']);
-            }
-        }else{
-            $plan = Plan::create(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Created Successfully']);
+        $plan = Plan::where('id',$request->plan_id)->update(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Updated Successfully']);
+    }
+
+    public function pricing(Request $request){
+        foreach($request->currencies as $currency){
+            $price = Price::where('priceable_id',$request->plan_id)->where('priceable_type','App\Models\Plan')->update(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
         }
+        
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Updated Successfully']);
     }
 
     public function adplans(Request $request){  

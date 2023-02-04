@@ -29,6 +29,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->job(new CheckOrderExpectedDateJob)->daily();
         $schedule->job(new ConvertDeliveredToCompletedJob)->daily();
+
+        // Your cronjob should run this: php /path/to/laravel/artisan queue:work --stop-when-empty
     }
 
     /**

@@ -196,16 +196,8 @@
                     <div class="contact-form--input">
                       <input type="text" placeholder="Subject" />
                     </div>
-                    <div
-                      class="contact-form--input contact-form--input-area"
-                      id="subject"
-                    >
-                      <textarea
-                        name="subject"
-                        cols="auto"
-                        rows="auto"
-                        placeholder="Your Message"
-                      ></textarea>
+                    <div class="contact-form--input contact-form--input-area" id="subject" >
+                      <textarea name="subject" cols="auto" rows="auto" placeholder="Your Message" ></textarea>
                     </div>
                     <div class="contact-form-button">
                       <button class="button button--md" type="button">

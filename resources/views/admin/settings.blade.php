@@ -572,17 +572,17 @@
                                                 <th scope="col" class="">Basic</th>
                                                 <th scope="col" class="">States</th>
                                                 <th scope="col" class="">Cities</th>
-                                                <th scope="col" class="">Banks</th>
+                                                {{-- <th scope="col" class="">Banks</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($countries as $country)
                                                 <tr>
                                                     <td>{{$country->name}}</td>
-                                                    <td><a href="#" data-bs-toggle="modal" data-bs-target="#country_basic{{$country->id}}">Open Basic</a></td>
-                                                    <td>12 states, <a href="#">Set States</a></td>
-                                                    <td>300 cities,<a href="#">Set Cities</a></td>
-                                                    <td>12 Banks, <a href="#">Set Banks</a></td>
+                                                    <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#country_basic{{$country->id}}">Open Basic</a></td>
+                                                    <td>{{$country->states->count()}} states, <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#country_states{{$country->id}}">Set States</a></td>
+                                                    <td>{{$country->cities->count()}} cities, <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#country_cities{{$country->id}}">Set Cities</a></td>
+                                                    {{-- <td>12 Banks, <a href="#">Set Banks</a></td> --}}
                                                 </tr>
                                                 <div class="modal fade" id="country_basic{{$country->id}}" tabindex="-1" aria-labelledby="country_basic{{$country->id}}ModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
@@ -655,6 +655,105 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="modal fade" id="country_states{{$country->id}}" tabindex="-1" aria-labelledby="country_states{{$country->id}}ModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                            <h5 class="modal-title" id="country_states{{$country->id}}ModalLabel">Manage States in {{$country->name}} </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{{route('admin.settings.country.states')}}" method="post" id="country_states{{$country->id}}form">
+                                                                    <h5 class="font-body--xl-400">Set Automatically</h5>
+                                                                    <p class="font-body--md-400">The system will attempt to fetch online all the states belonging to {{$country->name}}.</p>
+                                                                    <div class="contact-form-btn text-center my-3">
+                                                                        <button class="button button--md" name="type" value="automatic" type="submit">
+                                                                            Fetch States Automatically
+                                                                        </button>
+                                                                    </div>
+                                                                    <p class="text-center">OR</p>
+                                                                    @csrf 
+                                                                    <h5 class="font-body--xl-400">Set Manually</h5>
+                                                                    <p class="font-body--md-400">States added via this form will be appended to the existing list. Any duplicate found will not be added</p>
+                                                                    <p class="font-body--md-400">Kindly ensure to add each state in the format of Code:Name such as e.g LA:Lagos,OG:Ogun,FC:Abuja. Please check the state code online to add the correct code.</p>
+                                                                    <input type="hidden" name="country_id" value="{{$country->id}}">
+                                                                    <div class="contact-form__content my-3">
+                                                                        <div class="contact-form--input contact-form--input-area">
+                                                                            <label for="destination">Add States</label>
+                                                                            <textarea name="states" cols="auto" class="w-100" placeholder="e.g LA:Lagos,OG:Ogun,FC:Abuja" ></textarea>
+                                                                        </div>
+                                                                        <div class="contact-form-input">
+                                                                            <label for="pin">Enter Your Access Pin</label>
+                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                        </div>
+                                                                        <div class="contact-form-btn">
+                                                                            <button class="button button--md" name="type" value="manual" type="submit">
+                                                                                Add States
+                                                                            </button>
+                                                                            <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                                  
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade" id="country_cities{{$country->id}}" tabindex="-1" aria-labelledby="country_cities{{$country->id}}ModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                            <h5 class="modal-title" id="country_cities{{$country->id}}ModalLabel">Manage Cities in {{$country->name}}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{{route('admin.settings.country.cities')}}" method="post" id="country_cities{{$country->id}}form">
+                                                                    <input type="hidden" name="country_id" value="{{$country->id}}">
+                                                                    <div class="contact-form__content my-3">
+                                                                        <div class="contact-form-input">
+                                                                            <label for="statex">State </label>
+                                                                            <select name="state_id" class="select2" required>
+                                                                                @foreach ($country->states as $state)
+                                                                                    <option value="{{$state->id}}">{{$state->name}}-{{$state->cities->count()}} cities</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <h5 class="font-body--xl-400">Fetch Automatically</h5>
+                                                                    <p class="font-body--md-400">The system will attempt to fetch online all the cities belonging to selected state.</p>
+                                                                    <div class="contact-form-btn text-center my-3">
+                                                                        <button class="button button--md" name="type" value="automatic" type="submit">
+                                                                            Fetch Cities Automatically
+                                                                        </button>
+                                                                    </div>
+                                                                    <p class="text-center">OR</p>
+                                                                    @csrf 
+                                                                    <h5>Set Manually</h5>
+                                                                    <p class="font-body--md-400">States added via this form will be appended to the existing list. Any duplicate found will not be added</p>
+                                                                    <p class="font-body--md-400">Kindly ensure to add each city name like this. e.g Yaba,Agege,</p>
+                                                                        <div class="contact-form--input contact-form--input-area">
+                                                                            <label for="destination">Add Cities</label>
+                                                                            <textarea name="cities" cols="auto" class="w-100" placeholder="e.g LA:Lagos,OG:Ogun,FC:Abuja" ></textarea>
+                                                                        </div>
+                                                                        <div class="contact-form-input">
+                                                                            <label for="pin">Enter Your Access Pin</label>
+                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                        </div>
+                                                                        <div class="contact-form-btn">
+                                                                            <button class="button button--md" name="type" value="manual" type="submit">
+                                                                                Add Cities
+                                                                            </button>
+                                                                            <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                                  
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @endforeach
                                         </tbody>
                                         </table>
@@ -669,10 +768,10 @@
                             <!-- Manage Admins  -->
                             <div class="dashboard__content-card">
                                 <div class="dashboard__content-card-header">
-                                <h5 class="font-body--xl-500">Manage Admins</h5>
+                                    <h5 class="font-body--xl-500">Manage Admins</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                <form method="post" action="{{route('admin.staff')}}" id="admin" class="mb-3">@csrf
+                                <form method="post" action="{{route('admin.staff.store')}}" id="admin" class="mb-3">@csrf
                                     <div class="contact-form__content">
                                         <div class="contact-form__content-group">
                                             <div class="contact-form-input">
@@ -751,7 +850,7 @@
                                                     <td>
                                                         @if($user->id != Auth::id()) 
                                                         <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block';$('.select2').select2();">Edit </a> | 
-                                                        <form class="d-inline" action="{{route('admin.staff')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                        <form class="d-inline" action="{{route('admin.staff.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
                                                             <input type="hidden" name="user_id" value="{{$user->id}}">
                                                             <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
                                                         </form>
@@ -762,7 +861,7 @@
                                                 @if($user->id != Auth::id())
                                                 <tr>
                                                     <td colspan="6" style="border:none;padding:0px">
-                                                        <form action="{{route('admin.staff')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                        <form action="{{route('admin.staff.update')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
                                                             @csrf 
                                                             <input type="hidden" name="user_id" value="{{$user->id}}">
                                                             <div class="contact-form__content">
@@ -861,7 +960,7 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{route('admin.plans')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
+                                                            <form action="{{route('admin.plans.update')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
                                                                 <input type="hidden" name="plan_id" value="{{$plan->id}}">
                                                                 <div class="contact-form__content">
                                                                     
@@ -939,21 +1038,21 @@
                                                                         </div> 
                                                                     </div>
                                                                     @foreach ($currencies as $currency)
-                                                                    <div class="row border">
-                                                                        <div class="col">
-                                                                            {{$currency->name}}
-                                                                        </div>  
-                                                                        <input class="form-control-sm col pr-1 border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                        <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                        <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                        <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                        <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                        <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                        <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                        <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                        <div class="row border">
+                                                                            <div class="col">
+                                                                                {{$currency->name}}
+                                                                            </div>  
+                                                                            <input class="form-control-sm col pr-1 border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                                
                                                                             
-                                                                        
-                                                                    </div>
+                                                                        </div>
                                                                     @endforeach
                                                                 </div> 
                                                                 <div class="contact-form-btn">
