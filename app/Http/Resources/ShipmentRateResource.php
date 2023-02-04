@@ -19,7 +19,7 @@ class ShipmentRateResource extends JsonResource
             'id'=> $this->id,
             'destination' => $this->destination->name,
             'country' => $this->country->name,
-            'currency'=> $this->currency->symbol,
+            'currency'=> $this->country->currency->symbol,
             'amount' => $this->amount,
             'hours' => $this->hours,
             'created_at' => $this->created_at,
