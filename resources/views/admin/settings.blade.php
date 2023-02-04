@@ -1041,17 +1041,16 @@
                                                                         <div class="row border">
                                                                             <div class="col">
                                                                                 {{$currency->name}}
+                                                                                <input type="hidden" name="currencies[]" value="{{$currency->id}}">
                                                                             </div>  
-                                                                            <input class="form-control-sm col pr-1 border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" value="{{$plan->price->where('currency_id',$currency->id)->}}" id="discount120">
+                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120"  id="discount120">
                                                                             <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
                                                                             <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
                                                                             <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
                                                                             <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
                                                                             <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
                                                                             <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                                
-                                                                            
                                                                         </div>
                                                                     @endforeach
                                                                 </div> 

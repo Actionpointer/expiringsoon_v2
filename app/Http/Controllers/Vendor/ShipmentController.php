@@ -8,11 +8,11 @@ use App\Models\ShippingRate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ShipmentRateResource;
 
 class ShipmentController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth');
     }
 
@@ -22,7 +22,7 @@ class ShipmentController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Shipping rates fetched Successfully',
-                'data'=> $rates
+                'data'=> ShipmentRateResource::collection($rates)
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
@@ -64,7 +64,6 @@ class ShipmentController extends Controller
                 'message' => 'Successfully Created Shipping Rate',
             ], 200) :
             redirect()->back()->with(['result'=> 1,'message'=> 'Shipping Rate created successfully']);
-            
         
         } catch (\Throwable $th) {
             return response()->json([
