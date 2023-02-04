@@ -11,7 +11,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Adplan extends Model
 {
     use HasFactory;
+    protected $appends = ['price_per_day'];
 
+    public function getPricePerDayAttribute(){
+        return $this->prices->where('currency_id',session('locale')['currency_id'])->where('description','price_per_day')->isNotEmpty() ? $this->prices->where('currency_id',session('locale')['currency_id'])->firstWhere('description','price_per_day')->amount : 0 ;
+    }
     public function adverts(){
         return $this->hasManyThrough(Advert::class,Feature::class);
     }

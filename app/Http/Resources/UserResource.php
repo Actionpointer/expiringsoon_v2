@@ -34,6 +34,8 @@ class UserResource extends JsonResource
             "phone"=> $this->phone,
             "prefix"=> $this->country->dial,
             "mobile"=> $this->mobile,
+            "country_id"=> $this->country_id,
+            "country_name"=> $this->country->name,
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
             "state_name"=> $this->state->name,
@@ -53,7 +55,9 @@ class UserResource extends JsonResource
             }),
             "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
                 return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
-            }),            
+            }),
+            'payment_gateway_receiving'=> $this->country->payment_gateway_receiving,            
+            'payment_gateway_transfering'=> $this->country->payment_gateway_transfering,            
             
         ];
     }

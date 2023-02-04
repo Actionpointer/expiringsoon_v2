@@ -63,7 +63,7 @@
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Shops :</span> <strong>{{\App\Models\Shop::count()}}</strong></p>
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Adverts :</span> <strong>{{\App\Models\Advert::count()}}</strong></p>
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Customers :</span> <strong>{{\App\Models\User::where('role','shopper')->count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Sales :</span> <strong>{!!session('locale')['currency_symbol']!!} {{App\Models\Order::where('status','completed')->sum('total')}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Orders :</span> <strong>{{App\Models\Order::whereNotIn('status',['cancelled','new'])->count()}}</strong></p>
                     
                   </div>
                 </div>
@@ -81,12 +81,9 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"></th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Shop Details</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Date
-                        </th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Type
-                        </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Date</th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Type </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Applicant</th>
                         <th scope="col" class="dashboard__order-history-table-title"></th>
                       </tr>
                     </thead>
@@ -94,35 +91,36 @@
                       
                         @forelse ($documents as $document)
                             <tr>
-                                <!-- Order Id  -->
-                                <td class="dashboard__order-history-table-item order-id" >
+
+                              <td class="dashboard__order-history-table-item order-total " >
+                                {{$document->created_at->format('l, M jS, Y')}}
+                              </td>
+                              <!-- Status -->
+                              <td class="dashboard__order-history-table-item order-status">
+                                  {{ucwords($document->type)}}
+                              </td>
+
+                                <td class="dashboard__order-history-table-item order-date">
+                                  <div class="d-flex">
                                     @if($document->verifiable_type == 'App\Models\Shop')
                                       <img @if(!$document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
                                     @else
-                                    <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                      <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
                                     @endif
-                                </td>
-                                <!-- Date  -->
-                                <td class="dashboard__order-history-table-item order-date">
-                                    <p class="order-total-price">
+                                    <p class="order-total-price ps-2">
                     
                                         {{$document->verifiable->name}}
                                         <br />
                                         <span style="font-size:12px;color:#888">
                                             {{$document->verifiable->email}}
                                         </span>
-                                     
+                                    
                                     </p>
+                                  </div>
+                                  
                                 </td>
                                 <!-- Total  -->
-                                <td class="dashboard__order-history-table-item order-total " >
-                                    {{-- <?php echo date("l, M jS, Y", strtotime($row['date'])); ?> --}}
-                                    {{$document->created_at->format('l, M jS, Y')}}
-                                </td>
-                                <!-- Status -->
-                                <td class="dashboard__order-history-table-item order-status">
-                                    {{ucwords($document->type)}}
-                                </td>
+                                
                                 <!-- Details page  -->
                                 <td class=" dashboard__order-history-table-item order-details ">
                                   @if($document->verifiable_type == 'App\Models\Shop')

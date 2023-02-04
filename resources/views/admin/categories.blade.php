@@ -154,6 +154,20 @@
                                 <div class="modal-body">
                                   <form method="post" action="{{route('admin.categories.management')}}">@csrf
                                     <div class="contact-form__content">
+                                      <div class="dashboard__content-card-img flex-column align-items-center"> 
+                                        <div class="dashboard__content-img-wrapper rounded-0 w-50 h-50" id="avatar">
+                                          <img src="{{asset('src/images/site/no-image.png')}}" style="width:100%;height:100%;" alt="category"  onclick="performClick('theFile');"  id="imgPreview"   />
+                                        </div>
+                                        <div>
+                                          <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
+                                          <button type="button" class="button w-100 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Category Image</button>
+                                        </div>
+                                        @error('photo')
+                                        <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                        @enderror
+                                      </div>
                                       <div class="contact-form-input">
                                         <label for="address">Category Name</label>
                                         <input type="text" name="category" value="{{$category->name}}" placeholder="" />

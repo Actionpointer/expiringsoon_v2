@@ -18,6 +18,7 @@ class FrontendController extends Controller
         $advert_A = Advert::state($state_id)->running()->certifiedShop()->where('position',"A")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
         $advert_B = Advert::state($state_id)->running()->certifiedShop()->where('position',"B")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
         $advert_Z = Advert::with('product')->state($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
+        dd($advert_A);
         return view('frontend.index',compact('categories','advert_A','advert_B','advert_Z'));
     }
     

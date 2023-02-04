@@ -20,11 +20,8 @@ class AdvertController extends Controller
     use GeoLocationTrait,PaymentTrait;
 
     public function __construct(){
-        $this->middleware('auth')->except('redirect');
+        $this->middleware('auth');
     }
-
-    
-    
 
     public function ads(Feature $feature){
         // $feature = auth()->user()->features->where('subscribable_id',$feature->id)->first();

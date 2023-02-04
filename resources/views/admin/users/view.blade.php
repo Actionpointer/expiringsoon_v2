@@ -147,39 +147,47 @@
                   <div class="dashboard__content-card-body">
                     <table class="table small">
                         <tr>
-                            <th>Type</th>
-                            <th>Upload Date</th>
-                            <th>Status</th>
-                            <th align="right"></th>
+                          <th>Document</th>
+                          <th>Type</th>
+                          <th>Upload Date</th>
+                          <th>Status</th>
+                          <th align="right"></th>
                         </tr>
-                        @if($user->idcard)
-                        <tr>
-                          <td><a href="{{Storage::url($user->idcard->document)}}" target="_blank">Owner ID</a></td>
-                          <td>
-                              {{$user->idcard->created_at->format('d-m-Y')}}
-                          </td>
-                          <td>
-                              @if(!$user->idcard->reason)
-                                Rejected {{$user->idcard->reason}}
-                              @elseif(!$user->idcard->status)
-                                Pending
-                              @else Approved
-                              @endif
-                          </td>
-                          <td>
-                            <div class="dropdown">
-                              <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Manage
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">                                 
-                                <form action="{{route('admin.kyc.manage')}}" method="post" class="d-inline" onsubmit="return confirm('Do you really want to approve document?');">@csrf
+                        @if($user->idcard)  
+                            <tr>
+                                <td>
+                                  <a href="{{Storage::url($user->idcard->document)}}" target="_blank">
+                                    
+                                    <img style="width:50px;height:50px;border:1px solid #ddd;padding:3px" 
+                                      @if($user->idcard->doctype == 'application')
+                                         src="{{asset('src/images/site/icon-pdf.jpg')}}" 
+                                       @else
+                                          src="{{Storage::url($user->idcard->document)}}" 
+                                        @endif> 
+                                  </a>
+                                </td>
+                                <td>{{$user->idcard->type}}</td>
+                                <td>{{$user->idcard->created_at->format('d-m-Y')}}</td>
+                                  <td>
+                                    @if(!$user->idcard->status)
+                                      Pending {{$user->idcard->reason}}
+                                    @else
+                                      Approved
+                                    @endif
+                                </td>
+                                <td>
+                                  @if(!$user->idcard->status)
+                                  <form action="{{route('admin.kyc.manage')}}" method="post" class="d-inline" onsubmit="return confirm('Do you really want to approve document?');">@csrf
                                     <input type="hidden" name="kyc_id" value="{{$user->idcard->id}}">
                                     <input type="hidden" name="status" value="1">
-                                    <button class="dropdown-item" type="submit">Approve</button>
-                                </form> 
-                                <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#rateedit{{$user->idcard->id}}">Reject</button>
-                              </div>
-                            </div>
+                                    <button class="btn btn-success" type="submit">Approve</button>
+                                  </form>
+                                  @endif 
+                                  @if(!$user->idcard->reason)
+                                  <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#rateedit{{$user->idcard->id}}">Reject</button>
+                                  @endif
+                                </td>
+                            </tr>
                             <div class="modal fade" id="rateedit{{$user->idcard->id}}" tabindex="-1" aria-labelledby="rateedit{{$user->idcard->id}}ModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
@@ -191,7 +199,6 @@
                                       <form action="{{route('admin.kyc.manage')}}" method="post" id="rateedit{{$user->idcard->id}}">
                                           @csrf 
                                           <input type="hidden" name="kyc_id" value="{{$user->idcard->id}}">
-                                          <input type="hidden" name="status" value="0">
                                           <div class="contact-form__content my-3">
                                               <div class="contact-form-input">
                                                 <label for="hours">Reason</label>
@@ -211,10 +218,9 @@
                                 </div>
                               </div>
                             </div>
-                          </td>
-                        </tr>
-                        @else
-                        <tr><td colspan="3" class="text-center">No KYC</td></tr>                          
+                            
+                        @else  
+                            <tr><td>No KYC</td></tr>
                         @endif
                         
                         

@@ -11,18 +11,18 @@ trait PayoutTrait
     use FlutterwaveTrait,PaystackTrait;
 
     protected function initializePayout(Payout $payout){
-        // $gateway = Setting::firstWhere('name','active_payment_gateway')->value;
-        // switch($gateway){
-        //     case 'paystack':  $link = $this->initiatePaystack($payout);
-        //     break;
-        //     case 'flutter': $link = $this->initiateFlutterWave($payout);
-        //     break;
-            
-        // }
-        //check if settings gateway is flutter.. then call flutter else call paystack
-        // dd($link);
-        $link = $this->payoutFlutterWave($payout);
-        dd($link);
+        $user = Auth::user();
+        $gateway = $user->country->payment_gateway_receiving;
+        switch($gateway){
+            case 'paystack': $link = $this->payoutPaystack($payout);
+            break;
+            case 'flutterwave': $link = $this->payoutFlutterWave($payout);
+            break;
+            case 'paypal': $link = $this->payoutPaypal($payout);
+            break;
+            case 'stripe': $link = $this->payoutStripe($payout);
+            break;
+        }
         return $link;
     }
 

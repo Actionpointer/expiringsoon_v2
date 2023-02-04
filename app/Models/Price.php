@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Price extends Model
 {
     use HasFactory;
+    protected $fillable = ['currency_id','priceable_id','priceable_type','description','amount'];
 
     public function priceable(){
         return $this->morphTo();

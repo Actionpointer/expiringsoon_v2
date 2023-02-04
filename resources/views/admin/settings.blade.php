@@ -960,7 +960,7 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{route('admin.plan.update')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
+                                                            <form action="{{route('admin.plans')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
                                                                 <input type="hidden" name="plan_id" value="{{$plan->id}}">
                                                                 <div class="contact-form__content">
                                                                     
@@ -1004,9 +1004,10 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div>
-                                                            <form action="{{route('admin.plan.pricing')}}" method="post" id="plan_price{{$plan->id}}form">
+                                                            <form action="{{route('admin.pricing')}}" method="post" id="plan_price{{$plan->id}}form">
                                                                 @csrf 
-                                                                <input type="hidden" name="plan_id" value="{{$plan->id}}">
+                                                                <input type="hidden" name="priceable_id" value="{{$plan->id}}">
+                                                                <input type="hidden" name="priceable_type" value="App\Models\Plan">
                                                                 <div class="pricing">
                                                                     <div class="row">
                                                                         <div class="col border d-flex align-items-center">
@@ -1043,17 +1044,26 @@
                                                                                 {{$currency->name}}
                                                                                 <input type="hidden" name="currencies[]" value="{{$currency->id}}">
                                                                             </div>  
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="minimum_payout" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','minimum_payout')->amount}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="maximum_payout" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','maximum_payout')->amount}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="commission_percentage" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','commission_percentage')->amount}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="commission_fixed" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','commission_fixed')->amount}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_1" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_1')->amount}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_3" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_3')->amount}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_6" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_6')->amount}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_12" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_12')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[minimum_payout][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','minimum_payout')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','minimum_payout')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[maximum_payout][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','maximum_payout')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','maximum_payout')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[commission_percentage][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','commission_percentage')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','commission_percentage')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[commission_fixed][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','commission_fixed')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','commission_fixed')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_1][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_1')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_1')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_3][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_3')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_3')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_6][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_6')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_6')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_12][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_12')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_12')->amount : 0}}">
                                                                         </div>
                                                                     @endforeach
                                                                 </div> 
+                                                                <div class="row my-4">
+                                                                    <div class="col-md-4">
+                                                                        <div class="contact-form-input">
+                                                                            <label for="pin">Enter Your Access Pin</label>
+                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
                                                                 <div class="contact-form-btn">
                                                                     <button class="button button--md" type="submit"> Update Price </button>
                                                                     <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
@@ -1072,96 +1082,6 @@
                                     </table>
                                 </div>
                             </div>
-                            {{-- <!-- New Plan  -->
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">New Plan</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                    <form method="post" action="{{route('admin.plans')}}" id="plan" class="mb-3">@csrf
-                                        <div class="contact-form__content">
-                                            
-                                            <div class="contact-form-input">
-                                                <label for="name">Plan Name</label>
-                                                <input type="text" name="name" required />
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <label for="name">Plan Description</label>
-                                                <input type="text" name="description" required />
-                                            </div>
-                                            
-                                            <div class="contact-form-input">
-                                                <div class="input-group d-flex">
-                                                    <div class="prepend">
-                                                        <label for="number_of_shops">No of Shops</label>
-                                                        <input type="number" name="shops" class="form-control" id="number_of_shops" required/>
-                                                    </div>
-                                                    <div>
-                                                        <label for="number_of_products">No of Products</label>
-                                                        <input type="number" name="products" class="form-control" id="number_of_products" required/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <div class="input-group d-flex">
-                                                    <div class="prepend">
-                                                        <label>Commission Percentage</label>
-                                                        <input type="number" name="commission_percentage" class="form-control" required />
-                                                    </div>
-                                                    <div>
-                                                        <label>Commission Fixed</label>
-                                                        <input type="number" name="commission_fixed" class="form-control" required />
-                                                    </div>
-                                                    
-                                                </div>
-                                        
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <!-- <label for="number1">Plan Payout</label> -->
-                                                <div class="input-group d-flex">
-                                                    <div class="prepend">
-                                                        <label for="number1">Minimum Payout </label>
-                                                        <input type="number" name="minimum_payout" class="form-control" required />
-                                                    </div>
-                                                    <div>
-                                                        <label for="number1">Maximum Payout</label>
-                                                        <input type="number" name="maximum_payout" class="form-control" required />
-                                                    </div>
-                                                    
-                                                </div>
-                                        
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <label for="number1">Plan Cost</label>
-                                                <div class="row no-gutters">
-                                                    <div class="col-3">
-                                                        <label for="number1">1 Month </label>
-                                                        <input type="number" name="months_1" class="form-control" required />
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <label for="number1">3 Months </label>
-                                                        <input type="number" name="months_3" class="form-control" required />
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <label for="number1">6 Months </label>
-                                                        <input type="number" name="months_6" class="form-control" required />
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <label for="number1">1 Year</label>
-                                                        <input type="number" name="months_12" class="form-control" required />
-                                                    </div>
-                                                    
-                                                </div>
-                                        
-                                            </div>
-                                            
-                                            <div class="contact-form-btn">
-                                                <button class="button button--md askpin" type="button"> Create Plan </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div> --}}
                                 
                         </div>
                         
@@ -1176,78 +1096,83 @@
                                     <h5 class="font-body--xl-500">Advert Plans</h5>
                                 </div>
                                 <div class="dashboard__content-card-body">
-                                    <form method="POST" action="{{route('admin.adplans')}}">@csrf
-                                        <div class="contact-form__content">
-                                            <table class="table" style="width:100%;font-size:13px">
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="col">Plan</th>
-                                                        <th scope="col">Type</th>
-                                                        <th scope="col">Page</th>
-                                                        <th scope="col">Description</th>
-                                                        <th scope="col">Price</th>
-                                                    </tr>
-                                                    @foreach($adplans->sortBy('type') as $adplan)
-                                                    <tr>
-                                                        <td>{{$adplan->name}}</td>
-                                                        <td>{{ucwords($adplan->type)}}</td>
-                                                        <td>{{$adplan->page}}</td>
-                                                        <td>{{ucwords($adplan->description)}}</td>
-                                                        <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#adplan_price{{$adplan->id}}">Set Prices</a></td>
-                                                    </tr>
-                                                    <div class="modal fade" id="adplan_price{{$adplan->id}}" tabindex="-1" aria-labelledby="adplan_price{{$adplan->id}}ModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                          <div class="modal-content">
-                                                            <div class="modal-header">
-                                                              <h5 class="modal-title" id="adplan_price{{$adplan->id}}ModalLabel">{{$adplan->name}} Pricing</h5>
-                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div>
-                                                                <form action="{{route('admin.plans.pricing')}}" method="post" id="adplan_price{{$adplan->id}}form">
-                                                                    @csrf 
-                                                                    <input type="hidden" name="adplan_id" value="{{$adplan->id}}">
-                                                                    <div class="pricing">
-                                                                        <div class="row py-2">
-                                                                            <div class="col-md-4">
-                                                                                <span>Currency</span> 
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <span>Price Per Unit Per Day</span> 
-                                                                            </div>
-                                                                        </div>
-                                                                        @foreach ($currencies as $currency)
-                                                                        <div class="row py-2">
-                                                                            <div class="col-md-4">
-                                                                                {{$currency->name}}
-                                                                            </div>  
-                                                                            <div class="col-md-6">
-                                                                                <input class="form-control-sm col pr-1 border-light discountprice" type="number" step="0.001" required name="discount120" >
-                                                                            </div>  
-                                                                        </div>
-                                                                        @endforeach
-                                                                    </div> 
-                                                                    <div class="contact-form-btn pt-2">
-                                                                        <button class="button button--md askpin" type="button"> Update Advert Plan </button>
-                                                                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            
-                                                          </div>
+                                    <div class="contact-form__content">
+                                        <table class="table" style="width:100%;font-size:13px">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="col">Plan</th>
+                                                    <th scope="col">Type</th>
+                                                    <th scope="col">Page</th>
+                                                    <th scope="col">Description</th>
+                                                    <th scope="col">Price</th>
+                                                </tr>
+                                                @foreach($adplans->sortBy('type') as $adplan)
+                                                <tr>
+                                                    <td>{{$adplan->name}}</td>
+                                                    <td>{{ucwords($adplan->type)}}</td>
+                                                    <td>{{$adplan->page}}</td>
+                                                    <td>{{ucwords($adplan->description)}}</td>
+                                                    <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#adplan_price{{$adplan->id}}">Set Prices</a></td>
+                                                </tr>
+                                                <div class="modal fade" id="adplan_price{{$adplan->id}}" tabindex="-1" aria-labelledby="adplan_price{{$adplan->id}}ModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                      <div class="modal-content">
+                                                        <div class="modal-header">
+                                                          <h5 class="modal-title" id="adplan_price{{$adplan->id}}ModalLabel">{{$adplan->name}} Pricing</h5>
+                                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
+                                                        <div class="modal-body">
+                                                            <div>
+                                                            <form action="{{route('admin.pricing')}}" method="post" id="adplan_price{{$adplan->id}}form">
+                                                                @csrf 
+                                                                <input type="hidden" name="priceable_id" value="{{$adplan->id}}">
+                                                                <input type="hidden" name="priceable_type" value="App\Models\Adplan">
+                                                                <div class="pricing">
+                                                                    <div class="row py-2">
+                                                                        <div class="col-md-4">
+                                                                            <span>Currency</span> 
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <span>Price Per Unit Per Day</span> 
+                                                                        </div>
+                                                                    </div>
+                                                                    @foreach ($currencies as $currency)
+                                                                    <div class="row py-2">
+                                                                        <div class="col-md-4">
+                                                                            {{$currency->name}}
+                                                                            <input type="hidden" name="currencies[]" value="{{$currency->id}}">
+                                                                        </div>  
+
+                                                                        <div class="col-md-6">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[price_per_day][{{$currency->id}}]" value="{{$adplan->prices->where('currency_id',$currency->id)->where('description','price_per_day')->isNotEmpty() ? $adplan->prices->where('currency_id',$currency->id)->firstWhere('description','price_per_day')->amount : 0}}">
+                                                                        </div>  
+                                                                    </div>
+                                                                    @endforeach
+                                                                </div> 
+                                                                <div class="contact-form-input">
+                                                                    <label for="pin">Enter Your Access Pin</label>
+                                                                    <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                </div>
+                                                                <div class="contact-form-btn pt-2">
+                                                                    <button class="button button--md" type="submit"> Update Advert Plan Prices </button>
+                                                                    <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        
+                                                      </div>
                                                     </div>
-                                                    @endforeach
-                                                
-                                                
-                                                </tbody>
-                                            </table>
-                                            <div class="contact-form-btn">
-                                                <button class="button button--md askpin" type="button"> Save
-                                                </button>
-                                            </div>
+                                                </div>
+                                                @endforeach
+                                            
+                                            
+                                            </tbody>
+                                        </table>
+                                        <div class="contact-form-btn">
+                                            <button class="button button--md askpin" type="button"> Save
+                                            </button>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                           </div>
@@ -1339,7 +1264,7 @@
                                                 <td>{{$rate->origin->name}}</td>
                                                 <td>{{$rate->destination->name}}</td>
                                                 <td>{{$rate->hours}}</td>
-                                                <td>{{$rate->amount}}</td>
+                                                <td>{!! $rate->country->currency->symbol !!}{{$rate->amount}}</td>
                                                 <td> 
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit </a> | 
                                                     <form class="d-inline" action="{{route('admin.shipments.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf

@@ -94,20 +94,24 @@
                                                 {{$subscription->start_at->format('d-M-Y h:iA')}}
                                               </td>
                                               <td class="cart-table-item order-date align-middle">
-                                                {{$subscription->end_at->format('d-M-Y h:iA')}}
+                                                {{$subscription->end_at ? $subscription->end_at->format('d-M-Y h:iA') : '-'}}
                                               </td>
                                               <!-- Stock Status  -->
                                               <td class="cart-table-item order-date align-middle">
-                                                
-                                                  @if($subscription->expired())
-                                                      <button class="badge btn-danger">Expired </button>
-                                                  @elseif($subscription->renew_at && $subscription->renew_at < now())
-                                                      <button class="badge btn-warning">Expiring </button>
-                                                  @elseif(!$subscription->status)
-                                                      <button class="badge btn-danger">Not Active </button>
+                                                  @if($subscription->end_at)
+                                                    @if($subscription->expired())
+                                                        <button class="badge btn-danger">Expired </button>
+                                                    @elseif($subscription->renew_at && $subscription->renew_at < now())
+                                                        <button class="badge btn-warning">Expiring </button>
+                                                    @elseif(!$subscription->status)
+                                                        <button class="badge btn-danger">Not Active </button>
+                                                    @else 
+                                                        <button class="badge btn-success">Active </button>
+                                                    @endif
                                                   @else
-                                                      <button class="badge btn-success">Active </button>
+                                                    <button class="badge btn-success">Active </button>
                                                   @endif
+                                                  
                                                 
                                               </td>
                                               

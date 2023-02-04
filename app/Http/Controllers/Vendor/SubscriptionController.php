@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Models\Plan;
+use App\Models\Price;
 use App\Models\Adplan;
 use App\Models\Feature;
 use App\Models\Subscription;

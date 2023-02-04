@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Tag;
+
 use App\Models\City;
 use App\Models\Plan;
 use App\Models\User;
@@ -11,16 +11,12 @@ use App\Models\State;
 use App\Models\Adplan;
 use App\Models\Country;
 use App\Models\Setting;
-use App\Models\Category;
 use App\Models\Currency;
-use Illuminate\Support\Arr;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
-use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -118,65 +114,22 @@ class SettingsController extends Controller
     }
 
     public function pricing(Request $request){
-        foreach($request->currencies as $currency){
-            $price = Price::where('priceable_id',$request->plan_id)->where('priceable_type','App\Models\Plan')->update(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
-        }
+        // dd($request->all());
         
-        return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Updated Successfully']);
+        foreach($request->currencies as $currency){
+            foreach($request->description as $title => $value){
+                $price = Price::updateOrCreate(['priceable_id'=> $request->priceable_id,'priceable_type'=> $request->priceable_type,'description'=> $title,'currency_id'=> $currency],['amount'=> $value[$currency] ]);
+            }   
+        }
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Prices Updated Successfully']);
     }
 
     public function adplans(Request $request){  
-        foreach($request->price_per_day as $key=>$price){
-            $adplan = Adplan::where('id',$key)->update(['price_per_day'=> $price]);
-        }
+        $plan = AdPlan::where('id',$request->adplan_id)->update(['name'=> $request->name,'description'=>  $request->description]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'Updated advert plan successfully']);
     }
     
-    public function categories(){
-        $categories = Category::all();
-        $tags = Tag::all();
-        // dd($tags);
-        return view('admin.categories',compact('categories','tags'));
-    }
-
-    public function categories_management(Request $request){
-        if($request->category_id){
-            $category = Category::find($request->category_id);
-            if($request->delete){
-                if($category->products->count()){
-                    return redirect()->back()->with(['result'=> 0,'message'=> 'Unable to delete category which has products']);
-                }
-                $category->subcategories->detach();
-                $category->delete();
-
-                
-            }else{
-                $category->name = $request->category;
-                $category->save();
-                $old_subs = Arr::where($request->tags, function ($value, $key) {
-                    return is_numeric($value) ;
-                });
-                $new_subs = Arr::where($request->tags, function ($value, $key) {
-                    return is_string($value);
-                });
-                $category->subcategories->sync($old_subs);
-                foreach($new_subs as $sub){
-                    $newtag = Tag::create(['name'=> $sub]);
-                    $category->subcategories->attach($newtag->id);
-                }
-            }
-        }else{
-            $category = Category::create(['name'=> $request->category]);
-            foreach($request->tags as $tag){
-                if(is_numeric($tag)){
-                    $category->subcategories->attach($tag);
-                }else{
-                    $newtag = Tag::create(['name'=> $tag]);
-                    $category->subcategories->attach($newtag->id);
-                }
-            }
-        }
-    }
+    
 
     
     

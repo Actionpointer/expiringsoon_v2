@@ -27,10 +27,14 @@ class CustomerResource extends JsonResource
             "phone"=> $this->phone,
             "prefix"=> $this->country->dial,
             "mobile"=> $this->mobile,
+            "country_id"=> $this->country_id,
+            "country_name"=> $this->country->name,
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
             "status"=> $this->status,
             "recent_orders"=> OrderResource::collection(Order::where('user_id',$this->id)->get()),
+            'payment_gateway_receiving'=> $this->country->payment_gateway_receiving,            
+            'payment_gateway_transfering'=> $this->country->payment_gateway_transfering,
         ];
     }
 }

@@ -50,14 +50,8 @@ class ShipmentController extends Controller
                 ], 401);
             }
             $shop = Shop::find($request->shop_id);
-            $rate = new ShippingRate;
-            $rate->country_id = $shop->country_id;
-            $rate->shop_id = $shop->id;
-            $rate->origin_id = $shop->state_id;
-            $rate->destination_id = $request->destination_id;
-            $rate->hours = $request->hours;
-            $rate->amount = $request->amount;
-            $rate->save();
+            $rate = ShippingRate::updateOrCreate(['shop_id'=> $shop->id ,'destination_id'=> $request->destination_id,'origin_id'=> $shop->state_id],['hours'=> $request->hours,'amount'=> $request->amount]);
+           
             return request()->expectsJson() ?
              response()->json([
                 'status' => true,

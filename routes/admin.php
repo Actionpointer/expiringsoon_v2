@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
@@ -38,22 +38,23 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
         Route::post('delete',[UserController::class, 'destroy'])->name('delete');
     });
     
-    Route::group(['prefix'=> 'plans','as'=>'plan.'],function(){
-        Route::post('/',[SettingsController::class, 'plans'])->name('update');
-        Route::post('pricing',[SettingsController::class, 'pricing'])->name('pricing');
-    });
-    
-
+    Route::post('plans',[SettingsController::class, 'plans'])->name('plans');
     Route::post('adplans',[SettingsController::class, 'adplans'])->name('adplans');
+    Route::post('pricing',[SettingsController::class, 'pricing'])->name('pricing');
+
+    
     Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
     Route::post('coupons/manage',[CouponController::class, 'manage'])->name('coupon.manage');
     Route::get('subscriptions',[SubscriptionController::class, 'admin_index'])->name('subscriptions');
     Route::post('subscriptions',[SubscriptionController::class, 'update'])->name('subscriptions');
     
-    Route::get('categories',[SettingsController::class, 'categories'])->name('categories');
-    Route::post('categories',[SettingsController::class, 'categories_management'])->name('categories.management');
+    Route::get('categories',[ProductController::class, 'categories'])->name('categories');
+    Route::post('categories',[ProductController::class, 'categories_management'])->name('categories.management');
     
-
+    Route::get('users',[UserController::class, 'index'])->name('users');
+    Route::get('users/show/{user}',[UserController::class, 'show'])->name('user.show');
+    Route::post('users',[UserController::class, 'manage'])->name('user.manage');
+    
     Route::get('shops', [ShopController::class, 'index'])->name('shops');
     Route::get('shop/manage/{shop}', [ShopController::class, 'show'])->name('shop.show');
     Route::post('shop/management', [ShopController::class, 'manage'])->name('shop.manage');
@@ -73,15 +74,9 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('adverts',[AdvertController::class, 'index'])->name('adverts');
     Route::post('adverts/manage',[AdvertController::class, 'manage'])->name('adverts.manage');
 
-
-    
-    Route::get('users',[UserController::class, 'index'])->name('users');
-    Route::get('users/show/{user}',[UserController::class, 'show'])->name('user.show');
-    Route::post('users',[UserController::class, 'manage'])->name('user.manage');
-
     Route::get('messages',[MessageController::class, 'index'])->name('messages');
     Route::get('message/{user}',[MessageController::class, 'show'])->name('message');
-    Route::post('message/{user}',[MessageController::class, 'store'])->name('message');
+    Route::post('message/{user}',[MessageController::class, 'store'])->name('message.store');
     
     Route::get('security',[SecurityController::class, 'index'])->name('security');
 });

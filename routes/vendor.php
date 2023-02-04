@@ -8,7 +8,7 @@ use App\Http\Controllers\Vendor\FeatureController;
 use App\Http\Controllers\Vendor\SubscriptionController;
 use App\Http\Controllers\Vendor\StaffController;
 
-Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> 'role:vendor'],function () {
+Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum','role:vendor']],function () {
     Route::get('get-started',[StaffController::class, 'orientation'])->name('orientation');
     Route::get('dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
     Route::get('verification',[StaffController::class,'verification'])->name('verification');

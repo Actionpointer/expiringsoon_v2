@@ -84,7 +84,7 @@
                   </div>
                 @endforeach
               </div>
-              <form action="{{route('messages.store')}}" method="POST">@csrf
+              <form action="#" method="POST">@csrf
                 <div class="d-flex py-4">
                   <textarea name="body" class="form-control" placeholder="Write Message"></textarea>
                       <input type="hidden" name="sender_id"  value="{{auth()->id()}}">
