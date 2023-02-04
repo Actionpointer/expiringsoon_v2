@@ -17,6 +17,7 @@ class ShipmentRateResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id'=> $this->id,
+            'destination_id' => $this->destination_id,
             'destination' => $this->destination->name,
             'country' => $this->country->name,
             'currency'=> $this->country->currency->symbol,

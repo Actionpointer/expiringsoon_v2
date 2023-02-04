@@ -960,7 +960,7 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{route('admin.plans.update')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
+                                                            <form action="{{route('admin.plan.update')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
                                                                 <input type="hidden" name="plan_id" value="{{$plan->id}}">
                                                                 <div class="contact-form__content">
                                                                     
@@ -1004,7 +1004,7 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div>
-                                                            <form action="{{route('admin.plans.pricing')}}" method="post" id="plan_price{{$plan->id}}form">
+                                                            <form action="{{route('admin.plan.pricing')}}" method="post" id="plan_price{{$plan->id}}form">
                                                                 @csrf 
                                                                 <input type="hidden" name="plan_id" value="{{$plan->id}}">
                                                                 <div class="pricing">
@@ -1043,19 +1043,19 @@
                                                                                 {{$currency->name}}
                                                                                 <input type="hidden" name="currencies[]" value="{{$currency->id}}">
                                                                             </div>  
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" value="{{$plan->price->where('currency_id',$currency->id)->}}" id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120"  id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
-                                                                            <input class="form-control-sm col border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="minimum_payout" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','minimum_payout')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="maximum_payout" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','maximum_payout')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="commission_percentage" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','commission_percentage')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="commission_fixed" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','commission_fixed')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_1" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_1')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_3" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_3')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_6" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_6')->amount}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="months_12" value="{{$plan->price->where('currency_id',$currency->id)->firstWhere('description','months_12')->amount}}">
                                                                         </div>
                                                                     @endforeach
                                                                 </div> 
                                                                 <div class="contact-form-btn">
-                                                                    <button class="button button--md askpin" type="button"> Update Plan </button>
+                                                                    <button class="button button--md" type="submit"> Update Price </button>
                                                                     <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                                                                 </div>
                                                             </form>
@@ -1222,7 +1222,7 @@
                                                                                 {{$currency->name}}
                                                                             </div>  
                                                                             <div class="col-md-6">
-                                                                                <input class="form-control-sm col pr-1 border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120">
+                                                                                <input class="form-control-sm col pr-1 border-light discountprice" type="number" step="0.001" required name="discount120" >
                                                                             </div>  
                                                                         </div>
                                                                         @endforeach
