@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Product;
 use App\Models\Tag;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -11,7 +11,8 @@ class Category extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['name'];
+    protected $fillable = ['name','photo'];
+
     public function products(){
         return $this->hasMany(Product::class);
     }

@@ -30,10 +30,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'flutter'=>[
-        'secret'=> env('FLUTTER_TEST_SECRET'),
+        'secret'=> env('FLUTTER_SECRET'),
+        'public'=> env('FLUTTER_PUBLIC'),
     ],
     'paystack'=>[
-        'secret'=> env('PAYSTACK_TEST_SECRET'),
+        'secret'=> env('PAYSTACK_SECRET'),
+        'public'=> env('PAYSTACK_PUBLIC'),
     ],
     'countrystatecity' => env('COUNTRYSTATECITY')
 

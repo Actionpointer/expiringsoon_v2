@@ -47,7 +47,7 @@
                 <h5 class="font-body--xl-500">Add Category</h5>
               </div>
               <div class="dashboard__content-card-body">
-                <form method="post" action="{{route('admin.categories.management')}}" id="addcategory" enctype="multipart/form-data">@csrf
+                <form method="post" action="{{route('admin.category.store')}}" id="addcategory" enctype="multipart/form-data">@csrf
                   <div class="row">  
                     <div class="col-lg-7 order-lg-0 order-2">
                       <div class="contact-form__content">
@@ -109,98 +109,97 @@
                           <th scope="col" class="cart-table-title">Subcategories</th>
                           <th scope="col" class="cart-table-title">Items</th>
                           <th scope="col" class="cart-table-title">Action</th>
-                          
                         </tr>
                       </thead>
                       <tbody>
                         @foreach ($categories as $category)
-                        <tr>
-                          <!-- Product item  -->
-                          <td class="cart-table-item align-middle">
-                            <a href="product-details.html" class="cart-table__product-item">
-                              <div class="cart-table__product-item-img">
-                                <img src="{{asset('src/images/products/img-01.png')}}" alt="product">
-                              </div>
-                              <h5 class="font-body--lg-400">{{$category->name}}</h5>
-                            </a>
-                          </td>
-                          <!-- Price  -->
-                          <td class="cart-table-item order-date align-middle">
-                                @foreach ($category->subcategories as $subcategory)
-                                    {{$subcategory->name}},
-                                @endforeach
-                          </td>
-                          <!-- quantity -->
-                          <td class="cart-table-item order-total align-middle">
-                            {{$category->products->count()}}
-                          </td>
-                          <!-- Subtotal  -->
-                          <td class="cart-table-item order-subtotal align-middle">
-                            <div class="d-flex justify-content-between align-items-center ">
-                                <button class="edit_button" data-bs-toggle="modal" data-bs-target="#editcategory{{$category->id}}">Edit</button> | 
-                                <form action="{{route('admin.categories.management')}}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this category?');">@csrf
-                                    <input type="hidden" name="category_id" value="{{$category->id}}">
-                                    <button type="submit" name="action" value="delete">Delete</button>
-                                </form>
-                            </div>
-                          </td>
-                          <div class="modal fade" id="editcategory{{$category->id}}" aria-labelledby="editcategory{{$category->id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="editcategory{{$category->id}}Label">Modal title</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          <tr>
+                            <!-- Product item  -->
+                            <td class="cart-table-item align-middle">
+                              <a href="product-details.html" class="cart-table__product-item">
+                                <div class="cart-table__product-item-img">
+                                  <img src="{{asset('src/images/categories/'.$category->photo)}}" alt="category">
                                 </div>
-                                <div class="modal-body">
-                                  <form method="post" action="{{route('admin.categories.management')}}">@csrf
-                                    <div class="contact-form__content">
-                                      <div class="dashboard__content-card-img flex-column align-items-center"> 
-                                        <div class="dashboard__content-img-wrapper rounded-0 w-50 h-50" id="avatar">
-                                          <img src="{{asset('src/images/site/no-image.png')}}" style="width:100%;height:100%;" alt="category"  onclick="performClick('theFile');"  id="imgPreview"   />
-                                        </div>
-                                        <div>
-                                          <input type="file" name="photo" id="theFile" onchange="readURL(this,'imgPreview')" accept=".png, .jpg, .jpeg" />
-                                          <button type="button" class="button w-100 button--outline" id="btn-avatar" onclick="performClick('theFile');">Upload Category Image</button>
-                                        </div>
-                                        @error('photo')
-                                        <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                                              <strong>{{ $message }}</strong>
-                                          </span>
-                                        @enderror
-                                      </div>
-                                      <div class="contact-form-input">
-                                        <label for="address">Category Name</label>
-                                        <input type="text" name="category" value="{{$category->name}}" placeholder="" />
-                                      </div>
-                                      <div class="contact-form-input">
-                                        <label for="states">Subcategories</label>
-                                          <select id="subcategories" name="subcategories[]" class="form-control select2" multiple>
-                                            @foreach ($tags as $tag)
-                                              <option value="{{$tag->id}}" @if(in_array($tag->id,$category->subcategories->pluck('id')->toArray())) selected @endif>{{$tag->name}}</option>
-                                            @endforeach 
-                                            
-                                          </select>
-                                      </div>
-                                      
-                                      <div class="contact-form-btn">
-                                        <button class="button button--md" type="submit"> Update Category </button>
-                                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                      </div>
-                                      
-                                    </div>
+                                <h5 class="font-body--lg-400">{{$category->name}}</h5>
+                              </a>
+                            </td>
+                            <!-- Price  -->
+                            <td class="cart-table-item order-date align-middle">
+                                  @foreach ($category->subcategories as $subcategory)
+                                      {{$subcategory->name}},
+                                  @endforeach
+                            </td>
+                            <!-- quantity -->
+                            <td class="cart-table-item order-total align-middle">
+                              {{$category->products->count()}}
+                            </td>
+                            <!-- Subtotal  -->
+                            <td class="cart-table-item order-subtotal align-middle">
+                              <div class="d-flex justify-content-between align-items-center ">
+                                  <button class="edit_button" data-bs-toggle="modal" data-bs-target="#editcategory{{$category->id}}">Edit</button> | 
+                                  <form action="{{route('admin.category.destroy')}}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this category?');">@csrf
+                                      <input type="hidden" name="category_id" value="{{$category->id}}">
+                                      <button type="submit" name="action" value="delete">Delete</button>
                                   </form>
+                              </div>
+                            </td>
+                            <div class="modal fade" id="editcategory{{$category->id}}" aria-labelledby="editcategory{{$category->id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="editcategory{{$category->id}}Label">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form method="post" action="{{route('admin.category.update')}}" enctype="multipart/form-data">@csrf
+                                      <input type="hidden" name="category_id" value="{{$category->id}}">
+                                      <div class="contact-form__content">
+                                        <div class="dashboard__content-card-img flex-column align-items-center"> 
+                                          <div class="dashboard__content-img-wrapper rounded-0 w-50 h-50" id="avatar">
+                                            <img src="{{asset('src/images/categories/'.$category->photo)}}" style="width:50%;height:50%;" alt="category"  onclick="performClick('theFile{{$category->id}}');"  id="catPreview{{$category->id}}"   />
+                                          </div>
+                                          <div>
+                                            <input type="file" name="photo" id="theFile{{$category->id}}" onchange="readURL(this,'catPreview{{$category->id}}')" accept=".png, .jpg, .jpeg" class="theFile" />
+                                            <button type="button" class="button w-100 button--outline" id="btn-avatar" onclick="performClick('theFile{{$category->id}}');">Upload Category Image</button>
+                                          </div>
+                                          @error('photo')
+                                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                          @enderror
+                                        </div>
+                                        <div class="contact-form-input">
+                                          <label for="address">Category Name</label>
+                                          <input type="text" name="category" value="{{$category->name}}" placeholder="" />
+                                        </div>
+                                        <div class="contact-form-input">
+                                          <label for="states">Subcategories</label>
+                                            <select id="subcategories" name="subcategories[]" class="form-control select2" multiple>
+                                              @foreach ($tags as $tag)
+                                                <option value="{{$tag->id}}" @if(in_array($tag->id,$category->subcategories->pluck('id')->toArray())) selected @endif>{{$tag->name}}</option>
+                                              @endforeach 
+                                              
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="contact-form-btn">
+                                          <button class="button button--md" type="submit"> Update Category </button>
+                                          <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                        </div>
+                                        
+                                      </div>
+                                    </form>
+                                  </div>
+                                  
                                 </div>
-                                
                               </div>
                             </div>
-                          </div>
-                        </tr>
+                          </tr>
                         @endforeach
-                        
                       </tbody>
                     </table>
                   </div>
-                  <!-- Action Buttons  -->
+                  
                   
                 </div>
                 
@@ -248,8 +247,6 @@
         });
     });
 
-    
-
     function performClick(elemId) {
       var elem = document.getElementById(elemId);
       if(elem && document.createEvent) {
@@ -261,20 +258,19 @@
           
     function readURL(input,output) {
         console.log(input.id);
-        if (input.files && input.files[0]) {
+        if(input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
-            $('#'+output).attr('src', e.target.result);
+              $('#'+output).attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
-</script>
-<script>
     $('.edit_button').on('click',function(){
         let id = $(this).attr('data-bs-target');
         $('#'+id.substring(1)).modal()
         $('#'+id.substring(1)+' .select2').select2()
     })
 </script>
+
 @endpush

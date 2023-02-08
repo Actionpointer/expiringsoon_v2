@@ -9638,7 +9638,7 @@ body.overlay {
 .docinfo {
   width: 70%;
 }
-#topUp,#theFile,#theDoc {
+#topUp,#theFile,#theDoc,.theFile {
   display: none;
 }
 .input-group .prepend input.form-control{

@@ -97,15 +97,14 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('orders/message',[OrderController::class,'message']);
 
     });
-    
-    
-
-    
 
     Route::group(['prefix'=>'subscription'],function (){
         Route::get('plans',[SubscriptionController::class,'plans']);
         Route::post('store',[SubscriptionController::class,'store']);
         Route::post('cancel_renewal',[SubscriptionController::class,'cancel_renewal']);
-        
+    });
+
+    Route::group(['prefix'=>'adsets'],function(){
+        Route::get('plans',[Adve])
     });
 });

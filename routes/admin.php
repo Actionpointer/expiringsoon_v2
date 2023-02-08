@@ -49,8 +49,13 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::post('subscriptions',[SubscriptionController::class, 'update'])->name('subscriptions');
     
     Route::get('categories',[ProductController::class, 'categories'])->name('categories');
-    Route::post('categories',[ProductController::class, 'categories_management'])->name('categories.management');
+    Route::post('category/store',[ProductController::class, 'category_store'])->name('category.store');
+    Route::post('category/update',[ProductController::class, 'category_update'])->name('category.update');
+    Route::post('category/delete',[ProductController::class, 'category_destroy'])->name('category.destroy');
     
+    Route::get('products',[ProductController::class, 'index'])->name('products');
+    Route::post('products',[ProductController::class, 'manage'])->name('products.manage');
+
     Route::get('users',[UserController::class, 'index'])->name('users');
     Route::get('users/show/{user}',[UserController::class, 'show'])->name('user.show');
     Route::post('users',[UserController::class, 'manage'])->name('user.manage');
@@ -60,9 +65,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::post('shop/management', [ShopController::class, 'manage'])->name('shop.manage');
     Route::post('shop/manage', [ShopController::class, 'kyc'])->name('kyc.manage');
     
-    Route::get('products',[ProductController::class, 'index'])->name('products');
-    Route::post('products',[ProductController::class, 'manage'])->name('products.manage');
-
+    
     Route::get('orders',[OrderController::class, 'index'])->name('orders');
     Route::post('orders',[OrderController::class, 'update'])->name('order.manage');
     

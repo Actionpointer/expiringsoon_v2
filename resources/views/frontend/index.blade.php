@@ -474,7 +474,7 @@
         <div class="container">
             <div class="section__head">
                 <h2 class="section--title-one font-title--sm">Popular Categories</h2>
-                <a href="shop-01.html">
+                <a href="{{route('product.categories')}}">
                     View All
                     <span>
                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -486,89 +486,14 @@
             </div>
             <!-- Desktop Versions -->
             <div class="popular-categories__wrapper">
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-fruits.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Fresh Fruit</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-icon-vegitables.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Fresh Vegetables</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-meat.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Meat &amp; Fish</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-icon-snaks.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Snacks</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/img-12.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Beverages</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-icon-beauty.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Beauty &amp; Health</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-icon-snaks2.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Bread &amp; Bakery</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/img-06.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Baking Needs</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/img-07.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Cooking</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/img-08.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Diabetic Food</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-soda.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Dish Detergents</h5>
-                </a>
-
-                <a href="# " class="cards-sm popular-categories__wrapper-item">
-                    <div class="cards-sm__img-wrapper">
-                        <img src="{{asset('src/images/categories/image-oil.png')}}" alt="img-01">
-                    </div>
-                    <h5 class="font-body--xl-500">Oil</h5>
-                </a>
+                @foreach ($categories as $category)
+                    <a href="{{route('product.list')}}?cat={{$category->id}}" class="cards-sm popular-categories__wrapper-item">
+                        <div class="cards-sm__img-wrapper">
+                            <img src="{{asset('src/images/categories/'.$category->photo)}}" alt="{{$category->name}}">
+                        </div>
+                        <h5 class="font-body--xl-500">{{$category->name}}</h5>
+                    </a>
+                @endforeach
             </div>
 
             <!-- Mobile  Versions -->
