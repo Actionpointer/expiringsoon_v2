@@ -49,9 +49,9 @@ class UserResource extends JsonResource
             "shop"=> $this->when($this->shop_id, function(){ 
                 return new ShopResource(Shop::findOrFail($this->shop_id)); 
             }),
-            "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
-                return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
-            }),
+            // "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
+            //     return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
+            // }),
             'payment_gateway_receiving'=> $this->country->payment_gateway_receiving,            
             'payment_gateway_transfering'=> $this->country->payment_gateway_transfering,            
             
