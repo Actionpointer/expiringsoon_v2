@@ -56,9 +56,22 @@ class SubscriptionController extends Controller
             
             }
             $link = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
-            return request()->expectsJson()
-            ? response()->json(['status' => true, 'message' => 'Subscription Payment Required. Open link in browser','data' => $link], 200)
-            : redirect()->to($link);
+            if(!$link){
+                return request()->expectsJson() ? 
+                    response()->json([
+                        'status' => false,
+                        'message' => 'Something went wrong',
+                    ], 401) :
+                    redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
+            }else{
+                    return request()->expectsJson() ? 
+                    response()->json([
+                        'status' => true,
+                        'message' => 'Open payment link on browser to complete payment',
+                        'data' => $link,
+                    ], 200) :
+                    redirect()->to($link);
+            }  
             
         } catch (\Throwable $th) {
             return response()->json([

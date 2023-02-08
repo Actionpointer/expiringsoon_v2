@@ -14,6 +14,7 @@ use App\Http\Controllers\Vendor\ShipmentController;
 use App\Http\Controllers\Vendor\StaffController;
 use App\Http\Controllers\Vendor\SubscriptionController;
 use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\Vendor\FeatureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +106,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     });
 
     Route::group(['prefix'=>'adsets'],function(){
-        Route::get('plans',[Adve])
+        Route::get('plans',[FeatureController::class,'plans']);
+        Route::post('subscribe',[FeatureController::class,'subscribe']);
     });
 });
