@@ -58,7 +58,7 @@
             @enderror
             <div class="form-wrapper__content">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="remember" />
+                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} />
                 <label class="form-check-label" for="remember"> Remember Me
                 </label>
               </div>
