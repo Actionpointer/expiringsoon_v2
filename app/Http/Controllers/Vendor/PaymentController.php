@@ -35,6 +35,7 @@ class PaymentController extends Controller
             'count' => $payments->count()
         ], 200) : view('vendor.payments',compact('payments'));
     }
+
     //shop earnings
     public function earnings(Shop $shop){
         $settlements = $shop->settlements;
@@ -46,6 +47,7 @@ class PaymentController extends Controller
             'count' => $settlements->count()
         ], 200) : view('vendor.shop.earnings',compact('shop','settlements'));
     }
+    
     //our payouts to shops
     public function payouts(Shop $shop){
         $banks = Bank::all();

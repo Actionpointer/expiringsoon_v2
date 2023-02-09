@@ -8,8 +8,6 @@ expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafric
 
 
 
-
-
 NOTIFICATIONS
 place notification and profile icon at the top of vendor & shop
 kyc notification should be in-app

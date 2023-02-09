@@ -28,6 +28,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        Route::model('shop', \App\Models\Shop::class);
+
         $this->routes(function () {
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));

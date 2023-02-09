@@ -98,6 +98,9 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('{shop_id}/orders/{order_id}/messages',[OrderController::class,'api_messages']);
         Route::post('orders/message',[OrderController::class,'message']);
 
+        // Route::group(['earnings'],function(){
+        //     Route::get('/',[PaymentController::class,'earnings']);
+        // });
     });
 
     Route::group(['prefix'=>'subscription'],function (){

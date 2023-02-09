@@ -12,12 +12,13 @@ use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
 use App\Models\User;
 
-Route::get('runonce',function(){
-    $order = App\Models\Order::find(103);
+Route::get('runonce/{shop_id}',function(\App\Models\Shop $shop){
+    dd($shop);
+    // $order = App\Models\Order::find(103);
     // $user->notify(new WelcomeNotification());
-    return (new App\Notifications\OrderStatusCustomerNotification($order))
-                    ->toMail($order->user);
-    
+    // return (new App\Notifications\OrderStatusCustomerNotification($order))
+    //                 ->toMail($order->user);
+    return $shop;
 });
 
 Route::view('email','emails.completed');

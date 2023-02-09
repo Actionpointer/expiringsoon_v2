@@ -35,13 +35,23 @@ class SubscriptionController extends Controller
             if($request->has('subscription_id')){
                 $subscription = Subscription::find($request->subscription_id);
                 if($user->subscription_id && $user->subscription_id == $subscription->id && $user->subscription->renew_at && $user->subscription->renew_at > now()){
-                    return redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
+                    return request()->expectsJson() ? 
+                    response()->json([
+                        'status' => false,
+                        'message' => 'Subscription already exist',
+                    ], 401) :
+                    redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
                 }
             }
             if($request->has('plan')){
                 $plan = Plan::where('slug',$request->plan)->first();
                 if($user->subscription_id && $user->subscription->plan_id == $plan->id && $user->subscription->renew_at && $user->subscription->renew_at > now()){
-                    return redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
+                    return request()->expectsJson() ? 
+                    response()->json([
+                        'status' => false,
+                        'message' => 'Subscription already exist',
+                    ], 401) :
+                    redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
                 }
                 $subscription = Subscription::create(
                     ['user_id'=> auth()->id(),
