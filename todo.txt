@@ -1,22 +1,18 @@
 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
 
-kyc notification should be in-app
+
 
 swiper.js is displaying duplicates
 
 expiringsoon for (usa, -> stripe),(Uk, -> stripe),(uae),ghana,germany,southafrica
 
-when placing advert, let submit description of shop
 
-place notification and profile icon at the top of vendor & shop
 
 
 
 NOTIFICATIONS
-
-admin menu
-DASHBOARD [recent notifications, total shops vs total active, total products vs total active , 
-            total orders vs recent orders, total settlements vs recent settlements, total payouts vs recent payouts, kyc message]
+place notification and profile icon at the top of vendor & shop
+kyc notification should be in-app
 
 SETTINGS [add message settings (get notification for all order messages), (when should receiver be notified of unread messages) ]
 
@@ -48,8 +44,6 @@ user cannot create withdrawals, bvn validation,
 
 2.fetch payout
 retry payout with job - 
-
-4.notification
 
 5. REFUND
 customer does not raise query xdays after delivery, change order to completed

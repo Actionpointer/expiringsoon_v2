@@ -69,13 +69,13 @@ class ProductController extends Controller
     }
 
     public function show(Product $product){
-        // if(!$product->certified){
-        //     if(auth()->check() && auth()->id() == $product->shop->user_id){
-        //         return view('frontend.product.view',compact('product'));
-        //     }
-        //     abort(404,'Product is not available');
-        // }
-        return view('frontend.product.view',compact('product'));
+        $similar = Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->whereHas('adverts',function($query){
+            $query->running()->certifiedProduct();
+        })->get();
+        if($similar->isEmpty()){
+            $similar = Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->get();
+        }
+        return view('frontend.product.view',compact('product','similar'));
     }
 
     public function getSubcategories(Request $request){

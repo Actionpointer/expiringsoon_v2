@@ -232,9 +232,8 @@
                 <h2 style="font-size:20px" class="section--title-four font-title--sm">Similar Products</h2>
             </div>
             <div class="swiper-container related-slider--one">
-                <div class="swiper-wrapper">
-                  
-                  @foreach ($product->category->products->where('id','!=',$product->id) as $item)    
+                <div class="swiper-wrapper">              
+                  @foreach ($similar as $item)    
                         <div class="swiper-slide">
                             <div class="cards-md cards-md--four w-100">
                                 <div class="cards-md__img-wrapper">
@@ -269,27 +268,27 @@
                                 </div>
                                 <div class="cards-md__info d-flex justify-content-between align-items-center">
                                     <a href="product.php?pid={{$item->id}}" class="cards-md__info-left">
-                                        <h6 class="font-body--md-400 product-title">{{$item->product}}</h6>
+                                        <h6 class="font-body--md-400 product-title">{{$item->name}}</h6>
                                         <div class="cards-md__info-price">
-                                        @if($item->expire_at!='' && $item->discount) 
-                                            <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($product->amount, 0)}}></span>
-                                            <del class="font-body--lg-400" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{number_format($item->price, 0)}}></del>
+                                        @if($item->expire_at && $item->discount) 
+                                            <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($product->amount, 0)}}</span>
+                                            <del class="font-body--lg-400" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{number_format($item->price, 0)}}</del>
                                         @else 
-                                            <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($item->price, 0)}}></span>
+                                            <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($item->price, 0)}}</span>
                                         @endif
                                         </div>
                                         <ul class="d-flex" style="color:#888;font-size:12px">
                                         @if($item->expire_at!='' && $item->discount) 
-                                        <li>Expires in <span style="font-weight:550;color:#00b207">{{$item->expire_at->diffInDays(now())}}> days</span><li>
+                                        <li>Expires in <span style="font-weight:550;color:#00b207">{{$item->expire_at->diffInDays(now())}} days</span><li>
                                         @else 
                                             <li>&nbsp;</li>
                                         @endif
                                         </ul>
                                     </a>
                                     <div class="cards-md__info-right">
-                                        @if($item->stock > 0) 
+                                        @if($item->available) 
                                             <span class="action-btn">
-                                                @if($item->expire_at!='' && $item->discount) 
+                                                @if($item->expire_at && $item->discount) 
                                                     <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-cart" id3="{{$item->id}}" data-price="{{$product->amount}}" data-product="{{$item->product}}" data-photo="{{$item->photo}}">
                                                         <path
                                                             d="M6.66667 8.83333H4.16667L2.5 18H17.5L15.8333 8.83333H13.3333M6.66667 8.83333V6.33333C6.66667 4.49239 8.15905 3 10 3V3C11.8409 3 13.3333 4.49238 13.3333 6.33333V8.83333M6.66667 8.83333H13.3333M6.66667 8.83333V11.3333M13.3333 8.83333V11.3333"
@@ -308,9 +307,7 @@
                                 </div>
                             </div>
                         </div> 
-                  @endforeach
-                    
-                    
+                  @endforeach 
                 </div>
                 <div class="swiper-pagination featured-pagination"></div>
             </div>
