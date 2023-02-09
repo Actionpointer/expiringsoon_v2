@@ -366,14 +366,19 @@
                 <div class="col-xl-4 col-md-6">
                     <div class="cards-ss cards-ss--lg">
                         <div class="cards-ss__img-wrapper">
-                            <img src="{{asset('src/images/banner/banner-sm-03.png')}}" alt="banner" />
+                            <img src="{{Storage::url($item->photo)}}" alt="banner" />
                             <div class="cards-ss__content text-center">
-                                <h6 class="font-body--md-500">BEST DEALS</h6>
-                                <h2 class="font-title--lg">Limited Offer </h2>
+                                <h6 class="font-body--md-500">{{strtoupper($item->subheading)}}</h6>
+                                <h2 class="font-title--lg">{{$item->heading}} </h2>
 
-                                <div id="countdownTwo" class="countdown-clock"></div>
+                                <div class="cards-ss__startpackage">
+                                    <p>
+                                        
+                                        <span class="font-body--xxl-600">{{$item->offer}}</span>
+                                    </p>
+                                </div>
 
-                                <a href="shop.php" class="button button--md">
+                                <a href="{{route('vendor.show',$item->advertable)}}" class="button button--md">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">

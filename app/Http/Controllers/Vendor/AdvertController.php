@@ -53,16 +53,18 @@ class AdvertController extends Controller
     }
 
     public function store_shop_advert(Request $request){
-        $shops = [];
-        foreach($request->shops as $shop_id){
-            $shops[] = Shop::find($shop_id);
-        }
+        $shop = Shop::find($request->shop_id);
         $feature = Feature::find($request->feature_id);
-        foreach($shops as $shop){
-            if($feature->units > $feature->adverts->count()){
-                $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $shop->id,'advertable_type'=> get_class($shop),'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_shop_advert'] ? true:false]);
-            }  
-        }
+        if($request->hasFile('photo')){
+            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $request->file('photo')->storeAs('public/',$photo);
+        } 
+        if($feature->units > $feature->adverts->count()){
+            $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $shop->id,'advertable_type'=> get_class($shop),
+            'state_id'=> $request->state_id,'photo'=> $photo,'heading'=> $request->heading,
+            'subheading'=> $request->subheading,'offer'=> $request->offer,
+            'approved'=> cache('settings')['auto_approve_shop_advert'] ? true:false]);
+        } 
         return redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
     }
      

@@ -102,7 +102,6 @@
                                         <td class="   dashboard__order-history-table-item order-total">  {{ $advert->clicks}} </td>
 
                                         <td class="   dashboard__order-history-table-item order-total"> 
-                                          {{-- {{$advert->feature->start_at > now() ? 'true':'false'}} --}}
                                           @if($advert->running)
                                           <span class="d-block text-success">Ad is running </span>
                                           @else
@@ -145,12 +144,12 @@
                     <section class="shoping-cart section section--xl pt-0">
                       <div class="row shoping-cart__content justify-content-center">              
                         <div class="col-lg-8">
-                          <form method="POST" action="{{route('vendor.advert.store.shops')}}" enctype="multipart/form-data">@csrf
+                          <form method="POST" action="{{route('vendor.advert.store.shops')}}">@csrf
                             <input type="hidden" name="feature_id" value="{{$feature->id}}">
                             
                             <div class="contact-form-input">
                                 <label>Select Shops</label>
-                                <select id="shops" name="shop_id" class="select2" @if($feature->units <= $feature->adverts->count()) disabled @endif>
+                                <select id="shops" name="shops[]" class="select2" multiple @if($feature->units <= $feature->adverts->count()) disabled @endif>
                                   @foreach ($shops as $shop)
                                     <option value="{{$shop->id}}">{{$shop->name}} </option>  
                                   @endforeach 
@@ -165,24 +164,8 @@
                                 @endforeach     
                               </select>
                             </div>
-                            <div class="contact-form-file mb-3">
-                              <label for="category" class="d-block">Display Image</label>
-                              <input type="file" name="photo" placeholder="" />
-                            </div>
-                            <div class="contact-form-input">
-                              <label for="category">Heading</label>
-                              <input type="text" name="heading" placeholder="" />
-                            </div>
-                            <div class="contact-form-input">
-                              <label for="category">Subheading</label>
-                              <input type="text" name="subheading" placeholder="" />
-                            </div>
-                            <div class="contact-form-input">
-                              <label for="category">Offer Text</label>
-                              <input type="text" name="offer" placeholder="e.g Sales 50% off" />
-                            </div>
                             <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($feature->units <= $feature->adverts->count()) disabled @endif>
-                              Create Ad
+                              Create Advert
                             </button>
                             
                           </form>

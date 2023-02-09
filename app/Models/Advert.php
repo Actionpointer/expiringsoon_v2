@@ -17,7 +17,7 @@ class Advert extends Model
     use HasFactory,SoftDeletes,GeoLocationTrait;
 
     protected $fillable = [
-        'advertable_id','advertable_type','feature_id','state_id','position','approved'
+        'advertable_id','advertable_type','feature_id','state_id','position','approved','photo','heading','subheading','offer'
     ];
     protected $appends = ['status','running'];
 
@@ -62,7 +62,7 @@ class Advert extends Model
     }
 
     public function getRunningAttribute(){
-        return $this->approved && $this->feature->status && $this->feature->start_at > now() && $this->feature->end_at < now();
+        return $this->approved && $this->feature->status && $this->feature->start_at < now() && $this->feature->end_at > now();
     }
     public function scopeRunning($query){
         return $query->where('approved',true)->whereHas('feature', function (Builder $qry) 
