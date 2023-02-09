@@ -21,7 +21,7 @@ class AdplansResource extends JsonResource
             "page" => $this->page,
             "type" => $this->type,
             "price_per_day" => $this->price_per_day,
-            'currency'=> $this->currency->symbol,
+            'currency'=> auth()->user()->country->currency->symbol,
             "days" => 0,
             "units" => 1
         ];
