@@ -102,10 +102,11 @@ class AdvertController extends Controller
             $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
         }
         $link = $this->initializePayment($feature->amount,[$feature->id],'App\Models\Feature');
-        if(!$link)
-            return 'PAGE SHOWING service unavailable right now.. ask the user to TRY AGAIN LATER';
-        else
-        return redirect()->to($link);
+        if(!$link){
+            return redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
+        }else{
+            return redirect()->to($link);
+        }
     }
 
 }

@@ -60,10 +60,8 @@ customer does not raise query xdays after delivery, change order to completed
 
 12. cron job for running jobs
 
-15. on product page .. redo wishlist, similar products, 
+15. on product page 
 Product additional information
-
-- expiry date
-- discount price countdown
---------
-Show reviews
+- expiry date  and countdown
+- discount price on timeline
+- reviews

@@ -20,6 +20,7 @@ class AdplansResource extends JsonResource
             "description" => $this->description,
             "page" => $this->page,
             "type" => $this->type,
+            "price_per_day" => $this->price_per_day,
         ];
     }
 }

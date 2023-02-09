@@ -156,32 +156,23 @@
 
                             <td class="cart-table-item add-cart align-middle">
                               <div class="d-flex flex-column">
-                                  <button class="btn btn-sm  btn-secondary">Edit</button>
-                                  <button class="btn btn-sm my-1 btn-primary">Feature</button>
-                                  <button class="btn btn-sm btn-danger">Delete</button>
-                              </div>
-                              {{-- <div class="dropdown">
-                                <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                  Manage
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                  <a class="dropdown-item" href="{{route('vendor.shop.product.edit',[$shop,$product])}}">Edit</a>
+                                  <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="btn btn-sm  btn-secondary">Edit</a>
                                   @if(auth()->id() == $shop->user_id)
                                   <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
                                     <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                     <input type="hidden" name="products[]" value="{{$product->id}}">
-                                    <button type="submit" class="dropdown-item">Feature</button>
+                                    <button type="submit" class="btn btn-sm my-1 btn-primary">Feature</button>
                                   </form>
                                   @endif
+                                  
                                   <form class="d-inline" action="{{route('vendor.shop.products.manage',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
                                     <input type="hidden" name="products[]" value="{{$product->id}}">
                                     <input type="hidden" name="delete" value="1">
-                                    <button type="submit" class="dropdown-item">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                   </form>
                                   
-                                  
-                                </div>
-                              </div> --}}
+                              </div>
+                              
                             </td>
                             
     
