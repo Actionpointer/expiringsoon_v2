@@ -23,7 +23,7 @@ class ProductController extends Controller
         $tag = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->where('country_id',session('locale')['country_id'])->get();
-        $products = Product::withinCountry()->valid()->approved()->active()->accessible()->available()->visible();
+        $products = Product::withinCountry()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $products = $products->whereHas('shop',function($qry) use($state_id){
@@ -53,7 +53,7 @@ class ProductController extends Controller
             }
         }
         $products = $products->paginate(16);
-        $advert = Advert::state($state_id)->running()->certifiedShop()->where('position',"F")->orderBy('views','asc')->first();
+        $advert = Advert::within($state_id)->running()->certifiedShop()->where('position',"F")->orderBy('views','asc')->first();
         if($advert){
             $advert->views = $advert->views + 1;
             $advert->save();
@@ -64,12 +64,12 @@ class ProductController extends Controller
 
     public function categories(){
         $categories = Category::all();
-        $advert_Z = Advert::with('product')->state()->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_Z = Advert::with('product')->within()->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
         return view('frontend.product.categories',compact('categories','advert_Z'));
     }
 
     public function show(Product $product){
-        // if(!$product->isCertified()){
+        // if(!$product->certified){
         //     if(auth()->check() && auth()->id() == $product->shop->user_id){
         //         return view('frontend.product.view',compact('product'));
         //     }
@@ -88,9 +88,9 @@ class ProductController extends Controller
 
         $state_id = session('locale')['state_id'];
         $categories = Category::orderBy('name','ASC')->take(8)->get();
-        $advert_C = Advert::state($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_D = Advert::state($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_E = Advert::state($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_C = Advert::within($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_D = Advert::within($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_E = Advert::within($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
         $advert_Z = Advert::with('product')->state($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
         // dd($advert_Z);
         

@@ -29,7 +29,7 @@ class Shop extends Model
     use HasFactory,Notifiable,Sluggable;
     
     protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','status'];
-    protected $appends = ['image','verified'];
+    protected $appends = ['image','verified','certified'];
 
     public static function boot()
     {
@@ -63,22 +63,22 @@ class Shop extends Model
     public function getImageAttribute(){
         return $this->banner ? config('app.url')."/storage/$this->banner":null;   
     }
-    public function scopeNative($query){
+    public function scopeWithin($query){
         return $query->where('country_id',session('locale')['country_id']);
     }
-    public function scopeApproved($query){
+    public function scopeIsApproved($query){
         return $query->where('approved',true);
     }
-    public function scopeVisible($query){
+    public function scopeIsVisible($query){
         return $query->where('published',true);
     }
-    public function scopeActive($query){
+    public function scopeIsActive($query){
         return $query->where('status',true);
     }
-    public function scopeSelling($query){
-        return $query->whereHas('products',function($q) {$q->where('status',true)->where('published',true)->where('approved',true);});
+    public function scopeIsSelling($query){
+        return $query->whereHas('products',function($q) {$q->where('status',true)->where('published',true)->where('approved',true)->where('stock','>',cache('settings')['minimum_stock_level']);});
     }
-    public function isCertified(){
+    public function getCertifiedAttribute(){
         return $this->status && $this->approved && $this->published;
     }
     public function user(){

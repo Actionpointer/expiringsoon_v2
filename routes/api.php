@@ -6,15 +6,16 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\ApiController;
-use App\Http\Controllers\Vendor\OrderController;
+use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\Vendor\ShopController;
+use App\Http\Controllers\Vendor\OrderController;
+use App\Http\Controllers\Vendor\StaffController;
+use App\Http\Controllers\Vendor\AdvertController;
+use App\Http\Controllers\Vendor\FeatureController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
-use App\Http\Controllers\Vendor\StaffController;
 use App\Http\Controllers\Vendor\SubscriptionController;
-use App\Http\Controllers\ResourcesController;
-use App\Http\Controllers\Vendor\FeatureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,12 +102,17 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
 
     Route::group(['prefix'=>'subscription'],function (){
         Route::get('plans',[SubscriptionController::class,'plans']);
-        Route::post('store',[SubscriptionController::class,'store']);
+        Route::post('store',[SubscriptionController::class,'subscribe']);
         Route::post('cancel_renewal',[SubscriptionController::class,'cancel_renewal']);
     });
 
     Route::group(['prefix'=>'adsets'],function(){
+        Route::get('/',[FeatureController::class,'index']);
         Route::get('plans',[FeatureController::class,'plans']);
         Route::post('subscribe',[FeatureController::class,'subscribe']);
+        Route::post('cancel_renewal',[FeatureController::class,'cancel_renewal']);
+        
+        Route::post('ads/filter',[AdvertController::class,'cancel_renewal']);
+        Route::post('ads/store',[AdvertController::class,'cancel_renewal']);
     });
 });

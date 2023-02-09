@@ -90,39 +90,24 @@
                                         </td>
                                         <td class="dashboard__order-history-table-item" style="padding-left:0px !important"> 
                                             <span style="font-weight:500"> {{$advert->product->name}} </span>
-                                            <span class="d-block small">Product
                                             
-                                            @if(!$advert->product->approved)
-                                              <button class="badge btn-danger">Pending Approval </button>
-                                            @elseif(!$advert->product->status)
-                                              <button class="badge btn-danger">Suspended </button>
-
-                                            @elseif(!$advert->product->isValid())
-                                              <button class="badge btn-danger">Expired </button>
                                             
-                                            @elseif(!$advert->product->published)
-                                              <button class="badge btn-danger">Not visible </button>
-                                            
-                                            @elseif(!$advert->product->isAccessible())
-                                              <button class="badge btn-danger">Not accessible </button>
-                                            
-                                            @elseif(!$advert->product->stock)
-                                              <button class="badge btn-danger"> Out of Stock </button>
-                                            @else Satisfactory
-                                            @endif </span>
+                                            @if(!$advert->status)
+                                            <span class="d-block small"><button class="badge btn-danger">Product not showing </button></span>
+                                            @else
+                                            <span class="d-block small"><button class="badge btn-success">Product Satisfactory</button> </span>
+                                            @endif 
                                         </td>
                                         <!-- Date  -->
                                         <td class="dashboard__order-history-table-item order-date "> {{ $advert->views}}</td>
                                         <!-- Total  -->
                                         <td class="   dashboard__order-history-table-item order-total ">  {{ $advert->clicks}} </td>
 
-                                        <td class="   dashboard__order-history-table-item order-total "> 
-                                            @if($advert->approved)
-                                                @if($advert->status) Approved & Active
-                                                @else Inactive
-                                                @endif
+                                        <td class="dashboard__order-history-table-item order-total "> 
+                                            @if($advert->running)
+                                            <span class="d-block text-success">Ad is running </span>
                                             @else
-                                              Pending Approval
+                                            <span class="d-block text-danger">Ad is inactive</span>
                                             @endif  
                                         </td>
                                         <!-- Status -->
@@ -143,7 +128,7 @@
                                       </tr> 
                                       @empty
                                       <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%;margin-top:5%">
-                                        <button type="button" class="button button--md bg-dark" id="addbankaccount">Add Products</button>
+                                        <button type="button" class="button button--md bg-dark" id="addbankaccount">Add New Ad</button>
                                       </div>
                                     @endforelse
                                   </tbody>
@@ -251,9 +236,9 @@
           },
           success:function(data) {
             $('#product').children().remove()
-            console.log('filtered product count '+data.length)
-            data.forEach(element => {
-              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop.name+` </option>`)
+            console.log('filtered product count '+data.data.length)
+            data.data.forEach(element => {
+              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
             });
             $('#product').select2();
           },
@@ -278,8 +263,8 @@
           success:function(data) {
             $('#product').children().remove()
             console.log('filtered product count '+data.length)
-            data.forEach(element => {
-              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop.name+` </option>`)
+            data.data.forEach(element => {
+              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
             });
             $('#product').select2();
               

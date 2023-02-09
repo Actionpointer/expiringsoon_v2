@@ -9,6 +9,7 @@ use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdplansResource;
+use App\Http\Resources\FeatureResource;
 
 class FeatureController extends Controller
 {
@@ -27,7 +28,9 @@ class FeatureController extends Controller
         $user = auth()->user();
         $adplans = Adplan::all();
         $features = Feature::where('user_id',$user->id)->where('status',true)->get();
-        return view('vendor.features.adsets',compact('user','features','adplans'));
+        return request()->expectsJson()
+        ? response()->json(['status' => true, 'message' => 'Adsets retrieved Successfully','data' => FeatureResource::collection($features)], 200)
+        : view('vendor.features.adsets',compact('user','features','adplans')); 
     }
 
     public function subscribe(Request $request){
@@ -71,6 +74,8 @@ class FeatureController extends Controller
         $feature = Feature::find($request->feature_id);
         $feature->auto_renew = false;
         $feature->save();
-        return redirect()->back();
+        return request()->expectsJson()
+        ? response()->json(['status' => true, 'message' => 'Auto renewal cancelled Successfully'], 200)
+        : redirect()->back();
     }
 }

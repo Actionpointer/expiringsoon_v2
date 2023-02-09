@@ -65,7 +65,7 @@ class ResourcesController extends Controller
 
     public function states()
     {
-        $states = State::select('id','name','iso')->get();
+        $states = State::within()->select('id','name','iso')->get();
         if($states->count()){
             return response()->json([
                 'status' => true,

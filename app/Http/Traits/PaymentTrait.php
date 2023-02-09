@@ -31,11 +31,11 @@ trait PaymentTrait
         }
         return $link;
     }
-    
+
 
     protected function getPaymentData($option,$value){
-        
-        $gateway = cache('settings')['active_payment_gateway'];
+        $user = auth()->user();
+        $gateway = $user->country->payment_gateway_receiving;
         switch($option){
             case 'status': return in_array($value->status,['success',true]); 
                 break;

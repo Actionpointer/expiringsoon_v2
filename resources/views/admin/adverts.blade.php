@@ -89,7 +89,7 @@
                               <td class="cart-table-item stock-status order-date align-middle">
                                 @if($advert->approved)
                                   @if($advert->status)
-                                    @if($advert->advertable->isCertified())
+                                    @if($advert->advertable->certified)
                                       <span class="font-body--md-400 in"> Ad is showing</span>
                                     @else 
                                       <span class="font-body--md-400 out"> Ad is not showing</span>

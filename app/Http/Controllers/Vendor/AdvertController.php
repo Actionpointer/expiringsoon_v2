@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\GeoLocationTrait;
+use App\Http\Resources\ProductResource;
 
 class AdvertController extends Controller
 {
@@ -27,10 +28,10 @@ class AdvertController extends Controller
         // $feature = auth()->user()->features->where('subscribable_id',$feature->id)->first();
         $user = auth()->user();
         $shops = $user->shops->where('status',true)->where('published',true)->where('approved',true);
-        $states = State::all();
+        $states = State::within()->get();
         $state_id = session('locale')['state_id'];
         if($feature->adplan->type == 'products'){
-            $products = Product::withinCountry()->valid()->approved()->active()->accessible()->available()->visible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
+            $products = Product::withinCountry()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
             $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
             return view('vendor.features.products',compact('feature','products','categories','shops','states','state_id'));
         }else
@@ -48,7 +49,7 @@ class AdvertController extends Controller
                 $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_product_advert'] ? true:false]);
             }
         }
-        return redirect()->back();
+        return redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
     }
 
     public function store_shop_advert(Request $request){
@@ -62,7 +63,7 @@ class AdvertController extends Controller
                 $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $shop->id,'advertable_type'=> get_class($shop),'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_shop_advert'] ? true:false]);
             }  
         }
-        return redirect()->back();
+        return redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
     }
      
     public function filter_products(Request $request){
@@ -73,8 +74,9 @@ class AdvertController extends Controller
         if($request->categories)
             $products = $products->whereIn('category_id', $request->categories);
         $products = $products->with('shop')->get();
-        return response()->json($products,200);
+        return response()->json(['status' => true,'message' => 'Products filtered ','data' => ProductResource::collection($products)],200);
     }
+    
 
     public function remove(Request $request){
         $adverts = Advert::destroy($request->adverts);
@@ -82,8 +84,8 @@ class AdvertController extends Controller
     }
 
     public function feature_products(Request $request){
-        $products = Product::whereIn('id',$request->products)->valid()->approved()->active()->accessible()->available()->visible()->get();
-        $allproducts = Product::where('shop_id',$request->shop_id)->valid()->approved()->active()->accessible()->available()->visible()->get();
+        $products = Product::whereIn('id',$request->products)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->get();
+        $allproducts = Product::where('shop_id',$request->shop_id)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->get();
         $states = State::all();
         $state_id = session('locale')['state_id'];
         $adplan = Adplan::where('position','Z')->first();

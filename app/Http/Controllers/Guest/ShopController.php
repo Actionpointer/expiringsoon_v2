@@ -18,7 +18,7 @@ class ShopController extends Controller
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
         
-        $shops = Shop::native()->active()->approved()->visible()->selling();
+        $shops = Shop::within()->isActive()->isApproved()->isVisible()->selling();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $shops = $shops->where('state_id',$state_id);
@@ -39,17 +39,17 @@ class ShopController extends Controller
             }
         }
         $shops = $shops->paginate(16);
-        $advert_G = Advert::state($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_H = Advert::state($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_G = Advert::within($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_H = Advert::within($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
         return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
     }
 
     public function show(Shop $shop){
-        if(!$shop->isCertified())
+        if(!$shop->certified)
         abort(404,'Shop is not available');
         $category = null;
         $categories = Category::has('products')->get();
-        $products = Product::where('shop_id',$shop->id)->valid()->approved()->active()->accessible()->available()->visible();
+        $products = Product::where('shop_id',$shop->id)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
         if(request()->query() && request()->query('category_id')){
             $products = $products->where('category_id',request()->query('category_id'));
             $category = Category::find(request()->query('category_id'));

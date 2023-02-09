@@ -64,13 +64,13 @@ class SubscriptionController extends Controller
                     ], 401) :
                     redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
             }else{
-                    return request()->expectsJson() ? 
-                    response()->json([
-                        'status' => true,
-                        'message' => 'Open payment link on browser to complete payment',
-                        'data' => $link,
-                    ], 200) :
-                    redirect()->to($link);
+                return request()->expectsJson() ? 
+                response()->json([
+                    'status' => true,
+                    'message' => 'Open payment link on browser to complete payment',
+                    'data' => $link,
+                ], 200) :
+                redirect()->to($link);
             }  
             
         } catch (\Throwable $th) {

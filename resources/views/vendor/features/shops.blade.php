@@ -90,16 +90,11 @@
                                         </td>
                                         <td class="dashboard__order-history-table-item" style="padding-left:0px !important"> 
                                             <span style="font-weight:500"> {{$advert->advertable->name}},{{$advert->advertable->state->name}} </span>
-                                            <span class="d-block small">Shop
-                                              @if(!$advert->advertable->status == '-1')
-                                                <button class="badge btn-danger">Suspended </button>
-                                              @elseif($advert->advertable->status)
-                                                <button class="badge btn-success">Active </button>
-                                              
-                                              @else
-                                                <button class="badge btn-warning">Pending </button>
-                                              @endif 
-                                            </span>
+                                            @if(!$advert->status)
+                                            <span class="d-block small"><button class="badge btn-danger">Product not showing </button></span>
+                                            @else
+                                            <span class="d-block small"><button class="badge btn-success">Product Satisfactory</button> </span>
+                                            @endif
                                         </td>
                                         <!-- Date  -->
                                         <td class="dashboard__order-history-table-item order-date "> {{ $advert->views}}</td>
@@ -107,11 +102,11 @@
                                         <td class="   dashboard__order-history-table-item order-total">  {{ $advert->clicks}} </td>
 
                                         <td class="   dashboard__order-history-table-item order-total"> 
-                                            @if($advert->status)
-                                              Active
-                                            @else
-                                              Pending
-                                            @endif  
+                                          @if($advert->running)
+                                          <span class="d-block text-success">Ad is running </span>
+                                          @else
+                                          <span class="d-block text-danger">Ad is inactive</span>
+                                          @endif  
                                         </td>
                                         <!-- Status -->
                                         

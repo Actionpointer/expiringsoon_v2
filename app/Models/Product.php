@@ -31,7 +31,7 @@ class Product extends Model
     }
     
     protected $fillable = ['name','shop_id','slug','description','stock','category_id','published','status', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
-    protected $appends = ['amount','image','discount'];
+    protected $appends = ['amount','image','discount','valid','available','accessible','certified'];
 
     protected $dates = ['expire_at','uploaded'];
     protected $casts = ['tags'=> 'array'];
@@ -75,9 +75,9 @@ class Product extends Model
             return 30;
         elseif($this->expire_at->diffInDays(now()) <= 60)
             return 60;
-        elseif($this->expire_at->diffInDays(now()) <= 90 && $this-> shop->discount90)
+        elseif($this->expire_at->diffInDays(now()) <= 90)
             return 90;
-        elseif($this->expire_at->diffInDays(now()) <= 120 && $this-> shop->discount120)
+        elseif($this->expire_at->diffInDays(now()) <= 120)
             return 120;
         else return 0;
     }
@@ -88,43 +88,47 @@ class Product extends Model
     public function getImageAttribute(){
         return $this->photo ? config('app.url')."/storage/$this->photo":null;  
     }
+
     public function adverts(){
         return $this->morphMany(Advert::class,'advertable');
     }
 
-    public function isValid(){
-        return $this->expire_at > now();
-    }
-    public function isAvailable(){
-        return $this->stock > cache('settings')['minimum_stock_level'];
-    }
     
-    public function isAccessible(){
-        return $this->shop->status && $this->shop->approved && $this->shop->published;
-    }
-
-    public function isCertified(){
-        return $this->isValid() && $this->isAccessible() && $this->approved && $this->status && $this->published && $this->isAvailable();
-    }
     public function scopeWithinCountry($query){
         return $query->whereHas('shop',function ($q) { $q->where('country_id',session('locale')['country_id']); } );
     }
-    public function scopeValid($query){
+    //expiry
+    public function getValidAttribute(){
+        return $this->expire_at > now();
+    }
+    public function scopeIsValid($query){
         return $query->where('expire_at','>',now());
     }
-    public function scopeApproved($query){
+    public function getCertifiedAttribute(){
+        return $this->valid && $this->accessible && $this->approved && $this->status && $this->published && $this->available;
+    }
+
+    public function scopeIsApproved($query){
         return $query->where('approved',true);
     }
-    public function scopeActive($query){
+    public function scopeIsActive($query){
         return $query->where('status',true);
     }
-    public function scopeVisible($query){
+    public function scopeIsVisible($query){
         return $query->where('published',true);
     }
-    public function scopeAccessible($query){
+    //accessible
+    public function getAccessibleAttribute(){
+        return $this->shop->status && $this->shop->approved && $this->shop->published;
+    }
+    public function scopeIsAccessible($query){
         return $query->whereHas('shop',function ($q) { $q->where('status',true)->where('approved',true)->where('published',true); } );
     }
-    public function scopeAvailable($query){
+    //available
+    public function getAvailableAttribute(){
+        return $this->stock > cache('settings')['minimum_stock_level'];
+    }
+    public function scopeIsAvailable($query){
         return $query->where('stock','>',cache('settings')['minimum_stock_level']);
     }
     

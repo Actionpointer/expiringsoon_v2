@@ -4985,19 +4985,36 @@ body.overlay {
   display: inline-block;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  text-transform: capitalize; }
+  text-transform: capitalize; 
+}
+.button--sm {
+  font-size: 12px !important;
+  line-height: 10.8px !important;
+  padding: 10px 16px; 
+  font-weight: 400!important; 
+  
+}
+.button--sm:hover {
+  color: #fff;
+  opacity: 0.5 !important; 
+}
   .button span {
-    margin-left: 12px; }
+    margin-left: 12px; 
+  }
   .button:hover {
-    background-color: #2c742f; }
+    background-color: #2c742f; 
+  }
   .button--md, .button--lg {
-    font-weight: 600; }
+    font-weight: 600; 
+  }
   .button--md {
     font-size: 14px;
     line-height: 16.8px;
-    padding: 14px 32px; }
+    padding: 14px 32px; 
+  }
     .button--md:hover {
-      color: #fff; }
+      color: #fff; 
+    }
   .button--lg {
     font-size: 16px;
     line-height: 19.2px;

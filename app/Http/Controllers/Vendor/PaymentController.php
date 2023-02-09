@@ -107,12 +107,13 @@ class PaymentController extends Controller
     }
 
     public function payoutcallback(Request $request){
-        dd($request->getContent());
-        if(cache('settings')['active_payment_gateway'] == 'flutter' && request()->query('status') != 'success'){
+        $user = auth()->user();
+        $gateway = $user->country->payment_gateway_receiving;
+        if($gateway == 'flutter' && request()->query('status') != 'success'){
             //delete this order, and remove the order number from the cart
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payout was not successful. Please try again']);
         }
-        if(cache('settings')['active_payment_gateway'] == 'paystack'){
+        if($gateway == 'paystack'){
             $details = $this->verifyPaystackPayment(request()->query('reference'));
         }  
         else {

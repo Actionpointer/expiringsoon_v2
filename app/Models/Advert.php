@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Shop;
+use App\Models\State;
 use App\Models\Feature;
 use App\Models\Product;
 use App\Http\Traits\GeoLocationTrait;
@@ -18,7 +19,7 @@ class Advert extends Model
     protected $fillable = [
         'advertable_id','advertable_type','feature_id','state_id','position','approved'
     ];
-    protected $appends = ['status'];
+    protected $appends = ['status','running'];
 
     public static function boot()
     {
@@ -41,37 +42,44 @@ class Advert extends Model
     public function feature(){
         return $this->belongsTo(Feature::class);
     }
-
-    public function getStatusAttribute(){
-        return $this->feature->active;
+    public function state(){
+        return $this->belongsTo(State::class);
     }
 
-    public function scopeState($query,$state_id=null){
+    public function getStatusAttribute(){
+       if($this->advertable_type == 'App\Models\Shop'){
+            return $this->shop && $this->shop->certified;
+       }else{
+            return $this->product && $this->product->certified;
+       }
+    }
+
+    public function scopeWithin($query,$state_id=null){
         if(!$state_id){
             $state_id = session('locale')['state_id'];;
         }
         return $query->where('state_id',$state_id);
     }
+
+    public function getRunningAttribute(){
+        return $this->approved && $this->feature->status && $this->feature->start_at > now() && $this->feature->end_at < now();
+    }
     public function scopeRunning($query){
         return $query->where('approved',true)->whereHas('feature', function (Builder $qry) 
             { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); });
     }
+
     public function scopeCertifiedProduct($query){
         return $query->whereHas('product', function (Builder $qry){ 
-                 $qry->valid()->approved()->active()->visible()->accessible()->available();});
+                 $qry->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();});
     }
     public function scopeCertifiedShop($query){
         return $query->whereHas('shop', function (Builder $qry)  { 
             $qry->where('status',true)->where('approved',true)->where('published',true)
             ->whereHas('products',function(Builder $q){
-                $q->valid()->approved()->active()->visible()->accessible()->available();
+                $q->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();
             });
         });
     }
-    public function scopeApproved($query){
-        return $query->where('approved',true);
-    }
-    
-
 
 }

@@ -44,6 +44,8 @@ class ShopResource extends JsonResource
             "status"=> $this->status,
             "approved"=> $this->approved,
             "published"=> $this->published,
+            "verified"=> $this->verified,
+            "certified"=> $this->certified,
             "wallet"=> $this->wallet,
             "total_products"=> $this->products->count(),
             "opened_orders"=> $this->orders->whereNotIn('status',['completed','cancelled'])->count(),

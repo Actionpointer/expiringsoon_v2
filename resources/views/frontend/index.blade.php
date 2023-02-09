@@ -498,145 +498,22 @@
 
             <!-- Mobile  Versions -->
             <div class="swiper-container popular-categories--slider swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events">
-                <div class="swiper-wrapper" id="swiper-wrapper-20b96c1e4cc87791" aria-live="off" style="transition-duration: 300ms;"><div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active" data-swiper-slide-index="10">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-soda.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Dish Detergents</h5>
-                        </a>
-                    </div><div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active" data-swiper-slide-index="11">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-oil.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Oil</h5>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" data-swiper-slide-index="0">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-fruits.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Fresh Fruit</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="1">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-icon-vegitables.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Fresh Vegetables</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="2">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-meat.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Meat &amp; Fish</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="3">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-icon-snaks.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Snacks</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="4">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/img-12.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Beverages</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="5">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-icon-beauty.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Beauty &amp; Health</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="6">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-icon-snaks2.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Bread &amp; Bakery</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="7">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/img-06.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Baking Needs</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="8">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/img-07.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Cooking</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="9">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/img-08.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Diabetic Food</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="10">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-soda.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Dish Detergents</h5>
-                        </a>
-                    </div>
-
-                    <div class="swiper-slide" data-swiper-slide-index="11">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-oil.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Oil</h5>
-                        </a>
-                    </div>
-                <div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active" data-swiper-slide-index="0">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-fruits.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Fresh Fruit</h5>
-                        </a>
-                    </div><div class="swiper-slide swiper-slide-duplicate" data-swiper-slide-index="1">
-                        <a href="# " class="cards-sm popular-categories__wrapper-item">
-                            <div class="cards-sm__img-wrapper">
-                                <img src="{{asset('src/images/categories/image-icon-vegitables.png')}}" alt="img-01">
-                            </div>
-                            <h5 class="font-body--xl-500">Fresh Vegetables</h5>
-                        </a>
-                    </div></div>
+                    
+                <div class="swiper-wrapper" aria-live="off" style="transition-duration: 300ms;">
+                    @foreach ($categories as $category)
+                        <div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active">
+                            <a href="{{route('product.list')}}?cat={{$category->id}}" class="cards-sm popular-categories__wrapper-item">
+                                <div class="cards-sm__img-wrapper">
+                                    <img src="{{asset('src/images/categories/'.$category->photo)}}" alt="{{$category->name}}">
+                                </div>
+                                <h5 class="font-body--xl-500">{{$category->name}}</h5>
+                            </a>
+                        </div>
+                    @endforeach 
+                </div>
                 <div class="swiper-pagination swiper-pagination-bullets swiper-pagination-bullets-dynamic"></div>
-            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            </div>
         </div>
     </section>
     <!-- categories  section ends -->
@@ -650,7 +527,7 @@
                         <div class="section__head">
                             <h2 class="section--title-one font-title--sm">Featured Products</h2>
                             <a href="{{route('hotdeals')}}">
-                                View All
+                                View All 
                                 <span>
                                     <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />

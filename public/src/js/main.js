@@ -469,6 +469,7 @@ var bannerOne = new Swiper('.banner-slider--one', {
   },
 });
 
+
 var bannerTwo = new Swiper('.banner-slider--02', {
   spaceBetween: 15,
   loop: true,
@@ -929,6 +930,7 @@ var featured = new Swiper('.featured-slider--one', {
     },
   },
 });
+
 
 var featuredFive = new Swiper('.featured-slider--five', {
   loop: true,

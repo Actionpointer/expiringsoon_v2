@@ -26,16 +26,26 @@ class PaymentController extends Controller
         //check status of transaction ..if failed, 
         //flutter = request()->query('status') // successful, cancelled
         //paystack = request()->query('status') // 
-        if(cache('settings')['active_payment_gateway'] == 'flutter' && request()->query('status') != 'successful'){
+        
+        $user = auth()->user();
+        $gateway = $user->country->payment_gateway_receiving;
+        if($gateway == 'flutterwave' && request()->query('status') != 'successful'){
             //delete this order, and remove the order number from the cart
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again1']);
         }
-        if(cache('settings')['active_payment_gateway'] == 'paystack'){
+        if($gateway == 'paystack'){
             $details = $this->verifyPaystackPayment(request()->query('reference'));
         }  
-        else {
+        if($gateway == 'flutterwave'){
             $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
         }
+        if($gateway == 'paypal'){
+            // $details = $this->verifyPaystackPayment(request()->query('reference'));
+        }  
+        if($gateway == 'stripe'){
+            // $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
+        }
+        
         if(!$this->getPaymentData('status',$details)){
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again2']);
         }
@@ -56,7 +66,9 @@ class PaymentController extends Controller
     }
 
     public function status(Payment $payment){
-        if(cache('settings')['active_payment_gateway'] == 'paystack'){
+        $user = auth()->user();
+        $gateway = $user->country->payment_gateway_receiving;
+        if($gateway == 'paystack'){
             $details = $this->verifyPaystackPayment($payment->reference);
         }  
         else {
