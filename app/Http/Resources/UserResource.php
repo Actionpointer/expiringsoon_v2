@@ -42,6 +42,7 @@ class UserResource extends JsonResource
             "pin"=> $this->pin? true:false,
             "created_at"=> $this->created_at,
             "balance"=> $this->when($this->role == 'vendor', $this->shops->sum('wallet')),
+            "currency"=> $this->country->currency->symbol,
             'max_products' => $this->when($this->role == 'vendor', $this->max_products),
             'total_products' => $this->when($this->role == 'vendor', $this->total_products),
             'total_shops' => $this->when($this->role == 'vendor', $this->total_shops),
@@ -51,13 +52,15 @@ class UserResource extends JsonResource
             "shop"=> $this->when($this->shop_id, function(){ 
                 return new ShopResource(Shop::findOrFail($this->shop_id)); 
             }),
+            "opened_orders"=> $this->when(!$this->shop_id, function(){
+                return Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->count();
+            }),
+            "adverts_running"=> $this->adverts->where('running',true)->count(),
             // "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
             //     return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
             // }),
             // "recent_orders"=> $this->when(!$this->shop_id, ShopOrderResource::collection(Shop::where('user_id',$this->id)->whereHas('orders',function($query){$query->whereIn('status',['processing','shipped','delivered']);})->get())),
-            // "adverts_running"=> $this->when(!$this->shop_id, ShopOrderResource::collection(Shop::where('user_id',$this->id)->whereHas('orders',function($query){$query->whereIn('status',['processing','shipped','delivered']);})->get())),
-            'payment_gateway_receiving'=> $this->country->payment_gateway_receiving,            
-            'payment_gateway_transfering'=> $this->country->payment_gateway_transfering,            
+            // "adverts_running"=> $this->when(!$this->shop_id, ShopOrderResource::collection(Shop::where('user_id',$this->id)->whereHas('orders',function($query){$query->whereIn('status',['processing','shipped','delivered']);})->get())),        
             
         ];
     }
