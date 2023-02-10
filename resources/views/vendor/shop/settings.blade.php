@@ -56,7 +56,7 @@
                         <button class="nav-link" id="pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#pills-shipping" type="button" role="tab" aria-controls="pills-shipping" aria-selected="false">
                             Shipping
                         </button>
-                     </li>
+                      </li>
                       
                   </ul>
               </div>

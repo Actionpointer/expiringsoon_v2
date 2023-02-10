@@ -70,6 +70,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('transactions',[PaymentController::class, 'index']);
         Route::get('generate-otp',[StaffController::class, 'generate_otp']);
         Route::post('pin', [StaffController::class, 'pin']);
+        Route::post('kyc',[StaffController::class,'kyc']);
     });
 
     Route::group(['prefix'=> 'shops'],function(){
@@ -101,7 +102,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::group(['prefix'=>'{shop_id}'],function (){
             Route::get('earnings',[PaymentController::class,'earnings']);
             Route::get('payouts',[PaymentController::class,'payouts']);
-            Route::post('delete',[PaymentController::class,'store']);
+            Route::post('store',[PaymentController::class,'store']);
         });
         
     });
@@ -118,7 +119,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('subscribe',[FeatureController::class,'subscribe']);
         Route::post('cancel_renewal',[FeatureController::class,'cancel_renewal']);
         
-        Route::post('ads/filter',[AdvertController::class,'cancel_renewal']);
-        Route::post('ads/store',[AdvertController::class,'cancel_renewal']);
+        Route::post('ads/filter',[AdvertController::class,'filter_products']);
+        Route::post('ads/store',[AdvertController::class,'store_product_advert']);
+        Route::post('ads/delete',[AdvertController::class,'remove']);
     });
 });

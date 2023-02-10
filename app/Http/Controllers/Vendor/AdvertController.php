@@ -49,7 +49,9 @@ class AdvertController extends Controller
                 $advert = Advert::create(['feature_id'=> $feature->id,'position'=> $feature->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_product_advert'] ? true:false]);
             }
         }
-        return redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
+        return request()->expectsJson()
+        ? response()->json(['status' => true, 'message' => 'Advert Created'], 200)
+        : redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
     }
 
     public function store_shop_advert(Request $request){
@@ -82,7 +84,9 @@ class AdvertController extends Controller
 
     public function remove(Request $request){
         $adverts = Advert::destroy($request->adverts);
-        return redirect()->back()->with(['result'=> 1,'message'=> 'Ads Deleted Successfully']);
+        return request()->expectsJson()
+        ? response()->json(['status' => true, 'message' => 'Advert Deleted Successfully'], 200)
+        : redirect()->back()->with(['result'=> 1,'message'=>'Ad Deleted Successfully']);
     }
 
     public function feature_products(Request $request){

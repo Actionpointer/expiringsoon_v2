@@ -76,6 +76,6 @@ class FeatureController extends Controller
         $feature->save();
         return request()->expectsJson()
         ? response()->json(['status' => true, 'message' => 'Auto renewal cancelled Successfully'], 200)
-        : redirect()->back();
+        : redirect()->back()->with(['result'=>1,'message' => 'Auto renewal cancelled Successfully']);
     }
 }
