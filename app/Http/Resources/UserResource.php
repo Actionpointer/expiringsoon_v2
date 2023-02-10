@@ -38,6 +38,7 @@ class UserResource extends JsonResource
             "state_name"=> $this->state->name,
             "state_name"=> $this->state->name,
             "status"=> $this->status,
+            "verified"=> $this->verified,
             "pin"=> $this->pin? true:false,
             "created_at"=> $this->created_at,
             "balance"=> $this->when($this->role == 'vendor', $this->shops->sum('wallet')),
