@@ -37,7 +37,7 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
     Route::post('product/update', [ProductController::class, 'update'])->name('product.update');
     Route::post('product/manage', [ProductController::class, 'manage'])->name('products.manage');
 
-    Route::get('orders', [OrderController::class, 'index'])->name('order.list');
+    Route::get('orders/{status?}', [OrderController::class, 'index'])->name('order.list');
     Route::get('order/{order}', [OrderController::class, 'show'])->name('order.view');
     Route::post('order/manage', [OrderController::class, 'update'])->name('order.manage');
     

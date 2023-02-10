@@ -45,17 +45,14 @@ class ShopController extends Controller
     }
 
     public function show(Shop $shop){
-        return view('vendor.shop.dashboard',compact('shop'));
-    }
-
-    public function details($shop_id){
-        $shop = Shop::find($shop_id);
-        if($shop && $shop->user_id == auth()->id()){
-            return response()->json([
+        if($shop){
+            return request()->expectsJson() ?  
+            response()->json([
                 'status' => true,
                 'message' => 'Shop retrieved Successfully',
                 'data' => new ShopResource($shop)
-            ], 200);
+            ], 200):
+            view('vendor.shop.dashboard',compact('shop'));
         }else{
             return response()->json([
                 'status' => true,

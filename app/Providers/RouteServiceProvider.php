@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -26,9 +26,20 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->configureRateLimiting();
+        Route::bind('shop_id', function ($value) {
+            return \App\Models\Shop::where('id', $value)->first();
+        });
+        Route::bind('product_id', function ($value) {
+            return \App\Models\Product::where('id', $value)->first();
+        });
+        Route::bind('order_id', function ($value) {
+            return \App\Models\Order::where('id', $value)->first();
+        });
+        Route::bind('state_id', function ($value) {
+            return \App\Models\State::where('id', $value)->first();
+        });
 
-        Route::model('shop', \App\Models\Shop::class);
+        $this->configureRateLimiting();
 
         $this->routes(function () {
             Route::middleware('web')

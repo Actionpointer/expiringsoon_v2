@@ -16,13 +16,14 @@ class ShipmentController extends Controller
         $this->middleware('auth');
     }
 
-    public function index($shop_id){
+    public function index(Shop $shop){
         try {
-            $rates = ShippingRate::where('shop_id',$shop_id)->get();
+            $rates = ShippingRate::where('shop_id',$shop->id)->get();
             return response()->json([
                 'status' => true,
-                'message' => 'Shipping rates fetched Successfully',
-                'data'=> ShipmentRateResource::collection($rates)
+                'message' => $rates->count() ? 'Shipping rates fetched Successfully' : 'No shipping rates found',
+                'data'=> ShipmentRateResource::collection($rates),
+                'count' => $rates->count()
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([

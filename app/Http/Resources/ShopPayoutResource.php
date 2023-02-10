@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ShopSettlementResource extends JsonResource
+class ShopPayoutResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +18,9 @@ class ShopSettlementResource extends JsonResource
         return [
             "amount"=> $this->amount,
             "currency"=> auth()->user()->country->currency->symbol,
-            "order_id"=> $this->order_id,
+            "channel"=> $this->channel,
+            "destination"=> $this->destination,
+            "status"=> $this->status,
             "created_at"=> $this->created_at,   
         ];
     }

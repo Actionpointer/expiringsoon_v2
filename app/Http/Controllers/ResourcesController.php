@@ -88,9 +88,9 @@ class ResourcesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function cities($state_id)
+    public function cities(State $state)
     {
-        $cities = City::where('state_id',$state_id)->select('id','name')->get();
+        $cities = City::where('state_id',$state->id)->select('id','name')->get();
         if($cities->count()){
             return response()->json([
                 'status' => true,

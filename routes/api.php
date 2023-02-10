@@ -74,13 +74,13 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
 
     Route::group(['prefix'=> 'shops'],function(){
         Route::get('/',[ShopController::class,'index']);
-        Route::get('{shop_id}',[ShopController::class,'details']);
+        Route::get('{shop_id}',[ShopController::class,'show']);
         Route::post('store',[ShopController::class,'store']);
         Route::post('import',[ShopController::class,'import']);
         Route::post('update',[ShopController::class,'update']);
         Route::post('delete',[ShopController::class,'destroy']);
-        Route::get('{shop_id}/staff',[StaffController::class,'index']);
-        Route::get('{shop_id}/products',[ProductController::class,'list']);
+        // Route::get('{shop_id}/staff',[StaffController::class,'index']);
+        Route::get('{shop_id}/products',[ProductController::class,'index']);
         Route::get('{shop_id}/products/{product_id}',[ProductController::class,'details']);
         Route::post('products/store',[ProductController::class,'store']);
         Route::post('products/update',[ProductController::class,'update']);
@@ -92,15 +92,18 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
             Route::post('update',[ShipmentController::class,'update']);
             Route::post('delete',[ShipmentController::class,'delete']);
         });
-        Route::get('{shop_id}/orders/{status?}',[OrderController::class,'api_index']);
-        Route::get('orders/view/{order_id}',[OrderController::class,'api_show']);
+        Route::get('{shop_id}/orders/{status?}',[OrderController::class,'index']);
+        Route::get('orders/view/{order_id}',[OrderController::class,'show']);
         Route::post('orders/update',[OrderController::class,'update']);
-        Route::get('{shop_id}/orders/{order_id}/messages',[OrderController::class,'api_messages']);
+        Route::get('{shop_id}/orders/{order_id}/messages',[OrderController::class,'messages']);
         Route::post('orders/message',[OrderController::class,'message']);
 
-        // Route::group(['earnings'],function(){
-        //     Route::get('/',[PaymentController::class,'earnings']);
-        // });
+        Route::group(['prefix'=>'{shop_id}'],function (){
+            Route::get('earnings',[PaymentController::class,'earnings']);
+            Route::get('payouts',[PaymentController::class,'payouts']);
+            Route::post('delete',[PaymentController::class,'store']);
+        });
+        
     });
 
     Route::group(['prefix'=>'subscription'],function (){

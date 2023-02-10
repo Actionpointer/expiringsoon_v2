@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Shop;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -10,9 +12,8 @@ use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
-use App\Models\User;
 
-Route::get('runonce/{shop_id}',function(\App\Models\Shop $shop){
+Route::get('runonce/{shop_id}',function(Shop $shop){
     dd($shop);
     // $order = App\Models\Order::find(103);
     // $user->notify(new WelcomeNotification());

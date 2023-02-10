@@ -20,42 +20,39 @@ class OrderController extends Controller
     }
 
     //vendors
-    public function index(Shop $shop){
-        return view('vendor.shop.orders.list',compact('shop'));
-    }
-    
-    public function api_index($shop_id,$status = null){
+    public function index(Shop $shop,$status = null){
         if($status == 'opened'){
-            $orders = Order::where('shop_id',$shop_id)->whereIn('status',['new','processing','shipped','delivered'])->get();
+            $orders = Order::where('shop_id',$shop->id)->whereIn('status',['new','processing','shipped','delivered'])->get();
         }
         if($status == 'closed'){
-            $orders = Order::where('shop_id',$shop_id)->whereIn('status',['cancelled','completed'])->get();
+            $orders = Order::where('shop_id',$shop->id)->whereIn('status',['cancelled','completed'])->get();
         }
         if(!$status){
-            $orders = Order::where('shop_id',$shop_id)->get();
+            $orders = Order::where('shop_id',$shop->id)->get();
         }
-        return response()->json([
+        return request()->expectsJson() ? 
+        response()->json([
             'status' => true,
             'message' => $orders->count() ? 'Shop Orders retrieved Successfully':'No Order retrieved',
             'data' => OrderResource::collection($orders),
             'count' => $orders->count()
-        ], 200);
+        ], 200) :
+        view('vendor.shop.orders.list',compact('shop'));
+
     }
+    
 
     public function show(Shop $shop,Order $order){
-        
-        // OrderMessage::where('order_id',$order->id)->where('shop_id',$shop->id)->where('receiver','vendor')->whereNull('read_at')->update(['read_at'=>now()]);
-        return view('order.view',compact('shop','order'));
+        return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => $order->items->count() ? 'Order Details retrieved Successfully' :'No details retrieved',
+                'data' => OrderDetailsResource::collection($order->items),
+                'count' => $order->items->count()
+            ], 200):
+            view('order.view',compact('shop','order'));
     }
 
-    public function api_show($order_id){
-        $order = Order::find($order_id);
-        return response()->json([
-            'status' => true,
-            'message' => 'Order Details retrieved Successfully',
-            'data' => OrderDetailsResource::collection($order->items),
-        ], 200);
-    }
 
     public function update(Request $request){
         $order = Order::find($request->order_id);
@@ -71,18 +68,15 @@ class OrderController extends Controller
 
     public function messages(Shop $shop,Order $order){
         OrderMessage::where('order_id',$order->id)->where('sender_id',$shop->id)->where('sender_type','App\Models\Shop')->whereNull('read_at')->update(['read_at'=>now()]);
-        return view('order.messages',compact('shop','order'));
-    }
-
-    public function api_messages($shop_id,$order_id){
-        $order = Order::where('id',$order_id)->where('shop_id',$shop_id)->first();
-        OrderMessage::where('order_id',$order->id)->where('sender_id',$shop_id)->where('sender_type','App\Models\Shop')->whereNull('read_at')->update(['read_at'=>now()]);
-        return response()->json([
+        return request()->expectsJson() ? 
+        response()->json([
             'status' => true,
             'message' => 'Order Message',
             'data' => OrderMessageResource::collection($order->messages),
-        ], 200);
+        ], 200):
+         view('order.messages',compact('shop','order'));
     }
+
 
     public function message(Shop $shop,Request $request){
         $order = Order::find($request->order_id);

@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ShopPayoutResource;
 use App\Http\Resources\VendorPaymentResource;
 use App\Http\Resources\ShopSettlementResource;
 
@@ -26,7 +27,7 @@ class PaymentController extends Controller
     //vendor payments to us
     public function index(){
         $user = auth()->user();
-        $payments = $user->payments->where('status','success');
+        $payments = $user->payments->where('status','success')->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ?  
         response()->json([
             'status' => true,
@@ -38,7 +39,7 @@ class PaymentController extends Controller
 
     //shop earnings
     public function earnings(Shop $shop){
-        $settlements = $shop->settlements;
+        $settlements = $shop->settlements->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ?  
         response()->json([
             'status' => true,
@@ -51,8 +52,14 @@ class PaymentController extends Controller
     //our payouts to shops
     public function payouts(Shop $shop){
         $banks = Bank::all();
-        $payouts = $shop->payouts;
-        return view('vendor.shop.payouts',compact('shop','banks','payouts'));
+        $payouts = $shop->payouts->sortByDesc('created_at')->take(100);
+        return request()->expectsJson() ? 
+        response()->json([
+            'status' => true,
+            'message' => $payouts->count() ? 'Payouts retrieved Successfully':'No payout retrieved',
+            'data' => ShopPayoutResource::collection($payouts),
+            'count' => $payouts->count()
+        ], 200) : view('vendor.shop.payouts',compact('shop','banks','payouts'));
     }
 
     public function bank_info(Shop $shop,Request $request){
@@ -123,10 +130,6 @@ class PaymentController extends Controller
         }
     }  
 
-    public function shop_index(Shop $shop){
-        $settlements = Settlement::where('receiver_type','App\Models\Shop')->where('receiver_id',$shop->id)->get();
-        return view('vendor.shop.earnings',compact('shop','settlements'));
-    }
 
     public function apply(Request $request){
         $code = $request->code;

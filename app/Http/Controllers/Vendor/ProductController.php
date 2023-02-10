@@ -26,17 +26,14 @@ class ProductController extends Controller
    
     public function index(Shop $shop){
         $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->get();
-        return view('vendor.shop.product.list',compact('shop','products'));
-    }
-
-    public function list($shop_id){
-        $products = Product::where('shop_id',$shop_id)->orderBy('expire_at','desc')->get();
-        return response()->json([
-            'status' => true,
-            'message' => $products->count() ? 'Products retrieved Successfully':'No Products retrieved',
-            'data' => ProductResource::collection($products),
-            'count' => $products->count()
-        ], 200);
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => $products->count() ? 'Products retrieved Successfully':'No Products retrieved',
+                'data' => ProductResource::collection($products),
+                'count' => $products->count()
+            ], 200) :
+            view('vendor.shop.product.list',compact('shop','products'));
     }
 
     public function create(Shop $shop){
@@ -45,9 +42,8 @@ class ProductController extends Controller
         return view('vendor.shop.product.create',compact('shop','categories','tags'));
     }
 
-    public function details($shop_id,$product_id){
-        $product = Product::find($product_id);
-        if($product && $product->shop_id == $shop_id){
+    public function details(Shop $shop,Product $product){
+        if($product && $shop && $product->shop_id == $shop->id){
             return response()->json([
                 'status' => true,
                 'message' => 'Products retrieved Successfully',
