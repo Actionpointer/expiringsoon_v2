@@ -18,7 +18,7 @@ class ShopSettlementResource extends JsonResource
         return [
             "amount"=> $this->amount,
             "currency"=> auth()->user()->country->currency->symbol,
-            "order_id"=> $this->order_id,
+            "order_id"=> $this->order->slug,
             "created_at"=> $this->created_at,   
         ];
     }
