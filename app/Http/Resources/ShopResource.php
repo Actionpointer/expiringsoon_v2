@@ -47,6 +47,7 @@ class ShopResource extends JsonResource
             "verified"=> $this->verified,
             "certified"=> $this->certified,
             "wallet"=> $this->wallet,
+            "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),
             "opened_orders"=> $this->orders->whereNotIn('status',['completed','cancelled'])->count(),
             "total_orders"=> $this->orders->count(),
