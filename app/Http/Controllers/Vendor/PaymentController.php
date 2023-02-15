@@ -66,10 +66,18 @@ class PaymentController extends Controller
     public function payout(Shop $shop,Request $request){
         $user = $shop->user;
         if($request->amount < $shop->user->minimum_payout() || $request->amount > $shop->user->maximum_payout()){
-            return redirect()->back()->with(['result'=> '0','message'=> 'Adjust payout to match minimum and maximum payout']);
+            return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Adjust payout to match minimum and maximum payout',
+            ], 401) :  redirect()->back()->with(['result'=> '0','message'=> 'Adjust payout to match minimum and maximum payout']);
         }
         if($request->amount > $shop->wallet){
-            return redirect()->back()->with(['result'=> '0','message'=> 'Insufficient Balance']);
+            return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Adjust payout to match minimum and maximum payout',
+            ], 401) :  redirect()->back()->with(['result'=> '0','message'=> 'Insufficient Balance']);
         }
         
         $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,
