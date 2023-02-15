@@ -275,7 +275,7 @@
                                         <!-- Subtotal  -->
                                         <td class="cart-table-item order-subtotal align-middle">
                                           <div class="d-flex justify-content-between align-items-center ">
-                                            <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!}
+                                            <p class="font-body--md-500">{!!auth()->user()->country->currency->symbol!!}
                                               {{-- <span class="plan-total">{{cache('settings')['minimum_advert_days'] * $adplan->price_per_day}}</span> </p> --}}
                                               {{-- <input type="hidden" class="counter-btn-counter quantity" data-type="units" name="units[]" value="1" min="1" max="1000" placeholder="1"> --}}
                                               <input type="text" name="amount[{{$adplan->id}}]" class="d-inline border-0 amount" size="8" value="{{cache('settings')['minimum_advert_days'] * $adplan->price_per_day}}" readonly>
@@ -311,7 +311,7 @@
                                     <!-- total  -->
                                     <div class="bill-card__memo-item total">
                                       <p class="font-body--lg-400">SubTotal:</p>
-                                      <span class="font-body--xl-500">{!!session('locale')['currency_symbol']!!}
+                                      <span class="font-body--xl-500">{!!auth()->user()->country->currency->symbol!!}
                                         <span id="subtotal">0.00</span> </span>
                                     </div>
 

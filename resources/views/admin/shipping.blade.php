@@ -44,10 +44,7 @@
                 <a href="#" class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($shippings->count(), 2)}} Total</a>
                 </div>
                 <div class="container">
-                <div style="margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:10px">
-                    <a href="{{route('admin.payouts')}}" style="font-size:13px;color:#00b207;font-weight:500">Payout Requests</a> | 
-                    <a href="#" style="font-size:13px;color:#00b207;font-weight:500">Shipping Settlements</a>
-                </div>
+                
                 <!-- Products -->
                 <table id="datatable" class="table display" style="width:100%;font-size:13px">
                     <thead>

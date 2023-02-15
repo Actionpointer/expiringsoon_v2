@@ -91,7 +91,7 @@
                                                             {{$payment->user->name}}
                                                         </td>
                                                         <td class="cart-table-item order-date align-middle">
-                                                            <p class="font-body--lg-500" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{ number_format($payment->amount, 2)}}</p>
+                                                            <p class="font-body--lg-500" style="color:#00b207">{!!$payment->user->country->currency->symbol!!}{{ number_format($payment->amount, 2)}}</p>
                                                         </td>
                                                         
                                                         <td class="cart-table-item order-date align-middle">
@@ -151,7 +151,7 @@
                                                     {{$settlement->receiver->name}}
                                                 </td>
                                                 <td class="cart-table-item order-date align-middle">
-                                                    <p class="font-body--lg-500" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{ number_format($settlement->amount, 2)}}</p>
+                                                    <p class="font-body--lg-500" style="color:#00b207">{!!$settlement->receiver->country->currency->symbol!!}{{ number_format($settlement->amount, 2)}}</p>
                                                 </td>
                                                 <!-- Stock Status  -->
                                                 <td class="cart-table-item order-date align-middle">

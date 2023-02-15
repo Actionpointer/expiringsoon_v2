@@ -72,7 +72,7 @@
                                 <td> {{$payment->created_at->format('Y-m-d')}}</td>
                                 <!-- Total  -->
                                 <td> 
-                                    <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($payment->amount, 0)}} </p>
+                                    <p class="order-total-price">   {!!$payment->currency->symbol!!}{{number_format($payment->amount, 0)}} </p>
                                 </td>
                                 <!-- Status -->
                                 <td> {{$payment->status}}</td>

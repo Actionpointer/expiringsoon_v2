@@ -12,7 +12,7 @@ trait PayoutTrait
 
     protected function initializePayout(Payout $payout){
         $user = Auth::user();
-        $gateway = $user->country->payment_gateway_receiving;
+        $gateway = $user->country->payout_gateway;
         switch($gateway){
             case 'paystack': $link = $this->payoutPaystack($payout);
             break;
@@ -26,16 +26,30 @@ trait PayoutTrait
         return $link;
     }
 
-    public function verifybankaccount($account_number,$bank_code,$bvn=null,$branch=null){
-        // $gateway = Setting::firstWhere('name','active_payment_gateway')->value;
-        // switch($gateway){
-        //     case 'paystack':  $result = $this->resolveBankAccountByPaystack($account_number,$bank_code,$bvn);
-        //     break;
-        //     case 'flutter': $result = $this->resolveBankAccountByFlutter($account_number,$bank_code,$bvn);
-        //     break;
-        // }
-        // abandoning paystack bvn verification cos it doesn't return useful data
-        $result = $this->resolveBankAccountByFlutter($account_number,$bank_code,$bvn);
+    protected function verifyPayout(Payout $payout){
+        $user = auth()->user();
+        $gateway = $user->country->payout_gateway;
+        if($gateway == 'flutterwave' && request()->query('status') != 'success'){
+            //delete this order, and remove the order number from the cart
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payout was not successful. Please try again']);
+        }
+        if($gateway == 'paystack'){
+            $details = $this->verifyPaystackPayment(request()->query('reference'));
+        }  
+        else {
+            $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
+        }
+    }
+
+    public function verifybankaccount($bank_code,$account_number){
+        $user = Auth::user();
+        $gateway = $user->country->payout_gateway;
+        switch($gateway){
+            case 'paystack':  $result = $this->resolveBankAccountByPaystack($bank_code,$account_number);
+            break;
+            case 'flutterwave': $result = $this->resolveBankAccountByFlutter($bank_code,$account_number);
+            break;
+        }
         return $result;
     }
     

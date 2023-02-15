@@ -25,7 +25,7 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
 
     Route::get('earnings',[PaymentController::class, 'earnings'])->name('earnings');
     Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');
-    Route::post('bank-info',[PaymentController::class, 'bank_info'])->name('bank-info');
+    
     Route::post('payout',[PaymentController::class, 'payout'])->name('payout');
     
   

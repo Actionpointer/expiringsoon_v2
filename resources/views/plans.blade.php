@@ -133,7 +133,7 @@
                         <th scope="row" class="font-body--md-400 pt-3 pb-3 ps-5 mb-0">Minimum Payouts</th>
                         @foreach($plans as $enterprise)
                             <td class="text-center @if(!$loop->last) border-right @endif">
-                                {!!session('locale')['currency_symbol']!!}{{number_format($enterprise->minimum_payout)}}
+                                {!!auth()->user()->country->currency->symbol!!}{{number_format($enterprise->minimum_payout)}}
                             </td>
                         @endforeach
                     </tr>
@@ -141,7 +141,7 @@
                         <th scope="row" class="font-body--md-400 pt-3 pb-3 ps-5 mb-0">Maximum Payouts</th>
                         @foreach($plans as $enterprise)
                             <td class="text-center @if(!$loop->last) border-right @endif">
-                                {!!session('locale')['currency_symbol']!!}{{number_format($enterprise->maximum_payout)}}
+                                {!!auth()->user()->country->currency->symbol!!}{{number_format($enterprise->maximum_payout)}}
                             </td>
                         @endforeach
                     </tr>
@@ -155,7 +155,7 @@
                         <th scope="row" class="font-body--md-400 py-3 ps-5">Platform</th>
                         @foreach($plans as $enterprise)
                             <td class="text-center @if(!$loop->last) border-right @endif">
-                                @if($enterprise->commission_percentage){{$enterprise->commission_percentage}}% @endif @if($enterprise->commission_percentage && $enterprise->commission_fixed) + @endif @if($enterprise->commission_fixed) {!!session('locale')['currency_symbol']!!}{{$enterprise->commission_fixed}} @endif
+                                @if($enterprise->commission_percentage){{$enterprise->commission_percentage}}% @endif @if($enterprise->commission_percentage && $enterprise->commission_fixed) + @endif @if($enterprise->commission_fixed) {!!auth()->user()->country->currency->symbol!!}{{$enterprise->commission_fixed}} @endif
                             </td>
                         @endforeach
                     </tr>
@@ -246,7 +246,7 @@
                         <th scope="row" class="font-body--md-400 py-3 ps-5">1 Month</th>
                         @foreach($plans as $enterprise)
                             <td class="text-center @if(!$loop->last) border-right @endif">
-                                {!!session('locale')['currency_symbol']!!}{{number_format($enterprise->months_1)}}
+                                {!!auth()->user()->country->currency->symbol!!}{{number_format($enterprise->months_1)}}
                             </td>
                         @endforeach
                     </tr>
@@ -254,7 +254,7 @@
                         <th scope="row" class="font-body--md-400 py-3 ps-5">3 Months</th>
                         @foreach($plans as $enterprise)
                             <td class="text-center @if(!$loop->last) border-right @endif">
-                                {!!session('locale')['currency_symbol']!!}{{number_format($enterprise->months_3)}}
+                                {!!auth()->user()->country->currency->symbol!!}{{number_format($enterprise->months_3)}}
                             </td>
                         @endforeach
                     </tr> 
@@ -262,7 +262,7 @@
                         <th scope="row" class="font-body--md-400 py-3 ps-5">6 Months</th>
                         @foreach($plans as $enterprise)
                             <td class="text-center @if(!$loop->last) border-right @endif">
-                                {!!session('locale')['currency_symbol']!!}{{number_format($enterprise->months_6)}}
+                                {!!auth()->user()->country->currency->symbol!!}{{number_format($enterprise->months_6)}}
                             </td>
                         @endforeach
                     </tr> 
@@ -270,7 +270,7 @@
                         <th scope="row" class="font-body--md-400 py-3 ps-5"> 1 Year</th>
                         @foreach($plans as $enterprise)
                             <td class="text-center @if(!$loop->last) border-right @endif">
-                                {!!session('locale')['currency_symbol']!!}{{number_format($enterprise->months_12)}}
+                                {!!auth()->user()->country->currency->symbol!!}{{number_format($enterprise->months_12)}}
                             </td>
                         @endforeach
                     </tr>                
@@ -359,19 +359,19 @@
                                     </div>
                                     <div class="bill-card__memo-item total">
                                         <p class="font-body--lg-400">Amount:</p>
-                                        <span class="font-body--xl-500">{!!session('locale')['currency_symbol']!!}
+                                        <span class="font-body--xl-500">{!!auth()->user()->country->currency->symbol!!}
                                         <span id="plan_amount" class="ms-0"></span> 
                                         </span>
                                     </div>
                                     <div class="bill-card__memo-item">
                                         <p class="font-body--lg-400">Discount:</p>
-                                        <span class="font-body--xl-500">-{!!session('locale')['currency_symbol']!!}
+                                        <span class="font-body--xl-500">-{!!auth()->user()->country->currency->symbol!!}
                                         <span id="discount_text" class="ms-0">0</span> 
                                         </span>
                                     </div>
                                     <div class="bill-card__memo-item mb-3">
                                         <p class="font-body--lg-400">Total:</p>
-                                        <span class="font-body--xl-500">{!!session('locale')['currency_symbol']!!}
+                                        <span class="font-body--xl-500">{!!auth()->user()->country->currency->symbol!!}
                                             <span id="total" class="ms-0">0</span> 
                                         </span>
                                     </div>

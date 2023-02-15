@@ -92,7 +92,7 @@
                             <!-- total  -->
                             <div class="bill-card__memo-item total">
                               <p class="font-body--lg-400">SubTotal:</p>
-                              <span class="font-body--xl-500">{!!session('locale')['currency_symbol']!!}
+                              <span class="font-body--xl-500">{!!auth()->user()->country->currency->symbol!!}
                                 <span id="subtotal">{{$products->count() * $adplan->price_per_day * cache('settings')['minimum_advert_days']}}</span> </span>
                             </div>
                             <div class="form-check py-2">

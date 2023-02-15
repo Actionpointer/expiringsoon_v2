@@ -607,22 +607,22 @@
                                                                         <div class="contact-form__content-group">
                                                                             <div class="contact-form-input">
                                                                                 <label for="destination">Receiving Payment Gateway </label>
-                                                                                <select id="destination" name="payment_gateway_receiving" class="form-control">
+                                                                                <select id="destination" name="payment_gateway" class="form-control">
                                                                                     <option value="">Select</option>
-                                                                                    <option value="paystack" @if($country->payment_gateway_receiving == 'paystack') selected @endif>Paystack</option>
-                                                                                    <option value="flutterwave" @if($country->payment_gateway_receiving == 'flutterwave') selected @endif>Flutterwave</option>
-                                                                                    <option value="paypal" @if($country->payment_gateway_receiving == 'paypal') selected @endif>Paypal</option>
-                                                                                    <option value="stripe" @if($country->payment_gateway_receiving == 'stripe') selected @endif>Stripe</option>
+                                                                                    <option value="paystack" @if($country->payment_gateway == 'paystack') selected @endif>Paystack</option>
+                                                                                    <option value="flutterwave" @if($country->payment_gateway == 'flutterwave') selected @endif>Flutterwave</option>
+                                                                                    <option value="paypal" @if($country->payment_gateway == 'paypal') selected @endif>Paypal</option>
+                                                                                    <option value="stripe" @if($country->payment_gateway == 'stripe') selected @endif>Stripe</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="contact-form-input">
                                                                                 <label for="destination">Transfering Payment Gateway </label>
-                                                                                <select id="destination" name="payment_gateway_transfering" class="form-control">
+                                                                                <select id="destination" name="payout_gateway" class="form-control">
                                                                                     <option value="">Select</option>
-                                                                                    <option value="paystack" @if($country->payment_gateway_transfering == 'paystack') selected @endif >Paystack</option>
-                                                                                    <option value="flutterwave" @if($country->payment_gateway_transfering == 'flutterwave') selected @endif >Flutterwave</option>
-                                                                                    <option value="paypal" @if($country->payment_gateway_transfering == 'paypal') selected @endif >Paypal</option>
-                                                                                    <option value="stripe" @if($country->payment_gateway_transfering == 'stripe') selected @endif >Stripe</option>
+                                                                                    <option value="paystack" @if($country->payout_gateway == 'paystack') selected @endif >Paystack</option>
+                                                                                    <option value="flutterwave" @if($country->payout_gateway == 'flutterwave') selected @endif >Flutterwave</option>
+                                                                                    <option value="paypal" @if($country->payout_gateway == 'paypal') selected @endif >Paypal</option>
+                                                                                    <option value="stripe" @if($country->payout_gateway == 'stripe') selected @endif >Stripe</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>

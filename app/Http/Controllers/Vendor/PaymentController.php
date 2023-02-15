@@ -8,6 +8,7 @@ use App\Models\Payout;
 use App\Models\Account;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
+use App\Http\Traits\OrderTrait;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,7 @@ use App\Http\Resources\ShopSettlementResource;
 
 class PaymentController extends Controller
 {
-    use PayoutTrait;
+    use PayoutTrait,OrderTrait;
 
     public function __construct(){
         $this->middleware('auth:sanctum');
@@ -49,9 +50,8 @@ class PaymentController extends Controller
         ], 200) : view('vendor.shop.earnings',compact('shop','settlements'));
     }
     
-    //our payouts to shops
+    //all payouts
     public function payouts(Shop $shop){
-        $banks = Bank::all();
         $payouts = $shop->payouts->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ? 
         response()->json([
@@ -59,43 +59,11 @@ class PaymentController extends Controller
             'message' => $payouts->count() ? 'Payouts retrieved Successfully':'No payout retrieved',
             'data' => ShopPayoutResource::collection($payouts),
             'count' => $payouts->count()
-        ], 200) : view('vendor.shop.payouts',compact('shop','banks','payouts'));
+        ], 200) : view('vendor.shop.payouts',compact('shop','payouts'));
     }
 
-    public function bank_info(Shop $shop,Request $request){
-        // dd($request->all());
-        $validator = Validator::make($request->all(), [
-            'bvn' => [Rule::requiredIf(session('locale')['country_iso'] =='NG'),'string','size:11'],
-            'branch_id' => [Rule::requiredIf(session('locale')['country_iso'] =='GH'),'string'],
-            'bank_id' => 'required|string',
-            'account_number' => 'required|string'
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
-        }
-        $bank = Bank::find($request->bank_id);
-        $result = $this->verifybankaccount($request->account_number,$bank->code,$request->bvn,$request->branch_id);
-        if(!$result){
-            return redirect()->back()->with(['result'=> 0,'message'=> 'Could not verify your bank account']);
-        }
-        if($request->account_id){
-            $account = Account::find($request->account_id); 
-        }else{
-            $account = new Account;
-            $account->shop_id = $shop->id;
-        }
-        $account->account_name = $result;
-        $account->account_number = $request->account_number;
-        $account->bank_id = $request->bank_id;
-        if($request->branch_id) $account->branch_id = $request->branch_id;
-        $account->status = true;
-        $account->save();
-        return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);
-    }
-
-    public function store(Shop $shop,Request $request){
-        // payout
-        // dd($request->all());
+    //request payout
+    public function payout(Shop $shop,Request $request){
         $user = $shop->user;
         if($request->amount < $shop->user->minimum_payout() || $request->amount > $shop->user->maximum_payout()){
             return redirect()->back()->with(['result'=> '0','message'=> 'Adjust payout to match minimum and maximum payout']);
@@ -103,31 +71,25 @@ class PaymentController extends Controller
         if($request->amount > $shop->wallet){
             return redirect()->back()->with(['result'=> '0','message'=> 'Insufficient Balance']);
         }
-        if(!$shop->bankaccount->status){
-            return redirect()->back()->with(['result'=> '0','message'=> 'Re-validate your bank account']);
-        }
-        $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,'account_id'=> $shop->bankaccount->id,'reference'=> uniqid(),'amount'=> $request->amount]);
+        
+        $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,
+        'channel'=> ($user->country->payout_gateway == 'paypal') ? 'paypal' : ($user->country->payout_gateway == 'stripe' ? 'stripe':'bankaccount'),
+        'destination'=> ($user->country->payout_gateway == 'paypal') ? $user->email : ($user->country->payout_gateway == 'stripe' ? $user->stripe_account : $user->bankaccount->bank->name.' '.$user->bankaccount->account_number),
+        'reference'=> uniqid(),'amount'=> $request->amount]);
         $shop->wallet -= $request->amount;
         $shop->save();
         if(cache('settings')['automatic_payout_transfer']){
             $this->initializePayout($payout);
         }
-        return redirect()->back()->with(['result'=> '1','message'=> 'Payout Request Successful']);
+        return request()->expectsJson() ? 
+        response()->json([
+            'status' => true,
+            'message' => 'Payout Request Successful',
+        ], 200) : redirect()->back()->with(['result'=> '1','message'=> 'Payout Request Successful']); 
     }
 
     public function payoutcallback(Request $request){
-        $user = auth()->user();
-        $gateway = $user->country->payment_gateway_receiving;
-        if($gateway == 'flutter' && request()->query('status') != 'success'){
-            //delete this order, and remove the order number from the cart
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payout was not successful. Please try again']);
-        }
-        if($gateway == 'paystack'){
-            $details = $this->verifyPaystackPayment(request()->query('reference'));
-        }  
-        else {
-            $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
-        }
+        
     }  
 
 

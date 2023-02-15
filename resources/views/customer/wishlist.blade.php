@@ -67,9 +67,9 @@
                           <!-- Price  -->   
                           <td class="cart-table-item order-date align-middle">  
                               <p class="font-body--lg-500">
-                                  {!!session('locale')['currency_symbol']!!}{{number_format($like->product->amount, 0)}} 
+                                  {!!$like->product->shop->country->currency->symbol!!}{{number_format($like->product->amount, 0)}} 
                                   @if($like->product->amount != $like->product->price)
-                                    <del>{!!session('locale')['currency_symbol']!!}{{number_format($like->product->price, 0)}}</del>
+                                    <del>{!!$like->product->shop->country->currency->symbol!!}{{number_format($like->product->price, 0)}}</del>
                                   @endif
                               </p>    
                           </td>   
@@ -148,10 +148,10 @@
               </h5>
               
                 <h6 class="shoping-card__product-price font-body--lg-600">
-                  {!!session('locale')['currency_symbol']!!}{{number_format($like->product->amount, 0)}} 
+                  {!!$like->product->shop->country->currency->symbol!!}{{number_format($like->product->amount, 0)}} 
                   @if($like->product->amount != $like->product->price)
                   <del class="prev-price">
-                    {!!session('locale')['currency_symbol']!!}{{number_format($like->product->price, 0)}}
+                    {!!$like->product->shop->country->currency->symbol!!}{{number_format($like->product->price, 0)}}
                   </del>
                   @endif
                 </h6>

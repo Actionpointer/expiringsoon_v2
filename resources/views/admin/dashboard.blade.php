@@ -178,10 +178,7 @@
                       </a>
                       
                       
-                      {{-- <div class="dashboard__totalpayment-card-body-item total" >
-                        <h5 class="font-body--xl-400">Total:</h5>
-                        <p class="font-body--xl-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->total, 2)}}</p>
-                      </div> --}}
+                      
                     </div>
                   </div>
                 </div>
@@ -246,7 +243,7 @@
                             </td>
                             <!-- Total  -->
                             <td class="   dashboard__order-history-table-item   order-total "> 
-                                <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{ number_format($order->total)}} </p>
+                                <p class="order-total-price">   {!!$order->shop->country->currency->symbol!!}{{ number_format($order->total)}} </p>
                             </td>
                             <!-- Status -->
                             <td class="   dashboard__order-history-table-item   order-status "> 

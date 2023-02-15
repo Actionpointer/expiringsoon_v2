@@ -5,11 +5,11 @@ namespace App\Models;
 
 use App\Models\Cart;
 use App\Models\Like;
-use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\State;
 use App\Models\Payout;
+use App\Models\Account;
 use App\Models\Address;
 use App\Models\Country;
 use App\Models\Payment;
@@ -24,7 +24,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable,Sluggable,HasApiTokens;
 
@@ -48,8 +48,7 @@ class User extends Authenticatable
         parent::observe(new UserObserver);
     }
 
-    public function sluggable():array
-    {
+    public function sluggable():array{
         return [
             'slug' => [
                 'source' => ['fname','lname'],
@@ -57,9 +56,11 @@ class User extends Authenticatable
             ]
         ];
     }
+
     public function getRouteKeyName(){
         return 'slug';
     }
+
     public function getNameAttribute(){
         return ucwords($this->fname.' '.$this->lname);   
     }
@@ -73,6 +74,7 @@ class User extends Authenticatable
     public function getVerifiedAttribute(){
         return $this->idcard && $this->idcard->status;   
     }
+    
 
     public function shops(){
         return $this->hasMany(Shop::class);
@@ -158,6 +160,10 @@ class User extends Authenticatable
 
     public function payouts(){
         return $this->hasMany(Payout::class);
+    }
+
+    public function bankaccount(){
+        return $this->hasOne(Account::class);
     }
 
     public function payments(){

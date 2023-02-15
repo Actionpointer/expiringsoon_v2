@@ -115,12 +115,12 @@
                         @if($settlement->order->deliveryByVendor())
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Shipping</h5>
-                          <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($settlement->order->deliveryfee,2)}}</p>
+                          <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->deliveryfee,2)}}</p>
                         </div>
                         @endif
                         <div class="dashboard__totalpayment-card-body-item total" >
                           <h5 class="font-body--xl-400">Amount:</h5>
-                          <p class="font-body--xl-500">{!!session('locale')['currency_symbol']!!} {{number_format($settlement->amount, 2)}}</p>
+                          <p class="font-body--xl-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->amount, 2)}}</p>
                         </div>
                       </div>
                     </div>
@@ -153,15 +153,15 @@
                             </td>
                             <!-- Price  -->
                             <td class="dashboard__order-history-table-item order-date align-middle">
-                                {!!session('locale')['currency_symbol']!!} {{number_format($settlement->order->subtotal, 2)}}
+                                {!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->subtotal, 2)}}
                             </td>
                             <!-- commission -->
                             <td class="dashboard__order-history-table-item order-total align-middle">
-                              <p class="order-total-price">{!!session('locale')['currency_symbol']!!}  {{number_format($settlement->order->commission(),2)}}</p>
+                              <p class="order-total-price">{!!$settlement->receiver->country->currency->symbol!!}  {{number_format($settlement->order->commission(),2)}}</p>
                             </td>
                             <!-- Subtotal  -->     
                             <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
-                                <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($settlement->order->earning(), 2)}}</p>
+                                <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->earning(), 2)}}</p>
                             </td>
                         </tr>
                         @if($settlement->order->deliveryByVendor())
@@ -174,14 +174,14 @@
                                   </td>
                               <!-- Price  -->
                               <td class="dashboard__order-history-table-item order-date align-middle ">
-                                  {!!session('locale')['currency_symbol']!!} {{number_format($settlement->order->deliveryfee, 2)}}
+                                  {!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->deliveryfee, 2)}}
                               </td>
                               <td class="dashboard__order-history-table-item order-total align-middle">
                                   <p class="order-total-price">0</p>
                               </td>
                               <!-- Subtotal  -->     
                               <td class="dashboard__order-history-table-item order-status align-middle" style="text-align: left" >
-                                  <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($settlement->order->deliveryfee, 2)}}</p>
+                                  <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->deliveryfee, 2)}}</p>
                               </td>
                           </tr>
                         @endif

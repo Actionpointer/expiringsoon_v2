@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Models\Kyc;
+
 use App\Models\Bank;
 use App\Models\City;
 use App\Models\Shop;
-use App\Models\User;
 use App\Models\State;
-use App\Models\Advert;
-use App\Models\Product;
-use App\Models\Category;
 use App\Events\DeleteShop;
 use App\Models\ShippingRate;
-use App\Events\DeleteProduct;
 use Illuminate\Http\Request; 
-use Illuminate\Validation\Rule;
-use App\Http\Requests\ShopRequest;
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -167,30 +159,7 @@ class ShopController extends Controller
         $rates = ShippingRate::where('shop_id',$shop->id)->get();
         return view('vendor.shop.settings',compact('user','shop','banks','states','cities','rates'));
     }
-
-    // public function address(Shop $shop,Request $request){
-    //     if(!$this->checkPin($request)['result']){
-    //         return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-    //     }
-    //     $shop->address = $request->address;
-    //     $shop->state_id = $request->state_id;
-    //     $shop->city_id = $request->city_id;
-    //     $shop->save();
-    //     return redirect()->back()->with(['result'=> '1','message'=> 'Address Updated Successfully']);
-    // }
-
-    // public function discounts(Shop $shop,Request $request){
-    //     if(!$this->checkPin($request)['result']){
-    //         return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-    //     }
-    //     $shop->discount30 = $request->discount30;
-    //     $shop->discount60 = $request->discount60;
-    //     $shop->discount90 = $request->discount90;
-    //     $shop->discount120 = $request->discount120;
-    //     $shop->save();
-    //     return redirect()->back()->with(['result'=> '1','message'=> 'Discount Saved']);
-    // }
-
+    
     public function update(Request $request){
         $user = auth()->user();
         try {
@@ -318,31 +287,8 @@ class ShopController extends Controller
         }
     }
 
-    
-
-    // public function profile(Shop $shop,Request $request){
-    //     if(!$this->checkPin($request)['result']){
-    //         return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
-    //     }
-    //     $shop->name = $request->name;
-    //     $shop->email = $request->email;
-    //     $shop->phone = $request->phone;
-    //     $shop->published = $request->published;
-    //     if($request->hasFile('photo')){
-    //         if($shop->banner) Storage::delete('public/'.$shop->banner);
-    //         $banner = 'uploads/'.time().'.'.$request->file('banner')->getClientOriginalExtension();
-    //         $request->file('photo')->storeAs('public/',$banner);
-    //         $shop->banner = $banner;
-    //     } 
-    //     $shop->save();
-        
-    // }
-
-    
-
     public function notifications(Shop $shop){
         
     }
-
-    
+        
 }

@@ -11,7 +11,6 @@ use App\Models\State;
 use App\Models\Advert;
 use App\Models\Payout;
 use App\Models\Review;
-use App\Models\Account;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
@@ -107,9 +106,7 @@ class Shop extends Model
     public function city(){
         return $this->belongsTo(City::class);
     }
-    public function bankaccount(){
-        return $this->hasOne(Account::class);
-    }
+    
     public function shippingRates(){
         return $this->hasMany(ShippingRate::class);
     }

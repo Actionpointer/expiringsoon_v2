@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Models\Kyc;
+use App\Models\Bank;
 use App\Models\Shop;
 use App\Models\User;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +19,7 @@ use App\Notifications\NewStaffNotification;
 
 class StaffController extends Controller
 {
+    use PayoutTrait;
     /**
      * Display a listing of the resource.
      *
@@ -24,6 +28,7 @@ class StaffController extends Controller
     public function __construct(){
         $this->middleware('auth:sanctum');
     }
+
     public function dashboard(){
         $user = auth()->user(); 
         return view('vendor.dashboard',compact('user'));
@@ -39,7 +44,6 @@ class StaffController extends Controller
         return view('vendor.verification',compact('user'));
     }
 
-    
     public function kyc(Request $request){
         // dd($request->all());
         $user = auth()->user();
@@ -83,6 +87,52 @@ class StaffController extends Controller
         }
     }
 
+    public function banking(){
+        $user = auth()->user(); 
+        $banks = Bank::within()->get();
+        return view('vendor.banking',compact('user','banks')); 
+    }
+
+    public function accountNumberResolve(Request $request){
+       
+        $validator = Validator::make($request->all(), [
+            'bank_code' => 'required|string',
+            'account_number' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['result'=> 0,'message'=> $validator->errors()->first()],401);
+        }
+        if(in_array(auth()->user()->country->iso,['NG','GH'])){
+            $response = $this->verifybankaccount($request->bank_code,$request->account_number);
+            return response()->json(
+                ['status' => $response ? $response : false,
+                'message' => $response ? 'Account fetched Successfully':'Unable to verify bank account',
+                'data' => $response ? $response : false
+                ],200);
+        }else{
+            return response()->json(
+                ['status' => true,
+                'message' => 'Not applicable',
+                'data' => 'Not available'
+                ],200);
+        }
+
+    }
+
+    public function bank_info(Request $request){
+        $validator = Validator::make($request->all(), [
+            'branch_id' => [Rule::requiredIf(session('locale')['country_iso'] =='GH'),'string'],
+            'bank_id' => 'required|string',
+            'account_number' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
+        }
+        $user = auth()->user();
+        Account::updateOrCreate(['user_id'=> $user->id],['account_number'=> $request->account_number,'bank_id'=>$request->bank_id,'branch_id'=> $request->branch_id ?? null ,'status'=> true]);
+        return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);
+    }
+
     public function store(Shop $shop,Request $request){
         // add staff should send an email to the person
         $validator = Validator::make($request->all(), [
@@ -102,7 +152,6 @@ class StaffController extends Controller
        
     }
 
-    
     // public function index($shop_id){
     //     $shop = Shop::find($shop_id);
     //     return response()->json([
@@ -112,7 +161,6 @@ class StaffController extends Controller
     //     ], 200);
     // }
 
-    
     public function update(Shop $shop,Request $request){
         $validator = Validator::make($request->all(), [
             'status' => 'required|numeric'
@@ -126,8 +174,7 @@ class StaffController extends Controller
         return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated Staff']);
     }
 
-    public function destroy(Shop $shop,Request $request)
-    {
+    public function destroy(Shop $shop,Request $request){
         $user = User::where('id',$request->user_id)->where('shop_id',$shop->id)->delete();
         return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
     }

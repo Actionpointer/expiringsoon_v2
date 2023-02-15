@@ -24,11 +24,11 @@ class PaymentController extends Controller
         // dd(request()->query);
         // ["trxref" => "632889cbaa15f","reference" => "632889cbaa15f"]
         //check status of transaction ..if failed, 
-        //flutter = request()->query('status') // successful, cancelled
+        //flutterwave = request()->query('status') // successful, cancelled
         //paystack = request()->query('status') // 
         
         $user = auth()->user();
-        $gateway = $user->country->payment_gateway_receiving;
+        $gateway = $user->country->payment_gateway;
         if($gateway == 'flutterwave' && request()->query('status') != 'successful'){
             //delete this order, and remove the order number from the cart
             return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again1']);
@@ -67,7 +67,7 @@ class PaymentController extends Controller
 
     public function status(Payment $payment){
         $user = auth()->user();
-        $gateway = $user->country->payment_gateway_receiving;
+        $gateway = $user->country->payment_gateway;
         if($gateway == 'paystack'){
             $details = $this->verifyPaystackPayment($payment->reference);
         }  
@@ -169,11 +169,7 @@ class PaymentController extends Controller
         return redirect()->route('payment.status',$payment);
     }
 
-    public function accountNumberResolve(Request $request){
-        $bank = Bank::find($request->bank_id);
-        $response = $this->resolveBankAccount($bank->code,$request->account_number);
-        return response()->json($response,200);
-    }
+    
 
     // public function topup(Request $request){
     //     if($url = $this->initializePayment($request->amount)){

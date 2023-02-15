@@ -41,7 +41,7 @@
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
             <div class="dashboard__order-history-title" style="margin:auto;width:95%;border-bottom:1px solid #ddd;margin-bottom:10px">
               <p class="font-body--xl-500">Payout Requests</p>
-              <a href="#" class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{ number_format($payouts->count(), 2)}} Total</a>
+              <a href="#" class="font-body--lg-500">{{ number_format($payouts->count(), 2)}} Total</a>
             </div>
             <div class="container">
                 <div style="margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:10px">
@@ -82,14 +82,14 @@
                                         </span>
                                         <br />
                                         <span style="font-size:12px;color:#888">
-                                            {{$payout->account->bank->name}}<br />{{$payout->account->account_name}} > 
-                                            <span style="color:#000">{{$payout->account->account_number}}</span>
+                                            {{$payout->channel}}:{{$payout->destination}}
+                                            
                                         </span>
                                     </div>
                                   </td>
                                   <!-- Price  -->
                                   <td class="cart-table-item order-date align-middle">
-                                      <p class="font-body--lg-500" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{ number_format($payout->amount, 2)}}</p>
+                                      <p class="font-body--lg-500" style="color:#00b207">{!!$payout->user->country->currency->symbol!!}{{ number_format($payout->amount, 2)}}</p>
                                   </td>
                                   <!-- Stock Status  -->
                                   <td class="cart-table-item order-date align-middle">

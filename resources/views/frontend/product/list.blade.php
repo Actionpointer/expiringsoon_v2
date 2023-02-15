@@ -193,10 +193,10 @@
                                                 
                                                 <div class="cards-md__info-price">
                                                     @if($product->price > $product->amount)
-                                                        <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($product->amount, 0)}}</span>
-                                                        <del class="font-body--lg-400" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{number_format($product->price, 0)}}</del>
+                                                        <span class="font-body--lg-500">{!!$product->shop->country->currency->symbol!!}{{number_format($product->amount, 0)}}</span>
+                                                        <del class="font-body--lg-400" style="color:#00b207">{!!$product->shop->country->currency->symbol!!}{{number_format($product->price, 0)}}</del>
                                                     @else
-                                                        <span class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($product->price, 0)}}</span>
+                                                        <span class="font-body--lg-500">{!!$product->shop->country->currency->symbol!!}{{number_format($product->price, 0)}}</span>
                                                     @endif
                                                 </div>
                                                 <ul class="d-flex" style="color:#888;font-size:12px">

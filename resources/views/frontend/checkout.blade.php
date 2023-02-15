@@ -138,7 +138,7 @@
                                       @if($user->addresses->isNotEmpty() && $rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first())
                                           <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
                                           <label class="form-check-label font-body--400" for="cash">
-                                            {!!session('locale')['currency_symbol']!!}
+                                            {!!$user->country->currency->symbol!!}
                                             <span id="deliveryamount{{$item->shop_id}}">
                                               {{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}
                                             </span> 
@@ -148,7 +148,7 @@
                                       @elseif($user->addresses->isNotEmpty() && $rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first())
                                           <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
                                           <label class="form-check-label font-body--400" for="cash">
-                                            {!!session('locale')['currency_symbol']!!}
+                                            {!!$user->country->currency->symbol!!}
                                             <span id="deliveryamount{{$item->shop_id}}">
                                               {{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}
                                             </span> 
@@ -219,7 +219,7 @@
                     <div class="bill-card__memo-item subtotal">
                       <p class="font-body--md-400">Order Amount:</p>
                       <span class="font-body--md-500">
-                        {!!session('locale')['currency_symbol']!!} 
+                        {!!$user->country->currency->symbol!!} 
                         <span id="subtotal" data-value="{{$order['subtotal']}}">{{number_format($order['subtotal'], 2)}}</span>
                       </span>
                     </div>
@@ -227,7 +227,7 @@
                     <div class="bill-card__memo-item shipping">
                       <p class="font-body--md-400">Shipping:</p>
                       <span class="font-body--md-500">
-                        {!!session('locale')['currency_symbol']!!}
+                        {!!$user->country->currency->symbol!!}
                         <span id="shipping_cost" data-value="{{$order['shipping']}}">{{number_format($order['shipping'],2)}}</span>
                       </span>
                     </div>
@@ -237,7 +237,7 @@
                     <div class="bill-card__memo-item vat">
                       <p class="font-body--md-400">VAT ({{$order['vat_percent']}}%):</p>
                       <span class="font-body--md-500">
-                        {!!session('locale')['currency_symbol']!!}
+                        {!!$user->country->currency->symbol!!}
                         <span id="vat_cost" data-value="{{$order['vat_percent']}}">{{number_format($order['vat'],2)}}</span>
                       </span>
                     </div>
@@ -245,7 +245,7 @@
                     <div class="bill-card__memo-item total">
                       <p class="font-body--lg-400">Total:</p>
                       <span class="font-body--xl-500">
-                        {!!session('locale')['currency_symbol']!!}
+                        {!!$user->country->currency->symbol!!}
                         <span id="grandtotal" data-value="{{$order['grandtotal']}}">{{number_format($order['grandtotal'],2)}}</span>
                       </span>
                     </div>

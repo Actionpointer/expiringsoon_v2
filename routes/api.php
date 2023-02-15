@@ -102,7 +102,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::group(['prefix'=>'{shop_id}'],function (){
             Route::get('earnings',[PaymentController::class,'earnings']);
             Route::get('payouts',[PaymentController::class,'payouts']);
-            Route::post('store',[PaymentController::class,'store']);
+            Route::post('payout',[PaymentController::class,'payout']);
         });
         
     });

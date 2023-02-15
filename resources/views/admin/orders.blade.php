@@ -74,7 +74,7 @@
                                   <span style="font-weight:500">{{$order->created_at->format('Y-m-d')}} </span> </td>
                                 <!-- Total  -->
                                 <td> 
-                                    <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
+                                    <p class="order-total-price">   {!!$order->shop->country->currency->symbol!!}{{number_format($order->total, 0)}} </p>
                                 </td>
                                 <!-- Status -->
                                 <td> {{$order->status}}</td>

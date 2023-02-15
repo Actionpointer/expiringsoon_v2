@@ -61,25 +61,19 @@ trait PaystackTrait
 
     
     
-    // protected function resolveBankAccountByPaystack($account_number,$bank,$bvn){
+    protected function resolveBankAccountByPaystack($bank_code,$account_number){
 
-    //     // $response = Curl::to('https://api.paystack.co/bvn/match')
-    //     //         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-    //     //         ->withHeader('Content-Type: application/json')
-    //     //         ->withData( array('bvn'=> $bvn,"account_number" => $account_number,"bank_code" => $bank) )
-    //     //         ->asJson()
-    //     //         ->post();
-    //     //     return $response;  
-    //     // dd($response);
-
-    //     // $response = Curl::to('https://api.paystack.co/bank/resolve')
-    //     //         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-    //     //         ->withHeader('Content-Type: application/json')
-    //     //         ->withData( array('account_number'=> $account_number,"bank_code" => $bank) )
-    //     //         ->get();
-    //     // if($response )
-    //     // //     return $response;  
-    // }
+        $response = Curl::to('https://api.paystack.co/bank/resolve')
+              ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+              ->withHeader('Content-Type: application/json')
+              ->withData( array('account_number'=> $account_number,"bank_code" => $bank_code) )
+              ->asJsonResponse()
+              ->get();
+        if(!$response || !$response->status){
+          return false;
+        }
+        return $response->data->account_name;
+    }
 
     protected function getBanksByPaystack(){
         

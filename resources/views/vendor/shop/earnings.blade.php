@@ -40,68 +40,62 @@
         @include('layouts.shop_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           <div class="container">
-            
-            <div class="products-tab__content">
-              <div class="container">
-                <div class="products-tab__description">
-                    <div class="dashboard__content-card">
-                        <div class="dashboard__content-card-header">
-                            <h5 class="font-body--xl-500">Earnings</h5>
-                        </div>
-                        <div class="dashboard__content-card-body">
-                          <table id="datatable" class="table display" style="width:100%;font-size:13px">
-                              <thead>
-                                  <tr>
-                                    <th scope="col" class="cart-table-title">Date</th>
-                                    <th scope="col" class="cart-table-title">Amount</th>
-                                    <th scope="col" class="cart-table-title">Order</th>
-                                    <th scope="col" class="cart-table-title">Status</th>
-                                    <th scope="col" class="cart-table-title">Transaction ID</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  @forelse ($settlements as $settlement)
-                                      <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
-                                          <!-- item  -->
-                                          <td class="cart-table-item order-date align-middle">
-                                              <span style="font-size:12px;color:#888">{{ $settlement->created_at->format('l, F d, Y')}}</span>
-                                          </td>
-                                          
-                                          <td class="cart-table-item order-date align-middle">
-                                              <p class="font-body--lg-500" style="color:#00b207">{!!session('locale')['currency_symbol']!!}{{ number_format($settlement->amount, 2)}}</p>
-                                          </td>
-                                          <td class="cart-table-item order-date align-middle">{{$settlement->order->id}}</td>
-                                          <!-- Stock Status  -->
-                                          <td class="cart-table-item order-date align-middle">
-                                              
-                                              @if($settlement->status =='pending')
-                                                  <p style="color:#d92e2e;font-size:14px"><span id="status">{{ $settlement->status}}</span></p>
-                                              @else
-                                                  <p style="color:#00b207;font-size:14px;font-weight:500">{{ $settlement->status}}</p>
-                                              @endif
-                                          </td>
-                                          <td class="cart-table-item order-date align-middle">
-                                              {{$settlement->reference}}
-                                          </td>
-                                          
-                                      </tr>   
-                                  @empty
-                                      <div style="margin:auto;padding:1%;text-align:center">
-                                          <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
-                                          <br />No Settlement at this time.</span>
-                                      </div>
-                                  @endforelse
-                                  
-                              </tbody>
-                          </table>
-                        </div>
+            <div class="products-tab__description">
+                <div class="dashboard__content-card">
+                    <div class="dashboard__content-card-header">
+                        <h5 class="font-body--xl-500">Earnings</h5>
                     </div>
-                    
-                  </div>
+                    <div class="dashboard__content-card-body">
+                      <table id="datatable" class="table display" style="width:100%;font-size:13px">
+                          <thead>
+                              <tr>
+                                <th scope="col" class="cart-table-title">Date</th>
+                                <th scope="col" class="cart-table-title">Amount</th>
+                                <th scope="col" class="cart-table-title">Order</th>
+                                <th scope="col" class="cart-table-title">Status</th>
+                                <th scope="col" class="cart-table-title">Transaction ID</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              @forelse ($settlements as $settlement)
+                                  <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
+                                      <!-- item  -->
+                                      <td class="cart-table-item order-date align-middle">
+                                          <span style="font-size:12px;color:#888">{{ $settlement->created_at->format('l, F d, Y')}}</span>
+                                      </td>
+                                      
+                                      <td class="cart-table-item order-date align-middle">
+                                          <p class="font-body--lg-500" style="color:#00b207">{!!$settlement->receiver->country->currency->symbol!!}{{ number_format($settlement->amount, 2)}}</p>
+                                      </td>
+                                      <td class="cart-table-item order-date align-middle">{{$settlement->order->id}}</td>
+                                      <!-- Stock Status  -->
+                                      <td class="cart-table-item order-date align-middle">
+                                          
+                                          @if($settlement->status =='pending')
+                                              <p style="color:#d92e2e;font-size:14px"><span id="status">{{ $settlement->status}}</span></p>
+                                          @else
+                                              <p style="color:#00b207;font-size:14px;font-weight:500">{{ $settlement->status}}</p>
+                                          @endif
+                                      </td>
+                                      <td class="cart-table-item order-date align-middle">
+                                          {{$settlement->reference}}
+                                      </td>
+                                      
+                                  </tr>   
+                              @empty
+                                  <div style="margin:auto;padding:1%;text-align:center">
+                                      <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
+                                      <br />No Settlement at this time.</span>
+                                  </div>
+                              @endforelse
+                              
+                          </tbody>
+                      </table>
+                    </div>
+                </div>
+                
               </div>
-            </div>
-            <!-- Set VAT -->
-        </div>
+          </div>
         </div>
       </div>
     </div>

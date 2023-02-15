@@ -150,7 +150,7 @@
                               <!-- Price  -->
                             <td class="cart-table-item order-date align-middle">
                               <p class="font-body--lg-500">
-                                {!!session('locale')['currency_symbol']!!}{{number_format($product->price , 2)}}
+                                {!!$shop->country->currency->symbol!!}{{number_format($product->price , 2)}}
                               </p>
                             </td>
 

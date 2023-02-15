@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Notifications\WelcomeNotification;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
 
 Route::get('runonce/{shop_id}',function(Shop $shop){
-    dd($shop);
+    // dd($shop);
     // $order = App\Models\Order::find(103);
     // $user->notify(new WelcomeNotification());
     // return (new App\Notifications\OrderStatusCustomerNotification($order))
@@ -32,12 +33,6 @@ Route::view('help/download','help.download')->name('help.download');
 Route::view('help/contact','help.contact')->name('help.contact');
 
 Route::view('email','emails.completed');
-Auth::routes();
-Route::view('change_password','auth.forcepassword')->name('forcepassword');
-Route::post('change_password',[App\Http\Controllers\Auth\LoginController::class, 'forcepassword'] )->name('forcepassword');
-Route::view('start-selling','auth.register_vendor')->name('start-selling');
-
-Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');
 
 Route::get('/', [FrontendController::class, 'index'])->name('index');
 Route::get('advert/{advert}', [FrontendController::class, 'redirect'])->name('advert.redirect');
@@ -63,42 +58,46 @@ Route::post('product/remove-from-wish',[CartController::class,'removefromwish'])
 Route::post('product/sortFilter',[CartController::class,'sortFilter'])->name('product.sortFilter');
 
 Route::get('payment/callback',[App\Http\Controllers\PaymentController::class,'paymentcallback'])->name('payment.callback');
-
 Route::post('payment/webhook',[App\Http\Controllers\PaymentController::class,'webhook'])->name('payment.webhook');
-
 Route::post('payout/callback',[App\Http\Controllers\PayoutController::class,'payoutcallback'])->name('payout.callback');
 Route::get('payment/status/{payment}',[App\Http\Controllers\PaymentController::class,'status'])->name('payment.status');
-Route::post('account_number_verification',[App\Http\Controllers\PaymentController::class,'accountNumberResolve'])->name('account_number_verification');
-
 
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
 Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
 
-Route::get('home', [HomeController::class, 'home'])->name('home');
+Auth::routes(['verify' => true]);
+Route::group(['middleware'=> 'verified'],function(){
+    Route::view('change_password','auth.forcepassword')->name('forcepassword');
+    Route::post('change_password',[LoginController::class, 'forcepassword'] )->name('forcepassword');
+    Route::view('start-selling','auth.register_vendor')->name('start-selling');
+    Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');
+    Route::get('home', [HomeController::class, 'home'])->name('home');
 
-//for users
-Route::get('profile', [UserController::class, 'profile'])->name('profile');
-Route::post('profile/update',[UserController::class, 'update'])->name('profile.update');
-Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
-Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
-Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
-Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
-Route::post('address',[UserController::class, 'address'])->name('address');
+    //for users
+    Route::get('profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('profile/update',[UserController::class, 'update'])->name('profile.update');
+    Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
+    Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
+    Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
+    Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
+    Route::post('address',[UserController::class, 'address'])->name('address');
+    Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
+    Route::get('checkout/{shop?}',[OrderController::class,'checkout'])->name('checkout');
+    Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('checkout.shipment');
+    Route::post('checkout/confirm',[OrderController::class,'confirmcheckout'])->name('confirmcheckout');
+    Route::get('orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('order/{order}',[OrderController::class, 'show'])->name('order-details');
+    // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
+    Route::post('order/review',[OrderController::class, 'review'])->name('order.review');
+
+    Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
+    Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
+
+    include('vendor.php');
+    include('admin.php');
+});
 
 
-Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
-Route::get('checkout/{shop?}',[OrderController::class,'checkout'])->name('checkout');
-Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('checkout.shipment');
-Route::post('checkout/confirm',[OrderController::class,'confirmcheckout'])->name('confirmcheckout');
-Route::get('orders', [OrderController::class, 'index'])->name('orders');
-Route::get('order/{order}',[OrderController::class, 'show'])->name('order-details');
-// Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
-Route::post('order/review',[OrderController::class, 'review'])->name('order.review');
 
-Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
-Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
-
-include('vendor.php');
-include('admin.php');
 
 

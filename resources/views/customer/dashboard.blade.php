@@ -117,7 +117,7 @@
                               <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
                               <!-- Total  -->
                               <td class="   dashboard__order-history-table-item   order-total "> 
-                                  <p class="order-total-price">   {!!session('locale')['currency_symbol']!!}{{number_format($order->total, 0)}} </p>
+                                  <p class="order-total-price">   {!!$user->country->currency->symbol!!}{{number_format($order->total, 0)}} </p>
                               </td>
                               <!-- Status -->
                               <td class="dashboard__order-history-table-item   order-status "> 

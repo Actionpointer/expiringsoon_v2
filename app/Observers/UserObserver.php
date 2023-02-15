@@ -49,9 +49,6 @@ class UserObserver
     public function updated(User $user)
     {
         if($user->isDirty('fname') || $user->isDirty('fname')){
-            if($user->shops->isNotEmpty()){
-                Account::whereIn('shop_id',$user->shops->pluck('id')->toArray())->update(['status'=> false]);
-            }
             if($user->idcard){
                 $user->idcard->status = false;
                 $user->idcard->reason = 'User new name does not match idcard';

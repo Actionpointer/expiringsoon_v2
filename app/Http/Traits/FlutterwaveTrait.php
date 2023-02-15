@@ -41,26 +41,18 @@ trait FlutterwaveTrait
             ->get(); 
     }
     //payouts
-    protected function resolveBankAccountByFlutter($account_number,$bank,$bvn){
-        // $response = Curl::to('https://api.flutterwave.com/v3/accounts/resolve')
-        // $response = Curl::to('https://api.flutterwave.com/v3/kyc/bvns/'.$bvn)
-        //         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-        //         ->withHeader('Content-Type: application/json')
-        //         // ->withData( array('bvn'=> $bvn) )
-        //         ->asJson()
-        //         ->get();
-        // dd($response);
-        // $result['name'] = $response->data->firstname;
-        // $response = Curl::to('https://api.flutterwave.com/v3/accounts/resolve')
-        //     ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-        //     // ->withHeader('Content-Type: application/json')
-        //     ->withData( json_encode(array("account_number" => $account_number,"account_bank" => $bank)) )
-        //     ->asJson()
-        //     ->post();
-        // dd($response);
-        if($account_number && $bank && $bvn)
-        return 'Ronaldo Messi';
-        else return false;
+    protected function resolveBankAccountByFlutter($bank_code,$account_number){
+        $response = Curl::to('https://api.flutterwave.com/v3/accounts/resolve')
+            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+            // ->withHeader('Content-Type: application/json')
+            ->withData( json_encode(array("account_number" => $account_number,"account_bank" => $bank_code)) )
+            ->asJson()
+            ->post();
+            // dd($response);
+        if(!$response ||  !isset($response->status) || $response->status == "error"){
+            return false;
+        }
+        return $response->data->account_name;
         
     }
 
@@ -88,7 +80,7 @@ trait FlutterwaveTrait
                         ]) )
         ->asJson()
         ->post();
-        dd($response);
+        
         if(!$response || $response->status == 'error' || $response->data->status = 'FAILED'){
             $payout->transfer_id = $response->data->id ?? '';
             $payout->status = 'failed';

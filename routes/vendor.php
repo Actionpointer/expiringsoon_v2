@@ -13,6 +13,11 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
     Route::get('dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
     Route::get('verification',[StaffController::class,'verification'])->name('verification');
     Route::post('kyc',[StaffController::class,'kyc'])->name('kyc');
+
+    Route::get('banking',[StaffController::class, 'banking'])->name('banking');
+    Route::post('bank-account_number_verification',[StaffController::class,'accountNumberResolve'])->name('account_number_verification');
+    Route::post('bank-info',[StaffController::class, 'bank_info'])->name('bank-info');
+
     Route::get('shops', [ShopController::class, 'index'])->name('shops');
     Route::get('shop/create', [ShopController::class, 'create'])->name('shop.create');
     Route::post('shop/store', [ShopController::class, 'store'])->name('shop.store');    

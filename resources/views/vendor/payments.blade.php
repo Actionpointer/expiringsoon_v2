@@ -82,7 +82,7 @@
                         <!-- Total  -->
                         <td class=" dashboard__order-history-table-item order-total ">
                           <p class="order-total-price">
-                            {!!session('locale')['currency_symbol']!!} {{$payment->amount}}
+                            {!!$payment->currency->symbol!!} {{$payment->amount}}
                           </p>
                         </td>
                         <td class=" dashboard__order-history-table-item order-ortal ">

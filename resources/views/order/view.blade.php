@@ -154,15 +154,15 @@
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Subtotal:</h5>
-                          <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->subtotal, 2)}}</p>
+                          <p class="font-body--md-500">{!!$order->user->country->currency->symbol!!} {{number_format($order->subtotal, 2)}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">VAT :</h5>
-                          <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->vat, 2)}}</p>
+                          <p class="font-body--md-500">{!!$order->user->country->currency->symbol!!} {{number_format($order->vat, 2)}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Shipping:</h5>
-                          <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->deliveryfee, 0)}}</p>
+                          <p class="font-body--md-500">{!!$order->user->country->currency->symbol!!} {{number_format($order->deliveryfee, 0)}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Delivery Type:</h5>
@@ -179,7 +179,7 @@
                         
                         <div class="dashboard__totalpayment-card-body-item total" >
                           <h5 class="font-body--xl-400">Total:</h5>
-                          <p class="font-body--xl-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->total, 2)}}</p>
+                          <p class="font-body--xl-500">{!!$order->user->country->currency->symbol!!} {{number_format($order->total, 2)}}</p>
                         </div>
                       </div>
                     </div>
@@ -277,7 +277,7 @@
                               </td>
                               <!-- Price  -->
                               <td class="dashboard__order-history-table-item order-date align-middle "     >
-                                  {!!session('locale')['currency_symbol']!!} {{number_format($item->amount, 0)}}
+                                  {!!$order->user->country->currency->symbol!!} {{number_format($item->amount, 0)}}
                               </td>
                               <!-- quantity -->
                               <td class="dashboard__order-history-table-item         order-total         align-middle         "     >
@@ -285,7 +285,7 @@
                               </td>
                               <!-- Subtotal  -->     
                               <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
-                                  <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} {{number_format($order->total, 0)}}</p>
+                                  <p class="font-body--md-500">{!!$order->user->country->currency->symbol!!} {{number_format($order->total, 0)}}</p>
                               </td>
                               <td class="align-middle">
                                 

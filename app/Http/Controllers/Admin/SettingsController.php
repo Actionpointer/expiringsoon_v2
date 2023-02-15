@@ -61,8 +61,8 @@ class SettingsController extends Controller
         
         $country = Country::find($request->country_id);
         $country->currency_id = $request->currency_id;
-        $country->payment_gateway_receiving = $request->payment_gateway_receiving;
-        $country->payment_gateway_transfering = $request->payment_gateway_transfering;
+        $country->payment_gateway = $request->payment_gateway;
+        $country->payout_gateway = $request->payout_gateway;
         $country->vat = $request->vat;
         $country->bank_digits = $request->bank_digits;
         $country->save();
