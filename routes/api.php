@@ -51,7 +51,7 @@ Route::get('categories', [ResourcesController::class, 'categories']);
 Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);
 
 
-Route::group(['middleware'=> ['auth:sanctum','email_verify_api']],function(){
+Route::group(['middleware'=> 'auth:sanctum'],function(){
     Route::get('/user', function (Request $request) {
         // return $request->user();
         return new UserResource(User::findOrFail($request->user()->id));

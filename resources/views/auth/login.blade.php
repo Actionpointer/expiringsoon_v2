@@ -30,11 +30,6 @@
     <section class="sign-in section section--xl">
       <div class="container">
         <div class="form-wrapper">
-          @if (session('verified'))
-              <div class="alert alert-success" role="alert">
-                  {{ __('Email has been verified.') }}
-              </div>
-          @endif
           <h6 class="font-title--sm" style="font-size:16px">Sign in</h6>
           <form method="POST" action="{{ route('login') }}">
             @csrf

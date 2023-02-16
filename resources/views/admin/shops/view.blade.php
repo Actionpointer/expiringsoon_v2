@@ -85,7 +85,7 @@
                                         <path d="M16 8.36364C16 14.0909 8.5 19 8.5 19C8.5 19 1 14.0909 1 8.36364C1 6.41068 1.79018 4.53771 3.1967 3.15676C4.60322 1.77581 6.51088 1 8.5 1C10.4891 1 12.3968 1.77581 13.8033 3.15676C15.2098 4.53771 16 6.41068 16 8.36364Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M8.5 10.8182C9.88071 10.8182 11 9.71925 11 8.36364C11 7.00803 9.88071 5.90909 8.5 5.90909C7.11929 5.90909 6 7.00803 6 8.36364C6 9.71925 7.11929 10.8182 8.5 10.8182Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
-                                </span> {{$shop->address}} {{$shop->city->name}}, {{$shop->state->name}} 
+                                </span> {{$shop->address}} {{$shop->city->name}}, {{$shop->state->name}} ,{{$shop->country->name}}
                             </p>
                             <p class="font-body--md-400">
                                 <span class="icon">
@@ -109,7 +109,7 @@
                                       <path d="M7.115 11.6517C8.02238 13.5074 9.5263 15.0049 11.3859 15.9042C11.522 15.9688 11.6727 15.9966 11.8229 15.9851C11.9731 15.9736 12.1178 15.9231 12.2425 15.8386L14.9812 14.0134C15.1022 13.9326 15.2414 13.8833 15.3862 13.8698C15.5311 13.8564 15.677 13.8793 15.8107 13.9364L20.9339 16.1326C21.1079 16.2065 21.2532 16.335 21.3479 16.4987C21.4426 16.6623 21.4815 16.8523 21.4589 17.04C21.2967 18.307 20.6784 19.4714 19.7196 20.3154C18.7608 21.1593 17.5273 21.6249 16.25 21.625C12.3049 21.625 8.52139 20.0578 5.73179 17.2682C2.94218 14.4786 1.375 10.6951 1.375 6.75C1.37512 5.47279 1.84074 4.23941 2.68471 3.28077C3.52867 2.32213 4.6931 1.70396 5.96 1.542C6.14771 1.51936 6.33769 1.55832 6.50134 1.653C6.66499 1.74769 6.79345 1.89298 6.86738 2.067L9.06537 7.1945C9.1219 7.32698 9.14485 7.47137 9.13218 7.61485C9.11951 7.75833 9.07162 7.89647 8.99275 8.017L7.17275 10.7977C7.09015 10.923 7.04141 11.0675 7.03129 11.2171C7.02117 11.3668 7.05001 11.5165 7.115 11.6517V11.6517Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                     
-                                    {{$shop->mobile}}
+                                    +{{$shop->mobile}}
                                 </span>
                             </p>
                             <p class="font-body--md-400">Owned by: <a href="{{route('admin.user.show',$shop->user)}}" target="_blank">{{$shop->user->name}}</a> </p>
@@ -121,7 +121,7 @@
                                   <tr><td>No of Products</td><td align="right">{{$shop->products->count()}}</td></tr>
                                   <tr><td>No of Staff</td><td align="right">{{$shop->staff->count()}}</td></tr>
                                   <tr><td>Orders</td><td align="right">{{$shop->orders->count()}}</td></tr>
-                                  <tr><td>Wallet</td><td align="right">{!! session('locale')['currency_symbol'] !!} {{number_format($shop->wallet,2)}}</td></tr>
+                                  <tr><td>Wallet</td><td align="right">{!! $shop->country->currency->symbol !!} {{number_format($shop->wallet,2)}}</td></tr>
                                   <tr>
                                     <td>Subscription </td>
                                     <td align="right">
@@ -239,6 +239,7 @@
                   </div>
               </div>
 
+              @if(in_array($shop->country->payout_gateway,['flutterwave','paystack']))
               <div class="dashboard__content-card">
                 <div class="dashboard__content-card-header">
                     <h5 class="font-body--xl-500">Bank Accounts</h5>
@@ -264,6 +265,7 @@
                     </table> 
                 </div>
               </div>
+              @endif
             </div>
           </div>
       </div>

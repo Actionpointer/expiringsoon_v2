@@ -68,6 +68,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     
     Route::get('orders',[OrderController::class, 'index'])->name('orders');
     Route::post('orders',[OrderController::class, 'update'])->name('order.manage');
+    Route::post('orders',[OrderController::class, 'update'])->name('order.manage');
     
     Route::get('payments',[PaymentController::class, 'index'])->name('payments');
     Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');

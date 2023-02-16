@@ -70,6 +70,7 @@
               </div>
             </div>
 
+            @if ($documents->isNotEmpty())
             <!-- KYC Documents -->
             <div class="dashboard__order-history" style="margin-top: 24px">
               <div class="dashboard__order-history-title">
@@ -89,7 +90,7 @@
                     </thead>
                     <tbody>
                       
-                        @forelse ($documents as $document)
+                        @foreach ($documents as $document)
                             <tr>
 
                               <td class="dashboard__order-history-table-item order-total " >
@@ -130,18 +131,14 @@
                                   @endif
                                 </td>
                             </tr>
-                        @empty
-                            <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
-                                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
-                                <br />No pending documents at this time
-                            </div>
-                        @endforelse
+                        
+                        @endforeach
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
-
+            @endif
             <!-- Approvals and notifications  -->
             <div class="my-3">
               <div class="row">
