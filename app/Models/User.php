@@ -32,7 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'slug', 'fname','lname','email','shop_id','password','phone','country_id','role','state_id','status','require_password_change'
     ];
 
-    protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops','verified'];
+    protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];
 
     
     protected $hidden = [
@@ -71,9 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getImageAttribute(){
         return $this->pic ? config('app.url')."/storage/$this->pic":null;  
     }
-    public function getVerifiedAttribute(){
-        return $this->idcard && $this->idcard->status;   
-    }
+    
     
 
     public function shops(){

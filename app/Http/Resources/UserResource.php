@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             "fname"=> $this->fname,
             "lname"=> $this->lname,
             'email' => $this->email,
+            "email_verified_at"=> $this->email_verified_at,
             'image' => $this->image,
             "shop_id"=> $this->shop_id,
             "role"=> $this->role,
@@ -38,7 +39,6 @@ class UserResource extends JsonResource
             "state_name"=> $this->state->name,
             "state_name"=> $this->state->name,
             "status"=> $this->status,
-            "verified"=> $this->verified,
             "pin"=> $this->pin? true:false,
             "created_at"=> $this->created_at,
             "balance"=> $this->when($this->role == 'vendor', $this->shops->sum('wallet')),
@@ -56,6 +56,10 @@ class UserResource extends JsonResource
                 return Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->count();
             }),
             "adverts_running"=> $this->adverts->where('running',true)->count(),
+            'payment_gateway'=> $this->country->payment_gateway,            
+            'payout_gateway'=> $this->country->payout_gateway,
+            'minimum_payout'=> $this->minimum_payout(),
+            'maximum_payout'=> $this->maximum_payout(),
             // "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
             //     return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
             // }),

@@ -21,6 +21,7 @@ class CustomerResource extends JsonResource
             "fname"=> $this->fname,
             "lname"=> $this->lname,
             'email' => $this->email,
+            "email_verified_at"=> $this->email_verified_at,
             'image' => $this->image,
             "role"=> $this->role,
             "slug"=> $this->slug,

@@ -11,19 +11,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Support\Facades\Validator;
 
-class ApiController extends Controller
+class ApyController extends Controller
 {
 
     use GeoLocationTrait;
-    
-    public function webhook(Request $request){
-        logger()->info([
-            'payload' => $request->all(),
-            'headers' => $request->headers,
-        ]);
-        // $alert = \App\Models\Alert::create(['severity'=> 1,'description'=> 'Webhook','status'=> 1]);
-        return response()->json(200);
-    }
 
     public function register(Request $request)
     {
@@ -54,7 +45,7 @@ class ApiController extends Controller
                 'phone' => $request->phone,
                 'country_id' => session('locale')['country_id'],
                 'state_id' => session('locale')['state_id'],
-                'role' => 'vendor',
+                'role' => 'shopper',
             ]);
 
             return response()->json([
@@ -108,12 +99,7 @@ class ApiController extends Controller
                     'message' => 'Unauthorized Login Attempt',
                 ], 401);
             }
-            if($user->subscription_id){
-                if(!$user->subscription->active && !$user->subscription->is_free){
-                    $user->subscription_id = $user->subscriptions->firstWhere('is_free',true)->id;
-                    $user->save();
-                }
-            }
+            
             // $user->tokens()->delete();
             return response()->json([
                 'status' => true,

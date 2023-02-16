@@ -5,9 +5,6 @@ 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
 swiper.js is displaying duplicates
 
 
-
-
-
 NOTIFICATIONS
 place notification and profile icon at the top of vendor & shop
 kyc notification should be in-app
