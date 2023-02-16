@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -39,7 +40,7 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth:sanctum')->except('verify');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
@@ -61,26 +62,26 @@ class VerificationController extends Controller
 
     public function verify(Request $request)
     {
-        if (! hash_equals((string) $request->route('id'), (string) $request->user()->getKey())) {
+        $user = User::find($request->route('id'));
+        if (! hash_equals((string) $request->route('id'), (string) $user->getKey())) {
             return $request->wantsJson()
                 ? new JsonResponse(['status'=> false,'message'=> 'This action is unauthorized'], 403)
                 : throw new AuthorizationException;
         }
 
-        if (! hash_equals((string) $request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
+        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
             return $request->wantsJson()
                 ? new JsonResponse(['status'=> false,'message'=> 'This action is unauthorized'], 403)
                 : throw new AuthorizationException;
         }
 
-        if ($request->user()->hasVerifiedEmail()) {
+        if ($user->hasVerifiedEmail()) {
             return $request->wantsJson()
                         ? new JsonResponse(['status'=> true,'message'=> 'Email is already verified'], 204)
                         : redirect($this->redirectPath())->with('verified', true);
         }
-
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
         }
 
         if ($response = $this->verified($request)) {
