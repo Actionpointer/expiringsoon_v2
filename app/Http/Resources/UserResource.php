@@ -58,8 +58,12 @@ class UserResource extends JsonResource
             "adverts_running"=> $this->adverts->where('running',true)->count(),
             'payment_gateway'=> $this->country->payment_gateway,            
             'payout_gateway'=> $this->country->payout_gateway,
-            'minimum_payout'=> $this->minimum_payout(),
-            'maximum_payout'=> $this->maximum_payout(),
+            'minimum_payout'=> $this->when(!$this->shop_id, function(){ 
+                return $this->minimum_payout();
+            }),
+            'maximum_payout'=> $this->when(!$this->shop_id, function(){ 
+                return $this->maximum_payout();
+            }),
             // "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
             //     return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
             // }),
