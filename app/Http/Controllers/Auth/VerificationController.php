@@ -49,14 +49,14 @@ class VerificationController extends Controller
     {
         if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
-                        ? new JsonResponse(['status'=> true,'message'=> 'Email is already verified'], 204)
+                        ? response()->json(['status'=> true,'message'=> 'Email is already verified'], 204)
                         : redirect($this->redirectPath());
         }
 
         $request->user()->sendEmailVerificationNotification();
 
         return $request->wantsJson()
-                    ? new JsonResponse(['status'=> true,'message'=> 'Verification instructions has been sent to your email'], 202)
+                    ? response()->json(['status'=> true,'message'=> 'Verification instructions has been sent to your email'], 202)
                     : back()->with('resent', true);
     }
 
@@ -65,19 +65,19 @@ class VerificationController extends Controller
         $user = User::find($request->route('id'));
         if (! hash_equals((string) $request->route('id'), (string) $user->getKey())) {
             return $request->wantsJson()
-                ? new JsonResponse(['status'=> false,'message'=> 'This action is unauthorized'], 403)
+                ? response()->json(['status'=> false,'message'=> 'This action is unauthorized'], 403)
                 : throw new AuthorizationException;
         }
 
         if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
             return $request->wantsJson()
-                ? new JsonResponse(['status'=> false,'message'=> 'This action is unauthorized'], 403)
+                ? response()->json(['status'=> false,'message'=> 'This action is unauthorized'], 403)
                 : throw new AuthorizationException;
         }
 
         if ($user->hasVerifiedEmail()) {
             return $request->wantsJson()
-                        ? new JsonResponse(['status'=> true,'message'=> 'Email is already verified'], 204)
+                        ? response()->json(['status'=> true,'message'=> 'Email is already verified'], 204)
                         : redirect($this->redirectPath())->with('verified', true);
         }
         if ($user->markEmailAsVerified()) {
@@ -89,7 +89,7 @@ class VerificationController extends Controller
         }
 
         return $request->wantsJson()
-                    ? new JsonResponse(['status'=> true,'message'=> 'Email has been verified'], 204)
+                    ? response()->json(['status'=> true,'message'=> 'Email has been verified'], 204)
                     : redirect($this->redirectPath())->with('verified', true);
     }
 }
