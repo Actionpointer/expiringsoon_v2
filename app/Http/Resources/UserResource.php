@@ -64,6 +64,9 @@ class UserResource extends JsonResource
             'maximum_payout'=> $this->when(!$this->shop_id, function(){ 
                 return $this->maximum_payout();
             }),
+            'changed_password'=> $this->when($this->shop_id, function(){ 
+                return !$this->require_password_change;
+            }),
             // "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
             //     return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
             // }),
