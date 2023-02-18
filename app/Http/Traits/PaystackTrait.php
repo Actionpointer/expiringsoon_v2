@@ -64,10 +64,8 @@ trait PaystackTrait
         $response = Curl::to('https://api.paystack.co/transfer')
         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
         ->withHeader('Content-Type: application/json')
-        ->withData( array('email'=> $user->email,'amount'=> $payout->amount,'currency'=> $currency,
-                        'reference'=> $payout->reference,"callback_url"=> route('payment.callback'),
-                        'metadata' => json_encode(['user_id'=> $user->id,'phonenumber'=> $user->phone])
-                        ) )
+        ->withData( array('recipient'=> $payout->user->payout_account,'amount'=> $payout->amount,'currency'=> $currency,
+                        'reference'=> $payout->reference,"callback_url"=> route('payment.callback')  ) )
         
         ->asJson()                
         ->post();

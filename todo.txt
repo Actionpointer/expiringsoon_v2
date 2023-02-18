@@ -1,9 +1,6 @@
 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
 
-
-
 swiper.js is displaying duplicates
-
 
 NOTIFICATIONS
 place notification and profile icon at the top of vendor & shop
@@ -18,7 +15,6 @@ SHOPS [add confirmation with password to manage verification | autosend email to
 PRODUCTS [add confirmation with password to manage verification | autosend email to vendor when approved or disapproved]
 
 PAYMENTS [add profit, revenue & payout to settlement]
-
 
 
 shop menu
