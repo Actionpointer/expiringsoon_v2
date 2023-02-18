@@ -19,7 +19,7 @@ class ForcePasswordChangeMiddleware
     {
         if($request->user() || Auth::check()){
             if($request->user()->require_password_change){
-                return redirect()->route('forcepassword');
+                return redirect()->route('forcepasswordchange');
             }
         }
         return $next($request);

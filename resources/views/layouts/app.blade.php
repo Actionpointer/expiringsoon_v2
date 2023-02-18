@@ -697,8 +697,30 @@
     <script src="{{asset('src/js/jquery.syotimer.min.js')}}"></script>
     <script src="{{asset('src/plugins/select2/js/select2.min.js')}}"></script>
     <script src="{{asset('src/js/main.js')}}"></script>
-    {{-- <script src="{{asset('src/js/products.js')}}"></script> --}}
-
+    <script src="https://js.pusher.com/7.2.0/pusher.min.js"></script>
+    <script>
+        Pusher.logToConsole = true;
+        var pusher = new Pusher('30f7e5194b874bf1230b', {
+            cluster: 'eu',
+            wsHost: 'expiringsoon.test',
+            wsPort: 6001,
+            wssPort: 6001,
+            forceTLS: false,
+            enabledTransports: ['ws'],
+            debug: true,
+            authEndpoint: 'http://expiringsoon.test/broadcasting/auth', // The URL of your Laravel app's auth endpoint
+            auth: {
+                headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include the CSRF token if CSRF protection is enabled
+                }
+            }
+        });
+        var channel = pusher.subscribe('private-App.Models.Shop.1');
+        channel.bind('Illuminate\Notifications\Events\BroadcastNotificationCreated', function(data) {
+            console.log('Received event:', data);
+        });
+    </script>
+    
     @stack('scripts')
 </body>
 </html>

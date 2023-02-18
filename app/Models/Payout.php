@@ -12,8 +12,11 @@ class Payout extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','shop_id','channel','destination','reference','amount','transfer_id','status'];
-    
+    protected $fillable = ['user_id','shop_id','channel','reference','amount','transfer_id','status'];
+    protected $appends = ['destination'];
+    public function getDestinationAttribute(){
+        return in_array($this->user->country->payout_gateway,['stripe','paypal']) ? $this->user->payout_account : $this->user->bankaccount->bank->name.' '.$this->user->bankaccount->account_number;
+    }
     public function user(){
         return $this->belongsTo(User::class);
     }

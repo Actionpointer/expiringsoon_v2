@@ -12,22 +12,23 @@ use App\Events\UserSubscribed;
 use App\Listeners\SettleVendor;
 use App\Events\CheckPayoutStatus;
 use App\Events\RenewSubscription;
-use App\Listeners\RemoveFromCart;
+use App\Listeners\BroadcastOrder;
 use App\Listeners\RetryingPayout;
 use App\Listeners\DecreaseProduct;
 use App\Listeners\ResetShopStatus;
 use App\Events\SubscriptionExpired;
 use App\Listeners\AutoRenewFeature;
 use App\Listeners\DisbursingPayout;
+use App\Listeners\RemoveFromWishList;
 use App\Listeners\ResetProductStatus;
 use Illuminate\Support\Facades\Event;
 use App\Listeners\ShopDeleteProcesses;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\CheckingPayoutStatus;
 use App\Listeners\AutoRenewSubscription;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -48,6 +49,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderPurchased::class => [
             DecreaseProduct::class,
+            BroadcastOrder::class
         ],
         OrderCompleted::class => [
             SettleVendor::class,

@@ -6,14 +6,7 @@ use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\City;
 use App\Models\Shop;
-use App\Models\User;
-use App\Models\State;
-use App\Models\Advert;
-use App\Models\Product;
-use App\Models\Category;
-use App\Events\DeleteShop;
-use App\Models\ShippingRate;
-use App\Events\DeleteProduct;
+
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
 use App\Http\Requests\ShopRequest;

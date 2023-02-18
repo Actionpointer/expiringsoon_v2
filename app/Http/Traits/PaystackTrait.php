@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Traits;
+
+use App\Models\Account;
 use App\Models\Payout;
 use App\Models\Payment;
 use App\Models\PaymentItem;
@@ -31,10 +33,35 @@ trait PaystackTrait
         return $paymentDetails;
     }
 
+    protected function createRecipient($bank_code,$account_number){
+      $user = auth()->user();
+      $type = '';
+      $currency = '';
+      switch($user->country->iso){
+        case 'NG': 
+          $type = 'nuban'; 
+          $currency = $user->country->currency->iso;
+        break;
+        case 'GH': $type = 'mobile_money'; $currency = $user->country->currency->iso;
+        break;
+        case 'ZAR': $type = 'basa'; $currency = $user->country->currency->iso;
+        break;
+      }
+      $response = Curl::to('https://api.paystack.co/transferrecipient')
+        ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+        ->withHeader('Content-Type: application/json')
+        ->withData( array('type'=> $type,'account_number'=> $account_number,'currency'=> $currency,
+                        'bank_code'=> $bank_code ) )
+        
+        ->asJson()                
+        ->post();
+      if($response && isset($response->status) && $response->status)
+        return $response->data->recipient_code; 
+      else return false;
+    }
+
     public function payoutPaystack(Payout $payout){
-        $user = auth()->user();
-        $currency = session('locale')['currency_iso'];
-        $response = Curl::to('https://api.paystack.co/transaction/initialize')
+        $response = Curl::to('https://api.paystack.co/transfer')
         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
         ->withHeader('Content-Type: application/json')
         ->withData( array('email'=> $user->email,'amount'=> $payout->amount,'currency'=> $currency,

@@ -81,8 +81,7 @@ class PaymentController extends Controller
         }
         
         $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,
-        'channel'=> ($user->country->payout_gateway == 'paypal') ? 'paypal' : ($user->country->payout_gateway == 'stripe' ? 'stripe':'bankaccount'),
-        'destination'=> ($user->country->payout_gateway == 'paypal') ? $user->email : ($user->country->payout_gateway == 'stripe' ? $user->stripe_account : $user->bankaccount->bank->name.' '.$user->bankaccount->account_number),
+        'channel'=> $user->country->payout_gateway,
         'reference'=> uniqid(),'amount'=> $request->amount]);
         $shop->wallet -= $request->amount;
         $shop->save();

@@ -239,33 +239,7 @@
                   </div>
               </div>
 
-              @if(in_array($shop->country->payout_gateway,['flutterwave','paystack']))
-              <div class="dashboard__content-card">
-                <div class="dashboard__content-card-header">
-                    <h5 class="font-body--xl-500">Bank Accounts</h5>
-                </div>
-                <div class="dashboard__content-card-body">
-                    <table class="table small">
-                        <tr>
-                            <th>Bank</th>
-                            <th>Account number</th>
-                            <th>Account Name</th>
-                            <th>Status</th>
-                        </tr>
-                        @if($shop->bankaccount)
-                            <tr>
-                                <td>{{$shop->bankaccount->bank->name}}</td>
-                                <td>{{$shop->bankaccount->account_number}}</th>
-                                <td>{{$shop->bankaccount->account_name}}e</td>
-                                <td>@if($shop->bankaccount->status) Active @else Inactive @endif</td>
-                            </tr>
-                        @else 
-                            <tr><td>No Bank account</td></tr>
-                        @endif
-                    </table> 
-                </div>
-              </div>
-              @endif
+              
             </div>
           </div>
       </div>

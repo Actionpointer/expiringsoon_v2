@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class OrderStatusVendorNotification extends Notification
 {
@@ -30,7 +31,8 @@ class OrderStatusVendorNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        // return ['mail', 'database','broadcast'];
+        return ['database'];
     }
 
     /**
@@ -55,11 +57,25 @@ class OrderStatusVendorNotification extends Notification
         return (new MailMessage)->view($view,['order' => $this->order]);
     }
 
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'ourneworder';
+    }
+
+    
+    public function toBroadcast($notifiable){
+        return new BroadcastMessage([
+            'order_id' => $this->order->id,
+            'message' => 'Something happened to this order',
+        ]);
+    }
+
     
     public function toArray($notifiable)
     {
         return [
-            //
+            'order_id' => $this->order->id,
+            'message' => 'Something happened to this order',
         ];
     }
 }

@@ -16,7 +16,7 @@ class Subscription extends Model
     use HasFactory,SoftDeletes;
     protected $fillable = ['user_id','plan_id','amount','start_at','renew_at','end_at','auto_renew','coupon','status'];
     protected $appends = ['active','duration','is_free'];
-    protected $dates = ['start_at','end_at'];
+    protected $dates = ['start_at','end_at','renew_at'];
 
     public static function boot()
     {

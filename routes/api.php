@@ -63,6 +63,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('password', [UserController::class, 'password']);
     });
     Route::group(['prefix'=> 'vendor'],function(){
+        Route::get('notifications',[StaffController::class, 'notifications']);
+        Route::post('notifications/read',[StaffController::class, 'readNotifications']);
         Route::get('transactions',[PaymentController::class, 'index']);
         Route::get('generate-otp',[StaffController::class, 'generate_otp']);
         Route::post('pin', [StaffController::class, 'pin']);
@@ -97,6 +99,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('orders/message',[OrderController::class,'message']);
 
         Route::group(['prefix'=>'{shop_id}'],function (){
+            Route::get('notifications',[ShopController::class,'notifications']);
             Route::get('earnings',[PaymentController::class,'earnings']);
             Route::get('payouts',[PaymentController::class,'payouts']);
             Route::post('payout',[PaymentController::class,'payout']);

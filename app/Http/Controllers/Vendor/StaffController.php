@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -129,7 +130,18 @@ class StaffController extends Controller
             return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
         }
         $user = auth()->user();
-        Account::updateOrCreate(['user_id'=> $user->id],['account_number'=> $request->account_number,'bank_id'=>$request->bank_id,'branch_id'=> $request->branch_id ?? null ,'status'=> true]);
+        $bank = Bank::find($request->bank_id);
+        if($user->country->payout_gateway == 'paystack'){
+            $result = $this->createRecipient($bank->code,$request->account_number);
+            if(!$result){
+                return redirect()->back()->with(['result'=> '0','message'=> 'Bank details could not be saved']);
+            }else{
+                $user->payout_account = $result;
+                $user->save();
+            }
+        }
+        $account = Account::updateOrCreate(['user_id'=> $user->id],['account_number'=> $request->account_number,'bank_id'=>$request->bank_id,'branch_id'=> $request->branch_id ?? null ,'status'=> true]);
+        
         return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);
     }
 
@@ -177,5 +189,29 @@ class StaffController extends Controller
     public function destroy(Shop $shop,Request $request){
         $user = User::where('id',$request->user_id)->where('shop_id',$shop->id)->delete();
         return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
+    }
+
+    public function notifications(){
+        $user = auth()->user();
+        $notifications = $user->notifications()->orderBy('created_at','desc')->paginate(2);
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => $user->notifications->count() ? 'Notifications retrieved Successfully':'No Notifications retrieved',
+                'data' => NotificationResource::collection($user->notifications),
+                'count' => $user->notifications->count()
+            ], 200) :
+            view('vendor.notifications',compact('user','notifications'));
+    }
+
+    public function readNotifications(Request $request){
+        $user = auth()->user();
+        $user->unreadNotifications->markAsRead();
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => 'Notifications marked read',
+            ], 200) :
+            redirect()->back()->with(['result'=> 1,'message'=> 'Notifications marked read']);
     }
 }

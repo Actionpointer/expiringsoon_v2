@@ -65,6 +65,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::post('shop/management', [ShopController::class, 'manage'])->name('shop.manage');
     Route::post('shop/manage', [ShopController::class, 'kyc'])->name('kyc.manage');
     
+
     Route::get('orders',[OrderController::class, 'index'])->name('orders');
     Route::post('orders',[OrderController::class, 'update'])->name('order.manage');
     Route::post('orders',[OrderController::class, 'update'])->name('order.manage');

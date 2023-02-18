@@ -2,34 +2,31 @@
 
 namespace App\Notifications;
 
+use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class SubscriptionStatusNotification extends Notification
 {
     use Queueable;
-
+    public $subscription;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Subscription $subscription)
     {
-        //
+        $this->subscription = $subscription;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
+    
     public function via($notifiable)
     {
-        return ['mail'];
+        // return ['mail','database'];
+        return ['database'];
     }
 
     /**
@@ -55,7 +52,9 @@ class SubscriptionStatusNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'subject' => 'Expiring Subscription',
+            'body' => 'Your subscription of '.$this->subscription->plan->name.' will expire on '.$this->subscription->end_at->format('d-M').'. Renew subscription on or before '.$this->subscription->renew_at->format('d-M'),
+            'url' => route('vendor.dashboard'),
         ];
     }
 }

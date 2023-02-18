@@ -1,26 +1,21 @@
 <?php
 
-use App\Models\Shop;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
-use App\Notifications\WelcomeNotification;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
+use App\Models\Subscription;
 
-Route::get('runonce/{shop_id}',function(Shop $shop){
-    // dd($shop);
-    // $order = App\Models\Order::find(103);
-    // $user->notify(new WelcomeNotification());
-    // return (new App\Notifications\OrderStatusCustomerNotification($order))
-    //                 ->toMail($order->user);
-    return $shop;
+Route::get('/broadcast', function () {
+    $subscription = Subscription::find(3);
+    $subscription->user->notify(new App\Notifications\SubscriptionStatusNotification($subscription));
+    return "Event broadcaasted!";
 });
 
 Route::view('email','emails.completed');
@@ -67,10 +62,11 @@ Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class
 
 Auth::routes(['verify' => true]);
 Route::group(['middleware'=> 'verified'],function(){
-    Route::view('change_password','auth.forcepassword')->name('forcepassword');
-    Route::post('change_password',[LoginController::class, 'forcepassword'] )->name('forcepassword');
+    Route::view('change_password','auth.forcepassword')->name('forcepasswordchange');
+    Route::post('changed_password',[LoginController::class, 'forcepassword'] )->name('forcepassword');
     Route::view('start-selling','auth.register_vendor')->name('start-selling');
     Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');
+    Route::get('notifications/read',[UserController::class, 'readNotifications'])->name('notifications.read');
     Route::get('home', [HomeController::class, 'home'])->name('home');
 
     //for users

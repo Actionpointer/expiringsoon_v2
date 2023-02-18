@@ -197,6 +197,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return in_array($this->role,$value);
     }
 
+    public function receivesBroadcastNotificationsOn(){
+        return 'users.'.$this->id;
+    }
+
     
 
 }

@@ -29,7 +29,6 @@ class PaymentController extends Controller
         return view('admin.payments',compact('payments','settlements'));
     }
 
-    /** Admin */
     public function payouts()
     {
         $payouts = Payout::orderBy('created_at','desc')->get();

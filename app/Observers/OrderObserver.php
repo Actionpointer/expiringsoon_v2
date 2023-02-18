@@ -30,25 +30,25 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
-        if($order->isDirty('status') && $order->status == 'processing'){
-            $delivery = $order->deliveryByVendor() ? $order->deliveryfee : 0;
-            // $settlement = Settlement::create(['receiver_id'=> $order->shop_id,'receiver_type'=> 'App\Models\Shop','order_id'=> $order->id,'amount'=> $order->earning() + $delivery,'reference'=> uniqid()]);
-            event(new OrderPurchased($order));
-            $order->shop->notify(new OrderStatusVendorNotification($order));
-        }
-        if($order->isDirty('status') && $order->status == 'shipped'){
-            $order->user->notify(new OrderStatusCustomerNotification($order));
-        }
-        if($order->isDirty('status') && $order->status == 'delivered'){
-            $order->user->notify(new OrderStatusCustomerNotification($order));
-        }
-        if($order->isDirty('status') && $order->status == 'completed'){
-            $order->shop->wallet += $order->settlement->amount;
-            $order->shop->save();
-            $order->settlement->status = true;
-            $order->settlement->save();
-            $order->user->notify(new OrderStatusVendorNotification($order));
-        }
+        $order->shop->notify(new OrderStatusVendorNotification($order));
+        // if($order->isDirty('status') && $order->status == 'processing'){
+        //     $delivery = $order->deliveryByVendor() ? $order->deliveryfee : 0;
+        //     event(new OrderPurchased($order));
+        //     $order->shop->notify(new OrderStatusVendorNotification($order));
+        // }
+        // if($order->isDirty('status') && $order->status == 'shipped'){
+        //     $order->user->notify(new OrderStatusCustomerNotification($order));
+        // }
+        // if($order->isDirty('status') && $order->status == 'delivered'){
+        //     $order->user->notify(new OrderStatusCustomerNotification($order));
+        // }
+        // if($order->isDirty('status') && $order->status == 'completed'){
+        //     $order->shop->wallet += $order->settlement->amount;
+        //     $order->shop->save();
+        //     $order->settlement->status = true;
+        //     $order->settlement->save();
+        //     $order->user->notify(new OrderStatusVendorNotification($order));
+        // }
         
     }
 

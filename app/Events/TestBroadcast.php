@@ -10,8 +10,9 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class OrderPurchased
+class TestBroadcast implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -32,5 +33,13 @@ class OrderPurchased
      *RemoveFromWishList::class,
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    
+    public function broadcastOn()
+    {
+        return new Channel('ourneworder');
+    }
+
+    public function broadcastAs()
+    {
+        return 'TestBroadcast';
+    }
 }

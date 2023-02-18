@@ -81,6 +81,7 @@ class UserController extends Controller
         }
         if(Hash::check($request->oldpassword, $user->password)){
             $user->password = Hash::make($request->password);
+            $user->require_password_change = false;
             $user->save();
             return request()->expectsJson() ? 
             response()->json([
@@ -161,7 +162,27 @@ class UserController extends Controller
     }
 
     public function notifications(){
-        
+        $user = auth()->user();
+        $notifications = $user->notifications()->orderBy('created_at','desc')->paginate(10);
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => $user->notifications->count() ? 'Notifications retrieved Successfully':'No Notifications retrieved',
+                'data' => $user->notifications,
+                'count' => $user->notifications->count()
+            ], 200) :
+            view('customer.notifications',compact('user','notifications'));
+    }
+
+    public function readNotifications(Request $request){
+        $user = auth()->user();
+        $user->unreadNotifications->markAsRead();
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => 'Notifications marked read',
+            ], 200) :
+            redirect()->back()->with(['result'=> 1,'message'=> 'Notifications marked read']);
     }
 
 }

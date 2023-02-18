@@ -379,106 +379,132 @@
             </div>
 
             <!-- Order Status -->
-            <div class="row">
-              @if($order->status !== 'completed' && auth()->user()->role != 'shopper')
-                  <div class="col-lg-4" style="margin-top:20px">
-                      <form method="post" id="orderstatus" action="{{route('vendor.shop.order.manage',$order->shop)}}">@csrf
-                          <input type="hidden" name="order_id" value=" {{$order->id}}">
-                          <div class="contact-form__content-group">
-                              <div class="contact-form-input">
-                                  <label for="states" style="margin-bottom:15px">Update Order Status</label>
-                                  <select id="" name="status" class="form-control" required>
-                                      <option selected disabled>Select </option>
-                                      @if($order->status== 'processing')
-                                      <option value="shipped">Shipped for Delivery</option>
-                                      @endif
-                                      @if(in_array($order->status,['processing','shipped']))
-                                      <option value="delivered">Delivered</option>
-                                      @endif
-                                      {{-- @if($order->status == 'processing')
-                                      <option value="cancelled">Cancelled</option>
-                                      @endif --}}
-                                  </select>
-                              </div>
+            @if(auth()->user()->role == 'shopper' && $order->status == 'delivered')
+              <div class="row">
+                <div class="col-lg-4" style="margin-top:20px">
+                  <form method="post" id="orderstatus" action="">@csrf
+                      <input type="hidden" name="order_id" value=" {{$order->id}}">
+                      <div class="contact-form__content-group">
+                          <div class="contact-form-input">
+                              <label for="states" style="margin-bottom:15px">Update Order Status</label>
+                              <select id="" name="status" class="form-control" required>
+                                  <option selected disabled>Select </option>
+                                  <option value="completed">Completed</option>
+                                  <option value="failed_delivery">Not received</option>
+                                  <option value="refund">Request Refund</option>
+                              </select>
                           </div>
-                          <div class="contact-form-btn" style="margin-top:-5px">
-                              <button class="button button--md askpin" type="button" id="btn-update">
-                              Save Status
-                              </button>
-                          </div>
-                      </form>
-                  </div>
-              @endif
-
-              @if($order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Shop')->isEmpty())
-                <div class="col-lg-12" style="margin-top:20px">
-                    <div class="comment-box">
-                      <h5 class="font-body--xxxl-500">Review Vendor</h5>          
-                      <form method="post" id="rateService" action="{{route('order.review')}}">@csrf
-                        <input type="hidden" name="order_id" value="{{$order->id}}">
-                        <input type="hidden" name="shop_id" value="{{$order->shop_id}}">
-                        <div class="contact-form__content">
-                          <div class="bill-card__payment-method-item d-md-flex justify-content-between">
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="rating" id="vpoor" value="1"/>
-                              <label class="form-check-label font-body--400" >
-                                <span class="fa fa-star star"></span>
-                                (Very Poor)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="rating" id="poor" value="2" />
-                              <label class="form-check-label font-body--400" >
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                (Poor)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="rating" id="fair" value="3" />
-                              <label class="form-check-label font-body--400" >
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                (Fair)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="rating" id="good" value="4" />
-                              <label class="form-check-label font-body--400" >
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                (Good)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="rating" id="excellent" value="5" />
-                              <label class="form-check-label font-body--400" >
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                <span class="fa fa-star star"></span>
-                                (Excellent)
-                              </label>
-                            </div>
-                          </div>
-                          <div class="contact-form-input contact-form-textarea" style="margin-top:20px">
-                            <textarea name="comment" id="note" placeholder="Leave a Comment (Optional)"></textarea>
-                          </div>
-                          <div class="form-button">
-                            <button type="submit" id="btn-submit" class="button button--md w-100">Submit</button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
+                      </div>
+                      <div class="contact-form-btn" style="margin-top:-5px">
+                          <button class="button button--md askpin" type="button" id="btn-update">
+                          Save Status
+                          </button>
+                      </div>
+                  </form>
                 </div>
-              @endif
-              
-              
+              </div>
+            @endif
+
+            @if(auth()->user()->role != 'shopper' && in_array($order->status,['processing','shipped']))
+            <div class="row">
+                <div class="col-lg-4" style="margin-top:20px">
+                    <form method="post" id="orderstatus" action="{{route('vendor.shop.order.manage',$order->shop)}}">@csrf
+                        <input type="hidden" name="order_id" value=" {{$order->id}}">
+                        <div class="contact-form__content-group">
+                            <div class="contact-form-input">
+                                <label for="states" style="margin-bottom:15px">Update Order Status</label>
+                                <select id="" name="status" class="form-control" required>
+                                    <option selected disabled>Select </option>
+                                    @if($order->status== 'processing')
+                                    <option value="shipped">Shipped for Delivery</option>
+                                    @endif
+                                    @if(in_array($order->status,['processing','shipped']))
+                                    <option value="delivered">Delivered</option>
+                                    @endif
+                                    {{-- @if($order->status == 'processing')
+                                    <option value="cancelled">Cancelled</option>
+                                    @endif --}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="contact-form-btn" style="margin-top:-5px">
+                            <button class="button button--md askpin" type="button" id="btn-update">
+                            Save Status
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
+            @endif
+
+            @if(auth()->user()->role == 'shopper' && $order->status == 'completed' && $order->reviews->where('reviewable_type','App\Models\Shop')->isEmpty())
+              <div class="row">
+                  <div class="col-lg-12" style="margin-top:20px">
+                      <div class="comment-box">
+                        <h5 class="font-body--xxxl-500">Review Vendor</h5>          
+                        <form method="post" id="rateService" action="{{route('order.review')}}">@csrf
+                          <input type="hidden" name="order_id" value="{{$order->id}}">
+                          <input type="hidden" name="shop_id" value="{{$order->shop_id}}">
+                          <div class="contact-form__content">
+                            <div class="bill-card__payment-method-item d-md-flex justify-content-between">
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rating" id="vpoor" value="1"/>
+                                <label class="form-check-label font-body--400" >
+                                  <span class="fa fa-star star"></span>
+                                  (Very Poor)
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rating" id="poor" value="2" />
+                                <label class="form-check-label font-body--400" >
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  (Poor)
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rating" id="fair" value="3" />
+                                <label class="form-check-label font-body--400" >
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  (Fair)
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rating" id="good" value="4" />
+                                <label class="form-check-label font-body--400" >
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  (Good)
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rating" id="excellent" value="5" />
+                                <label class="form-check-label font-body--400" >
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  <span class="fa fa-star star"></span>
+                                  (Excellent)
+                                </label>
+                              </div>
+                            </div>
+                            <div class="contact-form-input contact-form-textarea" style="margin-top:20px">
+                              <textarea name="comment" id="note" placeholder="Leave a Comment (Optional)"></textarea>
+                            </div>
+                            <div class="form-button">
+                              <button type="submit" id="btn-submit" class="button button--md w-100">Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                  </div>
+              </div>
+            @endif
           </div>
       </div>
     </div>

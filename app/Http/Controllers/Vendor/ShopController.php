@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\NotificationResource;
 
 class ShopController extends Controller
 {
@@ -288,7 +289,17 @@ class ShopController extends Controller
     }
 
     public function notifications(Shop $shop){
-        
+        $shop->unreadNotifications->markAsRead();
+        $notifications = $shop->notifications()->orderBy('created_at','desc')->paginate(2);
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => $shop->notifications->count() ? 'Notifications retrieved Successfully':'No Notifications retrieved',
+                'data' => NotificationResource::collection($shop->notifications),
+                'count' => $shop->notifications->count()
+            ], 200) :
+            view('shop.notifications',compact('notifications'));
+            
     }
         
 }

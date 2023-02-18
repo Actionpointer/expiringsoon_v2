@@ -96,7 +96,7 @@
                       <div style="float:left;margin-right:10px">
                           <p align="left" class="font-body--md-400 designation">Balance</p>
                           <div style="margin-top:-10px">
-                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!$user->country->currency->symbol!!}{{number_format($user->shops->sum('wallet'), 2)}}</a>
+                              {{-- <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!$user->country->currency->symbol!!}{{number_format($user->shops->sum('wallet'), 2)}}</a> --}}
                           </div>
                       </div>
                       
@@ -128,11 +128,13 @@
                               </div>
                               
                               <h5 class="font-body--sm-400 px-2"> 
-                                {{$notification->data}}
+                                {{$notification->data['body']}}
                               </h5>
+                              @if($notification->data['url'])
                               <div>
-                                <button class="btn btn-sm btn-outline-dark">View</button>
+                                <a href="{{url($notification->data['url'])}}" class="btn btn-sm btn-outline-dark">View</a>
                               </div>
+                              @endif
                               
                           </div>
                         </div>

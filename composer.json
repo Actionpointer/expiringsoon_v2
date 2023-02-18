@@ -12,14 +12,14 @@
         "beyondcode/laravel-websockets": "^1.14",
         "cviebrock/eloquent-sluggable": "8.0.8",
         "fideloper/proxy": "^4.2",
-        "fruitcake/laravel-cors": "^2.0",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "ixudra/curl": "^6.22",
         "laravel/framework": "^8.0",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
-        "pusher/pusher-php-server": "^7.2",
+        "pusher/pusher-php-server": "7.0"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

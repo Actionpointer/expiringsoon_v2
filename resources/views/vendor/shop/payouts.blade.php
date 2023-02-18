@@ -46,7 +46,7 @@
                   <a href="#" class="font-body--lg-500 text-dark">{!!$shop->country->currency->symbol!!}{{ number_format($shop->wallet, 2)}}<span class="text-success"> Balance</span> </a>
               </div>
               <div class="dashboard__content-card-body">
-                @if($shop->user->bankaccount || $shop->user->stripe_account || $shop->user->country->payout_gateway == 'paypal')
+                @if($shop->user->payout_account || $shop->user->bankaccount)
                   <form method="post" action="{{route('vendor.shop.payout',$shop)}}">@csrf
                     <div class="contact-form__content">
                       <div class="contact-form__content-group">
@@ -65,7 +65,7 @@
                     </div>
                   </form>
                 @else
-                <a href="{{route('vendor.banking')}}" class="button button--md bg-dark">Add Bank Account</a>
+                  <a href="{{route('vendor.banking')}}" class="button button--md bg-dark">Add Bank Account</a>
                 @endif
               </div>
           </div>
@@ -96,7 +96,14 @@
                                       <p class="font-body--lg-500" style="color:#00b207">{!!$shop->country->currency->symbol!!}{{ number_format($payout->amount, 2)}}</p>
                                   </td>
                                   <td class="cart-table-item order-date align-middle">
-                                    {{$payout->channel}}
+                                    @switch($payout->channel)
+                                      @case('paypal') paypal
+                                      @break
+                                      @case('stripe') Stripe
+                                      @break
+                                      @default Bank Transfer
+                                      @break
+                                    @endswitch
                                   </td>
                                   <td class="cart-table-item order-date align-middle">
                                     {{$payout->destination}}
