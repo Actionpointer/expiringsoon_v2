@@ -127,7 +127,7 @@
 
                                   <div>
                                     <div class="d-flex flex-md-row text-nowrap" style="margin-top:10px;color:#888;font-size:12px">          
-                                      @if(!$product->isValid())
+                                      @if(!$product->valid)
                                         <span class="font-body--md-400 rounded px-1 mx-1 text-white bg-danger">Expired</span> 
                                       @else
                                         Expires in <span class="font-body--md-400 rounded px-1 mx-1 text-white @if($product->expire_at->diffInDays(now()) <= 7) bg-warning @else bg-success  @endif">{{$product->expire_at->diffInDays(now())}} days  </span>  

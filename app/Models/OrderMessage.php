@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class OrderMessage extends Model
 {
     use HasFactory;
-    protected $fillable = ['sender_id','order_id','sender_type','body','read_at'];
+    protected $fillable = ['sender_id','sender_type','receiver_id','receiver_type','order_id','body','attachment','read_at'];
     protected $dates = ['read_at'];
 
     public function user(){

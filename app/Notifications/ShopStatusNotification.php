@@ -33,10 +33,10 @@ class ShopStatusNotification extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Shop Approval/Disapproval
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * 
+     * 
      */
     public function toMail($notifiable)
     {

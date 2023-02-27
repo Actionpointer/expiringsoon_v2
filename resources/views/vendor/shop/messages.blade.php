@@ -37,7 +37,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('admin.navigation')
+        @include('layouts.admin_navigation')
         <div class="col-lg-9 section--xl pt-0">
           <div class="container">
             <div class="user-comments">

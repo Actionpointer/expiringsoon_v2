@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\Subscription;
 use App\Http\Resources\ShopResource;
 use App\Http\Resources\OrderResource;
-use App\Http\Resources\ShopOrderResource;
 use App\Http\Resources\SubscriptionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -70,8 +69,7 @@ class UserResource extends JsonResource
             // "recent_shops_orders"=> $this->when(!$this->shop_id, function(){
             //     return OrderResource::collection(Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->get());
             // }),
-            // "recent_orders"=> $this->when(!$this->shop_id, ShopOrderResource::collection(Shop::where('user_id',$this->id)->whereHas('orders',function($query){$query->whereIn('status',['processing','shipped','delivered']);})->get())),
-            // "adverts_running"=> $this->when(!$this->shop_id, ShopOrderResource::collection(Shop::where('user_id',$this->id)->whereHas('orders',function($query){$query->whereIn('status',['processing','shipped','delivered']);})->get())),        
+            
             
         ];
     }

@@ -5,18 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Plan;
 use App\Models\State;
+use App\Models\Country;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ResourcesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function categories()
-    {
+    
+    public function categories(){
         $categories = Category::select('id','name')->get();
         if($categories->count()){
             return response()->json([
@@ -35,8 +31,7 @@ class ResourcesController extends Controller
         }
     }
 
-    public function tags($category_id)
-    {
+    public function tags($category_id){
         $category = Category::find($category_id);
         if(!$category){
             return response()->json([
@@ -63,9 +58,11 @@ class ResourcesController extends Controller
         }
     }
 
-    public function states()
-    {
-        $states = State::within()->select('id','name','iso')->get();
+    public function states($country_id = null){
+        if($country_id)
+            $states = State::where('country_id',$country_id)->select('id','name','iso')->get();
+        else
+            $states = State::within()->select('id','name','iso')->get();
         if($states->count()){
             return response()->json([
                 'status' => true,
@@ -83,13 +80,7 @@ class ResourcesController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function cities(State $state)
-    {
+    public function cities(State $state){
         $cities = City::where('state_id',$state->id)->select('id','name')->get();
         if($cities->count()){
             return response()->json([

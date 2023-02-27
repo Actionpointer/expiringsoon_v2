@@ -200,16 +200,12 @@
       cities = $(this).closest('.location').find('.cities');
       // console.log.val())
       $.ajax({
-        type:'POST',
+        // type:'POST',
         dataType: 'json',
-        url: "{{route('cities')}}",
-        data:{
-            '_token' : $('meta[name="csrf-token"]').attr('content'),
-            'state_id': state_id,
-        },
+        url: "{{url('getCities')}}"+'/'+state_id,
         success:function(data) {
           cities.children().remove()
-          data.forEach(element => {
+          data.data.forEach(element => {
             cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
           });
           cities.select2();

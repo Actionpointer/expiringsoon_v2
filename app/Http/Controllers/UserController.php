@@ -41,6 +41,7 @@ class UserController extends Controller
             'phone' => ['nullable','string',Rule::unique('users')->ignore($user)],
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'state_id' => 'nullable|numeric',
+            'city_id' => 'nullable|numeric',
         ],[
             'photo.max' => 'The image is too heavy. Standard size is 2mb',
         ]);
@@ -52,6 +53,7 @@ class UserController extends Controller
         if($request->fname) $user->fname = $request->fname;
         if($request->lname) $user->lname = $request->lname;
         if($request->state_id) $user->state_id = $request->state_id;
+        if($request->city_id) $user->city_id = $request->city_id;
         if($request->phone) $user->phone = $request->phone;
         if($request->hasFile('photo')){
             if($user->pic) Storage::delete('public/'.$user->pic);

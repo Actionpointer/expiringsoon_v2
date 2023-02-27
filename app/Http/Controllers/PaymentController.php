@@ -12,6 +12,7 @@ use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
+use App\Models\OrderStatus;
 
 class PaymentController extends Controller
 {
@@ -100,8 +101,8 @@ class PaymentController extends Controller
             foreach($payment->items as $item){
                 if($item->paymentable_type == 'App\Models\Order'){
                     $order = Order::find($item->paymentable_id);
-                    $order->status = 'processing';
-                    $order->save();
+                    // OrderStatus::create(['order_id'=> $item->paymentable_id,'user_id'=> $payment->user_id,'name'=> 'processing']);
+                    $status = $order->statuses()->create(['user_id'=> $payment->user_id,'name'=> 'processing']);
                     foreach($order->items as $order_item){
                         $product = $order_item->product;
                         $cart = $this->removeFromCartSession($product);

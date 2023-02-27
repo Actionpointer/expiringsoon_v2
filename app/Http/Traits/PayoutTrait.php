@@ -11,7 +11,7 @@ trait PayoutTrait
     use FlutterwaveTrait,PaystackTrait;
 
     protected function initializePayout(Payout $payout){
-        $user = Auth::user();
+        $user = $payout->user;
         $gateway = $user->country->payout_gateway;
         switch($gateway){
             case 'paystack': $link = $this->payoutPaystack($payout);

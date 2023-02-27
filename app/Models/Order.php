@@ -9,6 +9,7 @@ use App\Models\Address;
 use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\Settlement;
+use App\Models\OrderStatus;
 use App\Models\PaymentItem;
 use App\Models\OrderMessage;
 use App\Observers\OrderObserver;
@@ -20,8 +21,9 @@ class Order extends Model
 {
     use HasFactory,Sluggable;
     
-    protected $fillable = ['slug','user_id','shop_id','address_id','deliveryfee','expected_at','subtotal','vat','total','delivered_at'];
+    protected $fillable = ['slug','user_id','shop_id','address_id','deliveryfee','deliverer','expected_at','subtotal','vat','total','delivered_at'];
     protected $dates = ['expected_at','delivered_at'];
+    protected $appends = ['status'];
 
     public function sluggable():array
     {
@@ -31,6 +33,14 @@ class Order extends Model
                 'separator' => '_'
             ]
         ];
+    }
+
+    public function statuses(){
+        return $this->hasMany(OrderStatus::class);
+    }
+    
+    public function getStatusAttribute(){
+        return $this->statuses->sortByDesc('created_at')->first()->name;
     }
 
     public static function boot()
@@ -69,9 +79,18 @@ class Order extends Model
     public function address(){
         return $this->belongsTo(Address::class);
     }
-    public function deliveryByVendor(){
-        return $this->address_id && $this->shop->shippingRates->where('destination',$this->address->state_id)->first();
+    
+    public function scopewithin($query,$value){
+        return $query->whereHas('shop',function($q)use($value){
+            $q->where('country_id',$value);
+        });
     }
+    public function scopeStatusFilter($query,$value){    
+        return $query->whereHas('statuses',function($q) use($value){
+            $q->where('name',$value);
+        });
+    }
+    
     public function messages(){
         return $this->hasMany(OrderMessage::class);
     }
@@ -89,6 +108,10 @@ class Order extends Model
 
     public function earning(){
         return $this->subtotal - $this->commission();
+    }
+
+    public function arbitrator(){
+        return $this->belongsTo(User::class,'arbitrator_id');
     }
 
 }

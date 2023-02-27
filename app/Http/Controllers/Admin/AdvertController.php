@@ -24,7 +24,7 @@ class AdvertController extends Controller
     }
 
     public function index(){
-        $adverts = Advert::all();
+        $adverts = Advert::paginate(10);
         return view('admin.adverts',compact('adverts'));
     }
 

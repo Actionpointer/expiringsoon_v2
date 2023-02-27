@@ -98,7 +98,7 @@
                                   {{-- {{$order->status}}</td> --}}
                                 <!-- Details page  -->
                                 <td>
-                                  <a href="{{route('order-details',$order)}}">
+                                  <a href="{{route('order.show',$order)}}">
                                     <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">
                                       View
                                     </span>

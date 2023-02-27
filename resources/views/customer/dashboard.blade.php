@@ -73,20 +73,45 @@
               </div>
               <!-- User Billing Address -->
               <div class="col-lg-5">
-                <div class="dashboard__user-billing dashboard-card">
-                  <h2 class="dashboard__user-billing-title font-body--md-500">
-                    <u>Notifications</u>
-                  </h2>
-                  <div class="dashboard__user-billing-info">
-
-                    <p class="dashboard__user-billing-location font-body--md-400 border-bottom"> {{$user->state->name}} </p>
-                    <h5 class="text-muted">No Notification</h5>
+                <div class="dashboard__totalpayment-card">
+                  <div class="dashboard__totalpayment-card-header">
+                    <div class="dashboard__totalpayment-card-header">
+                      <div class="dashboard__totalpayment-card-header-item">
+                        <h5 class="title">Unread Notifications</h5>
+                        
+                      </div>
+                    </div>
                   </div>
-                  
+
+                  <div class="dashboard__totalpayment-card-body">
+                      @forelse($user->unreadNotifications as $notification)
+                        <div class="dashboard__totalpayment-card-body-item">
+                          <div class="d-flex">
+                              <div>
+                                <small class="muted font-body--sm-400 text-nowrap">12-May</small>
+                              </div>
+                              
+                              <h5 class="font-body--sm-400 px-2"> 
+                                {{$notification->data['body']}}
+                              </h5>
+                              @if($notification->data['url'])
+                              <div>
+                                <a href="{{url($notification->data['url'])}}" class="btn btn-sm btn-outline-dark">View</a>
+                              </div>
+                              @endif
+                              
+                          </div>
+                        </div>
+                      @empty
+                        <div class="dashboard__totalpayment-card-body-item pt-5 justify-content-center">
+                          <h5 class="font-body--lg-600">No Unread Notification</h5>
+                        </div>
+                      @endforelse
+                  </div>
                 </div>
               </div>
             </div>
-            @if($user->orders->whereIn('status',['new','processing','shipped','delivered','completed']))
+            @if($user->orders->whereIn('status',['processing','shipped','delivered','completed'])->isNotEmpty())
             <!-- Order History -->
             <div class="dashboard__order-history" style="margin-top: 24px">
               <div class="dashboard__order-history-title">
@@ -107,7 +132,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach($user->orders->whereIn('status',['new','processing','shipped','delivered','completed'])->sortByDesc('updated_at') as $order)   
+                      @foreach($user->orders->whereIn('status',['processing','shipped','delivered','completed'])->sortByDesc('updated_at') as $order)   
                           <tr>
                               <!-- Order Id  -->
                               <td class="dashboard__order-history-table-item order-id"> 
@@ -144,7 +169,7 @@
                               <!-- Details page  -->
                               <td class="dashboard__order-history-table-item   order-details ">
                                   
-                                  <a href="{{route('order-details',$order)}}">
+                                  <a href="{{route('order.show',$order)}}">
                                       <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">view</span>
                                   </a>
                                   

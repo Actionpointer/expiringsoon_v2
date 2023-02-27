@@ -80,7 +80,7 @@ class PaymentController extends Controller
             ], 401) :  redirect()->back()->with(['result'=> '0','message'=> 'Insufficient Balance']);
         }
         
-        $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,
+        $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,'currency_id'=> $user->country->currency_id,
         'channel'=> $user->country->payout_gateway,
         'reference'=> uniqid(),'amount'=> $request->amount]);
         $shop->wallet -= $request->amount;

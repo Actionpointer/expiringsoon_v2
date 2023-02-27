@@ -37,6 +37,13 @@ return [
         'secret'=> env('PAYSTACK_SECRET'),
         'public'=> env('PAYSTACK_PUBLIC'),
     ],
+    'paypal'=>[
+        'secret'=> env('PAYPAL_SECRET'),
+        'client'=> env('PAYPAL_CLIENT'),
+        'account'=> env('PAYPAL_ACCOUNT'),
+        'token'=> env('PAYPAL_ACCESS_TOKEN'),
+        'url'=> env('PAYPAL_URL'),
+    ],
     'countrystatecity' => env('COUNTRYSTATECITY')
 
 ];

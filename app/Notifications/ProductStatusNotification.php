@@ -22,7 +22,7 @@ class ProductStatusNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Approval/Disapproval
      *
      * @param  mixed  $notifiable
      * @return array

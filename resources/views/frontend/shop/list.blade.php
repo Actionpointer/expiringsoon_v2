@@ -298,7 +298,7 @@
                         
                             
                         </div>
-
+                        
                         <nav aria-label="Page navigation pagination--one" class="pagination-wrapper section--xl" style="padding-top: 20px;">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item pagination-item @if($shops->onFirstPage()) disabled @endif">

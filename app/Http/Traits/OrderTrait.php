@@ -40,14 +40,17 @@ trait OrderTrait
     protected function getShopShipment($shop_id,$state_id){
         $hours = 0;
         $amount = 0;
+        $shipper = 'pickup';
         if(ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
             $hours = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->hours;
             $amount = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->amount;
+            $shipper = 'vendor';
         }elseif(ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()){
             $hours = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()->hours;
             $amount = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()->amount;
+            $shipper = 'admin';
         }
-        return ['hours'=> $hours,'amount'=>$amount];
+        return ['hours'=> $hours,'amount'=>$amount,'shipper'=> $shipper];
     }
 
     protected function getEachShipment($carts,$address_id = null){

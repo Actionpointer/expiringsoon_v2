@@ -37,7 +37,7 @@
 <div class="dashboard section">
   <div class="container">
     <div class="row dashboard__content">
-      @include('admin.navigation')
+      @include('layouts.admin_navigation')
       <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           <div class="dashboard__order-history-title" style="margin:auto;width:95%;border-bottom:1px solid #ddd;margin-bottom:10px">
             <p class="font-body--xl-500">Manage Adverts</p>
@@ -121,15 +121,44 @@
                               </td>
                           </tr>
                       @empty
-                          <div style="margin:auto;padding:1%;text-align:center">
-                              <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
-                              <br />There are no adverts at this time.</span>
-                          </div>
+                          <tr>
+                             <td colspan="4">
+                                <div style="margin:auto;padding:1%;text-align:center">
+                                  <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
+                                  <br />There are no adverts at this time.</span>
+                                </div>
+                             </td>
+                          </tr>
+                          
                       @endforelse
                       
                   </tbody>
               </table>
             </div>
+            <nav aria-label="Page navigation pagination--one" class="pagination-wrapper section--xl" style="padding-top: 20px;">
+              <ul class="pagination justify-content-center">
+                  <li class="page-item pagination-item @if($adverts->onFirstPage()) disabled @endif">
+                      <a class="page-link pagination-link" href="{{$adverts->previousPageUrl()}}" tabindex="-1">
+                          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M6.91663 1.16634L1.08329 6.99967L6.91663 12.833" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg>
+                      </a>
+                  </li>
+                  @for ($i = 1; $i <= $adverts->lastPage(); $i++)
+                  <li class="page-item pagination-item">
+                      <a class="page-link pagination-link @if($adverts->currentPage() == $i) active @endif" href="{{$adverts->url($i)}}">{{$i}}</a>
+                  </li>
+                  @endfor
+                  
+                  <li class="page-item pagination-item @if($adverts->currentPage() == $adverts->lastPage()) disabled @endif">
+                      <a class="page-link pagination-link" href="{{$adverts->nextPageUrl()}}">
+                          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M1.08337 1.16634L6.91671 6.99967L1.08337 12.833" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg>
+                      </a>
+                  </li>
+              </ul>
+            </nav>
           </div>
     </div>
   </div>

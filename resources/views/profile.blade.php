@@ -56,7 +56,7 @@
                             <input type="text" name="fname" value="{{$user->fname}}" placeholder="First Name"/>
                           </div>
                           @error('fname')
-                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                           @enderror
@@ -65,7 +65,7 @@
                             <input type="text" name="lname" value="{{$user->lname}}" placeholder="Last Name" />
                           </div>
                           @error('lname')
-                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                           @enderror
@@ -77,10 +77,32 @@
                             </div>
                           </div>
                           @error('phone')
-                          <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                           @enderror
+                          <div class="contact-form__content-group location">
+                                            
+                            <div class="contact-form-input">
+                              <label for="state_id">State</label>
+                              <select name="state_id" id="state_id" class="select2 states">
+                                  @foreach ($states as $state)
+                                    <option value="{{$state->id}}" @if($user->state_id == $state->id) selected @endif>{{$state->name}}</option> 
+                                  @endforeach
+                              </select>
+                            </div>
+                            <div class="contact-form-input">
+                              <label for="city">City</label>
+                              <select name="city_id" class="select2 cities">
+                                <option>Select City</option>
+                                @foreach ($user->state->cities as $city)
+                                  <option value="{{$city->id}}" @if($city->id == $user->city_id) selected @endif>{{ucwords(strtolower($city->name))}}</option>
+                                @endforeach
+                              </select>
+                              
+                            </div>
+
+                          </div>
                           {{-- <div class="contact-form-btn">
                             <button class="button button--md" type="submit"> Save Details</button>
                           </div> --}}
@@ -269,16 +291,13 @@
       cities = $(this).closest('.location').find('.cities');
       // console.log.val())
       $.ajax({
-        type:'POST',
+        // type:'POST',
         dataType: 'json',
-        url: "{{route('cities')}}",
-        data:{
-            '_token' : $('meta[name="csrf-token"]').attr('content'),
-            'state_id': state_id,
-        },
+        url: "{{url('getCities')}}"+'/'+state_id,
         success:function(data) {
+          console.log(data)
           cities.children().remove()
-          data.forEach(element => {
+          data.data.forEach(element => {
             cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
           });
           cities.select2();

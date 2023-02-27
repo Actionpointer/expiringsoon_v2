@@ -1,12 +1,9 @@
 <?php
 namespace App\Http\Traits;
 
-use App\Models\Account;
 use App\Models\Payout;
 use App\Models\Payment;
-use App\Models\PaymentItem;
 use Ixudra\Curl\Facades\Curl;
-use Illuminate\Support\Facades\Auth;
 
 
 trait PaystackTrait
@@ -20,7 +17,7 @@ trait PaystackTrait
                       'reference'=> $payment->reference,"callback_url"=> route('payment.callback') ) )
       ->asJson()                
       ->post();
-      if($response && $response->status)
+      if($response &&  isset($response->status) && $response->status)
         return $response->data->authorization_url;
       else return false;
     }
@@ -60,19 +57,28 @@ trait PaystackTrait
       else return false;
     }
 
+
     public function payoutPaystack(Payout $payout){
         $response = Curl::to('https://api.paystack.co/transfer')
         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
         ->withHeader('Content-Type: application/json')
-        ->withData( array('recipient'=> $payout->user->payout_account,'amount'=> $payout->amount,'currency'=> $currency,
-                        'reference'=> $payout->reference,"callback_url"=> route('payment.callback')  ) )
-        
+        ->withData( array("source" => "balance", "reason"=> "Withdrawal Payout", "amount"=> $payout->amount * 100, "recipient"=> $payout->user->payout_account,
+        "currency"=> $payout->currency->code,"reference"=> $payout->reference ) )
         ->asJson()                
         ->post();
-        if($response->status)
-          return $response->data->authorization_url;
+        dd($response);
+        if($response &&  isset($response->status) && $response->status)
+          return true;
         else return false;
     }
+
+    protected function verifyPayoutPaystack(Payout $payout){
+      $response = Curl::to("https://api.paystack.co/transfer/verify/$payout->reference")
+          ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+          ->asJson()
+          ->get();
+      //check the status and update
+  }
     
     
 

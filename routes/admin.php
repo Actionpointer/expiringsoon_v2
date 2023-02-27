@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SubscriptionController;
 
 Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,customercare,security,auditor'],function(){
-    Route::get('dashboard',[HomeController::class, 'admin'])->name('dashboard');
+    Route::get('dashboard',[UserController::class, 'dashboard'])->name('dashboard');
     
     Route::group(['prefix'=> 'settings','as'=>'settings.'],function(){
         Route::get('/',[SettingsController::class, 'index'])->name('global');
@@ -67,9 +67,10 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     
 
     Route::get('orders',[OrderController::class, 'index'])->name('orders');
-    Route::post('orders',[OrderController::class, 'update'])->name('order.manage');
-    Route::post('orders',[OrderController::class, 'update'])->name('order.manage');
-    
+    Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
+    Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
+    Route::post('message/{user}',[OrderController::class, 'store'])->name('order.message');
+
     Route::get('payments',[PaymentController::class, 'index'])->name('payments');
     Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');
     Route::post('payouts/manage',[PaymentController::class, 'update'])->name('payouts.manage');
@@ -78,9 +79,9 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('adverts',[AdvertController::class, 'index'])->name('adverts');
     Route::post('adverts/manage',[AdvertController::class, 'manage'])->name('adverts.manage');
 
-    Route::get('messages',[MessageController::class, 'index'])->name('messages');
-    Route::get('message/{user}',[MessageController::class, 'show'])->name('message');
-    Route::post('message/{user}',[MessageController::class, 'store'])->name('message.store');
+
+    // Route::get('message/{user}',[MessageController::class, 'show'])->name('messages');
+    // Route::post('message/{user}',[MessageController::class, 'store'])->name('message.store');
     
     Route::get('security',[SecurityController::class, 'index'])->name('security');
 });

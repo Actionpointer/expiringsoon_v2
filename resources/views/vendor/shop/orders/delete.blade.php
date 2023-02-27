@@ -61,7 +61,7 @@
                                {{$order->user->name}}
                             </h2>
                             <p class="font-body--md-400">
-                               {{$order->address->street}}  {{$order->address->city->name}}, {{$order->address->state->name}}
+                               {{$order->address->street}}  {{$order->address->city ? $order->address->city->name : ''}}, {{$order->address->state->name}}
                             </p>
                           </div>
                           <div class="dashboard__details-card-item__inner">

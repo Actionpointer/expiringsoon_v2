@@ -4,9 +4,7 @@ namespace App\Listeners;
 
 use App\Models\Cart;
 use App\Http\Traits\CartTrait;
-use App\Models\Subscription;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\InteractsWithQueue;
 
 
@@ -31,7 +29,7 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event)
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if($user->role == 'vendor' && $user->subscription_id){
             if(!$user->subscription->active && !$user->subscription->is_free){
                 $user->subscription_id = $user->subscriptions->firstWhere('is_free',true)->id;

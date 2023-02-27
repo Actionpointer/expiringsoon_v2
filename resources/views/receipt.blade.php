@@ -112,7 +112,7 @@
                           <h5 class="font-body--md-400">Reference:</h5>
                           <p class="font-body--md-500">{{$settlement->reference}}</p>
                         </div>
-                        @if($settlement->order->deliveryByVendor())
+                        @if($settlement->order->deliverer == "vendor")
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Shipping</h5>
                           <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->deliveryfee,2)}}</p>
@@ -146,7 +146,7 @@
                         <tr>
                             <!-- Order  -->
                             <td class="dashboard__order-history-table-item align-middle">
-                                <a href="{{route('order-details',$settlement->order)}}" class="dashboard__product-item d-flex" >
+                                <a href="{{route('order.show',$settlement->order)}}" class="dashboard__product-item d-flex" >
                                     <h5 class="font-body--md-400 flex-grow-1"> Earning for order #{{$settlement->order->id}}</h5>
                                     <h6 class="small">Click to view</h6>
                                 </a>
@@ -164,7 +164,7 @@
                                 <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->earning(), 2)}}</p>
                             </td>
                         </tr>
-                        @if($settlement->order->deliveryByVendor())
+                        @if($settlement->order->deliverer == "vendor")
                           <tr>
                               <!-- Product item  -->
                                   <td class="dashboard__order-history-table-item align-middle">

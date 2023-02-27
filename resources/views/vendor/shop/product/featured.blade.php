@@ -73,14 +73,14 @@
                                 </div>
                                 <h5 class="font-body--lg-400" style="font-size:14px">{{$product->name}}</h5>
                               </a>
-                              @if($product->expire_at <= now())
+                              @if($product->valid)
                                 <ul class="d-flex" style="margin-top:10px;color:#888;font-size:12px">
                                   <li>Expires <span style="font-weight:550;color:#00b207">
                                     {{$product->expire_at->format('l, M jS Y')}} | {{$product->expire_at->diffInDays(now())}} days</span>
                                   <li>
                                 </ul>
                               @endif
-                              @if($product->expire_at <= now())
+                              @if(!$product->valid)
                                 <ul class="d-flex" style="margin-top:10px;color:#888;font-size:12px">
                                   <li><span style="font-weight:550;color:#ff0000">Product expired and is no longer listed</span><li>
                                 </ul>

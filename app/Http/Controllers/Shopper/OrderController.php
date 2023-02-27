@@ -12,7 +12,8 @@ use App\Models\Address;
 use App\Models\Country;
 use App\Models\Payment;
 use App\Models\Product;
-use App\Models\Setting;
+use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use App\Models\OrderMessage;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request;
@@ -20,9 +21,8 @@ use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
 use App\Http\Controllers\Controller;
-use App\Models\OrderItem;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+use App\Http\Resources\OrderDetailsResource;
+use App\Http\Resources\OrderMessageResource;
 
 class OrderController extends Controller
 {
@@ -38,7 +38,47 @@ class OrderController extends Controller
     }
     
     public function show(Order $order){
-        return view('order.view',compact('order'));
+        if(!request()->expectsJson()){
+            OrderMessage::where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
+        }
+        $allow_update = false;
+        if($order->status == 'processing' && $order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_cancel_period']) > now())
+        $allow_update = true;
+        if($order->status == 'delivered' && $order->statuses->firstWhere('name','delivered')->created_at->addHours(cache('settings')['order_delivered_to_acceptance_period']) > now())
+        $allow_update = true;
+        if($order->status == 'rejected' && $order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_returned_period']) > now())
+        $allow_update = true;
+        return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => $order->items->count() ? 'Order Details retrieved Successfully' :'No details retrieved',
+                'data' => OrderDetailsResource::collection($order->items),
+                'count' => $order->items->count()
+            ], 200):
+            view('customer.orders.view',compact('order','allow_update'));
+    }
+
+    public function update(Request $request){
+        if($request->status == 'rejected'){
+            $items = OrderItem::where('order_id',$request->order_id)->whereHas('product',function($query){
+                $query->isValid();
+            })->get();
+            if($items->isEmpty()){
+                return request()->expectsJson() ? 
+                    response()->json([
+                        'status' => false,
+                        'message' => 'No item in the order is valid for return',
+                    ], 401) :
+                    redirect()->back()->with(['result'=> 0,'message'=> 'No item in the order is valid for return']);
+            }
+        }
+        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> $request->status]);
+        return request()->expectsJson() ? 
+        response()->json([
+            'status' => true,
+            'message' => 'Order Updated Successfully',
+        ], 200) :
+         redirect()->back()->with(['result'=> 1,'message'=> 'Order Updated Successfully']);
     }
     
 
@@ -92,15 +132,12 @@ class OrderController extends Controller
             $orders = collect([]);
             foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
                 $subtotal = 0;
-                $shipping_fee = 0;
-                $shipping_hours = null;
                 if($request->shop_delivery[$shop_id]){
-                    $shipping_fee = $this->getShopShipment($shop_id,$address->state_id)['amount'];
-                    $shipping_hours = $this->getShopShipment($shop_id,$address->state_id)['hours'];
+                    $shipping = $this->getShopShipment($shop_id,$address->state_id);  
                 }
                 //dd($shipping_fee);
                 $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
-                    'deliveryfee'=> $shipping_fee,'expected_at'=> $shipping_hours ? now()->addHours($shipping_hours) : null
+                    'deliveryfee'=> $shipping['amount'],'deliverer'=> $shipping['shipper'], 'expected_at'=> $shipping['hours'] ? now()->addHours($shipping['hours']) : null
                 ]);
                 foreach($carts->where('shop_id',$shop_id) as $cart){
                     $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->total]);
@@ -108,7 +145,7 @@ class OrderController extends Controller
                 }
                 $order->subtotal = $subtotal;
                 $order->vat = $vat * $subtotal / 100;
-                $order->total = ($vat * $subtotal / 100) + $subtotal + $shipping_fee;
+                $order->total = ($vat * $subtotal / 100) + $subtotal + $order->deliveryfee;
                 $order->save();
                 $orders->push($order);
             }
@@ -125,13 +162,19 @@ class OrderController extends Controller
     
     public function messages(Order $order){
         $user = auth()->user();
-        OrderMessage::where('order_id',$order->id)->where('sender_id',$user->id)->where('sender_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
-        return view('order.messages',compact('order'));
+        OrderMessage::where('order_id',$order->id)->where('receiver_id',$user->id)->where('receiver_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
+        return request()->expectsJson() ? 
+        response()->json([
+            'status' => true,
+            'message' => 'Order Messages',
+            'data' => OrderMessageResource::collection($order->messages),
+        ], 200):
+        view('customer.orders.messages',compact('order'));
     }
     
     public function message(Request $request){
         $order = Order::find($request->order_id);
-        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','body'=> $request->body]);
+        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type, 'body'=> $request->body]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

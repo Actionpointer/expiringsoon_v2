@@ -37,7 +37,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('admin.navigation')
+        @include('layouts.admin_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
             <div class="dashboard__order-history-title" style="margin:auto;width:95%;border-bottom:1px solid #ddd;margin-bottom:10px">
               <p class="font-body--xl-500">Payout Requests</p>

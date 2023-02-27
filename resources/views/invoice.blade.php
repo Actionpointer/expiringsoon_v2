@@ -83,7 +83,7 @@
                               {{$order->shop->name}}
                           </h2>
                           <p class="font-body--md-400">
-                              {{$order->shop->address}}, {{$order->shop->city->name}} , {{$order->shop->state->name}}
+                              {{$order->shop->address}}, {{$order->shop->city ? $order->shop->city->name : ''}} , {{$order->shop->state->name}}
                           </p>
                         </div>
                         <div class="dashboard__details-card-item__inner">
@@ -176,7 +176,7 @@
                           <tr>
                             <!-- Product item  -->
                             <td class="dashboard__order-history-table-item align-middle">
-                              <a href="{{route('order-details',$item->paymentable)}}">#{{$item->paymentable->id}} <span class="small">click to view </span></a>
+                              <a href="{{route('order.show',$item->paymentable)}}">#{{$item->paymentable->id}} <span class="small">click to view </span></a>
                             </td>
                             <!-- Order  -->
                             <td class="dashboard__order-history-table-item order-date align-middle "     >

@@ -54,7 +54,7 @@
                         <div class="form-check d-flex">
                           <input class="form-check-input previous_addresses px-2" type="radio" name="address_id" data-main="{{$address->main}}" value="{{$address->id}}" id="address{{$address->id}}" @if($address->main) checked @endif >
                           <label class="form-check-label font-body--400" for="existing"> 
-                              {{$address->contact_name.'('.$address->contact_phone.'): '.$address->street.', '.$address->city->name.', '.$address->state->name}}
+                              {{$address->contact_name.'('.$address->contact_phone.'): '.$address->street.', '.($address->city? $address->city->name:'').', '.$address->state->name}}
                           </label>
                         </div>
                       @endforeach
@@ -130,7 +130,7 @@
                       @foreach ($carts->unique('shop_id') as $item)
                         <tr>
                             <th>
-                              {{$item->shop->name}} <br> <small class="text-muted font-body--sm-400">{{$item->shop->city->name.','.$item->shop->state->name}}</small>
+                              {{$item->shop->name}} <br> <small class="text-muted font-body--sm-400">{{($item->shop->city ? $item->shop->city->name.', ' : '').$item->shop->state->name}}</small>
                             </th>
                             <th>
                                 <div class="bill-card__payment-method-item ">
@@ -273,16 +273,12 @@
       cities = $(this).closest('.location').find('.cities');
       // console.log.val())
       $.ajax({
-        type:'POST',
+        // type:'POST',
         dataType: 'json',
-        url: "{{route('cities')}}",
-        data:{
-            '_token' : $('meta[name="csrf-token"]').attr('content'),
-            'state_id': state_id,
-        },
+        url: "{{url('getCities')}}"+'/'+state_id,
         success:function(data) {
           cities.children().remove()
-          data.forEach(element => {
+          data.data.forEach(element => {
             cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
           });
           cities.select2();
@@ -407,7 +403,7 @@
         contact_phone = $('input[name=contact_phone]').val();
         _token = $('meta[name=csrf-token]').attr('content');
         elements = {'street':street,'state_id':state_id,'city_id':city_id,'contact_name':contact_name,'contact_phone':contact_phone,'_token':_token};
-        if(street && state_id && city_id && contact_name && contact_phone){
+        if(street && state_id && contact_name && contact_phone){
           var myform = $('#set_address_form');
           $.each(elements, function(key,value){
               var input = $("<input>").attr("type", "hidden").attr("name", key).val(value);

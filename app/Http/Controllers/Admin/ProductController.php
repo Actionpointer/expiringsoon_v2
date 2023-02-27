@@ -21,7 +21,7 @@ class ProductController extends Controller
     
     public function index()
     {
-        $products = Product::where('published',true)->orderBy('expire_at','desc')->get();
+        $products = Product::orderBy('expire_at','desc')->get();
         return view('admin.products',compact('products'));
     }
 

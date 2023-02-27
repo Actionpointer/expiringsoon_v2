@@ -3,18 +3,18 @@ namespace App\Http\Traits;
 use App\Models\Payment;
 use App\Models\PaymentItem;
 use App\Http\Traits\PaystackTrait;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\PaypalTrait;
 use App\Http\Traits\FlutterwaveTrait;
 
 
 trait PaymentTrait
 {
-    use FlutterwaveTrait,PaystackTrait;
+    use FlutterwaveTrait,PaystackTrait,PaypalTrait;
 
     protected function initializePayment($amount,$items,$type){
-        $user = Auth::user();
+        $user = auth()->user();
         $gateway = $user->country->payment_gateway;
-        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> session('locale')['currency_id'],'reference'=> uniqid(),'amount'=> $amount ,'vat'=> $user->country->vat]);
+        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> $user->country->currency_id,'reference'=> uniqid(),'amount'=> $amount ,'vat'=> $user->country->vat]);
         foreach($items as $item){
             PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
         }

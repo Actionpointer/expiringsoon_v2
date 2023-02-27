@@ -1,43 +1,51 @@
 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
 
-swiper.js is displaying duplicates
+https://stripe.com/docs/payments?payments=popular
+Perishable Key:
+pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9ogEXPAvVevVsN008FW9r6qi
 
-NOTIFICATIONS
-place notification and profile icon at the top of vendor & shop
-kyc notification should be in-app
-
-SETTINGS [add message settings (get notification for all order messages), (when should receiver be notified of unread messages) ]
-
-SUBSCRIPTIONS 
-
-SHOPS [add confirmation with password to manage verification | autosend email to vendor when approved or disapproved]
-
-PRODUCTS [add confirmation with password to manage verification | autosend email to vendor when approved or disapproved]
-
-PAYMENTS [add profit, revenue & payout to settlement]
-
-
-shop menu
-PRODUCTS [  show featured]
+Secret Key:
+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
+https://developer.paypal.com/docs/checkout/
 
 
 https://stripe.com/docs/payments?payments=popular
 Perishable Key:
 pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9o
 gEXPAvVevVsN008FW9r6qi
+
 Secret Key:
 sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWybhZt
-eJtqIzn8rY5oE00IgYVeL2p
-https://developer.paypal.com/docs/checkout/
+eJtqIzn8rY5oE00IgYVeL2p 
 
-1.BVN validation (revisit) 
-user cannot create withdrawals, bvn validation, 
+-------------------------------------------------------------------------------------------------
+swiper.js is displaying duplicates
+
+remove status,tracking code,discount, delivered_at from order table
+add arbitrator_id, deliverer to order table
+run php artisan migrate on server
+
+
+use pagination in shop/view page for all other pages requiring pagination
+
+admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready 
+
+email that user has been returned to free subscription.
+
+if admin is handling the delivery, vendor will mark the order to be ready, then admin should be the one to change the order to shipped, delivered
+
+display order status: rejected | returned | dispute/refunded | closed
+
+order dispute
+vendor earnings, and commissions and shipment fee
+
+NOTIFICATIONS
+place notification and profile icon at the top of vendor & shop
+
+PAYMENTS [add profit, revenue & payout to settlement]
 
 2.fetch payout
 retry payout with job - 
-
-5. REFUND
-customer does not raise query xdays after delivery, change order to completed
 
 6. REPORT SHOPS/PRODUCT
 
@@ -49,10 +57,9 @@ customer does not raise query xdays after delivery, change order to completed
 
 11. hot deals mobile view (home page & hot deals page)
 
-12. cron job for running jobs
 
 15. on product page 
 Product additional information
-- expiry date  and countdown
-- discount price on timeline
+
+
 - reviews

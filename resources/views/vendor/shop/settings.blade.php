@@ -415,7 +415,7 @@
                 
                                     <div class="contact-form-input">
                                         <label for="hours">Hours</label>
-                                        <input type="number" name="hours" max="{{cache('settings')['maximum_delivery_hours']}}" placeholder="hours" />
+                                        <input type="number" name="hours" max="{{cache('settings')['order_processing_to_delivery_period']}}" placeholder="hours" />
                                     </div>
                                     <div class="contact-form-input">
                                         <label for="amounts">Amount</label>
@@ -575,16 +575,12 @@
       cities = $('.cities');
       // console.log.val())
       $.ajax({
-        type:'POST',
+        // type:'POST',
         dataType: 'json',
-        url: "{{route('cities')}}",
-        data:{
-            '_token' : $('meta[name="csrf-token"]').attr('content'),
-            'state_id': state_id,
-        },
+        url: "{{url('getCities')}}"+'/'+state_id,
         success:function(data) {
           cities.children().remove()
-          data.forEach(element => {
+          data.data.forEach(element => {
             cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
           });
           cities.select2();

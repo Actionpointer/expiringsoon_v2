@@ -150,7 +150,7 @@
                               <tr>
                                   <td>{{$address->contact_name}}</td>
                                   <td>{{$address->contact_phone}}</td>
-                                  <td>{{$address->street.' '.$address->city->name.','.$address->state->name}}</td>
+                                  <td>{{$address->street.' '.($address->city ? $address->city->name : '').','.$address->state->name}}</td>
                                   <td>@if($address->main) main @endif</td>
                                   <td>
                                     <div class="d-flex">
@@ -245,16 +245,12 @@
       cities = $(this).closest('.location').find('.cities');
       // console.log.val())
       $.ajax({
-        type:'POST',
+        // type:'POST',
         dataType: 'json',
-        url: "{{route('cities')}}",
-        data:{
-            '_token' : $('meta[name="csrf-token"]').attr('content'),
-            'state_id': state_id,
-        },
+        url: "{{url('getCities')}}"+'/'+state_id,
         success:function(data) {
           cities.children().remove()
-          data.forEach(element => {
+          data.data.forEach(element => {
             cities.append(`<option value="`+element.id+`">`+element.name+` </option>`)
           });
           cities.select2();

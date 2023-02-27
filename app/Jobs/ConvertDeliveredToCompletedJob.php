@@ -34,7 +34,7 @@ class ConvertDeliveredToCompletedJob implements ShouldQueue
     public function handle()
     {
         //send message to vendor & user
-        $period = cache('settings')['order_rejection_period'];
+        $period = cache('settings')['order_delivered_to_acceptance_period'];
         $orders = Order::where('status','delivered')->where('delivered_at','>',now()->subHours($period))->get();
         foreach($orders as $order){
             $order->status = 'completed';

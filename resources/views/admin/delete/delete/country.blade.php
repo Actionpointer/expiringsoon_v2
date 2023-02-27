@@ -40,7 +40,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('admin.navigation')
+        @include('layouts.admin_navigation')
         <div class="col-lg-9 section--xl pt-0">
           <div class="container">
             <div class="products-tab__btn">
@@ -318,11 +318,11 @@
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--md-400">
                                                         <label for="max_del_hours" class="col-8 ">Maximum Delivery Hours</label>
-                                                        <input type="text" class="col-4"  name="maximum_delivery_hours" placeholder="Set Maximum Delivery Hours" value="{{$settings->firstWhere('name','maximum_delivery_hours')->value}}" />
+                                                        <input type="text" class="col-4"  name="order_processing_to_delivery_period" placeholder="Set Maximum Delivery Hours" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
                                                     </div>
                                                     <div class="form-group row mb-2 font-body--md-400">
-                                                        <label for="vat" class="col-8 font-body--400">Order Rejection Period</label>
-                                                        <input type="text" class="col-4" name="vat" placeholder="Set Order Rejection Period" value="{{$settings->firstWhere('name','order_rejection_period')->value}}" />
+                                                        <label for="vat" class="col-8 font-body--400">Order Delivery to Acceptance Period</label>
+                                                        <input type="text" class="col-4" name="vat" placeholder="Set Order Rejection Period" value="{{$settings->firstWhere('name','order_delivered_to_acceptance_period')->value}}" />
                                                     </div>
                                                     <table>
                                                         <tr>
@@ -1071,7 +1071,7 @@
                                         <div class="contact-form__content-group">
                                             <div class="contact-form-input">
                                                 <label for="hours">Hours</label>
-                                                <input type="number" name="hours" max="{{$settings->firstWhere('name','maximum_delivery_hours')->value}}" placeholder="hours" />
+                                                <input type="number" name="hours" max="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" placeholder="hours" />
                                             </div>
 
                                             <div class="contact-form-input">

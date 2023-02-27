@@ -12,5 +12,5 @@
 
 @endif
 @if(in_array(auth()->user()->role,['admin','customercare','security']))
-    @include('admin.navigation')
+    @include('layouts.admin_navigation')
 @endif

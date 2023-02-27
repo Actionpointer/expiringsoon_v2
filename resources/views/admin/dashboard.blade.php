@@ -37,7 +37,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('admin.navigation')
+        @include('layouts.admin_navigation')
         <div class="col-lg-9 section--xl pt-0">
           <div class="container">
             <!-- User Info -->
@@ -59,86 +59,86 @@
                 <div class="dashboard__user-billing dashboard-card">
                   <h2 class="dashboard__user-billing-title font-body--md-500"> Summary </h2>
                   <div class="dashboard__user-billing-info">
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Products :</span> <strong>{{\App\Models\Product::count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Shops :</span> <strong>{{\App\Models\Shop::count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Adverts :</span> <strong>{{\App\Models\Advert::count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Customers :</span> <strong>{{\App\Models\User::where('role','shopper')->count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom "> <span> Total Orders :</span> <strong>{{App\Models\Order::whereNotIn('status',['cancelled','new'])->count()}}</strong></p>
-                    
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Products :</span> <strong>{{\App\Models\Product::count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Shops :</span> <strong>{{\App\Models\Shop::count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Adverts :</span> <strong>{{\App\Models\Advert::count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Customers :</span> <strong>{{\App\Models\User::where('role','shopper')->count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Orders :</span> <strong>{{App\Models\Order::count()}}</strong></p>
                   </div>
                 </div>
               </div>
             </div>
 
             @if ($documents->isNotEmpty())
-            <!-- KYC Documents -->
-            <div class="dashboard__order-history" style="margin-top: 24px">
-              <div class="dashboard__order-history-title">
-                <h2 class="font-body--xxl-500">KYC Documents</h2>
-                <a href="#" class="font-body--lg-500">&nbsp</a>
-              </div>
-              <div class="dashboard__order-history-table">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"> Date</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Type </th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Applicant</th>
-                        <th scope="col" class="dashboard__order-history-table-title"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                        @foreach ($documents as $document)
-                            <tr>
-
-                              <td class="dashboard__order-history-table-item order-total " >
-                                {{$document->created_at->format('l, M jS, Y')}}
-                              </td>
-                              <!-- Status -->
-                              <td class="dashboard__order-history-table-item order-status">
-                                  {{ucwords($document->type)}}
-                              </td>
-
-                                <td class="dashboard__order-history-table-item order-date">
-                                  <div class="d-flex">
-                                    @if($document->verifiable_type == 'App\Models\Shop')
-                                      <img @if(!$document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
-                                    @else
-                                      <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
-                                    @endif
-                                    <p class="order-total-price ps-2">
-                    
-                                        {{$document->verifiable->name}}
-                                        <br />
-                                        <span style="font-size:12px;color:#888">
-                                            {{$document->verifiable->email}}
-                                        </span>
-                                    
-                                    </p>
-                                  </div>
-                                  
-                                </td>
-                                <!-- Total  -->
-                                
-                                <!-- Details page  -->
-                                <td class=" dashboard__order-history-table-item order-details ">
-                                  @if($document->verifiable_type == 'App\Models\Shop')
-                                    <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
-                                  @else
-                                    <a href="{{route('admin.user.show',$document->verifiable)}}"> View User</a>
-                                  @endif
-                                </td>
-                            </tr>
+              <!-- KYC Documents -->
+              <div class="dashboard__order-history" style="margin-top: 24px">
+                <div class="dashboard__order-history-title">
+                  <h2 class="font-body--xxl-500">KYC Documents</h2>
+                  <a href="#" class="font-body--lg-500">&nbsp</a>
+                </div>
+                <div class="dashboard__order-history-table">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="dashboard__order-history-table-title"> Date</th>
+                          <th scope="col" class="dashboard__order-history-table-title"> Type </th>
+                          <th scope="col" class="dashboard__order-history-table-title"> Applicant</th>
+                          <th scope="col" class="dashboard__order-history-table-title"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
                         
-                        @endforeach
-                    </tbody>
-                  </table>
+                          @foreach ($documents as $document)
+                              <tr>
+
+                                <td class="dashboard__order-history-table-item order-total " >
+                                  {{$document->created_at->format('l, M jS, Y')}}
+                                </td>
+                                <!-- Status -->
+                                <td class="dashboard__order-history-table-item order-status">
+                                    {{ucwords($document->type)}}
+                                </td>
+
+                                  <td class="dashboard__order-history-table-item order-date">
+                                    <div class="d-flex">
+                                      @if($document->verifiable_type == 'App\Models\Shop')
+                                        <img @if(!$document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                      @else
+                                        <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                      @endif
+                                      <p class="order-total-price ps-2">
+                      
+                                          {{$document->verifiable->name}}
+                                          <br />
+                                          <span style="font-size:12px;color:#888">
+                                              {{$document->verifiable->email}}
+                                          </span>
+                                      
+                                      </p>
+                                    </div>
+                                    
+                                  </td>
+                                  <!-- Total  -->
+                                  
+                                  <!-- Details page  -->
+                                  <td class=" dashboard__order-history-table-item order-details ">
+                                    @if($document->verifiable_type == 'App\Models\Shop')
+                                      <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
+                                    @else
+                                      <a href="{{route('admin.user.show',$document->verifiable)}}"> View User</a>
+                                    @endif
+                                  </td>
+                              </tr>
+                          
+                          @endforeach
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
             @endif
+
             <!-- Approvals and notifications  -->
             <div class="my-3">
               <div class="row">
@@ -247,17 +247,12 @@
                                 {{$order->status}}
                             </td>
                             <td class="   dashboard__order-history-table-item   order-status "> 
-                              @if($order->deliveryfee == '0.00')
-                                Pickup
-                              @elseif($order->deliveryByVendor())
-                                Delivery by Vendor
-                              @else 
-                                Delivery by Admin
-                              @endif
+                              Delivery Type: {{ucwords($order->deliverer)}}
+                              
                             </td>
                             <!-- Details page  -->
                             <td class="   dashboard__order-history-table-item   order-details "> 
-                                <a href="{{route('order-details',$order)}}"> View Order</a>
+                                <a href="{{route('admin.order.show',$order)}}"> View Order</a>
                             </td>
                         </tr>
                       @empty
@@ -272,9 +267,6 @@
               </div>
             </div>
 
-            
-
-           
           </div>
         </div>
       </div>

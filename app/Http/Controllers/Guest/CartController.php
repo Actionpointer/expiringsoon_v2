@@ -2,24 +2,14 @@
 
 namespace App\Http\Controllers\Guest;
 
-use App\Models\Cart;
-use App\Models\City;
 use App\Models\Shop;
-use App\Models\Order;
-use App\Models\State;
-use App\Models\Address;
-use App\Models\Country;
 use App\Models\Product;
-use App\Models\Setting;
-use App\Models\OrderMessage;
-use App\Models\ShippingRate;
 use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+
 
 class CartController extends Controller
 {

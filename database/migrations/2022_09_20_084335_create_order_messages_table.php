@@ -16,11 +16,9 @@ class CreateOrderMessagesTable extends Migration
         Schema::create('order_messages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('shop_id');
-            $table->unsignedBigInteger('user_id'); //the buyer
+            $table->unsignedBigInteger('sender_id');
+            $table->string('sender_type'); //sent by who? admin, buyer, shop
             $table->text('body'); //the message
-            $table->string('sender'); //sent by who? admin, buyer, shop
-            $table->string('receiver'); //sent to who? admin, buyer, shop
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });

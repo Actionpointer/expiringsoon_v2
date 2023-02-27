@@ -40,7 +40,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('admin.navigation')
+        @include('layouts.admin_navigation')
         <div class="col-lg-9 section--xl pt-0">
           <div class="container">
             <div class="products-tab__btn">
@@ -225,52 +225,7 @@
                                                             </td>
                                                         </tr>
                                                         
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Send Product Approval Email
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_approval_email" @if($settings->firstWhere('name','send_product_approval_email')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_approval_email" @if(!$settings->firstWhere('name','send_product_approval_email')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Send Product Rejection Email
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if($settings->firstWhere('name','send_product_rejection_email')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if(!$settings->firstWhere('name','send_product_rejection_email')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                        
 
                                                        
                                                     </table>
@@ -291,39 +246,32 @@
                                         <div class="dashboard__content-card-body">
                                             <form action="{{route('admin.settings.global')}}" method="post" id="orders">@csrf
                                                 <div class="contact-form__content">
-                                                    <div class="form-group row mb-2 font-body--md-400">
-                                                        <label for="max_del_hours" class="col-8 ">Maximum Delivery Hours</label>
-                                                        <input type="text" class="col-4"  name="maximum_delivery_hours" placeholder="Set Maximum Delivery Hours" value="{{$settings->firstWhere('name','maximum_delivery_hours')->value}}" />
+                                                    <div class="form-group row mb-2 font-body--sm-500">
+                                                        <label for="max_del_hours" class="col-8 ">Order Processing to Cancel Hours</label>
+                                                        <input type="text" class="col-4"  name="order_processing_to_cancel_period" placeholder="Set Processing to Cancellation Period" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
                                                     </div>
-                                                    <div class="form-group row mb-2 font-body--md-400">
-                                                        <label for="vat" class="col-8 font-body--400">Order Rejection Period</label>
-                                                        <input type="text" class="col-4" name="vat" placeholder="Set Order Rejection Period" value="{{$settings->firstWhere('name','order_rejection_period')->value}}" />
+                                                    <div class="form-group row mb-2 font-body--sm-500">
+                                                        <label for="max_del_hours" class="col-8 ">Order Processing to Shipment Hours</label>
+                                                        <input type="text" class="col-4"  name="order_processing_to_shipment_period" placeholder="Set Processing to Shipment Period" value="{{$settings->firstWhere('name','order_processing_to_shipment_period')->value}}" />
                                                     </div>
-                                                    <table>
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Send Order Rejection Email
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_rejection_email" @if($settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_product_rejection_email" @if(!$settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+                                                    <div class="form-group row mb-2 font-body--sm-500">
+                                                        <label for="vat" class="col-8 ">Order Processing to Delivery Hours</label>
+                                                        <input type="text" class="col-4" name="order_processing_to_delivery_period" placeholder="Set Processing to Delivery Period" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
+                                                    </div>
+                                                    <div class="form-group row mb-2 font-body--sm-500">
+                                                        <label for="vat" class="col-8 ">Order Delivery to Acceptance Hours</label>
+                                                        <input type="text" class="col-4" name="order_delivered_to_acceptance_period" placeholder="Set Delivery to Acceptance Period" value="{{$settings->firstWhere('name','order_delivered_to_acceptance_period')->value}}" />
+                                                    </div>
+                                                    
+                                                    <div class="form-group row mb-2 font-body--sm-500">
+                                                        <label for="vat" class="col-8 ">Order Rejected to Returned Hours</label>
+                                                        <input type="text" class="col-4" name="order_rejected_to_returned_period" placeholder="Set Rejected to Returned Period" value="{{$settings->firstWhere('name','order_rejected_to_returned_period')->value}}" />
+                                                    </div>
+                                                    <div class="form-group row mb-2 font-body--sm-500">
+                                                        <label for="vat" class="col-8 ">Order Rejected to Acceptance Hours</label>
+                                                        <input type="text" class="col-4" name="order_rejected_to_acceptance_period" placeholder="Set Rejected to Acceptance Period" value="{{$settings->firstWhere('name','order_rejected_to_acceptance_period')->value}}" />
+                                                    </div>
+                                                    
                                                     <div class="contact-form-btn">
                                                         <button class="button button--md askpin" type="button"> Save
                                                         </button>
@@ -370,55 +318,6 @@
                                                             </td>
                                                         </tr>
         
-                                                        
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Send Shop Approval Email
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_approval_email" @if($settings->firstWhere('name','send_shop_approval_email')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_approval_email" @if(!$settings->firstWhere('name','send_shop_approval_email')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Send Shop Rejection Email
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_rejection_email" @if($settings->firstWhere('name','send_shop_rejection_email')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_shop_rejection_email" @if(!$settings->firstWhere('name','send_shop_rejection_email')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-
-                                                        
                                                     </table>
                                                     <div class="contact-form-btn">
                                                         <button class="button button--md askpin" type="button"> Save
@@ -492,54 +391,6 @@
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Send Advert Approval Email
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_approval_email" @if($settings->firstWhere('name','send_advert_approval_email')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_approval_email" @if(!$settings->firstWhere('name','send_advert_approval_email')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Send Advert Rejection Email
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_rejection_email" @if($settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="send_advert_rejection_email" @if(!$settings->firstWhere('name','send_advert_rejection_email')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        
-            
                                                     </table>
                                                     <div class="contact-form-btn">
                                                         <button class="button button--md askpin" type="button"> Save
@@ -598,7 +449,7 @@
                                                                     <div class="contact-form__content my-3">
                                                                         <div class="contact-form-input">
                                                                             <label for="origin">Currency </label>
-                                                                            <select id="currency_id" name="currency_id" class="select2" >
+                                                                            <select id="currency_id{{$country->id}}" name="currency_id" class="select2" >
                                                                                 @foreach ($currencies as $currency)
                                                                                     <option value="{{$currency->id}}" @if($country->currency_id == $currency->id) selected @endif>{{$currency->name}}</option>
                                                                                 @endforeach
@@ -606,8 +457,8 @@
                                                                         </div>
                                                                         <div class="contact-form__content-group">
                                                                             <div class="contact-form-input">
-                                                                                <label for="destination">Receiving Payment Gateway </label>
-                                                                                <select id="destination" name="payment_gateway" class="form-control">
+                                                                                <label for="destination_a{{$country->id}}">Receiving Payment Gateway </label>
+                                                                                <select id="destination_a{{$country->id}}" name="payment_gateway" class="form-control">
                                                                                     <option value="">Select</option>
                                                                                     <option value="paystack" @if($country->payment_gateway == 'paystack') selected @endif>Paystack</option>
                                                                                     <option value="flutterwave" @if($country->payment_gateway == 'flutterwave') selected @endif>Flutterwave</option>
@@ -616,8 +467,8 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="contact-form-input">
-                                                                                <label for="destination">Transfering Payment Gateway </label>
-                                                                                <select id="destination" name="payout_gateway" class="form-control">
+                                                                                <label for="destination_b{{$country->id}}">Transfering Payment Gateway </label>
+                                                                                <select id="destination_b{{$country->id}}" name="payout_gateway" class="form-control">
                                                                                     <option value="">Select</option>
                                                                                     <option value="paystack" @if($country->payout_gateway == 'paystack') selected @endif >Paystack</option>
                                                                                     <option value="flutterwave" @if($country->payout_gateway == 'flutterwave') selected @endif >Flutterwave</option>
@@ -640,7 +491,7 @@
                                                                         </div>
                                                                         <div class="contact-form-input">
                                                                             <label for="pin">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                            <input type="text" name="pin" id="pin{{$country->id}}" value="" placeholder="Access pin">
                                                                         </div>
                                                                         <div class="contact-form-btn">
                                                                             <button class="button button--md " type="submit">
@@ -683,8 +534,8 @@
                                                                             <textarea name="states" cols="auto" class="w-100" placeholder="e.g LA:Lagos,OG:Ogun,FC:Abuja" ></textarea>
                                                                         </div>
                                                                         <div class="contact-form-input">
-                                                                            <label for="pin">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                            <label for="pinedit{{$country->id}}">Enter Your Access Pin</label>
+                                                                            <input type="text" name="pin" id="pinedit{{$country->id}}" value="" placeholder="Access pin">
                                                                         </div>
                                                                         <div class="contact-form-btn">
                                                                             <button class="button button--md" name="type" value="manual" type="submit">
@@ -738,7 +589,7 @@
                                                                         </div>
                                                                         <div class="contact-form-input">
                                                                             <label for="pin">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                            <input type="text" name="pin" id="pincity{{$country->id}}" value="" placeholder="Access pin">
                                                                         </div>
                                                                         <div class="contact-form-btn">
                                                                             <button class="button button--md" name="type" value="manual" type="submit">
@@ -983,9 +834,12 @@
                                                                         </div>
                                                                         
                                                                     </div> 
-                                                                    
+                                                                    <div class="contact-form-input">
+                                                                        <label for="pin">Enter Your Access Pin</label>
+                                                                        <input type="text" name="pin" id="pin_para{{$plan->id}}" value="" placeholder="Access pin">
+                                                                    </div>
                                                                     <div class="contact-form-btn">
-                                                                        <button class="button button--md askpin" type="button"> Update Plan </button>
+                                                                        <button class="button button--md" type="submit"> Update Plan </button>
                                                                         <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                                                                     </div>
                                                                 </div>
@@ -1059,7 +913,7 @@
                                                                     <div class="col-md-4">
                                                                         <div class="contact-form-input">
                                                                             <label for="pin">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                            <input type="text" name="pin" id="pin_pricing{{$plan->id}}" value="" placeholder="Access pin">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1151,7 +1005,7 @@
                                                                 </div> 
                                                                 <div class="contact-form-input">
                                                                     <label for="pin">Enter Your Access Pin</label>
-                                                                    <input type="text" name="pin" id="pin" value="" placeholder="Access pin">
+                                                                    <input type="text" name="pin" id="pin_ad{{$adplan->id}}" value="" placeholder="Access pin">
                                                                 </div>
                                                                 <div class="contact-form-btn pt-2">
                                                                     <button class="button button--md" type="submit"> Update Advert Plan Prices </button>
@@ -1219,7 +1073,7 @@
                                         <div class="contact-form__content-group">
                                             <div class="contact-form-input">
                                                 <label for="hours">Hours</label>
-                                                <input type="number" name="hours" max="{{$settings->firstWhere('name','maximum_delivery_hours')->value}}" placeholder="hours" />
+                                                <input type="number" name="hours" max="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" placeholder="hours" />
                                             </div>
 
                                             <div class="contact-form-input">
@@ -1286,16 +1140,16 @@
                                                                 <div class="contact-form__content my-3 location">
                                                                     <div class="contact-form-input">
                                                                         <label for="countrisdes">Country </label>
-                                                                        <select id="countrisdes" name="country_id" class="select2 country" >
+                                                                        <select id="countrisdes{{$rate->id}}" name="country_id" class="select2 country" >
                                                                             @foreach ($countries as $country)
-                                                                                <option value="{{$country->id}}">{{$country->name}}</option>
+                                                                                <option value="{{$country->id}}" @if($rate->country_id == $country->id) selected @endif>{{$country->name}}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                     <div class="contact-form__content-group">
                                                                         <div class="contact-form-input">
                                                                             <label for="origin">Origin </label>
-                                                                            <select id="countryz" name="origin_id" class="select2 states" >
+                                                                            <select id="countryz{{$rate->id}}" name="origin_id" class="select2 states" >
                                                                                 @foreach ($states as $state)
                                                                                     <option value="{{$state->id}}" @if($rate->origin_id == $state->id) selected @endif>{{$state->name}}</option>
                                                                                 @endforeach
@@ -1303,7 +1157,7 @@
                                                                         </div>
                                                                         <div class="contact-form-input">
                                                                             <label for="destination">Destination </label>
-                                                                            <select id="destination" name="destination_id" class="select2 states" >
+                                                                            <select id="destination_edit{{$rate->id}}" name="destination_id" class="select2 states" >
                                                                                 @foreach ($states as $state)
                                                                                     <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
                                                                                 @endforeach
@@ -1387,18 +1241,13 @@
         var clicked = $(this);
         var country_id = $(this).val();
         states = $(this).closest('.location').find('.states');
-        // console.log.val())
         $.ajax({
-            type:'POST',
             dataType: 'json',
-            url: "{{route('states')}}",
-            data:{
-                '_token' : $('meta[name="csrf-token"]').attr('content'),
-                'country_id': country_id,
-            },
+            url: "{{url('getStates')}}"+'/'+country_id,
             success:function(data) {
+                console.log(data)
                 states.children().remove()
-                data.forEach(element => {
+                data.data.forEach(element => {
                     states.append(`<option value="`+element.id+`">`+element.name+` </option>`)
                 });
                 if(clicked.parents('.modal').length){

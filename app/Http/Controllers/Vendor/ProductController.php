@@ -55,7 +55,9 @@ class ProductController extends Controller
     }
 
     public function store(Shop $shop,Request $request){
+        // dd($request->all());2023-02-04
         try {
+            $date_limit = now()->addHours(cache('settings')['order_processing_to_delivery_period']);
             $validator = Validator::make($request->all(), 
             [
                 'shop_id' => 'required|numeric',
@@ -65,7 +67,7 @@ class ProductController extends Controller
                 'category_id' => 'required|numeric',
                 'tags' => 'nullable',
                 'photo' => 'required|max:2048|image',
-                'expiry' => 'required|date|after:today',
+                'expiry' => ['required','date',"after:$date_limit"],
                 'price' => 'required|numeric',
                 'discount120' => 'nullable|lt:price|gt:discount90',
                 'discount90' => 'nullable|lt:price|gt:discount60',
@@ -88,7 +90,7 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            // dd($request->all());
+            
             $user = auth()->user();
             $shop = Shop::where('id',$request->shop_id)->where('user_id',$user->id)->first();
             if($request->hasFile('photo')){
@@ -122,7 +124,9 @@ class ProductController extends Controller
 
     public function update(Shop $shop,Request $request){
         // dd($request->all());
+        
         try {
+            $date_limit = now()->addHours(cache('settings')['order_processing_to_delivery_period']);
             $validator = Validator::make($request->all(), 
             [
                 'product_id' => 'required|numeric',
@@ -133,7 +137,7 @@ class ProductController extends Controller
                 'category_id' => 'required|numeric',
                 'tags' => 'nullable',
                 'photo' => 'nullable|max:2048|image',
-                'expiry' => 'required|date|after:today',
+                'expiry' => ['required','date',"after:$date_limit"],
                 'price' => 'required|numeric',
                 'discount120' => 'nullable|lt:price|gt:discount90',
                 'discount90' => 'nullable|lt:price|gt:discount60',

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use App\Models\City;
+use App\Models\Shop;
+use App\Models\User;
+use App\Models\Order;
 use App\Models\State;
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
@@ -25,4 +27,8 @@ class Country extends Model
     public function cities(){
         return $this->hasManyThrough(City::class,State::class,'country_id','state_id');
     }
+    public function orders(){
+        return $this->hasManyThrough(Order::class,Shop::class,'country_id','shop_id');
+    }
+
 }

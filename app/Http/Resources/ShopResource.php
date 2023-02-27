@@ -32,7 +32,7 @@ class ShopResource extends JsonResource
             "image"=> $this->image,
             "address"=> $this->address,
             "city_id"=> $this->city_id,
-            "city"=> $this->city->name,
+            "city"=> $this->city ? $this->city->name : '',
             "state_id"=> $this->state_id,
             "state"=> $this->state->name,
             "country_id"=> $this->country_id,

@@ -8,14 +8,14 @@ use App\Models\Coupon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\OrderTrait;
-use Illuminate\Support\Facades\Auth;
+
 
 class CouponController extends Controller
 {
     use OrderTrait;
 
     public function list(){
-        $coupons = Coupon::all();
+        $coupons = Coupon::paginate(10);
         return view('admin.coupons',compact('coupons'));
     }
     
@@ -63,7 +63,6 @@ class CouponController extends Controller
 
     public function update(Coupon $coupon,Request $request){
         // dd($request->all());
-        $user = Auth::user();
         $coupon->name= $request->name;
         $coupon->code= $request->code;
         $coupon->start_at= $request->start_date ? Carbon::createFromFormat('m/d/Y',$request->start_date): null;

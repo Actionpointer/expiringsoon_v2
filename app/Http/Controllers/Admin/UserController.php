@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\State;
+use App\Models\Payout;
 use App\Models\Address;
 use App\Models\Country;
 use Illuminate\Http\Request;
@@ -23,6 +26,14 @@ class UserController extends Controller
 
     public function __construct(){
         $this->middleware('auth');
+    }
+
+    public function dashboard(){
+        $user = auth()->user();
+        $documents = Kyc::where('status',false)->whereNull('reason')->take(5)->get(); 
+        $orders = Order::whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed']);})->latest()->take(5)->get();   
+        $payouts = Payout::where('status','pending')->orderBy('created_at','asc')->take(5)->get();   
+        return view('admin.dashboard',compact('user','documents','orders','payouts'));
     }
     
     public function index(){

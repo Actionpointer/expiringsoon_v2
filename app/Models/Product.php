@@ -59,7 +59,7 @@ class Product extends Model
     }
 
     public function getDiscountAttribute(){
-        $timeline = $this->getProductTimeline();
+        $timeline = $this->timeline;
         $discount = 0;
         if($timeline){
             if($this['discount'.$timeline]) 
@@ -70,7 +70,7 @@ class Product extends Model
         return $discount;
     }
 
-    public function getProductTimeline(){
+    public function getTimelineAttribute(){
         if($this->expire_at->diffInDays(now()) <= 30)
             return 30;
         elseif($this->expire_at->diffInDays(now()) <= 60)
@@ -99,10 +99,10 @@ class Product extends Model
     }
     //expiry
     public function getValidAttribute(){
-        return $this->expire_at > now();
+        return $this->expire_at->subDays(cache('settings')['order_processing_to_delivery_period']) > now();
     }
     public function scopeIsValid($query){
-        return $query->where('expire_at','>',now());
+        return $query->where('expire_at','>',now()->addDays(cache('settings')['order_processing_to_delivery_period']));
     }
     public function getCertifiedAttribute(){
         return $this->valid && $this->accessible && $this->approved && $this->status && $this->published && $this->available;

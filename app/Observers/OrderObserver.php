@@ -2,10 +2,11 @@
 
 namespace App\Observers;
 
+use App\Models\User;
 use App\Models\Order;
-use App\Models\Settlement;
 use App\Events\OrderPurchased;
-
+use App\Notifications\OrderShipmentNotification;
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\OrderStatusVendorNotification;
 use App\Notifications\OrderStatusCustomerNotification;
 
@@ -30,25 +31,30 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
-        $order->shop->notify(new OrderStatusVendorNotification($order));
-        // if($order->isDirty('status') && $order->status == 'processing'){
-        //     $delivery = $order->deliveryByVendor() ? $order->deliveryfee : 0;
-        //     event(new OrderPurchased($order));
-        //     $order->shop->notify(new OrderStatusVendorNotification($order));
-        // }
-        // if($order->isDirty('status') && $order->status == 'shipped'){
-        //     $order->user->notify(new OrderStatusCustomerNotification($order));
-        // }
-        // if($order->isDirty('status') && $order->status == 'delivered'){
-        //     $order->user->notify(new OrderStatusCustomerNotification($order));
-        // }
-        // if($order->isDirty('status') && $order->status == 'completed'){
-        //     $order->shop->wallet += $order->settlement->amount;
-        //     $order->shop->save();
-        //     $order->settlement->status = true;
-        //     $order->settlement->save();
-        //     $order->user->notify(new OrderStatusVendorNotification($order));
-        // }
+        if($order->isDirty('status') && $order->status == 'processing'){
+            event(new OrderPurchased($order));
+            $order->shop->notify(new OrderStatusVendorNotification($order));
+        }
+        if($order->isDirty('status') && $order->status == 'ready'){
+            if($order->deliverer == "admin"){
+                Notification::send(User::where('role','admin')->get(),new OrderShipmentNotification($order));
+            }else{
+                $order->user->notify(new OrderStatusCustomerNotification($order));
+            }
+        }
+        if($order->isDirty('status') && $order->status == 'shipped'){
+            $order->user->notify(new OrderStatusCustomerNotification($order));
+        }
+        if($order->isDirty('status') && $order->status == 'delivered'){
+            $order->user->notify(new OrderStatusCustomerNotification($order));
+        }
+        if($order->isDirty('status') && $order->status == 'completed'){
+            $order->shop->wallet += $order->settlement->amount;
+            $order->shop->save();
+            $order->settlement->status = true;
+            $order->settlement->save();
+            $order->user->notify(new OrderStatusVendorNotification($order));
+        }
         
     }
 

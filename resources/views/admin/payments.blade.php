@@ -37,7 +37,7 @@
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
-        @include('admin.navigation')
+        @include('layouts.admin_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           <div class="container">
             <div class="products-tab__btn">
@@ -97,6 +97,8 @@
                                                         <td class="cart-table-item order-date align-middle">
                                                             
                                                             @if($payment->status =='pending')
+                                                                <p style="color:#d9862e;font-size:14px"><span id="status">{{ $payment->status}}</span></p>
+                                                            @elseif($payment->status =='failed' || $payment->status =='cancelled')
                                                                 <p style="color:#d92e2e;font-size:14px"><span id="status">{{ $payment->status}}</span></p>
                                                             @else
                                                                 <p style="color:#00b207;font-size:14px;font-weight:500">{{ $payment->status}}</p>

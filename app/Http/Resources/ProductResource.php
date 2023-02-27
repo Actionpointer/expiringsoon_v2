@@ -39,7 +39,7 @@ class ProductResource extends JsonResource
             "accessible"=> $this->accessible,
             "certified"=> $this->certified,
             "discount"=> $this->discount,
-            "timeline"=> $this->getProductTimeline(),
+            "timeline"=> $this->timeline,
             "discount30"=> $this->discount30,
             "discount60"=> $this->discount60,
             "discount90"=> $this->discount90,

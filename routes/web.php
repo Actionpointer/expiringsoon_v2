@@ -1,16 +1,17 @@
 <?php
 
+use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
-use App\Models\Subscription;
 
 Route::get('/broadcast', function () {
     $subscription = Subscription::find(3);
@@ -39,8 +40,8 @@ Route::get('categories',[ProductController::class,'categories'])->name('product.
 Route::post('getSubcategories', [ProductController::class, 'getSubcategories'])->name('product.getSubcategories');
 
 
-Route::post('getStates', [HomeController::class, 'states'])->name('states');
-Route::post('getCities', [HomeController::class, 'cities'])->name('cities');
+Route::get('getStates/{country_id?}', [ResourcesController::class, 'states'])->name('states');
+Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name('cities');
 
 Route::get('vendors', [ShopController::class, 'index'])->name('vendors');
 Route::get('vendors/{shop}', [ShopController::class, 'show'])->name('vendor.show');
@@ -81,12 +82,14 @@ Route::group(['middleware'=> 'verified'],function(){
     Route::get('checkout/{shop?}',[OrderController::class,'checkout'])->name('checkout');
     Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('checkout.shipment');
     Route::post('checkout/confirm',[OrderController::class,'confirmcheckout'])->name('confirmcheckout');
+
     Route::get('orders', [OrderController::class, 'index'])->name('orders');
-    Route::get('order/{order}',[OrderController::class, 'show'])->name('order-details');
+    Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
+    Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
     // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
     Route::post('order/review',[OrderController::class, 'review'])->name('order.review');
 
-    Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
+    // Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
     Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
 
     include('vendor.php');
