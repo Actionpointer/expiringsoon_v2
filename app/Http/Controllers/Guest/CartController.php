@@ -67,6 +67,7 @@ class CartController extends Controller
         $wish = $this->removeWishlist($product);
         return response()->json(['wish_count'=> $wish],200);
     }
+    
 
     
 

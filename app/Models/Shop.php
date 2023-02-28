@@ -57,6 +57,7 @@ class Shop extends Model
     }
     public function getVerifiedAttribute(){
         return $this->addressproof && $this->addressproof->status && $this->companydoc && $this->companydoc->status && $this->user->idcard && $this->user->idcard->status;   
+        // return true;
     }
 
     public function getImageAttribute(){

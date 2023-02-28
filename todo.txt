@@ -36,6 +36,8 @@ if admin is handling the delivery, vendor will mark the order to be ready, then 
 
 display order status: rejected | returned | dispute/refunded | closed
 
+you cannot add expired products to cart.. from wishlist, from anywhere
+
 order dispute
 vendor earnings, and commissions and shipment fee
 

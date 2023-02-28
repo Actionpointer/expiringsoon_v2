@@ -1,10 +1,6 @@
 <script>
 $(document).on('click','.add-to-cart',function(){
     var product_id = parseInt($(this).attr('data-product'));
-    // var imgurl = $(this).attr("data-photo");
-    // var product = $(this).attr("data-product");
-    // var price = $(this).attr("data-price");
-    // alert(product_id);
     $.ajax({
         type:'POST',
         dataType: 'json',
@@ -14,7 +10,6 @@ $(document).on('click','.add-to-cart',function(){
             'product_id': product_id
         },
         success:function(data) {
-                // console.log(data.cart);
                 var cart_total = 0;
                 $(".cart-counter").text(data.cart_count);
                 $(".ec-cart-count").text(data.cart_count);

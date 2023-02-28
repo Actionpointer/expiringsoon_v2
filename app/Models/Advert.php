@@ -50,7 +50,7 @@ class Advert extends Model
        if($this->advertable_type == 'App\Models\Shop'){
             return $this->shop && $this->shop->certified;
        }else{
-            return $this->product && $this->product->certified;
+            return $this->product && $this->product->certified();
        }
     }
 

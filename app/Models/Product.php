@@ -31,7 +31,7 @@ class Product extends Model
     }
     
     protected $fillable = ['name','shop_id','slug','description','stock','category_id','published','status', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120'];
-    protected $appends = ['amount','image','discount','valid','available','accessible','certified'];
+    protected $appends = ['amount','image','discount','valid','available'];
 
     protected $dates = ['expire_at','uploaded'];
     protected $casts = ['tags'=> 'array'];
@@ -101,11 +101,12 @@ class Product extends Model
     public function getValidAttribute(){
         return $this->expire_at->subDays(cache('settings')['order_processing_to_delivery_period']) > now();
     }
+
     public function scopeIsValid($query){
         return $query->where('expire_at','>',now()->addDays(cache('settings')['order_processing_to_delivery_period']));
     }
-    public function getCertifiedAttribute(){
-        return $this->valid && $this->accessible && $this->approved && $this->status && $this->published && $this->available;
+    public function certified(){
+        return $this->valid && $this->accessible() && $this->approved && $this->status && $this->published && $this->available;
     }
 
     public function scopeIsApproved($query){
@@ -118,7 +119,7 @@ class Product extends Model
         return $query->where('published',true);
     }
     //accessible
-    public function getAccessibleAttribute(){
+    public function accessible(){
         return $this->shop->status && $this->shop->approved && $this->shop->published;
     }
     public function scopeIsAccessible($query){
