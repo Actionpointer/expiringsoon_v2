@@ -3,6 +3,7 @@ namespace App\Http\Traits;
 
 use App\Models\Payout;
 use App\Models\Payment;
+use App\Models\Settlement;
 use Ixudra\Curl\Facades\Curl;
 
 
@@ -28,6 +29,17 @@ trait PaystackTrait
          ->asJson()
          ->get();
         return $paymentDetails;
+    }
+
+    protected function refundPaystack(Settlement $settlement){
+        $response = Curl::to('https://api.paystack.co/refund')
+         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+         ->withData( array('transaction'=> $settlement->order->payment_item->payment->reference,'amount'=> $settlement->amount*100 ) )
+         ->asJson()
+         ->post();
+         if($response &&  isset($response->status) && $response->status)
+         return true;
+       else return false;
     }
 
     protected function createRecipient($bank_code,$account_number){

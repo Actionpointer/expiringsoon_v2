@@ -45,7 +45,7 @@ class ShopController extends Controller
     }
 
     public function show(Shop $shop){
-        if(!$shop->certified)
+        if(!$shop->certified())
         abort(404,'Shop is not available');
         $category = null;
         $categories = Category::has('products')->get();

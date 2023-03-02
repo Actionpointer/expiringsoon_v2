@@ -38,9 +38,15 @@ class OrderController extends Controller
     }
     
     public function show(Order $order){
+        
         if(!request()->expectsJson()){
             OrderMessage::where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
         }
+        $messages = OrderMessage::where(function($query) use($order){
+            return $query->where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\User');
+        })->orWhere(function($qeury) use($order){
+            return $qeury->where('order_id',$order->id)->where('sender_id',$order->user_id)->where('sender_type','App\Models\User');
+        })->orderBy('created_at','desc')->get();
         $allow_update = false;
         if($order->status == 'processing' && $order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_cancel_period']) > now())
         $allow_update = true;
@@ -55,7 +61,7 @@ class OrderController extends Controller
                 'data' => OrderDetailsResource::collection($order->items),
                 'count' => $order->items->count()
             ], 200):
-            view('customer.orders.view',compact('order','allow_update'));
+            view('customer.orders.view',compact('order','allow_update','messages'));
     }
 
     public function update(Request $request){
@@ -124,12 +130,14 @@ class OrderController extends Controller
     }
 
     public function confirmcheckout(Request $request){
+        // dd($request->all());
         try{
             $user = auth()->user();
             $carts = Cart::whereIn('id',$request->carts)->get();
             $vat = $user->country->vat;
             $address = Address::find($request->address_id);
             $orders = collect([]);
+            $shipping = ['amount'=> 0,'shipper'=> 'pickup','hours'=> 0];
             foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
                 $subtotal = 0;
                 if($request->shop_delivery[$shop_id]){
@@ -151,6 +159,7 @@ class OrderController extends Controller
             }
             //take payment
             $link = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
+            // dd($link);
             return redirect()->to($link); 
         } catch (\Throwable $th) {
             return response()->json([

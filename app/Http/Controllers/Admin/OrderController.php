@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\RefundBuyer;
 use App\Models\Order;
 use App\Models\Country;
+use App\Models\Settlement;
 use App\Models\OrderStatus;
 use App\Models\OrderMessage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrderDispute;
 
 class OrderController extends Controller
 {
@@ -16,8 +19,7 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
+    public function index(){
         $category = null;
         $status = 'all';
         $shipment = 'all';
@@ -75,6 +77,13 @@ class OrderController extends Controller
          redirect()->back()->with(['result'=> 1,'message'=> 'Order Updated Successfully']);
     }
 
+    public function resolution(Request $request){
+        $order = Order::find($request->order_id);
+        OrderDispute::create(['order_id'=> $request->order_id,'arbitrator_id'=> auth()->id(),'seller'=> $request->seller,'buyer'=> $request->buyer,'remark'=> $request->remark]);
+        OrderStatus::create(['order_id'=> $order->id,'user_id'=> auth()->id(),'name'=> 'closed']);
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Order Dispute Successfully Resolved']);
+    }
+
     public function messages(Order $order){
         $user = auth()->user();
         OrderMessage::where('order_id',$order->id)->where('sender_id',$user->id)->where('sender_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
@@ -82,14 +91,20 @@ class OrderController extends Controller
     }
     
     public function message(Request $request){
+        // dd($request->all());
+        
         $order = Order::find($request->order_id);
-        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type, 'body'=> $request->body]);
+        $order->arbitrator_id = auth()->id();
+        $order->save();
+        $receiver_id = $request->receiver == 'buyer'? $order->user_id : $order->shop_id;
+        $receiver_type = $request->receiver == 'buyer'? 'App\Models\User' : 'App\Models\Shop';
+        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $receiver_id ,'receiver_type'=> $receiver_type, 'body'=> $request->body]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
             'message' => 'Message Sent Successfully',
         ], 200) :
-         redirect()->back();
+         redirect()->back()->with(['result'=> 1,'message'=> 'Message sent Successfully']);
     }
     
 }

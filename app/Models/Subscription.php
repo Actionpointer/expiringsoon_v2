@@ -28,7 +28,7 @@ class Subscription extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function payment(){
+    public function payment_item(){
         return $this->morphOne(PaymentItem::class,'paymentable');
     }
 

@@ -2,25 +2,26 @@
 
 namespace App\Providers;
 
-use App\Events\DeleteShop;
+use App\Events\AdjustCart;
+use App\Events\RefundBuyer;
 use App\Events\RetryPayout;
-use App\Events\RenewFeature;
 use App\Events\DisbursePayout;
 use App\Events\OrderCompleted;
 use App\Events\OrderPurchased;
 use App\Events\UserSubscribed;
-use App\Listeners\SettleVendor;
+use App\Events\DecreaseProduct;
+use App\Events\SettleVendor;
+use App\Listeners\SettlingVendor;
+use App\Listeners\AdjustingCart;
 use App\Events\CheckPayoutStatus;
 use App\Events\RenewSubscription;
 use App\Listeners\BroadcastOrder;
+use App\Listeners\RefundingBuyer;
 use App\Listeners\RetryingPayout;
-use App\Listeners\DecreaseProduct;
-use App\Listeners\ResetShopStatus;
 use App\Events\SubscriptionExpired;
-use App\Listeners\AutoRenewFeature;
 use App\Listeners\DisbursingPayout;
+use App\Listeners\DecreasingProduct;
 use App\Listeners\RemoveFromWishList;
-use App\Listeners\ResetProductStatus;
 use Illuminate\Support\Facades\Event;
 use App\Listeners\ShopDeleteProcesses;
 use Illuminate\Auth\Events\Registered;
@@ -47,13 +48,24 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\Login' => [
             'App\Listeners\LogSuccessfulLogin',
         ],
+        AdjustCart::class => [
+            AdjustingCart::class
+        ],
+        DecreaseProduct::class => [
+            DecreasingProduct::class
+        ],
         OrderPurchased::class => [
-            DecreaseProduct::class,
             BroadcastOrder::class
+        ],
+        RefundBuyer::class => [
+            RefundingBuyer::class
         ],
         OrderCompleted::class => [
             SettleVendor::class,
             RemoveFromWishList::class,
+        ],
+        SettleVendor::class => [
+            SettlingVendor::class
         ],
         
         DisbursePayout::class => [

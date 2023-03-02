@@ -15,6 +15,7 @@ use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Settlement;
+use App\Models\OrderStatus;
 use App\Models\OrderMessage;
 use App\Models\ShippingRate;
 use App\Observers\ShopObserver;
@@ -28,7 +29,7 @@ class Shop extends Model
     use HasFactory,Notifiable,Sluggable;
     
     protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','status'];
-    protected $appends = ['image','verified','certified'];
+    protected $appends = ['image'];
 
     public static function boot()
     {
@@ -55,7 +56,7 @@ class Shop extends Model
     public function getMobileAttribute(){
         return $this->country->dial.intval($this->phone);   
     }
-    public function getVerifiedAttribute(){
+    public function verified(){
         return $this->addressproof && $this->addressproof->status && $this->companydoc && $this->companydoc->status && $this->user->idcard && $this->user->idcard->status;   
         // return true;
     }
@@ -78,7 +79,7 @@ class Shop extends Model
     public function scopeIsSelling($query){
         return $query->whereHas('products',function($q) {$q->where('status',true)->where('published',true)->where('approved',true)->where('stock','>',cache('settings')['minimum_stock_level']);});
     }
-    public function getCertifiedAttribute(){
+    public function certified(){
         return $this->status && $this->approved && $this->published;
     }
     public function user(){
@@ -128,6 +129,9 @@ class Shop extends Model
     }
     public function orders(){
         return $this->hasMany(Order::class);
+    }
+    public function orderStatuses(){
+        return $this->hasManyThrough(OrderStatus::class,Order::class,'shop_id','order_id');
     }
     public function orderMessages(){
         return $this->morphOne(OrderMessage::class, 'sender');

@@ -69,7 +69,8 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('orders',[OrderController::class, 'index'])->name('orders');
     Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
     Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
-    Route::post('message/{user}',[OrderController::class, 'store'])->name('order.message');
+    Route::post('order/resolution',[OrderController::class, 'resolution'])->name('order.resolution');
+    Route::post('order/message/',[OrderController::class, 'message'])->name('order.message');
 
     Route::get('payments',[PaymentController::class, 'index'])->name('payments');
     Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');

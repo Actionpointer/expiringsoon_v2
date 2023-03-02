@@ -16,7 +16,7 @@ use App\Models\OrderStatus;
 
 class PaymentController extends Controller
 {
-    use PaymentTrait,CartTrait;
+    use PaymentTrait;
     public function __construct(){
         // $this->middleware('auth');
     }
@@ -103,11 +103,6 @@ class PaymentController extends Controller
                     $order = Order::find($item->paymentable_id);
                     // OrderStatus::create(['order_id'=> $item->paymentable_id,'user_id'=> $payment->user_id,'name'=> 'processing']);
                     $status = $order->statuses()->create(['user_id'=> $payment->user_id,'name'=> 'processing']);
-                    foreach($order->items as $order_item){
-                        $product = $order_item->product;
-                        $cart = $this->removeFromCartSession($product);
-                        $this->removeFromCartDb($product);
-                    }
                 }
                 if($item->paymentable_type == 'App\Models\Feature'){
                     $feature = Feature::find($item->paymentable_id);

@@ -17,9 +17,10 @@ class CreateSettlementsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('receiver_id');
             $table->string('receiver_type');
+            $table->string('description');
             $table->unsignedBigInteger('order_id');
-            $table->double('amount')->default(0);
-            $table->string('status')->default('pending');
+            $table->string('amount')->default(0);
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

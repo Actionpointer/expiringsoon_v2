@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
 use App\Models\PaymentItem;
+use App\Models\OrderDispute;
 use App\Models\OrderMessage;
 use App\Observers\OrderObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -70,11 +71,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function payment(){
+    public function payment_item(){
         return $this->morphOne(PaymentItem::class,'paymentable');
     }
-    public function settlement(){
-        return $this->hasOne(Settlement::class);
+    public function settlements(){
+        return $this->hasMany(Settlement::class);
     }
     public function address(){
         return $this->belongsTo(Address::class);
@@ -93,6 +94,10 @@ class Order extends Model
     
     public function messages(){
         return $this->hasMany(OrderMessage::class);
+    }
+
+    public function dispute(){
+        return $this->hasOne(OrderDispute::class);
     }
     
     public function reviews(){

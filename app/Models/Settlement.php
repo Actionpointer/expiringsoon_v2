@@ -10,14 +10,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Settlement extends Model
 {
     use HasFactory;
-    protected $fillable = ['reference','order_id','receiver_id','receiver_type','amount','status'];
+    protected $fillable = ['receiver_id','receiver_type','order_id','description','amount','status'];
+
     public function order(){
         return $this->belongsTo(Order::class);
     }
     public function receiver(){
         return $this->morphTo();
     }
-    
     public function getRouteKeyName(){
         return 'reference';
     }

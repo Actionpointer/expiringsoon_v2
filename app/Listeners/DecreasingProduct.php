@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderCompleted;
+use App\Events\DecreaseProduct;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SettleVendor implements ShouldQueue
+class DecreasingProduct implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -21,11 +21,15 @@ class SettleVendor implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\OrderCompleted  $event
+     * @param  \App\Events\OrderPurchased  $event
      * @return void
      */
-    public function handle(OrderCompleted $event)
+    public function handle(DecreaseProduct $event)
     {
-        //
+        foreach($event->order->items as $cart){
+            $cart->product->stock -= $cart->quantity;
+            $cart->product->save();
+        }
+
     }
 }

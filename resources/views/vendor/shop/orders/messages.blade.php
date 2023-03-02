@@ -96,7 +96,7 @@
                 <div class="user-comments">
                   <h5 class="font-body--xxxl">Messages</h5>
                   <div class="user-comments__list" style="overflow-y:scroll;">
-                    @forelse ($order->messages->sortByDesc('created_at') as $message)
+                    @forelse ($messages as $message)
                     <div class="user">
                       <div class="user-img">
                         @if($message->sender_type == 'App\Models\User')
@@ -110,7 +110,7 @@
                       <div class="user-message-info">
                         <div class="user-name">
                           <h5 class="font-body--md-500">
-                            @if($message->sender_type == 'App\Models\Shop'){{$order->shop->name}} @else {{$order->user->name}} @endif
+                            {{-- {{$message->sender->name}} --}}
                           </h5>
                           <p class="date">{{$message->created_at->format('d M,Y h:i A')}}</p>
                         </div>

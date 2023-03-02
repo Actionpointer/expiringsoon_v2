@@ -62,7 +62,7 @@
                               <div class="dashboard__totalpayment-card-body">
                                 <div class=" dashboard__details-card-item__inner-contact" >
                                   <h2 class="font-body--lg-400">
-                                    <a href="{{route('vendor.show',$order->shop)}}" class="text-success">{{$order->shop->name}}</a>
+                                    {{$order->user->name}}
                                   </h2>
                                   <p class="font-body--md-400">
                                     @if($order->address_id)
@@ -105,7 +105,7 @@
                                 <div class="dashboard__totalpayment-card-body-item">
                                   <h5 class="font-body--md-400">Payment Status:</h5>
                                   <p class="font-body--md-500">
-                                      @if($order->payment) Paid @else Pending @endif
+                                      @if($order->payment_item) Paid @else Pending @endif
                                   </p>
                                 </div>
 
@@ -223,7 +223,7 @@
                         </select>
                       </div>
                       <div class="pt-2 pt-md-0">
-                        <button class="button button--md askpin" type="button" id="btn-update">
+                        <button class="button button--md" type="submit" id="btn-update">
                           Save Status
                         </button>
                       </div>
@@ -417,7 +417,7 @@
                         <div class="user-comments pb-0">
                           <h5 class="font-body--xxxl">Messages</h5>
                           <div class="user-comments__list" style="overflow-y:scroll;height:400px">
-                            @forelse ($order->messages->sortByDesc('created_at') as $message)
+                            @forelse ($messages as $message)
                             <div class="user">
                               <div class="user-img">
                                 @if($message->sender_type == 'App\Models\User')
@@ -431,7 +431,11 @@
                               <div class="user-message-info">
                                 <div class="user-name">
                                   <h5 class="font-body--md-500">
-                                    @if($message->sender_type == 'App\Models\Shop'){{$order->shop->name}} @else {{$order->user->name}} @endif
+                                    @if($message->sender_id == $order->user_id || ($message->sender_id == $order->shop_id && $message->sender_type == 'App\Models\Shop'))
+                                      {{$message->sender->name}}
+                                    @else
+                                    Arbitrator
+                                    @endif
                                   </h5>
                                   <p class="date">{{$message->created_at->format('d M,Y h:i A')}}</p>
                                 </div>

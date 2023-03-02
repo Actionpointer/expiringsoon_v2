@@ -47,6 +47,11 @@ class OrderController extends Controller
         if(!request()->expectsJson()){
             OrderMessage::where('order_id',$order->id)->where('receiver_id',$shop->id)->where('receiver_type','App\Models\Shop')->whereNull('read_at')->update(['read_at'=>now()]);
         }
+        $messages = OrderMessage::where(function($query) use($order){
+            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop');
+        })->orWhere(function($qeury) use($order){
+            return $qeury->where('order_id',$order->id)->where('sender_id',$order->shop_id)->where('sender_type','App\Models\Shop');
+        })->orderBy('created_at','desc')->get();
         $allow_update = false;
         if($order->status == 'processing')
         $allow_update = true;
@@ -64,7 +69,7 @@ class OrderController extends Controller
                 'data' => OrderDetailsResource::collection($order->items),
                 'count' => $order->items->count()
             ], 200):
-            view('vendor.shop.orders.view',compact('shop','order','allow_update'));
+            view('vendor.shop.orders.view',compact('shop','order','allow_update','messages'));
     }
 
 

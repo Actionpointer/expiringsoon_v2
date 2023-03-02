@@ -17,9 +17,9 @@ class CreateOrderDisputesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('arbitrator_id');
-            $table->string('sender'); //shopper, vendor, arbitrator
-            $table->longText('body');
-            $table->text('attachment')->nullable();
+            $table->string('seller'); //percentage
+            $table->string('buyer'); //percentage
+            $table->longText('remark');
             $table->timestamps();
         });
     }

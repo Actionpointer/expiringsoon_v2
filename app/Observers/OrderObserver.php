@@ -4,57 +4,32 @@ namespace App\Observers;
 
 use App\Models\User;
 use App\Models\Order;
-use App\Events\OrderPurchased;
-use App\Notifications\OrderShipmentNotification;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\OrderStatusVendorNotification;
-use App\Notifications\OrderStatusCustomerNotification;
+use App\Models\Settlement;
 
 class OrderObserver
 {
-    /**
-     * Handle the Order "created" event.
-     *
-     * @param  \App\Models\Order  $order
-     * @return void
-     */
+    
     public function created(Order $order)
     {
-        //
+        if($order->deliveryfee){
+            Settlement::create(['description'=> 'Shipment','order_id'=> $order->id,
+            'receiver_id' => $order->deliverer == 'Admin' ? User::where('role','admin')->first() : $order->shop_id,
+            'receiver_type' => $order->deliverer == 'Admin' ? 'App\Models\User' : 'App\Models\Shop',
+            'amount' => $order->deliveryfee,'status'=> $order->deliverer == 'Admin'? true:false]);
+        }
     }
 
-    /**
-     * Handle the Order "updated" event.
-     *
-     * @param  \App\Models\Order  $order
-     * @return void
-     */
+    
     public function updated(Order $order)
     {
-        if($order->isDirty('status') && $order->status == 'processing'){
-            event(new OrderPurchased($order));
-            $order->shop->notify(new OrderStatusVendorNotification($order));
+        if($order->isDirty('subtotal') && $order->subtotal){
+            $commission_percentage = 100 - $order->shop->user->subscription->plan->commission_percentage;
+            $commission_fixed = $order->shop->user->subscription->plan->commission_fixed;
+            $commission = ($commission_percentage * $order->subtotal / 100) - $commission_fixed;
+            Settlement::create(['description'=> 'Commission','order_id'=> $order->id, 
+            'receiver_id' => $order->shop_id, 'receiver_type' => 'App\Models\Shop', 'amount' => $commission]);
         }
-        if($order->isDirty('status') && $order->status == 'ready'){
-            if($order->deliverer == "admin"){
-                Notification::send(User::where('role','admin')->get(),new OrderShipmentNotification($order));
-            }else{
-                $order->user->notify(new OrderStatusCustomerNotification($order));
-            }
-        }
-        if($order->isDirty('status') && $order->status == 'shipped'){
-            $order->user->notify(new OrderStatusCustomerNotification($order));
-        }
-        if($order->isDirty('status') && $order->status == 'delivered'){
-            $order->user->notify(new OrderStatusCustomerNotification($order));
-        }
-        if($order->isDirty('status') && $order->status == 'completed'){
-            $order->shop->wallet += $order->settlement->amount;
-            $order->shop->save();
-            $order->settlement->status = true;
-            $order->settlement->save();
-            $order->user->notify(new OrderStatusVendorNotification($order));
-        }
+        
         
     }
 
@@ -63,23 +38,12 @@ class OrderObserver
         //
     }
 
-    /**
-     * Handle the Order "restored" event.
-     *
-     * @param  \App\Models\Order  $order
-     * @return void
-     */
+    
     public function restored(Order $order)
     {
         //
     }
 
-    /**
-     * Handle the Order "force deleted" event.
-     *
-     * @param  \App\Models\Order  $order
-     * @return void
-     */
     public function forceDeleted(Order $order)
     {
         //

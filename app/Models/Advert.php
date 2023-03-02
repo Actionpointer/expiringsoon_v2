@@ -48,7 +48,7 @@ class Advert extends Model
 
     public function getStatusAttribute(){
        if($this->advertable_type == 'App\Models\Shop'){
-            return $this->shop && $this->shop->certified;
+            return $this->shop && $this->shop->certified();
        }else{
             return $this->product && $this->product->certified();
        }

@@ -23,10 +23,24 @@ swiper.js is displaying duplicates
 
 remove status,tracking code,discount, delivered_at from order table
 add arbitrator_id, deliverer to order table
+change total, subtotal, vat and deliveryfee to varchar191 on orders
+add description field to settlement table
+remove reference from settlement table
+change amount on settlement table to varchar191
 run php artisan migrate on server
 
 
 use pagination in shop/view page for all other pages requiring pagination
+
+refund by flutterwave, paypal, stripe
+
+interface to manage shop adverts
+
+when order rejected but was not returned.
+
+vendor cannot ship or make ready if the item becomes expired
+
+buyer can remove items from order which not yet shipped/ready, and pick another item from the same shop, of similar worth
 
 admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready 
 

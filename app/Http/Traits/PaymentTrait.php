@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Traits;
 use App\Models\Payment;
+use App\Models\Settlement;
 use App\Models\PaymentItem;
-use App\Http\Traits\PaystackTrait;
 use App\Http\Traits\PaypalTrait;
+use App\Http\Traits\PaystackTrait;
 use App\Http\Traits\FlutterwaveTrait;
 
 
@@ -18,7 +19,6 @@ trait PaymentTrait
         foreach($items as $item){
             PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
         }
-        
         switch($gateway){
             case 'paystack': $link = $this->initiatePaystack($payment);
             break;
@@ -30,6 +30,21 @@ trait PaymentTrait
             break;
         }
         return $link;
+    }
+
+    protected function initializeRefund(Settlement $settlement){
+        
+        $gateway = $settlement->receiver->country->payment_gateway;
+        switch($gateway){
+            case 'paystack': return $this->refundPaystack($settlement);
+            break;
+            case 'flutterwave': return $this->refundFlutterWave($settlement);
+            break;
+            case 'paypal': return $this->refundPaypal($settlement);
+            break;
+            case 'stripe': return $this->refundStripe($settlement);
+            break;
+        }
     }
 
 

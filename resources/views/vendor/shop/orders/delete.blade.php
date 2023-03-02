@@ -118,7 +118,7 @@
                         <div class="dashboard__totalpayment-card-body">
                           <div class="dashboard__totalpayment-card-body-item">
                             <h5 class="font-body--md-400">Payment Method:</h5>
-                            <p class="font-body--md-500"> {{$order->paymentmethod}}</p>
+                            <p class="font-body--md-500"> {{$order->payment_itemmethod}}</p>
                           </div>
                           <div class="dashboard__totalpayment-card-body-item">
                             <h5 class="font-body--md-400">Subtotal:</h5>

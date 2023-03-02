@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class OrderDispute extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['order_id','arbitrator_id','seller','buyer','remark'];
+    
     public function order(){
         return $this->belongsTo(Order::class);
     }
@@ -18,10 +19,5 @@ class OrderDispute extends Model
         return $this->belongsTo(User::class,'arbitrator_id');
     }
 
-    public function vendor(){
-        return $this->order->shop;
-    }
-    public function shopper(){
-        return $this->order->user;
-    }
+    
 }

@@ -89,7 +89,7 @@
                             <p class="font-body--md-400">
                                 {{$order->shop->address}}, {{$order->shop->city ? $order->shop->city->name : ''}} , {{$order->shop->state->name}}
                             </p>
-                          @elseif($order->deliveryfee == '0.00')
+                          @elseif($order->deliveryfee)
                             <p class="font-body--md-400">
                               {{$order->shop->address}}, {{$order->shop->city ? $order->shop->city->name : ''}} , {{$order->shop->state->name}}
                             </p>
@@ -108,7 +108,7 @@
                               <p class="font-body--md-400"> {{$order->shop->mobile}}</p>
                             </div>
                           </div>
-                        @elseif($order->deliveryfee == '0.00')
+                        @elseif($order->deliveryfee)
                           <div class="dashboard__details-card-item__inner">
                             <div class=" dashboard__details-card-item__inner-contact   " >
                               <h5 class="title">Email</h5>
@@ -140,7 +140,7 @@
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Payment Status:</h5>
                           <p class="font-body--md-500">
-                              @if($order->payment) Paid @else Pending @endif
+                              @if($order->payment_item) Paid @else Pending @endif
                           </p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
@@ -225,7 +225,7 @@
               </div>
               
               <!-- Update status  -->
-              @if(in_array($order->status,["ready","disputed"]))
+              @if(in_array($order->status,["ready","shipped"]))
               <form method="post" class="my-5" id="orderstatus" action="{{route('admin.order.update')}}">@csrf
                 <input type="hidden" name="order_id" value=" {{$order->id}}">
                 <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
@@ -236,13 +236,7 @@
                     <select id="" name="status" class="form-control" required="true" style="min-width:250px">
                       <option selected disabled value="null">Select </option>
                       <option value="shipped">Shipped</option>
-                      
                       <option value="delivered">Delivered</option>
-                     
-                      
-                      @if($order->status == 'dispute' && $order->statuses->firstWhere('name','returned')->created_at->addHours(cache('settings')['order_rejected_to_acceptance_period']) > now())
-                        <option value="closed"> Reject </option>
-                      @endif
                     </select>
                   </div>
                   <div class="pt-2 pt-md-0">
@@ -251,6 +245,41 @@
                     </button>
                   </div>
                 </div>
+              </form>
+              @endif
+              @if($order->status == "disputed")
+              <form method="post" class="my-5" id="orderstatus" action="{{route('admin.order.resolution')}}" onsubmit="return confirm('Are you sure the dispute has been resolved between the parties?');">@csrf
+                <div class="mb-3 text-center">
+                  <label for="states" class="font-body--md-600">Resolve Dispute: </label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                      <div class="d-flex flex-column px-3">
+                        <input type="hidden" name="order_id" value=" {{$order->id}}">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <div class="contact-form-input">
+                            <label for="lname2">Pay Seller % </label>
+                            <input type="number" max="100" id="seller" value="100" name="seller" required/>
+                          </div>
+                          <div class="contact-form-input">
+                            <label for="number1">Refund Buyer %</label>
+                            <input type="number" max="100" id="buyer" value="0"  name="buyer"  required/>
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="pt-2 pt-md-0 text-center">
+                          <div class="contact-form-input contact-form-textarea" style="margin-top:20px">
+                            <textarea name="remark" id="remark" placeholder="Remark"></textarea>
+                          </div>
+                          <button class="button button--md w-100" type="submit" id="btn-update">
+                            Close Dispute
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                
               </form>
               @endif
             </div>
@@ -409,7 +438,7 @@
                         @if($order->status == 'disputed')
                         <div class="comment-box pt-0"> 
                           <h5 class="font-body--md-400">Write a message to buyer & seller </h5>
-                          <form action="{{route('order.message')}}" method="POST" class="mt-2">@csrf
+                          <form action="{{route('admin.order.message')}}" method="POST" class="mt-2">@csrf
                             <input type="hidden" name="order_id" value=" {{$order->id}}">
                             <input type="hidden" name="sender_id" value=" {{auth()->id()}}">
                             <input type="hidden" name="sender_type" value="App\Models\User">
@@ -457,7 +486,7 @@
                               <div class="user-message-info">
                                 <div class="user-name">
                                   <h5 class="font-body--md-500">
-                                    @if($message->sender_type == 'App\Models\Shop'){{$order->shop->name}} @else {{$order->user->name}} @endif
+                                    {{$message->sender->name}}
                                   </h5>
                                   <p class="date">{{$message->created_at->format('d M,Y h:i A')}}</p>
                                 </div>
@@ -494,5 +523,12 @@
   
 @endsection
 @push('scripts')
-
+<script>
+    $('#seller').on('input',function(){
+      $('#buyer').val(100 - $(this).val())
+    })
+    $('#buyer').on('input',function(){
+      $('#seller').val(100 - $(this).val())
+    })
+</script>
 @endpush

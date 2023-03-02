@@ -27,10 +27,14 @@ class OrderPurchased
     }
 
     /**
-     * Get the channels the event should broadcast on.
+     *
      *DecreaseProduct::class,
-     *RemoveFromWishList::class,
+     *BroadcastOrder::class,
      * @return \Illuminate\Broadcasting\Channel|array
      */
+    public function broadcastOn()
+    {
+        return new PrivateChannel('channel-name');
+    }
     
 }

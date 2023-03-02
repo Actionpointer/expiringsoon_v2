@@ -76,26 +76,7 @@
                                     <p class="order-total-price">   {!!$order->shop->country->currency->symbol!!}{{number_format($order->total, 0)}} </p>
                                 </td>
                                 <!-- Status -->
-                                <td> @switch($order->status)
-                                    @case('new') Payment Pending
-                                        
-                                        @break
-                                    @case('processing') Processing
-                                        
-                                        @break
-                                    @case('shipped') Shipped
-                                    
-                                    @break
-                                    @case('delivered') Delivered
-                                        
-                                        @break
-                                    @case('completed') Completed
-                                    
-                                    @break
-                                    @default Cancelled
-                                        
-                                @endswitch
-                                  {{-- {{$order->status}}</td> --}}
+                                <td> {{ucwords($order->status)}} </td>
                                 <!-- Details page  -->
                                 <td>
                                   <a href="{{route('order.show',$order)}}">

@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderPurchased;
+use App\Events\OrderCompleted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DecreaseProduct implements ShouldQueue
+class RemoveFromWishList
 {
     /**
      * Create the event listener.
@@ -21,15 +21,11 @@ class DecreaseProduct implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\OrderPurchased  $event
+     * @param  \App\Events\OrderCompleted  $event
      * @return void
      */
-    public function handle(OrderPurchased $event)
+    public function handle(OrderCompleted $event)
     {
-        foreach($event->order->items as $cart){
-            $cart->product->stock -= $cart->quantity;
-            $cart->product->save();
-        }
-
+        //
     }
 }

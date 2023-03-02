@@ -55,7 +55,7 @@ class OrderStatusCustomerNotification extends Notification
             $view = 'emails.completed';
         }
         return (new MailMessage)->subject('Welcome Aboard')->view(
-            $view, ['user' => $notifiable]
+            'emails.completed', ['user' => $notifiable]
         );
     }
 

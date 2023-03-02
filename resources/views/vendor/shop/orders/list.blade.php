@@ -77,7 +77,7 @@
                                     <p class="order-total-price">   {!!$shop->country->currency->symbol!!}{{number_format($order->total, 0)}} </p>
                                 </td>
                                 <!-- Status -->
-                                <td> {{$order->status}}</td>
+                                <td> {{ucwords($order->status)}}</td>
                                 <!-- Details page  -->
                                 <td>
                                     Vendor

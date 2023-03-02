@@ -50,12 +50,7 @@ class SettlementObserver
         //
     }
 
-    /**
-     * Handle the Settlement "force deleted" event.
-     *
-     * @param  \App\Models\Settlement  $settlement
-     * @return void
-     */
+    
     public function forceDeleted(Settlement $settlement)
     {
         //

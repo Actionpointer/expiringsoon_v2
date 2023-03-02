@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Adplan;
+use App\Models\PaymentItem;
 use App\Observers\FeatureObserver;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -57,6 +58,10 @@ class Feature extends Model
 
     public function adverts(){
         return $this->hasMany(Advert::class);
+    }
+    
+    public function payment_item(){
+        return $this->morphOne(PaymentItem::class,'paymentable');
     }
 
     
