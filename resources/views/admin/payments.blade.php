@@ -154,7 +154,7 @@
                                                     {{$settlement->receiver->name}}
                                                 </td>
                                                 <td class="cart-table-item order-date align-middle">{{$settlement->description}}
-                                                    <a href="{{route('receipt',$settlement)}}" class="text-success" target="_blank">View</a>
+                                                    
                                                 </td>
                                                 <td class="cart-table-item order-date align-middle">
                                                     <p class="font-body--lg-500" style="color:#00b207">{!!$settlement->receiver->country->currency->symbol!!}{{ number_format($settlement->amount, 2)}}</p>
