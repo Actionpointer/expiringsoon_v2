@@ -22,9 +22,13 @@ eJtqIzn8rY5oE00IgYVeL2p
 swiper.js is displaying duplicates
 
 remove status,tracking code,discount, delivered_at from order table
+
 add arbitrator_id, deliverer to order table
+
 change total, subtotal, vat and deliveryfee to varchar191 on orders
+
 add description field to settlement table
+
 remove reference from settlement table
 change amount on settlement table to varchar191
 run php artisan migrate on server
