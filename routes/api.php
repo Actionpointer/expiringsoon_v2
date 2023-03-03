@@ -66,8 +66,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('notifications',[StaffController::class, 'notifications']);
         Route::post('notifications/read',[StaffController::class, 'readNotifications']);
         Route::get('transactions',[PaymentController::class, 'index']);
-        Route::get('generate-otp',[StaffController::class, 'generate_otp']);
-        Route::post('pin', [StaffController::class, 'pin']);
+        Route::get('generate-otp',[UserController::class, 'generate_otp']);
+        Route::post('pin', [UserController::class, 'pin']);
         Route::post('kyc',[StaffController::class,'kyc']);
     });
 
