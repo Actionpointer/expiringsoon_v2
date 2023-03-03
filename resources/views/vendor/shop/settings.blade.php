@@ -401,7 +401,7 @@
                                 <div class="dashboard__content-card-body">
                                 <form method="post" id="editcategory" action="{{route('vendor.shop.shipping.store',$shop)}}" >@csrf
                                     <div class="contact-form__content">
-                
+                                      <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                     <div class="contact-form__content-group">
                                         <div class="contact-form-input">
                                         <label for="states">State </label>
