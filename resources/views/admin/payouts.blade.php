@@ -106,11 +106,11 @@
                                   </td>
                                  
                                   <td class="cart-table-item add-cart align-middle">
-                                    @if($payout->status == 'paid')
+                                    {{-- @if($payout->status == 'paid') --}}
                                       <a href="">View Receipt</a>
-                                    @elseif($payout->status == 'processing')
+                                    {{-- @elseif($payout->status == 'processing')
                                       <span class="btn btn-sm btn-info">Please wait</span>
-                                    @else
+                                    @else --}}
                                     <div class="dropdown">
                                       <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         Action
@@ -127,7 +127,7 @@
                                         </form>                                      
                                       </div>
                                     </div>
-                                    @endif
+                                    {{-- @endif --}}
                                   </td>
                               </tr>    
                         @empty

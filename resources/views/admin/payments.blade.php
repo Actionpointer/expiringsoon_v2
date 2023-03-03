@@ -143,11 +143,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($settlements as $settlement)
+                                        @forelse ($settlements->sortByDesc('updated_at') as $settlement)
                                             <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                                                 <!-- item  -->
                                                 <td class="cart-table-item order-date align-middle">
-                                                    <span style="font-size:12px;color:#888">{{ $settlement->created_at->format('l, F d, Y')}}</span>
+                                                    <span style="font-size:12px;color:#888">{{ $settlement->created_at->format('l, F d, Y h:i A')}}</span>
                                                 </td>
                                                 <!-- Price  -->
                                                 <td class="cart-table-item order-date align-middle">

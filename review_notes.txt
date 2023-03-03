@@ -1,0 +1,30 @@
+Mozilla & detects ssl as insecure
+
+separate admin per country..
+super admin will see everything globally
+export orders, revenue to excel file 
+
+set order processing to automatic cancel period on settings
+
+set rollers while fetching states and cities in admin
+manager role per country to view data & download
+
+add canadian dollars & swiss franc to the list of currencies
+
+super admin should manage role Permissions
+
+make coupons specific to countries
+category url from home page is wrong
+
+re-add payout receipt to settlement page
+
+add reason to payout reject
+
+block ipaddress from security page
+
+
+superadmin
+country admin
+country customer care
+country manager
+country auditor - orders, payouts & payments
