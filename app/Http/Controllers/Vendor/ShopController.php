@@ -10,6 +10,7 @@ use App\Models\State;
 use App\Events\DeleteShop;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request; 
+use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
@@ -162,15 +163,15 @@ class ShopController extends Controller
     }
     
     public function update(Request $request){
-        $user = auth()->user();
+        $shop = Shop::find($request->shop_id);
         try {
             $validator = Validator::make($request->all(), 
             [
-                'shop_id' => 'required|numeric',
+                'shop_id' => 'required|numeric|exists:shops,id',
                 // 'pin' => 'required|numeric',
                 'name' => 'nullable|string',
                 'email' => 'nullable|string|unique:shops',
-                'phone' => 'nullable|string|unique:shops',
+                'phone' => ['nullable','string',Rule::unique('shops')->ignore($shop)],
                 'published' => 'nullable|numeric',
                 'photo' => 'nullable|max:2048|image',
                 'address' => 'nullable|string',
@@ -198,13 +199,6 @@ class ShopController extends Controller
             //     redirect()->back()->with(['result'=> '0','message'=> 'Invalid Pin']);
             // }
             
-            $shop = Shop::find($request->shop_id);
-            if(!$shop){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Shop Not found',
-                ], 401);
-            }
             $request->name ? $shop->name = $request->name:'';
             $request->email ? $shop->email = $request->email:'';
             $request->phone ? $shop->phone = $request->phone:'';
