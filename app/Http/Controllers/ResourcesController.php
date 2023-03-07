@@ -58,6 +58,8 @@ class ResourcesController extends Controller
         }
     }
 
+    // public function countries()
+
     public function states($country_id = null){
         if($country_id)
             $states = State::where('country_id',$country_id)->select('id','name','iso')->get();

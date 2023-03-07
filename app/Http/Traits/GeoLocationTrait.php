@@ -1,9 +1,11 @@
 <?php
 namespace App\Http\Traits;
 
+use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
 use App\Models\Location;
+use App\Jobs\CreateCitiesJob;
 use App\Jobs\CreateStatesJob;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,16 +48,27 @@ trait GeoLocationTrait
         }
         return $state;
     }
+    protected function getCity($country_id,$state_id,$city_name){
+        // $state = State::where('country_id',$country_id)->where('name','LIKE',"%".$state_name."%")->first();
+        $city = City::where('state_id',$state_id)->where('name',$city_name)->first();
+        if(!$city){
+            $city = City::create(['country_id'=> $country_id,'state_id'=> $state_id,'name'=> $city_name]);
+            CreateCitiesJob::dispatch($country_id,$state_id);
+        }
+        return $city;
+    }
 
     public function saveLocation($geo_location){
         $country = $this->getCountryByIso($geo_location['geoplugin_countryCode']);
         $state = $this->getState($country->id,$geo_location['geoplugin_region'],$geo_location['geoplugin_regionCode']);
-        if($country && $state){
+        $city = $this->getCity($country->id,$state->id,$geo_location['geoplugin_city']);
+        if($country && $state && $city){
             $location = Location::updateOrCreate([
                 'ipaddress'=> $geo_location['geoplugin_request'],
                 'country_id'=> $country->id,
                 'user_id'=> auth()->check() ? auth()->id() : null,
-                'state_id'=> $state->id
+                'state_id'=> $state->id,
+                'city_id'=> $city->id
             ]);
             return $location;
         }else return null;

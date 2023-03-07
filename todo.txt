@@ -21,16 +21,40 @@ eJtqIzn8rY5oE00IgYVeL2p
 -------------------------------------------------------------------------------------------------
 swiper.js is displaying duplicates
 
-remove status,tracking code,discount, delivered_at from order table
+Mozilla & detects ssl as insecure
 
-add arbitrator_id, deliverer to order table
+separate admin per country..
+super admin will see everything globally
+export orders, revenue to excel file 
 
-change total, subtotal, vat and deliveryfee to varchar191 on orders
+set order processing to automatic cancel period on settings
 
-add description field to settlement table
+set rollers while fetching states and cities in admin
+manager role per country to view data & download
 
-remove reference from settlement table
-change amount on settlement table to varchar191
+add canadian dollars & swiss franc to the list of currencies
+
+super admin should manage role Permissions
+
+make coupons specific to countries
+category url from home page is wrong
+
+re-add payout receipt to settlement page
+
+add reason to payout reject
+
+block ipaddress from security page
+
+
+superadmin
+country admin
+country customer care
+country manager
+country auditor - orders, payouts & payments
+
+
+add reference to settlement table and show payout receipt there
+
 run php artisan migrate on server
 
 
@@ -50,7 +74,6 @@ admin should know orders that are stuck in a particular status e.g processing, o
 
 email that user has been returned to free subscription.
 
-if admin is handling the delivery, vendor will mark the order to be ready, then admin should be the one to change the order to shipped, delivered
 
 display order status: rejected | returned | dispute/refunded | closed
 

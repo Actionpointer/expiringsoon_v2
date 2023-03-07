@@ -46,6 +46,7 @@ Route::post('password/reset',[App\Http\Controllers\Auth\ResetPasswordController:
 
 Route::get('plans', [SubscriptionController::class, 'plans']);
 Route::get('states', [ResourcesController::class, 'states']);
+Route::get('states', [ResourcesController::class, 'states']);
 Route::get('cities/{state_id}', [ResourcesController::class, 'cities']);
 Route::get('categories', [ResourcesController::class, 'categories']);
 Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);

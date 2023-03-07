@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Location extends Model
 {
     use HasFactory;
-    protected $fillable = ['ipaddress','user_id','country_id','state_id'];
+    protected $fillable = ['ipaddress','user_id','country_id','state_id','city_id'];
 
     public function country(){
         return $this->belongsTo(Country::class);
