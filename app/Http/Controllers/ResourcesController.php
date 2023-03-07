@@ -58,7 +58,14 @@ class ResourcesController extends Controller
         }
     }
 
-    // public function countries()
+    public function location(){
+        $location = session('locale');
+        return response()->json([
+            'status' => true,
+            'message' => 'User Geo information returned',
+            'data' => $location,
+        ], 200);
+    }
 
     public function states($country_id = null){
         if($country_id)
