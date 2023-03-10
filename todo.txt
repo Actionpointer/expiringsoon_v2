@@ -19,6 +19,10 @@ sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWy
 eJtqIzn8rY5oE00IgYVeL2p 
 
 -------------------------------------------------------------------------------------------------
+payouts: add rejection_reason
+add reference to settlement table and show payout receipt there
+country_id to coupon
+--------------------------------------------------------------------------------------------------
 swiper.js is displaying duplicates
 
 Mozilla & detects ssl as insecure
@@ -51,11 +55,6 @@ country admin
 country customer care
 country manager
 country auditor - orders, payouts & payments
-
-
-add reference to settlement table and show payout receipt there
-
-run php artisan migrate on server
 
 
 use pagination in shop/view page for all other pages requiring pagination

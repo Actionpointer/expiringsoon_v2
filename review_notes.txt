@@ -26,8 +26,10 @@ orders
 subscriptions
 
 
+protect routes per role
+protect menus per role
 
-6730
-52 - 4 = 48
+instead of listing all the roles.. just say if user can do this action.. the system will check the role
+against the action.
 
-48 * 6730 = 323,040
+load data per country.

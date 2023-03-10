@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Bank;
 
-use App\Models\User;
+
 use App\Models\State;
 use App\Models\Address;
-use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Rules\OtpValidateRule;
-use App\Models\OneTimePassword;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\Hash;
@@ -132,7 +130,6 @@ class UserController extends Controller
             ], 200) :
              redirect()->back()->with(['result' => '1','message'=>'Pin operation was successfully completed']); //with success
     }
-
 
     public function addresses(){
         $user = auth()->user();

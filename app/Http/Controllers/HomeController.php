@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
-use App\Models\State;
-use Illuminate\Http\Request;
 use App\Http\Traits\GeoLocationTrait;
-// use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {

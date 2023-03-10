@@ -122,7 +122,7 @@ trait OrderTrait
         }
 
         if($coupon->is_percentage)
-            return ['description'=> 'Discount has been applied to your order','value'=>$coupon->value /100 * $amount];
+            return ['description'=> 'Discount has been applied to your order','value'=> $coupon->value /100 * $amount];
         else
             return ['description'=> 'Discount has been applied to your order','value'=> $coupon->value]; 
     }
