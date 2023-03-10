@@ -1,7 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
@@ -14,15 +13,28 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SubscriptionController;
 
-Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,customercare,security,auditor'],function(){
+Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,admin,customercare,security,auditor'],function(){
     Route::get('dashboard',[UserController::class, 'dashboard'])->name('dashboard');
     
     Route::group(['prefix'=> 'settings','as'=>'settings.'],function(){
         Route::get('/',[SettingsController::class, 'index'])->name('global');
         Route::post('store',[SettingsController::class, 'store'])->name('store');
+
+        Route::get('country/{country}',[SettingsController::class, 'country'])->name('country');
         Route::post('country/basic',[SettingsController::class, 'country_basic'])->name('country.basic');
         Route::post('country/states',[SettingsController::class, 'country_states'])->name('country.states');
         Route::post('country/cities',[SettingsController::class, 'country_cities'])->name('country.cities');
+
+        Route::get('plan/{plan}',[SettingsController::class, 'plan'])->name('plan');
+        Route::post('plans',[SettingsController::class, 'plans'])->name('plans');
+        Route::post('plan/pricing',[SettingsController::class, 'plan_pricing'])->name('plan.pricing');
+
+        Route::get('advert-plans/{adplan}',[SettingsController::class, 'adplan'])->name('adplan');
+        Route::post('adplans',[SettingsController::class, 'adplans'])->name('adplans');
+        Route::post('ad/pricing',[SettingsController::class, 'ad_pricing'])->name('ad.pricing');
+
+        Route::get('logistics',[SettingsController::class, 'logistics'])->name('logistics');
+        
     });
     
     Route::group(['prefix'=> 'shipment','as'=>'shipments.'],function(){
@@ -38,9 +50,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
         Route::post('delete',[UserController::class, 'destroy'])->name('delete');
     });
     
-    Route::post('plans',[SettingsController::class, 'plans'])->name('plans');
-    Route::post('adplans',[SettingsController::class, 'adplans'])->name('adplans');
-    Route::post('pricing',[SettingsController::class, 'pricing'])->name('pricing');
+    
 
     
     Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
@@ -80,9 +90,5 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:admin,custo
     Route::get('adverts',[AdvertController::class, 'index'])->name('adverts');
     Route::post('adverts/manage',[AdvertController::class, 'manage'])->name('adverts.manage');
 
-
-    // Route::get('message/{user}',[MessageController::class, 'show'])->name('messages');
-    // Route::post('message/{user}',[MessageController::class, 'store'])->name('message.store');
-    
     Route::get('security',[SecurityController::class, 'index'])->name('security');
 });

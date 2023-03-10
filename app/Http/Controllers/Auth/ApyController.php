@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\OneTimePassword;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -93,7 +92,7 @@ class ApyController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-            if($user->role != 'vendor'){
+            if($user->role->name != 'vendor'){
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized Login Attempt',

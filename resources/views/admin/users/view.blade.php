@@ -114,7 +114,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <table class="table small">
-                                  @if($user->role == 'vendor' && $user->subscription_id)
+                                  @if($user->role->name == 'vendor' && $user->subscription_id)
                                     <tr><td>No of Products</td><td align="right">{{$user->products->count()}}</td></tr>
                                     <tr><td>No of Shops</td><td align="right">{{$user->shops->count()}}</td></tr>
                                     <tr>

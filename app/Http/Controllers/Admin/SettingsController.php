@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\City;
+use App\Models\Cost;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\Price;
@@ -31,15 +32,25 @@ class SettingsController extends Controller
     }
     
     public function index(){
-        $users = User::whereNotIn('role',['shopper','vendor'])->get();
+        $users = User::whereDoesntHave('role',function($query){ $query->whereIn('name',['shopper','vendor','staff']);})->get();
         $countries = Country::all();
         $states = State::all();
         $plans = Plan::all();
         $adplans = Adplan::all();
         $settings = Setting::all();
-        $rates = ShippingRate::whereNull('shop_id')->get();
+        
         $currencies = Currency::all();
-        return view('admin.settings',compact('plans','adplans','currencies','users','countries','settings','rates','states'));
+        return view('admin.settings.global',compact('plans','adplans','currencies','users','countries','settings','states'));
+    }
+
+    public function country(Country $country){
+        $currencies = Currency::all();
+        return view('admin.settings.country',compact('country','currencies'));
+    }
+    public function plan(Plan $plan){
+        $currencies = Currency::all();
+        // dd($plan->prices);
+        return view('admin.settings.plan',compact('plan','currencies'));
     }
 
     public function store(Request $request){
@@ -68,6 +79,7 @@ class SettingsController extends Controller
         $country->save();
         return redirect()->back()->with(['result'=> 1,'message'=> 'Udpated Country Settings']);
     }
+
     public function country_states(Request $request){
         $country = Country::find($request->country_id);
         if($request->type == 'manual' && $request->states){
@@ -87,6 +99,7 @@ class SettingsController extends Controller
         }
         return redirect()->back()->with(['result'=> 1,'message'=> 'Udpated Country States']);
     }
+
     public function country_cities(Request $request){
         $country = Country::find($request->country_id);
         $state = Country::find($request->state_id);
@@ -113,20 +126,38 @@ class SettingsController extends Controller
         return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Updated Successfully']);
     }
 
-    public function pricing(Request $request){
-        // dd($request->all());
+    public function plan_pricing(Request $request){
+        $price = Price::updateOrCreate(['plan_id'=> $request->plan_id,'currency_id'=> $request->currency_id],[
+        'minimum_payout'=> $request->minimum_payout,'maximum_payout'=> $request->maximum_payout,
+        'commission_percentage'=> $request->commission_percentage,'commission_fixed'=> $request->commission_fixed,
+        'months_1'=> $request->months_1,'months_3'=> $request->months_3,
+        'months_6'=> $request->months_6,'months_12'=> $request->months_12]);
         
+        
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Prices Updated Successfully']);
+    }
+
+
+    public function adplans(Request $request){  
+        $plan = AdPlan::where('id',$request->adplan_id)->update(['name'=> $request->name,'description'=>  $request->description]);
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Updated advert plan successfully']);
+    }
+
+    public function ad_pricing(Request $request){
         foreach($request->currencies as $currency){
             foreach($request->description as $title => $value){
-                $price = Price::updateOrCreate(['priceable_id'=> $request->priceable_id,'priceable_type'=> $request->priceable_type,'description'=> $title,'currency_id'=> $currency],['amount'=> $value[$currency] ]);
+                $cost = Cost::updateOrCreate(['adplan_id'=> $request->adplan_id,'currency_id'=> $currency],['amount'=> $value[$currency] ]);
             }   
         }
         return redirect()->back()->with(['result'=> 1,'message'=> 'Prices Updated Successfully']);
     }
 
-    public function adplans(Request $request){  
-        $plan = AdPlan::where('id',$request->adplan_id)->update(['name'=> $request->name,'description'=>  $request->description]);
-        return redirect()->back()->with(['result'=> 1,'message'=> 'Updated advert plan successfully']);
+    public function logistics(){
+        $countries = Country::all();
+        $states = State::all();
+        $rates = ShippingRate::whereNull('shop_id')->get();
+        
+        return view('admin.settings.logistics',compact('rates','countries','states'));
     }
     
     

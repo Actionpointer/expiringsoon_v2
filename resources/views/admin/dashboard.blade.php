@@ -62,7 +62,7 @@
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Products :</span> <strong>{{\App\Models\Product::count()}}</strong></p>
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Shops :</span> <strong>{{\App\Models\Shop::count()}}</strong></p>
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Adverts :</span> <strong>{{\App\Models\Advert::count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Customers :</span> <strong>{{\App\Models\User::where('role','shopper')->count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Customers :</span> <strong>{{\App\Models\Role::where('name','shopper')->first()->users->count()}}</strong></p>
                     <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Orders :</span> <strong>{{App\Models\Order::count()}}</strong></p>
                   </div>
                 </div>

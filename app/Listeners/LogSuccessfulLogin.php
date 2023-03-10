@@ -30,7 +30,7 @@ class LogSuccessfulLogin
     public function handle(Login $event)
     {
         $user = auth()->user();
-        if($user->role == 'vendor' && $user->subscription_id){
+        if($user->role->name == 'vendor' && $user->subscription_id){
             if(!$user->subscription->active && !$user->subscription->is_free){
                 $user->subscription_id = $user->subscriptions->firstWhere('is_free',true)->id;
                 $user->save();

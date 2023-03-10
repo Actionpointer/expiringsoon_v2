@@ -13,15 +13,16 @@ class HomeController extends Controller
     }
     
     public function home(){
+        /** @var \App\Models\User $user **/
         $user = auth()->user(); 
-        if($user->role == 'shopper'){
+        if($user->isRole('shopper')){
             return view('customer.dashboard',compact('user'));
         }
-        if($user->role == 'vendor' && !$user->subscription_id){
+        if($user->isRole('staff')){
             $shop = $user->shop;
             return redirect()->route('vendor.shop.show',$shop);
         }
-        if($user->role == 'vendor' && $user->subscription_id){
+        if($user->isRole('vendor')){
             return redirect()->route('vendor.dashboard');
         }
        

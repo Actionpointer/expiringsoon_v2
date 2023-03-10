@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\OneTimePassword;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +45,7 @@ class ApiController extends Controller
                     'error' => $validateUser->errors()->first()
                 ], 401);
             }
-
+            $role_id = Role::where('name','vendor')->first()->id;
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -54,7 +54,7 @@ class ApiController extends Controller
                 'phone' => $request->phone,
                 'country_id' => session('locale')['country_id'],
                 'state_id' => session('locale')['state_id'],
-                'role' => 'vendor',
+                'role_id' => $role_id,
             ]);
 
             return response()->json([
@@ -102,7 +102,7 @@ class ApiController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-            if($user->role != 'vendor'){
+            if($user->role->name != 'vendor'){
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized Login Attempt',

@@ -31,6 +31,7 @@ class UserController extends Controller
     }
 
     public function update(Request $request){
+        /** @var \App\Models\User $user **/
         // dd($request->all());
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
@@ -69,6 +70,7 @@ class UserController extends Controller
     }
 
     public function password(Request $request){
+        /** @var \App\Models\User $user **/
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
             'oldpassword' => 'required|string',
@@ -108,6 +110,7 @@ class UserController extends Controller
     }
 
     public function pin(Request $request){
+        /** @var \App\Models\User $user **/
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
             'pin' => 'required|string|max:4|min:4',
@@ -161,6 +164,7 @@ class UserController extends Controller
     }
 
     public function notifications(){
+        /** @var \App\Models\User $user **/
         $user = auth()->user();
         $notifications = $user->notifications()->orderBy('created_at','desc')->paginate(10);
         return request()->expectsJson() ?

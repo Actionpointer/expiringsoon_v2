@@ -41,7 +41,7 @@ trait PaypalTrait
                       "items" => [
                           [
                               "name" => "Payment on Expiringsoon",
-                              "description" => "Payment for ".($user->role == 'shopper' ? 'Orders':'Subscription/Adverts'),
+                              "description" => "Payment for ".($user->role->name == 'shopper' ? 'Orders':'Subscription/Adverts'),
                               "quantity" => "1",
                               "unit_amount" => [
                                   "currency_code" => $payment->currency->code,

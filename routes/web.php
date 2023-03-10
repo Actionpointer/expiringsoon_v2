@@ -12,26 +12,13 @@ use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
-use Hamcrest\Type\IsString;
 
 Route::get('/broadcast', function () {
     $subscription = \App\Models\Subscription::find(3);
     $subscription->user->notify(new App\Notifications\SubscriptionStatusNotification($subscription));
     return "Event broadcaasted!";
 });
-Route::get('changeRoles',function (){
-    \App\Models\User::where('role','super_admin')->update(['role'=> 'superadmin']);
-    \App\Models\User::where('role','security')->update(['role'=> 'admin']);
-    $roles = \App\Models\Role::all();
-    $users = \App\Models\User::all();
-    foreach($users as $user){
-        if(!is_numeric($user->role)){
-            $user->role = $roles->firstWhere('name',$user->role)->id;
-            $user->save(); 
-        } 
-    }
-    return 'role changed';
-});
+
 
 Route::view('email','emails.completed');
 Route::view('help','help.index')->name('help.index');

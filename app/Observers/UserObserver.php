@@ -13,7 +13,7 @@ class UserObserver
     public function created(User $user)
     {
         
-        if($user->role == 'vendor' && !$user->shop_id){
+        if($user->role->name == 'vendor' && !$user->shop_id){
             $subscription = Subscription::create(
                 ['user_id'=> $user->id,
                 'plan_id'=> 1,

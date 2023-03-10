@@ -78,7 +78,7 @@
                       </td>
                       <!-- Price  -->
                       <td class="cart-table-item order-date align-middle">
-                        <p class="font-body--lg-500" style="color:#00b207">{{ucwords($user->role)}}</p>
+                        <p class="font-body--lg-500" style="color:#00b207">{{ucwords($user->role->name)}}</p>
                       </td>
                       <!-- Stock Status  -->
                       <td class="cart-table-item order-date align-middle">

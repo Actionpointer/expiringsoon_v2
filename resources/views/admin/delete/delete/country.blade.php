@@ -665,7 +665,7 @@
                                                     <td>{{$user->email}}<br>{{$user->mobile}}
                                                     </td>
                                                     <td>@if($user->status) Active @else Suspended @endif</td>
-                                                    <td>{{$user->role}}</td>
+                                                    <td>{{$user->role->name}}</td>
                                                     <td>
                                                         @if($user->id != Auth::id()) 
                                                         <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block';$('.select2').select2();">Edit </a> | 
@@ -688,10 +688,10 @@
                                                                     <div class="contact-form-input">
                                                                         <label for="states">Admin Level</label>
                                                                         <select id="abdcc{{$user->id}}" name="role" class="form-control-lg w-100 border text-muted" >
-                                                                            <option value='admin' @if($user->role == 'admin') selected @endif>Administrator</option>
-                                                                            <option value='customercare'  @if($user->role == 'customercare') selected @endif>Customer Care</option>
-                                                                            <option value='security' @if($user->role == 'security') selected @endif>Security</option>
-                                                                            <option value='auditor'  @if($user->role == 'auditor') selected @endif>Auditor</option>
+                                                                            <option value='admin' @if($user->role->name == 'admin') selected @endif>Administrator</option>
+                                                                            <option value='customercare'  @if($user->role->name == 'customercare') selected @endif>Customer Care</option>
+                                                                            <option value='security' @if($user->role->name == 'security') selected @endif>Security</option>
+                                                                            <option value='auditor'  @if($user->role->name == 'auditor') selected @endif>Auditor</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="contact-form-input">

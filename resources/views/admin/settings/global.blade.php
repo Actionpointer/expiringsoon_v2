@@ -72,11 +72,7 @@
                               Advert
                           </button>
                       </li>
-                      <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#pills-shipping" type="button" role="tab" aria-controls="pills-shipping" aria-selected="false">
-                            Shipping
-                        </button>
-                      </li>
+                      
                       
                       
                   </ul>
@@ -420,191 +416,24 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="">Country</th>
-                                                <th scope="col" class="">Basic</th>
-                                                <th scope="col" class="">States</th>
-                                                <th scope="col" class="">Cities</th>
-                                                {{-- <th scope="col" class="">Banks</th> --}}
+                                                <th scope="col" class="">Currency</th>
+                                                <th scope="col" class="">Location</th>
+                                                <th scope="col" class="">Payment Gateway</th>
+                                                <th scope="col" class="">Payout Gateway</th>
+                                                <th scope="col" class="">Settings</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($countries as $country)
                                                 <tr>
                                                     <td>{{$country->name}}</td>
-                                                    <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#country_basic{{$country->id}}">Open Basic</a></td>
-                                                    <td>{{$country->states->count()}} states, <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#country_states{{$country->id}}">Set States</a></td>
-                                                    <td>{{$country->cities->count()}} cities, <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#country_cities{{$country->id}}">Set Cities</a></td>
-                                                    {{-- <td>12 Banks, <a href="#">Set Banks</a></td> --}}
+                                                    <td>{{$country->currency->name}}</td>
+                                                    <td>{{$country->states->count()}} states, {{$country->cities->count()}} cities</td>
+                                                    <td>{{$country->payment_gateway}}</td>
+                                                    <td>{{$country->payout_gateway}}</td>
+                                                    <td><a href="{{route('admin.settings.country',$country)}}" target="_blank">Open Settings</a></td>
                                                 </tr>
-                                                <div class="modal fade" id="country_basic{{$country->id}}" tabindex="-1" aria-labelledby="country_basic{{$country->id}}ModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                            <h5 class="modal-title" id="country_basic{{$country->id}}ModalLabel">Edit {{$country->name}} Setting</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{route('admin.settings.country.basic')}}" method="post" id="country_basic{{$country->id}}form">
-                                                                    @csrf 
-                                                                    <input type="hidden" name="country_id" value="{{$country->id}}">
-                                                                    <div class="contact-form__content my-3">
-                                                                        <div class="contact-form-input">
-                                                                            <label for="origin">Currency </label>
-                                                                            <select id="currency_id{{$country->id}}" name="currency_id" class="select2" >
-                                                                                @foreach ($currencies as $currency)
-                                                                                    <option value="{{$currency->id}}" @if($country->currency_id == $currency->id) selected @endif>{{$currency->name}}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="contact-form__content-group">
-                                                                            <div class="contact-form-input">
-                                                                                <label for="destination_a{{$country->id}}">Receiving Payment Gateway </label>
-                                                                                <select id="destination_a{{$country->id}}" name="payment_gateway" class="form-control">
-                                                                                    <option value="">Select</option>
-                                                                                    <option value="paystack" @if($country->payment_gateway == 'paystack') selected @endif>Paystack</option>
-                                                                                    <option value="flutterwave" @if($country->payment_gateway == 'flutterwave') selected @endif>Flutterwave</option>
-                                                                                    <option value="paypal" @if($country->payment_gateway == 'paypal') selected @endif>Paypal</option>
-                                                                                    <option value="stripe" @if($country->payment_gateway == 'stripe') selected @endif>Stripe</option>
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="contact-form-input">
-                                                                                <label for="destination_b{{$country->id}}">Transfering Payment Gateway </label>
-                                                                                <select id="destination_b{{$country->id}}" name="payout_gateway" class="form-control">
-                                                                                    <option value="">Select</option>
-                                                                                    <option value="paystack" @if($country->payout_gateway == 'paystack') selected @endif >Paystack</option>
-                                                                                    <option value="flutterwave" @if($country->payout_gateway == 'flutterwave') selected @endif >Flutterwave</option>
-                                                                                    <option value="paypal" @if($country->payout_gateway == 'paypal') selected @endif >Paypal</option>
-                                                                                    <option value="stripe" @if($country->payout_gateway == 'stripe') selected @endif >Stripe</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                
-                                                                        <div class="contact-form__content-group">
-                                                                            <div class="contact-form-input">
-                                                                                <label for="hours">Vat</label>
-                                                                                <input type="number" step="0.1" name="vat" value="{{$country->vat}}" placeholder="vat" />
-                                                                            </div>
-                                                                
-                                                                            <div class="contact-form-input">
-                                                                                <label for="amounts">Bank Account Digits</label>
-                                                                                <input type="number" name="bank_digits" value="{{$country->bank_digits}}" placeholder="e.g 10" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="contact-form-input">
-                                                                            <label for="pin">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pin{{$country->id}}" value="" placeholder="Access pin">
-                                                                        </div>
-                                                                        <div class="contact-form-btn">
-                                                                            <button class="button button--md " type="submit">
-                                                                                Update Basic Settings
-                                                                            </button>
-                                                                            <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal fade" id="country_states{{$country->id}}" tabindex="-1" aria-labelledby="country_states{{$country->id}}ModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                            <h5 class="modal-title" id="country_states{{$country->id}}ModalLabel">Manage States in {{$country->name}} </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{route('admin.settings.country.states')}}" method="post" id="country_states{{$country->id}}form">
-                                                                    <h5 class="font-body--xl-400">Set Automatically</h5>
-                                                                    <p class="font-body--md-400">The system will attempt to fetch online all the states belonging to {{$country->name}}.</p>
-                                                                    <div class="contact-form-btn text-center my-3">
-                                                                        <button class="button button--md" name="type" value="automatic" type="submit">
-                                                                            Fetch States Automatically
-                                                                        </button>
-                                                                    </div>
-                                                                    <p class="text-center">OR</p>
-                                                                    @csrf 
-                                                                    <h5 class="font-body--xl-400">Set Manually</h5>
-                                                                    <p class="font-body--md-400">States added via this form will be appended to the existing list. Any duplicate found will not be added</p>
-                                                                    <p class="font-body--md-400">Kindly ensure to add each state in the format of Code:Name such as e.g LA:Lagos,OG:Ogun,FC:Abuja. Please check the state code online to add the correct code.</p>
-                                                                    <input type="hidden" name="country_id" value="{{$country->id}}">
-                                                                    <div class="contact-form__content my-3">
-                                                                        <div class="contact-form--input contact-form--input-area">
-                                                                            <label for="destination">Add States</label>
-                                                                            <textarea name="states" cols="auto" class="w-100" placeholder="e.g LA:Lagos,OG:Ogun,FC:Abuja" ></textarea>
-                                                                        </div>
-                                                                        <div class="contact-form-input">
-                                                                            <label for="pinedit{{$country->id}}">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pinedit{{$country->id}}" value="" placeholder="Access pin">
-                                                                        </div>
-                                                                        <div class="contact-form-btn">
-                                                                            <button class="button button--md" name="type" value="manual" type="submit">
-                                                                                Add States
-                                                                            </button>
-                                                                            <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                                  
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal fade" id="country_cities{{$country->id}}" tabindex="-1" aria-labelledby="country_cities{{$country->id}}ModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                            <h5 class="modal-title" id="country_cities{{$country->id}}ModalLabel">Manage Cities in {{$country->name}}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{route('admin.settings.country.cities')}}" method="post" id="country_cities{{$country->id}}form">
-                                                                    <input type="hidden" name="country_id" value="{{$country->id}}">
-                                                                    <div class="contact-form__content my-3">
-                                                                        <div class="contact-form-input">
-                                                                            <label for="statex">State </label>
-                                                                            <select name="state_id" class="select2" required>
-                                                                                @foreach ($country->states as $state)
-                                                                                    <option value="{{$state->id}}">{{$state->name}}-{{$state->cities->count()}} cities</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5 class="font-body--xl-400">Fetch Automatically</h5>
-                                                                    <p class="font-body--md-400">The system will attempt to fetch online all the cities belonging to selected state.</p>
-                                                                    <div class="contact-form-btn text-center my-3">
-                                                                        <button class="button button--md" name="type" value="automatic" type="submit">
-                                                                            Fetch Cities Automatically
-                                                                        </button>
-                                                                    </div>
-                                                                    <p class="text-center">OR</p>
-                                                                    @csrf 
-                                                                    <h5>Set Manually</h5>
-                                                                    <p class="font-body--md-400">States added via this form will be appended to the existing list. Any duplicate found will not be added</p>
-                                                                    <p class="font-body--md-400">Kindly ensure to add each city name like this. e.g Yaba,Agege,</p>
-                                                                        <div class="contact-form--input contact-form--input-area">
-                                                                            <label for="destination">Add Cities</label>
-                                                                            <textarea name="cities" cols="auto" class="w-100" placeholder="e.g LA:Lagos,OG:Ogun,FC:Abuja" ></textarea>
-                                                                        </div>
-                                                                        <div class="contact-form-input">
-                                                                            <label for="pin">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pincity{{$country->id}}" value="" placeholder="Access pin">
-                                                                        </div>
-                                                                        <div class="contact-form-btn">
-                                                                            <button class="button button--md" name="type" value="manual" type="submit">
-                                                                                Add Cities
-                                                                            </button>
-                                                                            <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                                  
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                
                                             @endforeach
                                         </tbody>
                                         </table>
@@ -697,7 +526,7 @@
                                                     <td>{{$user->email}}<br>{{$user->mobile}}
                                                     </td>
                                                     <td>@if($user->status) Active @else Suspended @endif</td>
-                                                    <td>{{$user->role}}</td>
+                                                    <td>{{$user->role->name}}</td>
                                                     <td>
                                                         @if($user->id != Auth::id()) 
                                                         <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block';$('.select2').select2();">Edit </a> | 
@@ -720,10 +549,10 @@
                                                                     <div class="contact-form-input">
                                                                         <label for="states">Admin Level</label>
                                                                         <select id="abdcc{{$user->id}}" name="role" class="form-control-lg w-100 border text-muted" >
-                                                                            <option value='admin' @if($user->role == 'admin') selected @endif>Administrator</option>
-                                                                            <option value='customercare'  @if($user->role == 'customercare') selected @endif>Customer Care</option>
-                                                                            <option value='security' @if($user->role == 'security') selected @endif>Security</option>
-                                                                            <option value='auditor'  @if($user->role == 'auditor') selected @endif>Auditor</option>
+                                                                            <option value='admin' @if($user->role->name == 'admin') selected @endif>Administrator</option>
+                                                                            <option value='customercare'  @if($user->role->name == 'customercare') selected @endif>Customer Care</option>
+                                                                            <option value='security' @if($user->role->name == 'security') selected @endif>Security</option>
+                                                                            <option value='auditor'  @if($user->role->name == 'auditor') selected @endif>Auditor</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="contact-form-input">
@@ -800,7 +629,7 @@
                                                     <td>{{$plan->shops}}</td>
                                                     <td>{{$plan->products}}</td>
                                                     <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#plan_edit{{$plan->id}}">Edit Parameters</a></td>
-                                                    <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#plan_price{{$plan->id}}">Set Prices</a></td> 
+                                                    <td><a href="{{route('admin.settings.plan',$plan)}}" target="_blank">Set Prices</a></td> 
                                                 </tr>
                                                 
                                                 <div class="modal fade" id="plan_edit{{$plan->id}}" tabindex="-1" aria-labelledby="plan_edit{{$plan->id}}ModalLabel" aria-hidden="true">
@@ -811,7 +640,7 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{route('admin.plans')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
+                                                            <form action="{{route('admin.settings.plans')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
                                                                 <input type="hidden" name="plan_id" value="{{$plan->id}}">
                                                                 <div class="contact-form__content">
                                                                     
@@ -848,87 +677,7 @@
                                                         
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal fade" id="plan_price{{$plan->id}}" tabindex="-1" aria-labelledby="plan_price{{$plan->id}}ModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-xl">
-                                                        <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="plan_price{{$plan->id}}ModalLabel">{{$plan->name}} Pricing</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div>
-                                                            <form action="{{route('admin.pricing')}}" method="post" id="plan_price{{$plan->id}}form">
-                                                                @csrf 
-                                                                <input type="hidden" name="priceable_id" value="{{$plan->id}}">
-                                                                <input type="hidden" name="priceable_type" value="App\Models\Plan">
-                                                                <div class="pricing">
-                                                                    <div class="row">
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>Currency</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>Min Payout</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>Max Payout</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>Commission Percent</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>Commission Fixed</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>1 month</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>3 month</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>6 month</span> 
-                                                                        </div>
-                                                                        <div class="col border d-flex align-items-center">
-                                                                            <span>12 month</span> 
-                                                                        </div> 
-                                                                    </div>
-                                                                    @foreach ($currencies as $currency)
-                                                                        <div class="row border">
-                                                                            <div class="col">
-                                                                                {{$currency->name}}
-                                                                                <input type="hidden" name="currencies[]" value="{{$currency->id}}">
-                                                                            </div>  
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[minimum_payout][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','minimum_payout')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','minimum_payout')->amount : 0}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[maximum_payout][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','maximum_payout')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','maximum_payout')->amount : 0}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[commission_percentage][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','commission_percentage')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','commission_percentage')->amount : 0}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[commission_fixed][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','commission_fixed')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','commission_fixed')->amount : 0}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_1][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_1')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_1')->amount : 0}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_3][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_3')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_3')->amount : 0}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_6][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_6')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_6')->amount : 0}}">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[months_12][{{$currency->id}}]" value="{{$plan->prices->where('currency_id',$currency->id)->where('description','months_12')->isNotEmpty() ? $plan->prices->where('currency_id',$currency->id)->firstWhere('description','months_12')->amount : 0}}">
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div> 
-                                                                <div class="row my-4">
-                                                                    <div class="col-md-4">
-                                                                        <div class="contact-form-input">
-                                                                            <label for="pin">Enter Your Access Pin</label>
-                                                                            <input type="text" name="pin" id="pin_pricing{{$plan->id}}" value="" placeholder="Access pin">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                
-                                                                <div class="contact-form-btn">
-                                                                    <button class="button button--md" type="submit"> Update Price </button>
-                                                                    <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
+                                                </div> 
                                             @empty
                                                 <tr><td colspan="7" class="text-center">No Plan</td></tr>
                                             @endforelse
@@ -977,10 +726,10 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div>
-                                                            <form action="{{route('admin.pricing')}}" method="post" id="adplan_price{{$adplan->id}}form">
+                                                            <form action="{{route('admin.settings.ad.pricing')}}" method="post" id="adplan_price{{$adplan->id}}form">
                                                                 @csrf 
                                                                 <input type="hidden" name="priceable_id" value="{{$adplan->id}}">
-                                                                <input type="hidden" name="priceable_type" value="App\Models\Adplan">
+                                                                
                                                                 <div class="pricing">
                                                                     <div class="row py-2">
                                                                         <div class="col-md-4">
@@ -998,14 +747,14 @@
                                                                         </div>  
 
                                                                         <div class="col-md-6">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="description[price_per_day][{{$currency->id}}]" value="{{$adplan->prices->where('currency_id',$currency->id)->where('description','price_per_day')->isNotEmpty() ? $adplan->prices->where('currency_id',$currency->id)->firstWhere('description','price_per_day')->amount : 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="{{$currency->id}}" value="{{$adplan->costs->firstWhere('currency_id',$currency->id)->amount ?? 0}}">
                                                                         </div>  
                                                                     </div>
                                                                     @endforeach
                                                                 </div> 
                                                                 <div class="contact-form-input">
                                                                     <label for="pin">Enter Your Access Pin</label>
-                                                                    <input type="text" name="pin" id="pin_ad{{$adplan->id}}" value="" placeholder="Access pin">
+                                                                    <input type="text" name="pin" id="pin_ad{{$currency->id}}" value="" placeholder="Access pin">
                                                                 </div>
                                                                 <div class="contact-form-btn pt-2">
                                                                     <button class="button button--md" type="submit"> Update Advert Plan Prices </button>
@@ -1033,175 +782,7 @@
                       </div>
                       <!--  Shipping  -->
 
-                      <div class="tab-pane fade" id="pills-shipping" role="tabpanel" aria-labelledby="pills-shipping-tab">
-                        <div class="row products-tab__feedback">
-                            <!-- Add Category  -->
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">Add Destination</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                <form method="post" id="editcategory" action="{{route('admin.shipments.store')}}">@csrf
-                                    <div class="contact-form__content location">
-                                        <div class="contact-form-input">
-                                            <label for="origin">Country </label>
-                                            <select id="countriez" name="country_id" class="select2 country">
-                                                @foreach ($countries as $country)
-                                                    <option value="{{$country->id}}">{{$country->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="contact-form__content-group">
-                                            <div class="contact-form-input">
-                                                <label for="origin">Origin </label>
-                                                <select id="state" name="origin_id" class="select2 states">
-                                                    @foreach ($states as $state)
-                                                        <option value="{{$state->id}}">{{$state->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <label for="postal">Destination </label>
-                                                <select id="postals" name="destination_id" class="select2 states">
-                                                    @foreach ($states as $state)
-                                                        <option value="{{$state->id}}">{{$state->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="contact-form__content-group">
-                                            <div class="contact-form-input">
-                                                <label for="hours">Hours</label>
-                                                <input type="number" name="hours" max="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" placeholder="hours" />
-                                            </div>
-
-                                            <div class="contact-form-input">
-                                                <label for="amounts">Amount</label>
-                                                <input type="number" name="amount" placeholder="Delivery cost" />
-                                            </div>
-                                        </div>
-
-                                        <div class="contact-form-btn">
-                                            <button class="button button--md askpin" type="button">
-                                            + Add Shipping Rate
-                                            </button>
-                                        </div>
-                                    
-                                    </div>
-                                </form>
-                                </div>
-                            </div>
-                
-                            <!-- Manage Shipping  -->
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                <h5 class="font-body--xl-500">Manage Shipping Rates</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                <div class="table-responsive">
-                                    <table class="table display datatable" style="width:100%;font-size:13px">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="">Country</th>
-                                            <th scope="col" class="">Origin</th>
-                                            <th scope="col" class="">Destination</th>
-                                            <th scope="col" class="">Hours</th>
-                                            <th scope="col" class="">Amount</th>
-                                            <th scope="col" class="">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($rates as $rate)
-                                            <tr>
-                                                <td>{{$rate->country->name}}</td>
-                                                <td>{{$rate->origin->name}}</td>
-                                                <td>{{$rate->destination->name}}</td>
-                                                <td>{{$rate->hours}}</td>
-                                                <td>{!! $rate->country->currency->symbol !!}{{$rate->amount}}</td>
-                                                <td> 
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit </a> | 
-                                                    <form class="d-inline" action="{{route('admin.shipments.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
-                                                        <input type="hidden" name="rate_id" value="{{$rate->id}}">
-                                                        <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
-                                                    </form>
-                                                </td>
-                                                <div class="modal fade" id="rateedit{{$rate->id}}" tabindex="-1" aria-labelledby="rateedit{{$rate->id}}ModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                      <div class="modal-content">
-                                                        <div class="modal-header">
-                                                          <h5 class="modal-title" id="rateedit{{$rate->id}}ModalLabel">Edit Shipping Rate</h5>
-                                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="{{route('admin.shipments.update')}}" method="post" id="rateedit{{$rate->id}}">
-                                                                @csrf 
-                                                                <input type="hidden" name="rate_id" value="{{$rate->id}}">
-                                                                <div class="contact-form__content my-3 location">
-                                                                    <div class="contact-form-input">
-                                                                        <label for="countrisdes">Country </label>
-                                                                        <select id="countrisdes{{$rate->id}}" name="country_id" class="select2 country" >
-                                                                            @foreach ($countries as $country)
-                                                                                <option value="{{$country->id}}" @if($rate->country_id == $country->id) selected @endif>{{$country->name}}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="contact-form__content-group">
-                                                                        <div class="contact-form-input">
-                                                                            <label for="origin">Origin </label>
-                                                                            <select id="countryz{{$rate->id}}" name="origin_id" class="select2 states" >
-                                                                                @foreach ($states as $state)
-                                                                                    <option value="{{$state->id}}" @if($rate->origin_id == $state->id) selected @endif>{{$state->name}}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="contact-form-input">
-                                                                            <label for="destination">Destination </label>
-                                                                            <select id="destination_edit{{$rate->id}}" name="destination_id" class="select2 states" >
-                                                                                @foreach ($states as $state)
-                                                                                    <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                            
-                                                                    <div class="contact-form__content-group">
-                                                                        <div class="contact-form-input">
-                                                                            <label for="hours">Hours</label>
-                                                                            <input type="number" name="hours" value="{{$rate->hours}}" placeholder="hours" />
-                                                                        </div>
-                                                            
-                                                                        <div class="contact-form-input">
-                                                                            <label for="amounts">Amount</label>
-                                                                            <input type="number" name="amount" value="{{$rate->amount}}" placeholder="Delivery cost" />
-                                                                        </div>
-                                                                    </div>
-                                                            
-                                                                    <div class="contact-form-btn">
-                                                                        <button class="button button--md" type="submit">
-                                                                            Update Shipping Rate
-                                                                        </button>
-                                                                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        
-                                                      </div>
-                                                    </div>
-                                                </div>
-                                            </tr>
-                                            
-                                        @endforeach
-                                    </tbody>
-                                    </table>
-                                </div>
-                                
-                                </div>
-                            </div>
-                          
-                        </div>
-                      </div>
+                      
                   </div>
               </div>
             </div>

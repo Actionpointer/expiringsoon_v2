@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Price extends Model
 {
     use HasFactory;
-    protected $fillable = ['currency_id','priceable_id','priceable_type','description','amount'];
+    protected $fillable = ['currency_id','plan_id','minimum_payout','maximum_payout','commission_percentage','commission_fixed','months_1','months_3','months_6','months_12'];
 
     public function priceable(){
         return $this->morphTo();

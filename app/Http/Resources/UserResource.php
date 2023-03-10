@@ -29,7 +29,7 @@ class UserResource extends JsonResource
             "email_verified_at"=> $this->email_verified_at,
             'image' => $this->image,
             "shop_id"=> $this->shop_id,
-            "role"=> $this->role,
+            "role"=> $this->role->name,
             "phone"=> $this->phone,
             "prefix"=> $this->country->dial,
             "country_id"=> $this->country_id,

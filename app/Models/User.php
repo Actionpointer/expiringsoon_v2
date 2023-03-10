@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Models\Cart;
 use App\Models\Like;
+use App\Models\Role;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\State;
@@ -29,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable,Sluggable,HasApiTokens;
 
     protected $fillable = [
-        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role','state_id','status','require_password_change'
+        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role_id','state_id','status','require_password_change'
     ];
 
     protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];
@@ -193,9 +194,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphMany(Settlement::class,'receiver');
     }
 
-    public function hasAnyRole($value){
-        return in_array($this->role,$value);
+    public function role(){
+        return $this->belongsTo(Role::class);
     }
+
+    public function isRole($value){
+        return $this->role->name == $value;
+    }
+    
+    public function isAnyRole($value){
+        $roles = Role::whereIn('name',$value)->get()->pluck('id')->toArray();
+        return in_array($this->role_id,$roles);
+    }
+
 
     public function receivesBroadcastNotificationsOn(){
         return 'users.'.$this->id;

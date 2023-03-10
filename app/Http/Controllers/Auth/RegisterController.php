@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -78,12 +79,14 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
         
-        return $user->role == 'vendor' ? redirect()->route('vendor.orientation') : redirect()->route('home');
+        return $user->role->name == 'vendor' ? redirect()->route('vendor.orientation') : redirect()->route('home');
 
     }
     
     protected function create(array $data)
     {
+        $role = $data['role'] ?? 'shopper';
+        $role_id = Role::where('name',$role)->first()->id;
         return User::create([
             // 'username' => $data['username'],
             'email' => $data['email'],
@@ -91,7 +94,7 @@ class RegisterController extends Controller
             'fname' => $data['fname'],
             'lname' => $data['lname'],
             'phone' => $data['phone'],
-            'role' => $data['role'] ?? 'shopper',
+            'role_id' => $role_id,
             'country_id' => session('locale')['country_id'],
             'state_id' => session('locale')['state_id'],
         ]);

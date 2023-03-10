@@ -23,7 +23,7 @@ class CustomerResource extends JsonResource
             'email' => $this->email,
             "email_verified_at"=> $this->email_verified_at,
             'image' => $this->image,
-            "role"=> $this->role,
+            "role"=> $this->role->name,
             "slug"=> $this->slug,
             "phone"=> $this->phone,
             "prefix"=> $this->country->dial,

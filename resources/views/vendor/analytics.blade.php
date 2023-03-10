@@ -81,12 +81,12 @@
               {{-- <div class="col-lg-5">
                 <div class="dashboard__user-billing dashboard-card">
                   <h2 class="dashboard__user-billing-title font-body--md-500">
-                    @if($user->role =='Shopper') Billing Address @else Pick-Up Address @endif
+                    @if($user->role->name =='Shopper') Billing Address @else Pick-Up Address @endif
                   </h2>
                   <div class="dashboard__user-billing-info">
                     <h5 class="dashboard__user-billing-name font-body--xl-500" >
-                      {{$user->role}} #{{$user->userid}}
-                      @if($user->role =='Vendor' && $user->status =='Approved') 
+                      {{$user->role->name}} #{{$user->userid}}
+                      @if($user->role->name =='Vendor' && $user->status =='Approved') 
                         <span class="iconify" style="color:#00b207" data-icon="akar-icons:check-box-fill" data-width="20" data-height="20">
                       @endif
                     </h5>
