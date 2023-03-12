@@ -728,7 +728,7 @@
                                                             <div>
                                                             <form action="{{route('admin.settings.ad.pricing')}}" method="post" id="adplan_price{{$adplan->id}}form">
                                                                 @csrf 
-                                                                <input type="hidden" name="priceable_id" value="{{$adplan->id}}">
+                                                                <input type="hidden" name="adplan_id" value="{{$adplan->id}}">
                                                                 
                                                                 <div class="pricing">
                                                                     <div class="row py-2">
@@ -747,7 +747,7 @@
                                                                         </div>  
 
                                                                         <div class="col-md-6">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="{{$currency->id}}" value="{{$adplan->costs->firstWhere('currency_id',$currency->id)->amount ?? 0}}">
+                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="amount[{{$currency->id}}]" value="{{$adplan->costs->firstWhere('currency_id',$currency->id)->amount ?? 0}}">
                                                                         </div>  
                                                                     </div>
                                                                     @endforeach

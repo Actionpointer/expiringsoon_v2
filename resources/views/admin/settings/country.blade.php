@@ -208,7 +208,15 @@
                                                     <td>{{$state->name}}</td>
                                                     <td>{{$state->iso}}</td>
                                                     <td>{{$state->cities->count()}} cities</td>
-                                                    <td><a href="#">Rename</a><a href="#">Delete</a></td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <a href="javascript:void(0)" class="rename_state me-4" data-id="{{$state->id}}" data-name="{{$state->name}}"><i class="fa fa-edit"></i> Rename</a>  
+                                                            <a href="javascript:void(0)" class="delete_state text-danger" data-id="{{$state->id}}" data-name="{{$state->name}}" data-shops="{{$state->shops->count()}}" data-users="{{$state->users->count()}}" data-addresses="{{$state->addresses->count()}}" data-shipping_rates="{{$state->shipping_rates->count()}}" data-cities="{{$state->cities->count()}}" data-locations="{{$state->locations->count()}}">
+                                                                <i class="fa fa-trash"></i> Delete
+                                                            </a>
+                                                    
+                                                        </div>
+                                                    </td>
                                                     
                                                 </tr>
                                                 
@@ -251,11 +259,11 @@
                                             <p class="text-center">OR</p>
                                             @csrf 
                                             <h5>Set Manually</h5>
-                                            <p class="font-body--md-400">States added via this form will be appended to the existing list. Any duplicate found will not be added</p>
+                                            <p class="font-body--md-400">Cities added via this form will be appended to the existing list. Any duplicate found will not be added</p>
                                             <p class="font-body--md-400">Kindly ensure to add each city name like this. e.g Yaba,Agege,</p>
                                             <div class="contact-form--input contact-form--input-area">
                                                 <label for="destination">Add Cities</label>
-                                                <textarea name="cities" cols="auto" class="w-100" placeholder="e.g LA:Lagos,OG:Ogun,FC:Abuja" ></textarea>
+                                                <textarea name="cities" cols="auto" class="w-100" placeholder="e.g Surulere,Agege,Ikotun,Ikorodu" ></textarea>
                                             </div>
                                             <div class="contact-form-input">
                                                 <label for="pin">Enter Your Access Pin</label>
@@ -295,8 +303,10 @@
                                                         <td>{{$city->name}}</td>
                                                         <td>
                                                             <div class="d-flex">
-                                                                <a href="#" class="me-4"><i class="fa fa-edit"></i> Rename</a>  
-                                                                <a href="#" class="text-danger"><i class="fa fa-trash"></i> Delete</a></td>
+                                                                <a href="javascript:void(0)" class="rename_city me-4" data-id="{{$city->id}}" data-name="{{$city->name}}"><i class="fa fa-edit"></i> Rename</a>  
+                                                                <a href="javascript:void(0)" class="delete_city text-danger" data-id="{{$city->id}}" data-name="{{$city->name}}" data-shops="{{$city->shops->count()}}" data-users="{{$city->users->count()}}" data-addresses="{{$city->addresses->count()}}" data-locations="{{$city->locations->count()}}">
+                                                                    <i class="fa fa-trash"></i> Delete
+                                                                </a>
                                                             </div>
                                                             
                                                     </tr>
@@ -324,7 +334,170 @@
     </div>
   </div>
   <!-- dashboard Secton  End  -->
-  
+<div class="modal fade" id="rename_state" tabindex="-1" aria-labelledby="rename_stateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="rename_stateModalLabel">Rename State</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="#" method="post"> @csrf 
+                <input type="hidden" name="state_id" id="rename_state_id">
+                <div class="contact-form__content">
+                    <div class="contact-form-input">
+                        <label for="pin">New Name</label>
+                        <input type="text" name="name" id="rename_state_name">
+                    </div>
+                    <div class="contact-form-input">
+                        <label for="pin">Enter Your Access Pin</label>
+                        <input type="text" name="pin" id="rename_state_pin" value="" placeholder="Access pin">
+                    </div>
+                    <div class="contact-form-btn">
+                        <button class="button button--md" type="submit"> Delete </button>
+                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+        
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete_state" tabindex="-1" aria-labelledby="delete_stateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="delete_stateModalLabel">Delete <span id="delete_state_name"></span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="#" method="post"> @csrf 
+                <input type="hidden" name="state_id" id="delete_state_id">
+                <div class="contact-form__content">
+                    
+                    The selected state has 
+                    <table class="table">
+                        <tr>
+                            <td><span id="delete_state_users"></span></td><td>Users</td>
+                        </tr>
+                        <tr>
+                            <td><span id="delete_state_shops"></span></td><td>Shops</td>
+                        </tr>
+                        <tr>
+                            <td><span id="delete_state_rates"></span></td><td>Shipping Rates</td>
+                        </tr>
+                        <tr>
+                            <td><span id="delete_state_cities"></span></td><td>Cities</td>
+                        </tr>
+                        <tr>
+                            <td><span id="delete_state_addresses"></span></td><td>Address</td>
+                        </tr>
+                        <tr>
+                            <td><span id="delete_state_locations"></span></td><td>Locations</td>
+                        </tr>
+                    </table>
+                    <div id="delete_state_message">
+                        <p>State cannot be deleted until all the dependant data are deleted</p> 
+                    </div>
+                    <div id="delete_state_button" style="display:none">
+                        <div class="contact-form-input">
+                            <label for="pin">Enter Your Access Pin</label>
+                            <input type="text" name="pin" id="delete_state_pin" value="" placeholder="Access pin">
+                        </div>
+                        <div class="contact-form-btn">
+                            <button class="button button--md" type="submit"> Delete </button>
+                            <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="rename_city" tabindex="-1" aria-labelledby="rename_cityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="rename_cityModalLabel">Rename City</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="#" method="post"> @csrf 
+                <input type="hidden" name="city_id" id="rename_city_id">
+                <div class="contact-form__content">
+                    <div class="contact-form-input">
+                        <label for="pin">New Name</label>
+                        <input type="text" name="name" id="rename_city_name">
+                    </div>
+                    <div class="contact-form-input">
+                        <label for="pin">Enter Your Access Pin</label>
+                        <input type="text" name="pin" id="rename_city_pin" value="" placeholder="Access pin">
+                    </div>
+                    <div class="contact-form-btn">
+                        <button class="button button--md" type="submit"> Delete </button>
+                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+        
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete_city" tabindex="-1" aria-labelledby="delete_cityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="delete_cityModalLabel">Delete <span id="delete_city_name"></span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="#" method="post"> @csrf 
+                <input type="hidden" name="city_id" id="delete_city_id">
+                <div class="contact-form__content">
+                    
+                    The selected city has 
+                    <table class="table">
+                        <tr>
+                            <td><span id="delete_city_users"></span></td><td>Users</td>
+                        </tr>
+                        <tr>
+                            <td><span id="delete_city_shops"></span></td><td>Shops</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><span id="delete_city_addresses"></span></td><td>Address</td>
+                        </tr>
+                        <tr>
+                            <td><span id="delete_city_locations"></span></td><td>Locations</td>
+                        </tr>
+                    </table>
+                    <div id="delete_city_message">
+                        <p>City cannot be deleted until all the dependant data are deleted</p> 
+                    </div>
+                    <div id="delete_city_button" style="display:none">
+                        <div class="contact-form-input">
+                            <label for="pin">Enter Your Access Pin</label>
+                            <input type="text" name="pin" id="delete_city_pin" value="" placeholder="Access pin">
+                        </div>
+                        <div class="contact-form-btn">
+                            <button class="button button--md" type="submit"> Delete </button>
+                            <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+        
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
 <script src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
@@ -347,14 +520,72 @@
             }
         });
     });
+
+    $('.rename_state').on('click',function(){
+        
+        $('#rename_state_id').val($(this).attr('data-id'))
+        $('#rename_state_name').val($(this).attr('data-name'))
+        $('#rename_state').modal('show');
+    });
+
+    $('.delete_state').on('click',function(){
+        let total = 0;
+        let shops = parseInt($(this).attr('data-shops'))
+        let users = parseInt($(this).attr('data-users'))
+        let shipping_rates = parseInt($(this).attr('data-shipping_rates'))
+        let cities = parseInt($(this).attr('data-cities'))
+        let addresses = parseInt($(this).attr('data-addresses'))
+        let locations = parseInt($(this).attr('data-locations'))
+        total = shops + users + shipping_rates + cities + addresses + locations;
+        if(!total){
+            $('#delete_state_message').hide()
+            $('#delete_state_button').show()
+        }
+        $('#delete_state_id').val($(this).attr('data-id'))
+        $('#delete_state_name').text($(this).attr('data-name'))
+        $('#delete_state_shops').text(shops)
+        $('#delete_state_users').text(users)
+        $('#delete_state_rates').text(shipping_rates)
+        $('#delete_state_cities').text(cities)
+        $('#delete_state_addresses').text(addresses)
+        $('#delete_state_locations').text(locations)
+        $('#delete_state').modal('show');
+    });
+
+    $('.rename_city').on('click',function(){
+        
+        $('#rename_city_id').val($(this).attr('data-id'))
+        $('#rename_city_name').val($(this).attr('data-name'))
+        $('#rename_city').modal('show');
+    });
+
+    $('.delete_city').on('click',function(){
+        let total = 0;
+        let shops = parseInt($(this).attr('data-shops'))
+        let users = parseInt($(this).attr('data-users'))
+        let addresses = parseInt($(this).attr('data-addresses'))
+        let locations = parseInt($(this).attr('data-locations'))
+        total = shops + users + addresses + locations;
+        if(!total){
+            $('#delete_city_message').hide()
+            $('#delete_city_button').show()
+        }
+        $('#delete_city_id').val($(this).attr('data-id'))
+        $('#delete_city_name').text($(this).attr('data-name'))
+        $('#delete_city_shops').text(shops)
+        $('#delete_city_users').text(users)
+        $('#delete_city_addresses').text(addresses)
+        $('#delete_city_locations').text(locations)
+        $('#delete_city').modal('show');
+    });
     
 
-    $('.modal').on('show.bs.modal', function () {
-        $(this).find('.select2').select2({
-            dropdownParent: $(this).find('.modal-content')
-        });
-        // $('.select2').select2();
-        console.log($(this).html())
-    });
+    // $('.modal').on('show.bs.modal', function () {
+    //     $(this).find('.select2').select2({
+    //         dropdownParent: $(this).find('.modal-content')
+    //     });
+    //     // $('.select2').select2();
+    //     console.log($(this).html())
+    // });
 </script>
 @endpush

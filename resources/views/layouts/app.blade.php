@@ -697,8 +697,8 @@
     <script src="{{asset('src/js/jquery.syotimer.min.js')}}"></script>
     <script src="{{asset('src/plugins/select2/js/select2.min.js')}}"></script>
     <script src="{{asset('src/js/main.js')}}"></script>
-    <script src="https://js.pusher.com/7.2.0/pusher.min.js"></script>
-    <script>
+    {{-- <script src="https://js.pusher.com/7.2.0/pusher.min.js"></script> --}}
+    {{-- <script>
         Pusher.logToConsole = true;
         var pusher = new Pusher('30f7e5194b874bf1230b', {
             cluster: 'eu',
@@ -719,7 +719,7 @@
         channel.bind('Illuminate\Notifications\Events\BroadcastNotificationCreated', function(data) {
             console.log('Received event:', data);
         });
-    </script>
+    </script> --}}
     
     @stack('scripts')
 </body>

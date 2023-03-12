@@ -3,7 +3,11 @@
 namespace App\Models;
 use App\Models\City;
 use App\Models\Shop;
+use App\Models\User;
+use App\Models\Address;
 use App\Models\Product;
+use App\Models\Location;
+use App\Models\ShippingRate;
 use App\Observers\StateObserver;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +26,19 @@ class State extends Model
     public function shops(){
         return $this->hasMany(Shop::class);
     }
+    public function users(){
+        return $this->hasMany(User::class);
+    }
+    public function locations(){
+        return $this->hasMany(Location::class);
+    }
+    public function addresses(){
+        return $this->hasMany(Address::class);
+    }
+    public function shipping_rates(){
+        return $this->hasMany(ShippingRate::class,'destination_id');
+    }
+
     public function products(){
         return $this->hasManyThrough(Product::class,Shop::class);
     }

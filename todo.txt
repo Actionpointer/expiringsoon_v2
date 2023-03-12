@@ -21,8 +21,9 @@ eJtqIzn8rY5oE00IgYVeL2p
 -------------------------------------------------------------------------------------------------
 add reference to settlement table and show payout receipt there
 --------------------------------------------------------------------------------------------------
-add currency to global settings
 add rename & delete to country settings under states and cities
+
+shops, users, addresses, shipping rates, states, cities, locations
 
 swiper.js is displaying duplicates
 
@@ -37,7 +38,6 @@ set order processing to automatic cancel period on settings
 set rollers while fetching states and cities in admin
 manager role per country to view data & download
 
-add canadian dollars & swiss franc to the list of currencies
 
 super admin should manage role Permissions
 

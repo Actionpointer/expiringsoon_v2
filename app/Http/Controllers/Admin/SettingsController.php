@@ -127,6 +127,7 @@ class SettingsController extends Controller
     }
 
     public function plan_pricing(Request $request){
+        // dd('here');
         $price = Price::updateOrCreate(['plan_id'=> $request->plan_id,'currency_id'=> $request->currency_id],[
         'minimum_payout'=> $request->minimum_payout,'maximum_payout'=> $request->maximum_payout,
         'commission_percentage'=> $request->commission_percentage,'commission_fixed'=> $request->commission_fixed,
@@ -144,10 +145,9 @@ class SettingsController extends Controller
     }
 
     public function ad_pricing(Request $request){
+        // dd($request->all());
         foreach($request->currencies as $currency){
-            foreach($request->description as $title => $value){
-                $cost = Cost::updateOrCreate(['adplan_id'=> $request->adplan_id,'currency_id'=> $currency],['amount'=> $value[$currency] ]);
-            }   
+            $cost = Cost::updateOrCreate(['adplan_id'=> $request->adplan_id,'currency_id'=> $currency],['amount'=> $request->amount[$currency] ]); 
         }
         return redirect()->back()->with(['result'=> 1,'message'=> 'Prices Updated Successfully']);
     }
