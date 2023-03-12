@@ -81,8 +81,7 @@ class ShopController extends Controller
             if($validator->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
+                    'message'=> $validator->errors()->first()
                 ], 401);
             }
             $size = getimagesize($request->photo);
@@ -127,7 +126,7 @@ class ShopController extends Controller
 
             if($validator->fails()){
                 return request()->expectsJson()
-                ? response()->json(['status' => false, 'message' => $validator->errors()->first() ], 401) :
+                ? response()->json(['status' => false, 'message'=>$validator->errors()->first() ], 401) :
                 redirect()->back()->withErrors($validator)->withInput();
             }
 
@@ -187,7 +186,7 @@ class ShopController extends Controller
 
             if($validator->fails()){
                 return request()->expectsJson() ?  
-                        response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
+                        response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
                         redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
             // if(!$this->checkPin($request)['result']){
@@ -255,8 +254,7 @@ class ShopController extends Controller
             if($validator->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
+                    'message'=> $validator->errors()->first()
                 ], 401);
             }
             $shop = Shop::where('id',$request->shop_id)->where('user_id',$user->id)->first();

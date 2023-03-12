@@ -35,7 +35,7 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
     Route::get('product/edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('product/update', [ProductController::class, 'update'])->name('product.update');
-    Route::post('product/manage', [ProductController::class, 'manage'])->name('products.manage');
+    Route::post('product/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
 
     Route::get('orders/{status?}', [OrderController::class, 'index'])->name('order.list');
     Route::get('order/{order}', [OrderController::class, 'show'])->name('order.view');

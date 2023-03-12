@@ -46,8 +46,7 @@ class ShipmentController extends Controller
             if($validator->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
+                    'message'=> $validator->errors()->first()
                 ], 401);
             }
             $shop = Shop::find($request->shop_id);
@@ -81,8 +80,7 @@ class ShipmentController extends Controller
             if($validator->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
+                    'message'=> $validator->errors()->first()
                 ], 401);
             }
             $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->first();
@@ -120,8 +118,7 @@ class ShipmentController extends Controller
                 if($validator->fails()){
                     return response()->json([
                         'status' => false,
-                        'message' => 'validation error',
-                        'error' => $validator->errors()->first()
+                        'message'=> $validator->errors()->first()
                     ], 401);
                 }
                 $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->delete();

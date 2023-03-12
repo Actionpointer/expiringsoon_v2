@@ -48,29 +48,18 @@
             <div class="dashboard__order-history" style="padding:10px;font-size:13px">
               <div class="dashboard__order-history-title d-flex flex-column flex-md-row justify-content-between">
                 <h2 class="font-body--xl-500 ">My Products</h2>
-                <div class="my-2 my-md-0">
-                  @if(auth()->id() == $shop->user_id)
-                  <button type="button" class="btn btn-primary" onclick="featureform();">Feature</button>
-                  @endif
-                  <button type="button" class="btn btn-success" onclick="if(confirm('Are you sure you want to publish?')) publishform();">Publish</button>
-                  <button type="button" class="btn btn-secondary" onclick="if(confirm('Are you sure you want to draft?')) draftform();">Draft </button>
-                  <button type="button" class="btn btn-danger" onclick="if(confirm('Are you sure you want to delete?')) deleteform();">Delete</button>
-                </div>
+                
                 <a href="{{route('vendor.shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
               </div>
               <div class="">
                 <form id="featureform" action="{{route('vendor.feature.products')}}" method="POST">@csrf
                   <input type="hidden" name="shop_id" value="{{$shop->id}}" >
                 </form>
-                <form id="deleteform" action="{{route('vendor.shop.products.manage',$shop)}}" method="POST">@csrf
+                <form id="deleteform" action="{{route('vendor.shop.products.destroy',$shop)}}" method="POST">@csrf
                   <input type="hidden" name="delete" value="1" >
                 </form>
-                <form id="publishform" action="{{route('vendor.shop.products.manage',$shop)}}" method="POST">@csrf
-                  <input type="hidden" name="published" value="1" >
-                </form>
-                <form id="draftform" action="{{route('vendor.shop.products.manage',$shop)}}" method="POST">@csrf
-                  <input type="hidden" name="draft" value="1" >
-                </form>
+                
+                
               </div>
               <div class="dashboard__order-history-table">
                 <div class="table-responsive">
@@ -156,18 +145,18 @@
 
                             <td class="cart-table-item add-cart align-middle">
                               <div class="d-flex flex-column">
-                                  <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="btn btn-sm  btn-secondary">Edit</a>
+                                  <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="btn btn-sm btn-secondary">Edit</a>
                                   @if(auth()->id() == $shop->user_id)
-                                  <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
-                                    <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                    <input type="hidden" name="products[]" value="{{$product->id}}">
-                                    <button type="submit" class="btn btn-sm my-1 btn-primary">Feature</button>
-                                  </form>
+                                    <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
+                                      <input type="hidden" name="shop_id" value="{{$shop->id}}">
+                                      <input type="hidden" name="product_id" value="{{$product->id}}">
+                                      <button type="submit" class="btn btn-sm my-1 btn-primary">Feature</button>
+                                    </form>
                                   @endif
                                   
-                                  <form class="d-inline" action="{{route('vendor.shop.products.manage',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
-                                    <input type="hidden" name="products[]" value="{{$product->id}}">
-                                    <input type="hidden" name="delete" value="1">
+                                  <form class="d-inline" action="{{route('vendor.shop.products.destroy',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
+                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                                    <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                   </form>
                                   

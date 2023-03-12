@@ -59,7 +59,7 @@ class StaffController extends Controller
                 ]);
                 if($validator->fails()){
                     return request()->expectsJson() ?  
-                        response()->json(['status' => false,'message' => 'validation error','error' => $validator->errors()->first()],401):
+                        response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
                         redirect()->back()->withErrors($validator)->withInput();
                 }
                 

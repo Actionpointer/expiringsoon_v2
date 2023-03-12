@@ -86,8 +86,7 @@ class ProductController extends Controller
                 return request()->expectsJson() ?
                  response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
+                    'message'=> $validator->errors()->first()
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
@@ -158,8 +157,7 @@ class ProductController extends Controller
                 return request()->expectsJson() ?
                  response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validator->errors()->first()
+                    'message'=> $validator->errors()->first()
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
@@ -190,16 +188,21 @@ class ProductController extends Controller
     }
 
     public function destroy(Request $request){
-        // dd($request->all());
-        // $products = Product::whereIn('id',$request->products)->where('shop_id',$request->shop_id)->delete();
-        // if($request->delete){
-        //     foreach($products as $product){
-        //         if($product->carts->isEmpty()){
-        //             $product->delete();
-        //         }
-        //     }    
-        //     return redirect()->back()->with(['result'=> 1,'message'=> 'Deleted Successfully']);
-        // }
+        dd($request->all());
+        $product = Product::find($request->products);
+        if($product->shop_id != $request->shop_id){
+            return request()->expectsJson() ?
+                 response()->json([
+                    'status' => false,
+                    'message'=> $validator->errors()->first()
+                ], 401) :
+                redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
+        }
+        if($product->carts->isEmpty()){
+            $product->delete();
+        } 
+               
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Deleted Successfully']);
         
     }
 
