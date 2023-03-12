@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Vendor;
 
 use Carbon\Carbon;
 use App\Models\Tag;
+use App\Models\Cart;
+use App\Models\Like;
 use App\Models\Shop;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
@@ -90,7 +93,7 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            
+            /** @var \App\Models\User $user **/
             $user = auth()->user();
             $shop = Shop::where('id',$request->shop_id)->where('user_id',$user->id)->first();
             if($request->hasFile('photo')){
@@ -188,21 +191,34 @@ class ProductController extends Controller
     }
 
     public function destroy(Request $request){
-        dd($request->all());
-        $product = Product::find($request->products);
+        // dd($request->all());
+        $product = Product::find($request->product_id);
         if($product->shop_id != $request->shop_id){
             return request()->expectsJson() ?
                  response()->json([
                     'status' => false,
-                    'message'=> $validator->errors()->first()
+                    'message'=> 'Product does not belong to shop'
                 ], 401) :
-                redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
+                redirect()->back()->with(['result'=> '0','message'=> 'Product does not belong to shop']);
         }
-        if($product->carts->isEmpty()){
-            $product->delete();
+        if($product->orders->isNotEmpty() && OrderStatus::whereIn('order_id',$product->orders->pluck('order_id')->toArray())->count()){
+            return request()->expectsJson() ?
+                 response()->json([
+                    'status' => false,
+                    'message'=> 'Cannot delete products with on-going orders'
+                ], 401) :
+                redirect()->back()->with(['result'=> '0','message'=> 'Cannot delete products with on-going orders']);
         } 
-               
-        return redirect()->back()->with(['result'=> 1,'message'=> 'Deleted Successfully']);
+        Like::whereIn('id',$product->likes->pluck('id')->toArray())->delete();
+        Cart::whereIn('id',$product->carts->pluck('id')->toArray())->delete();
+        Product::where('id',$product->id)->delete();
+        return request()->expectsJson() ?
+                 response()->json([
+                    'status' => true,
+                    'message'=> 'Product Deleted Successfully'
+                ], 200) :
+                redirect()->back()->with(['result'=> '1','message'=> 'Product Deleted Successfully']);
+        
         
     }
 

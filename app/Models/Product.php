@@ -8,6 +8,7 @@ use App\Models\Shop;
 use App\Models\Advert;
 use App\Models\Review;
 use App\Models\Category;
+use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -42,11 +43,14 @@ class Product extends Model
         parent::observe(new \App\Observers\ProductObserver);
     }
 
-    public function like(){
+    public function likes(){
         return $this->hasMany(Like::class);
     }
     public function carts(){
         return $this->hasMany(Cart::class);
+    }
+    public function orders(){
+        return $this->hasMany(OrderItem::class);
     }
     public function shop(){
         return $this->belongsTo(Shop::class);

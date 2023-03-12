@@ -202,7 +202,7 @@
                                         @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 0)
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -211,7 +211,7 @@
                                                 </span>
                                             </div>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 1)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 1)
                                             <div class="cards-md__favs-list show-heart">
                                                 <span class="action-btn liked">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -581,7 +581,7 @@
                                         @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 0)
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -590,7 +590,7 @@
                                                 </span>
                                             </div>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 1)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 1)
                                             <div class="cards-md__favs-list show-heart">
                                                 <span class="action-btn liked">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -961,7 +961,7 @@
                                         @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 0)
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -970,7 +970,7 @@
                                                 </span>
                                             </div>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 1)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 1)
                                             <div class="cards-md__favs-list show-heart">
                                                 <span class="action-btn liked">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -1341,7 +1341,7 @@
                                         @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 0)
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -1350,7 +1350,7 @@
                                                 </span>
                                             </div>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 1)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 1)
                                             <div class="cards-md__favs-list show-heart">
                                                 <span class="action-btn liked">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -1721,7 +1721,7 @@
                                         @if(!$advert->product->isAvailable())
                                             <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 0)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 0)
                                             <div class="cards-md__favs-list">
                                                 <span class="action-btn">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -1730,7 +1730,7 @@
                                                 </span>
                                             </div>
                                         @endif
-                                        @if(Auth::check() && $advert->product->like->where('user_id',Auth::id())->count() == 1)
+                                        @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count() == 1)
                                             <div class="cards-md__favs-list show-heart">
                                                 <span class="action-btn liked">
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$advert->product->id}}product">
@@ -2272,7 +2272,7 @@
                                     @if($feature->product->stock == 0)
                                         <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
                                     @endif
-                                    @if(Auth::check() && !$feature->product->like->where('user_id',Auth::id())->count())
+                                    @if(Auth::check() && !$feature->product->likes->where('user_id',Auth::id())->count())
                                         <div class="cards-md__favs-list">
                                             <span class="action-btn">
                                                 <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" id="{{$feature->product->id}}" class="add-to-wish" data-product="{{$feature->product->id}}product">
@@ -2282,7 +2282,7 @@
                                         </div>
                                     @endif
 
-                                    @if(Auth::check() && $feature->product->like->where('user_id',Auth::id())->count())
+                                    @if(Auth::check() && $feature->product->likes->where('user_id',Auth::id())->count())
                                         <div class="cards-md__favs-list show-heart">
                                             <span class="action-btn liked">
                                                 <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" id2="{{$feature->product->id}}" class="add-to-wish">

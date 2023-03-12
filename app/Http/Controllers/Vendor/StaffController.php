@@ -130,6 +130,7 @@ class StaffController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
         }
+        /** @var \App\Models\User $user **/
         $user = auth()->user();
         $bank = Bank::find($request->bank_id);
         if($user->country->payout_gateway == 'paystack'){
@@ -194,6 +195,7 @@ class StaffController extends Controller
     }
 
     public function notifications(){
+        /** @var \App\Models\User $user **/
         $user = auth()->user();
         $notifications = $user->notifications()->orderBy('created_at','desc')->paginate(2);
         return request()->expectsJson() ?
