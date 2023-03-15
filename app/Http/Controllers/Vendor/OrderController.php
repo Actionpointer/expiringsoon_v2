@@ -12,9 +12,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderDetailsResource;
 use App\Http\Resources\OrderMessageResource;
+use App\Http\Traits\OrderTrait;
 
 class OrderController extends Controller
 {
+    use OrderTrait;
     public function __construct()
     {
         $this->middleware('auth');
@@ -52,16 +54,7 @@ class OrderController extends Controller
         })->orWhere(function($qeury) use($order){
             return $qeury->where('order_id',$order->id)->where('sender_id',$order->shop_id)->where('sender_type','App\Models\Shop');
         })->orderBy('created_at','desc')->get();
-        $allow_update = false;
-        if($order->status == 'processing')
-        $allow_update = true;
-        if($order->status == 'ready' && $order->deliverer == "vendor")
-        $allow_update = true;
-        if($order->status == 'shipped' && $order->deliverer == "vendor")
-        $allow_update = true;
-        if($order->status == 'returned' && $order->statuses->firstWhere('name','returned')->created_at->addHours(cache('settings')['order_rejected_to_acceptance_period']) > now())
-        $allow_update = true;
-
+        $statuses = $this->getVendorOrderStatuses($order);
         return request()->expectsJson() ? 
             response()->json([
                 'status' => true,
@@ -69,7 +62,7 @@ class OrderController extends Controller
                 'data' => OrderDetailsResource::collection($order->items),
                 'count' => $order->items->count()
             ], 200):
-            view('vendor.shop.orders.view',compact('shop','order','allow_update','messages'));
+            view('vendor.shop.orders.view',compact('shop','order','statuses','messages'));
     }
 
 

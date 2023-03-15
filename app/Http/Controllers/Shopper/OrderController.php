@@ -47,13 +47,7 @@ class OrderController extends Controller
         })->orWhere(function($qeury) use($order){
             return $qeury->where('order_id',$order->id)->where('sender_id',$order->user_id)->where('sender_type','App\Models\User');
         })->orderBy('created_at','desc')->get();
-        $allow_update = false;
-        if($order->status == 'processing' && $order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_cancel_period']) > now())
-        $allow_update = true;
-        if($order->status == 'delivered' && $order->statuses->firstWhere('name','delivered')->created_at->addHours(cache('settings')['order_delivered_to_acceptance_period']) > now())
-        $allow_update = true;
-        if($order->status == 'rejected' && $order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_returned_period']) > now())
-        $allow_update = true;
+        $statuses = $this->getCustomerOrderStatuses($order);
         return request()->expectsJson() ? 
             response()->json([
                 'status' => true,
@@ -61,7 +55,7 @@ class OrderController extends Controller
                 'data' => OrderDetailsResource::collection($order->items),
                 'count' => $order->items->count()
             ], 200):
-            view('customer.orders.view',compact('order','allow_update','messages'));
+            view('customer.orders.view',compact('order','messages','statuses'));
     }
 
     public function update(Request $request){

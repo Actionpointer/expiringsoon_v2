@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use Carbon\Carbon;
 use App\Models\City;
 use App\Models\Shop;
+use App\Models\Order;
 use App\Models\State;
 use App\Models\Coupon;
 use App\Models\Address;
@@ -70,6 +71,75 @@ trait OrderTrait
         }
         return ['total'=> $shipping,'shipments'=> $result];
     
+    }
+
+    protected function getCustomerOrderStatuses(Order $order){
+        $statuses = [];
+        switch($order->status){
+            case 'processing':
+                if($order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_cancel_period']) > now()) 
+                $statuses = ['Cancel'=>'cancelled'];
+            break;
+            case 'delivered':
+                if($order->statuses->firstWhere('name','delivered')->created_at->addHours(cache('settings')['order_delivered_to_acceptance_period']) > now()) 
+                $statuses = ['Received'=>'completed','Reject'=>'rejected'];
+                break;
+            case 'rejected':
+                if($order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_returned_period']) > now())
+                $statuses = ['Returned'=>'returned'];
+                break;
+            default: $statuses = [];
+                break;
+        }
+        return $statuses;
+    }
+
+    protected function getVendorOrderStatuses(Order $order){
+        $statuses = [];
+        switch($order->status){
+            case 'processing': 
+                if(in_array($order->deliverer,["pickup","admin"])) $statuses = ['ready'];
+                else $statuses = ['Shipped'=>'shipped'];
+            break;
+            case 'ready':
+                if(in_array($order->deliverer,["pickup","vendor"])) $statuses = ['Delivered'=> 'delivered'];
+            break;
+            case 'shipped':
+                if($order->deliverer == "vendor") $statuses = ['Delivered'=> 'delivered'];
+                break;
+            case 'returned':
+                $statuses = ['Refund'=>'refunded','Reject'=>'disputed'];
+                break;
+            default: $statuses = [];
+                break;
+        }
+        return $statuses;
+    }
+
+    protected function getLogisticsOrderStatuses(Order $order){
+        $statuses = [];
+        switch($order->status){
+            case 'ready':
+                if($order->deliverer == "admin") $statuses = ['Shipped'=>'shipped','Delivered'=>'delivered'];
+                break;
+            case 'shipped':
+                if($order->deliverer == "admin") $statuses = ['Delivered'=>'delivered'];
+                break;
+            default: $statuses = [];
+                break;
+        }
+        return $statuses;
+    }
+    protected function getAdminOrderStatuses(Order $order){
+        $statuses = [];
+        switch($order->status){
+            case 'disputed':
+                $statuses = ['Close'=>'closed'];
+                break;
+            default:  $statuses = [];
+                break;
+        }
+        return $statuses;
     }
 
     // protected function getDeliveryCharge(){

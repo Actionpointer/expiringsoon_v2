@@ -195,7 +195,7 @@
               </div>
               
               <!-- Update status  -->
-              @if($allow_update)
+              @if(count($statuses))
               <form method="post" class="my-5" id="orderstatus" action="{{route('order.update')}}" onsubmit="return confirm('Are you sure?');">@csrf
                 <input type="hidden" name="order_id" value=" {{$order->id}}">
                 <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
@@ -205,17 +205,9 @@
                     <div class="mx-3 pt-1">
                       <select id="" name="status" class="form-control" required style="min-width:250px">
                         <option selected disabled>Select </option>
-                          @if($order->status == 'processing' && $order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_cancel_period']) > now())
-                            <option value="cancelled">Cancel</option>
-                          @endif
-                          @if($order->status == 'delivered' && $order->statuses->firstWhere('name','delivered')->created_at->addHours(cache('settings')['order_delivered_to_acceptance_period']) > now())
-                            <option value="rejected">Reject and Request Refund</option>
-                            <option value="completed">Received</option>
-                          @endif
-                          
-                          @if($order->status == 'rejected' && $order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_returned_period']) > now())
-                            <option value="returned"> Returned </option>
-                          @endif
+                          @foreach($statuses as $key => $value)
+                            <option value="{{$value}}">{{$key}}</option>
+                          @endforeach
                       </select>
                     </div>
                     <div class="pt-2 pt-md-0">
