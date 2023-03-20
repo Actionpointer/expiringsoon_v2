@@ -78,7 +78,7 @@ trait PaystackTrait
         "currency"=> $payout->currency->code,"reference"=> $payout->reference ) )
         ->asJson()                
         ->post();
-        dd($response);
+        // dd($response);
         if($response &&  isset($response->status) && $response->status)
           return true;
         else return false;
@@ -90,7 +90,7 @@ trait PaystackTrait
           ->asJson()
           ->get();
       //check the status and update
-  }
+    }
     
     
 

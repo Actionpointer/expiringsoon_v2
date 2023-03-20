@@ -13,7 +13,7 @@ trait CartTrait
 
     protected function addToCartSession(Product $product,$quantity = 1,$update = false){
         $cart = session('cart');
-        // if cart is empty then this is the first product
+        //if cart is empty then this is the first product
         if(!$cart) {
             $cart = [
                     $product->id => [
