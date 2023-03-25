@@ -41,8 +41,7 @@ class ApiController extends Controller
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validateUser->errors()->first()
+                    'message' => $validateUser->errors()->first(),
                 ], 401);
             }
             $role_id = Role::where('name','vendor')->first()->id;
@@ -89,8 +88,7 @@ class ApiController extends Controller
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
-                    'error' => $validateUser->errors()->first()
+                    'message' => $validateUser->errors()->first()
                 ], 401);
             }
 
