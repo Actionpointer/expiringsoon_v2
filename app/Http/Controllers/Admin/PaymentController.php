@@ -24,15 +24,19 @@ class PaymentController extends Controller
     }
 
     public function index(){
-        $payments = Payment::where('status','success')->get();
-        $settlements = Settlement::all();
-        return view('admin.payments',compact('payments','settlements'));
+        $payments = Payment::within()->where('status','success')->paginate(10);
+        return view('admin.payments.index',compact('payments'));
+    }
+
+    public function settlements(){
+        $settlements = Settlement::within()->paginate(10);
+        return view('admin.payments.settlements',compact('settlements'));
     }
 
     public function payouts()
     {
-        $payouts = Payout::orderBy('created_at','desc')->get();
-        return view('admin.payouts',compact('payouts'));
+        $payouts = Payout::within()->orderBy('created_at','desc')->paginate(10);
+        return view('admin.payments.payouts',compact('payouts'));
     }
 
     public function update(Request $request)

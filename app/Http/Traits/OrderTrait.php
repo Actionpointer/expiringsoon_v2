@@ -10,7 +10,7 @@ use App\Models\State;
 use App\Models\Coupon;
 use App\Models\Address;
 use App\Models\Setting;
-use App\Models\ShippingRate;
+use App\Models\Rate;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,13 +42,13 @@ trait OrderTrait
         $hours = 0;
         $amount = 0;
         $shipper = 'pickup';
-        if(ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
-            $hours = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->hours;
-            $amount = ShippingRate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->amount;
+        if(Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
+            $hours = Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->hours;
+            $amount = Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->amount;
             $shipper = 'vendor';
-        }elseif(ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()){
-            $hours = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()->hours;
-            $amount = ShippingRate::whereNull('shop_id')->where('destination_id',$state_id)->first()->amount;
+        }elseif(Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()){
+            $hours = Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()->hours;
+            $amount = Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()->amount;
             $shipper = 'admin';
         }
         return ['hours'=> $hours,'amount'=>$amount,'shipper'=> $shipper];

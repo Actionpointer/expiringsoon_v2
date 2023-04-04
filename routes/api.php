@@ -58,11 +58,13 @@ Route::group(['middleware'=> 'auth:sanctum'],function(){
         return new UserResource(User::findOrFail($request->user()->id));
     });
 });
+
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=> 'user'],function(){
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
     });
+
     Route::group(['prefix'=> 'vendor'],function(){
         Route::get('notifications',[StaffController::class, 'notifications']);
         Route::post('notifications/read',[StaffController::class, 'readNotifications']);
@@ -124,4 +126,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('ads/store',[AdvertController::class,'store_product_advert']);
         Route::post('ads/delete',[AdvertController::class,'remove']);
     });
+
+    Route::post('payment/status',[App\Http\Controllers\PaymentController::class,'paymentcallback']);
+
+    
 });

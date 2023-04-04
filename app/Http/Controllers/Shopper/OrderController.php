@@ -15,7 +15,7 @@ use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\OrderMessage;
-use App\Models\ShippingRate;
+use App\Models\Rate;
 use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
@@ -113,7 +113,7 @@ class OrderController extends Controller
         $states = State::all();
         $cities = City::all();
         $order = $this->getOrder($carts);
-        $rates = ShippingRate::where('country_id',$user->country_id)->whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
+        $rates = Rate::where('country_id',$user->country_id)->whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
         return view('frontend.checkout',compact('carts','user','countries','states','cities','order','rates'));
     }
 

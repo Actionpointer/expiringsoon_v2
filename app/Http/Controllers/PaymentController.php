@@ -18,82 +18,54 @@ class PaymentController extends Controller
 {
     use PaymentTrait;
     public function __construct(){
-        // $this->middleware('auth');
+        $this->middleware('auth');
     }
 
-    public function paymentcallback(){
-        // dd(request()->query);
-        // ["trxref" => "632889cbaa15f","reference" => "632889cbaa15f"]
-        //check status of transaction ..if failed, 
-        //flutterwave = request()->query('status') // successful, cancelled
-        //paystack = request()->query('status') // 
-        
+    public function paymentcallback(){        
         $user = auth()->user();
         $gateway = $user->country->payment_gateway;
-        if($gateway == 'flutterwave' && request()->query('status') != 'successful'){
-            //delete this order, and remove the order number from the cart
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again1']);
+        if(request()->expectsJson()){
+            if(!request()->reference){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Reference Not Found',
+                ], 401);
+            }else $reference = request()->reference;
+        }else{
+            if(!request()->query()){
+                \abort(404);
+            }else $reference = request()->query();
+        } 
+        switch($gateway){
+            case 'paystack': 
+                if(!request()->query('reference')) \abort(404);
+                $payment = Payment::where('reference',$reference)->first();
+            break;
+            case 'flutterwave':
+                if(!request()->query('tx_ref')) \abort(404);
+                $payment = Payment::where('reference',$reference)->first();
+            break;
+            case 'paypal': 
+            break;
+            case 'stripe': 
+            break;
         }
-        if($gateway == 'paystack'){
-            $details = $this->verifyPaystackPayment(request()->query('reference'));
-        }  
-        if($gateway == 'flutterwave'){
-            $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
-        }
-        if($gateway == 'paypal'){
-            // $details = $this->verifyPaystackPayment(request()->query('reference'));
-        }  
-        if($gateway == 'stripe'){
-            // $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
-        }
-        
-        if(!$this->getPaymentData('status',$details)){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again2']);
-        }
-        if(!$this->getPaymentData('trx_status',$details)){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again3']);
-        }
-        if(!$payment = Payment::where('reference',$this->getPaymentData('reference',$details))->first()){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again4']);
-        }
-        if($payment->amount != $this->getPaymentData('amount',$details)){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again5']);
+        if(!$payment || $payment->status == 'success' || $payment->user_id != $user->id) \abort(404);   
+        $details = $this->verifyPayment($payment);
+        if(!$details['status'] || $details['trx_status'] != 'success' || $details['amount'] < $payment->amount){
+            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
         }
         $payment->status = 'success';
+        $payment->method = $details['method'];
         $payment->save();
         $this->giveValueAfterPayment($payment);
-        return redirect()->route('home')->with(['result'=>1,'message'=> 'Payment Successful']);
+        return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Payment Successful',
+            ], 200) :
+            redirect()->route('home')->with(['result'=>1,'message'=> 'Payment Successful']);
        
-    }
-
-    public function status(Payment $payment){
-        $user = auth()->user();
-        $gateway = $user->country->payment_gateway;
-        if($gateway == 'paystack'){
-            $details = $this->verifyPaystackPayment($payment->reference);
-        }  
-        else {
-            $details = $this->verifyFlutterWavePayment($payment->reference);
-        }
-        // dd($this->getPaymentData('method',$details));
-        if(!$this->getPaymentData('status',$details)){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
-        }
-        if(!$this->getPaymentData('trx_status',$details)){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
-        }
-        $payment = Payment::where('reference',$this->getPaymentData('reference',$details))->first();
-        if(!$payment){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
-        }
-        if($payment->amount != $this->getPaymentData('amount',$details)){
-            return redirect('home')->with('statuss','Payment was not successful. Please try again');
-        }
-        $payment->status = 'success';
-        $payment->method = $this->getPaymentData('method',$details);
-        $payment->save();
-        $this->giveValueAfterPayment($payment);
-        return redirect()->route('home')->with(['result'=> 1,'message'=> 'Payment Successful']);
     }
 
     public function giveValueAfterPayment(Payment $payment){
@@ -140,30 +112,30 @@ class PaymentController extends Controller
         return view('invoice',compact('payment'));
     }
     
-    public function receipt(Settlement $settlement){
-        return view('receipt',compact('settlement'));
-    }
+    // public function receipt(Settlement $settlement){
+    //     return view('receipt',compact('settlement'));
+    // }
 
-    public function verification(){
-        if(!request()->query() || !request()->query('transaction_id') || !request()->query('tx_ref'))
-        \abort(404);
-        $trans_id = request()->query('transaction_id');
-        $trans_ref = request()->query('tx_ref');
-        $trans_status = request()->query('status');
-        $response = $this->verifyPayment($trans_id);
-        // dd($response);
-        $payment = Payment::where('reference',$trans_ref)->first();
-        if($trans_status == 'successful' && $response->status == 'success' && $payment && $response && $payment->reference == $response->data->tx_ref  && $response->data->currency == $payment->currency && $response->data->amount >= $payment->amount){
-            $payment->method = $response->data->payment_type;
-            $payment->status = 'success';
-            $payment->save();
-        }else{
-            $payment->status = 'failed';
-            $payment->save();
-        }
-        // else mark payment failed
-        return redirect()->route('payment.status',$payment);
-    }
+    // public function verification(){
+    //     if(!request()->query() || !request()->query('transaction_id') || !request()->query('tx_ref'))
+    //     \abort(404);
+    //     $trans_id = request()->query('transaction_id');
+    //     $trans_ref = request()->query('tx_ref');
+    //     $trans_status = request()->query('status');
+    //     $response = $this->verifyPayment($trans_id);
+    //     // dd($response);
+    //     $payment = Payment::where('reference',$trans_ref)->first();
+    //     if($trans_status == 'successful' && $response->status == 'success' && $payment && $response && $payment->reference == $response->data->tx_ref  && $response->data->currency == $payment->currency && $response->data->amount >= $payment->amount){
+    //         $payment->method = $response->data->payment_type;
+    //         $payment->status = 'success';
+    //         $payment->save();
+    //     }else{
+    //         $payment->status = 'failed';
+    //         $payment->save();
+    //     }
+    //     // else mark payment failed
+    //     return redirect()->route('payment.status',$payment);
+    // }
 
     
 

@@ -26,7 +26,7 @@ class OrderController extends Controller
         $sortBy = null;
         $countries = Country::has('orders')->get();
         $statuses = ['processing','cancelled','ready','shipped','delivered','rejected','completed','disputed','returned','closed'];       
-        $orders = Order::whereNotNull('subtotal');
+        $orders = Order::within();
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');
             $orders = $orders->within($country_id);

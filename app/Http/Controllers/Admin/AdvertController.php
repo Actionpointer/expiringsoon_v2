@@ -24,8 +24,8 @@ class AdvertController extends Controller
     }
 
     public function index(){
-        $adverts = Advert::paginate(10);
-        return view('admin.adverts',compact('adverts'));
+        $adverts = Advert::within()->paginate(10);
+        return view('admin.adverts.ads',compact('adverts'));
     }
 
     public function manage(Request $request){
@@ -39,5 +39,12 @@ class AdvertController extends Controller
             return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Updated Successfully']);
         }
     }
+
+    public function adsets(){
+        $features = Feature::within()->paginate(10);
+        return view('admin.adverts.sets',compact('features'));
+    }
+
+
 
 }

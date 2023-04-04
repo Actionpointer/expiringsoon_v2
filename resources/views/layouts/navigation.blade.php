@@ -1,16 +1,16 @@
-@if(auth()->user()->role == 'shopper')
-    @include('layouts.customer_navigation')
-@endif
-@if(auth()->user()->role == 'vendor')
-    
-    @if(auth()->user()->subscription_id)
+@switch(auth()->user()->role->name)
+    @case('shopper')
+        @include('layouts.customer_navigation')
+    @break
+
+    @case('vendor')
         @include('layouts.vendor_navigation')
-    @else  
+    @break
+
+    @case('staff')
         @include('layouts.shop_navigation')
-    @endif
+    @break
 
-
-@endif
-@if(in_array(auth()->user()->role,['admin','customercare','security']))
-    @include('layouts.admin_navigation')
-@endif
+    @default
+        @include('layouts.admin_navigation')
+@endswitch

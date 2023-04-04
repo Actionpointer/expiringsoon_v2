@@ -63,6 +63,7 @@
                         <form action="{{route('admin.orders')}}" method="get" id="filterform">
                             <div class="filter-box__top">
                                 <div class="filter-box__top-left">
+                                    @if(auth()->user()->role->name == 'superadmin')                                  
                                     <div class="select-box--item" style="min-width: 200px!important">
                                         <select name="country_id" id="country_id" class="w-100" onchange="document.getElementById('filterform').submit();">
                                             <option></option>
@@ -72,6 +73,7 @@
                                                 @endforeach
                                         </select>
                                     </div>
+                                    @endif
                                     <div class="select-box--item" style="min-width: 200px!important">
                                         <select name="status" id="order_status" class="select2" onchange="document.getElementById('filterform').submit();">
                                             <option></option>

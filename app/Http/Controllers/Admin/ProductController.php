@@ -19,16 +19,14 @@ class ProductController extends Controller
         $this->middleware('auth')->except(['index','show','getSubcategories']);
     }
     
-    public function index()
-    {
-        $products = Product::orderBy('expire_at','desc')->get();
+    public function index(){
+        $products = Product::within()->orderBy('expire_at','desc')->paginate(10);
         return view('admin.products',compact('products'));
     }
 
     public function manage(Request $request){
         if($request->delete){
-            $products = Product::whereIn('id',$request->products)->whereDoesntHave('orders')->get();
-            $products->each->delete();
+            $products = Product::whereIn('id',$request->products)->whereDoesntHave('orders')->delete();
             return redirect()->back()->with(['result'=>1,'message'=> 'Products deleted Successfully']);
         }else{
             $products = Product::whereIn('id',$request->products)->update(['status'=> $request->approved]);
@@ -87,6 +85,7 @@ class ProductController extends Controller
             $category->subcategories->attach($newtag->id);
         }
     }
+    
     public function category_destroy(Request $request){
         $category = Category::find($request->category_id);
         if($category->products->count()){

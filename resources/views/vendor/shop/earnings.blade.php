@@ -51,9 +51,8 @@
                               <tr>
                                 <th scope="col" class="cart-table-title">Date</th>
                                 <th scope="col" class="cart-table-title">Amount</th>
+                                <th scope="col" class="cart-table-title">Description</th>
                                 <th scope="col" class="cart-table-title">Order</th>
-                                <th scope="col" class="cart-table-title">Status</th>
-                                <th scope="col" class="cart-table-title">Transaction ID</th>
                               </tr>
                           </thead>
                           <tbody>
@@ -67,18 +66,12 @@
                                       <td class="cart-table-item order-date align-middle">
                                           <p class="font-body--lg-500" style="color:#00b207">{!!$settlement->receiver->country->currency->symbol!!}{{ number_format($settlement->amount, 2)}}</p>
                                       </td>
-                                      <td class="cart-table-item order-date align-middle">{{$settlement->order->id}}</td>
+                                      <td class="cart-table-item order-date align-middle">{{$settlement->description}}</td>
                                       <!-- Stock Status  -->
+
                                       <td class="cart-table-item order-date align-middle">
+                                          <a href="{{route('vendor.shop.order.view',[$settlement->receiver,$settlement->order])}}" class="btn btn-success">View Order</a>
                                           
-                                          @if($settlement->status =='pending')
-                                              <p style="color:#d92e2e;font-size:14px"><span id="status">{{ $settlement->status}}</span></p>
-                                          @else
-                                              <p style="color:#00b207;font-size:14px;font-weight:500">{{ $settlement->status}}</p>
-                                          @endif
-                                      </td>
-                                      <td class="cart-table-item order-date align-middle">
-                                          {{$settlement->reference}}
                                       </td>
                                       
                                   </tr>   

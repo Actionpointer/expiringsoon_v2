@@ -8,7 +8,7 @@ use App\Models\City;
 use App\Models\Shop;
 use App\Models\State;
 use App\Events\DeleteShop;
-use App\Models\ShippingRate;
+use App\Models\Rate;
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
@@ -157,7 +157,7 @@ class ShopController extends Controller
         $banks = Bank::all();
         $states = $shop->country->states;
         $cities = City::where('state_id',$shop->state_id)->get();
-        $rates = ShippingRate::where('shop_id',$shop->id)->get();
+        $rates = Rate::where('shop_id',$shop->id)->get();
         return view('vendor.shop.settings',compact('user','shop','banks','states','cities','rates'));
     }
     

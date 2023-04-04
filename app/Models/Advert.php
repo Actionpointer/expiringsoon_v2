@@ -30,10 +30,12 @@ class Advert extends Model
     public function advertable(){
         return $this->morphTo();
     }
+
     public function product(){
         //use only after separating the product from the shop
         return $this->belongsTo(Product::class,'advertable_id');
     }
+
     public function shop(){
         //use only after separating the product from the shop
         return $this->belongsTo(Shop::class,'advertable_id');
@@ -42,6 +44,7 @@ class Advert extends Model
     public function feature(){
         return $this->belongsTo(Feature::class);
     }
+
     public function state(){
         return $this->belongsTo(State::class);
     }
@@ -54,11 +57,26 @@ class Advert extends Model
        }
     }
 
-    public function scopeWithin($query,$state_id=null){
+    public function scopeWithinState($query,$state_id=null){
         if(!$state_id){
             $state_id = session('locale')['state_id'];;
         }
         return $query->where('state_id',$state_id);
+    }
+
+    public function scopeWithin($query,$value = null){
+        if($value){
+            return $query->whereHas('state',function($p)use($value){
+                $p->where('country_id',$value);
+            });
+        }
+        elseif(auth()->check()){
+            if(auth()->user()->role->name == 'superadmin')
+            return $query;
+            else return $query->whereHas('state',function ($q) { $q->where('country_id',auth()->user()->country_id); });
+        }else{
+            return $query->whereHas('state',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
+        }  
     }
 
     public function getRunningAttribute(){

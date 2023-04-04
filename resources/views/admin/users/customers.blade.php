@@ -1,11 +1,9 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/>
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
+
 
 @endpush
-@section('title')Users @endsection
+@section('title')Customers @endsection
 @section('main')
     <!-- breedcrumb section start  -->
   <div class="section breedcrumb">
@@ -27,7 +25,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="{{route('admin.dashboard')}}">Users</a></li>
+          <li class="active"><a href="{{route('admin.dashboard')}}">Customers</a></li>
         </ul>
       </div>
     </div>
@@ -47,12 +45,12 @@
           <div class="container">
             <!-- Products -->
             <div class="table-responsive">
-              <table id="datatable" class="table display" style="width:100%;font-size:13px">
+              <table class="table display" style="width:100%;font-size:13px">
                 <thead>
                   <tr>
                     <th scope="col" class="cart-table-title">User </th>
-                    <th scope="col" class="cart-table-title">Details</th>
-                    <th scope="col" class="cart-table-title">Role</th>
+                    <th scope="col" class="cart-table-title">Location</th>
+                    <th scope="col" class="cart-table-title">Orders</th>
                     <th scope="col" class="cart-table-title">Status</th>
                     <th scope="col" class="cart-table-title"></th>
                   </tr>
@@ -62,12 +60,6 @@
                     <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                       <!-- Product item  -->
                       <td class="cart-table-item align-middle" style="background-color:#fff;padding-top:12px !important">
-                          <div class="cart-table__product-item-img">
-                            <a href="{{route('admin.user.show',$user)}}">
-                            <img src="{{Storage::url($user->pic)}}" alt="{{$user->name}}" onerror="this.src='{{asset('src/images/site/avatar.png')}}'" /></a>
-                          </div>
-                      </td>
-                      <td class="cart-table-item order-date align-middle">
                         <a href="{{route('admin.user.show',$user)}}">
                           <span class="font-body--lg-500" style="color:#000">#{{$user->id}}. {{$user->name}}</span>
                         <br />
@@ -76,9 +68,16 @@
 
                         </a>
                       </td>
+                      <td class="cart-table-item order-date align-middle">
+                        <span style="font-size:12px;color:#888">{{$user->state->name}}. {{$user->country->name}}</span>
+                      </td>
                       <!-- Price  -->
                       <td class="cart-table-item order-date align-middle">
-                        <p class="font-body--lg-500" style="color:#00b207">{{ucwords($user->role->name)}}</p>
+                        @if($user->orders->count())
+                        <p class="font-body--md-400">
+                          {{$user->orders->count()}} <br> ({!!$user->country->currency->symbol!!} {{$user->orders->sum('total')}})
+                        </p>
+                        @else 0 @endif
                       </td>
                       <!-- Stock Status  -->
                       <td class="cart-table-item order-date align-middle">
@@ -118,6 +117,7 @@
                 </tbody>
               </table>
             </div>
+            @include('layouts.pagination',['data'=> $users])
           </div>
         </div>
       </div>
@@ -127,32 +127,5 @@
 
 @endsection
 @push('scripts')
-<script type="text/javascript" src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/jszip.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/pdfmake.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/vfs_fonts.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.html5.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.print.min.js')}}"></script>
-<script>
-    $(document).ready(function() {
-        $('#datatable').DataTable({
-            "pagingType": "full_numbers",
-            dom: 'lBfrtip',
-            buttons: [
-                { extend: 'print', className: 'btn btn-danger' }, { extend: 'pdf', className: 'btn btn-primary' }, { extend: 'csv', className: 'btn btn-warning' }, { extend: 'excel', className: 'btn btn-success' }, { extend: 'copy', className: 'btn btn-info' }
-            ],
-            "lengthMenu": [
-            [10, 25, 50, -1],
-            [10, 25, 50, "All"]
-            ],
-            responsive: true,
-            language: {
-            search: "_INPUT_",
-            searchPlaceholder: "Search Users",
-            }
-        });
-    });
-</script>
+
 @endpush

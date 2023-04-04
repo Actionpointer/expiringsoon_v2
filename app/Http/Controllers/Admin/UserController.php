@@ -10,6 +10,7 @@ use App\Models\State;
 use App\Models\Payout;
 use App\Models\Address;
 use App\Models\Country;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Rules\OtpValidateRule;
 use App\Models\OneTimePassword;
@@ -36,12 +37,22 @@ class UserController extends Controller
         return view('admin.dashboard',compact('user','documents','orders','payouts'));
     }
     
-    public function index(){
-        $users = User::whereIn('role',['shopper','vendor'])->get();
-        return request()->expectsJson()
-        ? response()->json(['data' => $users], 200)
-        : view('admin.users.list',compact('users'));
-        
+    public function customers(){
+        $users = User::within()->whereHas('role',function($query){$query->where('name','shopper');})->paginate(10);
+        $countries = Country::all();
+        return view('admin.users.customers',compact('users','countries'));
+    }
+
+    public function vendors(){
+        $users = User::within()->whereHas('role',function($query){$query->where('name','vendor');})->paginate(10);
+        $countries = Country::all();
+        return view('admin.users.vendors',compact('users','countries'));
+    }
+
+    public function staff(){
+        $users = User::within()->whereHas('role',function($query){$query->whereIn('name',['admin','manager','customercare','auditor']);})->paginate(10);
+        $countries = Country::all();
+        return view('admin.users.staff',compact('users','countries'));
     }
 
     public function show(User $user){
@@ -63,12 +74,14 @@ class UserController extends Controller
             'role' => 'required|string',
             'email' => 'required|string|unique:users',
             'phone' => 'required|string|unique:users',
-            'password' => 'required','string','confirmed'
+            'password' => 'required','string',
+            'country_id' => 'required','string'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
         }
-        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'state_id'=> session('locale')['state_id'],'country_id'=> session('locale')['country_id'],'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+        $state = State::where('country_id',$request->country_id)->first();
+        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'state_id'=> $state->id,'country_id'=> $request->country_id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
     }
 

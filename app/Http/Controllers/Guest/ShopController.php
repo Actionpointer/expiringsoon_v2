@@ -39,8 +39,8 @@ class ShopController extends Controller
             }
         }
         $shops = $shops->paginate(16);
-        $advert_G = Advert::within($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_H = Advert::within($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_G = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_H = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
         return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
     }
 

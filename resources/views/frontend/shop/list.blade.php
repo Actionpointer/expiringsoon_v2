@@ -298,8 +298,8 @@
                         
                             
                         </div>
-                        
-                        <nav aria-label="Page navigation pagination--one" class="pagination-wrapper section--xl" style="padding-top: 20px;">
+                        @include('layouts.pagination',['data'=> $shops])
+                        {{-- <nav aria-label="Page navigation pagination--one" class="pagination-wrapper section--xl" style="padding-top: 20px;">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item pagination-item @if($shops->onFirstPage()) disabled @endif">
                                     <a class="page-link pagination-link" href="{{$shops->previousPageUrl()}}" tabindex="-1">
@@ -322,7 +322,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> --}}
                     </div>
             </div>
         </div>

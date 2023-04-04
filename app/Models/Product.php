@@ -97,9 +97,19 @@ class Product extends Model
         return $this->morphMany(Advert::class,'advertable');
     }
 
-    
-    public function scopeWithinCountry($query){
-        return $query->whereHas('shop',function ($q) { $q->where('country_id',session('locale')['country_id']); } );
+    public function scopeWithin($query,$value = null){
+        if($value){
+            return $query->whereHas('shop',function($p)use($value){
+                $p->where('country_id',$value);
+            });
+        }
+        elseif(auth()->check()){
+            if(auth()->user()->role->name == 'superadmin')
+            return $query;
+            else return $query->whereHas('shop',function ($q) { $q->where('country_id',auth()->user()->country_id); });
+        }else{
+            return $query->whereHas('shop',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
+        }  
     }
     //expiry
     public function getValidAttribute(){

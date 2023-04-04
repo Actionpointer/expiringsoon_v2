@@ -11,7 +11,7 @@ class Coupon extends Model
 {
     use HasFactory,SoftDeletes;
     
-    protected $fillable = ['name','code', 'start_at', 'end_at',  'quantity', 'available', 'is_percentage',  'value',  'limit_per_user',  'status', 'maximum_spend', 'minimum_spend'];
+    protected $fillable = ['name','code', 'start_at', 'end_at',  'quantity', 'available', 'is_percentage', 'value',  'limit_per_user',  'status', 'maximum_spend', 'minimum_spend','country_id'];
     protected $dates = ['start_at','end_at'];
 
     protected static function boot()
@@ -22,5 +22,18 @@ class Coupon extends Model
                 $builder->where('country_id', auth()->user()->country_id);
             }
         });
+    }
+
+    public function scopeWithin($query,$value = null){
+        if($value){
+            return $query->where('country_id',$value);
+        }
+        elseif(auth()->check()){
+            if(auth()->user()->role->name == 'superadmin')
+            return $query;
+            else return $query->where('country_id',auth()->user()->country_id);
+        }else{
+            return $query->where('country_id',session('locale')['country_id']);
+        }  
     }
 }

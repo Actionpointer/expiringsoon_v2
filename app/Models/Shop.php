@@ -17,7 +17,7 @@ use App\Models\Category;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
 use App\Models\OrderMessage;
-use App\Models\ShippingRate;
+use App\Models\Rate;
 use App\Observers\ShopObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -64,9 +64,20 @@ class Shop extends Model
     public function getImageAttribute(){
         return $this->banner ? config('app.url')."/storage/$this->banner":null;   
     }
-    public function scopeWithin($query){
-        return $query->where('country_id',session('locale')['country_id']);
+
+    public function scopeWithin($query,$value = null){
+        if($value){
+            return $query->where('country_id',$value);
+        }
+        elseif(auth()->check()){
+            if(auth()->user()->role->name == 'superadmin')
+            return $query;
+            else return $query->where('country_id',auth()->user()->country_id);
+        }else{
+            return $query->where('country_id',session('locale')['country_id']);
+        }  
     }
+    
     public function scopeIsApproved($query){
         return $query->where('approved',true);
     }
@@ -109,8 +120,8 @@ class Shop extends Model
         return $this->belongsTo(City::class);
     }
     
-    public function shippingRates(){
-        return $this->hasMany(ShippingRate::class);
+    public function Rates(){
+        return $this->hasMany(Rate::class);
     }
     public function categories(){
         $categories = $this->products->pluck('category_id');

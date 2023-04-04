@@ -428,7 +428,7 @@
                                         <span class="font-body--xxl-600">N550</span>
                                     </p>
                                 </div>
-                                <a href="shop.php?cat=7" class="button button--md">
+                                <a href="#" class="button button--md">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -453,7 +453,7 @@
                                     <p>Up to <span>40% off</span></p>
                                 </div>
 
-                                <a href="shop.php?cat=1" class="button button--md">
+                                <a href="#" class="button button--md">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -492,7 +492,7 @@
             <!-- Desktop Versions -->
             <div class="popular-categories__wrapper">
                 @foreach ($categories as $category)
-                    <a href="{{route('product.list')}}?cat={{$category->id}}" class="cards-sm popular-categories__wrapper-item">
+                    <a href="{{route('product.list')}}?category_id={{$category->id}}" class="cards-sm popular-categories__wrapper-item">
                         <div class="cards-sm__img-wrapper">
                             <img src="{{asset('src/images/categories/'.$category->photo)}}" alt="{{$category->name}}">
                         </div>
@@ -507,7 +507,7 @@
                 <div class="swiper-wrapper" aria-live="off" style="transition-duration: 300ms;">
                     @foreach ($categories as $category)
                         <div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active">
-                            <a href="{{route('product.list')}}?cat={{$category->id}}" class="cards-sm popular-categories__wrapper-item">
+                            <a href="{{route('product.list')}}?category_id={{$category->id}}" class="cards-sm popular-categories__wrapper-item">
                                 <div class="cards-sm__img-wrapper">
                                     <img src="{{asset('src/images/categories/'.$category->photo)}}" alt="{{$category->name}}">
                                 </div>

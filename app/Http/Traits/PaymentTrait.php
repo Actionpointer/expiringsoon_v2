@@ -47,23 +47,25 @@ trait PaymentTrait
         }
     }
 
-
-    protected function getPaymentData($option,$value){
-        $user = auth()->user();
-        $gateway = $user->country->payment_gateway;
-        switch($option){
-            case 'status': return in_array($value->status,['success',true]); 
-                break;
-            case 'trx_status': return in_array($value->data->status,['success','successful']);
-                break;
-            case 'amount': return $gateway == 'paystack' ? $value->data->amount/100 : $value->data->amount;
-                break;
-            case 'reference': return $gateway == 'paystack' ? $value->data->reference : $value->data->tx_ref;
-                break;
-            case 'method': return $gateway == 'paystack' ? $value->data->channel : $value->data->payment_type;
-                break;
-        }  
+    protected function verifyPayment(Payment $payment){
+        $gateway = $payment->user->country->payment_gateway;
+        switch($gateway){
+            case 'paystack': 
+                $details = $this->verifyPaystackPayment($payment->reference);
+                return ['status'=> $details->status,'trx_status'=> $details->data->status,'amount'=> $details->data->amount/100,'method'=> $details->data->channel];
+            break;
+            case 'flutterwave': $details = $this->verifyFlutterWavePayment($payment->reference);
+                return ['status'=> $details->status == 'success'? true:false,'trx_status'=> $details->data->status == 'successful' ? 'success':'failed','amount'=> $details->data->amount,'method'=> $details->data->payment_type];
+            break;
+            case 'paypal': $details =  $this->verifyPaypalPayment($payment->reference);
+            break;
+            case 'stripe': $details =  $this->verifyStripePayment($payment->reference);
+            break;
+        }
     }
+
+
+    
     
 
 }

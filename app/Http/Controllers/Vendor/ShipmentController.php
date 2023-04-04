@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Models\Shop;
 use App\Models\State;
-use App\Models\ShippingRate;
+use App\Models\Rate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +18,7 @@ class ShipmentController extends Controller
 
     public function index(Shop $shop){
         try {
-            $rates = ShippingRate::where('shop_id',$shop->id)->get();
+            $rates = Rate::where('shop_id',$shop->id)->get();
             return response()->json([
                 'status' => true,
                 'message' => $rates->count() ? 'Shipping rates fetched Successfully' : 'No shipping rates found',
@@ -50,7 +50,7 @@ class ShipmentController extends Controller
                 ], 401);
             }
             $shop = Shop::find($request->shop_id);
-            $rate = ShippingRate::updateOrCreate(['shop_id'=> $shop->id ,'country_id'=> $shop->country_id,'destination_id'=> $request->destination_id,'origin_id'=> $shop->state_id],['hours'=> $request->hours,'amount'=> $request->amount]);
+            $rate = Rate::updateOrCreate(['shop_id'=> $shop->id ,'country_id'=> $shop->country_id,'destination_id'=> $request->destination_id,'origin_id'=> $shop->state_id],['hours'=> $request->hours,'amount'=> $request->amount]);
            
             return request()->expectsJson() ?
              response()->json([
@@ -83,7 +83,7 @@ class ShipmentController extends Controller
                     'message'=> $validator->errors()->first()
                 ], 401);
             }
-            $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->first();
+            $rate = Rate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->first();
             if(!$rate){
                 return response()->json([
                     'status' => false,
@@ -91,7 +91,7 @@ class ShipmentController extends Controller
 
                 ], 401);
             }
-            $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->update(['destination_id'=> $request->destination_id,'hours'=> $request->hours,'amount'=> $request->amount]);
+            $rate = Rate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->update(['destination_id'=> $request->destination_id,'hours'=> $request->hours,'amount'=> $request->amount]);
             return request()->expectsJson() ?
              response()->json([
                 'status' => true,
@@ -121,7 +121,7 @@ class ShipmentController extends Controller
                         'message'=> $validator->errors()->first()
                     ], 401);
                 }
-                $rate = ShippingRate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->delete();
+                $rate = Rate::where('id',$request->rate_id)->where('shop_id',$request->shop_id)->delete();
                 return request()->expectsJson() ?
                 response()->json([
                     'status' => true,

@@ -211,15 +211,12 @@
                                                     <td>
                                                         <div class="d-flex">
                                                             <a href="javascript:void(0)" class="rename_state me-4" data-id="{{$state->id}}" data-name="{{$state->name}}"><i class="fa fa-edit"></i> Rename</a>  
-                                                            <a href="javascript:void(0)" class="delete_state text-danger" data-id="{{$state->id}}" data-name="{{$state->name}}" data-shops="{{$state->shops->count()}}" data-users="{{$state->users->count()}}" data-addresses="{{$state->addresses->count()}}" data-shipping_rates="{{$state->shipping_rates->count()}}" data-cities="{{$state->cities->count()}}" data-locations="{{$state->locations->count()}}">
+                                                            <a href="javascript:void(0)" class="delete_state text-danger" data-id="{{$state->id}}" data-name="{{$state->name}}" data-shops="{{$state->shops->count()}}" data-users="{{$state->users->count()}}" data-addresses="{{$state->addresses->count()}}" data-rates="{{$state->rates->count()}}" data-cities="{{$state->cities->count()}}" data-locations="{{$state->locations->count()}}">
                                                                 <i class="fa fa-trash"></i> Delete
                                                             </a>
-                                                    
                                                         </div>
                                                     </td>
-                                                    
-                                                </tr>
-                                                
+                                                </tr> 
                                             @endforeach
                                         </tbody>
                                         </table>
@@ -342,7 +339,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="#" method="post"> @csrf 
+            <form action="{{route('admin.settings.state.manage')}}" method="post"> @csrf 
                 <input type="hidden" name="state_id" id="rename_state_id">
                 <div class="contact-form__content">
                     <div class="contact-form-input">
@@ -354,7 +351,7 @@
                         <input type="text" name="pin" id="rename_state_pin" value="" placeholder="Access pin">
                     </div>
                     <div class="contact-form-btn">
-                        <button class="button button--md" type="submit"> Delete </button>
+                        <button class="button button--md" type="submit" name="action" value="rename"> Rename </button>
                         <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                     </div>
                     
@@ -373,7 +370,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="#" method="post"> @csrf 
+            <form action="{{route('admin.settings.state.manage')}}" method="post"> @csrf 
                 <input type="hidden" name="state_id" id="delete_state_id">
                 <div class="contact-form__content">
                     
@@ -407,7 +404,7 @@
                             <input type="text" name="pin" id="delete_state_pin" value="" placeholder="Access pin">
                         </div>
                         <div class="contact-form-btn">
-                            <button class="button button--md" type="submit"> Delete </button>
+                            <button class="button button--md" type="submit" name="action" value="delete"> Delete </button>
                             <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                         </div>
                     </div>
@@ -426,7 +423,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="#" method="post"> @csrf 
+            <form action="{{route('admin.settings.city.manage')}}" method="post"> @csrf 
                 <input type="hidden" name="city_id" id="rename_city_id">
                 <div class="contact-form__content">
                     <div class="contact-form-input">
@@ -438,7 +435,7 @@
                         <input type="text" name="pin" id="rename_city_pin" value="" placeholder="Access pin">
                     </div>
                     <div class="contact-form-btn">
-                        <button class="button button--md" type="submit"> Delete </button>
+                        <button class="button button--md" type="submit" name="action" value="rename"> Rename </button>
                         <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                     </div>
                     
@@ -457,7 +454,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="#" method="post"> @csrf 
+            <form action="{{route('admin.settings.city.manage')}}" method="post"> @csrf 
                 <input type="hidden" name="city_id" id="delete_city_id">
                 <div class="contact-form__content">
                     
@@ -486,7 +483,7 @@
                             <input type="text" name="pin" id="delete_city_pin" value="" placeholder="Access pin">
                         </div>
                         <div class="contact-form-btn">
-                            <button class="button button--md" type="submit"> Delete </button>
+                            <button class="button button--md" type="submit" name="action" value="delete"> Delete </button>
                             <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                         </div>
                     </div>
@@ -532,11 +529,11 @@
         let total = 0;
         let shops = parseInt($(this).attr('data-shops'))
         let users = parseInt($(this).attr('data-users'))
-        let shipping_rates = parseInt($(this).attr('data-shipping_rates'))
+        let rates = parseInt($(this).attr('data-rates'))
         let cities = parseInt($(this).attr('data-cities'))
         let addresses = parseInt($(this).attr('data-addresses'))
         let locations = parseInt($(this).attr('data-locations'))
-        total = shops + users + shipping_rates + cities + addresses + locations;
+        total = shops + users + rates + cities + addresses + locations;
         if(!total){
             $('#delete_state_message').hide()
             $('#delete_state_button').show()
@@ -545,7 +542,7 @@
         $('#delete_state_name').text($(this).attr('data-name'))
         $('#delete_state_shops').text(shops)
         $('#delete_state_users').text(users)
-        $('#delete_state_rates').text(shipping_rates)
+        $('#delete_state_rates').text(rates)
         $('#delete_state_cities').text(cities)
         $('#delete_state_addresses').text(addresses)
         $('#delete_state_locations').text(locations)

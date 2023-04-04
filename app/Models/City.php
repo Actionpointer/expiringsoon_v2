@@ -8,7 +8,7 @@ use App\Models\State;
 use App\Models\Address;
 use App\Models\Country;
 use App\Models\Location;
-use App\Models\ShippingRate;
+use App\Models\Rate;
 use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
@@ -35,8 +35,8 @@ class City extends Model
     public function addresses(){
         return $this->hasMany(Address::class);
     }
-    public function shipping_rates(){
-        return $this->hasMany(ShippingRate::class);
+    public function rates(){
+        return $this->hasMany(Rate::class);
     }
 
 }

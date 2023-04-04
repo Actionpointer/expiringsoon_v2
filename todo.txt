@@ -18,79 +18,49 @@ Secret Key:
 sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWybhZt
 eJtqIzn8rY5oE00IgYVeL2p 
 
--------------------------------------------------------------------------------------------------
-add reference to settlement table and show payout receipt there
---------------------------------------------------------------------------------------------------
-controller function for rename & delete to country settings under states and cities
 
-shops, users, addresses, shipping rates, states, cities, locations
+when the order is ready, 
+1. create an order on the partners website
+2. send email to the partner
+
+after creating shipments, create a link for the shipper to mark the item shipped...
+if the logistic firm has been integrated, we need to receive a webhook from which we mark this item shipped.
+
 
 swiper.js is displaying duplicates
+security alerts ipaddress, failed logins, block ipaddress from security page, once someone is throttled etc
 
-separate admin per country..
-super admin will see everything globally
-export orders, revenue to excel file 
+export orders, revenue to excel file for auditors
 
 set order processing to automatic cancel period on settings
+display order status: rejected | returned | dispute/refunded | closed
 
-set rollers while fetching states and cities in admin
-manager role per country to view data & download
-
-
-super admin should manage role Permissions
-
-make coupons specific to countries
-category url from home page is wrong
-
-re-add payout receipt to settlement page
+policies & gates
 
 add reason to payout reject
 
-block ipaddress from security page
-
-
-superadmin
-country admin
-country customer care
-country manager
-country auditor - orders, payouts & payments
-
-
-use pagination in shop/view page for all other pages requiring pagination
-
+auto-renew subscription & feature
 refund by flutterwave, paypal, stripe
 
 interface to manage shop adverts
 
-when order rejected but was not returned.
+CRON JOB
+when order rejected but was not returned. - cron job
+admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready - cron
+
 
 vendor cannot ship or make ready if the item becomes expired
-
-buyer can remove items from order which not yet shipped/ready, and pick another item from the same shop, of similar worth
-
-admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready 
-
-email that user has been returned to free subscription.
-
-
-display order status: rejected | returned | dispute/refunded | closed
-
 you cannot add expired products to cart.. from wishlist, from anywhere
 
-order dispute
-vendor earnings, and commissions and shipment fee
 
 NOTIFICATIONS
 place notification and profile icon at the top of vendor & shop
-
-PAYMENTS [add profit, revenue & payout to settlement]
+email that user has been returned to free subscription.
 
 2.fetch payout
 retry payout with job - 
 
 6. REPORT SHOPS/PRODUCT
-
-7. revisit security alert - once someone is throttled 
 
 8. add password strength meter
 
@@ -98,9 +68,7 @@ retry payout with job -
 
 11. hot deals mobile view (home page & hot deals page)
 
+version 2
+buyer can remove items from order which not yet shipped/ready, not yet expired, and pick another item from the same shop, of similar worth
+buyer can buy now and receive later when the price drops
 
-15. on product page 
-Product additional information
-
-
-- reviews

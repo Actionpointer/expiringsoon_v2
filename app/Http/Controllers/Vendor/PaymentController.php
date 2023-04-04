@@ -12,7 +12,6 @@ use App\Http\Traits\OrderTrait;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\ShopPayoutResource;
 use App\Http\Resources\VendorPaymentResource;
 use App\Http\Resources\ShopSettlementResource;

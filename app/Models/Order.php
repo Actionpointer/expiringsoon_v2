@@ -81,11 +81,8 @@ class Order extends Model
         return $this->belongsTo(Address::class);
     }
     
-    public function scopewithin($query,$value){
-        return $query->whereHas('shop',function($q)use($value){
-            $q->where('country_id',$value);
-        });
-    }
+  
+    
     public function scopeStatusFilter($query,$value){    
         return $query->whereHas('statuses',function($q) use($value){
             $q->where('name',$value);
@@ -117,6 +114,21 @@ class Order extends Model
 
     public function arbitrator(){
         return $this->belongsTo(User::class,'arbitrator_id');
+    }
+
+    public function scopeWithin($query,$value = null){
+        if($value){
+            return $query->whereHas('shop',function($p)use($value){
+                $p->where('country_id',$value);
+            });
+        }
+        elseif(auth()->check()){
+            if(auth()->user()->role->name == 'superadmin')
+            return $query;
+            else return $query->whereHas('shop',function ($q) { $q->where('country_id',auth()->user()->country_id); });
+        }else{
+            return $query->whereHas('shop',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
+        }  
     }
 
 }

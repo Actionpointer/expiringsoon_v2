@@ -1,14 +1,11 @@
 @extends('layouts.app')
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/>
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 
 @endpush
-@section('title') Manage Products | Expiring Soon @endsection
+@section('title') Manage Products @endsection
 @section('main')
     <!-- breedcrumb section start  -->
-  <div class="section breedcrumb">
+<div class="section breedcrumb">
     <div class="breedcrumb__img-wrapper">
       <img src="{{asset('src/images/banner/breedcrumb.jpg')}}" alt="breedcrumb" />
       <div class="container">
@@ -33,180 +30,123 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-  @include('layouts.session')
-  <div class="dashboard section">
-    <div class="container">
-      <div class="row dashboard__content">
-        @include('layouts.admin_navigation')
-        <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
-            <div class="dashboard__order-history-title" style="margin:auto;width:95%;border-bottom:1px solid #ddd;margin-bottom:10px">
-              <p class="font-body--xl-500">Manage Products</p>
-              <a href="#" class="font-body--lg-500">{{number_format($products->count(), 0)}} Items</a>
+@include('layouts.session')
+<div class="dashboard section">
+  <div class="container">
+    <div class="row dashboard__content">
+      @include('layouts.admin_navigation')
+      <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
+        <div class="dashboard__content-card">
+          <div class="dashboard__content-card-header">
+              <h5 class="font-body--xl-500">Manage Products</h5>
+          </div>
+          
+          <div class="dashboard__content-card-body px-0">
+            <div class="dropdown p-3">
+              <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Manage
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form class="d-inline" action="{{route('admin.products.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
+                  <input type="hidden" name="products[]">
+                  
+                  <button type="button" class="dropdown-item">Select All</button>
+                  <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
+                  
+                  <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
+                 
+                  <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
+                </form>                                      
+              </div>
             </div>
-            <div class="container">
-              <!-- Products -->
-              <form id="approveform" action="{{route('admin.products.manage')}}" method="POST">@csrf
-                  <input type="hidden" name="action" value="approve" >
-              </form>
-              <form id="disapproveform" action="{{route('admin.products.manage')}}" method="POST">@csrf
-                <input type="hidden" name="action" value="reject" >
-              </form>
-              <div class="table-responsive">
-                <table id="datatable" class="table display" style="width:100%;font-size:13px">
-                    <thead>
-                        <tr>
-                          <th scope="col" class="cart-table-title" >
-                            <div class="d-flex align-items-center">
-                              <div class="form-check d-inline">
-                                <label class="form-check-label font-body--400" for="existing"> </label>
-                                <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
-                              </div>
-                             <span class="align-bottom"></span> 
-                            </div>
-                          </th>
-                        <th scope="col" class="cart-table-title align-middle">Product</th>
-                        <th scope="col" class="cart-table-title align-middle">Vendor</th>
+            <form id="approveform" action="{{route('admin.products.manage')}}" method="POST">@csrf
+              <input type="hidden" name="action" value="approve" >
+            </form>
+            <form id="disapproveform" action="{{route('admin.products.manage')}}" method="POST">@csrf
+              <input type="hidden" name="action" value="reject" >
+            </form>
+            <div class="table-responsive">
+              <table class="table display" style="width:100%;font-size:13px">
+                  <thead class="thead-light">
+                      <tr>
+                        <th scope="col" class="cart-table-title">Item</th>
                         <th scope="col" class="cart-table-title align-middle">Orders</th>
+                        <th scope="col" class="cart-table-title align-middle">Available</th>
+                        <th scope="col" class="cart-table-title align-middle">Approved</th>
                         <th scope="col" class="cart-table-title align-middle">Status</th>
-                        <th scope="col" class="cart-table-title align-middle">Manage</th>
-                        </tr>
-                    </thead>
-                    <tbody style="width:100%;font-size:13px">
-                        @forelse ($products as $product)
-                            <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
-                                <!-- Product item  -->
-                                <td>
-                                  <div class="form-check pt-2 ms-3">
-                                    <label class="form-check-label font-body--400" for="existing"> </label>
-                                    <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
-                                  </div>
-                                </td>
-                                <td class="cart-table-item align-middle pt-3">
-                                    <a href="{{route('product.show',$product)}}" class="cart-table__product-item pt-2" >
-                                        {{ $product->name}}
+                        <th scope="col" class="cart-table-title align-middle">Expiry</th>
+                      </tr>
+                  </thead>
+                  <tbody style="width:100%;font-size:13px">
+                      @forelse ($products as $product)
+                          <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
+                              <!-- Product item  -->
+                              <td class="">
+                                  <div class="d-flex align-items-center">
+                                    <div class="form-check pt-2">
+                                      <label class="form-check-label font-body--400" for="existing"> </label>
+                                      <input class="form-check-input checkboxes" type="checkbox">
+                                    </div>
+                                    <a href="{{route('product.show',$product)}}"  class="cart-table__product-item" >
+                                        <div class="cart-table__product-item-img">
+                                            <img src="{{Storage::url($product->photo)}}" alt="{{$product->name}}" onerror="this.src='{{asset('src/images/site/avatar.png')}}'" />
+                                            
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <h5 class="font-body--lg-400"> {{ $product->name}}
+                                               <small class="text-muted">by {{$product->shop->name}}</small>
+                                            </h5>
+                                        </div>
                                     </a>
-                                </td>
-                                <td class="cart-table-item stock-status order-date align-middle">
-                                    {{$product->shop->name}}
-                                </td>
-                                <td class="cart-table-item order-date align-middle">
-                                  <p class="font-body--lg-500">
-                                    {{$product->carts->unique('order_id')->count()}}
-                                  </p>
-                                </td>
-                                <td class="cart-table-item stock-status align-middle">
-                                  <div class="d-flex">
-                                    @if(!$product->approved)
-                                      <span class="font-body--md-400 in bg-warning text-white text-nowrap"> Pending Approval</span>
-                                    @else 
-                                        <span class="font-body--md-400 in"> Approved</span>
-                                    @endif
-
-                                    @if(!$product->status)
-                                        <span class="font-body--md-400 out"> Inactive</span>
-                                    @else
-                                        <span class="font-body--md-400 out"> Active</span>
-                                    @endif
-
-                                    @if($product->isValid())
-                                      <span class="font-body--md-400 in"> Valid</span>
-                                    @else 
-                                        <span class="font-body--md-400 out"> Expired</span>
-                                    @endif
                                   </div>
                                   
                               </td>
-                              <td class="cart-table-item add-cart align-middle">
-                                <div class="dropdown">
-                                  <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    Manage
-                                  </button>
-                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <form class="d-inline" action="{{route('admin.products.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
-                                      <input type="hidden" name="products[]" value="{{$product->id}}">
-                                      @if(!$product->approved)
-                                      <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
-                                      @else
-                                      <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
-                                      @endif
-                                      <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
-                                    </form>                                      
-                                  </div>
-                                </div>
+                              
+                              <td class="cart-table-item stock-status order-date align-middle">
+                                  <p class="font-body--lg-500">
+                                    {{$product->carts->unique('order_id')->count()}}
+                                  </p>
                               </td>
-                            </tr>
-                        @empty
-                            <div style="margin:auto;padding:1%;text-align:center">
-                                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
-                                <br />There are no products at this time.</span>
-                            </div>
-                        @endforelse
-                        
-                    </tbody>
-                </table>
-              </div>
+                              <!-- Stock Status  -->
+                              <td class="cart-table-item stock-status order-date align-middle">
+                                {{$product->stock}}
+                              </td>
+                              <td class="cart-table-item stock-status order-date align-middle">
+                                {{$product->approved}}
+                              </td>
+                              <td class="cart-table-item stock-status order-date align-middle">
+                                {{$product->status}}
+                              </td>
+                              <td class="cart-table-item stock-status order-date align-middle">
+                                {{$product->valid}}
+                              </td>
+                          </tr>
+                      @empty
+                          <tr>
+                             <td colspan="6">
+                                <div style="margin:auto;padding:1%;text-align:center">
+                                  <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
+                                  <br />There are no products at this time.</span>
+                                </div>
+                             </td>
+                          </tr>
+                          
+                      @endforelse
+                      
+                  </tbody>
+              </table>
+              @include('layouts.pagination',['data'=> $products])
             </div>
-      </div>
+          </div>
+        </div>
+
+          
+          
     </div>
   </div>
-
+</div>
 
 @endsection
 @push('scripts')
-<script src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/jszip.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/pdfmake.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/vfs_fonts.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.html5.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/buttons.print.min.js')}}"></script>
 
-<script>
-    $(document).ready(function() {
-      let url = window.location.href;
-      let query = url.split('?')[1] ? url.split('?')[1].split('=')[1] :'';
-        $('#datatable').DataTable({
-            "pagingType": "full_numbers",
-            dom: 'lBfrtip',
-            buttons: [
-                { extend: 'print', className: 'btn btn-danger' }, { extend: 'pdf', className: 'btn btn-primary' }, { extend: 'csv', className: 'btn btn-warning' }, { extend: 'excel', className: 'btn btn-success' }, { extend: 'copy', className: 'btn btn-info' },
-                {text: 'Approve',className: 'btn btn-dark mx-2',action: approve_many},{text: 'Disapprove',className: 'btn btn-dark mx-2',action: disapprove_many}
-            ],
-            "lengthMenu": [
-            [10, 25, 50, -1],
-            [10, 25, 50, "All"]
-            ],
-            responsive: true,
-            language: {
-            search: "_INPUT_",
-            searchPlaceholder: "Search",
-            },
-            search: {
-                "search": query
-              }
-        });
-    });
-</script>
-<script>
-  function approve_many(){
-    if($('.checkboxes:checked').length){
-      $('.checkboxes:checked').each(function(key,elem){
-          var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
-          $('#approveform').append($(input));
-      });
-      $('#approveform').submit();
-    }
-  }
-  function disapprove_many(){
-    if($('.checkboxes:checked').length){
-      $('.checkboxes:checked').each(function(key,elem){
-          var input = $("<input>").attr("type", "hidden").attr("name", 'products[]').val(elem.value);
-          $('#disapproveform').append($(input));
-      });
-      $('#disapproveform').submit();
-    }
-  }
-
-</script>
 @endpush

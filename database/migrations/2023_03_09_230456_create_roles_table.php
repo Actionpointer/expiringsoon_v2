@@ -29,8 +29,7 @@ class CreateRolesTable extends Migration
             array('id' => 6, 'name'=> 'vendor', 'description'=>'Shop Owner'),
             array('id' => 7, 'name'=> 'staff', 'description'=>'Shop Staff'),
             array('id' => 8, 'name'=> 'shopper', 'description'=>'Buyers'),
-            array('id' => 9, 'name'=> 'arbitrator', 'description'=>'Dispute Arbitrator'),
-            array('id' => 10, 'name'=> 'shippers', 'description'=>'Shipping Agents'),
+
         ));
     }
 

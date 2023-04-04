@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Models\Plan;
-use App\Models\Price;
-use App\Models\Adplan;
-use App\Models\Feature;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Http\Traits\OrderTrait;
@@ -81,15 +78,13 @@ class SubscriptionController extends Controller
                     'data' => $link,
                 ], 200) :
                 redirect()->to($link);
-            }  
-            
+            }    
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
             ], 500);
         }
-        
     }    
 
     public function cancel_renewal(Request $request){

@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Location;
-use App\Models\ShippingRate;
+use App\Models\Rate;
 use App\Observers\StateObserver;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,15 +35,19 @@ class State extends Model
     public function addresses(){
         return $this->hasMany(Address::class);
     }
-    public function shipping_rates(){
-        return $this->hasMany(ShippingRate::class,'destination_id');
+    public function rates(){
+        return $this->hasMany(Rate::class,'destination_id');
     }
 
     public function products(){
         return $this->hasManyThrough(Product::class,Shop::class);
     }
     public function scopeWithin($query){
-        $country = session('locale')['country_id'];
+        if(auth()->check()){
+            $country = auth()->user()->role->name == 'superadmin' ? true: auth()->user()->country_id;
+        }else{
+            $country = session('locale')['country_id'];
+        }
         return $query->where('country_id',$country);
     }
 }

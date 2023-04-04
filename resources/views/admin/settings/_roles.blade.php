@@ -24,11 +24,11 @@
           </li>
           <li>
             <a href="{{route('home')}}">
-              Account
+              Settings
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Settings</a></li>
+          <li class="active"><a href="#">Roles</a></li>
         </ul>
       </div>
     </div>
@@ -48,24 +48,28 @@
                   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                       <li class="nav-item" role="presentation">
                           <button class="nav-link active" id="pills-description-tab" data-bs-toggle="pill" data-bs-target="#pills-description" type="button" role="tab" aria-controls="pills-description" aria-selected="true">
-                              General
+                            Admin
                           </button>
                       </li>
                       <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-countries-tab" data-bs-toggle="pill" data-bs-target="#pills-countries" type="button" role="tab" aria-controls="pills-countries" aria-selected="false">
-                            Countries
+                            Manager
                         </button>
                       </li>
-                      
+                      <li class="nav-item" role="presentation">
+                          <button class="nav-link" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="false">
+                            Auditor
+                          </button>
+                      </li>
                       <li class="nav-item" role="presentation">
                           <button class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" data-bs-target="#pills-plans" type="button" role="tab" aria-controls="pills-plans" aria-selected="false">
-                            Plans
+                           Customer Care
                           </button>
                       </li>
                      
                       <li class="nav-item" role="presentation">
                           <button class="nav-link" id="pills-customer-tab" data-bs-toggle="pill" data-bs-target="#pills-customer" type="button" role="tab" aria-controls="pills-customer" aria-selected="false">
-                              Advert
+                            Logistics Agent
                           </button>
                       </li>
                       
@@ -438,7 +442,167 @@
                             </div>
                         </div>
                       </div>
-                      
+                      <!-- Admin -->
+                      <div class="tab-pane fade" id="pills-information" role="tabpanel" aria-labelledby="pills-information-tab">
+                          <div class="products-tab__information">
+                            <!-- Manage Admins  -->
+                            <div class="dashboard__content-card">
+                                <div class="dashboard__content-card-header">
+                                    <h5 class="font-body--xl-500">Manage Admins</h5>
+                                </div>
+                                <div class="dashboard__content-card-body">
+                                <form method="post" action="{{route('admin.staff.store')}}" id="admin" class="mb-3">@csrf
+                                    <div class="contact-form__content">
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input">
+                                                <label for="states" style="">Admin Level</label>
+                                                <select id="zips" name="role" class="form-control-lg w-100 border text-muted" >
+                                                    <option value='admin' selected>Administrator</option>
+                                                    <option value='customercare'>Customer Care</option>
+                                                    <option value='security'>Security</option>
+                                                    <option value='auditor'>Auditor</option>
+                                                </select>
+                                            </div>
+                                            <div class="contact-form-input">
+                                                <label for="states" style="">Status</label>
+                                                <select id="zissdsp" name="status" class="form-control-lg w-100 border text-muted" >
+                                                    <option value='1'>Active</option>
+                                                    <option value='0'>Suspended</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input">
+                                                <label for="name">First Name</label>
+                                                <input type="text" name="fname" placeholder="Enter First Name" required />
+                                            </div>
+                                            <div class="contact-form-input">
+                                                <label for="name">Last Name</label>
+                                                <input type="text" name="lname" placeholder="Enter Last Name" required />
+                                            </div>
+                                        </div>
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input"> 
+                                            <label for="email">Email</label>
+                                            <input type="email" name="email" placeholder="Enter Email" required />
+                                            </div>
+                                            <div class="contact-form-input">
+                                            <label for="phone">Phone</label>
+                                            <input type="text" name="phone" placeholder="Enter Phone" required />
+                                            </div>
+                                        </div>
+                                        <div class="contact-form__content-group">
+                                            <div class="contact-form-input">
+                                            <label for="password">Password</label>
+                                            <input type="password" name="password" placeholder="Enter Password" required />
+                                            </div>
+                                            <div class="contact-form-input">
+                                            <label for="password">Repeat Password</label>
+                                            <input type="password" name="password_confirmation" placeholder="Repeat Password" required />
+                                            </div>
+                                        </div>
+                                        <div class="contact-form-btn">
+                                            <button class="button button--md askpin" type="button"> + Create Admin </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="process3">
+                                    <table id="" class="table " style="width:100%;font-size:13px">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Contact</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Level</th>
+                                                <th scope="col">Manage</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($users as $user)
+                                                <tr>
+                                                    <td>{{$user->name}}</td>
+                                                    <td>{{$user->email}}<br>{{$user->mobile}}
+                                                    </td>
+                                                    <td>@if($user->status) Active @else Suspended @endif</td>
+                                                    <td>{{$user->role->name}}</td>
+                                                    <td>
+                                                        @if($user->id != Auth::id()) 
+                                                        <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block';$('.select2').select2();">Edit </a> | 
+                                                        <form class="d-inline" action="{{route('admin.staff.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                            <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                            <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
+                                                        </form>
+                                                        
+                                                        @endif
+                                                    </td> 
+                                                </tr>
+                                                @if($user->id != Auth::id())
+                                                <tr>
+                                                    <td colspan="6" style="border:none;padding:0px">
+                                                        <form action="{{route('admin.staff.update')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                            @csrf 
+                                                            <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                            <div class="contact-form__content">
+                                                                <div class="contact-form__content-group my-3">
+                                                                    <div class="contact-form-input">
+                                                                        <label for="states">Admin Level</label>
+                                                                        <select id="abdcc{{$user->id}}" name="role" class="form-control-lg w-100 border text-muted" >
+                                                                            <option value='admin' @if($user->role->name == 'admin') selected @endif>Administrator</option>
+                                                                            <option value='customercare'  @if($user->role->name == 'customercare') selected @endif>Customer Care</option>
+                                                                            <option value='security' @if($user->role->name == 'security') selected @endif>Security</option>
+                                                                            <option value='auditor'  @if($user->role->name == 'auditor') selected @endif>Auditor</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                        <label for="states">Status</label>
+                                                                        <select id="abc{{$user->id}}" name="status" class="form-control-lg w-100 border text-muted" >
+                                                                            <option value='1' @if($user->status) selected @endif>Active</option>
+                                                                            <option value='0' @if(!$user->status) selected @endif>Suspended</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="contact-form__content-group my-3">
+                                                                    <div class="contact-form-input">
+                                                                        <label for="firstname">First Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                        <input type="text" name="fname" value="{{$user->fname}}" placeholder="Enter First Name" />
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                        <label for="lastname">Last Name @error('lname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                        <input type="text" name="lname" value="{{$user->lname}}" placeholder="Enter Last Name" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="contact-form__content-group">
+                                                                    <div class="contact-form-input"> 
+                                                                    <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                    <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" />
+                                                                    </div>
+                                                                    <div class="contact-form-input">
+                                                                    <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                    <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                
+                                                                <div class="contact-form-btn">
+                                                                    <button class="button button--md askpin" type="button"> Update Admin </button>
+                                                                    <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                            </div>
+                            
+                          </div>
+                      </div>
                       <!-- Plan  -->
                       <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
                         <div class="products-tab__information">

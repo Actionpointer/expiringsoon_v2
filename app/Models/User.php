@@ -95,6 +95,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function subscription(){
         return $this->belongsTo(Subscription::class)->withDefault();
     }
+    public function subscriptions(){
+        return $this->hasMany(Subscription::class);
+    }
     public function getSubscriptionNameAttribute(){
         if($this->subscription_id){
             return $this->subscription->plan->name;
@@ -130,9 +133,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function maximum_payout(){
         return $this->subscription->plan->maximum_payout;
     }
-    public function subscriptions(){
-        return $this->hasMany(Subscription::class);
-    }
+    
     public function country(){
         return $this->belongsTo(Country::class);
     }
@@ -205,6 +206,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAnyRole($value){
         $roles = Role::whereIn('name',$value)->get()->pluck('id')->toArray();
         return in_array($this->role_id,$roles);
+    }
+
+    public function scopeWithin($query,$value = null){
+        if($value){
+            return $query->where('country_id',$value);
+        }
+        elseif(auth()->check()){
+            if(auth()->user()->role->name == 'superadmin')
+            return $query;
+            else return $query->where('country_id',auth()->user()->country_id);
+        }else{
+            return $query->where('country_id',session('locale')['country_id']);
+        }  
     }
 
 

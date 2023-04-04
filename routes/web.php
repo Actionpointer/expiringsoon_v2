@@ -55,18 +55,19 @@ Route::post('product/remove-from-wish',[CartController::class,'removefromwish'])
 Route::post('product/sortFilter',[CartController::class,'sortFilter'])->name('product.sortFilter');
 
 Route::get('payment/callback',[App\Http\Controllers\PaymentController::class,'paymentcallback'])->name('payment.callback');
-Route::post('payment/webhook',[App\Http\Controllers\PaymentController::class,'webhook'])->name('payment.webhook');
+// Route::post('payment/status',[App\Http\Controllers\PaymentController::class,'status'])->name('payment.status');
 Route::post('payout/callback',[App\Http\Controllers\PayoutController::class,'payoutcallback'])->name('payout.callback');
-Route::get('payment/status/{payment}',[App\Http\Controllers\PaymentController::class,'status'])->name('payment.status');
+
 
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
-Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
+// Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
+Route::view('start-selling','auth.register_vendor')->name('start-selling');
 
 Auth::routes(['verify' => true]);
 Route::group(['middleware'=> 'verified'],function(){
     Route::view('change_password','auth.forcepassword')->name('forcepasswordchange');
     Route::post('changed_password',[LoginController::class, 'forcepassword'] )->name('forcepassword');
-    Route::view('start-selling','auth.register_vendor')->name('start-selling');
+    
     Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');
     Route::get('notifications/read',[UserController::class, 'readNotifications'])->name('notifications.read');
     Route::get('home', [HomeController::class, 'home'])->name('home');
