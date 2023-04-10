@@ -73,131 +73,131 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    @forelse($features as $feature)
-                                    <tr style="border-color:#eee;height:100px">
-                                        <td class="">
-                                          <div class="row cards-blog__info">
-                                            <div class="col-md-9 ">
-                                              <a href="single-blog.html" class="blog-title font-body--xl-500 d-block text-center text-md-start">
-                                                {{$feature->adplan->name}} -{{$feature->slug}}
-                                              </a>
-                                              <div class="cards-blog__info-tags d-flex flex-column flex-md-row">
-                                                <div class="cards-blog__info-tags-item">
-                                                  <span>
-                                                    <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M17.1583 11.6748L11.1833 17.6498C11.0285 17.8048 10.8447 17.9277 10.6424 18.0116C10.4401 18.0955 10.2232 18.1386 10.0042 18.1386C9.78513 18.1386 9.56825 18.0955 9.36592 18.0116C9.16359 17.9277 8.97978 17.8048 8.82499 17.6498L1.66666 10.4998V2.1665H9.99999L17.1583 9.32484C17.4687 9.63711 17.643 10.0595 17.643 10.4998C17.643 10.9401 17.4687 11.3626 17.1583 11.6748V11.6748Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      <path d="M5.83331 6.33301H5.84165" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </svg>
-                                                  </span>
-                                                  {{$feature->adplan->page}}
-                                                </div>
-                                                
-                                                <div class="cards-blog__info-tags-item">
-                                                  <span class="icon">
-                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M0 16V9.00004H7L3.783 12.22C4.33247 12.7819 4.98837 13.2287 5.71241 13.5343C6.43644 13.8399 7.21411 13.9983 8 14C9.23925 13.9982 10.4475 13.6127 11.4589 12.8965C12.4702 12.1802 13.2349 11.1684 13.648 10H13.666C13.78 9.67504 13.867 9.34004 13.925 9.00004H15.937C15.6934 10.9333 14.7527 12.7111 13.2913 14C11.83 15.2888 9.9485 16 8 16H7.99C6.93982 16.0032 5.89944 15.798 4.9291 15.3963C3.95876 14.9946 3.07772 14.4045 2.337 13.66L0 16ZM2.074 7.00004H0.0619998C0.305476 5.06751 1.24564 3.29019 2.70616 2.00145C4.16667 0.712703 6.04719 0.00107558 7.995 3.98088e-05H8C9.05036 -0.00328613 10.0909 0.201826 11.0615 0.603496C12.032 1.00517 12.9132 1.59541 13.654 2.34004L16 3.98088e-05V7.00004H9L12.222 3.78004C11.672 3.21752 11.0153 2.77035 10.2903 2.46471C9.56537 2.15907 8.78674 2.0011 8 2.00004C6.76074 2.00187 5.55246 2.38738 4.54114 3.10361C3.52982 3.81985 2.76508 4.83166 2.352 6.00004H2.334C2.219 6.32504 2.132 6.66004 2.075 7.00004H2.074Z" fill="currentColor"></path>
-                                                    </svg>
+                                    @forelse($adsets as $adset)
+                                      <tr style="border-color:#eee;height:100px">
+                                          <td class="">
+                                            <div class="row cards-blog__info">
+                                              <div class="col-md-9 ">
+                                                <a href="single-blog.html" class="blog-title font-body--xl-500 d-block text-center text-md-start">
+                                                  {{$adset->adplan->name}} -{{$adset->slug}}
+                                                </a>
+                                                <div class="cards-blog__info-tags d-flex flex-column flex-md-row">
+                                                  <div class="cards-blog__info-tags-item">
+                                                    <span>
+                                                      <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M17.1583 11.6748L11.1833 17.6498C11.0285 17.8048 10.8447 17.9277 10.6424 18.0116C10.4401 18.0955 10.2232 18.1386 10.0042 18.1386C9.78513 18.1386 9.56825 18.0955 9.36592 18.0116C9.16359 17.9277 8.97978 17.8048 8.82499 17.6498L1.66666 10.4998V2.1665H9.99999L17.1583 9.32484C17.4687 9.63711 17.643 10.0595 17.643 10.4998C17.643 10.9401 17.4687 11.3626 17.1583 11.6748V11.6748Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M5.83331 6.33301H5.84165" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      </svg>
+                                                    </span>
+                                                    {{$adset->adplan->page}}
+                                                  </div>
+                                                  
+                                                  <div class="cards-blog__info-tags-item">
+                                                    <span class="icon">
+                                                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M0 16V9.00004H7L3.783 12.22C4.33247 12.7819 4.98837 13.2287 5.71241 13.5343C6.43644 13.8399 7.21411 13.9983 8 14C9.23925 13.9982 10.4475 13.6127 11.4589 12.8965C12.4702 12.1802 13.2349 11.1684 13.648 10H13.666C13.78 9.67504 13.867 9.34004 13.925 9.00004H15.937C15.6934 10.9333 14.7527 12.7111 13.2913 14C11.83 15.2888 9.9485 16 8 16H7.99C6.93982 16.0032 5.89944 15.798 4.9291 15.3963C3.95876 14.9946 3.07772 14.4045 2.337 13.66L0 16ZM2.074 7.00004H0.0619998C0.305476 5.06751 1.24564 3.29019 2.70616 2.00145C4.16667 0.712703 6.04719 0.00107558 7.995 3.98088e-05H8C9.05036 -0.00328613 10.0909 0.201826 11.0615 0.603496C12.032 1.00517 12.9132 1.59541 13.654 2.34004L16 3.98088e-05V7.00004H9L12.222 3.78004C11.672 3.21752 11.0153 2.77035 10.2903 2.46471C9.56537 2.15907 8.78674 2.0011 8 2.00004C6.76074 2.00187 5.55246 2.38738 4.54114 3.10361C3.52982 3.81985 2.76508 4.83166 2.352 6.00004H2.334C2.219 6.32504 2.132 6.66004 2.075 7.00004H2.074Z" fill="currentColor"></path>
+                                                      </svg>
+                                                        
+                                                    </span>
+                                                    {{$adset->units}} {{$adset->adplan->type}}. {{$adset->adverts->count()}} used
+                                                  </div>
+    
+                                                  <div class="cards-blog__info-tags-item">
+                                                    <span class="icon">
+                                                      <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M14.25 3.5H3.75C2.92157 3.5 2.25 4.17157 2.25 5V15.5C2.25 16.3284 2.92157 17 3.75 17H14.25C15.0784 17 15.75 16.3284 15.75 15.5V5C15.75 4.17157 15.0784 3.5 14.25 3.5Z" stroke="#00B307" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M12 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M6 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M2.25 8H15.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      </svg>
+                                                    </span>
+                                                    {{$adset->start_at->format('M d, Y')}} - {{$adset->end_at->format('M d, Y')}}
+                                                  </div>
+    
+                                                  <div class="cards-blog__info-tags-item">
+                                                    @if($adset->active)
+                                                      <span class="icon">
+                                                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M10.4173 3.125L4.68815 8.85417L2.08398 6.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                      </span>
+                                                      <span class="">Active </span>
+                                                    @elseif($adset->expiring())
+                                                      <span class="icon">
+                                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                          <path d="M14.25 3.5H3.75C2.92157 3.5 2.25 4.17157 2.25 5V15.5C2.25 16.3284 2.92157 17 3.75 17H14.25C15.0784 17 15.75 16.3284 15.75 15.5V5C15.75 4.17157 15.0784 3.5 14.25 3.5Z" stroke="#00B307" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          <path d="M12 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          <path d="M6 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          <path d="M2.25 8H15.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                      </span>
+                                                      <span class="">Expiring </span>
                                                       
-                                                  </span>
-                                                  {{$feature->units}} {{$feature->adplan->type}}. {{$feature->adverts->count()}} used
-                                                </div>
-  
-                                                <div class="cards-blog__info-tags-item">
-                                                  <span class="icon">
-                                                    <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M14.25 3.5H3.75C2.92157 3.5 2.25 4.17157 2.25 5V15.5C2.25 16.3284 2.92157 17 3.75 17H14.25C15.0784 17 15.75 16.3284 15.75 15.5V5C15.75 4.17157 15.0784 3.5 14.25 3.5Z" stroke="#00B307" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      <path d="M12 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      <path d="M6 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      <path d="M2.25 8H15.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </svg>
-                                                  </span>
-                                                  {{$feature->start_at->format('M d, Y')}} - {{$feature->end_at->format('M d, Y')}}
-                                                </div>
-  
-                                                <div class="cards-blog__info-tags-item">
-                                                  @if($feature->active)
-                                                    <span class="icon">
-                                                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                          <path d="M10.4173 3.125L4.68815 8.85417L2.08398 6.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      </svg>
-                                                    </span>
-                                                    <span class="">Active </span>
-                                                  @elseif($feature->expiring())
-                                                    <span class="icon">
-                                                      <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M14.25 3.5H3.75C2.92157 3.5 2.25 4.17157 2.25 5V15.5C2.25 16.3284 2.92157 17 3.75 17H14.25C15.0784 17 15.75 16.3284 15.75 15.5V5C15.75 4.17157 15.0784 3.5 14.25 3.5Z" stroke="#00B307" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M12 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M6 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M2.25 8H15.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      </svg>
-                                                    </span>
-                                                    <span class="">Expiring </span>
-                                                    
-                                                  @else
-                                                    <span class="icon">
-                                                      <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M14.25 3.5H3.75C2.92157 3.5 2.25 4.17157 2.25 5V15.5C2.25 16.3284 2.92157 17 3.75 17H14.25C15.0784 17 15.75 16.3284 15.75 15.5V5C15.75 4.17157 15.0784 3.5 14.25 3.5Z" stroke="#00B307" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M12 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M6 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M2.25 8H15.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      </svg>
-                                                    </span>
-                                                    <span class="badge btn-danger">Expired </span>
-                                                  @endif 
+                                                    @else
+                                                      <span class="icon">
+                                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                          <path d="M14.25 3.5H3.75C2.92157 3.5 2.25 4.17157 2.25 5V15.5C2.25 16.3284 2.92157 17 3.75 17H14.25C15.0784 17 15.75 16.3284 15.75 15.5V5C15.75 4.17157 15.0784 3.5 14.25 3.5Z" stroke="#00B307" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          <path d="M12 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          <path d="M6 2V5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          <path d="M2.25 8H15.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                      </span>
+                                                      <span class="badge btn-danger">Expired </span>
+                                                    @endif 
+                                                  </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            
-                                            <div class="col-md-3">
-                                              <div class="d-flex flex-md-column justify-content-center mt-1">
-                                                <div class="">
-                                                  <a href="{{route('vendor.adverts',$feature)}}" class="button button--sm button--outline col-md-10 button--sm">
-                                                    Manage Ads
-                                                    {{-- <span class="d-none d-md-block">
-                                                      <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      </svg>
-                                                    </span> --}}
-                                                  </a>
-                                                </div>
-                                                @if($feature->active && $feature->auto_renew)
-                                                  <form action="{{route('vendor.feature.cancel_renew')}}" method="post" class="col-md-10" onsubmit="return confirm('Are you sure?');">@csrf
-                                                    <input type="hidden" name="feature_id" value="{{$feature->id}}">
-                                                    <button class="button button--sm bg-warning border-warning my-1 col-md-12">
-                                                      Cancel Auto Renew
+                                              
+                                              <div class="col-md-3">
+                                                <div class="d-flex flex-md-column justify-content-center mt-1">
+                                                  <div class="">
+                                                    <a href="{{route('vendor.adverts',$adset)}}" class="button button--sm button--outline col-md-10 button--sm">
+                                                      Manage Ads
                                                       {{-- <span class="d-none d-md-block">
-                                                      <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                          <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                          <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                                         </svg>
                                                       </span> --}}
-                                                    </button>
-                                                  </form>
-                                                @endif
-                                                @if(!$feature->active)
-                                                  <form action="{{route('vendor.feature.subscribe')}}" method="post">@csrf
-                                                    <input type="hidden" name="feature_id" value="{{$feature->id}}">
-                                                    <button class="btn btn-sm btn-primary text-white">
-                                                      Renew
-                                                      {{-- <span>
-                                                      <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                          <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        </svg>
-                                                      </span> --}}
-                                                    </button>
-                                                  </form>
-                                                @endif
-                                                
+                                                    </a>
+                                                  </div>
+                                                  @if($adset->active && $adset->auto_renew)
+                                                    <form action="{{route('vendor.adset.cancel_renew')}}" method="post" class="col-md-10" onsubmit="return confirm('Are you sure?');">@csrf
+                                                      <input type="hidden" name="feature_id" value="{{$adset->id}}">
+                                                      <button class="button button--sm bg-warning border-warning my-1 col-md-12">
+                                                        Cancel Auto Renew
+                                                        {{-- <span class="d-none d-md-block">
+                                                        <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          </svg>
+                                                        </span> --}}
+                                                      </button>
+                                                    </form>
+                                                  @endif
+                                                  @if(!$adset->active)
+                                                    <form action="{{route('vendor.adset.subscribe')}}" method="post">@csrf
+                                                      <input type="hidden" name="feature_id" value="{{$adset->id}}">
+                                                      <button class="btn btn-sm btn-primary text-white">
+                                                        Renew
+                                                        {{-- <span>
+                                                        <svg width="20" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M8 10H5L3 21H21L19 10H16M8 10V7C8 4.79086 9.79086 3 12 3V3C14.2091 3 16 4.79086 16 7V10M8 10H16M8 10V13M16 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                          </svg>
+                                                        </span> --}}
+                                                      </button>
+                                                    </form>
+                                                  @endif
+                                                  
+                                                </div>
                                               </div>
                                             </div>
-                                          </div>
-                                        </td>
-                                      
-                                    </tr>
+                                          </td>
+                                        
+                                      </tr>
                                     @empty
-                                      <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
+                                      {{-- <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
                                         <button type="button" class="button button--md bg-dark" id="addbankaccount">Add Subscription</button>
-                                      </div>
+                                      </div> --}}
                                     @endforelse
                                   </tbody>
                                 </table>
@@ -214,7 +214,7 @@
                 <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
                   <div class="products-tab__description">
                     <section class="shoping-cart section section--xl pt-0">
-                      <form action="{{route('vendor.feature.subscribe')}}" method="post">@csrf
+                      <form action="{{route('vendor.adset.subscribe')}}" method="post">@csrf
                         <div class="row shoping-cart__content">
                           <div class="col-lg-12">
                             <a href="#" class="small text-muted"><u>View detailed description on all the adset plans</u></a>
@@ -334,7 +334,8 @@
                       </form>
                     </section>                   
                   </div>
-                </div>   
+                </div>
+                   
               </div>
             </div>
             <!-- Set VAT -->

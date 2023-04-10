@@ -64,6 +64,7 @@
                   <input class="form-check-input" type="radio" name="delivery_address" id="newaddress" value="new" @if($user->addresses->isEmpty()) checked @endif>
                   <label class="form-check-label font-body--400" for="existing"> Add New Address</label>
                 </div>
+
                 <div class="contact-form__content" id="new_address_form" @if($user->addresses->isNotEmpty()) style="display: none;" @endif>            
                     <div class="contact-form-input">
                         <label for="address">Street Address </label>
@@ -116,7 +117,8 @@
                     <div class="contact-form-input">
                         <button type="button" class="btn btn-success" id="save_address">Save </button>
                     </div>
-                </div>    
+                </div>
+                    
               </div>
             </div>
 

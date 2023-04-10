@@ -24,7 +24,7 @@ class CreatePermissionsTable extends Migration
             array('id' => 1, 'name'=> 'adplans', 'description'=>'Advert Plans'),
             array('id' => 2, 'name'=> 'adverts', 'description'=>'Adverts'),
             array('id' => 3, 'name'=> 'coupons', 'description'=>'Coupons'),
-            array('id' => 4, 'name'=> 'features', 'description'=>'Advert Subscriptions'),
+            array('id' => 4, 'name'=> 'adsets', 'description'=>'Advert Subscriptions'),
             array('id' => 5, 'name'=> 'orders', 'description'=>'Orders'),
             array('id' => 6, 'name'=> 'orderstatus', 'description'=>'Order Statuses'),
             array('id' => 7, 'name'=> 'dispute', 'description'=>'Order Dispute'),

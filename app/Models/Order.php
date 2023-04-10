@@ -57,9 +57,7 @@ class Order extends Model
     public function getRouteKeyName(){
         return 'slug';
     }
-    public function product(){
-        return $this->belongsTo(Product::class);
-    }
+    
     public function shop(){
         return $this->belongsTo(Shop::class);
     }

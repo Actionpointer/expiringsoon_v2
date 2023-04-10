@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Shopper;
 
 use App\Models\Cart;
 use App\Models\City;
+use App\Models\Like;
+use App\Models\Rate;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\State;
@@ -15,7 +17,6 @@ use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\OrderMessage;
-use App\Models\Rate;
 use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
@@ -84,7 +85,8 @@ class OrderController extends Controller
 
     public function wishlist(){
         $user = auth()->user();
-        return view('customer.wishlist',compact('user'));
+        $likes = Like::where('user_id',$user->id)->get();
+        return view('customer.wishlist',compact('likes'));
     }
 
     // public function transactions(){
@@ -103,12 +105,13 @@ class OrderController extends Controller
         foreach($items as $key => $value){
             $this->addToCartDb($value['product'],$value['quantity'],true);
         }
-
         $carts = Cart::where('user_id',$user->id);
         if($shop){
             $carts = $carts->where('shop_id',$shop->id);
         }
-        $carts = $carts->whereIn('product_id',array_keys($items))->get();
+        $carts = $carts->whereHas('product',function($query) use($items){
+                    $query->whereIn('product_id',array_keys($items))->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
+                 })->get();
         $countries = Country::all();
         $states = State::all();
         $cities = City::all();
@@ -139,7 +142,7 @@ class OrderController extends Controller
                 }
                 //dd($shipping_fee);
                 $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
-                    'deliveryfee'=> $shipping['amount'],'deliverer'=> $shipping['shipper'], 'expected_at'=> $shipping['hours'] ? now()->addHours($shipping['hours']) : null
+                    'deliveryfee' => $shipping['amount'],'deliverer'=> $shipping['shipper'],'expected_at'=> $shipping['hours'] ? now()->addHours($shipping['hours']) : null
                 ]);
                 foreach($carts->where('shop_id',$shop_id) as $cart){
                     $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->total]);

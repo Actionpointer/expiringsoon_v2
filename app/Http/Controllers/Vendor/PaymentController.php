@@ -8,8 +8,8 @@ use App\Models\Payout;
 use App\Models\Account;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
+use App\Events\DisbursePayout;
 use App\Http\Traits\OrderTrait;
-use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopPayoutResource;
@@ -81,11 +81,11 @@ class PaymentController extends Controller
         
         $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,'currency_id'=> $user->country->currency_id,
         'channel'=> $user->country->payout_gateway,
-        'reference'=> uniqid(),'amount'=> $request->amount]);
+        'reference'=> uniqid(),'amount'=> $request->amount,'status'=> cache('settings')['automatic_payout_transfer'] ? 'processing':'pending']);
         $shop->wallet -= $request->amount;
         $shop->save();
         if(cache('settings')['automatic_payout_transfer']){
-            $this->initializePayout($payout);
+            event(new DisbursePayout($payout));
         }
         return request()->expectsJson() ? 
         response()->json([

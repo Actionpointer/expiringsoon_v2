@@ -52,7 +52,7 @@
                 <a href="{{route('vendor.shop.product.create',$shop)}}" class="button button--md" style="margin: unset;color:white">Add Products</a>
               </div>
               <div class="">
-                <form id="featureform" action="{{route('vendor.feature.products')}}" method="POST">@csrf
+                <form id="featureform" action="{{route('vendor.adset.products')}}" method="POST">@csrf
                   <input type="hidden" name="shop_id" value="{{$shop->id}}" >
                 </form>
                 <form id="deleteform" action="{{route('vendor.shop.products.destroy',$shop)}}" method="POST">@csrf
@@ -147,7 +147,7 @@
                               <div class="d-flex flex-column">
                                   <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="btn btn-sm btn-secondary">Edit</a>
                                   @if(auth()->id() == $shop->user_id)
-                                    <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
+                                    <form class="d-inline" action="{{route('vendor.adset.products')}}"  method="POST">@csrf
                                       <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                       <input type="hidden" name="product_id" value="{{$product->id}}">
                                       <button type="submit" class="btn btn-sm my-1 btn-primary">Feature</button>

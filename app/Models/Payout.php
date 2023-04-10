@@ -13,8 +13,12 @@ class Payout extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','shop_id','currency_id','channel','reference','amount','transfer_id','status',	'rejection_reason'];
+    protected $fillable = ['user_id','shop_id','currency_id','channel','reference','amount','transfer_id','status',	'reason'];
     protected $appends = ['destination'];
+
+    public function getRouteKeyName(){
+        return 'reference';
+    }
 
     public function getDestinationAttribute(){
         return in_array($this->user->country->payout_gateway,['stripe','paypal']) ? $this->user->payout_account : $this->user->bankaccount->bank->name.' '.$this->user->bankaccount->account_number;

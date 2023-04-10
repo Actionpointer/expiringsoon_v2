@@ -52,11 +52,17 @@
                     
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   
-                      <form class="d-inline" action="{{route('admin.payouts.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
-                        <input type="hidden" name="payouts[]" >
-                          <button type="submit" name="action" value="pay" class="dropdown-item">Pay</button>
-                          <button type="submit" name="action" value="reject" class="dropdown-item">Reject</button>
-                      </form>                                      
+                      {{-- <form class="d-inline" action="{{route('admin.payouts.manage')}}" method="post">@csrf --}}
+                          <input type="hidden" name="payouts[]" >
+                          <button type="button" onclick="approve_many()" class="dropdown-item">
+                            @if(cache('settings')['automatic_payout_transfer'])
+                              Pay
+                            @else
+                              Paid
+                            @endif
+                          </button>
+                          <button type="button" onclick="disapprove_many()" class="dropdown-item">Reject</button>
+                      {{-- </form>                                       --}}
                     </div>
                   </div>
                     <table class="table display" style="width:100%;font-size:13px">
@@ -65,16 +71,14 @@
                               <th scope="col" class="cart-table-title">
                                 <div class="form-check pt-2">
                                   <label class="form-check-label font-body--400" for="existing"> </label>
-                                  <input class="form-check-input checkboxes" type="checkbox">
+                                  <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
                                 </div>
                               </th>
                               <th scope="col" class="cart-table-title">Recipient</th>
                               <th scope="col" class="cart-table-title">Amount</th>
                               <th scope="col" class="cart-table-title">Requested</th>
-
                               <th scope="col" class="cart-table-title">Status</th>
                               <th scope="col" class="cart-table-title">Receipt</th>
-        
                             </tr>
                         </thead>
                         <tbody>
@@ -107,14 +111,14 @@
                                         
                                         @if($payout->status =='pending')
                                             <p style="color:#d9862e;font-size:14px"><span id="status">{{ $payout->status}}</span></p>
-                                        @elseif($payout->status =='failed' || $payout->status =='cancelled')
+                                        @elseif($payout->status =='failed' || $payout->status =='rejected')
                                             <p style="color:#d92e2e;font-size:14px"><span id="status">{{ $payout->status}}</span></p>
                                         @else
                                             <p style="color:#00b207;font-size:14px;font-weight:500">{{ $payout->status}}</p>
                                         @endif
                                     </td>
                                     <td class="cart-table-item order-date align-middle">
-                                        <a href="{{route('invoice',$payout)}}" target="_blank">{{$payout->reference}}</a>
+                                        <a href="{{route('receipt',$payout)}}" target="_blank">{{$payout->reference}}</a>
                                     </td>
                                     
                                 </tr>   
@@ -136,27 +140,87 @@
     </div>
   </div>
 
-
+<div class="modal fade" id="approval" tabindex="-1" aria-labelledby="approvalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="approvalModalLabel">Comfirm Payout</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="approveform" action="{{route('admin.payouts.manage')}}" method="post">@csrf
+            <input type="hidden" name="action" value="pay">
+            <div class="contact-form__content my-3">
+              <div class="contact-form-input">
+                  <label for="pin">Enter Your Access Pin</label>
+                  <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+              </div>
+              <div class="contact-form-btn">
+                  <button class="button button--md" type="submit"> Continue </button>
+                  <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-start">
+          <span class="small text-muted">Set or reset your access pin from your <a href="{{route('profile')}}">profile</a></span>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="disapproval" tabindex="-1" aria-labelledby="disapprovalModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="disapprovalModalLabel">Comfirm Rejected</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="disapproveform" action="{{route('admin.payouts.manage')}}" method="post">@csrf
+          <input type="hidden" name="action" value="reject">
+          <div class="contact-form__content my-3">
+            <div class="contact-form-input">
+              <label for="pin">Rejection Reason</label>
+              <input type="text" name="reason" placeholder="Type reason for rejection" />
+          </div>
+            <div class="contact-form-input">
+                <label for="pin">Enter Your Access Pin</label>
+                <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+            </div>
+            <div class="contact-form-btn">
+                <button class="button button--md bg-dark" type="submit"> Reject </button>
+                <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer justify-content-start">
+        <span class="small text-muted">Set or reset your access pin from your <a href="{{route('profile')}}">profile</a></span>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
+
 @push('scripts')
 
 <script>
   function approve_many(){
     if($('.checkboxes:checked').length){
-      $('.checkboxes:checked').each(function(key,elem){
+      $('.checkboxes:checked').not('#checkbox_master').each(function(key,elem){
           var input = $("<input>").attr("type", "hidden").attr("name", 'payouts[]').val(elem.value);
           $('#approveform').append($(input));
       });
-      $('#approveform').submit();
+      $('#approval').modal('show');
     }
   }
   function disapprove_many(){
     if($('.checkboxes:checked').length){
-      $('.checkboxes:checked').each(function(key,elem){
+      $('.checkboxes:checked').not('#checkbox_master').each(function(key,elem){
           var input = $("<input>").attr("type", "hidden").attr("name", 'payouts[]').val(elem.value);
           $('#disapproveform').append($(input));
       });
-      $('#disapproveform').submit();
+      $('#disapproval').modal('show');
     }
   }
 

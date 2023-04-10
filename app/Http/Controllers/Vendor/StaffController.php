@@ -142,6 +142,7 @@ class StaffController extends Controller
                 $user->save();
             }
         }
+        
         $account = Account::updateOrCreate(['user_id'=> $user->id],['account_number'=> $request->account_number,'bank_id'=>$request->bank_id,'branch_id'=> $request->branch_id ?? null ,'status'=> true]);
         
         return redirect()->back()->with(['result'=> '1','message'=> 'Bank details Updated']);

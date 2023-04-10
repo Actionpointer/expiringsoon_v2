@@ -11,7 +11,7 @@ use App\Http\Controllers\Vendor\ShopController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\StaffController;
 use App\Http\Controllers\Vendor\AdvertController;
-use App\Http\Controllers\Vendor\FeatureController;
+use App\Http\Controllers\Vendor\AdsetController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
@@ -117,10 +117,10 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     });
 
     Route::group(['prefix'=>'adsets'],function(){
-        Route::get('/',[FeatureController::class,'index']);
-        Route::get('plans',[FeatureController::class,'plans']);
-        Route::post('subscribe',[FeatureController::class,'subscribe']);
-        Route::post('cancel_renewal',[FeatureController::class,'cancel_renewal']);
+        Route::get('/',[AdsetController::class,'index']);
+        Route::get('plans',[AdsetController::class,'plans']);
+        Route::post('subscribe',[AdsetController::class,'subscribe']);
+        Route::post('cancel_renewal',[AdsetController::class,'cancel_renewal']);
         
         Route::post('ads/filter',[AdvertController::class,'filter_products']);
         Route::post('ads/store',[AdvertController::class,'store_product_advert']);

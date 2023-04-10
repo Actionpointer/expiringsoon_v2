@@ -111,7 +111,6 @@
                                                                             -{{$coupon->value}} Off 
                                                                         @endif
                                                                     </td>
-                                                                    
                                                                     <td class="cart-table-item stock-status order-date align-middle"> 
                                                                         @if($coupon->start_at && $coupon->end_at)
                                                                             {{ $coupon->start_at->format('M-d')}} to {{$coupon->end_at->format('M-d')}} 
@@ -136,8 +135,7 @@
                                                                             </button>
                                                                         </form>
                                                                         
-                                                                    </td>
-                                                                    
+                                                                    </td>  
                                                                 </tr>
                                                                 <div class="modal fade" id="editcoupon{{$coupon->id}}" aria-labelledby="editcoupon{{$coupon->id}}Label" tabindex="-1" role="dialog" aria-hidden="true">
                                                                     <div class="modal-dialog modal-lg">

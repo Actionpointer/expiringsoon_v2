@@ -5,13 +5,13 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Adplan;
 use App\Models\PaymentItem;
-use App\Observers\FeatureObserver;
+use App\Observers\AdsetObserver;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Feature extends Model
+class Adset extends Model
 {
     use HasFactory,Sluggable,SoftDeletes;
     
@@ -30,7 +30,7 @@ class Feature extends Model
     public static function boot()
     {
         parent::boot();
-        parent::observe(new FeatureObserver);
+        parent::observe(new AdsetObserver);
     }
 
     public function getNameAttribute()

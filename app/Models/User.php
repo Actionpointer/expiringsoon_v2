@@ -73,8 +73,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->pic ? config('app.url')."/storage/$this->pic":null;  
     }
     
-    
-
     public function shops(){
         return $this->hasMany(Shop::class);
     }
@@ -89,7 +87,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasManyThrough(Order::class,Shop::class,'user_id','shop_id');
     } 
     public function adverts(){  
-        return $this->hasManyThrough(Advert::class,Feature::class,'user_id','feature_id');
+        return $this->hasManyThrough(Advert::class,Adset::class,'user_id','adset_id');
     }
 
     public function subscription(){
@@ -183,12 +181,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Kyc::class,'verifiable')->where('type','idcard');
     }
 
-    public function features(){
-        return $this->hasMany(Feature::class);
+    public function adsets(){
+        return $this->hasMany(Adset::class);
     }
 
-    public function activeFeatures(){
-        return $this->hasMany(Feature::class)->where('end_at', '>', now())->where('status',true); 
+    public function activeAdsets(){
+        return $this->hasMany(Adset::class)->where('end_at', '>', now())->where('status',true); 
     }
 
     public function settlements(){
@@ -226,6 +224,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return 'users.'.$this->id;
     }
 
-    
+        
 
 }

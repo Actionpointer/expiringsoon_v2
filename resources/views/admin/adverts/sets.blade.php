@@ -40,7 +40,7 @@
             <div class="dashboard__content-card">
               <div class="dashboard__content-card-header d-flex justify-content-between">
                   <h5 class="font-body--xl-500">Advert Subscription</h5>
-                  <a href="#" class="font-body--lg-500">{{number_format($features->count(), 0)}} Advert Subscriptions</a>
+                  <a href="#" class="font-body--lg-500">{{number_format($adsets->count(), 0)}} Advert Subscriptions</a>
               </div>
               <div class="dashboard__content-card-body px-0">
                 <table class="table display" style="width:100%;font-size:13px">
@@ -55,26 +55,26 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($features as $feature)
+                    @foreach ($adsets as $adset)
                       <tr class="likeditem">
                         <!-- Product item  -->
-                        <td class="cart-table-item align-middle"> {{$feature->user->name}} </td>
-                        <td class="cart-table-item order-date align-middle"> {{$feature->adplan->name}} </td>
-                        <td class="cart-table-item order-date align-middle"> {{$feature->units}} </td>
+                        <td class="cart-table-item align-middle"> {{$adset->user->name}} </td>
+                        <td class="cart-table-item order-date align-middle"> {{$adset->adplan->name}} </td>
+                        <td class="cart-table-item order-date align-middle"> {{$adset->units}} </td>
                         
                         <td class="cart-table-item order-date align-middle">
-                          {{$feature->start_at->format('d-m-Y h:iA')}}
+                          {{$adset->start_at->format('d-m-Y h:iA')}}
                         </td>
                         <td class="cart-table-item order-date align-middle">
-                          {{$feature->end_at->format('d-m-Y h:iA')}}
+                          {{$adset->end_at->format('d-m-Y h:iA')}}
                         </td>
                         
                         <!-- Stock Status  -->
                         <td class="cart-table-item order-date align-middle">
                           
-                            @if($feature->deleted_at || $feature->end_at < now())
+                            @if($adset->deleted_at || $adset->end_at < now())
                                 <button class="badge btn-danger">Expired </button>
-                            @elseif($feature->end_at->diffInMonths(now()) < 2)
+                            @elseif($adset->end_at->diffInMonths(now()) < 2)
                                 <button class="badge btn-warning">Expiring </button>
                             @else
                                 <button class="badge btn-success">Active </button>
@@ -86,7 +86,7 @@
                     @endforeach
                   </tbody>
                 </table>
-                @include('layouts.pagination',['data'=> $features])
+                @include('layouts.pagination',['data'=> $adsets])
               </div>
           </div> 
         </div>

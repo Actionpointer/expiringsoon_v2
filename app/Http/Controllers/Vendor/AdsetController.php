@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Models\Adplan;
-use App\Models\Feature;
+use App\Models\Adset;
 use Illuminate\Http\Request;
 use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdplansResource;
-use App\Http\Resources\FeatureResource;
+use App\Http\Resources\AdsetResource;
 
-class FeatureController extends Controller
+class AdsetController extends Controller
 {
     use PaymentTrait,OrderTrait;
 
@@ -27,25 +27,25 @@ class FeatureController extends Controller
     public function index(){
         $user = auth()->user();
         $adplans = Adplan::all();
-        $features = Feature::where('user_id',$user->id)->where('status',true)->get();
+        $adsets = Adset::where('user_id',$user->id)->where('status',true)->get();
         return request()->expectsJson()
-        ? response()->json(['status' => true, 'message' => 'Adsets retrieved Successfully','data' => FeatureResource::collection($features)], 200)
-        : view('vendor.features.adsets',compact('user','features','adplans')); 
+        ? response()->json(['status' => true, 'message' => 'Adsets retrieved Successfully','data' => AdsetResource::collection($adsets)], 200)
+        : view('vendor.adverts.adsets',compact('user','adsets','adplans')); 
     }
 
     public function subscribe(Request $request){
         try{
-            $features = collect([]);
-            if($request->has('feature_id')){
-                $feature = Feature::where('id',$request->feature_id)->get();
-                $features->push($feature);
+            $adsets = collect([]);
+            if($request->has('adset_id')){
+                $adset = Adset::where('id',$request->adset_id)->get();
+                $adsets->push($adset);
             }else{
                 foreach($request->adplans as $key=>$plan){
-                    $feature = Feature::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key]),'auto_renew'=> $request->auto_renew ? true:false ]);
-                    $features->push($feature);
+                    $adset = Adset::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key]),'auto_renew'=> $request->auto_renew ? true:false ]);
+                    $adsets->push($adset);
                 }
             }
-            $link = $this->initializePayment($features->sum('amount'),$features->pluck('id')->toArray(),'App\Models\Feature');
+            $link = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
             if(!$link){
                 return request()->expectsJson() ? 
                     response()->json([
@@ -71,9 +71,9 @@ class FeatureController extends Controller
     }
 
     public function cancel_renewal(Request $request){
-        $feature = Feature::find($request->feature_id);
-        $feature->auto_renew = false;
-        $feature->save();
+        $adset = Adset::find($request->adset_id);
+        $adset->auto_renew = false;
+        $adset->save();
         return request()->expectsJson()
         ? response()->json(['status' => true, 'message' => 'Auto renewal cancelled Successfully'], 200)
         : redirect()->back()->with(['result'=>1,'message' => 'Auto renewal cancelled Successfully']);

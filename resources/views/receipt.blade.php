@@ -2,7 +2,7 @@
 @push('styles')
 
 @endpush
-@section('title') Settlement #{{$settlement->id}} | Expiring Soon @endsection
+@section('title') Payout #{{$payout->id}} | Expiring Soon @endsection
 @section('main')
 <!-- breedcrumb section start  -->
 <div class="section breedcrumb">
@@ -20,11 +20,11 @@
           </li>
           <li>
             <a href="#">
-              Settlement
+              Payout
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Settlement #{{$settlement->reference}}</a></li>
+          <li class="active"><a href="#">Payout #{{$payout->reference}}</a></li>
         </ul>
       </div>
     </div>
@@ -43,7 +43,7 @@
             <!-- Order Details  -->
             <div class="dashboard__order-history">
               <div class="dashboard__order-history-title">
-                <h2 class="font-body--xl-500">Settlement Details</h2>
+                <h2 class="font-body--xl-500">Payout Details</h2>
                 
               </div>
 
@@ -56,10 +56,10 @@
                         <!-- billing Address -->
                         <div class="dashboard__details-card-item__inner">
                           <h2 class="font-body--lg-400 name">
-                              {{$settlement->receiver->name}}
+                              {{$payout->user->name}}
                           </h2>
                           <p class="font-body--md-400">
-                              {{$settlement->receiver->state->name}}
+                              {{$payout->user->state->name}}
                           </p>
                         </div>
                         <div class="dashboard__details-card-item__inner">
@@ -67,12 +67,12 @@
                             class="dashboard__details-card-item__inner-contact">
                             <h5 class="title">Email</h5>
                             <p class="font-body--md-400">
-                                {{$settlement->receiver->email}}
+                                {{$payout->user->email}}
                             </p>
                           </div>
                           <div class=" dashboard__details-card-item__inner-contact">
                             <h5 class="title">Phone</h5>
-                            <p class="font-body--md-400"> {{$settlement->receiver->mobile}}</p>
+                            <p class="font-body--md-400"> {{$payout->user->mobile}}</p>
                           </div>
                         </div>
                       </div>
@@ -84,7 +84,7 @@
                       <div class="dashboard__totalpayment-card-header">
                         <div class="dashboard__totalpayment-card-header">
                           <div class="dashboard__totalpayment-card-header-item">
-                            <h5 class="title">Settlement Details:</h5>
+                            <h5 class="title">Payout Details:</h5>
                             
                           </div>
                         </div>
@@ -92,35 +92,27 @@
 
                       <div class="dashboard__totalpayment-card-body">
                         <div class="dashboard__totalpayment-card-body-item">
-                          <h5 class="font-body--md-400">Settlement Status:</h5>
+                          <h5 class="font-body--md-400">Payout Status:</h5>
                           <p class="font-body--md-500">
-                              @if($settlement->status) 
-                                Paid
-                                @else Pending 
-                              @endif
+                              {{$payout->status}}
                           </p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Date:</h5>
-                          <p class="font-body--md-500">{{$settlement->created_at->format('jS F Y')}}</p>
+                          <p class="font-body--md-500">{{$payout->created_at->format('jS F Y')}}</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
-                          <h5 class="font-body--md-400">Medium:</h5>
-                          <p class="font-body--md-500">Wallet</p>
+                          <h5 class="font-body--md-400">Source:</h5>
+                          <p class="font-body--md-500">{{$payout->shop->name}} Wallet</p>
                         </div>
                         <div class="dashboard__totalpayment-card-body-item">
                           <h5 class="font-body--md-400">Reference:</h5>
-                          <p class="font-body--md-500">{{$settlement->reference}}</p>
+                          <p class="font-body--md-500">{{$payout->reference}}</p>
                         </div>
-                        @if($settlement->order->deliverer == "vendor")
-                        <div class="dashboard__totalpayment-card-body-item">
-                          <h5 class="font-body--md-400">Shipping</h5>
-                          <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->deliveryfee,2)}}</p>
-                        </div>
-                        @endif
+                        
                         <div class="dashboard__totalpayment-card-body-item total" >
                           <h5 class="font-body--xl-400">Amount:</h5>
-                          <p class="font-body--xl-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->amount, 2)}}</p>
+                          <p class="font-body--xl-500">{!!$payout->user->country->currency->symbol!!} {{number_format($payout->amount, 2)}}</p>
                         </div>
                       </div>
                     </div>
@@ -136,55 +128,41 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"> Item </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Date </th>
                         <th scope="col" class="dashboard__order-history-table-title"> Amount </th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Commission </th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Earning </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Destination </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Info </th>
                       </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <!-- Order  -->
                             <td class="dashboard__order-history-table-item align-middle">
-                                <a href="{{route('order.show',$settlement->order)}}" class="dashboard__product-item d-flex" >
-                                    <h5 class="font-body--md-400 flex-grow-1"> Earning for order #{{$settlement->order->id}}</h5>
-                                    <h6 class="small">Click to view</h6>
-                                </a>
+                                {{$payout->updated_at->format('jS F Y')}}
                             </td>
                             <!-- Price  -->
                             <td class="dashboard__order-history-table-item order-date align-middle">
-                                {!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->subtotal, 2)}}
+                                {!!$payout->user->country->currency->symbol!!} {{number_format($payout->amount, 2)}}
                             </td>
                             <!-- commission -->
                             <td class="dashboard__order-history-table-item order-total align-middle">
-                              <p class="order-total-price">{!!$settlement->receiver->country->currency->symbol!!}  {{number_format($settlement->order->commission(),2)}}</p>
+                              {{$payout->destination}}
                             </td>
                             <!-- Subtotal  -->     
                             <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
-                                <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->earning(), 2)}}</p>
+                                <p class="font-body--md-500">
+                                  @switch($payout->status)
+                                    @case('pending') Awaiting Confirmation @break
+                                    @case('processing') Payout is in process @break
+                                    @case('rejected') Rejected: {{$payout->reason}} @break
+                                    @case('paid') Payout has been completed @break
+                                    @case('failed') Payout processes failed. Please make request again @break
+                                    
+                                  @endswitch
+                                </p>
                             </td>
                         </tr>
-                        @if($settlement->order->deliverer == "vendor")
-                          <tr>
-                              <!-- Product item  -->
-                                  <td class="dashboard__order-history-table-item align-middle">
-                                      <a href="#" class="dashboard__product-item" >
-                                          <h5 class="font-body--md-400"> Delivery</h5>
-                                      </a>
-                                  </td>
-                              <!-- Price  -->
-                              <td class="dashboard__order-history-table-item order-date align-middle ">
-                                  {!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->deliveryfee, 2)}}
-                              </td>
-                              <td class="dashboard__order-history-table-item order-total align-middle">
-                                  <p class="order-total-price">0</p>
-                              </td>
-                              <!-- Subtotal  -->     
-                              <td class="dashboard__order-history-table-item order-status align-middle" style="text-align: left" >
-                                  <p class="font-body--md-500">{!!$settlement->receiver->country->currency->symbol!!} {{number_format($settlement->order->deliveryfee, 2)}}</p>
-                              </td>
-                          </tr>
-                        @endif
+                        
                       
                     </tbody>
                   </table>

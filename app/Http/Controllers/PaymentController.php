@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bank;
-use App\Models\Shop;
 use App\Models\Order;
-use App\Models\Feature;
+use App\Models\Payout;
+use App\Models\Adset;
 use App\Models\Payment;
-use App\Models\Settlement;
+use App\Models\OrderStatus;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
-use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
-use App\Models\OrderStatus;
 
 class PaymentController extends Controller
 {
@@ -76,10 +73,10 @@ class PaymentController extends Controller
                     // OrderStatus::create(['order_id'=> $item->paymentable_id,'user_id'=> $payment->user_id,'name'=> 'processing']);
                     $status = $order->statuses()->create(['user_id'=> $payment->user_id,'name'=> 'processing']);
                 }
-                if($item->paymentable_type == 'App\Models\Feature'){
-                    $feature = Feature::find($item->paymentable_id);
-                    $feature->status = true;
-                    $feature->save();
+                if($item->paymentable_type == 'App\Models\Adset'){
+                    $adset = Adset::find($item->paymentable_id);
+                    $adset->status = true;
+                    $adset->save();
                 }
                 if($item->paymentable_type == 'App\Models\Subscription'){
                     $subscription = Subscription::find($item->paymentable_id);
@@ -112,9 +109,10 @@ class PaymentController extends Controller
         return view('invoice',compact('payment'));
     }
     
-    // public function receipt(Settlement $settlement){
-    //     return view('receipt',compact('settlement'));
-    // }
+    
+    public function receipt(Payout $payout){
+        return view('receipt',compact('payout'));
+    }
 
     // public function verification(){
     //     if(!request()->query() || !request()->query('transaction_id') || !request()->query('tx_ref'))

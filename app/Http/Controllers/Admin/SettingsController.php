@@ -31,16 +31,14 @@ class SettingsController extends Controller
     public function index(){
         // $users = User::whereDoesntHave('role',function($query){ $query->whereIn('name',['shopper','vendor','staff']);})->get();
         $countries = Country::all();
-        $states = State::all();
         $plans = Plan::all();
         $adplans = Adplan::all();
         $settings = Setting::all();
         $currencies = Currency::all();
-        return view('admin.settings.global',compact('plans','adplans','currencies','countries','settings','states'));
+        return view('admin.settings.global',compact('plans','adplans','currencies','countries','settings'));
     }
 
     public function store(Request $request){
-        
         if(!$this->checkPin($request)['result']){
             return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
         }
@@ -51,7 +49,7 @@ class SettingsController extends Controller
         $settings = Cache::rememberForever('settings', function () {
             return \App\Models\Setting::select(['name','value'])->get()->pluck('value','name')->toArray();
         });
-        return redirect()->back()->with(['result'=>1,'message'=> 'Settings Saved']);
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Settings Saved']);
     }
 
     public function plan(Plan $plan){

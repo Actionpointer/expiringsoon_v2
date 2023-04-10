@@ -15,7 +15,7 @@
         <ul class="breedcrumb__content">
           <li>
             <a href="{{route('index')}}">
-              <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg" >
+              <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"
                   stroke="#808080" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -26,7 +26,7 @@
             <a href="#"> Vendor <span> > </span> </a>
           </li>
           <li>
-            <a href="{{route('vendor.adsets')}}"> Features <span> > </span> </a>
+            <a href="{{route('vendor.adsets')}}"> Adsets <span> > </span> </a>
           </li>
           <li class="active"><a href="#">Products</a></li>
         </ul>
@@ -34,7 +34,7 @@
     </div>
   </div>
     <!-- breedcrumb section end   -->
-  @include('layouts.session')
+    @include('layouts.session')
   <div class="dashboard section">
     <div class="container">
       <div class="row dashboard__content">
@@ -51,7 +51,7 @@
                       </li>
                       <li class="nav-item" role="presentation">
                           <button class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" data-bs-target="#pills-plans" type="button" role="tab" aria-controls="pills-plans" aria-selected="false">
-                                Add Shops
+                                Add Products
                           </button>
                       </li>       
                   </ul>
@@ -71,7 +71,7 @@
                                   <thead>
                                     <tr>
                                       <th scope="col" class="dashboard__order-history-table-title"> </th>
-                                      <th scope="col" class="dashboard__order-history-table-title" style="padding-left:0px !important"> Shop</th>
+                                      <th scope="col" class="dashboard__order-history-table-title" style="padding-left:0px !important"> Product</th>
                                       <th scope="col" class="dashboard__order-history-table-title"> Views</th>
                                       <th scope="col" class="dashboard__order-history-table-title"> Clicks</th>
                                       <th scope="col" class="dashboard__order-history-table-title"> Ad-Status</th>
@@ -79,35 +79,36 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    @forelse($feature->adverts as $advert)
+                                    @forelse($adset->adverts as $advert)
                                       <tr>
                                         <!-- Product item  -->
                                         <td class="border-0">
                                           <div class="form-check pt-2">
                                             <label class="form-check-label font-body--400" for="existing"> </label>
-                                            <input class="form-check-input checkboxes" type="checkbox" name="adverts[]" value="{{$advert->id}}" >
+                                            <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$advert->id}}" >
                                           </div>
                                         </td>
                                         <td class="dashboard__order-history-table-item" style="padding-left:0px !important"> 
-                                            <span style="font-weight:500"> {{$advert->advertable->name}},{{$advert->advertable->state->name}} </span>
+                                            <span style="font-weight:500"> {{$advert->product->name}} </span>
+                                            
+                                            
                                             @if(!$advert->status)
                                             <span class="d-block small"><button class="badge btn-danger">Product not showing </button></span>
                                             @else
                                             <span class="d-block small"><button class="badge btn-success">Product Satisfactory</button> </span>
-                                            @endif
+                                            @endif 
                                         </td>
                                         <!-- Date  -->
                                         <td class="dashboard__order-history-table-item order-date "> {{ $advert->views}}</td>
                                         <!-- Total  -->
-                                        <td class="   dashboard__order-history-table-item order-total">  {{ $advert->clicks}} </td>
+                                        <td class="   dashboard__order-history-table-item order-total ">  {{ $advert->clicks}} </td>
 
-                                        <td class="   dashboard__order-history-table-item order-total"> 
-                                          {{-- {{$advert->feature->start_at > now() ? 'true':'false'}} --}}
-                                          @if($advert->running)
-                                          <span class="d-block text-success">Ad is running </span>
-                                          @else
-                                          <span class="d-block text-danger">Ad is inactive</span>
-                                          @endif  
+                                        <td class="dashboard__order-history-table-item order-total "> 
+                                            @if($advert->running)
+                                            <span class="d-block text-success">Ad is running </span>
+                                            @else
+                                            <span class="d-block text-danger">Ad is inactive</span>
+                                            @endif  
                                         </td>
                                         <!-- Status -->
                                         
@@ -119,13 +120,15 @@
                                                 Remove
                                               </button>
                                             </form>
+                                            
+                                            
                                           </div>
                                         </td>
 
                                       </tr> 
                                       @empty
                                       <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%;margin-top:5%">
-                                        <button type="button" class="button button--md bg-dark" id="addbankaccount">Add New Advert</button>
+                                        <button type="button" class="button button--md bg-dark" id="addbankaccount">Add New Ad</button>
                                       </div>
                                     @endforelse
                                   </tbody>
@@ -145,44 +148,52 @@
                     <section class="shoping-cart section section--xl pt-0">
                       <div class="row shoping-cart__content justify-content-center">              
                         <div class="col-lg-8">
-                          <form method="POST" action="{{route('vendor.advert.store.shops')}}" enctype="multipart/form-data">@csrf
-                            <input type="hidden" name="feature_id" value="{{$feature->id}}">
-                            
+                          <form method="POST" action="{{route('vendor.advert.store.products')}}">@csrf
+                              <input type="hidden" name="feature_id" value="{{$adset->id}}">
+                              
+                              
+                              <div class="my-3 filter" style="display: block;">
+                                  
+                                  <div class="contact-form-input">
+                                    <label>Filter by Shop</label>
+                                    <select id="shops" name="shops[]" class="select2 w-100" multiple>
+                                      @foreach ($shops as $shop)
+                                        <option value="{{$shop->id}}">{{$shop->name}} </option>  
+                                      @endforeach    
+                                    </select>
+                                  </div>
+                              </div>
+                              <div class="my-3 filter" style="display: block;">
+                                  
+                                  <div class="contact-form-input">
+                                    <label>Filter by Categories</label>
+                                    <select id="categories" name="categories[]" class="select2 w-100" multiple>
+                                        @foreach ($categories as $category)
+                                          <option value="{{$category->id}}">{{$category->name}}</option>  
+                                        @endforeach  
+                                    </select>
+                                  </div>
+                              </div>
+                            {{-- @endif --}}
                             <div class="contact-form-input">
-                                <label>Select Shops</label>
-                                <select id="shops" name="shop_id" class="select2" @if($feature->units <= $feature->adverts->count()) disabled @endif>
-                                  @foreach ($shops as $shop)
-                                    <option value="{{$shop->id}}">{{$shop->name}} </option>  
-                                  @endforeach 
+                                <label>Select Products</label>
+                                <select id="product" name="products[]" class="select2" multiple @if($adset->units <= $adset->adverts->count()) disabled @endif required>
+                                    @foreach ($products as $product)
+                                      <option value="{{$product->id}}">{{$product->name}} in {{$product->shop->name}}</option>  
+                                    @endforeach      
                                 </select>
                             </div>
                           
                             <div class="contact-form-input">
                               <label>Show in Location</label>
                               <select id="stateselect" name="state_id" class="select2" required>
-                                @foreach ($states as $state)
-                                  <option value="{{$state->id}}" @if($state->id == $state_id) selected @endif>{{$state->name}}</option>  
-                                @endforeach     
+                                  @foreach ($states as $state)
+                                    <option value="{{$state->id}}" @if($state->id == $state_id) selected @endif>{{$state->name}}</option>  
+                                  @endforeach     
                               </select>
                             </div>
-                            <div class="contact-form-file mb-3">
-                              <label for="category" class="d-block">Display Image</label>
-                              <input type="file" name="photo" placeholder="" />
-                            </div>
-                            <div class="contact-form-input">
-                              <label for="category">Heading</label>
-                              <input type="text" name="heading" placeholder="" />
-                            </div>
-                            <div class="contact-form-input">
-                              <label for="category">Subheading</label>
-                              <input type="text" name="subheading" placeholder="" />
-                            </div>
-                            <div class="contact-form-input">
-                              <label for="category">Offer Text</label>
-                              <input type="text" name="offer" placeholder="e.g Sales 50% off" />
-                            </div>
-                            <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($feature->units <= $feature->adverts->count()) disabled @endif>
-                              Create Ad
+                            <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($adset->units <= $adset->adverts->count()) disabled @endif>
+                              Create Advert
                             </button>
                             
                           </form>
@@ -200,14 +211,70 @@
       </div>
     </div>
   </div>
+
+
 @endsection
 @push('scripts')
 <script>
-    var limit = @json($feature->units);
-    var used = @json($feature->adverts->count());
-      $('.select2#shop[multiple]').select2({
-        maximumSelectionLength:limit-used,
+    var limit = @json($adset->units);
+    var used = @json($adset->adverts->count());
+    $('.select2#product[multiple]').select2({
+      maximumSelectionLength:limit-used,
+    })
+
+    $(document).on('change','#shops',function(){
+      var shops = $('#shops').val();
+      var categories = $('#categories').val(); 
+      $.ajax({
+          type:'POST',
+          dataType: 'json',
+          url: "{{route('vendor.advert.filter_product')}}",
+          data:{
+              '_token' : $('meta[name="csrf-token"]').attr('content'),
+              'shops': shops,
+              'categories': categories,
+          },
+          success:function(data) {
+            $('#product').children().remove()
+            console.log('filtered product count '+data.data.length)
+            data.data.forEach(element => {
+              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
+            });
+            $('#product').select2();
+          },
+          error: function (data, textStatus, errorThrown) {
+              console.log(data);
+          },
       })
+    })
+
+    $(document).on('change','#categories',function(){
+      var shops = $('#shops').val();
+      var categories = $('#categories').val();
+      $.ajax({
+          type:'POST',
+          dataType: 'json',
+          url: "{{route('vendor.advert.filter_product')}}",
+          data:{
+              '_token' : $('meta[name="csrf-token"]').attr('content'),
+              'shops': shops,
+              'categories': categories,
+          },
+          success:function(data) {
+            $('#product').children().remove()
+            console.log('filtered product count '+data.length)
+            data.data.forEach(element => {
+              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
+            });
+            $('#product').select2();
+              
+              //adjust all the subtotals and grandtotals here
+          },
+          error: function (data, textStatus, errorThrown) {
+              console.log(data);
+          },
+      })
+    })
     
     $('#addbankaccount').click(function(e){
         e.preventDefault();
@@ -216,5 +283,3 @@
     
 </script>
 @endpush
-  
-     

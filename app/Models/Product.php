@@ -89,6 +89,7 @@ class Product extends Model
     public function getAmountAttribute(){
         return $this->price - ($this->discount*$this->price/100);
     }
+
     public function getImageAttribute(){
         return $this->photo ? config('app.url')."/storage/$this->photo":null;  
     }
@@ -113,12 +114,13 @@ class Product extends Model
     }
     //expiry
     public function getValidAttribute(){
-        return $this->expire_at->subDays(cache('settings')['order_processing_to_delivery_period']) > now();
+        return $this->expire_at->subHours(cache('settings')['order_processing_to_delivery_period']) > now();
     }
 
     public function scopeIsValid($query){
-        return $query->where('expire_at','>',now()->addDays(cache('settings')['order_processing_to_delivery_period']));
+        return $query->where('expire_at','>',now()->addHours(cache('settings')['order_processing_to_delivery_period']));
     }
+    
     public function certified(){
         return $this->valid && $this->accessible() && $this->approved && $this->status && $this->published && $this->available;
     }

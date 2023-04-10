@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Http\Resources\AdsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FeatureResource extends JsonResource
+class AdsetResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

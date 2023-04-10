@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Shop;
 use App\Models\State;
-use App\Models\Feature;
+use App\Models\Adset;
 use App\Models\Product;
 use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +17,7 @@ class Advert extends Model
     use HasFactory,SoftDeletes,GeoLocationTrait;
 
     protected $fillable = [
-        'advertable_id','advertable_type','feature_id','state_id','position','approved','photo','heading','subheading','offer'
+        'advertable_id','advertable_type','adset_id','state_id','position','approved','photo','heading','subheading','offer'
     ];
     protected $appends = ['status','running'];
 
@@ -41,8 +41,8 @@ class Advert extends Model
         return $this->belongsTo(Shop::class,'advertable_id');
     }
     
-    public function feature(){
-        return $this->belongsTo(Feature::class);
+    public function adset(){
+        return $this->belongsTo(Adset::class);
     }
 
     public function state(){
@@ -80,10 +80,10 @@ class Advert extends Model
     }
 
     public function getRunningAttribute(){
-        return $this->approved && $this->feature->status && $this->feature->start_at < now() && $this->feature->end_at > now();
+        return $this->approved && $this->adset->status && $this->adset->start_at < now() && $this->adset->end_at > now();
     }
     public function scopeRunning($query){
-        return $query->where('approved',true)->whereHas('feature', function (Builder $qry) 
+        return $query->where('approved',true)->whereHas('adset', function (Builder $qry) 
             { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); });
     }
 

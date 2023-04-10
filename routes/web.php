@@ -14,8 +14,11 @@ use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
 
 Route::get('/broadcast', function () {
-    $subscription = \App\Models\Subscription::find(3);
-    $subscription->user->notify(new App\Notifications\SubscriptionStatusNotification($subscription));
+    $subscriptions = \App\Models\PaymentItem::where('paymentable_type','App\Models\Feature')->get();
+    foreach($subscriptions as $sub){
+        $sub->paymentable_type = 'App\Models\Adset';
+        $sub->save();
+    }
     return "Event broadcaasted!";
 });
 
@@ -60,7 +63,7 @@ Route::post('payout/callback',[App\Http\Controllers\PayoutController::class,'pay
 
 
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
-// Route::get('receipt/{settlement}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
+Route::get('receipt/{payout}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
 Route::view('start-selling','auth.register_vendor')->name('start-selling');
 
 Auth::routes(['verify' => true]);

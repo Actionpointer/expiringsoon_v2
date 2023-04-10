@@ -56,7 +56,7 @@
                     </thead>
                     <tbody> 
                         
-                        @forelse ($user->likes as $like)
+                        @forelse ($likes as $like)
                           
                             <tr class="likeditem">   
                                 <!-- Product item  -->   
@@ -80,7 +80,7 @@
                                 <!-- Stock Status  -->
                                 <td class="cart-table-item stock-status align-middle">
                                     @if($like->product->stock > 0 && $like->product->status == true)
-                                        <span class="font-body--md-400 in"> in Stock</span>
+                                        <span class="font-body--md-400 in">{{$like->product->stock}} in Stock</span>
                                     @else
                                         <span class="font-body--md-400 out"> out of stock</span>   
                                     @endif  
@@ -88,10 +88,10 @@
 
                                 <td class="cart-table-item add-cart align-middle">     
                                     <div class="add-cart__wrapper">
-                                        @if($like->product->stock > 0 && $like->product->status== true)
+                                        @if($like->product->certified())
                                             <button class="button button--md add-to-cart" data-product="{{$like->product_id}}">Add to Cart</button>
                                         @else
-                                            <button class="button button--md button--disable">Add to Cart</button>     
+                                            <button class="button button--md button--disable">Unavailable</button>     
                                         @endif      
                                         <button class="delete-item remove-from-wish" data-product="{{$like->product_id}}product">
                                             <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +135,7 @@
               <div class="shoping-cart__mobile">
                 
                 // Fetch Products
-                @forelse ($user->likes as $like)
+                @forelse ($likes as $like)
                   <div class="shoping-card likeditem">
                     <div class="shoping-card__img-wrapper">
                       <img src="{{Storage::url($like->product->photo)}}" alt=" {{$like->product->name}}" />

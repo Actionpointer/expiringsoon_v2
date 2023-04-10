@@ -1249,6 +1249,12 @@ $('#checkbox_master').change(function() {
       $('.checkboxes').prop('checked',true)
   }else $('.checkboxes').prop('checked',false)
 })
+$('#select_all').click(function() {
+    $('.checkboxes').prop('checked',true)
+})
+$('#deselect_all').click(function() {
+  $('.checkboxes').prop('checked',false)
+})
 
 //20. Pin validation
 $('.askpin').on('click',function(){

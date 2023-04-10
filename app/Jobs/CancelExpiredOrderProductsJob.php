@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\Feature;
-use App\Events\RenewFeature;
+use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class FeatureRenewalJob implements ShouldQueue
+class CancelExpiredOrderProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,10 +32,15 @@ class FeatureRenewalJob implements ShouldQueue
      */
     public function handle()
     {
-        $features = Feature::where('auto_renew',true)->where(function ($query) {
-            return $query->where('end_at','>',now()->subHours(2))->orWhere('end_at','>=',now());})->get();
-            foreach($features as $feat){
-                event(new RenewFeature($feat));
-            }
+        $orders = Order::whereDoesntHave('statuses',function($query){
+            $query->where('name','delivered')->withTrashed();
+        })->whereHas('items',function($pqr){
+            $pqr->whereHas('product',function($abc){
+                $abc->where('expired_at','<',now());
+            });
+        })->get();
+        foreach($orders  as $order){
+            OrderStatus::create(['order_id'=> $order->id,'user_id'=> $order->user_id,'name'=> 'cancelled']);
+        }
     }
 }

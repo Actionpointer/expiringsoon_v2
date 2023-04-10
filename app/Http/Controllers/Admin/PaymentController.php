@@ -44,14 +44,20 @@ class PaymentController extends Controller
         if($request->action == 'pay'){
             foreach($request->payouts as $req){ 
                 $payout = Payout::find($req);
-                $payout->status = 'processing';
-                $payout->save();
-                event(new DisbursePayout($payout));
+                if(cache('settings')['automatic_payout_transfer']){
+                    $payout->status = 'processing';
+                    $payout->save();
+                    event(new DisbursePayout($payout));
+                }else{
+                    $payout->status = 'paid';
+                    $payout->save();
+                }
+                
             }
             return redirect()->back()->with(['result'=> '1','message'=> 'Payout Processing']);
         }else{
-            $payout = Payout::whereIn('id',$request->payouts)->update(['status'=> 'rejected']);
-            return redirect()->back()->with(['result'=> '1','message'=> 'Payout Rejected']);
+            $payout = Payout::whereIn('id',$request->payouts)->update(['status'=> 'rejected','reason'=> $request->reason]);
+            return redirect()->back()->with(['result'=> '1','message'=> 'Payouts Rejected']);
         }   
     }
     

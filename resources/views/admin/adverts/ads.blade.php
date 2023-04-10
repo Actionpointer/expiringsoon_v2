@@ -107,11 +107,13 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                       <form class="d-inline" action="{{route('admin.adverts.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                                         <input type="hidden" name="advert_id" value="{{$advert->id}}">
+                                        <a href="#" class="dropdown-item">Preview</a>
                                         @if(!$advert->approved)
                                         <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
                                         @else
                                         <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
                                         @endif
+                                        
                                         <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
                                       </form>                                      
                                     </div>

@@ -75,214 +75,288 @@
               </div>
             </div>
             <div class="products-tab__content">
-              <div class="container">
-                  <div class="tab-content" id="pills-tabContent">
-                      <!-- General  -->
-                      <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
-                          <div class="products-tab__description">
-                            {{-- <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">Global</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                    <form action="{{route('admin.settings')}}" method="post" id="global">@csrf
-                                        <div class="contact-form__content">
-                                            <div class="contact-form-input">
-                                                <label for="country">Country</label>
-                                                <select name="country_id" id="countries" class="select2">
-                                                    @foreach ($countries as $country)
-                                                        <option value="{{$country->id}}" @if(session('locale')['country_id'] == $country->id) selected @endif>{{$country->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="contact-form-input">
-                                                <label for="vat">VAT %</label>
-                                                <input type="text" name="vat" placeholder="Set VAT Percentage" value="{{$settings->firstWhere('name','vat')->value}}" />
-                                            </div>
+                <div class="tab-content" id="pills-tabContent">
+                    <!-- General  -->
+                    <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
+                        <div class="products-tab__description">
+                          {{-- <div class="dashboard__content-card">
+                              <div class="dashboard__content-card-header">
+                                  <h5 class="font-body--xl-500">Global</h5>
+                              </div>
+                              <div class="dashboard__content-card-body">
+                                  <form action="{{route('admin.settings')}}" method="post" id="global">@csrf
+                                      <div class="contact-form__content">
+                                          <div class="contact-form-input">
+                                              <label for="country">Country</label>
+                                              <select name="country_id" id="countries" class="select2">
+                                                  @foreach ($countries as $country)
+                                                      <option value="{{$country->id}}" @if(session('locale')['country_id'] == $country->id) selected @endif>{{$country->name}}</option>
+                                                  @endforeach
+                                              </select>
+                                          </div>
+                                          <div class="contact-form-input">
+                                              <label for="vat">VAT %</label>
+                                              <input type="text" name="vat" placeholder="Set VAT Percentage" value="{{$settings->firstWhere('name','vat')->value}}" />
+                                          </div>
 
-                                            
+                                          
 
-                                            
-                                            <div class="contact-form-input">
-                                                <label for="gateway">Payout</label>
-                                                <select name="automatic_payout_transfer" id="selectbox1">
-                                                   <option value="1" @if($settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Automatic </option>
-                                                   <option value="0" @if(!$settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Manual </option>
-                                                                                                  
-                                                </select>
-                                            </div>
-                                            
-                                            <div class="contact-form-btn">
-                                                <button class="button button--md askpin" type="button"> Save </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div> --}}
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">Throttle</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                    <form action="{{route('admin.settings.global')}}" method="post" >@csrf
-                                        <div class="contact-form__content">
-                                            <div class="contact-form-input row ">
-                                                <div class="col-md-2">
-                                                    <label for="number1" class="pt-3">Security Throttle</label>
-                                                </div>
-                                                <div class="col-md-10">
-                                                    <div class="input-group d-flex">
-                                                        <div class="prepend">
-                                                            <input type="number" name="throttle_security_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_security_attempt')->value}}" placeholder="Maximum Attempt" />
-                                                            <i class="small text-sm text-muted">Maximum attempt per minute</i>
-                                                        </div>
-                                                        <div>
-                                                            <input type="number" name="throttle_security_time" class="form-control" value="{{$settings->firstWhere('name','throttle_security_time')->value}}" placeholder="Timeframe"  />
-                                                            <i class="small text-sm text-muted">Delay Timeframe (minutes)</i>
-                                                        </div>
-                                                    </div>
-                                                </div>  
-                                            </div>
+                                          
+                                          <div class="contact-form-input">
+                                              <label for="gateway">Payout</label>
+                                              <select name="automatic_payout_transfer" id="selectbox1">
+                                                 <option value="1" @if($settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Automatic </option>
+                                                 <option value="0" @if(!$settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Manual </option>
+                                                                                                
+                                              </select>
+                                          </div>
+                                          
+                                          <div class="contact-form-btn">
+                                              <button class="button button--md askpin" type="button"> Save </button>
+                                          </div>
+                                      </div>
+                                  </form>
+                              </div>
+                          </div> --}}
+                          <div class="dashboard__content-card">
+                              <div class="dashboard__content-card-header">
+                                  <h5 class="font-body--xl-500">Throttle</h5>
+                              </div>
+                              <div class="dashboard__content-card-body">
+                                  <form action="{{route('admin.settings.store')}}" method="post" >@csrf
+                                      <div class="contact-form__content">
+                                          <div class="contact-form-input row ">
+                                              <div class="col-md-2">
+                                                  <label for="number1" class="pt-3">Security Throttle</label>
+                                              </div>
+                                              <div class="col-md-10">
+                                                  <div class="input-group d-flex">
+                                                      <div class="prepend">
+                                                          <input type="number" name="throttle_security_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_security_attempt')->value}}" placeholder="Maximum Attempt" />
+                                                          <i class="small text-sm text-muted">Maximum attempt per minute</i>
+                                                      </div>
+                                                      <div>
+                                                          <input type="number" name="throttle_security_time" class="form-control" value="{{$settings->firstWhere('name','throttle_security_time')->value}}" placeholder="Timeframe"  />
+                                                          <i class="small text-sm text-muted">Delay Timeframe (minutes)</i>
+                                                      </div>
+                                                  </div>
+                                              </div>  
+                                          </div>
 
-                                            
+                                          
 
-                                            <div class="contact-form-input row ">
-                                                <div class="col-md-2">
-                                                    <label for="number1" class="pt-3">Service Request Throttle</label>
-                                                </div>
-                                                <div class="col-md-10">
-                                                    <div class="input-group d-flex">
-                                                        <div class="prepend">
-                                                            <input type="number" name="throttle_service_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_service_attempt')->value}}" placeholder="Maximum Attempt" />
-                                                            <i class="small text-sm text-muted">Maximum attempt per minute</i>
-                                                        </div>
-                                                        <div>
-                                                            <input type="number" name="throttle_service_time" class="form-control" value="{{$settings->firstWhere('name','throttle_service_time')->value}}" placeholder="Timeframe"  />
-                                                            <i class="small text-sm text-muted">Delay Timeframe (minutes)</i>
-                                                        </div>
-                                                    </div>
-                                                </div>  
-                                            </div>
+                                          <div class="contact-form-input row ">
+                                              <div class="col-md-2">
+                                                  <label for="number1" class="pt-3">Service Request Throttle</label>
+                                              </div>
+                                              <div class="col-md-10">
+                                                  <div class="input-group d-flex">
+                                                      <div class="prepend">
+                                                          <input type="number" name="throttle_service_attempt" class="form-control" value="{{$settings->firstWhere('name','throttle_service_attempt')->value}}" placeholder="Maximum Attempt" />
+                                                          <i class="small text-sm text-muted">Maximum attempt per minute</i>
+                                                      </div>
+                                                      <div>
+                                                          <input type="number" name="throttle_service_time" class="form-control" value="{{$settings->firstWhere('name','throttle_service_time')->value}}" placeholder="Timeframe"  />
+                                                          <i class="small text-sm text-muted">Delay Timeframe (minutes)</i>
+                                                      </div>
+                                                  </div>
+                                              </div>  
+                                          </div>
 
-                                            
+                                          
 
-                                            <div class="contact-form-btn">
-                                                <button class="button button--md askpin" type="button"> Save
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="dashboard__content-card">
-                                        <div class="dashboard__content-card-header">
-                                            <h5 class="font-body--xl-500">Products</h5>
-                                        </div>
-                                        <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings.global')}}" method="post" id="product">@csrf
-                                                <div class="contact-form__content">
-                                                    <div class="form-group row mb-2 font-body--md-400">
-                                                        <label for="min_stck_level" class="col-8">Minimum stock level</label>
-                                                        <input type="text" class="col-4"  name="minimum_stock_level" placeholder="Set Minimum stock level" value="{{$settings->firstWhere('name','minimum_stock_level')->value}}" />
-                                                    </div>
-                                                    <div class="form-group row mb-2 font-body--md-400">
-                                                        <label for="max_stck_hours" class="col-8">Maximum stock level</label>
-                                                        <input type="text" class="col-4"  name="maximum_stock_level" placeholder="Set Maximum stock level" value="{{$settings->firstWhere('name','maximum_stock_level')->value}}" />
-                                                    </div>
-                                                    <table>
-                                                        
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Auto Approve Product
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if($settings->firstWhere('name','auto_approve_product')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if(!$settings->firstWhere('name','auto_approve_product')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        
-                                                        
-
-                                                       
-                                                    </table>
-                                                    <div class="contact-form-btn">
-                                                        <button class="button button--md askpin" type="button"> Save
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="dashboard__content-card">
-                                        <div class="dashboard__content-card-header">
-                                            <h5 class="font-body--xl-500">Orders</h5>
-                                        </div>
-                                        <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings.global')}}" method="post" id="orders">@csrf
-                                                <div class="contact-form__content">
-                                                    <div class="form-group row mb-2 font-body--sm-500">
-                                                        <label for="max_del_hours" class="col-8 ">Order Processing to Cancel Hours</label>
-                                                        <input type="text" class="col-4"  name="order_processing_to_cancel_period" placeholder="Set Processing to Cancellation Period" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
-                                                    </div>
-                                                    <div class="form-group row mb-2 font-body--sm-500">
-                                                        <label for="max_del_hours" class="col-8 ">Order Processing to Shipment Hours</label>
-                                                        <input type="text" class="col-4"  name="order_processing_to_shipment_period" placeholder="Set Processing to Shipment Period" value="{{$settings->firstWhere('name','order_processing_to_shipment_period')->value}}" />
-                                                    </div>
-                                                    <div class="form-group row mb-2 font-body--sm-500">
-                                                        <label for="vat" class="col-8 ">Order Processing to Delivery Hours</label>
-                                                        <input type="text" class="col-4" name="order_processing_to_delivery_period" placeholder="Set Processing to Delivery Period" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
-                                                    </div>
-                                                    <div class="form-group row mb-2 font-body--sm-500">
-                                                        <label for="vat" class="col-8 ">Order Delivery to Acceptance Hours</label>
-                                                        <input type="text" class="col-4" name="order_delivered_to_acceptance_period" placeholder="Set Delivery to Acceptance Period" value="{{$settings->firstWhere('name','order_delivered_to_acceptance_period')->value}}" />
-                                                    </div>
-                                                    
-                                                    <div class="form-group row mb-2 font-body--sm-500">
-                                                        <label for="vat" class="col-8 ">Order Rejected to Returned Hours</label>
-                                                        <input type="text" class="col-4" name="order_rejected_to_returned_period" placeholder="Set Rejected to Returned Period" value="{{$settings->firstWhere('name','order_rejected_to_returned_period')->value}}" />
-                                                    </div>
-                                                    <div class="form-group row mb-2 font-body--sm-500">
-                                                        <label for="vat" class="col-8 ">Order Rejected to Acceptance Hours</label>
-                                                        <input type="text" class="col-4" name="order_rejected_to_acceptance_period" placeholder="Set Rejected to Acceptance Period" value="{{$settings->firstWhere('name','order_rejected_to_acceptance_period')->value}}" />
-                                                    </div>
-                                                    
-                                                    <div class="contact-form-btn">
-                                                        <button class="button button--md askpin" type="button"> Save
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- shop and adverts --}}
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="dashboard__content-card">
-                                        <div class="dashboard__content-card-header">
-                                            <h5 class="font-body--xl-500">Shop</h5>
-                                        </div>
-                                        <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings.global')}}" method="post" id="shop">@csrf
+                                          <div class="contact-form-btn">
+                                              <button class="button button--md askpin" type="button"> Save
+                                              </button>
+                                          </div>
+                                      </div>
+                                  </form>
+                              </div>
+                          </div>
+                          <div class="row mb-4">
+                              <div class="col-md-7">
+                                  <div class="dashboard__content-card">
+                                      <form action="{{route('admin.settings.store')}}" method="post" id="orders">@csrf
+                                          <div class="dashboard__content-card-header">
+                                              <h5 class="font-body--xl-500">Orders</h5>
+                                          </div>
+                                          <div class="dashboard__content-card-body">
+                                              
+                                                  <div class="contact-form__content">
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                          <label for="max_del_hours" class="col-8 ">Order Processing to User Cancel Hours</label>
+                                                          <input type="text" class="col-4"  name="order_processing_to_user_cancel_period" placeholder="Set Processing to Cancellation Period" value="{{$settings->firstWhere('name','order_processing_to_user_cancel_period')->value}}" />
+                                                      </div>
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                          <label for="max_del_hours" class="col-8 ">Order Processing to Auto-Cancel Hours</label>
+                                                          <input type="text" class="col-4"  name="order_processing_to_auto_cancel_period" placeholder="Set Processing to Auto Cancellation Period" value="{{$settings->firstWhere('name','order_processing_to_auto_cancel_period')->value}}" />
+                                                      </div>
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                          <label for="max_del_hours" class="col-8 ">Order Processing to Shipment Hours</label>
+                                                          <input type="text" class="col-4"  name="order_processing_to_shipment_period" placeholder="Set Processing to Shipment Period" value="{{$settings->firstWhere('name','order_processing_to_shipment_period')->value}}" />
+                                                      </div>
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                          <label for="vat" class="col-8 ">Order Processing to Delivery Hours</label>
+                                                          <input type="text" class="col-4" name="order_processing_to_delivery_period" placeholder="Set Processing to Delivery Period" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
+                                                      </div>
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                          <label for="vat" class="col-8 ">Order Delivery to Acceptance Hours</label>
+                                                          <input type="text" class="col-4" name="order_delivered_to_acceptance_period" placeholder="Set Delivery to Acceptance Period" value="{{$settings->firstWhere('name','order_delivered_to_acceptance_period')->value}}" />
+                                                      </div>
+                                                      
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                          <label for="vat" class="col-8 ">Order Rejected to Returned Hours</label>
+                                                          <input type="text" class="col-4" name="order_rejected_to_returned_period" placeholder="Set Rejected to Returned Period" value="{{$settings->firstWhere('name','order_rejected_to_returned_period')->value}}" />
+                                                      </div>
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                          <label for="vat" class="col-8 ">Order Rejected to Acceptance Hours</label>
+                                                          <input type="text" class="col-4" name="order_rejected_to_acceptance_period" placeholder="Set Rejected to Acceptance Period" value="{{$settings->firstWhere('name','order_rejected_to_acceptance_period')->value}}" />
+                                                      </div>
+                                                      
+                                                      {{-- <div class="contact-form-btn">
+                                                          <button class="button button--md askpin" type="button"> Save
+                                                          </button>
+                                                      </div> --}}
+                                                  </div>
+                                              
+                                          </div>
+                                          <div class="dashboard__content-card-header">
+                                              <h5 class="font-body--xl-500">Products</h5>
+                                          </div>
+                                          <div class="dashboard__content-card-body">
+                                              <div class="form-group row mb-2 font-body--md-400">
+                                                  <label for="min_stck_level" class="col-8">Minimum stock level</label>
+                                                  <input type="text" class="col-4"  name="minimum_stock_level" placeholder="Set Minimum stock level" value="{{$settings->firstWhere('name','minimum_stock_level')->value}}" />
+                                              </div>
+                                              <div class="form-group row mb-2 font-body--md-400">
+                                                  <label for="max_stck_hours" class="col-8">Maximum stock level</label>
+                                                  <input type="text" class="col-4"  name="maximum_stock_level" placeholder="Set Maximum stock level" value="{{$settings->firstWhere('name','maximum_stock_level')->value}}" />
+                                              </div>
+                                          </div>
+                                          <div class="dashboard__content-card-header">
+                                              <h5 class="font-body--xl-500">Advert</h5>
+                                          </div>
+                                          <div class="dashboard__content-card-body pb-0">
+                                              <div class="form-group row mb-2 font-body--md-400">
+                                                  <label for="max_del_hours" class="col-8">Minimum Advert Days</label>
+                                                  <input type="text" class="col-4"  name="minimum_advert_days" placeholder="Set minimum advert days" value="{{$settings->firstWhere('name','minimum_advert_days')->value}}" />
+                                              </div>
+                                              {{-- <div class="form-group row mb-2">
+                                                  <label for="vat" class="col-8 font-body--400">Maximum Advert Days</label>
+                                                  <input type="text" class="col-4" name="vat" placeholder="Set maximum advert days" value="{{$settings->firstWhere('name','maximum_advert_days')->value}}" />
+                                              </div> --}}
+                                              <div class="contact-form-btn mt-4">
+                                                  <button class="button button--md askpin w-100" type="button"> Save
+                                                  </button>
+                                              </div>
+                                              
+                                          </div>
+                                          
+                                      </form>
+                                  </div>
+                              </div>
+                              <div class="col-md-5">
+                                  <div class="dashboard__content-card">
+                                      <form action="{{route('admin.settings.store')}}" method="post" id="product">@csrf
+                                          <div class="dashboard__content-card-header">
+                                              <h5 class="font-body--xl-500">Products</h5>
+                                          </div>
+                                          <div class="dashboard__content-card-body">
+                                              <div class="contact-form__content">
+                                                      
+                                                  <table>
+                                                      
+                                                      <tr>
+                                                          <td class="d-flex">
+                                                              <label class="form-check-label font-body--400" for="existing"> 
+                                                                  Auto Approve Product
+                                                              </label>
+                                                          </td>
+                                                          <td>
+                                                              <div class="form-check mx-3">
+                                                                  <label class="form-check-label font-body--400" for="existing"> 
+                                                                      On
+                                                                  </label>
+                                                                  <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if($settings->firstWhere('name','auto_approve_product')->value) checked @endif value="1" >
+                                                              </div>
+                                                          </td>
+                                                          <td>
+                                                              <div class="form-check">
+                                                                  <label class="form-check-label font-body--400" for="existing"> 
+                                                                      Off
+                                                                  </label>
+                                                                  <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product" @if(!$settings->firstWhere('name','auto_approve_product')->value) checked @endif value="0" > 
+                                                              </div>
+                                                          </td>
+                                                      </tr>
+                                                  </table>
+                                                 
+                                              </div>
+                                              
+                                                  
+                                              
+                                          </div>
+                                          <div class="dashboard__content-card-header">
+                                              <h5 class="font-body--xl-500">Advert</h5>
+                                          </div>
+                                          <div class="dashboard__content-card-body">
+                                              <div class="contact-form__content">
+                                                  <table>
+                                                      <tr>
+                                                          <td class="d-flex">
+                                                              <label class="form-check-label font-body--400" for="existing"> 
+                                                                  Auto Approve Product Advert
+                                                              </label>
+                                                          </td>
+                                                          <td>
+                                                              <div class="form-check mx-3">
+                                                                  <label class="form-check-label font-body--400" for="existing"> 
+                                                                      On
+                                                                  </label>
+                                                                  <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if($settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="1" >
+                                                              </div>
+                                                          </td>
+                                                          <td>
+                                                              <div class="form-check">
+                                                                  <label class="form-check-label font-body--400" for="existing"> 
+                                                                      Off
+                                                                  </label>
+                                                                  <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if(!$settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="0" > 
+                                                              </div>
+                                                          </td>
+                                                      </tr>
+                                                      <tr>
+                                                          <td class="d-flex">
+                                                              <label class="form-check-label font-body--400" for="existing"> 
+                                                                  Auto Approve Shop Advert
+                                                              </label>
+                                                          </td>
+                                                          <td>
+                                                              <div class="form-check mx-3">
+                                                                  <label class="form-check-label font-body--400" for="existing"> 
+                                                                      On
+                                                                  </label>
+                                                                  <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if($settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="1" >
+                                                              </div>
+                                                          </td>
+                                                          <td>
+                                                              <div class="form-check">
+                                                                  <label class="form-check-label font-body--400" for="existing"> 
+                                                                      Off
+                                                                  </label>
+                                                                  <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if(!$settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="0" > 
+                                                              </div>
+                                                          </td>
+                                                      </tr>
+                                                  </table>
+                                                  
+                                              </div>
+                                              
+                                          </div>
+                                          <div class="dashboard__content-card-header">
+                                              <h5 class="font-body--xl-500">Shop</h5>
+                                          </div>
+                                          <div class="dashboard__content-card-body">
                                                 <div class="contact-form__content">
                                                     <table>
                                                         
@@ -311,316 +385,276 @@
                                                         </tr>
         
                                                     </table>
-                                                    <div class="contact-form-btn">
-                                                        <button class="button button--md askpin" type="button"> Save
-                                                        </button>
-                                                    </div>
+                                                    
                                                 </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="dashboard__content-card">
-                                        <div class="dashboard__content-card-header">
-                                            <h5 class="font-body--xl-500">Advert</h5>
+                                          </div>
+                                          <div class="dashboard__content-card-header">
+                                            <h5 class="font-body--xl-500">Payout</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                            <form action="{{route('admin.settings.global')}}" method="post" id="advert">@csrf
-                                                <div class="contact-form__content">
-                                                    <div class="form-group row mb-2 font-body--md-400">
-                                                        <label for="max_del_hours" class="col-8 font-body--400">Minimum Advert Days</label>
-                                                        <input type="text" class="col-4"  name="minimum_advert_days" placeholder="Set minimum advert days" value="{{$settings->firstWhere('name','minimum_advert_days')->value}}" />
-                                                    </div>
-                                                    {{-- <div class="form-group row mb-2">
-                                                        <label for="vat" class="col-8 font-body--400">Maximum Advert Days</label>
-                                                        <input type="text" class="col-4" name="vat" placeholder="Set maximum advert days" value="{{$settings->firstWhere('name','maximum_advert_days')->value}}" />
-                                                    </div> --}}
-                                                    <table>
+                                              <div class="contact-form__content">
+                                                  <table>
                                                         <tr>
                                                             <td class="d-flex">
                                                                 <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Auto Approve Product Advert
+                                                                    Payout Type
                                                                 </label>
                                                             </td>
                                                             <td>
                                                                 <div class="form-check mx-3">
                                                                     <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
+                                                                        Auto
                                                                     </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if($settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="1" >
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="automatic_payout_transfer" @if($settings->firstWhere('name','automatic_payout_transfer')->value) checked @endif value="1" >
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <div class="form-check">
                                                                     <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
+                                                                        Manual
                                                                     </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_product_advert" @if(!$settings->firstWhere('name','auto_approve_product_advert')->value) checked @endif value="0" > 
+                                                                    <input class="form-check-input previous_addresses" type="radio" name="automatic_payout_transfer" @if(!$settings->firstWhere('name','automatic_payout_transfer')->value) checked @endif value="0" > 
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="d-flex">
-                                                                <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Auto Approve Shop Advert
-                                                                </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        On
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if($settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Off
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="auto_approve_shop_advert" @if(!$settings->firstWhere('name','auto_approve_shop_advert')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <div class="contact-form-btn">
-                                                        <button class="button button--md askpin" type="button"> Save
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                                  </table>
+                                                  <div class="contact-form-btn mt-4">
+                                                      <button class="button button--md askpin w-100" type="button"> Save
+                                                      </button>
+                                                  </div>
+                                              </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            
+                                      </form>
+                                  </div>
+                              </div>
+                              
+                          </div>
+                          
+                          
+                        </div>
+                    </div>
+                    <!-- Countries -->
+                    <div class="tab-pane fade" id="pills-countries" role="tabpanel" aria-labelledby="pills-countries-tab">
+                      <div class="row products-tab__feedback"> 
+                          <!-- Manage Countries  -->
+                          <div class="dashboard__content-card">
+                              <div class="dashboard__content-card-header">
+                              <h5 class="font-body--xl-500">Manage Countries</h5>
+                              </div>
+                              <div class="dashboard__content-card-body">
+                                  <div class="table-responsive">
+                                      <table class="table display datatable" style="width:100%;font-size:13px">
+                                      <thead>
+                                          <tr>
+                                              <th scope="col" class="">Country</th>
+                                              <th scope="col" class="">Currency</th>
+                                              <th scope="col" class="">Location</th>
+                                              <th scope="col" class="">Payment Gateway</th>
+                                              <th scope="col" class="">Payout Gateway</th>
+                                              <th scope="col" class="">Settings</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          @foreach ($countries as $country)
+                                              <tr>
+                                                  <td>{{$country->name}}</td>
+                                                  <td>{{$country->currency->name}}</td>
+                                                  <td>{{$country->states->count()}} states, {{$country->cities->count()}} cities</td>
+                                                  <td>{{$country->payment_gateway}}</td>
+                                                  <td>{{$country->payout_gateway}}</td>
+                                                  <td><a href="{{route('admin.settings.country',$country)}}" target="_blank">Open Settings</a></td>
+                                              </tr>
+                                              
+                                          @endforeach
+                                      </tbody>
+                                      </table>
+                                  </div>
+                              </div>
                           </div>
                       </div>
-                      <!-- Countries -->
-                      <div class="tab-pane fade" id="pills-countries" role="tabpanel" aria-labelledby="pills-countries-tab">
-                        <div class="row products-tab__feedback"> 
-                            <!-- Manage Countries  -->
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                <h5 class="font-body--xl-500">Manage Countries</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                    <div class="table-responsive">
-                                        <table class="table display datatable" style="width:100%;font-size:13px">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="">Country</th>
-                                                <th scope="col" class="">Currency</th>
-                                                <th scope="col" class="">Location</th>
-                                                <th scope="col" class="">Payment Gateway</th>
-                                                <th scope="col" class="">Payout Gateway</th>
-                                                <th scope="col" class="">Settings</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($countries as $country)
-                                                <tr>
-                                                    <td>{{$country->name}}</td>
-                                                    <td>{{$country->currency->name}}</td>
-                                                    <td>{{$country->states->count()}} states, {{$country->cities->count()}} cities</td>
-                                                    <td>{{$country->payment_gateway}}</td>
-                                                    <td>{{$country->payout_gateway}}</td>
-                                                    <td><a href="{{route('admin.settings.country',$country)}}" target="_blank">Open Settings</a></td>
-                                                </tr>
-                                                
-                                            @endforeach
-                                        </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Plan  -->
-                      <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
-                        <div class="products-tab__information">
-                            <!-- Manage Plan  -->
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">Manage Plans</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">                                        
-                                    <table class="table " style="width:100%;font-size:13px">
-                                        
-                                        <tbody>
-                                            <tr>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Shops</th>
-                                                <th scope="col">Products</th>
-                                                <th scope="col">Parameters</th>
-                                                <th scope="col">Prices</th>
-                                                <th></th>
-                                            </tr>
-                                            @forelse ($plans as $plan)
-                                                <tr>
-                                                    <td>{{$plan->name}}</td>
-                                                    <td>{{$plan->shops}}</td>
-                                                    <td>{{$plan->products}}</td>
-                                                    <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#plan_edit{{$plan->id}}">Edit Parameters</a></td>
-                                                    <td><a href="{{route('admin.settings.plan',$plan)}}" target="_blank">Set Prices</a></td> 
-                                                </tr>
-                                                
-                                                <div class="modal fade" id="plan_edit{{$plan->id}}" tabindex="-1" aria-labelledby="plan_edit{{$plan->id}}ModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="plan_edit{{$plan->id}}ModalLabel">Edit {{$plan->name}}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="{{route('admin.settings.plans')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
-                                                                <input type="hidden" name="plan_id" value="{{$plan->id}}">
-                                                                <div class="contact-form__content">
-                                                                    
-                                                                    <div class="contact-form-input">
-                                                                        <label for="name">Plan Name</label>
-                                                                        <input type="text" name="name" value="{{$plan->name}}" required />
-                                                                    </div>
-                                                                    <div class="contact-form-input">
-                                                                        <label for="name">Plan Description</label>
-                                                                        <input type="text" name="description" value="{{$plan->description}}" required />
-                                                                    </div>
-                                                                    <div class="contact-form__content-group">
-                                                                        <div class="contact-form-input">
-                                                                            <label>No of Shops</label>
-                                                                            <input type="number" name="shops" class="form-control" required value="{{$plan->shops}}"/>
-                                                                        </div>
-                                                                        <div class="contact-form-input">
-                                                                            <label>No of Products</label>
-                                                                            <input type="number" name="products" class="form-control" required value="{{$plan->products}}"/>     
-                                                                        </div>
-                                                                        
-                                                                    </div> 
-                                                                    <div class="contact-form-input">
-                                                                        <label for="pin">Enter Your Access Pin</label>
-                                                                        <input type="text" name="pin" id="pin_para{{$plan->id}}" value="" placeholder="Access pin">
-                                                                    </div>
-                                                                    <div class="contact-form-btn">
-                                                                        <button class="button button--md" type="submit"> Update Plan </button>
-                                                                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        
-                                                        </div>
-                                                    </div>
-                                                </div> 
-                                            @empty
-                                                <tr><td colspan="7" class="text-center">No Plan</td></tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                                
-                        </div>
-                        
-                      </div>
-                      
-                      <!--  Advert  -->
-                      <div class="tab-pane fade" id="pills-customer" role="tabpanel" aria-labelledby="pills-customer-tab">
-                          <div class="row products-tab__feedback">
-                            
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                    <h5 class="font-body--xl-500">Advert Plans</h5>
-                                </div>
-                                <div class="dashboard__content-card-body">
-                                    <div class="contact-form__content">
-                                        <table class="table" style="width:100%;font-size:13px">
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="col">Plan</th>
-                                                    <th scope="col">Type</th>
-                                                    <th scope="col">Page</th>
-                                                    <th scope="col">Description</th>
-                                                    <th scope="col">Price</th>
-                                                </tr>
-                                                @foreach($adplans->sortBy('type') as $adplan)
-                                                <tr>
-                                                    <td>{{$adplan->name}}</td>
-                                                    <td>{{ucwords($adplan->type)}}</td>
-                                                    <td>{{$adplan->page}}</td>
-                                                    <td>{{ucwords($adplan->description)}}</td>
-                                                    <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#adplan_price{{$adplan->id}}">Set Prices</a></td>
-                                                </tr>
-                                                <div class="modal fade" id="adplan_price{{$adplan->id}}" tabindex="-1" aria-labelledby="adplan_price{{$adplan->id}}ModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
+                    </div>
+                    
+                    <!-- Plan  -->
+                    <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
+                      <div class="products-tab__information">
+                          <!-- Manage Plan  -->
+                          <div class="dashboard__content-card">
+                              <div class="dashboard__content-card-header">
+                                  <h5 class="font-body--xl-500">Manage Plans</h5>
+                              </div>
+                              <div class="dashboard__content-card-body">                                        
+                                  <table class="table " style="width:100%;font-size:13px">
+                                      
+                                      <tbody>
+                                          <tr>
+                                              <th scope="col">Name</th>
+                                              <th scope="col">Shops</th>
+                                              <th scope="col">Products</th>
+                                              <th scope="col">Parameters</th>
+                                              <th scope="col">Prices</th>
+                                              <th></th>
+                                          </tr>
+                                          @forelse ($plans as $plan)
+                                              <tr>
+                                                  <td>{{$plan->name}}</td>
+                                                  <td>{{$plan->shops}}</td>
+                                                  <td>{{$plan->products}}</td>
+                                                  <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#plan_edit{{$plan->id}}">Edit Parameters</a></td>
+                                                  <td><a href="{{route('admin.settings.plan',$plan)}}" target="_blank">Set Prices</a></td> 
+                                              </tr>
+                                              
+                                              <div class="modal fade" id="plan_edit{{$plan->id}}" tabindex="-1" aria-labelledby="plan_edit{{$plan->id}}ModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog">
                                                       <div class="modal-content">
-                                                        <div class="modal-header">
-                                                          <h5 class="modal-title" id="adplan_price{{$adplan->id}}ModalLabel">{{$adplan->name}} Pricing</h5>
+                                                      <div class="modal-header">
+                                                          <h5 class="modal-title" id="plan_edit{{$plan->id}}ModalLabel">Edit {{$plan->name}}</h5>
                                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div>
-                                                            <form action="{{route('admin.settings.ad.pricing')}}" method="post" id="adplan_price{{$adplan->id}}form">
-                                                                @csrf 
-                                                                <input type="hidden" name="adplan_id" value="{{$adplan->id}}">
-                                                                
-                                                                <div class="pricing">
-                                                                    <div class="row py-2">
-                                                                        <div class="col-md-4">
-                                                                            <span>Currency</span> 
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <span>Price Per Unit Per Day</span> 
-                                                                        </div>
-                                                                    </div>
-                                                                    @foreach ($currencies as $currency)
-                                                                    <div class="row py-2">
-                                                                        <div class="col-md-4">
-                                                                            {{$currency->name}}
-                                                                            <input type="hidden" name="currencies[]" value="{{$currency->id}}">
-                                                                        </div>  
-
-                                                                        <div class="col-md-6">
-                                                                            <input class="form-control-sm col border-light" type="number" step="0.001" required name="amount[{{$currency->id}}]" value="{{$adplan->costs->firstWhere('currency_id',$currency->id)->amount ?? 0}}">
-                                                                        </div>  
-                                                                    </div>
-                                                                    @endforeach
-                                                                </div> 
-                                                                <div class="contact-form-input">
-                                                                    <label for="pin">Enter Your Access Pin</label>
-                                                                    <input type="text" name="pin" id="pin_ad{{$currency->id}}" value="" placeholder="Access pin">
-                                                                </div>
-                                                                <div class="contact-form-btn pt-2">
-                                                                    <button class="button button--md" type="submit"> Update Advert Plan Prices </button>
-                                                                    <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        
                                                       </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                            
-                                            
-                                            </tbody>
-                                        </table>
-                                        <div class="contact-form-btn">
-                                            <button class="button button--md askpin" type="button"> Save
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                                      <div class="modal-body">
+                                                          <form action="{{route('admin.settings.plans')}}" method="post" id="planedit{{$plan->id}}" style="display:none;margin:20px 0px;"> @csrf 
+                                                              <input type="hidden" name="plan_id" value="{{$plan->id}}">
+                                                              <div class="contact-form__content">
+                                                                  
+                                                                  <div class="contact-form-input">
+                                                                      <label for="name">Plan Name</label>
+                                                                      <input type="text" name="name" value="{{$plan->name}}" required />
+                                                                  </div>
+                                                                  <div class="contact-form-input">
+                                                                      <label for="name">Plan Description</label>
+                                                                      <input type="text" name="description" value="{{$plan->description}}" required />
+                                                                  </div>
+                                                                  <div class="contact-form__content-group">
+                                                                      <div class="contact-form-input">
+                                                                          <label>No of Shops</label>
+                                                                          <input type="number" name="shops" class="form-control" required value="{{$plan->shops}}"/>
+                                                                      </div>
+                                                                      <div class="contact-form-input">
+                                                                          <label>No of Products</label>
+                                                                          <input type="number" name="products" class="form-control" required value="{{$plan->products}}"/>     
+                                                                      </div>
+                                                                      
+                                                                  </div> 
+                                                                  <div class="contact-form-input">
+                                                                      <label for="pin">Enter Your Access Pin</label>
+                                                                      <input type="text" name="pin" id="pin_para{{$plan->id}}" value="" placeholder="Access pin">
+                                                                  </div>
+                                                                  <div class="contact-form-btn">
+                                                                      <button class="button button--md" type="submit"> Update Plan </button>
+                                                                      <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                                  </div>
+                                                              </div>
+                                                          </form>
+                                                      </div>
+                                                      
+                                                      </div>
+                                                  </div>
+                                              </div> 
+                                          @empty
+                                              <tr><td colspan="7" class="text-center">No Plan</td></tr>
+                                          @endforelse
+                                      </tbody>
+                                  </table>
+                              </div>
                           </div>
+                              
                       </div>
-                      <!--  Shipping  -->
-
                       
-                  </div>
-              </div>
+                    </div>
+                    
+                    <!--  Advert  -->
+                    <div class="tab-pane fade" id="pills-customer" role="tabpanel" aria-labelledby="pills-customer-tab">
+                        <div class="row products-tab__feedback">
+                          
+                          <div class="dashboard__content-card">
+                              <div class="dashboard__content-card-header">
+                                  <h5 class="font-body--xl-500">Advert Plans</h5>
+                              </div>
+                              <div class="dashboard__content-card-body">
+                                  <div class="contact-form__content">
+                                      <table class="table" style="width:100%;font-size:13px">
+                                          <tbody>
+                                              <tr>
+                                                  <th scope="col">Plan</th>
+                                                  <th scope="col">Type</th>
+                                                  <th scope="col">Page</th>
+                                                  <th scope="col">Description</th>
+                                                  <th scope="col">Price</th>
+                                              </tr>
+                                              @foreach($adplans->sortBy('type') as $adplan)
+                                              <tr>
+                                                  <td>{{$adplan->name}}</td>
+                                                  <td>{{ucwords($adplan->type)}}</td>
+                                                  <td>{{$adplan->page}}</td>
+                                                  <td>{{ucwords($adplan->description)}}</td>
+                                                  <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#adplan_price{{$adplan->id}}">Set Prices</a></td>
+                                              </tr>
+                                              <div class="modal fade" id="adplan_price{{$adplan->id}}" tabindex="-1" aria-labelledby="adplan_price{{$adplan->id}}ModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="adplan_price{{$adplan->id}}ModalLabel">{{$adplan->name}} Pricing</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                          <div>
+                                                          <form action="{{route('admin.settings.ad.pricing')}}" method="post" id="adplan_price{{$adplan->id}}form">
+                                                              @csrf 
+                                                              <input type="hidden" name="adplan_id" value="{{$adplan->id}}">
+                                                              
+                                                              <div class="pricing">
+                                                                  <div class="row py-2">
+                                                                      <div class="col-md-4">
+                                                                          <span>Currency</span> 
+                                                                      </div>
+                                                                      <div class="col-md-6">
+                                                                          <span>Price Per Unit Per Day</span> 
+                                                                      </div>
+                                                                  </div>
+                                                                  @foreach ($currencies as $currency)
+                                                                  <div class="row py-2">
+                                                                      <div class="col-md-4">
+                                                                          {{$currency->name}}
+                                                                          <input type="hidden" name="currencies[]" value="{{$currency->id}}">
+                                                                      </div>  
+
+                                                                      <div class="col-md-6">
+                                                                          <input class="form-control-sm col border-light" type="number" step="0.001" required name="amount[{{$currency->id}}]" value="{{$adplan->costs->firstWhere('currency_id',$currency->id)->amount ?? 0}}">
+                                                                      </div>  
+                                                                  </div>
+                                                                  @endforeach
+                                                              </div> 
+                                                              <div class="contact-form-input">
+                                                                  <label for="pin">Enter Your Access Pin</label>
+                                                                  <input type="text" name="pin" id="pin_ad{{$currency->id}}" value="" placeholder="Access pin">
+                                                              </div>
+                                                              <div class="contact-form-btn pt-2">
+                                                                  <button class="button button--md" type="submit"> Update Advert Plan Prices </button>
+                                                                  <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                              </div>
+                                                          </form>
+                                                      </div>
+                                                      
+                                                    </div>
+                                                  </div>
+                                              </div>
+                                              @endforeach
+                                          
+                                          
+                                          </tbody>
+                                      </table>
+                                      <div class="contact-form-btn">
+                                          <button class="button button--md askpin" type="button"> Save
+                                          </button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                    
+
+                    
+                </div>
             </div>
             <!-- Set VAT -->
             

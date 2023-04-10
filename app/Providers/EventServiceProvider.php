@@ -3,30 +3,28 @@
 namespace App\Providers;
 
 use App\Events\AdjustCart;
+use App\Events\RenewAdset;
 use App\Events\RefundBuyer;
 use App\Events\RetryPayout;
+use App\Events\SettleVendor;
 use App\Events\DisbursePayout;
 use App\Events\OrderCompleted;
 use App\Events\OrderPurchased;
-use App\Events\UserSubscribed;
 use App\Events\DecreaseProduct;
-use App\Events\SettleVendor;
-use App\Listeners\SettlingVendor;
 use App\Listeners\AdjustingCart;
+use App\Listeners\RenewingAdset;
 use App\Events\CheckPayoutStatus;
-use App\Events\RenewSubscription;
 use App\Listeners\BroadcastOrder;
 use App\Listeners\RefundingBuyer;
 use App\Listeners\RetryingPayout;
-use App\Events\SubscriptionExpired;
+use App\Listeners\SettlingVendor;
 use App\Listeners\DisbursingPayout;
 use App\Listeners\DecreasingProduct;
 use App\Listeners\RemoveFromWishList;
 use Illuminate\Support\Facades\Event;
-use App\Listeners\ShopDeleteProcesses;
+
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\CheckingPayoutStatus;
-use App\Listeners\AutoRenewSubscription;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -73,6 +71,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         RetryPayout::class => [
             RetryingPayout::class
+        ],
+        RenewAdset::class => [
+            RenewingAdset::class
         ],
         CheckPayoutStatus::class => [
             CheckingPayoutStatus::class

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Plan;
 use App\Models\Shop;
+use App\Models\Adset;
 use App\Models\State;
 use App\Models\Adplan;
 use App\Models\Advert;
-use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -41,8 +41,8 @@ class AdvertController extends Controller
     }
 
     public function adsets(){
-        $features = Feature::within()->paginate(10);
-        return view('admin.adverts.sets',compact('features'));
+        $adsets = Adset::within()->paginate(10);
+        return view('admin.adverts.sets',compact('adsets'));
     }
 
 

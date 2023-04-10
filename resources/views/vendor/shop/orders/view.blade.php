@@ -145,55 +145,7 @@
               </div>
 
               
-              <div class="progress__bar progress__bar-1x">
-                <div class="progress__bar-item active">
-                  <div class="progress__bar-item-ball">
-                    <p class=" font-body--md-400 count-number count-number-active " > 01 </p>
-                    <span class="check-mark">
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.6663 5.83301L7.49967 14.9997L3.33301 10.833" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                  </div>
-                  <h2 class="font-body--md-400">Order received</h2>
-                </div>
-
-                <div class="progress__bar-item @if(in_array($order->status,['processing','shipped','delivered','completed'])) active @endif">
-                  <div class="progress__bar-item-ball">
-                    <p class=" font-body--md-400 count-number count-number-active " > 02 </p>
-                    <span class="check-mark">
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.6663 5.83301L7.49967 14.9997L3.33301 10.833" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                  </div>
-                  <h2 class="font-body--md-400">Processing</h2>
-                </div>
-
-                <div class="progress__bar-item @if(in_array($order->status,['shipped','delivered','completed'])) active @endif">
-                  <div class="progress__bar-item-ball">
-                    <p class=" font-body--md-400 count-number count-number-active " > 03 </p>
-                    <span class="check-mark">
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.6663 5.83301L7.49967 14.9997L3.33301 10.833" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                  </div>
-                  <h2 class="font-body--md-400">Shipped for Delivery</h2>
-                </div>
-
-                <div class="progress__bar-item @if(in_array($order->status,['delivered','completed'])) active @endif">
-                  <div class="progress__bar-item-ball">
-                    <p class=" font-body--md-400 count-number count-number-active " > 04 </p>
-                    <span class="check-mark">
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.6663 5.83301L7.49967 14.9997L3.33301 10.833" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                  </div>
-                  <h2 class="font-body--md-400">Delivered</h2>
-                </div>
-              </div>
+              @include('vendor.shop.orders.status',['status'=> $order->status])
               
                 <!-- Update status  -->
                 @if(count($statuses))
