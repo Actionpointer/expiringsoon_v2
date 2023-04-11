@@ -70,7 +70,9 @@ Route::post('product/sortFilter',[CartController::class,'sortFilter'])->name('pr
 Route::get('payment/callback',[App\Http\Controllers\PaymentController::class,'paymentcallback'])->name('payment.callback');
 
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
+
 Route::get('receipt/{payout}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
+
 Route::view('start-selling','auth.register_vendor')->name('start-selling');
 
 Auth::routes(['verify' => true]);
