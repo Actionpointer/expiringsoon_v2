@@ -45,8 +45,8 @@ class AdsetController extends Controller
                     $adsets->push($adset);
                 }
             }
-            $link = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
-            if(!$link){
+            $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
+            if(!$result['link']){
                 return request()->expectsJson() ? 
                     response()->json([
                         'status' => false,
@@ -54,14 +54,14 @@ class AdsetController extends Controller
                     ], 401) :
                     redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
             }else{
-                    return request()->expectsJson() ? 
-                    response()->json([
-                        'status' => true,
-                        'message' => 'Open payment link on browser to complete payment',
-                        'data' => $link,
-                    ], 200) :
-                    redirect()->to($link);
-            }
+                return request()->expectsJson() ? 
+                response()->json([
+                    'status' => true,
+                    'message' => 'Open payment link on browser to complete payment',
+                    'data' => $result,
+                ], 200) :
+                redirect()->to($result['link']);
+            }    
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

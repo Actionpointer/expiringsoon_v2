@@ -62,8 +62,8 @@ class SubscriptionController extends Controller
                 ]);
             
             }
-            $link = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
-            if(!$link){
+            $result = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
+            if(!$result['link']){
                 return request()->expectsJson() ? 
                     response()->json([
                         'status' => false,
@@ -75,9 +75,9 @@ class SubscriptionController extends Controller
                 response()->json([
                     'status' => true,
                     'message' => 'Open payment link on browser to complete payment',
-                    'data' => $link,
+                    'data' => $result,
                 ], 200) :
-                redirect()->to($link);
+                redirect()->to($result['link']);
             }    
         } catch (\Throwable $th) {
             return response()->json([

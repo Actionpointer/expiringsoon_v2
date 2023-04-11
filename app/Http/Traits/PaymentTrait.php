@@ -29,7 +29,7 @@ trait PaymentTrait
             case 'stripe': $link = $this->initiateStripe($payment);
             break;
         }
-        return $link;
+        return ['link'=> $link,'reference'=> $payment->reference];
     }
 
     protected function initializeRefund(Settlement $settlement){

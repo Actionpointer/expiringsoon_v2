@@ -1,8 +1,10 @@
 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
 
+
 https://stripe.com/docs/payments?payments=popular
 Perishable Key:
 pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9ogEXPAvVevVsN008FW9r6qi
+
 
 Secret Key:
 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
@@ -14,12 +16,14 @@ Perishable Key:
 pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9o
 gEXPAvVevVsN008FW9r6qi
 
+
 Secret Key:
 sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWybhZt
 eJtqIzn8rY5oE00IgYVeL2p 
 
 
 ad preview
+
 
 when the order is ready,
 1. create an order on the shipment partners website, if integrated
