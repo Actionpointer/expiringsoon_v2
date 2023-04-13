@@ -2,7 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\VendorResource;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\ApiController;
@@ -55,7 +55,7 @@ Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);
 Route::group(['middleware'=> 'auth:sanctum'],function(){
     Route::get('/user', function (Request $request) {
         // return $request->user();
-        return new UserResource(User::findOrFail($request->user()->id));
+        return new VendorResource(User::findOrFail($request->user()->id));
     });
 });
 

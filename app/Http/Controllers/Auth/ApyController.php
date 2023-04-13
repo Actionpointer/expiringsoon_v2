@@ -90,7 +90,7 @@ class ApyController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-            if($user->role->name != 'vendor'){
+            if($user->role->name != 'shopper'){
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized Login Attempt',

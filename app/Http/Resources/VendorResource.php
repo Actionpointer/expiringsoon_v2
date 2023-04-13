@@ -10,7 +10,7 @@ use App\Http\Resources\OrderResource;
 use App\Http\Resources\SubscriptionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class VendorResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -36,7 +36,6 @@ class UserResource extends JsonResource
             "country_name"=> $this->country->name,
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
-            "state_name"=> $this->state->name,
             "status"=> $this->status,
             "pin"=> $this->pin? true:false,
             "created_at"=> $this->created_at,
@@ -47,7 +46,6 @@ class UserResource extends JsonResource
             'total_shops' => $this->when($this->role->name == 'vendor', $this->total_shops),
             'max_shops' => $this->when($this->role->name == 'vendor', $this->max_shops),
             "subscription"=> $this->subscription_id ? new SubscriptionResource(Subscription::findOrFail($this->subscription_id)) :null,
-            // "shops"=> $this->when(!$this->shop_id, ShopResource::collection(Shop::where('user_id',$this->id)->get())),
             "shop"=> $this->when($this->shop_id, function(){ 
                 return new ShopResource(Shop::findOrFail($this->shop_id)); 
             }),
