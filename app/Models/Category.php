@@ -12,11 +12,14 @@ class Category extends Model
     use HasFactory;
     
     protected $fillable = ['name','photo'];
-
+    protected $appends = ['image'];
     public function products(){
         return $this->hasMany(Product::class);
     }
     public function subcategories(){
         return $this->belongsToMany(Tag::class,'subcategories');
+    }
+    public function getImageAttribute(){
+        return $this->photo ? config('app.url')."/storage/$this->photo":null;  
     }
 }

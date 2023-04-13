@@ -10,7 +10,7 @@ class ResourcesController extends Controller
 {
     
     public function categories(){
-        $categories = Category::select('id','name','photo')->get();
+        $categories = Category::all();
         if($categories->count()){
             return response()->json([
                 'status' => true,
