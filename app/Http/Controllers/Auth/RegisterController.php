@@ -90,6 +90,7 @@ class RegisterController extends Controller
         return User::create([
             // 'username' => $data['username'],
             'email' => $data['email'],
+            'email_verified_at' => $role == 'shoppper' ? now() : null,
             'password' => Hash::make($data['password']),
             'fname' => $data['fname'],
             'lname' => $data['lname'],

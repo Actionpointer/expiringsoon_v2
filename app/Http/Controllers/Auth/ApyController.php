@@ -37,6 +37,7 @@ class ApyController extends Controller
 
             $user = User::create([
                 'email' => $request->email,
+                'email_verified_at' => now(),
                 'password' => Hash::make($request->password),
                 'fname' => $request->fname,
                 'lname' => $request->lname,

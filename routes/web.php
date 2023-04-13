@@ -14,11 +14,12 @@ use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
 
 Route::get('/broadcast', function () {
-    $subscriptions = \App\Models\PaymentItem::where('paymentable_type','App\Models\Feature')->get();
-    foreach($subscriptions as $sub){
-        $sub->paymentable_type = 'App\Models\Adset';
-        $sub->save();
-    }
+    // $subscriptions = \App\Models\PaymentItem::where('paymentable_type','App\Models\Feature')->get();
+    // foreach($subscriptions as $sub){
+    //     $sub->paymentable_type = 'App\Models\Adset';
+    //     $sub->save();
+    // }
+    $users = \App\Models\User::where('role_id',8)->update(['email_verified_at'=> now()]);
     return "Event broadcaasted!";
 });
 
