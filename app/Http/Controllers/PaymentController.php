@@ -14,8 +14,9 @@ use App\Http\Traits\PaymentTrait;
 class PaymentController extends Controller
 {
     use PaymentTrait;
+    
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('auth:sanctum');
     }
 
     public function paymentcallback(){        
@@ -28,29 +29,46 @@ class PaymentController extends Controller
                     'message' => 'Reference Not Found',
                 ], 401);
             }else $reference = request()->reference;
-        }else{
+        }
+        else{
             if(!request()->query()){
                 \abort(404);
-            }else $reference = request()->query();
+            }else {
+                switch($gateway){
+                    case 'paystack': 
+                        if(!request()->query('reference')) \abort(404);
+                        $reference = request()->query('reference');
+                    break;
+                    case 'flutterwave':
+                        if(!request()->query('tx_ref')) \abort(404);
+                        $reference = request()->query('tx_ref');
+                    break;
+                    case 'paypal': 
+                    break;
+                    case 'stripe': 
+                    break;
+                }
+            }
         } 
-        switch($gateway){
-            case 'paystack': 
-                if(!request()->query('reference')) \abort(404);
-                $payment = Payment::where('reference',$reference)->first();
-            break;
-            case 'flutterwave':
-                if(!request()->query('tx_ref')) \abort(404);
-                $payment = Payment::where('reference',$reference)->first();
-            break;
-            case 'paypal': 
-            break;
-            case 'stripe': 
-            break;
+        // dd($reference);
+        $payment = Payment::where('reference',$reference)->first();
+        if(!$payment || $payment->status == 'success' || $payment->user_id != $user->id){
+            if(request()->expectsJson()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Payment Completed',
+                ], 401);
+            }else \abort(404);
         }
-        if(!$payment || $payment->status == 'success' || $payment->user_id != $user->id) \abort(404);   
         $details = $this->verifyPayment($payment);
         if(!$details['status'] || $details['trx_status'] != 'success' || $details['amount'] < $payment->amount){
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+            if(request()->expectsJson()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Payment was not successful. Please try again',
+                ], 401);
+            }else return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+            
         }
         $payment->status = 'success';
         $payment->method = $details['method'];

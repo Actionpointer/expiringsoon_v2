@@ -34,6 +34,7 @@ if the logistic firm has been integrated, we need to receive a webhook from whic
 
 
 swiper.js is displaying duplicates
+
 security alerts ipaddress, failed logins, block ipaddress from security page, once someone is throttled etc
 
 export orders, revenue to excel file for auditors

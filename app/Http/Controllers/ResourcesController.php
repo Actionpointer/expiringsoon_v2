@@ -3,17 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
-use App\Models\Plan;
 use App\Models\State;
-use App\Models\Country;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 class ResourcesController extends Controller
 {
     
     public function categories(){
-        $categories = Category::select('id','name')->get();
+        $categories = Category::select('id','name','photo')->get();
         if($categories->count()){
             return response()->json([
                 'status' => true,

@@ -60,7 +60,6 @@ class SubscriptionController extends Controller
                     'coupon' => $request->coupon_used,
                     'auto_renew'=> $request->auto_renew ? true:false
                 ]);
-            
             }
             $result = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
             if(!$result['link']){
