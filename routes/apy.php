@@ -4,12 +4,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Auth\ApyController;
-use App\Http\Controllers\ResourcesController;
-use App\Http\Controllers\Vendor\PaymentController;
-use App\Http\Controllers\Auth\VerificationController;
-
 use App\Http\Resources\CustomerResource;
+use App\Http\Controllers\Auth\ApyController;
+use App\Http\Controllers\Guest\ProductController;
+use App\Http\Controllers\Shopper\OrderController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +25,8 @@ use App\Http\Resources\CustomerResource;
 
 Route::post('register', [ApyController::class, 'register']);
 Route::post('login', [ApyController::class, 'login']);                                               
-Route::get('products',[App\Http\Controllers\Guest\ProductController::class,'list']);
-Route::get('product/{product_id}',[App\Http\Controllers\Guest\ProductController::class,'show']);
+Route::get('products',[ProductController::class,'list']);
+Route::get('product/{product_id}',[ProductController::class,'show']);
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=> 'user'],function(){
@@ -37,15 +36,13 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
     });
+    Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
     Route::get('notifications',[UserController::class, 'notifications']);
-    Route::get('profile', [UserController::class, 'profile'])->name('profile');
-    Route::post('profile/update',[UserController::class, 'update'])->name('profile.update');
-    Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
     Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
     Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
     Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
     Route::post('address',[UserController::class, 'address'])->name('address');
-    Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
+    
     Route::get('checkout/{shop?}',[OrderController::class,'checkout'])->name('checkout');
     Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('checkout.shipment');
     Route::post('checkout/confirm',[OrderController::class,'confirmcheckout'])->name('confirmcheckout');

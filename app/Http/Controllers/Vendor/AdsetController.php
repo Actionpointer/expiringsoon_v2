@@ -34,6 +34,7 @@ class AdsetController extends Controller
     }
 
     public function subscribe(Request $request){
+        dd($request->all());
         try{
             $adsets = collect([]);
             if($request->has('adset_id')){

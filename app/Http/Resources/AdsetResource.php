@@ -17,6 +17,7 @@ class AdsetResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
+            'id'=> $this->id,
             'plan_name' => $this->adplan->name,
             'slug' => $this->slug,
             'start_at' => $this->start_at,

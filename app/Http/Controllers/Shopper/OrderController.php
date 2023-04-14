@@ -22,6 +22,7 @@ use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\OrderDetailsResource;
 use App\Http\Resources\OrderMessageResource;
 
@@ -30,7 +31,7 @@ class OrderController extends Controller
     use CartTrait,WishlistTrait,PaymentTrait;
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:sanctum');
     }
     
     public function index(){
@@ -86,7 +87,14 @@ class OrderController extends Controller
     public function wishlist(){
         $user = auth()->user();
         $likes = Like::where('user_id',$user->id)->get();
-        return view('customer.wishlist',compact('likes'));
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => $likes->count() ? 'Wishlist retrieved Successfully':'No item in wishlist',
+                'data' => ProductResource::collection(Product::whereIn('id',$likes->pluck('product_id')->toArray())->get()),
+                'count' => $likes->count()
+            ], 200) :
+            view('customer.wishlist',compact('likes'));
     }
 
     // public function transactions(){

@@ -8,11 +8,11 @@ use App\Models\Review;
 use App\Models\OrderStatus;
 use App\Models\OrderMessage;
 use Illuminate\Http\Request;
+use App\Http\Traits\OrderTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderDetailsResource;
 use App\Http\Resources\OrderMessageResource;
-use App\Http\Traits\OrderTrait;
 
 class OrderController extends Controller
 {
