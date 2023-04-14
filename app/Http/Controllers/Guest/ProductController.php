@@ -80,7 +80,9 @@ class ProductController extends Controller
             $category = Category::find(request()->query('category_id'));
         }
         if(request()->query() && request()->query('tag')){
-            $products = $products->where('tags','like',"%".request()->query('tag')."%");
+            $products = $products->where(function($query){ 
+                $query->where('tags','like',"%".request()->query('tag')."%")->orWhere('name','like',"%".request()->query('tag')."%")->orWhere('description','like',"%".request()->query('tag')."%");
+            });
             $tag = request()->query('tag');
         }
         if(request()->query() && request()->query('sortBy')){
@@ -97,7 +99,7 @@ class ProductController extends Controller
                 $products = $products->orderBy('expire_at','desc');
             }
         }
-        $products = $products->paginate(1);
+        $products = $products->paginate(10);
         if(request()->expectsJson()){
             return response()->json([
                 'status' => true,
@@ -140,7 +142,14 @@ class ProductController extends Controller
         if($similar->isEmpty()){
             $similar = Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->get();
         }
-        return view('frontend.product.view',compact('product','similar'));
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => 'Product details retrieved Successfully',
+                'data' => new ProductResource($product),
+            ], 200) :
+            view('frontend.product.view',compact('product','similar'));
+
     }
 
     public function getSubcategories(Request $request){
