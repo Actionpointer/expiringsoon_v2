@@ -25,26 +25,14 @@ use App\Http\Resources\CustomerResource;
 
 
 Route::post('register', [ApyController::class, 'register']);
-Route::post('login', [ApyController::class, 'login']);
+Route::post('login', [ApyController::class, 'login']);                                               
+Route::get('products',[App\Http\Controllers\Guest\ProductController::class,'list']);
 
-Route::post('email/resend',[VerificationController::class,'resend']);                                              
-Route::post('email/verify',[VerificationController::class,'verify']);                                                
-
-Route::post('password/email',[App\Http\Controllers\Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');                    
-Route::post('password/reset',[App\Http\Controllers\Auth\ResetPasswordController::class,'reset'])->name('password.update');                  
-
-Route::get('states', [ResourcesController::class, 'states']);
-Route::get('cities/{state_id}', [ResourcesController::class, 'cities']);
-Route::get('categories', [ResourcesController::class, 'categories']);
-Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    // return $request->user();
-    return new CustomerResource(User::findOrFail($request->user()->id));
-});
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=> 'user'],function(){
+        Route::get('/',function(Request $request){
+            return new CustomerResource(User::findOrFail($request->user()->id));
+        });
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
     });

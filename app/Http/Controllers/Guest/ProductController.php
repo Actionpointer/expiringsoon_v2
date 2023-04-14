@@ -13,6 +13,7 @@ use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -60,6 +61,70 @@ class ProductController extends Controller
         }
         // dd(array_filter($products->pluck('tags')->flatten()->toArray()));
         return view('frontend.product.list',compact('advert','products','tag','category','categories','states','state_id'));
+    }
+
+    public function list(){
+        $category = null;
+        $tag = null;
+        $categories = Category::has('products')->get();
+        $states = State::has('products')->where('country_id',session('locale')['country_id'])->get();
+        $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
+        if(request()->query() && request()->query('state_id')){
+            $state_id = request()->query('state_id');
+            $products = $products->whereHas('shop',function($qry) use($state_id){
+                $qry->where('state_id',$state_id);
+            });
+        }else{$state_id = 0;}
+        if(request()->query() && request()->query('category_id')){
+            $products = $products->where('category_id',request()->query('category_id'));
+            $category = Category::find(request()->query('category_id'));
+        }
+        if(request()->query() && request()->query('tag')){
+            $products = $products->where('tags','like',"%".request()->query('tag')."%");
+            $tag = request()->query('tag');
+        }
+        if(request()->query() && request()->query('sortBy')){
+            if(request()->query('sortBy') == 'price_asc'){
+                $products = $products->orderBy('price','asc');
+            }
+            if(request()->query('sortBy') == 'price_desc'){
+                $products = $products->orderBy('price','desc');
+            }
+            if(request()->query('sortBy') == 'expiry_asc'){
+                $products = $products->orderBy('expire_at','asc');
+            }
+            if(request()->query('sortBy') == 'expiry_desc'){
+                $products = $products->orderBy('expire_at','desc');
+            }
+        }
+        $products = $products->paginate(1);
+        if(request()->expectsJson()){
+            return response()->json([
+                'status' => true,
+                'message' => 'Products Retrieved',
+                'data' => ProductResource::collection($products),
+                'meta'=> [
+                    "total"=> $products->total(),
+                    "per_page"=> $products->perPage(),
+                    "current_page"=> $products->currentPage(),
+                    "last_page"=> $products->lastPage(),
+                    "first_page_url"=> $products->url(1),
+                    "last_page_url"=> $products->url($products->lastPage()),
+                    "next_page_url"=> $products->nextPageUrl(),
+                    "prev_page_url"=> $products->previousPageUrl(),
+                ]
+                
+            ], 200);
+        }else{
+            $advert = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"F")->orderBy('views','asc')->first();
+            if($advert){
+                $advert->views = $advert->views + 1;
+                $advert->save();
+            }
+            // dd(array_filter($products->pluck('tags')->flatten()->toArray()));
+            return view('frontend.product.list',compact('advert','products','tag','category','categories','states','state_id'));
+        }
+        
     }
 
     public function categories(){
