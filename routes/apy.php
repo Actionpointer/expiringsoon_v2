@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Resources\CustomerResource;
 use App\Http\Controllers\Auth\ApyController;
+use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +36,15 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
     });
-    Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
+    Route::get('wishlist', [OrderController::class, 'wishlist']);
+    Route::post('wishlist/add',[CartController::class,'addtowish']);
+    Route::post('wishlist/remove',[CartController::class,'removefromwish']);
+
+    Route::get('cart', [CartController::class, 'cart']);
+    Route::post('cart/add',[CartController::class,'addtocart']);
+    Route::post('cart/remove',[CartController::class,'removefromcart']);
+    
+    // Route::get('adverts/products',)
     Route::get('notifications',[UserController::class, 'notifications']);
     Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
     Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');

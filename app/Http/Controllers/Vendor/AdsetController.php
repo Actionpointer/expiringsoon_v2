@@ -34,7 +34,6 @@ class AdsetController extends Controller
     }
 
     public function subscribe(Request $request){
-        dd($request->all());
         try{
             $adsets = collect([]);
             if($request->has('adset_id')){
@@ -48,19 +47,8 @@ class AdsetController extends Controller
             }
             $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
             if(!$result['link']){
-                return request()->expectsJson() ? 
-                    response()->json([
-                        'status' => false,
-                        'message' => 'Something went wrong',
-                    ], 401) :
                     redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
             }else{
-                return request()->expectsJson() ? 
-                response()->json([
-                    'status' => true,
-                    'message' => 'Open payment link on browser to complete payment',
-                    'data' => $result,
-                ], 200) :
                 redirect()->to($result['link']);
             }    
         } catch (\Throwable $th) {
@@ -68,6 +56,32 @@ class AdsetController extends Controller
                 'status' => false,
                 'message' => $th->getMessage()
             ], 500);
+        }
+    }
+
+    public function store(Request $request){
+        $adsets = collect([]);
+        foreach($request->adsets as $plan){
+            if($plan['days']){
+                $adplan = Adplan::find($plan['id']);
+                $adset = Adset::create(['user_id'=> auth()->id(),'adplan_id' => $plan['id'],'units'=> $plan['units'],
+                'amount'=> $adplan->price_per_day * $plan['units'] * $plan['days'],'start_at'=> now(),'end_at'=> now()->addDays($plan['days']),
+                'auto_renew'=> $request->auto_renew ? true:false ]);
+                $adsets->push($adset);
+            }  
+        }
+        $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
+        if(!$result['link']){
+            return response()->json([
+                    'status' => false,
+                    'message' => 'Something went wrong',
+                ], 401);
+        }else{
+            return response()->json([
+                'status' => true,
+                'message' => 'Open payment link on browser to complete payment',
+                'data' => $result,
+            ], 200);
         }
     }
 

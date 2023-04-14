@@ -119,7 +119,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=>'adsets'],function(){
         Route::get('/',[AdsetController::class,'index']);
         Route::get('plans',[AdsetController::class,'plans']);
-        Route::post('subscribe',[AdsetController::class,'subscribe']);
+        Route::post('subscribe',[AdsetController::class,'store']);
         Route::post('cancel_renewal',[AdsetController::class,'cancel_renewal']);
         
         Route::post('ads/filter',[AdvertController::class,'filter_products']);

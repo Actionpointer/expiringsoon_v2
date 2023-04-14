@@ -26,7 +26,14 @@ class CartController extends Controller
             $shop_ids = array_column($items, 'shop_id');
             $shops = Shop::whereIn('id',$shop_ids)->get();
         }
-        return view('frontend.cart',compact('items','shops'));
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => $items && count($items) ? 'Cart retrieved Successfully':'No item in cart',
+                'data' => $items,
+                'count' => $items && count($items) ? count($items) : 0
+            ], 200) :
+            view('frontend.cart',compact('items','shops'));
     }
 
     public function addtocart(Request $request){
@@ -49,7 +56,7 @@ class CartController extends Controller
         $cart = $this->removeFromCartSession($product);
         if(auth()->check())
         $this->removeFromCartDb($product);
-        return response()->json(['cart_count'=> count((array)$cart),'cart'=> $cart],200);
+        return response()->json(['cart_count'=> $cart && count($cart) ? count((array)$cart) : 0,'cart'=> $cart],200);
     }
 
     public function addtowish(Request $request){

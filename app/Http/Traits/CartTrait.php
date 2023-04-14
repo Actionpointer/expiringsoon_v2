@@ -55,9 +55,11 @@ trait CartTrait
 
     protected function removeFromCartSession(Product $product){
         $oldcart = session('cart');
-        $cart = Arr::except($oldcart, ["$product->id"]);
-        session(['cart' => $cart]);
-        return $cart;
+        if($oldcart && count($oldcart)){
+             $cart = Arr::except($oldcart, ["$product->id"]);
+             session(['cart' => $cart]);
+        }
+        return session('cart');
     }
 
     protected function addToCartDb(Product $product,$quantity = 1,$update = false){
