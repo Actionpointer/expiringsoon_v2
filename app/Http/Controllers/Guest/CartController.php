@@ -31,22 +31,17 @@ class CartController extends Controller
             }
         }elseif($user = auth()->user()){
             $items = $user->carts;
-            $cart = collect();
             if($items->isNotEmpty()){
                 $shop_ids = $items->pluck('shop_id')->toArray();
                 $shops = Shop::whereIn('id',$shop_ids)->get();
-            }
-            foreach($items as $item){
-                $cart->put($item->product_id,["product" => $item->product, "shop_id" => $item->shop_id, 'quantity' => $item->quantity, 'amount' => $item->amount, 'total' => $item->total]);
             }
         }
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
                 'message' => $items->count() ? 'Cart retrieved Successfully':'No item in cart',
-                'cart' => $cart,
-                'cart_count' => $items->count() ?? 0,
-                // 'cart' => 
+                'data' => CartResource::collection($items),
+                'count' => $items->count() ?? 0
             ], 200) :
             view('frontend.cart',compact('items','shops'));
     }
