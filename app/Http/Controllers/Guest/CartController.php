@@ -18,7 +18,7 @@ class CartController extends Controller
     use CartTrait,WishlistTrait,PaymentTrait;
     
     public function __construct(){
-        $this->middleware('auth')->only(['wishlist','addtowish','removefromwish','checkout','confirmcheckout']);
+        $this->middleware('auth')->only(['wishlist','addtowish','removefromwish']);
     }
 
     public function cart(){

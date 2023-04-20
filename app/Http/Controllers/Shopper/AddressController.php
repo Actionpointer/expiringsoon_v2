@@ -26,6 +26,11 @@ class AddressController extends Controller
             Address::where('user_id',$user->id)->update(['main'=> 0]);
         }
         $address = Address::create(['user_id'=> auth()->id(),'state_id'=> $request->state_id,'city_id'=> $request->city_id,'street' => $request->street,'contact_phone' => $request->contact_phone,'contact_name' => $request->contact_name ,'main' => $request->main ?? 0]);
+        $addresses = Address::where('user_id',$user->id)->get();
+        if($addresses->isNotEmpty() && $addresses->where('main',true)->isEmpty()){
+            $addresses->first()->main = true;
+            $addresses->first()->save();
+        }
         return request()->expectsJson() ? 
             response()->json([
                 'status' => true,

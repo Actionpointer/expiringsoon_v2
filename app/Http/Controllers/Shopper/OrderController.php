@@ -171,9 +171,23 @@ class OrderController extends Controller
                 $orders->push($order);
             }
             //take payment
-            $link = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
-            // dd($link);
-            return redirect()->to($link); 
+            $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
+            if(!$result['link']){
+                return request()->expectsJson() ? 
+                    response()->json([
+                        'status' => false,
+                        'message' => 'Something went wrong',
+                    ], 401) :
+                    redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
+            }else{
+                return request()->expectsJson() ? 
+                response()->json([
+                    'status' => true,
+                    'message' => 'Open payment link on browser to complete payment',
+                    'data' => $result,
+                ], 200) :
+                redirect()->to($result['link']);
+            }    
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

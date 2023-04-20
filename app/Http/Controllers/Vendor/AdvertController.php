@@ -105,12 +105,24 @@ class AdvertController extends Controller
         foreach($products as $product){
             $advert = Advert::create(['adset_id'=> $adset->id,'position'=> $adset->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
         }
-        $link = $this->initializePayment($adset->amount,[$adset->id],'App\Models\Adset');
-        if(!$link){
-            return redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
+        $result = $this->initializePayment($adset->amount,[$adset->id],'App\Models\Adset');
+        if(!$result['link']){
+            return request()->expectsJson() ? 
+                response()->json([
+                    'status' => false,
+                    'message' => 'Something went wrong',
+                ], 401) :
+                redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
         }else{
-            return redirect()->to($link);
-        }
+            return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Open payment link on browser to complete payment',
+                'data' => $result,
+            ], 200) :
+            redirect()->to($result['link']);
+        }    
+        
     }
 
 }

@@ -21,7 +21,6 @@ trait FlutterwaveTrait
                         ]) )
         ->asJson()
         ->post();
-        // dd($response);
         if($response && $response->status == 'success')
             return $response->data->link;
         else return false;
