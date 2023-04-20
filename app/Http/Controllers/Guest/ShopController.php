@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ShopResource;
+use App\Http\Resources\ProductResource;
 
 class ShopController extends Controller
 {
@@ -39,14 +41,41 @@ class ShopController extends Controller
             }
         }
         $shops = $shops->paginate(16);
-        $advert_G = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_H = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
-        return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
+        if(request()->expectsJson()){
+            return response()->json([
+                'status' => true,
+                'message' => 'Vendors Retrieved',
+                'data' => ShopResource::collection($shops),
+                'meta'=> [
+                    "total"=> $shops->total(),
+                    "per_page"=> $shops->perPage(),
+                    "current_page"=> $shops->currentPage(),
+                    "last_page"=> $shops->lastPage(),
+                    "first_page_url"=> $shops->url(1),
+                    "last_page_url"=> $shops->url($shops->lastPage()),
+                    "next_page_url"=> $shops->nextPageUrl(),
+                    "prev_page_url"=> $shops->previousPageUrl(),
+                ]
+                
+            ], 200);
+        }else{
+            $advert_G = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+            $advert_H = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+            return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
+        }
+        
+        
     }
 
     public function show(Shop $shop){
-        if(!$shop->certified())
-        abort(404,'Shop is not available');
+        if(!$shop->certified()){
+            return request()->expectsJson() ?
+            response()->json([
+                'status' => false,
+                'message' => 'Shop is not available',
+            ],400): 
+            redirect()->back()->with(['result'=> 0,'message'=> 'Shop is not available']);
+        }
         $category = null;
         $categories = Category::has('products')->get();
         $products = Product::where('shop_id',$shop->id)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
@@ -63,6 +92,23 @@ class ShopController extends Controller
             }
         }
         $products = $products->paginate(2);
-        return view('frontend.shop.view',compact('shop','categories','products','category'));
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => 'Product details retrieved Successfully',
+                'data' => ProductResource::collection($products),
+                'meta'=> [
+                    "total"=> $products->total(),
+                    "per_page"=> $products->perPage(),
+                    "current_page"=> $products->currentPage(),
+                    "last_page"=> $products->lastPage(),
+                    "first_page_url"=> $products->url(1),
+                    "last_page_url"=> $products->url($products->lastPage()),
+                    "next_page_url"=> $products->nextPageUrl(),
+                    "prev_page_url"=> $products->previousPageUrl(),
+                ]
+            ], 200) :
+            view('frontend.shop.view',compact('shop','categories','products','category'));
+
     }
 }

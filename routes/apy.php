@@ -8,6 +8,7 @@ use App\Http\Resources\CustomerResource;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\ApyController;
 use App\Http\Controllers\Guest\CartController;
+use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Shopper\AddressController;
@@ -25,9 +26,11 @@ use App\Http\Controllers\Shopper\AddressController;
 
 Route::post('register', [ApyController::class, 'register']);
 Route::post('login', [ApyController::class, 'login']);                                               
-Route::get('products',[ProductController::class,'list']);
+Route::get('products',[ProductController::class,'index']);
 Route::get('product/{product_id}',[ProductController::class,'show']);
 Route::get('hotdeals',[ProductController::class, 'hotdeals']);
+Route::get('vendors',[ShopController::class, 'index']);
+Route::get('vendor/{shop_id}',[ShopController::class, 'show']);
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=> 'user'],function(){
@@ -66,7 +69,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     });
 
     // Route::get('adverts/products',)
-    Route::get('notifications',[UserController::class, 'notifications']);
+ 
 
     Route::get('generate/otp',[UserController::class, 'generate_otp']);
     Route::post('edit-pin',[UserController::class, 'pin']);
