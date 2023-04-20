@@ -34,7 +34,7 @@
 @include('layouts.session')
 <section class="section billing section--xl pt-0">
     <div class="container">
-      <form id="set_address_form" action="{{route('address')}}" method="POST" style="display: none">@csrf</form>
+      <form id="set_address_form" action="{{route('address.store')}}" method="POST" style="display: none">@csrf</form>
       <form action="{{route('confirmcheckout')}}" method="POST">@csrf
         <div class="row billing__content">
           <div class="col-lg-8">
