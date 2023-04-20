@@ -37,10 +37,12 @@ class PaymentController extends Controller
                 switch($gateway){
                     case 'paystack': 
                         if(!request()->query('reference')) \abort(404);
+                        if(request()->query('status') != 'success') return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
                         $reference = request()->query('reference');
                     break;
                     case 'flutterwave':
                         if(!request()->query('tx_ref')) \abort(404);
+                        if(request()->query('status') != 'successful') return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
                         $reference = request()->query('tx_ref');
                     break;
                     case 'paypal': 

@@ -111,76 +111,76 @@
                 </div>
               </div>
             </div>
-            @if($user->orders->whereIn('status',['processing','shipped','delivered','completed'])->isNotEmpty())
-            <!-- Order History -->
-            <div class="dashboard__order-history" style="margin-top: 24px">
-              <div class="dashboard__order-history-title">
-                <h2 class="font-body--xl-500">Recent Orders</h2>
-                <a href="{{route('orders')}}" class="font-body--lg-500">
-                  View All</a>
-              </div>
-              <div class="dashboard__order-history-table">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="dashboard__order-history-table-title">Shop/Order Id</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Date</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Total</th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Status</th>
-                        <th scope="col" class="dashboard__order-history-table-title"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($user->orders->whereIn('status',['processing','shipped','delivered','completed'])->sortByDesc('updated_at') as $order)   
-                          <tr>
-                              <!-- Order Id  -->
-                              <td class="dashboard__order-history-table-item order-id"> 
-                                  <span style="font-weight:500"><a href="{{route('vendor.show',$order->shop)}}">{{$order->shop->name}}</a>/Order#{{$order->id}}</span>
-                              </td>
-                              <!-- Date  -->
-                              <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
-                              <!-- Total  -->
-                              <td class="   dashboard__order-history-table-item   order-total "> 
-                                  <p class="order-total-price">   {!!$user->country->currency->symbol!!}{{number_format($order->total, 0)}} </p>
-                              </td>
-                              <!-- Status -->
-                              <td class="dashboard__order-history-table-item   order-status "> 
-                                @switch($order->status)
-                                @case('new') Payment Pending
-                                    
-                                    @break
-                                @case('processing') Processing
-                                    
-                                    @break
-                                @case('shipped') Shipped
-                                
-                                @break
-                                @case('delivered') Delivered
-                                    
-                                    @break
-                                @case('completed') Completed
-                                
-                                @break
-                                @default Cancelled
-                                    
-                            @endswitch
-                              </td>
-                              <!-- Details page  -->
-                              <td class="dashboard__order-history-table-item   order-details ">
+            @if($orders->whereIn('status',['processing','shipped','delivered','completed'])->isNotEmpty())
+              <!-- Order History -->
+              <div class="dashboard__order-history" style="margin-top: 24px">
+                <div class="dashboard__order-history-title">
+                  <h2 class="font-body--xl-500">Recent Orders</h2>
+                  <a href="{{route('orders')}}" class="font-body--lg-500">
+                    View All</a>
+                </div>
+                <div class="dashboard__order-history-table">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="dashboard__order-history-table-title">Shop/Order Id</th>
+                          <th scope="col" class="dashboard__order-history-table-title"> Date</th>
+                          <th scope="col" class="dashboard__order-history-table-title"> Total</th>
+                          <th scope="col" class="dashboard__order-history-table-title"> Status</th>
+                          <th scope="col" class="dashboard__order-history-table-title"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($orders->whereIn('status',['processing','shipped','delivered','completed'])->sortByDesc('updated_at') as $order)   
+                            <tr>
+                                <!-- Order Id  -->
+                                <td class="dashboard__order-history-table-item order-id"> 
+                                    <span style="font-weight:500"><a href="{{route('vendor.show',$order->shop)}}">{{$order->shop->name}}</a>/Order#{{$order->id}}</span>
+                                </td>
+                                <!-- Date  -->
+                                <td class="   dashboard__order-history-table-item   order-date "> {{$order->created_at->format('Y-m-d')}}</td>
+                                <!-- Total  -->
+                                <td class="   dashboard__order-history-table-item   order-total "> 
+                                    <p class="order-total-price">   {!!$user->country->currency->symbol!!}{{number_format($order->total, 0)}} </p>
+                                </td>
+                                <!-- Status -->
+                                <td class="dashboard__order-history-table-item   order-status "> 
+                                  @switch($order->status)
+                                  @case('new') Payment Pending
+                                      
+                                      @break
+                                  @case('processing') Processing
+                                      
+                                      @break
+                                  @case('shipped') Shipped
                                   
-                                  <a href="{{route('order.show',$order)}}">
-                                      <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">view</span>
-                                  </a>
+                                  @break
+                                  @case('delivered') Delivered
+                                      
+                                      @break
+                                  @case('completed') Completed
                                   
-                              </td>
-                          </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
+                                  @break
+                                  @default Cancelled
+                                      
+                              @endswitch
+                                </td>
+                                <!-- Details page  -->
+                                <td class="dashboard__order-history-table-item   order-details ">
+                                    
+                                    <a href="{{route('order.show',$order)}}">
+                                        <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">view</span>
+                                    </a>
+                                    
+                                </td>
+                            </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
             @endif
           </div>
         </div>

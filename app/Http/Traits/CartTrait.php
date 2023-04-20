@@ -19,9 +19,9 @@ trait CartTrait
                     $product->id => [
                         "product" => $product,
                         "shop_id" => $product->shop_id,
-                        "quantity" => $quantity,
+                        "quantity" => abs($quantity),
                         "amount" => $product->amount,
-                        "total" => $product->amount * $quantity,
+                        "total" => $product->amount * abs($quantity),
                     ]
             ];
             session(['cart' => $cart]);
@@ -29,8 +29,8 @@ trait CartTrait
             // if cart not empty then check if this product exist then increment quantity
             if(isset($cart[$product->id])) {
                 if($update){
-                    $cart[$product->id]['quantity'] = $quantity;
-                    $cart[$product->id]['total'] = $product->amount * $quantity;
+                    $cart[$product->id]['quantity'] = abs($quantity);
+                    $cart[$product->id]['total'] = $product->amount * abs($quantity);
                 }     
                 else{
                     $cart[$product->id]['quantity'] = $cart[$product->id]['quantity'] + $quantity;
@@ -42,9 +42,9 @@ trait CartTrait
                 $cart[$product->id] = [
                     "product" => $product,
                     "shop_id" => $product->shop_id,
-                    "quantity" => $quantity,
+                    "quantity" => abs($quantity),
                     "amount" => $product->amount,
-                    "total" => $product->amount * $quantity,
+                    "total" => $product->amount * abs($quantity),
                 ];
                 session(['cart' => $cart]);
             }

@@ -76,6 +76,7 @@ Route::group(['middleware'=> 'verified'],function(){
     Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');
     Route::get('notifications/read',[UserController::class, 'readNotifications'])->name('notifications.read');
     Route::get('home', [HomeController::class, 'home'])->name('home');
+    Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
     //for users
     Route::get('profile', [UserController::class, 'profile'])->name('profile');

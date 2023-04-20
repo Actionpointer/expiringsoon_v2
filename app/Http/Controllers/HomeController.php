@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Http\Traits\GeoLocationTrait;
 
 class HomeController extends Controller
@@ -16,7 +17,7 @@ class HomeController extends Controller
         /** @var \App\Models\User $user **/
         $user = auth()->user(); 
         if($user->isRole('shopper')){
-            return view('customer.dashboard',compact('user'));
+            return redirect()->route('dashboard');
         }
         if($user->isRole('staff')){
             $shop = $user->shop;
@@ -27,6 +28,13 @@ class HomeController extends Controller
         }
        
         return redirect()->route('admin.dashboard');
+    }
+
+    public function dashboard(){
+        /** @var \App\Models\User $user **/
+        $user = auth()->user(); 
+        $orders = $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
+        return view('customer.dashboard',compact('user','orders'));
     }
     
 }

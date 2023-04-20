@@ -55,7 +55,7 @@ trait PaymentTrait
                 return ['status'=> $details->status,'trx_status'=> $details->data->status,'amount'=> $details->data->amount/100,'method'=> $details->data->channel];
             break;
             case 'flutterwave': $details = $this->verifyFlutterWavePayment($payment->reference);
-                return ['status'=> $details->status == 'success'? true:false,'trx_status'=> $details->data->status == 'successful' ? 'success':'failed','amount'=> $details->data->amount,'method'=> $details->data->payment_type];
+                return ['status'=> $details->status == 'success'? true:false,'trx_status'=> $details->data ->status == 'successful' ? 'success':'failed','amount'=> $details->data->amount,'method'=> $details->data->payment_type];
             break;
             case 'paypal': $details =  $this->verifyPaypalPayment($payment->reference);
             break;
