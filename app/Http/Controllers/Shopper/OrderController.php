@@ -37,14 +37,15 @@ class OrderController extends Controller
     
     public function index(){
         $user = auth()->user();
+        $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
-                'message' => $user->orders->count() ? 'Orders retrieved Successfully':'No Order',
-                'data' => OrderResource::collection($user->orders),
-                'count' => $user->orders->count()
+                'message' => $orders->count() ? 'Orders retrieved Successfully':'No Order',
+                'data' => OrderResource::collection($orders),
+                'count' => $orders->count()
             ], 200) :
-            view('customer.orders.list',compact('user')); 
+            view('customer.orders.list',compact('user','orders')); 
     }
     
     public function show(Order $order){

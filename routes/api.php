@@ -54,9 +54,10 @@ Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);
 
 Route::group(['middleware'=> 'auth:sanctum'],function(){
     Route::get('/user', function (Request $request) {
-        // return $request->user();
         return new VendorResource(User::findOrFail($request->user()->id));
     });
+    Route::get('notifications',[UserController::class,'notifications']);
+    Route::post('notifications/read',[UserController::class,'readNotifications']);
 });
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
@@ -66,8 +67,6 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     });
 
     Route::group(['prefix'=> 'vendor'],function(){
-        Route::get('notifications',[StaffController::class, 'notifications']);
-        Route::post('notifications/read',[StaffController::class, 'readNotifications']);
         Route::get('transactions',[PaymentController::class, 'index']);
         Route::get('generate-otp',[UserController::class, 'generate_otp']);
         Route::post('pin', [UserController::class, 'pin']);

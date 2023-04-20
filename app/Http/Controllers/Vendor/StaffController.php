@@ -198,7 +198,7 @@ class StaffController extends Controller
     public function notifications(){
         /** @var \App\Models\User $user **/
         $user = auth()->user();
-        $notifications = $user->notifications()->orderBy('created_at','desc')->paginate(2);
+        $notifications = $user->notifications()->orderBy('created_at','desc')->paginate(10);
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,

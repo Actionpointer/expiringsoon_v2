@@ -62,7 +62,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($user->orders->where('status','!=','new') as $order)
+                      @forelse($orders->where('status','!=','new') as $order)
                             
                             <tr>
                                 <!-- Order Id  -->
@@ -83,8 +83,7 @@
                                     <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">
                                       View
                                     </span>
-                                  </a>
-                                    
+                                  </a>  
                                 </td>
                             </tr>   
                         @empty

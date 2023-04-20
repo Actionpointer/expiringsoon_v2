@@ -33,7 +33,7 @@ class HomeController extends Controller
     public function dashboard(){
         /** @var \App\Models\User $user **/
         $user = auth()->user(); 
-        $orders = $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
+        $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
         return view('customer.dashboard',compact('user','orders'));
     }
     
