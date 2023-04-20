@@ -33,7 +33,7 @@ class CustomerResource extends JsonResource
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
             "status"=> $this->status,
-            "recent_orders"=> OrderResource::collection(Order::where('user_id',$this->id)->get()),
+            "recent_orders"=> OrderResource::collection(Order::where('user_id',$this->id)->whereHas('statuses')->get()),
             'payment_gateway'=> $this->country->payment_gateway,            
             'payout_gateway'=> $this->country->payout_gateway,
             'currency'=> $this->country->currency->symbol,

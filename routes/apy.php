@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\ApyController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
+use App\Http\Controllers\Shopper\AddressController;
 
 /*
 |--------------------------------------------------------------------------
