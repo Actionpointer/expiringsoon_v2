@@ -22,6 +22,7 @@ use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\OrderDetailsResource;
 use App\Http\Resources\OrderMessageResource;
@@ -36,7 +37,14 @@ class OrderController extends Controller
     
     public function index(){
         $user = auth()->user();
-        return view('customer.orders.list',compact('user'));
+        return request()->expectsJson() ?
+            response()->json([
+                'status' => true,
+                'message' => $user->orders->count() ? 'Orders retrieved Successfully':'No Order',
+                'data' => OrderResource::collection($user->orders),
+                'count' => $user->orders->count()
+            ], 200) :
+            view('customer.orders.list',compact('user')); 
     }
     
     public function show(Order $order){

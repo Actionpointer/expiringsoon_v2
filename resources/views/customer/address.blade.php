@@ -47,7 +47,7 @@
                 </div>
                 <div class="dashboard__content-card-body">
                   
-                  <form method="post" action="{{route('address')}}" id="admin" class="mb-3">@csrf
+                  <form method="post" action="{{route('address.store')}}" id="admin" class="mb-3">@csrf
                      
                       <div class="contact-form__content">
                         <div class="contact-form-input">
@@ -155,7 +155,7 @@
                                   <td>
                                     <div class="d-flex">
                                       <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$address->id}}).style.display='block'">Edit</a>| 
-                                      <form class="d-inline" action="{{route('address')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                      <form class="d-inline" action="{{route('address.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
                                           <input type="hidden" name="address_id" value="{{$address->id}}">
                                           <input type="hidden" name="delete" value="1">
                                           <button type="submit" class="text-danger">Delete</button>
@@ -167,7 +167,7 @@
                               
                               <tr>
                                   <td colspan="5" style="border:none;padding:0px">   
-                                      <form method="post" action="{{route('address')}}" id="adminedit{{$address->id}}" style="display:none;margin-top:20px">@csrf
+                                      <form method="post" action="{{route('address.update')}}" id="adminedit{{$address->id}}" style="display:none;margin-top:20px">@csrf
                                         <input type="hidden" name="address_id" value="{{$address->id}}">
                                         <div class="contact-form__content">
                                           

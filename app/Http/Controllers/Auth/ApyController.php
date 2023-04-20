@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,7 +35,7 @@ class ApyController extends Controller
                     'message' => $validateUser->errors()->first()
                 ], 401);
             }
-
+            $role_id = Role::where('name','shopper')->first()->id;
             $user = User::create([
                 'email' => $request->email,
                 'email_verified_at' => now(),
@@ -44,7 +45,7 @@ class ApyController extends Controller
                 'phone' => $request->phone,
                 'country_id' => session('locale')['country_id'],
                 'state_id' => session('locale')['state_id'],
-                'role' => 'shopper',
+                'role' => $role_id,
             ]);
 
             return response()->json([

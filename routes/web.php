@@ -12,6 +12,7 @@ use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
+use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('/broadcast', function () {
     // $subscriptions = \App\Models\PaymentItem::where('paymentable_type','App\Models\Feature')->get();
@@ -82,8 +83,10 @@ Route::group(['middleware'=> 'verified'],function(){
     Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
     Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
     Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
-    Route::get('addresses', [UserController::class, 'addresses'])->name('addresses');
-    Route::post('address',[UserController::class, 'address'])->name('address');
+    Route::get('addresses', [AddressController::class, 'index'])->name('addresses');
+    Route::post('address/store',[AddressController::class, 'store'])->name('address.store');
+    Route::post('address/update',[AddressController::class, 'update'])->name('address.update');
+    Route::post('address/delete',[AddressController::class, 'destroy'])->name('address.delete');
     Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
     Route::get('checkout/{shop?}',[OrderController::class,'checkout'])->name('checkout');
     Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('checkout.shipment');

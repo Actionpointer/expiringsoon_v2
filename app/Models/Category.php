@@ -22,6 +22,6 @@ class Category extends Model
         return $this->belongsToMany(Tag::class,'subcategories');
     }
     public function getImageAttribute(){
-        return $this->photo ? config('app.url')."/storage/$this->photo":null;  
+        return $this->photo ? asset("src/images/categories/$this->photo") :null;  
     }
 }

@@ -134,35 +134,6 @@ class UserController extends Controller
              redirect()->back()->with(['result' => '1','message'=>'Pin operation was successfully completed']); //with success
     }
 
-    public function addresses(){
-        $user = auth()->user();
-        $states = State::where('country_id',$user->country_id)->get();
-        return view('customer.address',compact('user','states'));
-    }
-
-    public function address(Request $request){
-        $user= auth()->user();
-        if($request->main){
-            Address::where('user_id',$user->id)->update(['main'=> 0]);
-        }
-        if($request->address_id){
-            if($request->delete){
-                Address::where('id',$request->address_id)->delete();
-            }else{
-                $address = Address::where('id',$request->address_id)->update(['state_id'=> $request->state_id,'city_id'=> $request->city_id,'street' => $request->street,'contact_phone' => $request->contact_phone,'contact_name' => $request->contact_name,'main' => $request->main ?? 0]);
-            }
-           
-        }else{
-            $address = Address::create(['user_id'=> auth()->id(),'state_id'=> $request->state_id,'city_id'=> $request->city_id,'street' => $request->street,'contact_phone' => $request->contact_phone,'contact_name' => $request->contact_name ,'main' => $request->main ?? 0]);
-        }
-        $addresses = Address::where('user_id',$user->id)->get();
-        if($addresses->isNotEmpty() && $addresses->where('main',true)->isEmpty()){
-            $addresses->first()->main = true;
-            $addresses->first()->save();
-        }
-        return redirect()->back();
-    }
-
     public function notifications(){
         /** @var \App\Models\User $user **/
         $user = auth()->user();

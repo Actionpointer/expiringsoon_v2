@@ -41,8 +41,8 @@ Route::post('register', [ApiController::class, 'register']);
 Route::post('login/vendor', [ApiController::class, 'login']);
 Route::post('email/resend',[VerificationController::class,'resend']);                                            
 Route::post('email/verify',[VerificationController::class,'verify']);                                                
-Route::post('password/email',[App\Http\Controllers\Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');                    
-Route::post('password/reset',[App\Http\Controllers\Auth\ResetPasswordController::class,'reset'])->name('password.update');                  
+Route::post('password/email',[App\Http\Controllers\Auth\ForgotPasswordController::class,'sendResetLinkEmail']);                    
+Route::post('password/reset',[App\Http\Controllers\Auth\ResetPasswordController::class,'reset']);                  
 
 Route::get('plans', [SubscriptionController::class, 'plans']);
 Route::get('location', [ResourcesController::class, 'location']);
@@ -121,7 +121,6 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('plans',[AdsetController::class,'plans']);
         Route::post('subscribe',[AdsetController::class,'store']);
         Route::post('cancel_renewal',[AdsetController::class,'cancel_renewal']);
-        
         Route::post('ads/filter',[AdvertController::class,'filter_products']);
         Route::post('ads/store',[AdvertController::class,'store_product_advert']);
         Route::post('ads/delete',[AdvertController::class,'remove']);

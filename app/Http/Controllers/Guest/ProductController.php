@@ -166,7 +166,25 @@ class ProductController extends Controller
         $advert_D = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
         $advert_E = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
         $advert_Z = Advert::with('product')->within($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
-        
+        $products = Product::whereIn('id',$advert_Z->pluck('product_id'))->paginate(10);
+        if(request()->expectsJson()){
+            return response()->json([
+                'status' => true,
+                'message' => $products->count() ? 'Hotdeals Retrieved' : 'No hotdeals retrieved',
+                'data' => ProductResource::collection($products),
+                'meta'=> [
+                    "total"=> $products->total(),
+                    "per_page"=> $products->perPage(),
+                    "current_page"=> $products->currentPage(),
+                    "last_page"=> $products->lastPage(),
+                    "first_page_url"=> $products->url(1),
+                    "last_page_url"=> $products->url($products->lastPage()),
+                    "next_page_url"=> $products->nextPageUrl(),
+                    "prev_page_url"=> $products->previousPageUrl(),
+                ]
+                
+            ], 200);
+        }else
         return view('frontend.hotdeals',compact('categories','advert_C','advert_D','advert_E','advert_Z'));
     }
 
