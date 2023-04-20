@@ -36,6 +36,9 @@ class CustomerResource extends JsonResource
             "recent_orders"=> OrderResource::collection(Order::where('user_id',$this->id)->get()),
             'payment_gateway'=> $this->country->payment_gateway,            
             'payout_gateway'=> $this->country->payout_gateway,
+            'currency'=> $this->country->currency->symbol,
+            'cart'=> $this->carts->pluck('product_id')->combine($this->carts->pluck('quantity')),
+            'wishlist' => $this->likes->pluck('product_id')->toArray()
         ];
     }
 }
