@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Guest;
 
+use App\Models\Cart;
 use App\Models\Shop;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartResource;
 
 
 class CartController extends Controller
@@ -20,18 +22,31 @@ class CartController extends Controller
     }
 
     public function cart(){
-        $items = session('cart');
         $shops = collect([]);
-        if($items && count($items)){
-            $shop_ids = array_column($items, 'shop_id');
-            $shops = Shop::whereIn('id',$shop_ids)->get();
+        if(session('cart')){
+            $items = session('cart');
+            if($items && count($items)){
+                $shop_ids = array_column($items, 'shop_id');
+                $shops = Shop::whereIn('id',$shop_ids)->get();
+            }
+        }elseif($user = auth()->user()){
+            $items = $user->carts;
+            $cart = collect();
+            if($items->isNotEmpty()){
+                $shop_ids = $items->pluck('shop_id')->toArray();
+                $shops = Shop::whereIn('id',$shop_ids)->get();
+            }
+            foreach($items as $item){
+                $cart->put($item->product_id,["product" => $item->product, "shop_id" => $item->shop_id, 'quantity' => $item->quantity, 'amount' => $item->amount, 'total' => $item->total]);
+            }
         }
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
-                'message' => $items && count($items) ? 'Cart retrieved Successfully':'No item in cart',
-                'data' => $items,
-                'count' => $items && count($items) ? count($items) : 0
+                'message' => $items->count() ? 'Cart retrieved Successfully':'No item in cart',
+                'cart' => $cart,
+                'cart_count' => $items->count() ?? 0,
+                // 'cart' => 
             ], 200) :
             view('frontend.cart',compact('items','shops'));
     }

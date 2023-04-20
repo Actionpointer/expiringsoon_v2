@@ -98,6 +98,12 @@ class ApyController extends Controller
                     'message' => 'Unauthorized Login Attempt',
                 ], 401);
             }
+            if(!$user->status){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Account Suspended',
+                ], 401);
+            }
             
             // $user->tokens()->delete();
             return response()->json([
