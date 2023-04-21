@@ -75,7 +75,7 @@
                           <div class="contact-form-input">
                               <label for="states">states </label>
                               <select id="statess" name="state_id" class="select2">
-                                  @foreach ($states as $state)
+                                  @foreach ($user->country->states as $state)
                                     <option value="{{$state->id}}" @if($state->id == $user->state_id) selected @endif>{{$state->name}}</option> 
                                   @endforeach
                               </select>
@@ -86,7 +86,7 @@
                             <div class="contact-form-input">
                               <label for="zip">City</label>
                               <select id="zips" name="city_id" class="select2 cities">
-                                  @foreach ($user->state->cities as $city)
+                                  @foreach ($user->country->cities as $city)
                                     <option data-state="{{$city->state_id}}" value="{{$city->id}}">{{$city->name}}</option> 
                                   @endforeach
                               </select>

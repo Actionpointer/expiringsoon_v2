@@ -160,12 +160,12 @@
                         @endif
                       </h6>
                     
-
-                    @if($like->product->stock > 0 && $like->product->status==true)
-                      <button class="button button--md add-to-cart" data-product="{{$like->product->id}}">Add to Cart</button>
-                    @else
-                      <button class="button button--md button--disable">Add to Cart</button>
-                    @endif
+                      @if($like->product->certified())
+                          <button class="button button--md add-to-cart" data-product="{{$like->product_id}}">Add to Cart</button>
+                      @else
+                          <button class="button button--md button--disable">Unavailable</button>     
+                      @endif  
+                    
                     <button class="close-btn delete-item remove-from-wish" data-product="{{$like->product->id}}">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 23C18.0748 23 23 18.0748 23 12C23 5.92525 18.0748 1 12 1C5.92525 1 1 5.92525 1 12C1 18.0748 5.92525 23 12 23Z"   stroke="#CCCCCC"   stroke-miterlimit="10" /> <path   d="M16 8L8 16"   stroke="#666666"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" /> <path   d="M16 16L8 8"   stroke="#666666"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" />

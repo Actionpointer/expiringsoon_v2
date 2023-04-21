@@ -106,10 +106,6 @@ class OrderController extends Controller
             view('customer.wishlist',compact('likes'));
     }
 
-    // public function transactions(){
-    //     $payments = Payment::where('user_id',auth()->id())->where('status','success')->get();
-    //     return view('customer.payments',compact('payments'));
-    // }
 
     public function checkout(Shop $shop = null){
         
@@ -144,7 +140,6 @@ class OrderController extends Controller
     }
 
     public function confirmcheckout(Request $request){
-        // dd($request->all());
         try{
             $user = auth()->user();
             $carts = Cart::whereIn('id',$request->carts)->get();

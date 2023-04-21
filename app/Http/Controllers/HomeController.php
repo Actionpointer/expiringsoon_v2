@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use Ixudra\Curl\Facades\Curl;
 use App\Http\Traits\GeoLocationTrait;
 
 class HomeController extends Controller
@@ -31,7 +32,7 @@ class HomeController extends Controller
     }
 
     public function dashboard(){
-        /** @var \App\Models\User $user **/
+        /** @var \App\Models\User $user **/         
         $user = auth()->user(); 
         $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
         return view('customer.dashboard',compact('user','orders'));

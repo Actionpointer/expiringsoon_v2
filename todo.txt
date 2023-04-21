@@ -1,5 +1,9 @@
 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
 
+https://developer.paypal.com/docs/checkout/
+Secret Key:
+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
+
 
 https://stripe.com/docs/payments?payments=popular
 Perishable Key:
@@ -7,19 +11,7 @@ pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69
 
 
 Secret Key:
-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
-https://developer.paypal.com/docs/checkout/
-
-
-https://stripe.com/docs/payments?payments=popular
-Perishable Key:
-pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9o
-gEXPAvVevVsN008FW9r6qi
-
-
-Secret Key:
-sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWybhZt
-eJtqIzn8rY5oE00IgYVeL2p 
+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 
 
 
 ad preview
@@ -45,7 +37,6 @@ admin should know orders that are stuck in a particular status e.g processing, o
 NOTIFICATIONS
 place notification and profile icon at the top of vendor & shop
 email that user has been returned to free subscription.
-
 
 
 PAYMENTS & PAYOUT

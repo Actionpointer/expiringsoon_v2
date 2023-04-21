@@ -1,35 +1,30 @@
-superadmin
-- by countries
+PAYPAL ACCOUNT
+---------------------------------------------------------
+John Doe, Tel: 4087110393
+sb-ezc5f25686546@business.example.com
+password: 12345678
+Account Type: Business
+Country: US
+Bank Account Number: 0831177449
+Routing Number: 325272063
+Credit Card VISA - 05/2028: 4032039674487550
+Balance: $ 5,000.00
 
-admin 
-manager
-customer care
-auditor
-security
-vendor
-staff
-shopper
-shipping_agents
+-----------------------------------------------------------
 
+John Doe, Tel: 4083080081
+sb-fzt1n25686528@personal.example.com
+password: T9vzp4@@
+Account Type: Personal 
+Country: US
+Bank Account Number: 442428496
+Routing Number: 325272063
+Credit Card VISA - 05/2028: 4032031726558173
+Balance: $ 5,000.00
 
-products,shops, orders, 
-superadmin 
- - can create admin staff per country & manage them
- - settings [ global, currencies, localities, staff,  ]
- - 
+----------------------------------------------------------------
+buyer wants to make payment: 
+Receive it through buyer's country payment gateway
 
-country admins[coupons,shipping,]
-
-
-products
-orders
-subscriptions
-
-
-protect routes per role
-protect menus per role
-
-instead of listing all the roles.. just say if user can do this action.. the system will check the role
-against the action.
-
-load data per country.
+seller wants to receive earnings:
+Send it through seller's country payment gateway

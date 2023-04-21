@@ -20,16 +20,27 @@ trait PaymentTrait
             PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
         }
         switch($gateway){
-            case 'paystack': $link = $this->initiatePaystack($payment);
+            case 'paystack': 
+                $link = $this->initiatePaystack($payment);
+                return ['link'=> $link,'reference'=> $payment->reference];
             break;
-            case 'flutterwave': $link = $this->initiateFlutterWave($payment);
+            case 'flutterwave': 
+                $link = $this->initiateFlutterWave($payment);
+                return ['link'=> $link,'reference'=> $payment->reference];
             break;
-            case 'paypal': $link = $this->initiatePaypal($payment);
+            case 'paypal': 
+                $result = $this->initiatePaypal($payment);
+                $payment->request_id = $payment->reference;
+                $payment->reference = $result['reference'];
+                $payment->save();
+                return $result;
             break;
             case 'stripe': $link = $this->initiateStripe($payment);
+                return true;
             break;
+            default: return false;
         }
-        return ['link'=> $link,'reference'=> $payment->reference];
+        
     }
 
     protected function initializeRefund(Settlement $settlement){
@@ -54,10 +65,13 @@ trait PaymentTrait
                 $details = $this->verifyPaystackPayment($payment->reference);
                 return ['status'=> $details->status,'trx_status'=> $details->data->status,'amount'=> $details->data->amount/100,'method'=> $details->data->channel];
             break;
-            case 'flutterwave': $details = $this->verifyFlutterWavePayment($payment->reference);
+            case 'flutterwave': 
+                $details = $this->verifyFlutterWavePayment($payment->reference);
                 return ['status'=> $details->status == 'success'? true:false,'trx_status'=> $details->data ->status == 'successful' ? 'success':'failed','amount'=> $details->data->amount,'method'=> $details->data->payment_type];
             break;
-            case 'paypal': $details =  $this->verifyPaypalPayment($payment->reference);
+            case 'paypal': 
+                $details =  $this->verifyPaypalPayment($payment->reference,$payment->request_id);
+                return ['status'=> $details->status == 'COMPLETED'? true:false,'trx_status'=> $details->purchase_units[0]->payments->captures[0]->final_capture ? 'success':'failed','amount'=> $details->purchase_units[0]->payments->captures[0]->amount->value,'method'=> 'paypal'];
             break;
             case 'stripe': $details =  $this->verifyStripePayment($payment->reference);
             break;

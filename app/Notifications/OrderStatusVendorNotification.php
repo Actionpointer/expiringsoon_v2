@@ -31,8 +31,7 @@ class OrderStatusVendorNotification extends Notification
      */
     public function via($notifiable)
     {
-        // return ['mail', 'database','broadcast'];
-        return ['database'];
+        return ['mail', 'database'];
     }
 
     /**

@@ -91,6 +91,15 @@ class ProductController extends Controller
     }
 
     public function show(Product $product){
+        if(!$product->certified()){
+            return request()->expectsJson() ?
+            response()->json([
+                'status' => false,
+                'message' => 'Product is no longer available',
+                'data' => new ProductResource($product),
+            ], 400) :
+            redirect()->back()->with(['result'=> 0,'message'=> 'Product is no longer available']);
+        }
         $similar = Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->whereHas('adverts',function($query){
             $query->running()->certifiedProduct();
         })->get();

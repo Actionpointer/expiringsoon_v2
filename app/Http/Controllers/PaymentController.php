@@ -37,7 +37,11 @@ class PaymentController extends Controller
                 switch($gateway){
                     case 'paystack': 
                         if(!request()->query('reference')) \abort(404);
-                        if(request()->query('status') != 'success') return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+                        if(request()->query('status') != 'success') {
+                            
+                            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+                        
+                        }
                         $reference = request()->query('reference');
                     break;
                     case 'flutterwave':
@@ -46,6 +50,9 @@ class PaymentController extends Controller
                         $reference = request()->query('tx_ref');
                     break;
                     case 'paypal': 
+                        if(!request()->query('token')) \abort(404);
+                        if(request()->query('status') != 'success') return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
+                        $reference = request()->query('token');
                     break;
                     case 'stripe': 
                     break;
@@ -54,6 +61,7 @@ class PaymentController extends Controller
         } 
         // dd($reference);
         $payment = Payment::where('reference',$reference)->first();
+        //if payment was already successful before now
         if(!$payment || $payment->status == 'success' || $payment->user_id != $user->id){
             if(request()->expectsJson()){
                 return response()->json([

@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -15,12 +14,7 @@ use App\Http\Controllers\Guest\FrontendController;
 use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('/broadcast', function () {
-    // $subscriptions = \App\Models\PaymentItem::where('paymentable_type','App\Models\Feature')->get();
-    // foreach($subscriptions as $sub){
-    //     $sub->paymentable_type = 'App\Models\Adset';
-    //     $sub->save();
-    // }
-    $users = \App\Models\User::where('role_id',8)->update(['email_verified_at'=> now()]);
+    // $users = \App\Models\User::where('role_id',8)->update(['email_verified_at'=> now()]);
     return "Event broadcaasted!";
 });
 
