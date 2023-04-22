@@ -36,14 +36,16 @@ trait FlutterwaveTrait
     }
 
     protected function refundFlutterWave(Settlement $settlement){
-        $response = Curl::to('https://api.paystack.co/refund')
-        ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-        ->withData( array('transaction'=> $settlement->order->payment_item->payment->reference,'amount'=> $settlement->amount*100 ) )
+        $payment = $settlement->order->payment_item->payment;
+        $id = $payment->request_id;
+        $response = Curl::to("https://api.flutterwave.com/v3/transactions/$id/refund")
+        ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+        ->withData( array('amount'=> $settlement->amount ) )
         ->asJson()
         ->post();
-        if($response &&  isset($response->status) && $response->status)
+        if($response &&  isset($response->status) && $response->status == 'success')
         return true;
-      else return false;
+        else return false;
     }
 
 

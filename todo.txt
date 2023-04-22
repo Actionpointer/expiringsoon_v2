@@ -38,7 +38,7 @@ email that user has been returned to free subscription.
 PAYMENTS & PAYOUT
 look at payout again.. flutterwave payout, paypal & stripe
 auto-renew subscription & adset
-refund by flutterwave, paypal, stripe
+refund by stripe
 2.fetch payout
 retry payout with job - 
 

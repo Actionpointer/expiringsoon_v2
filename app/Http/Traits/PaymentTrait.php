@@ -67,6 +67,8 @@ trait PaymentTrait
             break;
             case 'flutterwave': 
                 $details = $this->verifyFlutterWavePayment($payment->reference);
+                $payment->request_id = $details->data->id;
+                $payment->save();
                 return ['status'=> $details->status == 'success'? true:false,'trx_status'=> $details->data ->status == 'successful' ? 'success':'failed','amount'=> $details->data->amount,'method'=> $details->data->payment_type];
             break;
             case 'paypal': 

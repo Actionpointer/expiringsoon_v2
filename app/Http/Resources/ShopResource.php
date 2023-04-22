@@ -49,8 +49,8 @@ class ShopResource extends JsonResource
             "wallet"=> $this->wallet,
             "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),
-            "opened_orders"=> $this->orders->whereNotIn('status',['completed','cancelled'])->count(),
-            "total_orders"=> $this->orders->count(),
+            "opened_orders"=> $this->orders->whereIn('statuses.name',['processing','ready','shipped','delivered','rejected','returned'])->count(),
+            "total_orders"=> $this->orders->whereIn('statuses.name',['processing','ready','shipped','delivered','rejected','returned'])->count(),
             // "staff" => UserResource::collection(User::where('shop_id',$this->id)->get())
         ];
     }
