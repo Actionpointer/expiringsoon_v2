@@ -63,7 +63,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($shop->orders->where('status','!=','new') as $order)
+                      @forelse($orders as $order)
                             <tr>
                                 <!-- Order Id  -->
                                 <td> 
@@ -99,6 +99,7 @@
                       
                     </tbody>
                   </table>
+                  @include('layouts.pagination',['data'=> $orders])
                 </div>
               </div>
             </div>

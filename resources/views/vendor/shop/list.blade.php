@@ -54,7 +54,7 @@
                             </th>
                             <th scope="col" class="dashboard__order-history-table-title"> Sales
                             </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Profit
+                            <th scope="col" class="dashboard__order-history-table-title"> Earnings
                             </th>
                             <th scope="col" class="dashboard__order-history-table-title"> Wallet
                             </th>
@@ -74,10 +74,16 @@
                                     </td>
                                     <!-- Site Split  -->
                                     <td class="dashboard__order-history-table-item order-total"> 
-                                        <p class="order-total-price">   {!!$shop->country->currency->symbol!!}{{number_format($shop->orders->sum('total'), 0)}} </p>
+                                        <p class="order-total-price">   {!!$shop->country->currency->symbol!!}
+                                            {{number_format($shop->orders->filter(function($value){ return $value->statuses->count(); })->sum('subtotal') , 0)}} 
+                                        </p>
                                     </td>
                                     <!-- Status -->
-                                    <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->settlements->sum('amount'),2)}}</td>
+                                    <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} 
+                                            {{number_format(
+                                              $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
+                                            ,2)}}
+                                    </td>
                                     <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->wallet,2)}}</td>
                                     <!-- Details page  -->
                                     <td class="dashboard__order-history-table-item   order-details "> 

@@ -39,7 +39,8 @@ class PaymentController extends Controller
 
     //shop earnings
     public function earnings(Shop $shop){
-        $settlements = $shop->settlements->sortByDesc('created_at')->take(100);
+        $settlements = $shop->settlements->where('status',true)->sortByDesc('created_at')->take(100);
+        // dd($settlements);
         return request()->expectsJson() ?  
         response()->json([
             'status' => true,

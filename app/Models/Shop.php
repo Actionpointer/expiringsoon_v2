@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Kyc;
 use App\Models\Cart;
 use App\Models\City;
+use App\Models\Rate;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
@@ -17,7 +18,6 @@ use App\Models\Category;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
 use App\Models\OrderMessage;
-use App\Models\Rate;
 use App\Observers\ShopObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -56,6 +56,7 @@ class Shop extends Model
     public function getMobileAttribute(){
         return $this->country->dial.intval($this->phone);   
     }
+
     public function verified(){
         return $this->addressproof && $this->addressproof->status && $this->companydoc && $this->companydoc->status && $this->user->idcard && $this->user->idcard->status;   
         // return true;

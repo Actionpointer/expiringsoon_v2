@@ -39,6 +39,7 @@ class ShopController extends Controller
     }
 
     public function show(Shop $shop){
+        
         if($shop){
             return request()->expectsJson() ?  
             response()->json([

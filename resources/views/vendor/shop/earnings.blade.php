@@ -71,7 +71,6 @@
 
                                       <td class="cart-table-item order-date align-middle">
                                           <a href="{{route('vendor.shop.order.view',[$settlement->receiver,$settlement->order])}}" class="btn btn-success">View Order</a>
-                                          
                                       </td>
                                       
                                   </tr>   

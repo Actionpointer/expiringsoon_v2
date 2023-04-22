@@ -250,7 +250,7 @@
                             </tr>
                             </thead>
                             <tbody>                     
-                                @forelse($user->shopOrders->whereIn('status',['processing','shipped','delivered'])->sortByDesc('updated_at')->take(5) as $order)                                        
+                                @forelse($orders->sortByDesc('updated_at')->take(5) as $order)                                        
                                     <tr>
                                         <td class="dashboard__order-history-table-item order-date "> 
                                           {{$order->created_at->format('Y-m-d')}}

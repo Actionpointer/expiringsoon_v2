@@ -43,7 +43,6 @@ refund by stripe
 retry payout with job - 
 
 
-
 6. REPORT SHOPS/PRODUCT
 9. reviews : product rating.. show in index, product, hotdeals
 

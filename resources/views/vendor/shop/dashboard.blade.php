@@ -70,7 +70,11 @@
                         <div style="float:left;margin-right:10px">
                           <p align="left" class="font-body--md-400 designation">Unavailable Balance</p>
                           <div style="margin-top:-10px">
-                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!$shop->country->currency->symbol!!}{{number_format($shop->settlements->where('status',false)->sum('amount'), 2)}}</a>
+                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!$shop->country->currency->symbol!!}{{number_format(
+                                  $shop->orders->filter(function($value){
+                                        return $value->statuses->isNotEmpty() && $value->statuses->whereNotIn('name',['completed','cancelled'])->count();
+                                    })->sum('subtotal')
+                                , 2)}}</a>
                           </div>
                       </div>
                     </div>
@@ -139,7 +143,7 @@
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Orders:</h5>
-                        <p class="font-body--md-500">{!!$shop->country->currency->symbol!!} {{number_format($shop->orders->where('status','!=','new')->sum('subtotal'), 2)}}</p>
+                        <p class="font-body--md-500"> {{number_format($shop->orderStatuses->unique('order_id')->count())}}</p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Products:</h5>

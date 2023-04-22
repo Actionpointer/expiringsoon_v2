@@ -23,8 +23,10 @@ Credit Card VISA - 05/2028: 4032031726558173
 Balance: $ 5,000.00
 
 ----------------------------------------------------------------
-buyer wants to make payment: 
-Receive it through buyer's country payment gateway
+   if order has no shipment
+        ready for pickup
+   else
+        shipment 
 
-seller wants to receive earnings:
-Send it through seller's country payment gateway
+
+

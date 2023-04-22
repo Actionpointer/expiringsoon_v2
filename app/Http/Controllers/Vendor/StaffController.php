@@ -7,6 +7,7 @@ use App\Models\Bank;
 use App\Models\Role;
 use App\Models\Shop;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -33,7 +34,10 @@ class StaffController extends Controller
 
     public function dashboard(){
         $user = auth()->user(); 
-        return view('vendor.dashboard',compact('user'));
+        $orders = Order::whereHas('statuses')->whereHas('shop',function($query) use($user){
+            $query->where('user_id',$user->id);
+        })->get();
+        return view('vendor.dashboard',compact('user','orders'));
     }
     
 

@@ -48,6 +48,9 @@ class ShopResource extends JsonResource
             "verified"=> $this->verified(),
             "certified"=> $this->certified(),
             "wallet"=> $this->wallet,
+            "unavailable_balance"=> $this->orders->filter(function($value){
+                                        return $value->statuses->count() && $value->statuses->whereNotIn('name',['completed','cancellled'])->count();
+                                    })->sum('subtotal'),
             "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),
             "opened_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->whereNotIn('name',['completed','closed'])->count(),

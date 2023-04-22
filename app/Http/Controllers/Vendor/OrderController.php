@@ -22,25 +22,35 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    //vendors
     public function index(Shop $shop,$status = null){
+        $orders = Order::where('shop_id',$shop->id);
         if($status == 'opened'){
-            $orders = Order::where('shop_id',$shop->id)->whereHas('statuses',function($query){$query->whereIn('name',['processing','shipped','delivered']);})->get();
+            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['processing','shipped','delivered']);});
         }
         if($status == 'closed'){
-            $orders = Order::where('shop_id',$shop->id)->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed']);})->get();
+            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed']);});
         }
         if(!$status){
-            $orders = Order::where('shop_id',$shop->id)->get();
+            $orders = $orders->whereHas('statuses');
         }
+        $orders = $orders->paginate(16);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
             'message' => $orders->count() ? 'Shop Orders retrieved Successfully':'No Order retrieved',
             'data' => OrderResource::collection($orders),
-            'count' => $orders->count()
+            'meta'=> [
+                "total"=> $orders->total(),
+                "per_page"=> $orders->perPage(),
+                "current_page"=> $orders->currentPage(),
+                "last_page"=> $orders->lastPage(),
+                "first_page_url"=> $orders->url(1),
+                "last_page_url"=> $orders->url($orders->lastPage()),
+                "next_page_url"=> $orders->nextPageUrl(),
+                "prev_page_url"=> $orders->previousPageUrl(),
+            ]
         ], 200) :
-        view('vendor.shop.orders.list',compact('shop'));
+        view('vendor.shop.orders.list',compact('shop','orders'));
 
     }
     

@@ -98,7 +98,7 @@ trait OrderTrait
         $statuses = [];
         switch($order->status){
             case 'processing': 
-                if(in_array($order->deliverer,["pickup","admin"])) $statuses = ['ready'];
+                if(in_array($order->deliverer,["pickup","admin"])) $statuses = ['Ready'=>'ready'];
                 else $statuses = ['Shipped'=>'shipped'];
             break;
             case 'ready':
