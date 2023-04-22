@@ -244,7 +244,7 @@
                                                 <div class="contact-form__content">
                                                     <div class="form-group row mb-2 font-body--sm-500">
                                                         <label for="max_del_hours" class="col-8 ">Order Processing to Cancel Hours</label>
-                                                        <input type="text" class="col-4"  name="order_processing_to_cancel_period" placeholder="Set Processing to Cancellation Period" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
+                                                        <input type="text" class="col-4"  name="order_processing_to_user_cancel_period" placeholder="Set Processing to Cancellation Period" value="{{$settings->firstWhere('name','order_processing_to_delivery_period')->value}}" />
                                                     </div>
                                                     <div class="form-group row mb-2 font-body--sm-500">
                                                         <label for="max_del_hours" class="col-8 ">Order Processing to Shipment Hours</label>

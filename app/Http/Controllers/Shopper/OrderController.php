@@ -70,26 +70,38 @@ class OrderController extends Controller
     }
 
     public function update(Request $request){
-        if($request->status == 'rejected'){
-            $items = OrderItem::where('order_id',$request->order_id)->whereHas('product',function($query){
-                $query->isValid();
-            })->get();
-            if($items->isEmpty()){
-                return request()->expectsJson() ? 
-                    response()->json([
-                        'status' => false,
-                        'message' => 'No item in the order is valid for return',
-                    ], 401) :
-                    redirect()->back()->with(['result'=> 0,'message'=> 'No item in the order is valid for return']);
-            }
+        switch($request->status){
+            
+            case 'cancelled':
+                    $message = 'Order has been cancelled and refund initiated';
+                break;
+            case 'completed': 
+                    $message = 'Order has been completed';
+                break;
+            case 'rejected':
+                $items = OrderItem::where('order_id',$request->order_id)->whereHas('product',function($query){
+                    $query->isValid();
+                })->get();
+                if($items->isEmpty()){
+                    return request()->expectsJson() ? 
+                        response()->json([
+                            'status' => false,
+                            'message' => 'No item in the order is valid for return',
+                        ], 401) :
+                        redirect()->back()->with(['result'=> 0,'message'=> 'No item in the order is valid for return']);
+                }
+                break;
+            case 'returned':
+                    $message = 'Order has been updated';
+                break;
         }
         OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> $request->status]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
-            'message' => 'Order Updated Successfully',
+            'message' => $message,
         ], 200) :
-         redirect()->back()->with(['result'=> 1,'message'=> 'Order Updated Successfully']);
+         redirect()->back()->with(['result'=> 1,'message'=> $message]);
     }
     
 

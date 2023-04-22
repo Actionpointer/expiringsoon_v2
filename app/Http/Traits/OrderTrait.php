@@ -77,7 +77,7 @@ trait OrderTrait
         $statuses = [];
         switch($order->status){
             case 'processing':
-                if($order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_cancel_period']) > now()) 
+                if($order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_user_cancel_period']) > now()) 
                 $statuses = ['Cancel'=>'cancelled'];
             break;
             case 'delivered':

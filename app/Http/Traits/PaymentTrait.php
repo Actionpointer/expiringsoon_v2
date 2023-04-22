@@ -71,6 +71,8 @@ trait PaymentTrait
             break;
             case 'paypal': 
                 $details =  $this->verifyPaypalPayment($payment->reference,$payment->request_id);
+                $payment->reference = $details->purchase_units[0]->payments->captures[0]->id;
+                $payment->save();
                 return ['status'=> $details->status == 'COMPLETED'? true:false,'trx_status'=> $details->purchase_units[0]->payments->captures[0]->final_capture ? 'success':'failed','amount'=> $details->purchase_units[0]->payments->captures[0]->amount->value,'method'=> 'paypal'];
             break;
             case 'stripe': $details =  $this->verifyStripePayment($payment->reference);

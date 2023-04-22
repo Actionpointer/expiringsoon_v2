@@ -1,9 +1,5 @@
 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
 
-https://developer.paypal.com/docs/checkout/
-Secret Key:
-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
-
 
 https://stripe.com/docs/payments?payments=popular
 Perishable Key:

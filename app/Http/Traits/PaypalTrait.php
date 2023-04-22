@@ -3,6 +3,7 @@ namespace App\Http\Traits;
 
 use App\Models\Payout;
 use App\Models\Payment;
+use App\Models\Settlement;
 use Ixudra\Curl\Facades\Curl;
 
 
@@ -95,6 +96,27 @@ trait PaypalTrait
         return $paymentDetails;
     }
 
+    protected function refundPaypal(Settlement $settlement){
+        $payment = $settlement->order->payment_item->payment;
+        $payment->request_id = uniqid();
+        $payment->save();
+        $reference = $payment->reference;
+        $response = Curl::to("https://api-m.sandbox.paypal.com/v2/payments/captures/$reference/refund")
+            ->withHeader('Content-Type: application/json')
+            ->withHeader('Authorization: Bearer '.cache('paypal_token'))
+            ->withHeader('PayPal-Request-Id: '.$payment->request_id)
+            ->withData( array('transaction'=> $settlement->order->payment_item->payment->reference,'amount'=> $settlement->amount ) )
+            ->withData([
+                    "amount"=> [ "value"=> $settlement->amount, "currency_code"=> $settlement->order->payment_item->payment->currency->iso],
+                    "invoice_id"=> $settlement->order->id,
+                    "note_to_payer"=> "Order Cancelled"
+            ])
+            ->asJson()
+            ->post();
+        if($response &&  isset($response->status) && $response->status == 'COMPLETED')
+        return true;
+        else return false;
+    }
     
 
     protected function payoutPaypal(Payout $payout){
