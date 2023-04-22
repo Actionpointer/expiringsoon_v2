@@ -6,6 +6,7 @@ use App\Models\State;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AddressResource;
 
 class AddressController extends Controller
 {
@@ -17,7 +18,13 @@ class AddressController extends Controller
     public function index(){
         $user = auth()->user();
         $states = State::where('country_id',$user->country_id)->get();
-        return view('customer.address',compact('user','states'));
+        return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Address Retrieved Successfully',
+                'data' => AddressResource::collection($user->addresses)
+            ], 200) :
+            view('customer.address',compact('user','states'));
     }
     
     public function store(Request $request){
