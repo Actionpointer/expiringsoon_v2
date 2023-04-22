@@ -20,7 +20,7 @@ class ShopController extends Controller
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
         
-        $shops = Shop::within()->isActive()->isApproved()->isVisible()->isSelling();
+        $shops = Shop::isActive()->isApproved()->isVisible()->isSelling();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $shops = $shops->where('state_id',$state_id);

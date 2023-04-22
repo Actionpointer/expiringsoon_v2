@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\OrderStatus;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -49,8 +50,8 @@ class ShopResource extends JsonResource
             "wallet"=> $this->wallet,
             "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),
-            "opened_orders"=> $this->orders->whereIn('statuses.name',['processing','ready','shipped','delivered','rejected','returned'])->count(),
-            "total_orders"=> $this->orders->whereIn('statuses.name',['processing','ready','shipped','delivered','rejected','returned'])->count(),
+            "opened_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->whereNotIn('name',['completed','closed'])->count(),
+            "total_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->count(),
             // "staff" => UserResource::collection(User::where('shop_id',$this->id)->get())
         ];
     }
