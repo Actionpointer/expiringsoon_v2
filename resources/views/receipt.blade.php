@@ -150,16 +150,28 @@
                             </td>
                             <!-- Subtotal  -->     
                             <td class="dashboard__order-history-table-item order-status align-middle " style="text-align: left" >
-                                <p class="font-body--md-500">
-                                  @switch($payout->status)
-                                    @case('pending') Awaiting Confirmation @break
-                                    @case('processing') Payout is in process @break
-                                    @case('rejected') Rejected: {{$payout->reason}} @break
-                                    @case('paid') Payout has been completed @break
-                                    @case('failed') Payout processes failed. Please make request again @break
-                                    
-                                  @endswitch
-                                </p>
+                              @switch($payout->status)
+                                  @case('pending')
+                                        <p style="color:#cc7817;font-size:14px"><span id="status">Pending</span></p>
+                                      @break
+                                  @case('approved')
+                                      <p style="color:#5e2ed9;font-size:14px;font-weight:500">Approved</p>
+                                  @break
+                                  @case('processing')
+                                    <p style="color:#5e2ed9;font-size:14px;font-weight:500">Processing</p>
+                                  @break
+                                  @case('failed')
+                                    <p style="color:#d92e2e;font-size:14px"><span id="status">Failed</span></p>
+                                  @break
+                                  @case('paid')
+                                    <p style="color:#00b207;font-size:14px;font-weight:500">Paid at {{$payout->paid_at->format('d-m-y h:i')}}</p>
+                                  @break
+
+                                  @default
+                                    <p style="color:#d92e2e;font-size:14px"><span id="status">{{$payout->status}}</span></p>
+                                  @break
+                                      
+                              @endswitch
                             </td>
                         </tr>
                         

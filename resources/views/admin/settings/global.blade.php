@@ -79,45 +79,7 @@
                     <!-- General  -->
                     <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
                         <div class="products-tab__description">
-                          {{-- <div class="dashboard__content-card">
-                              <div class="dashboard__content-card-header">
-                                  <h5 class="font-body--xl-500">Global</h5>
-                              </div>
-                              <div class="dashboard__content-card-body">
-                                  <form action="{{route('admin.settings')}}" method="post" id="global">@csrf
-                                      <div class="contact-form__content">
-                                          <div class="contact-form-input">
-                                              <label for="country">Country</label>
-                                              <select name="country_id" id="countries" class="select2">
-                                                  @foreach ($countries as $country)
-                                                      <option value="{{$country->id}}" @if(session('locale')['country_id'] == $country->id) selected @endif>{{$country->name}}</option>
-                                                  @endforeach
-                                              </select>
-                                          </div>
-                                          <div class="contact-form-input">
-                                              <label for="vat">VAT %</label>
-                                              <input type="text" name="vat" placeholder="Set VAT Percentage" value="{{$settings->firstWhere('name','vat')->value}}" />
-                                          </div>
-
-                                          
-
-                                          
-                                          <div class="contact-form-input">
-                                              <label for="gateway">Payout</label>
-                                              <select name="automatic_payout_transfer" id="selectbox1">
-                                                 <option value="1" @if($settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Automatic </option>
-                                                 <option value="0" @if(!$settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Manual </option>
-                                                                                                
-                                              </select>
-                                          </div>
-                                          
-                                          <div class="contact-form-btn">
-                                              <button class="button button--md askpin" type="button"> Save </button>
-                                          </div>
-                                      </div>
-                                  </form>
-                              </div>
-                          </div> --}}
+                          
                           <div class="dashboard__content-card">
                               <div class="dashboard__content-card-header">
                                   <h5 class="font-body--xl-500">Throttle</h5>
@@ -359,7 +321,6 @@
                                           <div class="dashboard__content-card-body">
                                                 <div class="contact-form__content">
                                                     <table>
-                                                        
                                                         <tr>
                                                             <td class="d-flex">
                                                                 <label class="form-check-label font-body--400" for="existing"> 
@@ -383,46 +344,67 @@
                                                                 </div>
                                                             </td>
                                                         </tr>
-        
                                                     </table>
-                                                    
                                                 </div>
                                           </div>
                                           <div class="dashboard__content-card-header">
                                             <h5 class="font-body--xl-500">Payout</h5>
                                         </div>
                                         <div class="dashboard__content-card-body">
-                                              <div class="contact-form__content">
-                                                  <table>
-                                                        <tr>
-                                                            <td class="d-flex">
+                                            <div class="contact-form__content">
+                                                <table>
+                                                    <tr>
+                                                        <td class="d-flex">
+                                                            <label class="form-check-label font-body--400" for="existing"> 
+                                                                Auto Approve Payout
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-check mx-3">
                                                                 <label class="form-check-label font-body--400" for="existing"> 
-                                                                    Payout Type
+                                                                    On
                                                                 </label>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check mx-3">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Auto
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="automatic_payout_transfer" @if($settings->firstWhere('name','automatic_payout_transfer')->value) checked @endif value="1" >
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check">
-                                                                    <label class="form-check-label font-body--400" for="existing"> 
-                                                                        Manual
-                                                                    </label>
-                                                                    <input class="form-check-input previous_addresses" type="radio" name="automatic_payout_transfer" @if(!$settings->firstWhere('name','automatic_payout_transfer')->value) checked @endif value="0" > 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                  </table>
-                                                  <div class="contact-form-btn mt-4">
-                                                      <button class="button button--md askpin w-100" type="button"> Save
-                                                      </button>
-                                                  </div>
-                                              </div>
+                                                                <input class="form-check-input previous_addresses" type="radio" name="auto_approve_payout" @if($settings->firstWhere('name','auto_approve_payout')->value) checked @endif value="1" >
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-check">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Off
+                                                                </label>
+                                                                <input class="form-check-input previous_addresses" type="radio" name="auto_approve_payout" @if(!$settings->firstWhere('name','auto_approve_payout')->value) checked @endif value="0" > 
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="d-flex">
+                                                            <label class="form-check-label font-body--400" for="existing"> 
+                                                                Payout Type
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-check mx-3">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Auto
+                                                                </label>
+                                                                <input class="form-check-input previous_addresses" type="radio" name="automatic_payout" @if($settings->firstWhere('name','automatic_payout')->value) checked @endif value="1" >
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-check">
+                                                                <label class="form-check-label font-body--400" for="existing"> 
+                                                                    Manual
+                                                                </label>
+                                                                <input class="form-check-input previous_addresses" type="radio" name="automatic_payout" @if(!$settings->firstWhere('name','automatic_payout')->value) checked @endif value="0" > 
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div class="contact-form-btn mt-4">
+                                                    <button class="button button--md askpin w-100" type="button"> Save
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                       </form>
                                   </div>

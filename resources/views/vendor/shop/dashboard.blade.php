@@ -73,8 +73,8 @@
                               <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!$shop->country->currency->symbol!!}{{number_format(
                                   $shop->orders->filter(function($value){
                                         return $value->statuses->isNotEmpty() && $value->statuses->whereNotIn('name',['completed','cancelled'])->count();
-                                    })->sum('subtotal')
-                                , 2)}}</a>
+                                    })->sum('subtotal') , 2)}}
+                              </a>
                           </div>
                       </div>
                     </div>

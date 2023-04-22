@@ -12,13 +12,11 @@ use App\Models\Settlement;
 use Illuminate\Http\Request;
 use App\Events\DisbursePayout;
 use Illuminate\Validation\Rule;
-use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
-    use PayoutTrait;
     public function __construct(){
         $this->middleware('auth');
     }
@@ -41,22 +39,22 @@ class PaymentController extends Controller
 
     public function update(Request $request)
     {
+
         if($request->action == 'pay'){
             foreach($request->payouts as $req){ 
                 $payout = Payout::find($req);
-                if(cache('settings')['automatic_payout_transfer']){
+                if(cache('settings')['automatic_payout']){
                     $payout->status = 'processing';
                     $payout->save();
-                    event(new DisbursePayout($payout));
                 }else{
                     $payout->status = 'paid';
+                    $payout->paid_at = now();
                     $payout->save();
                 }
-                
             }
             return redirect()->back()->with(['result'=> '1','message'=> 'Payout Processing']);
         }else{
-            $payout = Payout::whereIn('id',$request->payouts)->update(['status'=> 'rejected','reason'=> $request->reason]);
+            $payout = Payout::whereIn('id',$request->payouts)->update(['status'=> 'Rejected. '.$request->reason]);
             return redirect()->back()->with(['result'=> '1','message'=> 'Payouts Rejected']);
         }   
     }

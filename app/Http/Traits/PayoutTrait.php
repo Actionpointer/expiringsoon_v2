@@ -1,14 +1,15 @@
 <?php
 namespace App\Http\Traits;
+
 use App\Models\Payout;
-use App\Models\Setting;
+use App\Http\Traits\PaypalTrait;
 use App\Http\Traits\PaystackTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\FlutterwaveTrait;
 
 trait PayoutTrait
 {
-    use FlutterwaveTrait,PaystackTrait;
+    use FlutterwaveTrait,PaystackTrait,PaypalTrait;
 
     protected function initializePayout(Payout $payout){
         $user = $payout->user;

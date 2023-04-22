@@ -55,7 +55,7 @@
                       {{-- <form class="d-inline" action="{{route('admin.payouts.manage')}}" method="post">@csrf --}}
                           <input type="hidden" name="payouts[]" >
                           <button type="button" onclick="approve_many()" class="dropdown-item">
-                            @if(cache('settings')['automatic_payout_transfer'])
+                            @if(cache('settings')['automatic_payout'])
                               Pay
                             @else
                               Paid
@@ -108,14 +108,28 @@
                                         <span style="font-size:12px;color:#888">{{ $payout->created_at->format('jS F, Y')}}</span>
                                     </td>
                                     <td class="cart-table-item order-date align-middle">
-                                        
-                                        @if($payout->status =='pending')
-                                            <p style="color:#d9862e;font-size:14px"><span id="status">{{ $payout->status}}</span></p>
-                                        @elseif($payout->status =='failed' || $payout->status =='rejected')
-                                            <p style="color:#d92e2e;font-size:14px"><span id="status">{{ $payout->status}}</span></p>
-                                        @else
-                                            <p style="color:#00b207;font-size:14px;font-weight:500">{{ $payout->status}}</p>
-                                        @endif
+                                        @switch($payout->status)
+                                          @case('pending')
+                                                <p style="color:#cc7817;font-size:14px"><span id="status">Pending</span></p>
+                                              @break
+                                          @case('approved')
+                                              <p style="color:#5e2ed9;font-size:14px;font-weight:500">Approved</p>
+                                          @break
+                                          @case('processing')
+                                            <p style="color:#5e2ed9;font-size:14px;font-weight:500">Processing</p>
+                                          @break
+                                          @case('failed')
+                                            <p style="color:#d92e2e;font-size:14px"><span id="status">Failed</span></p>
+                                          @break
+                                          @case('paid')
+                                            <p style="color:#00b207;font-size:14px;font-weight:500">Paid at {{$payout->paid_at->format('d-m-y h:i')}}</p>
+                                          @break
+
+                                          @default
+                                            <p style="color:#d92e2e;font-size:14px"><span id="status">{{$payout->status}}</span></p>
+                                          @break
+                                              
+                                        @endswitch
                                     </td>
                                     <td class="cart-table-item order-date align-middle">
                                         <a href="{{route('receipt',$payout)}}" target="_blank">{{$payout->reference}}</a>

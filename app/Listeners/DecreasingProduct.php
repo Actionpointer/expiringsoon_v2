@@ -6,7 +6,7 @@ use App\Events\DecreaseProduct;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DecreasingProduct implements ShouldQueue
+class DecreasingProduct
 {
     /**
      * Create the event listener.

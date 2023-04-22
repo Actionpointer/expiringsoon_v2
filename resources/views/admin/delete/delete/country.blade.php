@@ -106,9 +106,9 @@
                                             
                                             <div class="contact-form-input">
                                                 <label for="gateway">Payout</label>
-                                                <select name="automatic_payout_transfer" id="selectbox1">
-                                                   <option value="1" @if($settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Automatic </option>
-                                                   <option value="0" @if(!$settings->firstWhere('name','automatic_payout_transfer')->value) selected @endif> Manual </option>
+                                                <select name="automatic_payout" id="selectbox1">
+                                                   <option value="1" @if($settings->firstWhere('name','automatic_payout')->value) selected @endif> Automatic </option>
+                                                   <option value="0" @if(!$settings->firstWhere('name','automatic_payout')->value) selected @endif> Manual </option>
                                                                                                   
                                                 </select>
                                             </div>

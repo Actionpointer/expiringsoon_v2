@@ -80,6 +80,7 @@ class VerificationController extends Controller
                         ? response()->json(['status'=> true,'message'=> 'Email is already verified'], 204)
                         : redirect($this->redirectPath())->with('verified', true);
         }
+
         if ($user->markEmailAsVerified()) {
 
             event(new Verified($user));
@@ -90,12 +91,12 @@ class VerificationController extends Controller
         }
 
         return $request->wantsJson()
-                    ? response()->json(['status'=> true,'message'=> 'Email has been verified'], 204)
-                    : redirect($this->redirectPath())->with('verified', true);
+            ? response()->json(['status'=> true,'message'=> 'Email has been verified'], 204)
+            : redirect($this->redirectPath())->with('verified', true);
+
     }
 
-    protected function verified(Request $request)
-    {
+    protected function verified(Request $request){
         $user = User::find($request->route('id'));
         if($user->country->payout_gateway == 'paypal'){
             $user->payout_account = $user->email;

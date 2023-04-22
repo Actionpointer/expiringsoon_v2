@@ -9,6 +9,7 @@ use App\Models\Advert;
 use App\Models\Review;
 use App\Models\Category;
 use App\Models\OrderItem;
+use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,7 +41,7 @@ class Product extends Model
     public static function boot()
     {
         parent::boot();
-        parent::observe(new \App\Observers\ProductObserver);
+        parent::observe(new ProductObserver);
     }
 
     public function likes(){

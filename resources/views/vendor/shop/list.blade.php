@@ -81,7 +81,7 @@
                                     <!-- Status -->
                                     <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} 
                                             {{number_format(
-                                              $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
+                                                $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
                                             ,2)}}
                                     </td>
                                     <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->wallet,2)}}</td>

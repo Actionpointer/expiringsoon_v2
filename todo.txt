@@ -5,10 +5,8 @@ https://stripe.com/docs/payments?payments=popular
 Perishable Key:
 pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9ogEXPAvVevVsN008FW9r6qi
 
-
 Secret Key:
 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 
-
 
 ad preview
 
@@ -18,8 +16,6 @@ when the order is ready,
 2. send email to the shipment partner
 3. create a link for the shipper to mark the item shipped
 if the logistic firm has been integrated, we need to receive a webhook from which we mark this item shipped
-
-
 
 swiper.js is displaying duplicates
 

@@ -29,5 +29,8 @@ class DisbursingPayout implements ShouldQueue
     public function handle(DisbursePayout $event)
     {
         $this->initializePayout($event->payout);
+        $event->payout->status = 'paid';
+        $event->payout->paid_at = now();
+        $event->payout->save();
     }
 }

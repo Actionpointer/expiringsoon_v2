@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Models\Account;
 use App\Models\Currency;
+use App\Observers\PayoutObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,9 +14,15 @@ class Payout extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','shop_id','currency_id','channel','reference','amount','transfer_id','status',	'reason'];
+    protected $fillable = ['user_id','shop_id','currency_id','channel','reference','amount','transfer_id','status',	'paid_at'];
     protected $appends = ['destination'];
+    protected $dates = ['paid_at'];
 
+    public static function boot(){
+        parent::boot();
+        parent::observe(new PayoutObserver);
+    }
+    
     public function getRouteKeyName(){
         return 'reference';
     }

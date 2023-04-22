@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Models\Bank;
 use App\Models\Shop;
 use App\Models\Payout;
-use App\Models\Account;
-use App\Models\Settlement;
 use Illuminate\Http\Request;
-use App\Events\DisbursePayout;
 use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PayoutTrait;
 use App\Http\Controllers\Controller;
@@ -82,11 +78,12 @@ class PaymentController extends Controller
         
         $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,'currency_id'=> $user->country->currency_id,
         'channel'=> $user->country->payout_gateway,
-        'reference'=> uniqid(),'amount'=> $request->amount,'status'=> cache('settings')['automatic_payout_transfer'] ? 'processing':'pending']);
+        'reference'=> uniqid(),'amount'=> $request->amount,'status'=> cache('settings')['auto_approve_payout'] ? 'approved':'pending']);
         $shop->wallet -= $request->amount;
         $shop->save();
-        if(cache('settings')['automatic_payout_transfer']){
-            event(new DisbursePayout($payout));
+        if($payout->status == "approved" && cache('settings')['automatic_payout']){
+            $payout->status = 'processing';
+            $payout->save();
         }
         return request()->expectsJson() ? 
         response()->json([

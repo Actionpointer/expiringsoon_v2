@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Payout;
+use App\Events\DisbursePayout;
 
 class PayoutObserver
 {
@@ -12,52 +13,20 @@ class PayoutObserver
      * @param  \App\Models\Payout  $payout
      * @return void
      */
-    public function created(Payout $payout)
-    {
-        //
+    public function created(Payout $payout){
+        if($payout->status == "pending"){
+            // send an email to admin
+        }
     }
 
-    /**
-     * Handle the Payout "updated" event.
-     *
-     * @param  \App\Models\Payout  $payout
-     * @return void
-     */
-    public function updated(Payout $payout)
-    {
-        //send email
+    public function updated(Payout $payout){
+        if($payout->isDirty('status') && $payout->status == "processing"){
+            event(new DisbursePayout($payout));
+            
+        }
+        
+        //send mail to user based on the status
+
     }
 
-    /**
-     * Handle the Payout "deleted" event.
-     *
-     * @param  \App\Models\Payout  $payout
-     * @return void
-     */
-    public function deleted(Payout $payout)
-    {
-        //
-    }
-
-    /**
-     * Handle the Payout "restored" event.
-     *
-     * @param  \App\Models\Payout  $payout
-     * @return void
-     */
-    public function restored(Payout $payout)
-    {
-        //
-    }
-
-    /**
-     * Handle the Payout "force deleted" event.
-     *
-     * @param  \App\Models\Payout  $payout
-     * @return void
-     */
-    public function forceDeleted(Payout $payout)
-    {
-        //
-    }
 }
