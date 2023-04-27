@@ -6,7 +6,7 @@ use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Address;
-use App\Models\Product;
+use App\Models\Shipment;
 use App\Models\OrderItem;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
@@ -97,6 +97,10 @@ class Order extends Model
     
     public function reviews(){
         return $this->hasMany(Review::class);
+    }
+
+    public function shipments(){
+        return $this->hasMany(Shipment::class);
     }
 
     public function commission(){

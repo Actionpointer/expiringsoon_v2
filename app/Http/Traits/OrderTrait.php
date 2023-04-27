@@ -19,7 +19,7 @@ trait OrderTrait
 
     protected function getOrder($carts = null){
         $user = auth()->user();
-        $cart = $carts ? $carts->toArray() : session('cart');
+        $cart = isset($carts) ? $carts->toArray() : session('cart');
         if(!$cart)
         $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=> $user->country->vat,'shipping'=> 0];
         else
@@ -38,7 +38,13 @@ trait OrderTrait
         return $subtotal;
     }
 
-    protected function getShopShipment($shop_id,$state_id){
+    protected function getShopShipment2($shop_id,$address_id = null){
+        $user = auth()->user();
+        if($address_id){
+            $state_id = $user->addresses->where('id',$address_id)->first() ? $user->addresses->where('id',$address_id)->first()->state_id : 0;
+        }else{
+            $state_id = $user->addresses->where('main',true)->first() ? $user->addresses->where('main',true)->first()->state_id : 0;
+        }
         $hours = 0;
         $amount = 0;
         $shipper = 'pickup';
@@ -52,6 +58,25 @@ trait OrderTrait
             $shipper = 'admin';
         }
         return ['hours'=> $hours,'amount'=>$amount,'shipper'=> $shipper];
+    }
+
+    protected function getShopShipment($shop_id,$state_id){
+        $hours = 0;
+        $amount = 0;
+        $rate_id = null;
+        $by = 'pickup';
+        if($rate = Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
+            $hours = $rate->hours;
+            $amount = $rate->amount;
+            $rate_id = $rate->id;
+            $by = 'vendor';
+        }elseif($rate = Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()){
+            $hours = $rate->hours;
+            $amount = $rate->amount;
+            $rate_id = $rate->id;
+            $by = 'admin';
+        }
+        return ['hours'=> $hours,'amount'=>$amount,'rate_id'=> $rate_id,'by'=> $by];
     }
 
     protected function getEachShipment($carts,$address_id = null){
@@ -130,6 +155,7 @@ trait OrderTrait
         }
         return $statuses;
     }
+
     protected function getAdminOrderStatuses(Order $order){
         $statuses = [];
         switch($order->status){
@@ -174,10 +200,11 @@ trait OrderTrait
         if($coupon->start_at && $coupon->start_at > now())
             return ['description'=> 'Coupon is not available','value'=> 0];
         if($coupon->end_at && $coupon->end_at < now())
-        return ['description'=> 'Coupon is expired','value'=> 0];
+            return ['description'=> 'Coupon is expired','value'=> 0];
         if($coupon->minimum_spend && $coupon->minimum_spend > $amount){
             return ['description'=> "Your subtotal must be greater than $coupon->minimum_spend to avail this coupon",'value'=> 0]; 
         }
+        
         if($coupon->maximum_spend && $coupon->maximum_spend < $amount){
             return ['description'=> "Your subtotal must be lower than $coupon->maximum_spend to avail this coupon",'value'=> 0];
         }

@@ -48,9 +48,6 @@ trait FlutterwaveTrait
         else return false;
     }
 
-
-
-
     protected function fetchFlutterWave(Payout $payout){
         $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id")
             ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
@@ -73,23 +70,15 @@ trait FlutterwaveTrait
         
     }
 
-    protected function retryFlutterWave(Payout $payout){
-        $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id/retries")
-            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-            ->asJson()
-            ->get();
-        //check the status and update
-    }
-
     protected function payoutFlutterWave(Payout $payout){
-        $currency = session('locale')['currency_iso'];
         
         $response = Curl::to('https://api.flutterwave.com/v3/transfers')
         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-        // ->withData( array('account_number'=> $payout->account->account_number,'account_bank'=> $payout->account->bank->code,
-        ->withData( array('account_number'=> '0690000032','account_bank'=> '044',
-            'amount'=> $payout->amount,'narration'=> "Vendor payout with reference $payout->reference",'reference'=> $payout->reference,
-                        "currency"=> $currency,'callback_url '=> route('payout.callback'),
+        // ->withData( array('account_number'=> $payout->user->bankaccount->account_number,'account_bank'=> $payout->user->bankaccount->bank->code,
+        ->withData( array('account_number'=> '0690000032','account_bank'=> '044','amount'=> $payout->amount,
+                        'narration'=> "Vendor payout with reference $payout->reference",'reference'=> $payout->reference,
+                        "currency"=> $payout->currency->iso,'destination_branch_code'=> $payout->user->bankaccount->branch->code,
+                        'callback_url '=> route('payout.callback'),
                         "customizations"=> [
                             "title"=>"Expiring Soon",
                             "description"=>"Payment",
@@ -111,6 +100,14 @@ trait FlutterwaveTrait
             return true;
         }
         
+    }
+
+    protected function retryFlutterWave(Payout $payout){
+        $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id/retries")
+            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+            ->asJson()
+            ->get();
+        //check the status and update
     }
 
     protected function getBanksByFlutterWave(){

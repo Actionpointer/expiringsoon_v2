@@ -7,11 +7,11 @@ use App\Models\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Shipping extends Model
+class Shipment extends Model
 {
     use HasFactory;
-    public $table = 'shipping';
-
+    protected $fillable = ['address_id','rate_id','order_id','amount','ready_at','delivered_at'];
+    protected $dates = ['ready_at','expected_at'];
     public function rate(){
         return $this->belongsTo(Rate::class);
     }

@@ -14,6 +14,7 @@ use App\Models\Address;
 use App\Models\Country;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Shipment;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\OrderMessage;
@@ -122,7 +123,6 @@ class OrderController extends Controller
     public function checkout(Shop $shop = null){
         
         $user = auth()->user();
-        
         $items = session('cart');
         if(!isset($items)){
             return redirect()->back();
@@ -137,12 +137,9 @@ class OrderController extends Controller
         $carts = $carts->whereHas('product',function($query) use($items){
                     $query->whereIn('product_id',array_keys($items))->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
                  })->get();
-        $countries = Country::all();
-        $states = State::all();
-        $cities = City::all();
         $order = $this->getOrder($carts);
         $rates = Rate::where('country_id',$user->country_id)->whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
-        return view('frontend.checkout',compact('carts','user','countries','states','cities','order','rates'));
+        return view('frontend.checkout',compact('carts','user','order','rates'));
     }
 
     public function shipment(Request $request){
@@ -151,6 +148,33 @@ class OrderController extends Controller
         return response()->json($this->getEachShipment($carts,$address_id),200);
     }
 
+    public function checkout_api(Request $request){
+        $user = auth()->user();
+        if(!$request->address_id){
+            if($user->addresses->isNotEmpty())
+                $state_id = $user->addresses->firstWhere('main',true)->state_id;
+            else $state_id = 0;
+        }else{
+            $state_id = Address::find($request->address_id)->state_id;
+        }
+        $carts = Cart::where('user_id',$user->id)->whereHas('product',function($query){
+            $query->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
+        })->get();
+        Cart::where('user_id',$user->id)->whereNotIn('id',$carts->pluck('id')->toArray())->delete();
+        foreach($carts->groupBy('shop_id') as $key=>$group){
+            $shops[] = ['id'=> $key,'name'=> $group->first()->shop->name,
+            'location'=> ($group->first()->shop->city ? $group->first()->shop->city->name.', ' : '').$group->first()->shop->state->name,
+            'delivery_amount' => $this->getShopShipment($key,$state_id)['amount'],
+            'delivery_hours' => $this->getShopShipment($key,$state_id)['hours']];
+        }
+        $order = $this->getOrder($carts);
+        return response()->json([
+            'status' => true,
+            'message' => 'Checkout for selected address',
+            'data' => ['carts'=> $carts->pluck('id')->toArray(),'shops'=> $shops,'order'=> $order,'currency'=> $carts->first()->shop->country->currency->symbol]
+        ],200);
+    } 
+
     public function confirmcheckout(Request $request){
         try{
             $user = auth()->user();
@@ -158,16 +182,19 @@ class OrderController extends Controller
             $vat = $user->country->vat;
             $address = Address::find($request->address_id);
             $orders = collect([]);
-            $shipping = ['amount'=> 0,'shipper'=> 'pickup','hours'=> 0];
+            $shipping = ['amount'=> 0,'shipper'=> 'pickup','hours'=> 0,'by'=>'pickup'];
             foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
                 $subtotal = 0;
-                if($request->shop_delivery[$shop_id]){
-                    $shipping = $this->getShopShipment($shop_id,$address->state_id);  
+                if($request->deliveries[$shop_id]){
+                    $shipping = $this->getShopShipment($shop_id,$address->state_id); 
                 }
                 //dd($shipping_fee);
                 $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
-                    'deliveryfee' => $shipping['amount'],'deliverer'=> $shipping['shipper'],'expected_at'=> $shipping['hours'] ? now()->addHours($shipping['hours']) : null
+                    'deliveryfee' => $shipping['amount'],'deliverer'=> $shipping['by'],'expected_at'=> $shipping['hours'] ? now()->addHours($shipping['hours']) : null
                 ]);
+                if($shipping['by'] == 'admin'){
+                    $shipment = Shipment::create(['address_id'=> $address->id,'rate_id'=> $shipping['rate_id'],'order_id'=> $order->id,'amount'=> $shipping['amount']]); 
+                } 
                 foreach($carts->where('shop_id',$shop_id) as $cart){
                     $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->total]);
                     $subtotal += $cart->total;

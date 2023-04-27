@@ -138,7 +138,7 @@
                                 <div class="bill-card__payment-method-item ">
                                   <div class="form-check">
                                       @if($user->addresses->isNotEmpty() && $rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first())
-                                          <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
+                                          <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
                                           <label class="form-check-label font-body--400" for="cash">
                                             {!!$user->country->currency->symbol!!}
                                             <span id="deliveryamount{{$item->shop_id}}">
@@ -148,7 +148,7 @@
                                             <span id="deliverytime{{$item->shop_id}}"> {{now()->addHours($rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->hours)->format('l jS \of\ F')}}</span>
                                           </label>
                                       @elseif($user->addresses->isNotEmpty() && $rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first())
-                                          <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
+                                          <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
                                           <label class="form-check-label font-body--400" for="cash">
                                             {!!$user->country->currency->symbol!!}
                                             <span id="deliveryamount{{$item->shop_id}}">
@@ -160,7 +160,7 @@
                                             </span>
                                           </label>
                                       @else
-                                        <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value='0' data-state="unchecked" disabled>
+                                        <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value='0' data-state="unchecked" disabled>
                                         <label class="form-check-label font-body--400" for="cash">
                                           <span id="deliveryamount{{$item->shop_id}}"></span>
                                           <span id="deliverytext{{$item->shop_id}}"> Delivery is not available</span>
@@ -173,7 +173,7 @@
                             <th>
                                 <div class="bill-card__payment-method-item ">
                                   <div class="form-check">
-                                    <input class="form-check-input shopdelivery" type="radio" name="shop_delivery[{{$item->shop->id}}]" value="0" id="nodelivery{{$item->shop_id}}" 
+                                    <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop->id}}]" value="0" id="nodelivery{{$item->shop_id}}" 
                                     @if($user->addresses->isEmpty() || (!$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first() && !$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()) ) checked data-state="checked" @else data-state="unchecked" @endif>
                                     <label class="form-check-label font-body--400" for="cash">
                                         Pick up

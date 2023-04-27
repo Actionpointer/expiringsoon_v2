@@ -1,53 +1,44 @@
-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
+1.
+NOTIFICATIONS
+place notification and profile icon at the top of vendor & shop
+email that user has been returned to free subscription.
 
-
-https://stripe.com/docs/payments?payments=popular
-Perishable Key:
-pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9ogEXPAvVevVsN008FW9r6qi
-
-Secret Key:
-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 
-
-ad preview
-
-
+2.
 when the order is ready,
 1. create an order on the shipment partners website, if integrated
 2. send email to the shipment partner
 3. create a link for the shipper to mark the item shipped
 if the logistic firm has been integrated, we need to receive a webhook from which we mark this item shipped
 
-swiper.js is displaying duplicates
+3. 
+ad preview
 
+4. 
 security alerts ipaddress, failed logins, block ipaddress from security page, once someone is throttled etc
-
 export orders, revenue to excel file for auditors
 CRON JOB
 when order rejected but was not returned. - cron job
 admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready - cron
 
-NOTIFICATIONS
-place notification and profile icon at the top of vendor & shop
-email that user has been returned to free subscription.
+5.
+swiper.js is displaying duplicates
 
+6.
+stripe PAYMENTS, REFUND & PAYOUT
 
-PAYMENTS & PAYOUT
-look at payout again.. flutterwave payout, paypal & stripe
+7.
 auto-renew subscription & adset
-refund by stripe
-2.fetch payout
+
+8.
 retry payout with job - 
 
+9. REPORT SHOPS/PRODUCT
 
-6. REPORT SHOPS/PRODUCT
-9. reviews : product rating.. show in index, product, hotdeals
+10.
+reviews : product rating.. show in index, product, hotdeals
 
+11.
+add password strength meter
 
-8. add password strength meter
-
-11. hot deals mobile view (home page & hot deals page)
-
-version 2
-buyer can remove items from order which not yet shipped/ready, not yet expired, and pick another item from the same shop, of similar worth
-buyer can buy now and receive later when the price drops
-
+12.
+hot deals mobile view (home page & hot deals page)

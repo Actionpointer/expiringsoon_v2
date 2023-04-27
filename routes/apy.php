@@ -53,8 +53,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('address/update',[AddressController::class,'update']);
     Route::post('address/delete',[AddressController::class,'destroy']);
 
-    Route::get('checkout/{shop?}',[OrderController::class,'checkout']);
-    Route::post('checkout/getshipment',[OrderController::class,'shipment']);
+    Route::post('checkout',[OrderController::class,'checkout_api']);
     Route::post('checkout/confirm',[OrderController::class,'confirmcheckout']);
 
     Route::get('orders', [OrderController::class, 'index']);

@@ -1,3 +1,6 @@
+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
+
+
 PAYPAL ACCOUNT
 ---------------------------------------------------------
 John Doe, Tel: 4087110393
@@ -23,3 +26,15 @@ Credit Card VISA - 05/2028: 4032031726558173
 Balance: $ 5,000.00
 
 ---------------------------------------------------------
+
+https://stripe.com/docs/payments?payments=popular
+Perishable Key:
+pk_live_51M9zUbFkbKiQb5lmF0wLt91nahucxvGVhoeT50VZfotjJgW4vYNr3zt96ORwPkpeTC76V69i0m9ogEXPAvVevVsN008FW9r6qi
+
+Secret Key:
+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 
+
+
+version 2
+buyer can remove items from order which not yet shipped/ready, not yet expired, and pick another item from the same shop, of similar worth
+buyer can buy now and receive later when the price drops

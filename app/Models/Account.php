@@ -23,6 +23,8 @@ class Account extends Model
         return $this->belongsTo(Bank::class);
     }
     public function branch(){
-        return $this->belongsTo(BankBranch::class);
+        return $this->belongsTo(BankBranch::class)->withDefault([
+            'code' => '',
+        ]);
     }
 }
