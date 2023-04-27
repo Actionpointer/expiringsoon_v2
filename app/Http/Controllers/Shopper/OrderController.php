@@ -176,8 +176,10 @@ class OrderController extends Controller
     } 
 
     public function confirmcheckout(Request $request){
+        // dd($request->all());
         try{
             $user = auth()->user();
+            
             $carts = Cart::whereIn('id',$request->carts)->get();
             $vat = $user->country->vat;
             $address = Address::find($request->address_id);
