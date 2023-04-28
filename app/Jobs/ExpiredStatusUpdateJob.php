@@ -2,12 +2,16 @@
 
 namespace App\Jobs;
 
+use App\Models\Adset;
+use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Notifications\AdsetStatusNotification;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Notifications\SubscriptionStatusNotification;
 
 class ExpiredStatusUpdateJob implements ShouldQueue
 {
@@ -30,8 +34,13 @@ class ExpiredStatusUpdateJob implements ShouldQueue
      */
     public function handle()
     {
-        //adsets
-        //subscriptions
-        
+        $adsets = Adset::where('end_at','<',now())->where('end_at','>',now()->subHour())->get();
+        $subscriptions = Subscription::whereNotNull('end_at')->where('end_at','<',now())->where('end_at','>',now()->subHour())->get();
+        foreach($adsets as $adset){
+            $adset->user->notify(new AdsetStatusNotification($adset));
+        }
+        foreach($subscriptions as $subscription){
+            $subscriptions->user->notify(new SubscriptionStatusNotification($subscription));
+        }
     }
 }

@@ -22,6 +22,16 @@ class SubscriptionStatusNotification extends Notification
         $this->subscription = $subscription;
     }
 
+    public function status(){
+        if($this->subscription->end_at <= now()){
+            return 'expired';
+        }elseif($this->subscription->renew_at <= now()){
+            return 'expiring';
+        }else{
+            return 'activated';
+        }
+    }
+
     
     public function via($notifiable)
     {
@@ -37,10 +47,7 @@ class SubscriptionStatusNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new MailMessage)->view('emails.subscription', ['subscription'=> $this->subscription,'status' => $this->status()]);
     }
 
     /**
@@ -51,9 +58,16 @@ class SubscriptionStatusNotification extends Notification
      */
     public function toArray($notifiable)
     {
+        if($this->subscription->end_at <= now()){
+            $message = 'Your subscription of '.$this->subscription->plan->name.' has expired. You are now subscribed to Free Plan.';
+        }elseif($this->subscription->renew_at <= now()){
+            $message = 'Your subscription of '.$this->subscription->plan->name.' will expire on '.$this->subscription->end_at->format('d-M').'. Renew subscription on or before '.$this->subscription->renew_at->format('d-M');
+        }else{
+            $message = 'Your subscription of '.$this->subscription->plan->name.' has been activated';
+        }
         return [
-            'subject' => 'Expiring Subscription',
-            'body' => 'Your subscription of '.$this->subscription->plan->name.' will expire on '.$this->subscription->end_at->format('d-M').'. Renew subscription on or before '.$this->subscription->renew_at->format('d-M'),
+            'subject' => ucwords($this->status()).' Subscription',
+            'body' => $message,
             'url' => route('vendor.dashboard'),
         ];
     }

@@ -141,8 +141,8 @@
 																Your adset with id {{$adset->id}} is now {{$status}} <br/> 
                                                                 @if($status == 'activated')
 																	You have added the following ads to this adsets <br/>
-																	Products: 0 <br/>
-																	Shops: 9
+																	Products: {{$adset->adverts->where('advertable_type','App\Models\Product')->count()}} <br/>
+																	Shops: {{$adset->adverts->where('advertable_type','App\Models\Shop')->count()}}
 																@endif
                                                             </td>
 														</tr>
@@ -150,12 +150,12 @@
 															<td class="text-btn-large" align="center">
 																<div style="background:#5fb882;width:50%;color:#fff; font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; padding:15px 35px;border-bottom:1px solid #ddd">
 																	@if($status == 'activated')
-																	<a href="https://expiring.soon/login.php" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
+																	<a href="{{route('vendor.adverts',$adset)}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
 																		<span class="link-2" style="color:#fff; text-decoration:none;">Manage Ads</span>
 																	</a>
 																	@else
-																	<a href="https://expiring.soon/login.php" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
-																		<span class="link-2" style="color:#fff; text-decoration:none;">Renew Adset</span>
+																	<a href="{{route('vendor.adsets')}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
+																		<span class="link-2" style="color:#fff; text-decoration:none;">Manage Adset</span>
 																	</a>
 																	@endif
 																</div>

@@ -21,8 +21,8 @@ Route::get('/broadcast', function () {
     //     $user->save();
     // }
     // return "Event broadcaasted!";
-    $adset = \App\Models\Adset::find(48);
-    return (new App\Notifications\AdsetStatusNotification($adset))
+    $adset = \App\Models\Subscription::find(3);
+    return (new App\Notifications\SubscriptionStatusNotification($adset))
                     ->toMail($adset->user);
 });
 

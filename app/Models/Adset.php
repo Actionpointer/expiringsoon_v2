@@ -68,9 +68,11 @@ class Adset extends Model
     public function expired(){
         return $this->start_at < now() && $this->end_at < now();
     }
+    
     public function expiring(){
         return $this->start_at < now() && $this->end_at > now() && $this->end_at->diffInDays(now()) < 3;
     }
+
     public function scopeExpired($query){
         return $query->where('start_at','<',now())->where('end_at','<',now());
     }

@@ -1,5 +1,4 @@
-1.
-NOTIFICATIONS
+
 
 Advert
 email that user has been returned to free subscription.
@@ -39,3 +38,69 @@ reviews : product rating.. show in index, product, hotdeals
 
 12.
 hot deals mobile view (home page & hot deals page)
+
+
+
+NOTIFICATIONS
+
+Adverts[
+    advert is showing started - shop
+    period insights on advert - 24hours
+]
+
+Order Statuses[
+    Processing- Vendor
+    Cancelled- Vendor & Customer
+    Ready - Admin
+    Shipped - Customer
+    Delivered - Customer
+    Completed - Vendor
+    Rejected - Vendor
+    Returned - Vendor
+    Refunded - Customer
+    Dispute - Vendor & Customer
+    Closed - Vendor & Customer
+]
+Order Message[
+    Unread Messages - Shop & Customer
+]
+Payments[
+    Payment Receipt - Customer
+]
+Payouts[
+    Pending - Shop
+    Approved - Shop
+    Processing - Shop
+    Paid - Shop
+]
+Products[
+    Product Status - Shop
+]
+Shops[
+    Shop Status - Vendor
+    Orientation - after creation - Vendor
+]
+Product and Shop Reviews[
+    Shop Review - Vendor
+    Product Review - Shop
+]
+Shipment[
+    Created - Admin Shipper
+    Ready for pickup - Admin Shipper
+]
+Newsletters[
+    Products - Customers
+    Coupon - Customers
+    Coupon - Vendors
+
+]
+
+
+Users[
+    KYC
+    Security
+    Welcome - User
+    Welcome - Vendor
+    Invitation - Staff
+
+]
