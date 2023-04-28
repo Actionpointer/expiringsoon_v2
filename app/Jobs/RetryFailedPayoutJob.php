@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CheckPayoutStatusJob implements ShouldQueue,ShouldBeUnique
+class RetryFailedPayoutJob implements ShouldQueue,ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PayoutTrait;
 
@@ -26,12 +26,16 @@ class CheckPayoutStatusJob implements ShouldQueue,ShouldBeUnique
         //
     }
 
-    
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
     public function handle()
     {
-        $payouts = Payout::whereIn('status',['processing'])->whereNotNull('transfer_id')->get();
+        $payouts = Payout::where('status','failed')->whereNotNull('transfer_id')->get();
         foreach($payouts as $payout){
-            $this->verifyPayout($payout);
+            $this->retryFlutterWave($payout);
         }
     }
 }

@@ -102,7 +102,7 @@
                                         <td class="   dashboard__order-history-table-item order-total">  {{ $advert->clicks}} </td>
 
                                         <td class="   dashboard__order-history-table-item order-total"> 
-                                          {{-- {{$advert->feature->start_at > now() ? 'true':'false'}} --}}
+                                          {{-- {{$advert->adset->start_at > now() ? 'true':'false'}} --}}
                                           @if($advert->running)
                                           <span class="d-block text-success">Ad is running </span>
                                           @else
@@ -146,7 +146,7 @@
                       <div class="row shoping-cart__content justify-content-center">              
                         <div class="col-lg-8">
                           <form method="POST" action="{{route('vendor.advert.store.shops')}}" enctype="multipart/form-data">@csrf
-                            <input type="hidden" name="feature_id" value="{{$adset->id}}">
+                            <input type="hidden" name="adset_id" value="{{$adset->id}}">
                             
                             <div class="contact-form-input">
                                 <label>Select Shops</label>

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AdvertStatusNotification extends Notification
+class AdvertInsightNotification extends Notification
 {
     use Queueable;
 
@@ -40,7 +40,7 @@ class AdvertStatusNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->view('emails.adset.adverts');
+        return (new MailMessage)->view('emails.adset.insights');
     }
 
     /**

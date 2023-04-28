@@ -149,7 +149,7 @@
                       <div class="row shoping-cart__content justify-content-center">              
                         <div class="col-lg-8">
                           <form method="POST" action="{{route('vendor.advert.store.products')}}">@csrf
-                              <input type="hidden" name="feature_id" value="{{$adset->id}}">
+                              <input type="hidden" name="adset_id" value="{{$adset->id}}">
                               
                               
                               <div class="my-3 filter" style="display: block;">

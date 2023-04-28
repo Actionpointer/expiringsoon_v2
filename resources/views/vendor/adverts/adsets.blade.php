@@ -163,7 +163,7 @@
                                                   </div>
                                                   @if($adset->active && $adset->auto_renew)
                                                     <form action="{{route('vendor.adset.cancel_renew')}}" method="post" class="col-md-10" onsubmit="return confirm('Are you sure?');">@csrf
-                                                      <input type="hidden" name="feature_id" value="{{$adset->id}}">
+                                                      <input type="hidden" name="adset_id" value="{{$adset->id}}">
                                                       <button class="button button--sm bg-warning border-warning my-1 col-md-12">
                                                         Cancel Auto Renew
                                                         {{-- <span class="d-none d-md-block">
@@ -176,7 +176,7 @@
                                                   @endif
                                                   @if(!$adset->active)
                                                     <form action="{{route('vendor.adset.subscribe')}}" method="post">@csrf
-                                                      <input type="hidden" name="feature_id" value="{{$adset->id}}">
+                                                      <input type="hidden" name="adset_id" value="{{$adset->id}}">
                                                       <button class="btn btn-sm btn-primary text-white">
                                                         Renew
                                                         {{-- <span>

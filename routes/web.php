@@ -14,13 +14,16 @@ use App\Http\Controllers\Guest\FrontendController;
 use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('/broadcast', function () {
-    $countries = \App\Models\Country::where('payout_gateway','paypal')->get();
-    $users = \App\Models\User::where('role_id',6)->whereIn('country_id',$countries->pluck('id')->toArray())->get();
-    foreach($users as $user){
-        $user->payout_account = $user->email;
-        $user->save();
-    }
-    return "Event broadcaasted!";
+    // $countries = \App\Models\Country::where('payout_gateway','paypal')->get();
+    // $users = \App\Models\User::where('role_id',6)->whereIn('country_id',$countries->pluck('id')->toArray())->get();
+    // foreach($users as $user){
+    //     $user->payout_account = $user->email;
+    //     $user->save();
+    // }
+    // return "Event broadcaasted!";
+    $adset = \App\Models\Adset::find(48);
+    return (new App\Notifications\AdsetStatusNotification($adset))
+                    ->toMail($adset->user);
 });
 
 

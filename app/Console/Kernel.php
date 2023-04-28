@@ -2,9 +2,12 @@
 
 namespace App\Console;
 
+use App\Jobs\ExpiredStatusUpdateJob;
+use App\Jobs\ExpiringStatusUpdateJob;
+use App\Jobs\InactiveStatusUpdateJob;
 use App\Jobs\CheckOrderExpectedDateJob;
-use App\Jobs\ConvertDeliveredToCompletedJob;
 use Illuminate\Console\Scheduling\Schedule;
+use App\Jobs\ConvertDeliveredToCompletedJob;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -29,6 +32,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->job(new CheckOrderExpectedDateJob)->daily();
         $schedule->job(new ConvertDeliveredToCompletedJob)->daily();
+        $schedule->job(new ExpiredStatusUpdateJob)->hourly();
+        $schedule->job(new ExpiringStatusUpdateJob)->hourly();
+        $schedule->job(new InactiveStatusUpdateJob)->hourly();
 
         // Your cronjob should run this: php /path/to/laravel/artisan queue:work --stop-when-empty
     }

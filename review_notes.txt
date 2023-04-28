@@ -38,3 +38,10 @@ sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWy
 version 2
 buyer can remove items from order which not yet shipped/ready, not yet expired, and pick another item from the same shop, of similar worth
 buyer can buy now and receive later when the price drops
+
+auto-renew subscription & adset
+
+add password strength meter
+
+6.
+stripe PAYMENTS, REFUND & PAYOUT

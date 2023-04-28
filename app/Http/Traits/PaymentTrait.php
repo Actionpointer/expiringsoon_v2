@@ -10,7 +10,7 @@ use App\Http\Traits\FlutterwaveTrait;
 
 trait PaymentTrait
 {
-    use FlutterwaveTrait,PaystackTrait,PaypalTrait;
+    use PaystackTrait,FlutterwaveTrait,PaypalTrait;
 
     protected function initializePayment($amount,$items,$type){
         $user = auth()->user();

@@ -94,14 +94,11 @@
                             </td>
                             <!-- Stock Status  -->
                             <td class="cart-table-item stock-status order-date align-middle">
-                              @if($product->stock  > 0)
-                                <span class="font-body--md-400 in">{{$product->stock}}</span>
-                              @else
-                              <span class="font-body--md-400 out">{{$product->stock}}</span>
-                              @endif
+                              <span class="font-body--md-400 @if($product->stock  > 0) in @else out @endif">{{$product->stock}}</span>
+                              
                             </td>
                             <td class="cart-table-item add-cart align-middle">
-                              @if($product->featured)
+                              @if($product->adverts->isNotEmpty())
                                 <span class="iconify" style="color:#00b207" data-icon="clarity:star-solid" data-width="20" data-height="20">
                               @endif
                             </td>

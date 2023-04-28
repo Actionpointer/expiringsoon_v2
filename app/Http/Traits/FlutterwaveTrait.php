@@ -110,7 +110,7 @@ trait FlutterwaveTrait
         //check the status and update
     }
 
-    protected function getBanksByFlutterWave(){
+    protected function verifyPayoutFlutterwave(){
         
     }
 

@@ -36,8 +36,9 @@ class AdsetController extends Controller
     public function subscribe(Request $request){
         try{
             $adsets = collect([]);
+            // dd($request->all());
             if($request->has('adset_id')){
-                $adset = Adset::where('id',$request->adset_id)->get();
+                $adset = Adset::find($request->adset_id);
                 $adsets->push($adset);
             }else{
                 foreach($request->adplans as $key=>$plan){
@@ -46,10 +47,11 @@ class AdsetController extends Controller
                 }
             }
             $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
+            
             if(!$result['link']){
-                    redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
+                return redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
             }else{
-                redirect()->to($result['link']);
+                return redirect()->to($result['link']);
             }    
         } catch (\Throwable $th) {
             return response()->json([

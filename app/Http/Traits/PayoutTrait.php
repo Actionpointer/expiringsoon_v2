@@ -28,18 +28,18 @@ trait PayoutTrait
     }
 
     protected function verifyPayout(Payout $payout){
-        $user = auth()->user();
-        $gateway = $user->country->payout_gateway;
-        if($gateway == 'flutterwave' && request()->query('status') != 'success'){
-            //delete this order, and remove the order number from the cart
-            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payout was not successful. Please try again']);
+        $gateway = $payout->user->country->payout_gateway;
+        switch($gateway){
+            case 'paystack': $details = $this->verifyPayoutPaystack($payout);
+            break;
+            case 'flutterwave': $details = $this->verifyPayoutFlutterwave($payout);
+            break;
+            case 'paypal': $details = $this->verifyPayoutPaypal($payout);
+            break;
+            case 'stripe': $details = $this->verifyPayoutStripe($payout);
+            break;
         }
-        if($gateway == 'paystack'){
-            $details = $this->verifyPaystackPayment(request()->query('reference'));
-        }  
-        else {
-            $details = $this->verifyFlutterWavePayment(request()->query('tx_ref'));
-        }
+        
     }
 
     public function verifybankaccount($bank_code,$account_number){

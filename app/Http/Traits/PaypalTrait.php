@@ -27,7 +27,7 @@ trait PaypalTrait
     }
 
     protected function initiatePaypal(Payment $payment){
-        $user = auth()->user();
+        $user = $payment->user;
         $token = cache('paypal_token');
         if(!$token){
             $token = $this->get_token();

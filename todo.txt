@@ -1,7 +1,10 @@
 1.
 NOTIFICATIONS
-place notification and profile icon at the top of vendor & shop
+
+Advert
 email that user has been returned to free subscription.
+
+
 
 2.
 when the order is ready,
@@ -16,6 +19,7 @@ ad preview
 4. 
 security alerts ipaddress, failed logins, block ipaddress from security page, once someone is throttled etc
 export orders, revenue to excel file for auditors
+
 CRON JOB
 when order rejected but was not returned. - cron job
 admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready - cron
@@ -23,11 +27,6 @@ admin should know orders that are stuck in a particular status e.g processing, o
 5.
 swiper.js is displaying duplicates
 
-6.
-stripe PAYMENTS, REFUND & PAYOUT
-
-7.
-auto-renew subscription & adset
 
 8.
 retry payout with job - 
@@ -37,8 +36,6 @@ retry payout with job -
 10.
 reviews : product rating.. show in index, product, hotdeals
 
-11.
-add password strength meter
 
 12.
 hot deals mobile view (home page & hot deals page)
