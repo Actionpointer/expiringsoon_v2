@@ -2,10 +2,13 @@
 
 namespace App\Observers;
 
+use App\Events\DeleteProduct;
+use App\Http\Traits\OptimizationTrait;
 use App\Models\Product;
 
 class ProductObserver
 {
+    use OptimizationTrait;
     /**
      * Handle the Product "created" event.
      *
@@ -39,16 +42,12 @@ class ProductObserver
      */
     public function deleting(Product $product)
     {
-        $product->adverts->delete();
-        //orders
-        //carts
-        //wishlist
-        //
+        event(new DeleteProduct($product));
     }
 
     public function deleted(Product $product)
     {
-        //
+        $this->resetProducts($product->shop->user);
     }
 
     /**

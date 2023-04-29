@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @push('styles')
 @endpush
-@section('title') Contacts | Expiring Soon @endsection
+@section('title') Shipments | Expiring Soon @endsection
 @section('main')
     <!-- breedcrumb section start  -->
   <div class="section breedcrumb">
@@ -18,7 +18,7 @@
               </a>
             </li>
             
-            <li class="active"><a href="#">Contacts</a></li>
+            <li class="active"><a href="#">Shipments</a></li>
           </ul>
         </div>
       </div>
@@ -40,7 +40,7 @@
                   <path d="M41.9375 20.7188C41.9375 35.0625 26 46.2188 26 46.2188C26 46.2188 10.0625 35.0625 10.0625 20.7188C10.0625 16.4919 11.7416 12.4381 14.7305 9.44924C17.7193 6.46037 21.7731 4.78125 26 4.78125C30.2269 4.78125 34.2807 6.46037 37.2695 9.44924C40.2584 12.4381 41.9375 16.4919 41.9375 20.7188V20.7188Z" stroke="#2C742F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </span>
-              <p>13099 Westheimer Rd. Houston, TX 77077 </p>
+              <p>Enter Order Number & Password sent to your mail</p>
             </div>
             <div class="contact-form__contact-info--item">
               <span class="icon">
@@ -58,7 +58,7 @@
                   </defs>
                 </svg>
               </span>
-              <p>info@expiringsoon.shop</p>
+              <p>Mark items shipped once you pick up the item</p>
             </div>
             <div class="contact-form__contact-info--item">
               <span class="icon">
@@ -68,36 +68,90 @@
                   <path d="M17.4625 25.6416C19.2621 29.322 22.2449 32.292 25.933 34.0757C26.2031 34.2036 26.5018 34.2589 26.7998 34.2361C27.0977 34.2133 27.3846 34.1131 27.632 33.9456L33.0639 30.3255C33.3038 30.1653 33.5799 30.0674 33.8671 30.0408C34.1544 30.0141 34.4437 30.0595 34.709 30.1728L44.8699 34.5287C45.215 34.6753 45.5032 34.9301 45.691 35.2546C45.8788 35.5792 45.9561 35.956 45.9112 36.3283C45.5895 38.8411 44.3631 41.1506 42.4616 42.8244C40.56 44.4983 38.1135 45.4217 35.5802 45.4219C27.7558 45.4219 20.2518 42.3136 14.7191 36.7809C9.18637 31.2482 6.07813 23.7442 6.07812 15.9198C6.07836 13.3866 7.00185 10.9404 8.67571 9.03914C10.3496 7.13784 12.659 5.91181 15.1717 5.59057C15.544 5.54568 15.9208 5.62294 16.2454 5.81074C16.5699 5.99853 16.8247 6.28669 16.9713 6.63182L21.3307 16.8014C21.4428 17.0641 21.4883 17.3505 21.4632 17.6351C21.4381 17.9196 21.3431 18.1936 21.1867 18.4327L17.577 23.9478C17.4132 24.1962 17.3165 24.4828 17.2964 24.7796C17.2764 25.0765 17.3336 25.3734 17.4625 25.6416V25.6416Z" stroke="#2C742F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </span>
-              <p>+1 305 434 7149</p>
+              <p>Mark item delivered immediately after delivery</p>
             </div>
           </div>
         </div>
         <div class="col-lg-9">
+          @if(isset($order))
           <div class="contact-form-card">
-            <h2>Write to us</h2>
-            <p> Do you fancy saying hi to me or you want to get started with your project and you need my help? Feel free to contact me. </p>
-            <form action="#">
-              <div class="contact-form-group">
-                <div class="contact-form--input">
-                  <input type="text " placeholder="Your Name" />
+            <h2>Order: {{$order->slug}}</h2>
+            <h6>Number of Items: {{$order->items->count()}}</h6>
+            <h6> Categories : 
+              @foreach ($order->items as $item)
+                  {{$item->product->category->name}},
+              @endforeach
+            </h6>
+            
+            <form action="{{route('shipment.update')}}" method="POST">@csrf
+              @php $shipment = $order->shipments->firstWhere('delivered_at',null); @endphp 
+              <input type="hidden" name="shipment_id" value="{{$shipment->id}}">
+              @if(!$shipment->ready_at)
+                <p> Package is not yet ready for pickup</p>
+                <p> You will be notified via email and phone call once this package is ready for pickup</p>
+              @elseif(!$shipment->shipped_at)
+                <p> This package is Ready for Pickup</p>
+                <p> Please pick up items at: <span class="font-body--md-600"> {{$order->ship}}</span></p>
+                <p> Contact Persion :  <span class="font-body--md-600">Mr Lawal, 08082323244.</span> </p>
+                <div class="row">
+                  <div class="col-6">
+                    
+                    <div class="contact-form--input">
+                      <button type="submit" name="action" value="shipped" class="button btn-md" placeholder="Order Number">Mark Picked Up For Delivery</button>
+                    </div>
+                  </div>
                 </div>
-                <div class="contact-form--input">
-                  <input type="email" placeholder="Your Email" />
+              @elseif(!$shipment->delivered_at)
+                <div class="row">
+                  <div class="col-6">
+                    
+                    <div class="contact-form--input">
+                      <button type="submit" name="action" value="delivered" class="button btn-md" placeholder="Order Number">Mark Items Delivered</button>
+                    </div>
+                  </div>
+                </div>
+              @endif
+            </form>
+          </div>
+          @else
+          <div class="contact-form-card">
+            <h2>Find Order</h2>
+            <p> Enter the order number and password sent to your email to display package information. </p>
+            <form action="{{route('shipment.search')}}" method="POST">@csrf
+              <div class="row">
+                <div class="col-6">
+                  @error('order_number')
+                  <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+                  <div class="contact-form--input">
+                    <input type="text" name="order_number" placeholder="Order Number" />
+                  </div>
                 </div>
               </div>
-              <div class="contact-form--input">
-                <input type="text" placeholder="Subject" />
-              </div>
-              <div class="contact-form--input contact-form--input-area" id="subject" >
-                <textarea name="subject" cols="auto" rows="auto" placeholder="Your Message" ></textarea>
+              <div class="row">
+                <div class="row">
+                  <div class="col-6">
+                    @error('password')
+                    <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
+                    <div class="contact-form--input">
+                      <input type="password" name="password" placeholder="Password" />
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="contact-form-button">
-                <button class="button button--md" type="button">
-                  Send Message
+                <button class="button button--md" type="submit">
+                  Search
                 </button>
               </div>
             </form>
           </div>
+          @endif
         </div>
       </div>
     </div>

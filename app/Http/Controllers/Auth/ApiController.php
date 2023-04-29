@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -112,11 +113,8 @@ class ApiController extends Controller
                     'message' => 'Account Suspended',
                 ], 401);
             }
-            if($user->subscription_id){
-                if(!$user->subscription->active && !$user->subscription->is_free){
-                    $user->subscription_id = $user->subscriptions->firstWhere('is_free',true)->id;
-                    $user->save();
-                }
+            if($user->subscription && $user->subscription->end_at && $user->subscription->expired()){
+                $user->subscription->delete();
             }
             // $user->tokens()->delete();
             return response()->json([
@@ -141,6 +139,7 @@ class ApiController extends Controller
      */
     public function logout()
     {
+        /** @var \App\Models\User $user **/ 
         $user = Auth::user();
         $user->tokens()->delete();
         return [

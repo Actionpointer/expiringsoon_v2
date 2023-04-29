@@ -82,6 +82,7 @@ class Advert extends Model
     public function getRunningAttribute(){
         return $this->approved && $this->adset->status && $this->adset->start_at < now() && $this->adset->end_at > now();
     }
+    
     public function scopeRunning($query){
         return $query->where('approved',true)->whereHas('adset', function (Builder $qry) 
             { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); });

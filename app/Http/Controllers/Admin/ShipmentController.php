@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Rate;
 use App\Models\State;
 use App\Models\Country;
-use App\Models\Shipping;
+use App\Models\Shipment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 
 class ShipmentController extends Controller
 {
@@ -54,9 +55,11 @@ class ShipmentController extends Controller
 
     /*deliveries */
     public function index(){
-        $shippings = Shipping::within()->paginate(10);
+        $shippings = Shipment::within()->paginate(10);
         return view('admin.shipments.index',compact('shippings'));
     }
+
+    
 
     public function process(Request $request){
         //

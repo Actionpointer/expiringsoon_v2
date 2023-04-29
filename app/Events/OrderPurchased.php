@@ -28,7 +28,6 @@ class OrderPurchased
 
     /**
      *
-     *DecreaseProduct::class,
      *BroadcastOrder::class,
      * @return \Illuminate\Broadcasting\Channel|array
      */

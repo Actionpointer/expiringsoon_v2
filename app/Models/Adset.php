@@ -77,6 +77,10 @@ class Adset extends Model
         return $query->where('start_at','<',now())->where('end_at','<',now());
     }
 
+    public function scopeActive($query){
+        return $query->where('start_at','<',now())->where('end_at','>',now());
+    }
+
     public function scopeWithin($query,$value = null){
         if($value){
             return $query->whereHas('user',function($p)use($value){

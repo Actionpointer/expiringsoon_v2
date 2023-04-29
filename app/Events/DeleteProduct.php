@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\User;
+use App\Models\Product;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -20,10 +20,10 @@ class DeleteProduct
      *
      * @return void
      */
-    public $user;
-    public function __construct(User $user)
+    public $product;
+    public function __construct(Product $product)
     {
-        $this->user = $user;
+        $this->product = $product;
     }
 
     /**

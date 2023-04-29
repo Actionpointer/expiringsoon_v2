@@ -23,7 +23,7 @@
                 <span> > </span>
               </a>
             </li>
-            <li class="active"><a href="{{route('wishlist')}}">Wishlist</a></li>
+            <li class="active"><a href="{{route('wishlist')}}">Cart</a></li>
           </ul>
         </div>
       </div>

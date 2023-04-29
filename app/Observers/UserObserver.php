@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Http\Traits\OptimizationTrait;
 use App\Models\User;
 use App\Models\Account;
 use App\Models\Subscription;
@@ -9,6 +10,7 @@ use App\Notifications\WelcomeNotification;
 
 class UserObserver
 {
+    use OptimizationTrait;
     
     public function created(User $user)
     {
@@ -25,8 +27,6 @@ class UserObserver
                 'status'=> 1,
                 'auto_renew'=> false
             ]);
-            $user->subscription_id = $subscription->id;
-            $user->save();
         }
         try{
             $user->notify(new WelcomeNotification);
@@ -53,9 +53,7 @@ class UserObserver
                 $user->idcard->status = false;
                 $user->idcard->reason = 'User new name does not match idcard';
                 $user->idcard->save();
-            }
-
-            
+            } 
         }
     }
 

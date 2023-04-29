@@ -125,8 +125,8 @@ class PaymentController extends Controller
                     $subscription->renew_at = $renew_at;
                     $subscription->end_at = now()->addMonths($duration);
                     $subscription->save();
-                    $subscription->user->subscription_id = $subscription->id;
                     $subscription->user->save();
+                    Subscription::where('user_id',$payment->user->id)->whereNull('end_at')->delete();
                 }
             }
         }

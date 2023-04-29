@@ -50,10 +50,6 @@ class Subscription extends Model
     public function expired(){
         return $this->start_at < now() && $this->end_at < now();
     }
-
-    public function scopeActiveSubscription($query){
-        return $query->where('status',true)->where('start_at','<',now())->where('end_at','>',now());
-    }
     
     public function scopeExpired($query){
         return $query->where('start_at','<',now())->where('end_at','<',now());

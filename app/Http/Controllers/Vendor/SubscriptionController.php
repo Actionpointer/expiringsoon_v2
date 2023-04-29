@@ -15,15 +15,16 @@ class SubscriptionController extends Controller
     use PaymentTrait,OrderTrait;
 
     public function __construct(){
-        $this->middleware('auth:sanctum')->except('plans');
+        $this->middleware('auth:sanctum');
     }
 
     public function plans(){
         $plans = Plan::orderBy('id','desc')->get();
         $enterprises = $plans->keyBy('slug');
+        $user = auth()->user();
         return request()->expectsJson()
         ? response()->json(['status' => true, 'message' => 'Plans retrieved Successfully','data' => PlanResource::collection($plans)], 200)
-        : view('plans',compact('plans','enterprises'));
+        : view('plans',compact('plans','enterprises','user'));
     }
     
     public function subscribe(Request $request){
@@ -31,7 +32,7 @@ class SubscriptionController extends Controller
             $user = auth()->user();
             if($request->has('subscription_id')){
                 $subscription = Subscription::find($request->subscription_id);
-                if($user->subscription_id && $user->subscription_id == $subscription->id && $user->subscription->renew_at && $user->subscription->renew_at > now()){
+                if($user->subscription && $user->subscription->id == $subscription->id && $user->subscription->renew_at && $user->subscription->renew_at > now()){
                     return request()->expectsJson() ? 
                     response()->json([
                         'status' => false,
@@ -42,7 +43,7 @@ class SubscriptionController extends Controller
             }
             if($request->has('plan')){
                 $plan = Plan::where('slug',$request->plan)->first();
-                if($user->subscription_id && $user->subscription->plan_id == $plan->id && $user->subscription->renew_at && $user->subscription->renew_at > now()){
+                if($user->subscription && $user->subscription->plan_id == $plan->id && $user->subscription->renew_at && $user->subscription->renew_at > now()){
                     return request()->expectsJson() ? 
                     response()->json([
                         'status' => false,

@@ -2,27 +2,27 @@
 
 namespace App\Providers;
 
-use App\Events\AdjustCart;
+
+use App\Events\DeleteShop;
 use App\Events\RenewAdset;
 use App\Events\RefundBuyer;
 use App\Events\RetryPayout;
 use App\Events\SettleVendor;
+use App\Events\DeleteProduct;
 use App\Events\DisbursePayout;
 use App\Events\OrderCompleted;
 use App\Events\OrderPurchased;
-use App\Events\DecreaseProduct;
-use App\Listeners\AdjustingCart;
+use App\Listeners\DeletingShop;
 use App\Listeners\RenewingAdset;
 use App\Events\CheckPayoutStatus;
 use App\Listeners\BroadcastOrder;
 use App\Listeners\RefundingBuyer;
 use App\Listeners\RetryingPayout;
 use App\Listeners\SettlingVendor;
+use App\Listeners\DeletingProduct;
 use App\Listeners\DisbursingPayout;
-use App\Listeners\DecreasingProduct;
 use App\Listeners\RemoveFromWishList;
 use Illuminate\Support\Facades\Event;
-
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\CheckingPayoutStatus;
 use Illuminate\Support\Facades\Broadcast;
@@ -46,12 +46,7 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\Login' => [
             'App\Listeners\LogSuccessfulLogin',
         ],
-        AdjustCart::class => [
-            AdjustingCart::class
-        ],
-        DecreaseProduct::class => [
-            DecreasingProduct::class
-        ],
+       
         OrderPurchased::class => [
             BroadcastOrder::class
         ],
@@ -78,11 +73,17 @@ class EventServiceProvider extends ServiceProvider
         CheckPayoutStatus::class => [
             CheckingPayoutStatus::class
         ],
+        DeleteShop::class => [
+            DeletingShop::class
+        ],
+        DeleteProduct::class => [
+            DeletingProduct::class
+        ],
         
     ];
 
     protected $subscribe = [
-        'App\Listeners\ResetShopsAndProductsStatus',
+        
     ];
 
     /**

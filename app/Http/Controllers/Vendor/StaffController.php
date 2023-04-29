@@ -33,6 +33,7 @@ class StaffController extends Controller
     }
 
     public function dashboard(){
+
         $user = auth()->user(); 
         $orders = Order::whereHas('statuses')->whereHas('shop',function($query) use($user){
             $query->where('user_id',$user->id);

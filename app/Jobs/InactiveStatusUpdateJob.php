@@ -3,11 +3,13 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Notifications\AdvertStatusNotification;
 
 class InactiveStatusUpdateJob implements ShouldQueue
 {
@@ -31,7 +33,17 @@ class InactiveStatusUpdateJob implements ShouldQueue
     public function handle()
     {
         //adverts
-        //shops
-        //products
+        $users = \App\Models\User::whereHas('adsets',function($query){
+                    $query->active()->whereHas('adverts',function($puery){
+                        $puery->where(function($wuery){
+                            $wuery->where('advertable_type','App\Models\Product')->whereHas('product',function($pd){
+                                $pd->isNotCertified();
+                            })->orWhere('advertable_type','App\Models\Shop')->whereHas('shop',function($sh){
+                                $sh->isNotCertified();
+                            });
+                        });
+                    });
+                })->get();
+        Notification::send($users,new AdvertStatusNotification());
     }
 }

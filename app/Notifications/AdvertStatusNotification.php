@@ -2,10 +2,11 @@
 
 namespace App\Notifications;
 
+use App\Models\Adset;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class AdvertStatusNotification extends Notification
 {
@@ -40,7 +41,17 @@ class AdvertStatusNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->view('emails.adset.adverts');
+        $adsets = Adset::where('user_id',$notifiable->id)->active()->whereHas('adverts',function($puery){
+                    $puery->where(function($wuery){
+                        $wuery->where('advertable_type','App\Models\Product')->whereHas('product',function($pd){
+                            $pd->isNotCertified();
+                        })->orWhere('advertable_type','App\Models\Shop')->whereHas('shop',function($sh){
+                        $sh->isNotCertified();
+                        });
+                    });
+
+                })->get();
+        return (new MailMessage)->view('emails.adset.adverts',['user'=> $notifiable,'adsets' => $adsets]);
     }
 
     /**

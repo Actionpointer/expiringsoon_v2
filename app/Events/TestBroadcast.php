@@ -29,7 +29,6 @@ class TestBroadcast implements ShouldBroadcastNow
 
     /**
      * Get the channels the event should broadcast on.
-     *DecreaseProduct::class,
      *RemoveFromWishList::class,
      * @return \Illuminate\Broadcasting\Channel|array
      */

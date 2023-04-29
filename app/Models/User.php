@@ -89,15 +89,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function adverts(){  
         return $this->hasManyThrough(Advert::class,Adset::class,'user_id','adset_id');
     }
-
     public function subscription(){
-        return $this->belongsTo(Subscription::class)->withDefault();
+        return $this->hasOne(Subscription::class,'user_id');
     }
-    public function subscriptions(){
-        return $this->hasMany(Subscription::class);
-    }
+
     public function getSubscriptionNameAttribute(){
-        if($this->subscription_id){
+        if($this->subscription){
             return $this->subscription->plan->name;
         }else return null;    
     }
@@ -114,13 +111,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getMaxShopsAttribute(){
         if($this->shop_id)
             return $this->shop->user->subscription->plan->shops;
-        elseif($this->subscription_id)
+        elseif($this->subscription)
             return $this->subscription->plan->shops;
     }
     public function getMaxProductsAttribute(){
         if($this->shop_id)
             return $this->shop->user->subscription->plan->products;
-        elseif($this->subscription_id)
+        elseif($this->subscription)
              return $this->subscription->plan->products;
     }
     

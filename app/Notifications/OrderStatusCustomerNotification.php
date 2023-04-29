@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,16 +11,16 @@ use Illuminate\Notifications\Notification;
 class OrderStatusCustomerNotification extends Notification
 {
     use Queueable;
-    public $order;
+    public $status;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct(OrderStatus $status)
     {
-        $this->order = $order;
+        $this->status = $status;
     }
 
     /**
@@ -42,29 +42,31 @@ class OrderStatusCustomerNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        if($this->order->status == 'processing'){
-            $view = 'emails.receipt';
+        switch($this->status->name){
+            case 'processing': $view = 'emails.order.processing';
+            break;
+            case 'cancelled': $view = 'emails.order.cancelled';
+            break;
+            // case 'ready': $view = 'emails.order.ready';
+            // break;
+            case 'shipped': $view = 'emails.order.shipped';
+            break;
+            case 'delivered': $view = 'emails.order.delivered';
+            break;
+            case 'refunded': $view = 'emails.order.refunded';
+            break;
+            case 'disputed': $view = 'emails.order.disputed';
+            break;
+            case 'closed': $view = 'emails.order.closed';
+            break;
         }
-        if($this->order->status == 'shipped'){
-            $view = 'emails.shipped';
-        }
-        if($this->order->status == 'delivered'){
-            $view = 'emails.delivered';
-        }
-        if($this->order->status == 'completed'){
-            $view = 'emails.completed';
-        }
-        return (new MailMessage)->subject('Welcome Aboard')->view(
-            'emails.completed', ['user' => $notifiable]
+        
+        return (new MailMessage)->view(
+            $view, ['user' => $notifiable,'order'=> $this->status->order,'status'=> $this->status]
         );
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
+    
     public function toArray($notifiable)
     {
         return [

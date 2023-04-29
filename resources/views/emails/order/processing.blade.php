@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Order Receipt No. 4343 | Expiring Soon</title>
+	<title>Order Receipt No. {{$order->id}} | Expiring Soon</title>
 	
 	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
 	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
@@ -131,93 +131,119 @@
 											<tr>
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
+														@if(isset($user))
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">Dear Mike Okeji,</span><br />Thank you for shopping with Expiring Soon.</b>
-															<br /><br />Please help us improve our service by taking a moment to rate your experience with the vendor and the productsa(s) you ordered.</td>
-														</tr>
-														<tr>
-															<td class="fluid-img" align="center">
-																<img src="{{asset('src/images/site/tracking-bar-delivered.jpg')}}" border="0" width="100%" alt="" />
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">Dear {{$order->user->name}},</span>
+																<br />Your order is now being processed and will be available for delivery/pickup within the next 72hours. In case you are not happy with your purchase, 
+																you may still be able to cancel it within the next 24hours.
+																<br />Thank you for shopping with Expiring Soon. 
+																
 															</td>
 														</tr>
-														{{-- <tr>
-															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Please Note:</span><br />You can rate from <span style="color:#00b207">★</span> (very poor) to <span style="color:#00b207">★★★★★</span> (Excellent) on the <a href="https://expiringsoon.shop/invoice.php?ref=123232" target="_blank" style="color:#00b207">Order Details</a> page.<br /><br />
-																In case you are not happy with your purchase, you may still be able to return it. At Expiring Soon, we have an option for Easy Return & Quick Refund.<br /><br />
-															You have the option to return an item within 7 days of delivery if it's not matching your expectation (wrong/defective/damaged), and in some cases for change of mind too.</div>
+														@else
+														<tr>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">New Order from {{$order->user->name}},</span>
+																<br />Kindly fulfill the order before 12/12/12. Order will be automatically cancelled if not ready for delivery or shipped on or before 12/12/21.
+
+																<br />Thank you for using Expiring Soon..
+															</td>
+														</tr>
+														@endif
+														<tr>
+															<td class="fluid-img" align="center">
+																<img src="{{asset('src/images/site/tracking-bar-processing.jpg')}}" border="0" width="100%" alt="" />
 															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Delivery Address</span><br />
-															25, Odunlade street, Isaleko Lagos</div>
+																<div style="display:flex;justify-content:space-between">
+																	@if($order->deliverer != 'pickup')
+																	<div style="">
+																		<span style="font-weight:600">Delivery Type: {{$order->deliverer == 'pickup'? 'Pickup': 'Shipment'}}</span><br />
+																			@if($order->deliverer != 'pickup')
+																			{{ucwords(strtolower($order->address->contact_name))}}<br />
+																			{{ucwords(strtolower($order->address->street))}}<br/>
+																			{{ucwords(strtolower($order->address->city ? $order->address->city->name.', ' : ''))}} {{ucwords(strtolower($order->address->state->name))}} <br/>
+																			{{$order->address->contact_phone}}
+																			@endif
+																	</div>
+																	@endif
+																	<div style="">
+																		<span style="font-weight:600">Summary</span><br />
+																		Order #: {{$order->id}}<br />
+																		Payment Date: {{$status->created_at->format('d/m/y')}}<br />
+																		
+																	</div>
+																</div>
+																
 															</td>
 														</tr>
+														
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<div style="margin:auto;width:80%"><span style="font-weight:600">Recipient Details</span><br />
-																	Damilola Odunlade<br />
-																	08038493984343
-																</div>
-															</td>
-														</tr> --}}
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
-																	Order #: 123232<br />
-																	Date: 12/12/2022<br />
-																</div>
+																
 															</td>
 														</tr>
 														<tr>
 															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
 																<div class="cart-row">
-																	<div class="cart-item-name" style="font-weight: 600;">Item</div>
+																	<div class="cart-item-name" style="font-weight: 600;">Items</div>
 																	<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
 																	<div class="cart-item" style="font-weight: 600;">Price</div>
 																	<div class="cart-item" style="font-weight: 600;">Total</div>
 																</div>
+																@foreach($order->items as $item)
+																	<div class="cart-row">
+																		<div class="cart-item-name">{{$item->product->name}}</div>
+																		<div class="cart-item-qty">{{$item->quantity}}</div>
+																		<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$item->amount}}</div>
+																		<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$item->total}}</div>
+																	</div>
+																@endforeach
 																
-																<div class="cart-row">
-																	<div class="cart-item-name">yam</div>
-																	<div class="cart-item-qty">4</div>
-																<div class="cart-item">N3422</div>
-																<div class="cart-item">N23800</div>
-																</div>
 															
-															<div class="cart-row-ttl">
-																<div class="cart-item-name">&nbsp;</div>
-																<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
-																<div class="cart-item">N45465656</div>
+																<div class="cart-row-ttl">
+																	<div class="cart-item-name">&nbsp;</div>
+																	<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
+																	<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$order->subtotal}}</div>
 
 																	<div class="cart-item-name">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">VAT (5%)</span></div>
-																	<div class="cart-item">N454646</div>
+																	<div class="cart-item"><span style="font-weight: 600;">VAT ({{$order->shop->country->vat}}%)</span></div>
+																	<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$order->vat}}</div>
 
 																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
 																	<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
-																	<div class="cart-item">N5,644</div>
+																	<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$order->deliveryfee}}</div>
 
 																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
 																	<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
-																	<div class="cart-item"><span style="font-weight: 600;">N4,545,456</span></div>
-															</div>
-															<div class="cart-row">
-															<div class="cart-item-name">Payment Method</div>
-															<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
-															<div class="cart-item">&nbsp</div>
-															<div class="cart-item">&nbsp</div>
-															</div>
+																	<div class="cart-item"><span style="font-weight: 600;">{!!$order->shop->country->currency->symbol!!}{{$order->total}}</span></div>
+																</div>
+																{{-- <div class="cart-row">
+																	<div class="cart-item-name">Payment Method</div>
+																	<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
+																	<div class="cart-item">&nbsp</div>
+																	<div class="cart-item">&nbsp</div>
+																</div> --}}
 															</td>
 														</tr>
-														<tr>
-															<td class="text-btn-large" bgcolor="#00FA00" style="font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; border:0px solid #cd6502; padding:15px 35px;">
-																<a href="https://grabbr.ng/verify.php?token=11111&uid=222; ?>" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
-																	<span class="link-2" style="color:#fff; text-decoration:none;">Review</span>
-																</a>
-															</td>
-														</tr> 
 														
+														<!-- Button -->
+														<tr>
+															<td align="center">
+																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+																	<tr>
+																		<td class="text-button" style="padding:12px">
+																			<a @if(isset($user)) href="{{route('order.show',$order)}}" @else href="{{route('vendor.shop.order.view',[$shop,$order])}}" @endif target="_blank" class="link">
+																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
+																			</a>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;">
 															</td>

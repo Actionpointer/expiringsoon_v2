@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!DOCTYPE html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -8,19 +7,13 @@
 	<meta name="format-detection" content="address=no" />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="x-apple-disable-message-reformatting" />
-    <!--[if !mso]><!-->
+    
 	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900,900i" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!--<![endif]-->
-	<title>Order Receipt No. 34343 | Expiring Soon</title>
-	<!--[if gte mso 9]>
-	<style type="text/css" media="all">
-		sup { font-size: 100% !important; }
-	</style>
-	<![endif]-->
-
-	<!-- site Favicon -->
+	
+	<title>Order Receipt No. {{$order->id}} | Expiring Soon</title>
+	
 	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
 	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
 	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
@@ -124,7 +117,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="fluid-img">
-										<img src="{{asset('src/images/site/img-shipped.jpg')}}" border="0" width="100%" alt="" />
+										<img src="{{asset('src/images/site/img-delivered.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -141,7 +134,7 @@
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Dear John Ejeba,</span><br />
-																We have just dispatched the item(s) below from your order <b>34343</b>
+																We have just dispatched the item(s) below from your order <b>{{$order->id}}</b>
 															<br /><br />The package will be delivered by our delivery agent once it gets to the delivery hub at the following address: 
 															<span style="font-weight:600">
 																21, Irewunmi Badru Street, Ojota Lagos</span>.
@@ -149,83 +142,106 @@
 														</tr>
 														<tr>
 															<td class="fluid-img" align="center">
-																<img src="{{asset('src/images/site/tracking-bar-shipped.jpg')}}" border="0" width="100%" alt="" /></td>
+																<img src="{{asset('src/images/site/tracking-bar-shipped.jpg')}}" border="0" width="100%" alt="" />
+															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Please Note:</span><br />If you ordered multiple items, you may receive them on different days. This is because they are sold by different vendors on our platform and we want to make each item available to you as quickly as possible.<br /><br />
-																If you have chosen Pay on Delivery, we encourage you to pay via our POS only.<br /><br />
+															<div style="margin:auto;"><span style="font-weight:600">Please Note:</span><br />If you ordered multiple items, you may receive them on different days. This is because they are sold by different vendors on our platform and we want to make each item available to you as quickly as possible.<br />
+																
+																{{-- <br />If you have chosen Pay on Delivery, we encourage you to pay via our POS only.<br /> --}}
+																<br />
 																Expiring Soon will never ask you for your password, PIN, CVV or full card details over the phone or via email.</div>
 															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Delivery Address</span><br />
-																21, Irewunmi Badru Street, Ojota Lagos</div>
+																<div style="display:flex;justify-content:space-between">
+																	@if($order->deliverer != 'pickup')
+																	<div style="">
+																		<span style="font-weight:600">Delivery Address</span><br />
+																			{{ucwords(strtolower($order->address->contact_name))}}<br />
+																			{{ucwords(strtolower($order->address->street))}}<br/>
+																			{{ucwords(strtolower($order->address->city ? $order->address->city->name.', ' : ''))}} {{ucwords(strtolower($order->address->state->name))}} <br/>
+																			{{$order->address->contact_phone}}
+																	</div>
+																	@endif
+																	<div style="">
+																		<span style="font-weight:600">Summary</span><br />
+																		Order #: {{$order->id}}<br />
+																		Delivery Date: {{$status->created_at->format('d/m/y')}}<br />
+																	</div>
+																</div>
+																
 															</td>
 														</tr>
+														
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Recipient Details</span><br />
-															Suluman Israel<br />090656565645</div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
-															Order #: 34343<br />
-															Date: 12/12/2020<br />
-															</div>
+																
 															</td>
 														</tr>
 														<tr>
 															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
 																<div class="cart-row">
-																<div class="cart-item-name" style="font-weight: 600;">Item</div>
-																<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
-																<div class="cart-item" style="font-weight: 600;">Price</div>
-																<div class="cart-item" style="font-weight: 600;">Total</div>
+																	<div class="cart-item-name" style="font-weight: 600;">Items</div>
+																	<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
+																	<div class="cart-item" style="font-weight: 600;">Price</div>
+																	<div class="cart-item" style="font-weight: 600;">Total</div>
 																</div>
+																@foreach($order->items as $item)
+																	<div class="cart-row">
+																		<div class="cart-item-name">{{$item->product->name}}</div>
+																		<div class="cart-item-qty">{{$item->quantity}}</div>
+																		<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$item->amount}}</div>
+																		<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$item->total}}</div>
+																	</div>
+																@endforeach
 																
-																<div class="cart-row">
-																	<div class="cart-item-name">Yam</div>
-																	<div class="cart-item-qty">12</div>
-																	<div class="cart-item">N123232</div>
-																	<div class="cart-item">N123,232</div>
-																</div>
 															
 																<div class="cart-row-ttl">
 																	<div class="cart-item-name">&nbsp;</div>
 																	<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
-																	<div class="cart-item">N34343</div>
-	
-																		<div class="cart-item-name">&nbsp;</div>
-																		<div class="cart-item"><span style="font-weight: 600;">VAT (5%)</span></div>
-																		<div class="cart-item">N34343</div>
-	
-																		<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																		<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
-																		<div class="cart-item">N3433</div>
-	
-																		<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																		<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
-																		<div class="cart-item"><span style="font-weight: 600;">N3455</span></div>
+																	<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$order->subtotal}}</div>
+
+																	<div class="cart-item-name">&nbsp;</div>
+																	<div class="cart-item"><span style="font-weight: 600;">VAT ({{$order->shop->country->vat}}%)</span></div>
+																	<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$order->vat}}</div>
+
+																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
+																	<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
+																	<div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$order->deliveryfee}}</div>
+
+																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
+																	<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
+																	<div class="cart-item"><span style="font-weight: 600;">{!!$order->shop->country->currency->symbol!!}{{$order->total}}</span></div>
 																</div>
-																<div class="cart-row">
+																{{-- <div class="cart-row">
 																	<div class="cart-item-name">Payment Method</div>
 																	<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
 																	<div class="cart-item">&nbsp</div>
 																	<div class="cart-item">&nbsp</div>
-																</div>
+																</div> --}}
 															</td>
 														</tr>
+														{{-- <tr>
+															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
+																<div style="">
+																	<span style="font-weight:600">Please Note:</span>
+																	<br />You can rate from <span style="color:#00b207">★</span> (very poor) to 
+																	<span style="color:#00b207">★★★★★</span> 
+																	(Excellent) on the <a href="{{route('order.show',$order)}}" target="_blank" style="color:#00b207">Order Details</a> page.
+																	<br /><br />
+																</div>
+															</td>
+														</tr> --}}
 														<!-- Button -->
 														<tr>
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
 																		<td class="text-button" style="padding:12px">
-																			<a href="https://expiringsoon.shop/invoice.php?ref=34343" target="_blank" class="link">
+																			<a href="{{route('order.show',$order)}}" target="_blank" class="link">
 																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
 																			</a>
 																		</td>

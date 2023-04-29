@@ -126,9 +126,16 @@ class Product extends Model
         return $this->valid && $this->accessible() && $this->approved && $this->status && $this->published && $this->available;
     }
 
+    public function scopeIsNotCertified($query){
+        return $query->where(function($q){
+            $q->where('approved',false)->orWhere('status',false)->orWhere('published',false)->orWhere('expire_at','<',now()->addHours(cache('settings')['order_processing_to_delivery_period']));
+        });        
+    }
+
     public function scopeIsApproved($query){
         return $query->where('approved',true);
     }
+    
     public function scopeIsActive($query){
         return $query->where('status',true);
     }

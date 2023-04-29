@@ -56,9 +56,9 @@ class Plan extends Model
     public function subscriptions(){
         return $this->hasMany(Subscription::class);
     }
-    public function activeSubscriptions(){
-        return $this->hasMany(Subscription::class)->where('end_at', '>', now())->where('status',true);
-    }
+    // public function activeSubscriptions(){
+    //     return $this->hasMany(Subscription::class)->where('end_at', '>', now())->where('status',true);
+    // }
     public function prices(){
         return $this->hasMany(Price::class);
     }

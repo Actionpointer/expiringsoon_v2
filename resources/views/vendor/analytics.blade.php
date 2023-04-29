@@ -178,7 +178,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($user->subscriptions as $subscription)
+                      @forelse($subscriptions as $subscription)
                         <tr>
                           <!-- Order Id  -->
                           <td class="dashboard__order-history-table-item order-status"> 

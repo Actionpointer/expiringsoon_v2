@@ -38,10 +38,22 @@ sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWy
 version 2
 buyer can remove items from order which not yet shipped/ready, not yet expired, and pick another item from the same shop, of similar worth
 buyer can buy now and receive later when the price drops
-
 auto-renew subscription & adset
-
 add password strength meter
-
-6.
+create an order on the shipment partners website, if integrated. Also we need to receive a webhook from shipment company when the item has been shipped so we can mark this item shipped
 stripe PAYMENTS, REFUND & PAYOUT
+
+
+
+$users = \App\Models\User::whereHas('adsets',function($query){
+                    $query->active()->whereHas('adverts',function($puery){
+                        $puery->where(function($wuery){
+                            $wuery->where('advertable_type','App\Models\Product')->whereHas('product',function($pd){
+                                $pd->where('status',false);
+                            })->orWhere('advertable_type','App\Models\Shop')->whereHas('shop',function($sh){
+                                $sh->where('status',false);
+                            });
+                        });
+                });
+        })->get();
+dd($users);

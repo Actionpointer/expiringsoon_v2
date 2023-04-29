@@ -57,7 +57,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('checkout/confirm',[OrderController::class,'confirmcheckout']);
 
     Route::get('orders', [OrderController::class, 'index']);
-    Route::get('order/{order}',[OrderController::class, 'show']);
+    Route::get('order/{order_id}',[OrderController::class, 'show']);
     Route::post('order/update',[OrderController::class, 'update']); 
     Route::post('order/message',[OrderController::class, 'message']);
 

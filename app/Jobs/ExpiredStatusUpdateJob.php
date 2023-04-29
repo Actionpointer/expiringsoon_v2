@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Adset;
 use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
+use App\Http\Traits\OptimizationTrait;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +16,7 @@ use App\Notifications\SubscriptionStatusNotification;
 
 class ExpiredStatusUpdateJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels,OptimizationTrait;
 
     /**
      * Create a new job instance.
@@ -40,7 +41,9 @@ class ExpiredStatusUpdateJob implements ShouldQueue
             $adset->user->notify(new AdsetStatusNotification($adset));
         }
         foreach($subscriptions as $subscription){
-            $subscriptions->user->notify(new SubscriptionStatusNotification($subscription));
+            $user = $subscription->user;
+            $user->notify(new SubscriptionStatusNotification($subscription));
+            $subscription->delete(); 
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\Cart;
+use App\Models\Subscription;
 use App\Http\Traits\CartTrait;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,12 +31,10 @@ class LogSuccessfulLogin
     public function handle(Login $event)
     {
         $user = auth()->user();
-        if($user->role->name == 'vendor' && $user->subscription_id){
-            if(!$user->subscription->active && !$user->subscription->is_free){
-                $user->subscription_id = $user->subscriptions->firstWhere('is_free',true)->id;
-                $user->save();
-            }
+        if($user->subscription && $user->subscription->end_at && $user->subscription->expired()){
+            $user->subscription->delete();
         }
+        
         //first give session cart to database
         $cart = session('cart');
         if($cart){

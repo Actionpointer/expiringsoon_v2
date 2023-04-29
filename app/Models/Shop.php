@@ -82,17 +82,27 @@ class Shop extends Model
     public function scopeIsApproved($query){
         return $query->where('approved',true);
     }
+
     public function scopeIsVisible($query){
         return $query->where('published',true);
     }
+
     public function scopeIsActive($query){
         return $query->where('status',true);
     }
+
     public function scopeIsSelling($query){
         return $query->whereHas('products',function($q) {$q->where('status',true)->where('published',true)->where('approved',true)->where('stock','>',cache('settings')['minimum_stock_level']);});
     }
+    
     public function certified(){
         return $this->status && $this->approved && $this->published;
+    }
+
+    public function scopeIsNotCertified($query){
+        return $query->where(function($q){
+            $q->where('approved',false)->orWhere('status',false)->orWhere('published',false);
+        });        
     }
     public function user(){
         return $this->belongsTo(User::class);
@@ -131,6 +141,10 @@ class Shop extends Model
     }
     public function products(){
         return $this->hasMany(Product::class);
+    }
+    
+    public function likes(){
+        return $this->hasManyThrough(Like::class,Product::class,'shop_id','product_id');
     }
     
     public function adverts(){

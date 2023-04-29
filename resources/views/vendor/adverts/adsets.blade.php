@@ -315,10 +315,10 @@
                                         <span id="subtotal">0.00</span> </span>
                                     </div>
 
-                                    <div class="form-check py-2">
+                                    {{-- <div class="form-check py-2">
                                       <label class="form-check-label" for="autorenew" > Auto-renew</label>
                                       <input class="form-check-input checkboxes" type="checkbox" name="auto_renew" value="1" checked>
-                                    </div>
+                                    </div> --}}
 
                                   </div>
                                   

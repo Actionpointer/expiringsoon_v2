@@ -13,7 +13,7 @@ use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
 use App\Http\Controllers\Shopper\AddressController;
 
-Route::get('/broadcast', function () {
+Route::get('/eg', function () {
     // $countries = \App\Models\Country::where('payout_gateway','paypal')->get();
     // $users = \App\Models\User::where('role_id',6)->whereIn('country_id',$countries->pluck('id')->toArray())->get();
     // foreach($users as $user){
@@ -21,10 +21,18 @@ Route::get('/broadcast', function () {
     //     $user->save();
     // }
     // return "Event broadcaasted!";
-    $adset = \App\Models\Subscription::find(3);
+    $adset = \App\Models\Subscription::where('end_at','<',now())->delete();
     return (new App\Notifications\SubscriptionStatusNotification($adset))
                     ->toMail($adset->user);
 });
+
+Route::get('/broadcast', function () {
+    $status = \App\Models\OrderStatus::find(28);
+    return (new App\Notifications\OrderStatusCustomerNotification($status))
+                    ->toMail($status->order->shop);
+});
+
+
 
 
 Route::view('email','emails.completed');
@@ -34,9 +42,10 @@ Route::view('help/vendors','help.vendors')->name('help.vendors');
 Route::view('help/api/documentation','help.apidocumentation')->name('help.api_documentation');
 Route::view('help/faq','help.faq')->name('help.faq');
 Route::view('help/download','help.download')->name('help.download');
-Route::view('help/contact','help.contact')->name('help.contact');
-
-Route::view('email','emails.completed');
+Route::view('help/contact','frontend.contact')->name('help.contact');
+Route::get('shipments/{order?}',[FrontendController::class,'shipment'])->name('shipment');
+Route::post('shipment/search',[FrontendController::class,'shipment_search'])->name('shipment.search');
+Route::post('shipment/updated',[FrontendController::class,'shipment_update'])->name('shipment.update');
 
 Route::get('/', [FrontendController::class, 'index'])->name('index');
 Route::get('advert/{advert}', [FrontendController::class, 'redirect'])->name('advert.redirect');

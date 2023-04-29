@@ -72,14 +72,14 @@ class Order extends Model
     public function payment_item(){
         return $this->morphOne(PaymentItem::class,'paymentable');
     }
+    
     public function settlements(){
         return $this->hasMany(Settlement::class);
     }
+
     public function address(){
         return $this->belongsTo(Address::class);
     }
-    
-  
     
     public function scopeStatusFilter($query,$value){    
         return $query->whereHas('statuses',function($q) use($value){
@@ -104,7 +104,7 @@ class Order extends Model
     }
 
     public function commission(){
-        $plan = $this->shop->user->activeSubscription ? $this->shop->user->activeSubscription->plan : Plan::where('slug','free_plan')->first();
+        $plan = $this->shop->user->subscription ? $this->shop->user->subscription->plan : Plan::where('slug','free_plan')->first();
         $fixed = $plan->commission_fixed; 
         $percentage = $plan->commission_percentage; 
         return ($this->subtotal * ($percentage / 100)) + $fixed;

@@ -10,8 +10,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Shipment extends Model
 {
     use HasFactory;
-    protected $fillable = ['address_id','rate_id','order_id','amount','ready_at','delivered_at'];
-    protected $dates = ['ready_at','expected_at'];
+    protected $fillable = ['address_id','rate_id','order_id','amount','ready_at','shipped','delivered_at'];
+    protected $dates = ['ready_at','shipped','expected_at'];
+    
     public function rate(){
         return $this->belongsTo(Rate::class);
     }

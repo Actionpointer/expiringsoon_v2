@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,15 +13,15 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 class OrderStatusVendorNotification extends Notification
 {
     use Queueable;
-    public $order;
+    public $status;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct(OrderStatus $status)
     {
-        $this->order = $order;
+        $this->status = $status;
     }
 
     /**
@@ -42,18 +43,33 @@ class OrderStatusVendorNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        switch($this->order->status){
-            case 'processing': $view = 'emails.receipt';
-                break;
-            case 'shipped': $view = 'emails.shipped';
-                break;
-            case 'delivered': $view = 'emails.delivered';
-                break;
-            case 'completed': $view = 'emails.completed';
-                break;
-
+        switch($this->status->name){
+            case 'processing': $view = 'emails.order.processing';
+            break;
+            case 'cancelled': $view = 'emails.order.cancelled';
+            break;
+            // case 'ready': $view = 'emails.order.ready';
+            // break;
+            case 'shipped': $view = 'emails.order.shipped';
+            break;
+            // case 'delivered': $view = 'emails.order.delivered';
+            // break;
+            case 'completed': $view = 'emails.order.completed';
+            break;
+            case 'rejected': $view = 'emails.order.rejected';
+            break;
+            case 'returned': $view = 'emails.order.returned';
+            break;
+            // case 'refunded': $view = 'emails.order.refunded';
+            // break;
+            case 'disputed': $view = 'emails.order.disputed';
+            break;
+            case 'closed': $view = 'emails.order.closed';
+            break;
         }
-        return (new MailMessage)->view($view,['order' => $this->order]);
+        return (new MailMessage)->view(
+            $view, ['shop' => $notifiable,'order'=> $this->status->order,'status'=> $this->status]
+        );
     }
 
     public function receivesBroadcastNotificationsOn()
@@ -64,7 +80,7 @@ class OrderStatusVendorNotification extends Notification
     
     public function toBroadcast($notifiable){
         return new BroadcastMessage([
-            'order_id' => $this->order->id,
+            'order_id' => $this->status->id,
             'message' => 'Something happened to this order',
         ]);
     }
@@ -73,7 +89,7 @@ class OrderStatusVendorNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'order_id' => $this->order->id,
+            'order_id' => $this->status->id,
             'message' => 'Something happened to this order',
         ];
     }

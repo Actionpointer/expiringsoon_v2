@@ -61,31 +61,31 @@
                             
                           @else
                           
-                            @if($user->subscription->auto_renew) 
+                            {{-- @if($user->subscription->auto_renew) 
                                 
                               <form class="" action="{{route('vendor.subscription.cancel_renew')}}" method="POST"> @csrf 
-                                  <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
+                                  <input type="hidden" name="subscription_id" value="{{$user->subscription->id}}"> 
                                   <p>Subscription will auto-renew on ({{$user->subscription->end_at->format('d-M-Y')}}) | 
                                   <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
                               </form> 
                               <form class="" action="{{route('vendor.plans.subscribe')}}" method="POST"> @csrf 
-                                <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
+                                <input type="hidden" name="subscription_id" value="{{$user->subscription->id}}"> 
                                 <button type="submit"><u>Renew Now </u></button>
                               </form>
-                            @else
+                            @else --}}
 
                               <form class="" action="{{route('vendor.plans.subscribe')}}" method="POST"> @csrf 
-                                <input type="hidden" name="subscription_id" value="{{$user->subscription_id}}"> 
+                                <input type="hidden" name="subscription_id" value="{{$user->subscription->id}}"> 
                                 <p>Subscription will expire on {{$user->subscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p> 
                                 <button type="submit"><u>Renew Now </u></button>
                               </form>
 
-                            @endif 
+                            {{-- @endif  --}}
                             
                           @endif
                       @endif
                         
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center mt-3">
                       <div style="float:left;padding-right:20px;margin-right:20px;border-right:2px solid #e0dfdf">
                           <p align="left" class="font-body--md-400 designation">Total Shops</p>
                           <div style="margin-top:-10px">

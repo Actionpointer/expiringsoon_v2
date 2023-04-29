@@ -4,11 +4,13 @@ namespace App\Observers;
 
 use App\Models\Shop;
 use App\Events\DeleteShop;
+use App\Http\Traits\OptimizationTrait;
 use App\Notifications\ShopStatusNotification;
 
 
 class ShopObserver
 {
+    use OptimizationTrait;
     /**
      * Handle the Shop "created" event.
      *
@@ -17,7 +19,6 @@ class ShopObserver
      */
     public function created(Shop $shop)
     {
-
         if(cache('settings')['auto_approve_shop'])
         $shop->approved = true;
         $shop->status = $shop->user->max_shops >= $shop->user->total_shops ? true:false;
@@ -58,11 +59,12 @@ class ShopObserver
 
     public function deleting(Shop $shop)
     {
-        $shop->user->notify(new ShopStatusNotification('deleted'));
-        event(new DeleteShop($shop->user));
+        event(new DeleteShop($shop));
     }
 
     public function deleted(Shop $shop){
+        $this->resetProducts($shop->user);
+        $this->resetShops($shop->user);
     }
 
     /**

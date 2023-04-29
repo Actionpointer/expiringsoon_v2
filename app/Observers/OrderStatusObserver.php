@@ -3,13 +3,13 @@
 namespace App\Observers;
 
 use App\Models\User;
-use App\Events\AdjustCart;
+use App\Models\Shipment;
 use App\Models\Settlement;
 use App\Events\RefundBuyer;
 use App\Models\OrderStatus;
 use App\Events\SettleVendor;
 use App\Events\OrderPurchased;
-use App\Events\DecreaseProduct;
+use App\Http\Traits\OptimizationTrait;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\OrderShipmentNotification;
 use App\Notifications\OrderStatusVendorNotification;
@@ -17,6 +17,7 @@ use App\Notifications\OrderStatusCustomerNotification;
 
 class OrderStatusObserver
 {
+    use OptimizationTrait;
     /**
      * Handle the OrderStatus "created" event.
      *
@@ -56,9 +57,10 @@ class OrderStatusObserver
 
     public function processing(OrderStatus $orderStatus){
         event(new OrderPurchased($orderStatus->order));
-        event(new DecreaseProduct($orderStatus->order));
-        event(new AdjustCart($orderStatus->order));
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus->order));
+        $this->decreaseProducts($orderStatus->order);
+        $this->adjustCart($orderStatus->order);
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
         
     }
 
@@ -68,50 +70,53 @@ class OrderStatusObserver
 
     public function ready(OrderStatus $orderStatus){
         if($orderStatus->order->deliverer == "admin"){
-            Notification::send(User::where('role','admin')->get(),new OrderShipmentNotification($orderStatus->order));
+            $shipment = Shipment::where('order_id',$orderStatus->order_id)->where('delivered_at',null)->first();
+            $shipment->ready_at = now();
+            $shipment->save();
+            Notification::send(User::where('role','admin')->get(),new OrderShipmentNotification($shipment));
         }else{
-            $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus->order));
+            $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
         }
     }
 
     public function shipped(OrderStatus $orderStatus){
-        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus->order));
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
     }
 
     public function delivered(OrderStatus $orderStatus)
     {
-        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus->order));
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
     }
     
     public function completed(OrderStatus $orderStatus)
     {
         event(new SettleVendor($orderStatus->order));
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus->order));
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
 
     public function rejected(OrderStatus $orderStatus)
     {
         //delete one settlement where description is vendor commission
         Settlement::where('order_id',$orderStatus->order_id)->where('description','Commission')->delete();
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus->order));
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
     
     public function returned(OrderStatus $orderStatus)
     {
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus->order));
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
 
     public function refunded(OrderStatus $orderStatus)
     {
         event(new RefundBuyer($orderStatus->order,$orderStatus->order->subtotal));
         event(new SettleVendor($orderStatus->order));
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus->order));
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
 
     public function disputed(OrderStatus $orderStatus)
     {
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus->order));
-        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus->order));
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
     }
 
     public function closed(OrderStatus $orderStatus)
@@ -125,7 +130,7 @@ class OrderStatusObserver
             event(new RefundBuyer($orderStatus->order,$orderStatus->order->subtotal * $dispute->buyer / 100));
         }
         event(new SettleVendor($orderStatus->order));
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus->order));
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
     
 }

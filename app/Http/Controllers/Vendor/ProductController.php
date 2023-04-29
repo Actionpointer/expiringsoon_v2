@@ -209,9 +209,7 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->with(['result'=> '0','message'=> 'Cannot delete products with on-going orders']);
         } 
-        // Like::whereIn('id',$product->likes->pluck('id')->toArray())->delete();
-        // Cart::whereIn('id',$product->carts->pluck('id')->toArray())->delete();
-        // Product::where('id',$product->id)->delete();
+        Product::where('id',$product->id)->delete();
         return request()->expectsJson() ?
                  response()->json([
                     'status' => true,

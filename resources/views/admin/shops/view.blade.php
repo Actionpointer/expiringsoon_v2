@@ -125,10 +125,7 @@
                                   <tr>
                                     <td>Subscription </td>
                                     <td align="right">
-                                        @if($shop->user->activeSubscription)
-                                        {{$shop->user->activeSubscription->plan->name}} Subscription
-                                        @else Free Subscription
-                                        @endif
+                                        {{$shop->user->subscription->plan->name}} Subscription
                                     </td>
                                   </tr>
                                   <tr>

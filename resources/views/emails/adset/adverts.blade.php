@@ -134,15 +134,35 @@
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:center; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">Advert is showing!</span><br />
-																Your ads contained in AdsetNumber34098304 Adsets are now showing<br/ > 
-																The ads contains 4 products and 2shops</td>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:center; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">Some Advert are not showing!</span>
+																
+															</td>
+														</tr>
+														<tr>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																
+																Some of your ads are not showing. Affected adsets are: 
+																@foreach ($adsets as $adset)
+																	<a href="{{route('vendor.adverts',$adset)}}"><u>{{$adset->slug}}</u></a> @if(!$loop->last) , @else . @endif
+																@endforeach
+																<br/>
+																Here are a few things that might be the problem<br/> 
+																<ul>
+																	<li>Your adset subscription has expired</li>
+																	<li>Your user subscription has expired and therefore some of your shops or products are no longer visible</li>
+																	<li>Your shop or products are not approved</li>
+																	<li>Your shop or products are not not published</li>
+																	<li>Your products are no longer available in stock</li>
+																	<li>Your products have expired</li>
+																</ul>
+															</td>
 														</tr>
 														<tr>
 															<td class="text-btn-large" align="center">
 																<div style="background:#5fb882;width:50%;color:#fff; font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; padding:15px 35px;border-bottom:1px solid #ddd">
-																	<a href="https://expiring.soon/login.php" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
-																		<span class="link-2" style="color:#fff; text-decoration:none;">View Ad Insights</span>
+																	<a href="{{route('vendor.adsets')}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
+																		<span class="link-2" style="color:#fff; text-decoration:none;">Manage Ads</span>
 																	</a>
 																</div>
 															</td>

@@ -45,7 +45,7 @@ class VendorResource extends JsonResource
             'total_products' => $this->when($this->role->name == 'vendor', $this->total_products),
             'total_shops' => $this->when($this->role->name == 'vendor', $this->total_shops),
             'max_shops' => $this->when($this->role->name == 'vendor', $this->max_shops),
-            "subscription"=> $this->subscription_id ? new SubscriptionResource(Subscription::findOrFail($this->subscription_id)) :null,
+            "subscription"=> $this->subscription ? new SubscriptionResource($this->subscription) :null,
             "shop"=> $this->when($this->shop_id, function(){ 
                 return new ShopResource(Shop::findOrFail($this->shop_id)); 
             }),

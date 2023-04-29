@@ -1,16 +1,11 @@
+one event can call many listeners
+many events cannot call one listener - use subscribers to do this
 
-
-Advert
-email that user has been returned to free subscription.
-
-
-
-2.
 when the order is ready,
-1. create an order on the shipment partners website, if integrated
+
 2. send email to the shipment partner
 3. create a link for the shipper to mark the item shipped
-if the logistic firm has been integrated, we need to receive a webhook from which we mark this item shipped
+
 
 3. 
 ad preview
@@ -22,13 +17,12 @@ export orders, revenue to excel file for auditors
 CRON JOB
 when order rejected but was not returned. - cron job
 admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready - cron
+8.
+retry payout with job -
 
 5.
 swiper.js is displaying duplicates
 
-
-8.
-retry payout with job - 
 
 9. REPORT SHOPS/PRODUCT
 
@@ -42,11 +36,6 @@ hot deals mobile view (home page & hot deals page)
 
 
 NOTIFICATIONS
-
-Adverts[
-    advert is showing started - shop
-    period insights on advert - 24hours
-]
 
 Order Statuses[
     Processing- Vendor

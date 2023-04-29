@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ConvertDeliveredToCompletedJob)->daily();
         $schedule->job(new ExpiredStatusUpdateJob)->hourly();
         $schedule->job(new ExpiringStatusUpdateJob)->hourly();
-        $schedule->job(new InactiveStatusUpdateJob)->hourly();
+        $schedule->job(new InactiveStatusUpdateJob)->daily();
 
         // Your cronjob should run this: php /path/to/laravel/artisan queue:work --stop-when-empty
     }
