@@ -23,6 +23,7 @@ class CartController extends Controller
 
     public function cart(){
         $shops = collect([]);
+        $items = null;
         if(session('cart')){
             $items = session('cart');
             if($items && count($items)){
