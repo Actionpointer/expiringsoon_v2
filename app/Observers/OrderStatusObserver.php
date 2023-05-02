@@ -81,11 +81,18 @@ class OrderStatusObserver
 
     public function shipped(OrderStatus $orderStatus){
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
+        if($orderStatus->order->deliverer == "admin"){
+            $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+        }
     }
 
     public function delivered(OrderStatus $orderStatus)
     {
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
+        if($orderStatus->order->deliverer == "admin"){
+            $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+        }
+        
     }
     
     public function completed(OrderStatus $orderStatus)
@@ -98,6 +105,7 @@ class OrderStatusObserver
     {
         //delete one settlement where description is vendor commission
         Settlement::where('order_id',$orderStatus->order_id)->where('description','Commission')->delete();
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
     
@@ -130,6 +138,7 @@ class OrderStatusObserver
             event(new RefundBuyer($orderStatus->order,$orderStatus->order->subtotal * $dispute->buyer / 100));
         }
         event(new SettleVendor($orderStatus->order));
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
     

@@ -330,7 +330,7 @@
                     
                     <div class="tab-pane fade" id="pills-customer" role="tabpanel" aria-labelledby="pills-customer-tab">
                       <div class="dashboard__content-card-body single-blog">
-                        @if(!in_array($order->status,['cancelled','completed','closed'] ))
+                        @if(!in_array($order->status,['cancelled','completed','refunded','closed'] ))
                         <div class="comment-box pt-0">
                           
                           <h5 class="font-body--md-400">Write a message to @if($order->status == 'disputed') the Arbitrator @else Vendor @endif</h5>

@@ -12,11 +12,10 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Order Receipt No. {{$order->id}} | Expiring Soon</title>
+	<title>Order Receipt No. {{$order->slug}} | Expiring Soon</title>
 	
-	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
-	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
-	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -133,8 +132,8 @@
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Dear {{$shop->name}},</span>
-																<br />You have successfully completed the Order #: {{$order->id}}, and your customer appears to be satisfied.
+																<span style="font-size:16px;font-weight:600">Order Completed</span>
+																<br />You have successfully completed the Order #: {{$order->slug}}, and your customer appears to be satisfied.
 																<br />Your earnings for this order have been automatically deposited to your shop wallet.
 																<br/> Thank you for using Expiring Soon.
 															</td>
@@ -163,7 +162,7 @@
 																	<div class="cart-item-name" style="font-weight: 600;">Items</div>
 																	<div class="cart-item" style="font-weight: 600;">Total</div>
 																</div>
-																@foreach($order->settlements as $item)
+																@foreach($order->settlements->where('receiver_type','App\Models\Shop') as $item)
 																	<div class="cart-row">
 																		<div class="cart-item-name">{{$item->description}}</div>
 																		<div class="cart-item">{!!$shop->country->currency->symbol!!}{{$item->amount}}</div>
@@ -174,7 +173,7 @@
 																<div class="cart-row" style="border-bottom:none;">
 																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
 																	<div class="cart-item"><span style="font-weight: 600;">Grand Total :</span></div>
-																	<div class="cart-item"><span style="font-weight: 600;">{!!$order->shop->country->currency->symbol!!}{{$order->settlements->sum('amount')}}</span></div>
+																	<div class="cart-item"><span style="font-weight: 600;">{!!$order->shop->country->currency->symbol!!}{{$order->settlements->where('receiver_type','App\Models\Shop')->sum('amount')}}</span></div>
 																</div>
 																
 															</td>

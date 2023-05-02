@@ -105,6 +105,10 @@ trait OrderTrait
                 if($order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_user_cancel_period']) > now()) 
                 $statuses = ['Cancel'=>'cancelled'];
             break;
+            case 'ready':
+                if($order->deliverer == "pickup") 
+                $statuses = ['Completed'=>'completed','Reject'=>'rejected'];
+            break;
             case 'delivered':
                 if($order->statuses->firstWhere('name','delivered')->created_at->addHours(cache('settings')['order_delivered_to_acceptance_period']) > now()) 
                 $statuses = ['Received'=>'completed','Reject'=>'rejected'];
@@ -127,7 +131,7 @@ trait OrderTrait
                 else $statuses = ['Shipped'=>'shipped'];
             break;
             case 'ready':
-                if(in_array($order->deliverer,["pickup","vendor"])) $statuses = ['Delivered'=> 'delivered'];
+                if($order->deliverer == "vendor") $statuses = ['Delivered'=> 'delivered'];
             break;
             case 'shipped':
                 if($order->deliverer == "vendor") $statuses = ['Delivered'=> 'delivered'];

@@ -36,14 +36,13 @@ class OrderShipmentNotification extends Notification
 
     public function message(){
         if(!$this->shipment->ready_at){
-
+            $message = 'Please expect a pickup and delivery of some packages on or before'.$this->shipment->created_at->addHours(cache('order_processing_to_shipment_period'))->format('M,jS');
         }       
         elseif(!$this->shipment->shipped_at){
-            //ready at
-
+            $message = 'You have some packages for pickup and delivery. Kindly check your email for further instructions';
         }       
         elseif(!$this->shipment->delivered_at){
-            //shipped
+            $message = 'Thank you for the delivery.';
         }     
 
     }
@@ -62,7 +61,7 @@ class OrderShipmentNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'message'=> $this->message()
         ];
     }
 }

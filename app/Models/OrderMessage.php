@@ -14,6 +14,7 @@ class OrderMessage extends Model
     protected $fillable = ['sender_id','sender_type','receiver_id','receiver_type','order_id','body','attachment','read_at'];
     protected $dates = ['read_at'];
 
+
     public function user(){
         return $this->belongsTo(User::class,'sender_id')->where('sender_type','App\Models\User');
     }

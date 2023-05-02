@@ -1,7 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!DOCTYPE html>
 <head>
-
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,16 +7,15 @@
 	<meta name="format-detection" content="address=no" />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="x-apple-disable-message-reformatting" />
-    <!--[if !mso]><!-->
+    
 	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900,900i" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Order Receipt No. 123232 | Expiring Soon</title>
+	<title>Order Receipt No. {{$order->slug}} | Expiring Soon</title>
 	
-	<link rel="icon" href="{{asset('src/images/favicon/favicon.png')}}" sizes="32x32" />
-	<link rel="apple-touch-icon" href="{{asset('src/images/favicon/favicon.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon.png')}}" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -118,7 +115,9 @@
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img"><img src="{{asset('src/images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img">
+										<img src="{{asset('src/images/site/img-delivered.jpg')}}" border="0" width="100%" alt="" />
+									</td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
@@ -131,93 +130,60 @@
 											<tr>
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
+														
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">Dear John Okigwe,</span><br />Thank you for shopping with Expiring Soon!<br /> Your order <b>123232</b> has been confirmed successfully.
-
-															<br /><br />It will be packed and shipped as soon as possible. You will receive a notification from us once the item(s) are available for door delivery.</td>
-														</tr>
-														<tr>
-															<td class="fluid-img" align="center"><img src="{{asset('src/images/site/tracking-bar-accepted.jpg')}}" border="0" width="100%" alt="" /></td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Please Note:</span><br />If you ordered multiple items, you may receive them on different days. This is because they are sold by different vendors on our platform and we want to make each item available to you as quickly as possible.</div>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">Order #{{$order->slug}} Refunded,</span>
+																<br />A refund has been initiated for your order #{{$order->slug}}. Please note that it might take between 3 to 7 working days for the completion of the 
+																refund process and the money to be remitted to your channel of purchase, i.e Bank Account, Card or Paypal.
 															</td>
 														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Delivery Address</span><br />
-															25, Owokemi street, Lagos Island</div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Recipient Details</span><br />
-															Shina Akanni<br />08038498394</div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
-															Order #: 123232<br />
-															Date: 12/12/23<br />
-															</div>
-															</td>
-														</tr>
+														
+														
 														<tr>
 															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
 																<div class="cart-row">
-																	<div class="cart-item-name" style="font-weight: 600;">Item</div>
-																<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
-																<div class="cart-item" style="font-weight: 600;">Price</div>
-																<div class="cart-item" style="font-weight: 600;">Total</div>
+																	<div class="cart-item-name" style="font-weight: 600;">Items</div>
+																	<div class="cart-item-qty" style="font-weight: 600;">Channel</div>
+																	<div class="cart-item" style="font-weight: 600; text-align:right">Amount</div>
+																	{{-- <div class="cart-item" style="font-weight: 600;">Total</div> --}}
+																</div>
+																<div class="cart-row">
+																	<div class="cart-item-name">Refund</div>
+																	<div class="cart-item-qty">{{$order->payment_item->payment->method ?? 'unknown'}}</div>
+																	<div class="cart-item" style="text-align:right">{!!$order->shop->country->currency->symbol!!} {{$order->settlements->where('receiver_id',$user->id)->firstWhere('receiver_type','App\Models\User')->amount}}</div>
+																	{{-- <div class="cart-item">{!!$order->shop->country->currency->symbol!!}{{$item->total}}</div> --}}
 																</div>
 																
-																<div class="cart-row">
-																<div class="cart-item-name">Yam</div>
-																<div class="cart-item-qty">12</div>
-																<div class="cart-item">N123232</div>
-																<div class="cart-item">N123,232</div>
-																</div>
+																
 															
-															<div class="cart-row-ttl">
-																<div class="cart-item-name">&nbsp;</div>
-																<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
-																<div class="cart-item">N34343</div>
-
-																	<div class="cart-item-name">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">VAT (5%)</span></div>
-																	<div class="cart-item">N34343</div>
-
-																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
-																	<div class="cart-item">N3433</div>
-
-																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
-																	<div class="cart-item"><span style="font-weight: 600;">N3455</span></div>
-															</div>
-															<div class="cart-row">
-															<div class="cart-item-name">Payment Method</div>
-															<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
-															<div class="cart-item">&nbsp</div>
-															<div class="cart-item">&nbsp</div>
-															</div>
+																
+																
 															</td>
 														</tr>
-														<!-- Button -->
+														
+														<tr>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																Thank you for shopping with us. There are lots of new exciting deals you might want to checkout today on Expiring Soon. CLick below to start shopping 
+																again to find the best deals for you.
+																
+															</td>
+														</tr>
 														<tr>
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link"><img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175"></a></td>
+																		<td class="text-button" style="padding:12px">
+																			<a href="{{route('product.list')}}"  target="_blank" class="link">
+																				<img src="{{asset('src/images/site/btn-welcome.png')}}" width="175">
+																			</a>
+																		</td>
 																	</tr>
 																</table>
 															</td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;">
-															<div style="margin:auto;width:80%"><strong style="font-size:14px">Thank you for shopping with us!</strong><br />
 															</td>
 														</tr>
 														<!-- END Button -->
@@ -239,7 +205,11 @@
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
+																<a href="#" target="_blank">
+																	<img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																</a>
+															</td>
 														</tr>
 													</table>
 												</td>

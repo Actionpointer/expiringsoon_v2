@@ -54,20 +54,20 @@
                   <table id="datatable" class="table display" style="width:100%;font-size:13px">
                     <thead>
                       <tr>
-                        <th scope="col" class="cart-table-title">  Order Id</th>
-                        <th scope="col" class="cart-table-title">  Date</th>
-                        <th scope="col" class="cart-table-title">  Total</th>
-                        <th scope="col" class="cart-table-title">  Status</th>
-                        <th scope="col" class="cart-table-title">  Shipment By</th>
+                        <th scope="col" class="cart-table-title"> Order No</th>
+                        <th scope="col" class="cart-table-title"> Date</th>
+                        <th scope="col" class="cart-table-title"> Total</th>
+                        <th scope="col" class="cart-table-title"> Status</th>
+                        <th scope="col" class="cart-table-title"> Shipment By</th>
                         <th scope="col" class="cart-table-title"> Manage </th>
                       </tr>
                     </thead>
                     <tbody>
                       @forelse($orders as $order)
                             <tr>
-                                <!-- Order Id  -->
+
                                 <td> 
-                                    <span style="font-weight:500">#{{$order->id}}</span>
+                                    <span style="font-weight:500">#{{$order->slug}}</span>
                                 </td>
                                 <!-- Date  -->
                                 <td> 
@@ -80,8 +80,9 @@
                                 <td> {{ucwords($order->status)}}</td>
                                 <!-- Details page  -->
                                 <td>
-                                    Vendor
+                                      {{ucwords($order->deliverer)}}
                                 </td>
+
                                 <td>
                                     <a href="{{route('vendor.shop.order.view',[$shop,$order])}}">
                                         <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">

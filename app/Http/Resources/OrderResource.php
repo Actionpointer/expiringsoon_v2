@@ -2,10 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Order;
+use App\Http\Traits\OrderTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
 {
+    use OrderTrait;
     /**
      * Transform the resource into an array.
      *
@@ -36,6 +39,7 @@ class OrderResource extends JsonResource
             'total' => $this->total,
             'currency'=> $this->shop->country->currency->symbol,
             'status'=> $this->status,
+            "statuses"=> auth()->user()->role->name == 'shopper' ? $this->getCustomerOrderStatuses(Order::find($this->id)) : $this->getVendorOrderStatuses(Order::find($this->id)),
             'created_at'=> $this->created_at
         ];
     }

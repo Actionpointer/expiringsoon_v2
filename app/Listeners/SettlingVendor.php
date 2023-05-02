@@ -28,9 +28,12 @@ class SettlingVendor
     public function handle(SettleVendor $event)
     {
         $settlements = $event->order->settlements->where('receiver_type','App\Models\Shop');
-        $shop = $event->order->shop;
-        $shop->wallet += $settlements->sum('amount');
-        $shop->save();
-        Settlement::whereIn('id',[$settlements->pluck('id')->toArray()])->update(['status'=>true]);
+        if($settlements->isNotEmpty()){
+            $shop = $event->order->shop;
+            $shop->wallet += $settlements->sum('amount');
+            $shop->save();
+            Settlement::whereIn('id',[$settlements->pluck('id')->toArray()])->update(['status'=>true]);
+        }
+        
     }
 }

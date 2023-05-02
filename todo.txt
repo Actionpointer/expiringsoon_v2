@@ -37,22 +37,6 @@ hot deals mobile view (home page & hot deals page)
 
 NOTIFICATIONS
 
-Order Statuses[
-    Processing- Vendor
-    Cancelled- Vendor & Customer
-    Ready - Admin
-    Shipped - Customer
-    Delivered - Customer
-    Completed - Vendor
-    Rejected - Vendor
-    Returned - Vendor
-    Refunded - Customer
-    Dispute - Vendor & Customer
-    Closed - Vendor & Customer
-]
-Order Message[
-    Unread Messages - Shop & Customer
-]
 Payments[
     Payment Receipt - Customer
 ]
@@ -73,10 +57,7 @@ Product and Shop Reviews[
     Shop Review - Vendor
     Product Review - Shop
 ]
-Shipment[
-    Created - Admin Shipper
-    Ready for pickup - Admin Shipper
-]
+
 Newsletters[
     Products - Customers
     Coupon - Customers

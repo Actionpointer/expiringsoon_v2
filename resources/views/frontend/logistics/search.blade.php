@@ -96,7 +96,7 @@
                 <div class="row">
                   <div class="col-6">
                     
-                    <div class="contact-form--input">
+                    <div class="contact-form--input mt-3">
                       <button type="submit" name="action" value="shipped" class="button btn-md" placeholder="Order Number">Mark Picked Up For Delivery</button>
                     </div>
                   </div>
@@ -105,7 +105,7 @@
                 <div class="row">
                   <div class="col-6">
                     
-                    <div class="contact-form--input">
+                    <div class="contact-form--input mt-3">
                       <button type="submit" name="action" value="delivered" class="button btn-md" placeholder="Order Number">Mark Items Delivered</button>
                     </div>
                   </div>

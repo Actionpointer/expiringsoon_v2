@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
 use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -52,16 +51,14 @@ class OrderStatusVendorNotification extends Notification
             // break;
             case 'shipped': $view = 'emails.order.shipped';
             break;
-            // case 'delivered': $view = 'emails.order.delivered';
-            // break;
+            case 'delivered': $view = 'emails.order.delivered';
+            break;
             case 'completed': $view = 'emails.order.completed';
             break;
             case 'rejected': $view = 'emails.order.rejected';
             break;
             case 'returned': $view = 'emails.order.returned';
             break;
-            // case 'refunded': $view = 'emails.order.refunded';
-            // break;
             case 'disputed': $view = 'emails.order.disputed';
             break;
             case 'closed': $view = 'emails.order.closed';
@@ -88,9 +85,30 @@ class OrderStatusVendorNotification extends Notification
     
     public function toArray($notifiable)
     {
+        switch($this->status->name){
+            case 'processing': $subject = 'New Order'; $message = 'You have a new order containing '.$this->status->order->items->count().' items worth '.$this->status->order->subtotal;
+            break;
+            case 'cancelled': $subject = 'Order '.$this->status->order->slug.' Cancelled'; $message = 'Your order with id '.$this->status->order->slug.' has been cancelled';
+            break;
+            case 'shipped': $subject = 'Order '.$this->status->order->slug.' Shipped'; $message = 'Your order with id '.$this->status->order->slug.' has been shipped';
+            break;
+            case 'delivered': $subject = 'Order '.$this->status->order->slug.' Delivered'; $message = 'Your order with id '.$this->status->order->slug.' has been delivered';
+            break;
+            case 'completed': $subject = 'Order '.$this->status->order->slug.' Completed'; $message = 'Your order with id '.$this->status->order->slug.' has been completed';
+            break;
+            case 'rejected':$subject = 'Order '.$this->status->order->slug.' Rejected'; $message = 'Your order with id '.$this->status->order->slug.' has been rejected';
+            break;
+            case 'returned': $subject = 'Order '.$this->status->order->slug.' Returned'; $message = 'Your order with id '.$this->status->order->slug.' has been returned';
+            break;
+            case 'disputed': $subject = 'Order '.$this->status->order->slug.' in Dispute'; $message = 'Your order with id '.$this->status->order->slug.' is now in dispute';
+            break;
+            case 'closed': $subject = 'Order '.$this->status->order->slug.' Closed'; $message = 'Your order with id '.$this->status->order->slug.' has been closed';
+            break;
+        }
         return [
-            'order_id' => $this->status->id,
-            'message' => 'Something happened to this order',
+            'subject' => $subject,
+            'body' => $message,
+            'url'=> route('vendor.shop.order.view',[$this->status->order->shop,$this->status->order])
         ];
     }
 }

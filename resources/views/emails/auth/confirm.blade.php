@@ -28,9 +28,8 @@
 	</style>
 	<![endif]-->
 	<!-- site Favicon -->
-	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
-	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
-	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 	<style type="text/css" media="screen">
 		/* Linked Styles */
@@ -143,7 +142,10 @@
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-bottom:25px;">
-															<div style="margin:auto;width:80%">You will need to verify your email to complete registration.<br />Click the button below to confirm.</div></td>
+																<div style="margin:auto;width:80%">You will need to verify your email to complete registration.<br />
+																	Click the button below to confirm.
+																</div>
+															</td>
 														</tr>
 														 {{-- <tr>
 															<td align="center">

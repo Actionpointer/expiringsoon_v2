@@ -34,13 +34,24 @@ class FrontendController extends Controller
         } 
     }
 
-    public function shipment(Order $order=null){
-        if(!$order){
+    public function shipment(){
+        if(!request()->input('order') || !request()->input('password')){
             return view('frontend.logistics.search');
-        }elseif($order->shipments->isEmpty() || $order->shipments->where('delivered_at',null)->isEmpty()){
-            return redirect()->back()->with(['result'=> 0,'message'=> 'Shipment not found']);
         }
-        else return view('frontend.logistics.search',compact('order'));
+        if(request()->input('order') && request()->input('password')){
+            $order = Order::where('slug',request()->input('order'))->first();
+            if(!$order || $order->shipments->isEmpty()){
+                return redirect()->route('shipment')->with(['result'=> 0,'message'=> 'Shipment not found']);
+            }
+            if($order->shipments->where('delivered_at',null)->isEmpty()){
+                return redirect()->route('shipment')->with(['result'=> 1,'message'=> 'Shipment already completed']);
+            }
+            $shipment = $order->shipments->firstWhere('delivered_at',null);
+            if(!$shipment || $shipment->created_at->format('ymdhi') != strrev(request()->input('password'))){
+                return redirect()->route('shipment')->with(['result'=> 0,'message'=> 'Incorrect credentials supplied']);
+            }
+            return view('frontend.logistics.search',compact('order'));
+        }
     }
 
     public function shipment_search(Request $request){
@@ -52,15 +63,7 @@ class FrontendController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        $order = Order::where('slug',$request->order_number)->first();
-        if(!$order || $order->shipments->isEmpty()){
-            return redirect()->back()->with(['result'=> 0,'message'=> 'Shipment not found']);
-        }
-        $shipment = $order->shipments->firstWhere('delivered_at','!=',null);
-        if(!$shipment || $shipment->created_at->format('ymdhi') != strrev($request->password)){
-           return redirect()->back()->with(['result'=> 0,'message'=> 'Incorrect credentials supplied']);
-        }
-        return redirect()->route('shipment',$order);
+        return redirect()->route('shipment',['order'=> $request->order_number,'password'=>$request->password]);
 
     }
 
@@ -69,7 +72,7 @@ class FrontendController extends Controller
         if($request->action == 'shipped') $shipment->shipped_at = now();
         if($request->action == 'delivered') $shipment->delivered_at = now();
         $shipment->save();
-        return redirect()->back()->with(['result'=> 1,'message'=> 'Shipment Status Updated']);
+        return redirect()->route('shipment')->with(['result'=> 1,'message'=> 'Shipment Status Updated']);
     }
 
 }

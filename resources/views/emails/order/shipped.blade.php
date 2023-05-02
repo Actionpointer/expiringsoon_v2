@@ -12,11 +12,10 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Order Receipt No. {{$order->id}} | Expiring Soon</title>
+	<title>Order Receipt No. {{$order->slug}} | Expiring Soon</title>
 	
-	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
-	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
-	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -133,18 +132,27 @@
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Dear John Ejeba,</span><br />
-																We have just dispatched the item(s) below from your order <b>{{$order->id}}</b>
-															<br /><br />The package will be delivered by our delivery agent once it gets to the delivery hub at the following address: 
-															<span style="font-weight:600">
-																21, Irewunmi Badru Street, Ojota Lagos</span>.
-																<br /><br />You will receive a call on <span style="font-weight:600">090456565656</span> from our delivery agent when your package arrives at your door.</td>
+																<span style="font-size:16px;font-weight:600"> @if(isset($user)) Dear {{$user->name}} @else Order Shipped for {{$shop->name}} @endif,</span>
+																<br />
+																We have just dispatched the item(s) below from your order <b>{{$order->slug}}</b> @if(isset($shop)) to your customer. @endif
+																<br />
+																@if(isset($user))
+																	<br />The package will be delivered by our delivery agent once it gets to the delivery hub at the following address: 
+																	<span style="font-weight:600"> {{ucwords(strtolower($order->address->location))}}</span>.
+																@endif
+																@if(isset($user))
+																	<br /><br />You will receive a call on <span style="font-weight:600">{{$order->address->contact_phone}}</span> from our delivery agent when your package arrives at your door.
+																@else
+																	 You will receive updates via email once our delivery agent delivers the package to the destination address.
+																@endif
+															</td>
 														</tr>
 														<tr>
 															<td class="fluid-img" align="center">
 																<img src="{{asset('src/images/site/tracking-bar-shipped.jpg')}}" border="0" width="100%" alt="" />
 															</td>
 														</tr>
+														@if(isset($user))
 														<tr>
 															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
 															<div style="margin:auto;"><span style="font-weight:600">Please Note:</span><br />If you ordered multiple items, you may receive them on different days. This is because they are sold by different vendors on our platform and we want to make each item available to you as quickly as possible.<br />
@@ -154,6 +162,7 @@
 																Expiring Soon will never ask you for your password, PIN, CVV or full card details over the phone or via email.</div>
 															</td>
 														</tr>
+														@endif
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
 																<div style="display:flex;justify-content:space-between">
@@ -169,7 +178,7 @@
 																	<div style="">
 																		<span style="font-weight:600">Summary</span><br />
 																		Order #: {{$order->id}}<br />
-																		Delivery Date: {{$status->created_at->format('d/m/y')}}<br />
+																		Shipment Date: {{$status->created_at->format('d/m/y')}}<br />
 																	</div>
 																</div>
 																
@@ -241,7 +250,7 @@
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
 																		<td class="text-button" style="padding:12px">
-																			<a href="{{route('order.show',$order)}}" target="_blank" class="link">
+																			<a @if(isset($user)) href="{{route('order.show',$order)}}" @else href="{{route('vendor.shop.order.view',[$shop,$order])}}" @endif  target="_blank" class="link">
 																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
 																			</a>
 																		</td>

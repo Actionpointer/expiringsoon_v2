@@ -12,11 +12,10 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Order Receipt No. {{$order->id}} | Expiring Soon</title>
+	<title>Order Receipt No. {{$order->slug}} | Expiring Soon</title>
 	
-	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
-	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
-	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">

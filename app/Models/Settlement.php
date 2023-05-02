@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Models\Order;
 use App\Observers\SettlementObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Settlement extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
+    
     protected $fillable = ['receiver_id','receiver_type','order_id','description','amount','status'];
 
     public function order(){

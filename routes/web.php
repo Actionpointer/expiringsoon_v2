@@ -27,9 +27,10 @@ Route::get('/eg', function () {
 });
 
 Route::get('/broadcast', function () {
-    $status = \App\Models\OrderStatus::find(28);
+    $status = \App\Models\OrderStatus::find(52);
     return (new App\Notifications\OrderStatusCustomerNotification($status))
-                    ->toMail($status->order->shop);
+                    ->toMail($status->order->user);
+
 });
 
 
@@ -43,7 +44,7 @@ Route::view('help/api/documentation','help.apidocumentation')->name('help.api_do
 Route::view('help/faq','help.faq')->name('help.faq');
 Route::view('help/download','help.download')->name('help.download');
 Route::view('help/contact','frontend.contact')->name('help.contact');
-Route::get('shipments/{order?}',[FrontendController::class,'shipment'])->name('shipment');
+Route::get('shipments',[FrontendController::class,'shipment'])->name('shipment');
 Route::post('shipment/search',[FrontendController::class,'shipment_search'])->name('shipment.search');
 Route::post('shipment/updated',[FrontendController::class,'shipment_update'])->name('shipment.update');
 

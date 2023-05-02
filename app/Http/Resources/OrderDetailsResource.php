@@ -4,12 +4,12 @@ namespace App\Http\Resources;
 
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
-use App\Http\Traits\OrderTrait;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderDetailsResource extends JsonResource
 {
-    use OrderTrait;
+    
     /**
      * Transform the resource into an array.
      *
@@ -27,12 +27,6 @@ class OrderDetailsResource extends JsonResource
             'quantity' => $this->quantity,
             'amount' => $this->amount,
             'total' => $this->total,
-            "statuses"=> $this->when(in_array(auth()->user()->role->name,['vendor','staff']), function(){ 
-                return $this->getVendorOrderStatuses($this->order); 
-            }),
-            "statuses" => $this->when(auth()->user()->role->name == 'shopper', function(){ 
-                return $this->getCustomerOrderStatuses($this->order); 
-            }),
             'created_at'=> $this->created_at
         ];
     }

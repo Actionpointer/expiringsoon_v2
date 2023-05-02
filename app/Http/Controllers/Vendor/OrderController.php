@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Models\Shop;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Review;
 use App\Models\OrderStatus;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderDetailsResource;
 use App\Http\Resources\OrderMessageResource;
+use App\Notifications\OrderMessageNotification;
 
 class OrderController extends Controller
 {
@@ -101,6 +103,12 @@ class OrderController extends Controller
     public function message(Shop $shop,Request $request){
         $order = Order::find($request->order_id);
         $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type,'body'=> $request->body]);
+        if($message->receiver_type == 'App\Models\User'){
+            $receiver = User::find($message->receiver_id);
+        }else{
+            $receiver = Shop::find($message->receiver_id);
+        }
+        $receiver->notify(new OrderMessageNotification($message));
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

@@ -12,11 +12,10 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Order Receipt No. {{$order->id}} | Expiring Soon</title>
+	<title>Order Receipt No. {{$order->slug}} | Expiring Soon</title>
 	
-	<link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
-	<link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
-	<meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -129,16 +128,17 @@
 									<td style="padding-bottom: 10px;">
 										<table width="100%" border="0" cellspacing="0" cellpadding="0">
 											<tr>
-												<td class="p30-15" style="padding: 20px 30px;">
+												<td class="p30-15" style="padding: 20px 30px 0px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Dear {{$user->name}},</span>
-																<br />Your order has been delivered ducts(s) you ordered.
-																<br />Thank you for shopping with Expiring Soon. In case you are not happy with your purchase, 
-																you may still be able to return it. At Expiring Soon, we have an option for Easy Return & Quick Refund.
-																<br />
-																You have the option to return an item within 7 days of delivery if it's not matching your expectation (wrong/defective/damaged), and in some cases for change of mind too.
+																<span style="font-size:16px;font-weight:600">@if(isset($user)) Dear {{$user->name}} @else Order Delivered for {{$shop->name}} @endif,</span>
+																<br/>Your order {{$order->slug}} has been delivered @if(isset($shop)) to your customer. <br/>Thank you for using Expiring Soon. @endif
+																@if(isset($user))
+																<br/>In case you are not happy with your purchase, you may still be able to return it. At Expiring Soon, we have an option for Easy Return & Quick Refund.
+																You have the option to return an item within 7 days of delivery if it's not matching your expectation (e.g wrong /defective /expired), and in some cases for change of mind too.
+																<br/>Thank you for shopping with Expiring Soon. 
+																@endif
 															</td>
 														</tr>
 														<tr>
@@ -149,18 +149,18 @@
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
 																<div style="display:flex;justify-content:space-between">
-																	@if($order->deliverer != 'pickup')
-																	<div style="">
-																		<span style="font-weight:600">Delivery Address</span><br />
-																			{{ucwords(strtolower($order->address->contact_name))}}<br />
-																			{{ucwords(strtolower($order->address->street))}}<br/>
-																			{{ucwords(strtolower($order->address->city ? $order->address->city->name.', ' : ''))}} {{ucwords(strtolower($order->address->state->name))}} <br/>
-																			{{$order->address->contact_phone}}
-																	</div>
+																	@if(($order->deliverer == 'admin' && isset($user)) || $order->deliverer == 'vendor')
+																		<div style="">
+																			<span style="font-weight:600">Delivery Address</span><br />
+																				{{ucwords(strtolower($order->address->contact_name))}}<br />
+																				{{ucwords(strtolower($order->address->street))}}<br/>
+																				{{ucwords(strtolower($order->address->city ? $order->address->city->name.', ' : ''))}} {{ucwords(strtolower($order->address->state->name))}} <br/>
+																				{{$order->address->contact_phone}}
+																		</div>
 																	@endif
 																	<div style="">
 																		<span style="font-weight:600">Summary</span><br />
-																		Order #: {{$order->id}}<br />
+																		Order #: {{$order->slug}}<br />
 																		Delivery Date: {{$status->created_at->format('d/m/y')}}<br />
 																	</div>
 																</div>
@@ -217,34 +217,23 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
+															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left;padding-top:20px;border-top:1px solid #ddd">
+																<div style="text-align:center">
+																	<a href="{{route('order.show',$order)}}" target="_blank" class="link">
+																		<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
+																	</a>
+																</div>
 																<div style="">
 																	<span style="font-weight:600">Please Note:</span>
-																	<br />You can rate from <span style="color:#00b207">★</span> (very poor) to 
-																	<span style="color:#00b207">★★★★★</span> 
-																	(Excellent) on the <a href="{{route('order.show',$order)}}" target="_blank" style="color:#00b207">Order Details</a> page.
+																	<br/>If you did not receive this order, kindly call support at   <span style="color:#00b207">08053434343 </span> 
+																	or email us at <span style="color:#00b207">abc@gmail.com.</span> 
 																	<br /><br />
 																</div>
 															</td>
 														</tr>
 														<!-- Button -->
-														<tr>
-															<td align="center">
-																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
-																	<tr>
-																		<td class="text-button" style="padding:12px">
-																			<a href="{{route('order.show',$order)}}" target="_blank" class="link">
-																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
-																			</a>
-																		</td>
-																	</tr>
-																</table>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;">
-															</td>
-														</tr>
+														
+														
 														<!-- END Button -->
 													</table>
 												</td>

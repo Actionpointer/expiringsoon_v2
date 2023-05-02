@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Settlement;
@@ -13,9 +14,9 @@ class OrderObserver
     {
         if($order->deliveryfee){
             Settlement::create(['description'=> 'Shipment','order_id'=> $order->id,
-            'receiver_id' => $order->deliverer == 'Admin' ? User::where('role','admin')->first() : $order->shop_id,
-            'receiver_type' => $order->deliverer == 'Admin' ? 'App\Models\User' : 'App\Models\Shop',
-            'amount' => $order->deliveryfee,'status'=> $order->deliverer == 'Admin'? true:false]);
+            'receiver_id' => $order->deliverer == 'admin' ? User::where('role_id',Role::where('name','superadmin')->first()->id)->first() : $order->shop_id,
+            'receiver_type' => $order->deliverer == 'admin' ? 'App\Models\User' : 'App\Models\Shop',
+            'amount' => $order->deliveryfee,'status'=> $order->deliverer == 'admin'? true:false]);
         }
     }
 

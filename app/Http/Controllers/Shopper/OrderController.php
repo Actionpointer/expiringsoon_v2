@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Like;
 use App\Models\Rate;
 use App\Models\Shop;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
 use App\Models\Review;
@@ -28,6 +29,7 @@ use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\OrderDetailsResource;
 use App\Http\Resources\OrderMessageResource;
+use App\Notifications\OrderMessageNotification;
 
 class OrderController extends Controller
 {
@@ -84,6 +86,7 @@ class OrderController extends Controller
                 $items = OrderItem::where('order_id',$request->order_id)->whereHas('product',function($query){
                     $query->isValid();
                 })->get();
+
                 if($items->isEmpty()){
                     return request()->expectsJson() ? 
                         response()->json([
@@ -92,6 +95,7 @@ class OrderController extends Controller
                         ], 401) :
                         redirect()->back()->with(['result'=> 0,'message'=> 'No item in the order is valid for return']);
                 }
+                $message = 'Order has been rejected';
                 break;
             case 'returned':
                     $message = 'Order has been updated';
@@ -179,7 +183,6 @@ class OrderController extends Controller
     public function confirmcheckout(Request $request){
         // dd($request->all());
         try{
-            
             if(!count($request->carts)){
                 return request()->expectsJson() ?
                 response()->json([
@@ -224,7 +227,6 @@ class OrderController extends Controller
                 $order->save();
                 $orders->push($order);
             }
-            
             //take payment
             $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
             if(!$result['link']){
@@ -266,6 +268,12 @@ class OrderController extends Controller
     public function message(Request $request){
         $order = Order::find($request->order_id);
         $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type, 'body'=> $request->body]);
+        if($message->receiver_type == 'App\Models\User'){
+            $receiver = User::find($message->receiver_id);
+        }else{
+            $receiver = Shop::find($message->receiver_id);
+        }
+        $receiver->notify(new OrderMessageNotification($message));
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

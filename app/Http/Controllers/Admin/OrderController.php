@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\RefundBuyer;
+use App\Models\Shop;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Country;
 use App\Models\Settlement;
+use App\Events\RefundBuyer;
 use App\Models\OrderStatus;
+use App\Models\OrderDispute;
 use App\Models\OrderMessage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\OrderDispute;
+use App\Notifications\OrderMessageNotification;
 
 class OrderController extends Controller
 {
@@ -26,7 +29,7 @@ class OrderController extends Controller
         $sortBy = null;
         $countries = Country::has('orders')->get();
         $statuses = ['processing','cancelled','ready','shipped','delivered','rejected','completed','disputed','returned','closed'];       
-        $orders = Order::within();
+        $orders = Order::whereHas('statuses')->within();
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');
             $orders = $orders->within($country_id);
@@ -99,6 +102,12 @@ class OrderController extends Controller
         $receiver_id = $request->receiver == 'buyer'? $order->user_id : $order->shop_id;
         $receiver_type = $request->receiver == 'buyer'? 'App\Models\User' : 'App\Models\Shop';
         $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $receiver_id ,'receiver_type'=> $receiver_type, 'body'=> $request->body]);
+        if($message->receiver_type == 'App\Models\User'){
+            $receiver = User::find($message->receiver_id);
+        }else{
+            $receiver = Shop::find($message->receiver_id);
+        }
+        $receiver->notify(new OrderMessageNotification($message));
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

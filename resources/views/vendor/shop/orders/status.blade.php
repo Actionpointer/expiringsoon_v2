@@ -11,7 +11,7 @@
       <h2 class="font-body--md-400">Order received</h2>
     </div>
 
-    <div class="progress__bar-item @if(in_array($status,['processing','ready','shipped','delivered','completed'])) active @endif">
+    <div class="progress__bar-item @if(in_array($status,['processing','ready','shipped','delivered','completed','rejected','returned','refunded','disputed','closed'])) active @endif">
       <div class="progress__bar-item-ball">
         <p class=" font-body--md-400 count-number count-number-active " > 02 </p>
         <span class="check-mark">
@@ -36,7 +36,7 @@
       </div>
     @else
       @if(!$order->deliveryfee)
-        <div class="progress__bar-item @if(in_array($status,['ready','delivered','completed'])) active @endif">
+        <div class="progress__bar-item @if(in_array($status,['ready','delivered','completed','rejected','returned','refunded','disputed','closed'])) active @endif">
           <div class="progress__bar-item-ball">
             <p class=" font-body--md-400 count-number count-number-active " > 03 </p>
             <span class="check-mark">
@@ -48,7 +48,7 @@
           <h2 class="font-body--md-400">Ready for Pickup</h2>
         </div>
       @else
-        <div class="progress__bar-item @if(in_array($status,['shipped','delivered','completed'])) active @endif">
+        <div class="progress__bar-item @if(in_array($status,['shipped','delivered','completed','rejected','returned','refunded','disputed','closed'])) active @endif">
           <div class="progress__bar-item-ball">
             <p class=" font-body--md-400 count-number count-number-active " > 03 </p>
             <span class="check-mark">
@@ -61,7 +61,7 @@
         </div>
       @endif
 
-      <div class="progress__bar-item @if(in_array($status,['delivered','completed'])) active @endif">
+      <div class="progress__bar-item @if(in_array($status,['delivered','completed','rejected','returned','refunded','disputed','closed'])) active @endif">
         <div class="progress__bar-item-ball">
           <p class=" font-body--md-400 count-number count-number-active " > 04 </p>
           <span class="check-mark">
@@ -100,7 +100,7 @@
           <h2 class="font-body--md-400 text-danger">Rejected</h2>
         </div>
 
-        <div class="progress__bar-item @if(in_array($status,['returned','refunded'])) active @endif">
+        <div class="progress__bar-item @if(in_array($status,['returned','refunded','disputed','closed'])) active @endif">
           <div class="progress__bar-item-ball">
             <p class=" font-body--md-400 count-number count-number-active " > 06 </p>
             <span class="check-mark">
@@ -127,7 +127,7 @@
         @endif
 
         @if(in_array($status,['disputed','closed']))
-          <div class="progress__bar-item active @if(in_array($status,['disputed','closed'])) active @endif">
+          <div class="progress__bar-item  @if(in_array($status,['disputed','closed'])) active @endif">
             <div class="progress__bar-item-ball bg-warning border-warning">
               <p class=" font-body--md-400 count-number count-number-active " > 07 </p>
               <span class="check-mark">
@@ -139,7 +139,7 @@
             <h2 class="font-body--md-400 text-danger">Disputed</h2>
           </div>
 
-          <div class="progress__bar-item active @if($status == 'closed') active @endif">
+          <div class="progress__bar-item  @if($status == 'closed') active @endif">
             <div class="progress__bar-item-ball">
               <p class=" font-body--md-400 count-number count-number-active " > 08 </p>
               <span class="check-mark">

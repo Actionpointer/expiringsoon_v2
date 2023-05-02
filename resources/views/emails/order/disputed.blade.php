@@ -1,7 +1,5 @@
-<!DOCTYPE html PUBLIC>
-<html>
+<!DOCTYPE html>
 <head>
-	
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Adset | Expiring Soon</title>
+	<title>Order Receipt No. {{$order->slug}} | Expiring Soon</title>
 	
 	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
@@ -115,10 +113,10 @@
 							<!-- END Header -->
 
 							<!-- Hero Image -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img" align="center" style="padding:10px">
-										<img src="{{asset('src/images/site/img-shoppingbag.jpg')}}" border="0" width="200" alt="" />
+									<td class="fluid-img">
+										<img src="{{asset('src/images/site/img-delivered.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -127,44 +125,40 @@
 							<!-- Intro -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="font-size:13px">
 								<tr>
-									<td style="padding-bottom: 10px;">
+									<td>
 										<table width="100%" border="0" cellspacing="0" cellpadding="0">
 											<tr>
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                        
+														@if(isset($user))
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:center; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Adset is {{$status}}!</span><br />
-																Dear {{$adset->user->name}} , <br>
-																Your adset with id {{$adset->id}} is now {{$status}} <br/> 
-                                                                @if($status == 'activated')
-																	You have added the following ads to this adsets <br/>
-																	Products: {{$adset->adverts->where('advertable_type','App\Models\Product')->count()}} <br/>
-																	Shops: {{$adset->adverts->where('advertable_type','App\Models\Shop')->count()}}
-																@endif
-                                                            </td>
-														</tr>
-														<tr>
-															<td class="text-btn-large" align="center">
-																<div style="background:#5fb882;width:50%;color:#fff; font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; padding:15px 35px;border-bottom:1px solid #ddd">
-																	@if($status == 'activated')
-																	<a href="{{route('vendor.adverts',$adset)}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
-																		<span class="link-2" style="color:#fff; text-decoration:none;">Manage Ads</span>
-																	</a>
-																	@else
-																	<a href="{{route('vendor.adsets')}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
-																		<span class="link-2" style="color:#fff; text-decoration:none;">Manage Adset</span>
-																	</a>
-																	@endif
-																</div>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">Dear {{$user->name}},</span>
+																<br />There appears to be a misunderstanding between you and the vendor involved in this order #: {{$order->slug}}. A disputed
+																resolution case has been opened cancelled. A refund of payments made has been initiated to
+																the same payment channel you used to make payment. Please you may expect to receive the funds back in 
+																your possessions within 5 to 7 business days.
+																<br/> Thank you for shopping with Expiring Soon.
 															</td>
 														</tr>
-														
-														
-
+														@else
 														<tr>
-															<td class="text-center" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:center; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;">
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">Order #: {{$order->id}} Cancelled,</span>
+																<br />Order #: {{$order->id}} has been cancelled. No further actions are required on this order.
+																<br/> Thank you for using Expiring Soon.
+															</td>
+														</tr>
+														@endif
+														<tr>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
+																<div style="">
+																	<span style="font-weight:600">Summary</span><br />
+																	Order #: {{$order->id}}<br />
+																	Order Amount: {!!$order->shop->country->currency->symbol!!}{{$order->subtotal}}<br />
+																	Cancelled Date: {{$status->created_at->format('d/m/y')}}<br />
+																</div>
+																
 															</td>
 														</tr>
 														<!-- END Button -->
@@ -181,7 +175,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="p30-15 bbrr" style="padding: 20px 20px; border-radius:0px 0px 26px 26px;" bgcolor="#ffffff">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top:40px; border-top:1px solid #ddd">
 											<tr>
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">

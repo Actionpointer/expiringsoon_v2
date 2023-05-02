@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Rate;
 use App\Models\Order;
+use App\Observers\ShipmentObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,6 +14,12 @@ class Shipment extends Model
     protected $fillable = ['address_id','rate_id','order_id','amount','ready_at','shipped','delivered_at'];
     protected $dates = ['ready_at','shipped','expected_at'];
     
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new ShipmentObserver);
+    }
+
     public function rate(){
         return $this->belongsTo(Rate::class);
     }

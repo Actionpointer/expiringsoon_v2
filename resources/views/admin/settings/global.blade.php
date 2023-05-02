@@ -171,8 +171,8 @@
                                                           <input type="text" class="col-4" name="order_rejected_to_returned_period" placeholder="Set Rejected to Returned Period" value="{{$settings->firstWhere('name','order_rejected_to_returned_period')->value}}" />
                                                       </div>
                                                       <div class="form-group row mb-2 font-body--md-400">
-                                                          <label for="vat" class="col-8 ">Order Rejected to Acceptance Hours</label>
-                                                          <input type="text" class="col-4" name="order_rejected_to_acceptance_period" placeholder="Set Rejected to Acceptance Period" value="{{$settings->firstWhere('name','order_rejected_to_acceptance_period')->value}}" />
+                                                          <label for="vat" class="col-8 ">Order Returned to Acceptance Hours</label>
+                                                          <input type="text" class="col-4" name="order_returned_to_acceptance_period" placeholder="Set Rejected to Acceptance Period" value="{{$settings->firstWhere('name','order_returned_to_acceptance_period')->value}}" />
                                                       </div>
                                                       
                                                       {{-- <div class="contact-form-btn">
