@@ -2,23 +2,25 @@
 
 namespace App\Notifications;
 
+use App\Models\Payment;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class PaymentNotification extends Notification
 {
     use Queueable;
+    public $payment;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Payment $payment)
     {
-        //
+        $this->payment = $payment;
     }
 
     /**
@@ -29,7 +31,7 @@ class PaymentNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -48,8 +50,19 @@ class PaymentNotification extends Notification
 
     public function toArray($notifiable)
     {
+        $purpose = $this->payment->items->first()->paymentable_type;
+        switch($purpose){
+            case 'App\Models\Order': $url = route('orders');
+                break;
+            case 'App\Models\Subscription': $url = route('vendor.dashboard');
+                break;
+            case 'App\Model\Adset': $url = route('vendor.adsets');
+                break;
+        }
         return [
-            //
+            'subject' => 'Payment Received',
+            'body' => 'Payment Received for '.str_replace('App\Models\\','',$purpose),
+            'url'=> $url 
         ];
     }
 }

@@ -158,6 +158,25 @@ class Product extends Model
     }
     
     public function reviews(){
-        return $this->morphMany(Review::class,'reviewable');
+        return $this->hasMany(Review::class);
+    }
+
+    public function reviewable(){
+        $result = false;
+        if(auth()->check()){
+            $order = Order::where('user_id',auth()->id())->whereHas('statuses')->whereHas('items',function($query){
+                $query->where('product_id',$this->id);
+            })->count();
+            if($order && $this->reviews->where('user_id',auth()->id())->isEmpty()){
+                $result = true;                
+            }
+        }
+        return $result;
+    }
+
+    public function ratings(){
+        $count = $this->reviews->count();
+        $sum = $this->reviews->sum('rating');
+        return $sum/$count;
     }
 }

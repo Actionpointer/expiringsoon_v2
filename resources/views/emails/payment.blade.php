@@ -16,9 +16,8 @@
 	
 	<title>Payment Receipt No. 123232 | Expiring Soon</title>
 	
-	<link rel="icon" href="{{asset('src/images/favicon/favicon.png')}}" sizes="32x32" />
-	<link rel="apple-touch-icon" href="{{asset('src/images/favicon/favicon.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon.png')}}" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -102,11 +101,11 @@
 												<th class="column-empty2" width="1" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;"></th>
 												<th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
-															<tr>
+														<tr>
 															<td class="text-header" style="color:#fff; font-family:'Playfair Display', Georgia,serif; font-size:13px; line-height:18px; text-align:right;">&nbsp;</td>
 														</tr>
 
-														</table>
+													</table>
 												</th>
 											</tr>
 										</table>

@@ -2,23 +2,23 @@
 
 namespace App\Notifications;
 
+use App\Models\Payout;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class PayoutStatusNotification extends Notification
 {
     use Queueable;
-
+    public $payout;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
+    public function __construct(Payout $payout){
+        $this->payout = $payout;
     }
 
     /**
@@ -29,33 +29,45 @@ class PayoutStatusNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        if($this->payout->status == 'approved'){
+            return ['database'];
+        }else return ['mail'];
     }
 
     /**
-     * Get the mail representation of the notification.
+     * pending, processing, approved, paid, rejected 
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+
+        return (new MailMessage)->view(
+            'emails.payout', ['payout' => $this->payout]
+        );
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
+    
     public function toArray($notifiable)
     {
+        
+        switch($this->payout->status){
+            case 'pending': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been requested and waiting your approval';
+        
+            break;
+            case 'processing': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' is being processed';
+            break;
+            case 'approved': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been approved';
+            break;
+            case 'paid': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been paid';
+            break;
+            default: $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' was '.$this->payout->status;
+            break;
+        }
+        
         return [
-            //
+            'subject' => 'Payout '.$this->payout->status,
+            'body' => $message,
+            'url'=> $notifiable->id == $this->payout->user_id ? route('vendor.shop.payouts',$this->payout->shop,$this->payout) : route('admin.payouts') 
         ];
     }
 }

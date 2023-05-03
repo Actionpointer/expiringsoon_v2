@@ -47,7 +47,7 @@ class KycRejectionNotification extends Notification
                     ->line('Reason: '.$this->kyc->reason)
                     ->line('You will need to submit valid documents to have your account fully operational')
                     ->action('Submit Documents', route('vendor.shop.settings',$this->kyc->shop))
-                    ->line('Thank you for using our application!');
+                    ->line('Thank you for using ExpiringSoon!');
     }
 
     /**

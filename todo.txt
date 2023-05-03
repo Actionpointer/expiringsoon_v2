@@ -23,6 +23,7 @@ retry payout with job -
 5.
 swiper.js is displaying duplicates
 
+welcome email for vendor when registered from mobile
 
 9. REPORT SHOPS/PRODUCT
 
@@ -37,15 +38,7 @@ hot deals mobile view (home page & hot deals page)
 
 NOTIFICATIONS
 
-Payments[
-    Payment Receipt - Customer
-]
-Payouts[
-    Pending - Shop
-    Approved - Shop
-    Processing - Shop
-    Paid - Shop
-]
+
 Products[
     Product Status - Shop
 ]

@@ -163,30 +163,21 @@
 
 <body>
     <div class="ec-cart-float">
-    <svg width="70" height="70" viewBox="0 0 34 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-            d="M11.3333 14.6667H7.08333L4.25 30.25H29.75L26.9167 14.6667H22.6667M11.3333 14.6667V10.4167C11.3333 7.28705 13.8704 4.75 17 4.75V4.75C20.1296 4.75 22.6667 7.28705 22.6667 10.4167V14.6667M11.3333 14.6667H22.6667M11.3333 14.6667V18.9167M22.6667 14.6667V18.9167"
-            stroke="white"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-    </svg>
-    <div class="ec-cart-count">{{count((array) session('cart'))}}</div>
-    @php $total = 0 @endphp
-    @forelse((array) session('cart') as $id => $details)
-        @php $total += $details['product']->amount * $details['quantity'] @endphp
-    @empty
-    @endforelse
+        <svg width="70" height="70" viewBox="0 0 34 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.3333 14.6667H7.08333L4.25 30.25H29.75L26.9167 14.6667H22.6667M11.3333 14.6667V10.4167C11.3333 7.28705 13.8704 4.75 17 4.75V4.75C20.1296 4.75 22.6667 7.28705 22.6667 10.4167V14.6667M11.3333 14.6667H22.6667M11.3333 14.6667V18.9167M22.6667 14.6667V18.9167" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div class="ec-cart-count">{{count((array) session('cart'))}}</div>
+        @php $total = 0 @endphp
+        @forelse((array) session('cart') as $id => $details)
+            @php $total += $details['product']->amount * $details['quantity'] @endphp
+        @empty
+        @endforelse
     </div>
     <div class="ec-wish-float">
-    <svg width="70" height="70" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z"
-            stroke="white"
-            stroke-width="1.5"
-        />
-    </svg>
-    <div class="wish-counter">{{auth()->check() ? auth()->user()->likes->count() : 0}}</div>
+        <svg width="70" height="70" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="white" stroke-width="1.5" />
+        </svg>
+        <div class="wish-counter">{{auth()->check() ? auth()->user()->likes->count() : 0}}</div>
     </div>
     <div class="loader">
         <div class="loader-icon">
@@ -626,7 +617,7 @@
             </div>
             <div class="footer__bottom">
                 <p class="footer__copyright-text">
-                    Expiring Soon © 2022. All Rights Reserved
+                    Expiring Soon © {{now()->format('Y')}}. All Rights Reserved
                 </p>
                 <div class="footer__partner d-flex">
                     <a  href="#" class="footer__partner-item">

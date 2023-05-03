@@ -41,7 +41,7 @@ class NewStaffNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)->subject('Welcome Aboard')->view(
-            'emails.staff', ['user' => $notifiable,'password'=> $this->password]
+            'emails.user.staff', ['user' => $notifiable,'password'=> $this->password]
         );
     
     }

@@ -35,10 +35,10 @@ class WelcomeNotification extends Notification
     public function toMail($notifiable)
     {
         if($notifiable->role == 'vendor' && !$notifiable->shop_id){
-            $view = 'emails.welcome_vendor';
+            $view = 'emails.user.welcome_vendor';
         }
         if($notifiable->role == 'shopper'){
-            $view = 'emails.welcome';
+            $view = 'emails.user.welcome';
         }
         return (new MailMessage)->subject('Welcome Aboard')->view(
             $view, ['user' => $notifiable]

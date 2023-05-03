@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Order Receipt No. {{$shipment->order->id}} | Expiring Soon</title>
+	<title>Shipment Receipt No. {{$shipment->order->slug}} | Expiring Soon</title>
 	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 

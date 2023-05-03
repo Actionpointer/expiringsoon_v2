@@ -27,9 +27,9 @@ Route::get('/eg', function () {
 });
 
 Route::get('/broadcast', function () {
-    $status = \App\Models\OrderStatus::find(52);
-    return (new App\Notifications\OrderStatusCustomerNotification($status))
-                    ->toMail($status->order->user);
+    $payout = \App\Models\Payout::find(2);
+    return (new App\Notifications\PayoutStatusNotification($payout))
+                    ->toMail($payout->user);
 
 });
 

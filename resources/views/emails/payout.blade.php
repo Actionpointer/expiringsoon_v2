@@ -14,11 +14,10 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Payment Receipt No. 123232 | Expiring Soon</title>
+	<title>Payout | Expiring Soon</title>
 	
-	<link rel="icon" href="{{asset('src/images/favicon/favicon.png')}}" sizes="32x32" />
-	<link rel="apple-touch-icon" href="{{asset('src/images/favicon/favicon.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon.png')}}" />
+	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -102,11 +101,10 @@
 												<th class="column-empty2" width="1" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;"></th>
 												<th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
-															<tr>
+														<tr>
 															<td class="text-header" style="color:#fff; font-family:'Playfair Display', Georgia,serif; font-size:13px; line-height:18px; text-align:right;">&nbsp;</td>
 														</tr>
-
-														</table>
+													</table>
 												</th>
 											</tr>
 										</table>
@@ -132,92 +130,67 @@
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">Dear John Okigwe,</span><br />Thank you for shopping with Expiring Soon!<br /> Your order <b>123232</b> has been confirmed successfully.
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																
+																
+																@switch($payout->status)
+																	@case('pending') 
+																	<span style="font-size:16px;font-weight:600"> New Payout Request,</span><br/>	
+																	<br />We have a new payout request of {!! $payout->currency->symbol !!}{{$payout->amount}} waiting for your approval. Visit <a href="{{route('admin.payouts')}}"><u>Payouts</u> </a> to manage request<br/> .
+																	@break
+																	@case('processing') 
+																	<span style="font-size:16px;font-weight:600"> Payout {{$payout->status}}	</span><br/>
+																	<br/> Your Payout request of {!!$payout->currency->symbol!!} {{$payout->amount}} is being processed. 
+																	Kindly be patient while we completed the necessary verification procedures';
+																	@break
+																	@case('approved') 
+																	<span style="font-size:16px;font-weight:600"> Payout {{$payout->status}}	</span><br/>
+																	<br/> Your Payout request of {!!$payout->currency->symbol!!} {{$payout->amount}} has been approved and will be disbursed shortly
+																	@break
+																	@case('paid') 
+																	<span style="font-size:16px;font-weight:600"> Payout {{$payout->status}}	</span><br/>
+																	<br/> Payout of {!!$payout->currency->symbol!!} {{$payout->amount}} has been paid. 
+																	@break
+																	@default
+																	<span style="font-size:16px;font-weight:600">Payout Rejected</span> <br/>
+																	<br/> Payout of {!!$payout->currency->symbol!!} {{$payout->amount}} was {{$payout->status}}
+																	@break
+																@endswitch
+																
+																
+																
 
-															<br /><br />It will be packed and shipped as soon as possible. You will receive a notification from us once the item(s) are available for door delivery.</td>
-														</tr>
-														<tr>
-															<td class="fluid-img" align="center"><img src="{{asset('src/images/site/tracking-bar-accepted.jpg')}}" border="0" width="100%" alt="" /></td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Please Note:</span><br />If you ordered multiple items, you may receive them on different days. This is because they are sold by different vendors on our platform and we want to make each item available to you as quickly as possible.</div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Delivery Address</span><br />
-															25, Owokemi street, Lagos Island</div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Recipient Details</span><br />
-															Shina Akanni<br />08038498394</div>
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-															<div style="margin:auto;width:80%"><span style="font-weight:600">Summary</span><br />
-															Order #: 123232<br />
-															Date: 12/12/23<br />
-															</div>
+															
 															</td>
 														</tr>
 														<tr>
 															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
 																<div class="cart-row">
-																	<div class="cart-item-name" style="font-weight: 600;">Item</div>
-																<div class="cart-item-qty" style="font-weight: 600;">Qty</div>
-																<div class="cart-item" style="font-weight: 600;">Price</div>
-																<div class="cart-item" style="font-weight: 600;">Total</div>
+																	<div class="cart-item" style="font-weight: 600;">Items</div>
+																	<div class="cart-item-qty" style="font-weight: 600;">Channel</div>
+																	<div class="cart-item" style="font-weight: 600; padding:0px 20px">Amount</div>
+																	<div class="cart-item" style="font-weight: 600;">Destination</div>
+																	
+																	{{-- <div class="cart-item" style="font-weight: 600;">Total</div> --}}
+																</div>
+																<div class="cart-row">
+																	<div class="cart-item">Payout</div>
+																	<div class="cart-item-qty">@if(in_array($payout->user->country->payout_gateway,['paystack','flutterwave','stripe'])) Bank Account @else Paypal @endif</div>
+																	<div class="cart-item" style="padding:0px 20px">{!!$payout->currency->symbol!!} {{$payout->amount}}</div>
+																	<div class="cart-item">{{$payout->destination}}</div>
 																</div>
 																
-																<div class="cart-row">
-																<div class="cart-item-name">Yam</div>
-																<div class="cart-item-qty">12</div>
-																<div class="cart-item">N123232</div>
-																<div class="cart-item">N123,232</div>
-																</div>
+																
 															
-															<div class="cart-row-ttl">
-																<div class="cart-item-name">&nbsp;</div>
-																<div class="cart-item"><span style="font-weight: 600;">Sub Total</span></div>
-																<div class="cart-item">N34343</div>
-
-																	<div class="cart-item-name">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">VAT (5%)</span></div>
-																	<div class="cart-item">N34343</div>
-
-																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">Shipping</span></div>
-																	<div class="cart-item">N3433</div>
-
-																	<div class="cart-item-name" style="margin-bottom:10px">&nbsp;</div>
-																	<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
-																	<div class="cart-item"><span style="font-weight: 600;">N3455</span></div>
-															</div>
-															<div class="cart-row">
-															<div class="cart-item-name">Payment Method</div>
-															<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
-															<div class="cart-item">&nbsp</div>
-															<div class="cart-item">&nbsp</div>
-															</div>
+																
+																
 															</td>
 														</tr>
-														<!-- Button -->
-														<tr>
-															<td align="center">
-																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
-																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link"><img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175"></a></td>
-																	</tr>
-																</table>
-															</td>
-														</tr>
+														
+														
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;">
-															<div style="margin:auto;width:80%"><strong style="font-size:14px">Thank you for shopping with us!</strong><br />
+																<div style="margin:auto;width:80%"><strong style="font-size:14px">Thank you for using ExpiringSoon!</strong><br />
 															</td>
 														</tr>
 														<!-- END Button -->

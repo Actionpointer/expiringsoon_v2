@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
     
     public function index(){
         $category = null;
@@ -151,5 +152,11 @@ class ProductController extends Controller
         }else
         return view('frontend.hotdeals',compact('categories','advert_C','advert_D','advert_E','advert_Z'));
     }
+
+    public function reviews($product){
+
+    }
+
+    
 
 }
