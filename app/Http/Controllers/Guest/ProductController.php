@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\ProductDetailsResource;
 
 class ProductController extends Controller
 {
@@ -97,7 +98,7 @@ class ProductController extends Controller
             response()->json([
                 'status' => false,
                 'message' => 'Product is no longer available',
-                'data' => new ProductResource($product),
+                'data' => new ProductDetailsResource($product),
             ], 400) :
             redirect()->back()->with(['result'=> 0,'message'=> 'Product is no longer available']);
         }
