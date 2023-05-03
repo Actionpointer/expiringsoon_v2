@@ -49,6 +49,6 @@ class ProductDetailsResource extends JsonResource
             'reviewable'=> $this->reviewable(),
             "reviews" => ReviewResource::collection($this->reviews)
             
-        ];
+        ];Product::find($this->id)
     }
 }

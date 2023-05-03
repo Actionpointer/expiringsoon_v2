@@ -177,6 +177,9 @@ class Product extends Model
     public function ratings(){
         $count = $this->reviews->count();
         $sum = $this->reviews->sum('rating');
-        return $sum/$count;
+        if($count){
+            return $sum/$count;
+        }else return 0;
+        
     }
 }
