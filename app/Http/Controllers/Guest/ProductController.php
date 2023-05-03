@@ -98,7 +98,7 @@ class ProductController extends Controller
             response()->json([
                 'status' => false,
                 'message' => 'Product is no longer available',
-                'data' => new ProductDetailsResource($product),
+                'data' => [],
             ], 400) :
             redirect()->back()->with(['result'=> 0,'message'=> 'Product is no longer available']);
         }
@@ -112,7 +112,7 @@ class ProductController extends Controller
             response()->json([
                 'status' => true,
                 'message' => 'Product details retrieved Successfully',
-                'data' => new ProductResource($product),
+                'data' => new ProductDetailsResource($product),
             ], 200) :
             view('frontend.product.view',compact('product','similar'));
 
