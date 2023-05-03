@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Guest;
 
-use Carbon\Carbon;
-use App\Models\Tag;
-use App\Models\Shop;
+
 use App\Models\State;
 use App\Models\Advert;
+use App\Models\Review;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\ReviewResource;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductDetailsResource;
@@ -154,8 +153,28 @@ class ProductController extends Controller
         return view('frontend.hotdeals',compact('categories','advert_C','advert_D','advert_E','advert_Z'));
     }
 
-    public function reviews($product){
-
+    public function reviews(Product $product){
+        $reviews = Review::where('product_id',$product->id)->paginate(16);
+        if(request()->expectsJson()){
+            return response()->json([
+                'status' => true,
+                'message' => 'Reviews Retrieved',
+                'data' => ReviewResource::collection($reviews),
+                'meta'=> [
+                    "total"=> $reviews->total(),
+                    "per_page"=> $reviews->perPage(),
+                    "current_page"=> $reviews->currentPage(),
+                    "last_page"=> $reviews->lastPage(),
+                    "first_page_url"=> $reviews->url(1),
+                    "last_page_url"=> $reviews->url($reviews->lastPage()),
+                    "next_page_url"=> $reviews->nextPageUrl(),
+                    "prev_page_url"=> $reviews->previousPageUrl(),
+                ]
+                
+            ], 200);
+        }else{
+            return view('frontend.product.reviews',compact('reviews'));
+        }
     }
 
     

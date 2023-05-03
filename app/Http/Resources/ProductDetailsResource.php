@@ -47,7 +47,9 @@ class ProductDetailsResource extends JsonResource
             "discount120"=> $this->discount120,
             'rating' => $this->ratings(),
             'reviewable'=> $this->reviewable(),
-            "reviews" => ReviewResource::collection($this->reviews)
+            "reviews" => ReviewResource::collection($this->reviews->sortByDesc('rating')->take(3)),
+            "expected_hours"=> cache('order_processing_to_delivery_period'),
+            "refund_hours" => cache('order_processing_to_auto_cancel_period')
             
         ];
     }

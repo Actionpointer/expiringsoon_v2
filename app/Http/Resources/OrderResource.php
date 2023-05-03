@@ -26,6 +26,7 @@ class OrderResource extends JsonResource
             'user_name' => $this->user->name,
             'shop_id' => $this->shop_id,
             'shop_name' => $this->shop->name,
+            'shop_image' => $this->shop->image,
             'address_id' => $this->address_id,
             'address' => $this->address_id ? $this->address->street.' '.($this->address->city ? $this->address->city->name:'').' '.$this->address->state->name : '',
             'contact_name' => $this->address_id ? $this->address->contact_name : '',

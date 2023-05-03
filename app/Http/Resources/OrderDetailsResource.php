@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Product;
-use App\Http\Resources\ProductResource;
-
+use App\Http\Resources\ReviewResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderDetailsResource extends JsonResource
@@ -24,10 +22,12 @@ class OrderDetailsResource extends JsonResource
             'product_id' => $this->product->id,
             'product_name' => $this->product->name,
             'product_slug' => $this->product->slug,
+            'product_image' => $this->product->image,
             'quantity' => $this->quantity,
             'amount' => $this->amount,
             'total' => $this->total,
-            'created_at'=> $this->created_at
+            'created_at'=> $this->created_at,
+            "review" => new ReviewResource($this->product->reviews->firstWhere('user_id',$this->order->user_id))
         ];
     }
 }
