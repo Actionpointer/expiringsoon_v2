@@ -41,53 +41,61 @@
             <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
                 <div class="dashboard__order-history-title" style="margin:auto;width:95%;border-bottom:1px solid #ddd;margin-bottom:10px">
                 <p class="font-body--xl-500">Shipping History</p>
-                <a href="#" class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($shippings->count(), 2)}} Total</a>
+                <a href="#" class="font-body--lg-500">{!!session('locale')['currency_symbol']!!}{{number_format($shipments->count(), 2)}} Total</a>
                 </div>
                 <div class="container">
                     <!-- Products -->
                     <table id="datatable" class="table display" style="width:100%;font-size:13px">
                         <thead>
                         <tr>
-                            <th scope="col" class="cart-table-title">Order ID</th>
+                            <th scope="col" class="cart-table-title">Shipper</th>
                             <th scope="col" class="cart-table-title">Amount</th>
-                            <th scope="col" class="cart-table-title">Status</th>
-                            <th scope="col" class="cart-table-title">
-                            <a href="#" class="cart-table__product-item" id="payAll" data-action="payall" >
-                            <span class="iconify" style="color:#000" data-icon="akar-icons:check-box-fill" data-width="25" data-height="25">
-                            </a>
-                        </th>
+                            <th scope="col" class="cart-table-title">Ready</th>
+                            <th scope="col" class="cart-table-title">Shipped</th>
+                            <th scope="col" class="cart-table-title">Delivered</th>
+                            
                         </tr>
                         </thead>
                         <tbody>
-                        @forelse ($shippings as $shipping)    
+                        @forelse ($shipments as $shipment)    
                             <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                                 <!-- item  -->
                                 <td class="cart-table-item order-date align-middle">
-                                <div style="margin-top:10px">
-                                <span class="font-body--lg-500">
-                                    <a href="#" style="color:#00b207">#{{$shipping->orderid}}</a></span></div>
+                                    <div style="margin-top:10px">
+                                        <span class="font-body--lg-500">
+                                            <a href="{{route('shipment')}}" style="color:#00b207">{{$shipment->rate->company_name}}</a>
+                                        </span>
+                                    </div>
                                 </td>
                                 <!-- Price  -->
                                 <td class="cart-table-item order-date align-middle">
-                                <p class="font-body--lg-500" style="color:#000">{!!session('locale')['currency_symbol']!!}{{number_format($shipping->amount, 2)}}</p>
+                                    <p class="font-body--lg-500" style="color:#000">{!!session('locale')['currency_symbol']!!}{{number_format($shipment->amount, 2)}}</p>
                                 </td>
                                 <!-- Stock Status  -->
-                                <td class="cart-table-item order-date align-middle">
-                                <span style="font-size:12px;color:#888">{{$shipping->created_at->format('l, F d, Y')}}</span>
-                                @if($shipping->status =='pending')
-                                    <p style="color:#d92e2e;font-size:14px"><span id="status">{{$shipping->status}}</span></p>
-                                @else
-                                    <p style="color:#00b207;font-size:14px;font-weight:500">{{$shipping->status}}</p>
-                                @endif
+                                <td class="cart-table-item order-date align-middle">  
+                                    @if($shipment->ready_at) 
+                                        <span style="font-size:12px;color:#888">{{$shipment->ready_at->format('l, F d, Y')}}</span>
+                                    @else
+                                        <p style="color:#d92e2e;font-size:14px"><span id="status">Pending</span></p>
+                                    @endif
+                                </td>
+                                <td class="cart-table-item order-date align-middle">  
+                                    @if($shipment->ready_at && $shipment->shipped_at) 
+                                        <span style="font-size:12px;color:#888">{{$shipment->shipped_at->format('l, F d, Y')}}</span>
+                                    @elseif($shipment->ready_at)
+                                        <a href="{{route('shipment')}}" style="color:#00b207">Manage </a>
+                                    @else 
+                                        <p style="color:#d92e2e;font-size:14px"><span id="status">Pending</span></p>
+                                    @endif
                                 </td>
                                 <td class="cart-table-item add-cart align-middle">
-                                <div class="add-cart__wrapper">
-                                    <a href="#" class="cart-table__product-item approve" id="{{$shipping->id}}" >
-                                    @if($shipping->status =='pending')
-                                        <span class="iconify" style="color:#00b207" data-icon="akar-icons:check-box-fill" data-width="25" data-height="25">
+                                    @if($shipment->shipped_at && $shipment->delivered_at) 
+                                        <span style="font-size:12px;color:#888">{{$shipment->delivered_at->format('l, F d, Y')}}</span>
+                                    @elseif($shipment->shipped_at)
+                                        <a href="{{route('shipment')}}" style="color:#00b207">Manage </a>
+                                    @else 
+                                        <p style="color:#d92e2e;font-size:14px"><span id="status">Pending</span></p>
                                     @endif
-                                    </a>
-                                </div>
                                 </td>
                             </tr>
                         @empty
@@ -98,7 +106,7 @@
                         
                         </tbody>
                     </table>
-                    @include('layouts.pagination',['data'=> $shippings])
+                    @include('layouts.pagination',['data'=> $shipments])
                 </div>
             </div>
         </div>

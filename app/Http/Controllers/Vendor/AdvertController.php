@@ -31,7 +31,7 @@ class AdvertController extends Controller
         $states = State::within()->get();
         $state_id = session('locale')['state_id'];
         if($adset->adplan->type == 'products'){
-            $products = Product::withinCountry()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
+            $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
             $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
             return view('vendor.adverts.products',compact('adset','products','categories','shops','states','state_id'));
         }else

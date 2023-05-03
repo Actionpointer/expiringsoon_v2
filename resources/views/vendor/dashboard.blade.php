@@ -169,7 +169,7 @@
                         <p class="font-body--md-500"> {{$user->shops->where('status',true)->count()}} of {{$user->shops->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
-                        <h5 class="font-body--md-400">Shops Visible:</h5>
+                        <h5 class="font-body--md-400">Shops Published:</h5>
                         <p class="font-body--md-500"> {{$user->shops->where('published',true)->count()}} of {{$user->shops->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
@@ -206,7 +206,7 @@
                         <p class="font-body--md-500"> {{$user->products->where('status',true)->count()}} of {{$user->products->count()}} </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">
-                        <h5 class="font-body--md-400">Products Visible:</h5>
+                        <h5 class="font-body--md-400">Products Published:</h5>
                         <p class="font-body--md-500">{{$user->products->where('published',true)->count()}} of {{$user->products->count()}}</p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">

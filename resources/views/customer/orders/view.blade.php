@@ -204,7 +204,9 @@
                               <thead>
                                 <tr>
                                   <th scope="col" class="dashboard__order-history-table-title"> Product </th>
+                                  @if(in_array($order->status,['completed','closed']))
                                   <th scope="col" class="dashboard__order-history-table-title"> Review </th>
+                                  @endif
                                   <th scope="col" class="dashboard__order-history-table-title"> Price </th>
                                   <th scope="col" class="dashboard__order-history-table-title" > quantity </th>
                                   <th scope="col" class="dashboard__order-history-table-title"> Subtotal </th>
@@ -224,14 +226,14 @@
                                                 <h5 class="font-body--md-400"> {{$item->product->name}}</h5>
                                             </a>
                                         </td>
+                                        @if(in_array($order->status,['completed','closed']))
                                         <td class="dashboard__order-history-table-item align-middle">
-                                          @if($order->status == 'completed' &&  $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$item->product_id)->isNotEmpty())
-                                          <button class="btn btn-sm btn-info" >View Review</button>
-                                          @endif
-                                          @if($order->status == 'completed' &&  $order->reviews->where('reviewable_type','App\Models\Product')->where('reviewable_id',$item->product_id)->isEmpty())
-                                          <button class="btn btn-sm btn-info" >Add Review</button>
-                                          @endif
+                                          
+                                          <a href="{{route('product.show',$item->product)}}" class="btn btn-sm btn-info" >
+                                            @if($item->product->reviewable()) Add Review @else View Reviews @endif
+                                          </a>
                                         </td>
+                                        @endif
                                         <!-- Price  -->
                                         <td class="dashboard__order-history-table-item order-date align-middle "     >
                                             {!!$order->shop->country->currency->symbol!!} {{number_format($item->amount, 0)}}

@@ -55,8 +55,8 @@ class ShipmentController extends Controller
 
     /*deliveries */
     public function index(){
-        $shippings = Shipment::within()->paginate(10);
-        return view('admin.shipments.index',compact('shippings'));
+        $shipments = Shipment::within()->paginate(10);
+        return view('admin.shipments.index',compact('shipments'));
     }
 
     

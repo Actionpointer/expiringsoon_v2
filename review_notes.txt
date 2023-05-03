@@ -36,13 +36,18 @@ sk_live_51M9zUbFkbKiQb5lmlsQ3Fsor4HUoluvpBCqRb3oJO3s73Wb7DpaAzaQC8rUDwFQvXtj5bWy
 
 
 version 2
+report shops/products
 buyer can remove items from order which not yet shipped/ready, not yet expired, and pick another item from the same shop, of similar worth
 buyer can buy now and receive later when the price drops
 auto-renew subscription & adset
 add password strength meter
 create an order on the shipment partners website, if integrated. Also we need to receive a webhook from shipment company when the item has been shipped so we can mark this item shipped
 stripe PAYMENTS, REFUND & PAYOUT
-
+Newsletters[
+    Products - Customers
+    Coupon - Customers
+    Coupon - Vendors
+]
 
 
 $users = \App\Models\User::whereHas('adsets',function($query){
