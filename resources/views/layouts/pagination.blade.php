@@ -1,4 +1,4 @@
-<nav aria-label="Page navigation pagination--one" class="pagination-wrapper" style="padding-top: 20px;">
+<nav aria-label="Page navigation pagination--one" class="pagination-wrapper py-4" >
     <ul class="pagination justify-content-center">
         <li class="page-item pagination-item @if($data->onFirstPage()) disabled @endif">
             <a class="page-link pagination-link" href="{{$data->previousPageUrl()}}" tabindex="-1">
