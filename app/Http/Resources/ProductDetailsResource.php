@@ -20,6 +20,7 @@ class ProductDetailsResource extends JsonResource
             "name"=> $this->name,
             "description"=> $this->description,
             "slug"=> $this->slug,
+            "url"=> route('product.show',$this->slug),
             "shop_id"=> $this->shop_id,
             "shop_name"=> $this->shop->name,
             "shop_image"=> $this->shop->image,
@@ -48,8 +49,8 @@ class ProductDetailsResource extends JsonResource
             'rating' => $this->ratings(),
             'reviewable'=> $this->reviewable(),
             "reviews" => ReviewResource::collection($this->reviews->sortByDesc('rating')->take(3)),
-            "expected_hours"=> cache('order_processing_to_delivery_period'),
-            "refund_hours" => cache('order_processing_to_auto_cancel_period')
+            "expected_hours"=> cache('settings')['order_processing_to_delivery_period'],
+            "refund_hours" => cache('settings')['order_processing_to_auto_cancel_period']
             
         ];
     }

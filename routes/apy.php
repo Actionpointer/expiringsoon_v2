@@ -65,13 +65,10 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('order/review',[OrderController::class, 'review']);
 
     Route::get('reviews/{product_id}',[ProductController::class,'reviews']);
-    
+
     Route::group(['prefix'=> 'transactions'],function(){
         Route::get('/',[PaymentController::class, 'index']);    
     });
-
-    // Route::get('adverts/products',)
- 
 
     Route::get('generate/otp',[UserController::class, 'generate_otp']);
     Route::post('edit-pin',[UserController::class, 'pin']);

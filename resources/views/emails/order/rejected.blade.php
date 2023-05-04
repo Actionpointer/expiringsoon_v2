@@ -150,7 +150,7 @@
 														@endif
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																Rejected items are expected to be returned to the vendor before {{$status->created_at->addHours(cache('order_rejected_to_returned_period'))->format('d-M-Y h:i A')}}. Failure to do so will lead to automatic closure of the 
+																Rejected items are expected to be returned to the vendor before {{$status->created_at->addHours(cache('settings')['order_rejected_to_returned_period'])->format('d-M-Y h:i A')}}. Failure to do so will lead to automatic closure of the 
 																order and disbursement of funds to the vendor.
 																
 															</td>

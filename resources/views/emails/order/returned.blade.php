@@ -134,9 +134,9 @@
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600"> Order Returned for Vendor: {{$shop->name}},</span>
 																<br/>The items contained in this order {{$order->slug}} has been returned to you by your customer. A refund will be automatically initiated to the customer within
-																{{cache('order_returned_to_acceptance_period')}} hours. @if($order->deliverer == 'vendor') Kindly note that you will be paid 100% for the delivery of the order to the customer @endif
+																{{cache('settings')['order_returned_to_acceptance_period']}} hours. @if($order->deliverer == 'vendor') Kindly note that you will be paid 100% for the delivery of the order to the customer @endif
 
-																<br/><br/>If you have any issue with the items returned, you may reject the delivery via the order interface before {{$status->created_at->addHours(cache('order_returned_to_acceptance_period'))->format('d-M-Y h:i A')}}. This action will automatically open a dispute resolution dialogue among 
+																<br/><br/>If you have any issue with the items returned, you may reject the delivery via the order interface before {{$status->created_at->addHours(cache('settings')['order_returned_to_acceptance_period'])->format('d-M-Y h:i A')}}. This action will automatically open a dispute resolution dialogue among 
 																you, the customer and our arbitration committee for quick resolution.
 																
 																<br/><br/>Thank you for shopping with Expiring Soon. 

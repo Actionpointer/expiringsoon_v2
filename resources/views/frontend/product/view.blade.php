@@ -332,7 +332,7 @@
                                     </tr>
                                     <tr>
                                         <td><i>You can request refund anytime before</i></td>
-                                        <th>{{now()->addHours(cache('settings')['order_delivered_to_acceptance_period'] + cache('settings')['order_processing_to_delivery_period'])->format('jS M')}}</th>
+                                        <th>{{now()->addHours( cache('settings')['order_delivered_to_acceptance_period'] + cache('settings')['order_processing_to_delivery_period'])->format('jS M')}}</th>
                                     </tr>
                                 </table>
                                 <div class="products-video__card">
