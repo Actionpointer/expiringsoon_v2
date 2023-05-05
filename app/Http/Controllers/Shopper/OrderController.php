@@ -300,7 +300,6 @@ class OrderController extends Controller
                 $orders->push($order);
             }
             //take payment
-            dd($orders);
             $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
             if(!$result['link']){
                 return request()->expectsJson() ? 
