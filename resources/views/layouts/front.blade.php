@@ -11,24 +11,25 @@ $(document).on('click','.add-to-cart',function(){
         },
         success:function(data) {
                 var cart_total = 0;
-                $(".cart-counter").text(data.cart_count);
-                $(".ec-cart-count").text(data.cart_count);
-                $(".cart-ttl").text(data.cart_count);
+                $(".cart-counter").text(data.count);
+                $(".ec-cart-count").text(data.count);
+                $(".cart-ttl").text(data.count);
                 $('#cartitems').html('');
-                $.each( data.cart, function( key, value ) {
-                    cart_total += parseInt(value['quantity']) * parseInt(value['amount']);
+
+                $.each( data.data, function( key, value ) {
+                    cart_total += parseInt(value.quantity) * parseInt(value.amount);
                     var cartitem = `<div class="shopping-cart__product-content cartitem">
                                         <div class="shopping-cart__product-content-item">
                                             <div class="img-wrapper">
-                                                <img src="`+ window.location.origin+ '/storage/'+value.product.photo +`" alt="`+ value.product.name +`">
+                                                <img src="`+ value.image +`" alt="`+ value.name +`">
                                             </div>
                                             <div class="text-content">
-                                                <h5 class="font-body--md-400 product-title">`+ value.product.name + `</h5>
+                                                <h5 class="font-body--md-400 product-title">`+ value.name + `</h5>
                                                 <p class="font-body--md-400">`+ value.quantity + ` x <span class="font-body--md-500">N`+ value.amount.toLocaleString() +`</span></p>
                                             </div>
                                         </div>
                                         <button class="delete-item">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="remove-from-cart" data-product="`+ key +`product">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="remove-from-cart" data-product="`+ value.product_id +`product">
                                                 <path d="M12 23C18.0748 23 23 18.0748 23 12C23 5.92525 18.0748 1 12 1C5.92525 1 1 5.92525 1 12C1 18.0748 5.92525 23 12 23Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
                                                 <path d="M16 8L8 16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                                 <path d="M16 16L8 8" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -56,6 +57,56 @@ $(document).on('click','.add-to-cart',function(){
     });
 });   
 
+function updatecart(product_id,quantity){
+    $.ajax({
+        type:'POST',
+        dataType: 'json',
+        url: "{{route('product.addtocart')}}",
+        data:{
+            '_token' : $('meta[name="csrf-token"]').attr('content'),
+            'product_id': product_id,
+            'quantity': quantity,
+            'update': true,
+        },
+        success:function(data) {
+                // console.log(data.cart);
+                var cart_total = 0;
+                $(".cart-counter").text(data.count);
+                $(".ec-cart-count").text(data.count);
+                $(".cart-ttl").text(data.count);
+                $('#cartitems').html('');
+                $.each( data.data, function( key, value ) {
+                    cart_total += parseInt(value['quantity']) * parseInt(value['amount']);
+                    var cartitem = `<div class="shopping-cart__product-content cartitem">
+                                        <div class="shopping-cart__product-content-item">
+                                            <div class="img-wrapper">
+                                                <img src="`+ value.image +`" alt="`+ value.name +`">
+                                            </div>
+                                            <div class="text-content">
+                                                <h5 class="font-body--md-400 product-title">`+ value.name + `</h5>
+                                                <p class="font-body--md-400">`+ value.quantity + ` x <span class="font-body--md-500">N`+ value.amount.toLocaleString() +`</span></p>
+                                            </div>
+                                        </div>
+                                        <button class="delete-item">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="remove-from-cart" data-product="`+ value.product_id +`product">
+                                                <path d="M12 23C18.0748 23 23 18.0748 23 12C23 5.92525 18.0748 1 12 1C5.92525 1 1 5.92525 1 12C1 18.0748 5.92525 23 12 23Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
+                                                <path d="M16 8L8 16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                <path d="M16 16L8 8" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </button>
+                                    </div>`
+                    // Update cart items
+                    $('#cartitems').append(cartitem);
+                });
+                $('.cart-ttl-amount').text(cart_total.toLocaleString());
+                $(".cart-empty").hide();
+        },
+        error: function (data, textStatus, errorThrown) {
+        console.log(data);
+        },
+    });
+} 
+
 $(document).on('click','.remove-from-cart',function(){
     var product_id = parseInt($(this).attr('data-product'));
 
@@ -69,34 +120,34 @@ $(document).on('click','.remove-from-cart',function(){
         },
         success:function(data) {
             console.log(data.cart);
-            if(!data.cart_count){
+            if(!data.count){
                 $(".cart-empty").show();
             }
             var cart_total = 0;
-            $(".cart-counter").text(data.cart_count);
-            $(".ec-cart-count").text(data.cart_count);
-            $(".cart-ttl").text(data.cart_count);
+            $(".cart-counter").text(data.count);
+            $(".ec-cart-count").text(data.count);
+            $(".cart-ttl").text(data.count);
             $('#cartitems').html('');
-            $.each( data.cart, function( key, value ) {
+            $.each( data.data, function( key, value ) {
                 cart_total += parseInt(value['quantity']) * parseInt(value['amount']);
                 var cartitem = `<div class="shopping-cart__product-content cartitem">
-                                    <div class="shopping-cart__product-content-item">
-                                        <div class="img-wrapper">
-                                            <img src="`+ window.location.origin+'/storage/'+value.product.photo +`" alt="`+ value.product.name +`">
+                                        <div class="shopping-cart__product-content-item">
+                                            <div class="img-wrapper">
+                                                <img src="`+ value.image +`" alt="`+ value.name +`">
+                                            </div>
+                                            <div class="text-content">
+                                                <h5 class="font-body--md-400 product-title">`+ value.name + `</h5>
+                                                <p class="font-body--md-400">`+ value.quantity + ` x <span class="font-body--md-500">N`+ value.amount.toLocaleString() +`</span></p>
+                                            </div>
                                         </div>
-                                        <div class="text-content">
-                                            <h5 class="font-body--md-400 product-title">`+ value.product.name + `</h5>
-                                            <p class="font-body--md-400">`+ value.quantity + ` x <span class="font-body--md-500">N`+ value.amount.toLocaleString() +`</span></p>
-                                        </div>
-                                    </div>
-                                    <button class="delete-item">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="remove-from-cart" data-product="`+ key +`product">
-                                            <path d="M12 23C18.0748 23 23 18.0748 23 12C23 5.92525 18.0748 1 12 1C5.92525 1 1 5.92525 1 12C1 18.0748 5.92525 23 12 23Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
-                                            <path d="M16 8L8 16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M16 16L8 8" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </button>
-                                </div>`
+                                        <button class="delete-item">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="remove-from-cart" data-product="`+ value.product_id +`product">
+                                                <path d="M12 23C18.0748 23 23 18.0748 23 12C23 5.92525 18.0748 1 12 1C5.92525 1 1 5.92525 1 12C1 18.0748 5.92525 23 12 23Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
+                                                <path d="M16 8L8 16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                <path d="M16 16L8 8" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </button>
+                                    </div>`
                 // Update cart items
                 $('#cartitems').append(cartitem);
             });
@@ -157,58 +208,5 @@ $(document).on('click','.remove-from-wish',function(){
         },
     });
 });
-
-function updatecart(product_id,quantity){
-    $.ajax({
-        type:'POST',
-        dataType: 'json',
-        url: "{{route('product.addtocart')}}",
-        data:{
-            '_token' : $('meta[name="csrf-token"]').attr('content'),
-            'product_id': product_id,
-            'quantity': quantity,
-            'update': true,
-        },
-        success:function(data) {
-                // console.log(data.cart);
-                var cart_total = 0;
-                $(".cart-counter").text(data.cart_count);
-                $(".ec-cart-count").text(data.cart_count);
-                $(".cart-ttl").text(data.cart_count);
-                $('#cartitems').html('');
-                $.each( data.cart, function( key, value ) {
-                    cart_total += parseInt(value['quantity']) * parseInt(value['amount']);
-                    var cartitem = `<div class="shopping-cart__product-content cartitem">
-                                        <div class="shopping-cart__product-content-item">
-                                            <div class="img-wrapper">
-                                                <img src="`+ window.location.origin+ '/storage/'+value.product.photo +`" alt="`+ value.product.name +`">
-                                            </div>
-                                            <div class="text-content">
-                                                <h5 class="font-body--md-400 product-title">`+ value.product.name + `</h5>
-                                                <p class="font-body--md-400">`+ value.quantity + ` x <span class="font-body--md-500">N`+ value.amount.toLocaleString() +`</span></p>
-                                            </div>
-                                        </div>
-                                        <button class="delete-item">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="remove-from-cart" data-product="`+ key +`product">
-                                                <path d="M12 23C18.0748 23 23 18.0748 23 12C23 5.92525 18.0748 1 12 1C5.92525 1 1 5.92525 1 12C1 18.0748 5.92525 23 12 23Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
-                                                <path d="M16 8L8 16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M16 16L8 8" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </button>
-                                    </div>`
-                    // Update cart items
-                    $('#cartitems').append(cartitem);
-                });
-                $('.cart-ttl-amount').text(cart_total.toLocaleString());
-                $(".cart-empty").hide();
-
-                
-            
-        },
-        error: function (data, textStatus, errorThrown) {
-        console.log(data);
-        },
-    });
-} 
 
 </script>

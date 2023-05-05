@@ -24,10 +24,10 @@ class CartController extends Controller
     public function cart(){
         $shops = collect([]);
         $items = null;
-        if(session('cart')){
-            $items = session('cart');
-            if($items && count($items)){
-                $shop_ids = array_column($items, 'shop_id');
+        if(session('carts')){
+            $items = session('carts');
+            if($items->count()){
+                $shop_ids = $items->pluck('shop_id')->toArray();
                 $shops = Shop::whereIn('id',$shop_ids)->get();
             }
         }elseif($user = auth()->user()){
@@ -48,26 +48,55 @@ class CartController extends Controller
     }
 
     public function addtocart(Request $request){
-        // $request->session()->flush();
         $product = Product::find($request->product_id);
         if(!$product)
         abort(404);
         $quantity = $request->quantity ?? 1;
         $update = $request->update ?? false;
-        $cart = $this->addToCartSession($product,$quantity,$update);
-        if(auth()->check())
-        $this->addToCartDb($product,$quantity,$update);
-        return response()->json(['cart_count'=> count((array)$cart),'cart'=> $cart],200);
+        $carts = $this->addToCartSession($product,$quantity,$update);
+        if(auth()->check()){
+            $this->addToCartDb($product,$quantity,$update);
+            $carts = auth()->user()->carts;
+        }
+        return in_array('web',request()->route()->middleware()) ?
+            response()->json([
+                'status' => true,
+                'message' => $carts->count() ? 'Cart retrieved Successfully':'No item in cart',
+                'data' => $carts,
+                'count' => $carts->count() ?? 0
+            ], 200):
+            response()->json([
+                'status' => true,
+                'message' => $carts->count() ? 'Cart retrieved Successfully':'No item in cart',
+                'data' => CartResource::collection($carts),
+                'count' => $carts->count() ?? 0
+            ], 200);
+        
     }
 
     public function removefromcart(Request $request){
         $product = Product::find($request->product_id);
         if(!$product)
         abort(404);
-        $cart = $this->removeFromCartSession($product);
-        if(auth()->check())
-        $this->removeFromCartDb($product);
-        return response()->json(['cart_count'=> $cart && count($cart) ? count((array)$cart) : 0,'cart'=> $cart],200);
+        $carts = $this->removeFromCartSession($product);
+        if($user = auth()->user()){
+            $this->removeFromCartDb($product);
+            $carts = $user->carts;
+        }
+        
+        return in_array('web',request()->route()->middleware()) ?
+            response()->json([
+                'status' => true,
+                'message' => $carts->count() ? 'Cart retrieved Successfully':'No item in cart',
+                'data' => $carts,
+                'count' => $carts->count() ?? 0
+            ], 200):
+            response()->json([
+                'status' => true,
+                'message' => $carts->count() ? 'Cart retrieved Successfully':'No item in cart',
+                'data' => CartResource::collection($carts),
+                'count' => $carts->count() ?? 0
+            ], 200);
     }
 
     public function addtowish(Request $request){

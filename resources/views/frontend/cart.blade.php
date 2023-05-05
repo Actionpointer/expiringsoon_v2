@@ -54,20 +54,20 @@
                     </thead>
                     <tbody>
                         
-                        @foreach(collect($items)->where('shop_id',$shop->id) as $key=>$cart)
-                            <tr class="item" data-product="{{$key}}product" data-price="{{$cart['product']->amount}}" data-amount="{{$cart['product']->amount * $cart['quantity']}}" data-qty="{{$cart['quantity']}}">
+                        @foreach($items->where('shop_id',$shop->id) as $key=>$cart)
+                            <tr class="item" data-product="{{$cart['product_id']}}product" data-price="{{$cart['amount']}}" data-amount="{{$cart['amount'] * $cart['quantity']}}" data-qty="{{$cart['quantity']}}">
                                 <!-- Product item  -->
                                 <td class="cart-table-item align-middle">
-                                    <a href="{{route('product.show',$cart['product'])}}" class="cart-table__product-item">
+                                    <a href="{{$cart['url']}}" class="cart-table__product-item">
                                         <div class="cart-table__product-item-img">
-                                        <img src="{{Storage::url($cart['product']->photo)}}" alt="product">
+                                        <img src="{{$cart['image']}}" alt="product">
                                         </div>
-                                        <h5 class="font-body--lg-400">{{$cart['product']->name}}</h5>
+                                        <h5 class="font-body--lg-400">{{$cart['name']}}</h5>
                                     </a>
                                 </td>
                                 <!-- Price  -->
                                 <td class="cart-table-item order-date align-middle">
-                                  {!!session('locale')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}
+                                  {!!session('locale')['currency_symbol']!!}{{number_format($cart['amount'], 2)}}
                                 </td>
                                 <!-- quantity -->
                                 <td class="cart-table-item order-total align-middle">
@@ -75,7 +75,7 @@
                                         <button class="counter-btn-dec counter-btn" data-action="decrement">
                                         -
                                         </button>
-                                        <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$key}}" min="1" max="1000" placeholder="1" value="{{$cart['quantity']}}">
+                                        <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$cart['product_id']}}" min="1" max="1000" placeholder="1" value="{{$cart['quantity']}}">
                                         <button class="counter-btn-inc counter-btn" data-action="increment">
                                         +
                                         </button>
@@ -85,7 +85,7 @@
                                 <td class="cart-table-item order-subtotal align-middle">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p class="font-body--md-500">{!!session('locale')['currency_symbol']!!} <span class="product-total">{{$cart['total']}}</span> </p>
-                                        <button class="delete-item remove-item" data-product="{{$key}}product">
+                                        <button class="delete-item remove-item" data-product="{{$cart['product_id']}}product">
                                         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 23.5C18.0748 23.5 23 18.5748 23 12.5C23 6.42525 18.0748 1.5 12 1.5C5.92525 1.5 1 6.42525 1 12.5C1 18.5748 5.92525 23.5 12 23.5Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
                                             <path d="M16 8.5L8 16.5" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -94,8 +94,7 @@
                                         </button>
                                     </div>
                                 </td>
-                            </tr>
-                            
+                            </tr>  
                         @endforeach
                     </tbody>
                   </table>               
@@ -122,24 +121,24 @@
             </a>
           </div>
           <div class="shoping-cart__mobile">
-            @forelse(collect($items) as $key=>$cart)
+            @forelse($items as $key=>$cart)
               <div class="shoping-card">
                 <div class="shoping-card__img-wrapper">
-                  <img src="./storage/{{$cart['product']->photo}}" alt="product-item">
+                  <img src="./storage/{{$cart['image']}}" alt="product-item">
                 </div>
                 <h5 class="shoping-card__product-caption font-body--lg-400">
-                  {{$cart['product']->name}}
+                  {{$cart['name']}}
                 </h5>
 
                 <h6 class="shoping-card__product-price font-body--lg-400">
-                  {!!session('locale')['currency_symbol']!!}{{number_format($cart['product']->amount, 2)}}
+                  {!!session('locale')['currency_symbol']!!}{{number_format($cart['amount'], 2)}}
                 </h6>
 
                 <div class="counter-btn-wrapper">
                   <button class="counter-btn-dec counter-btn" data-action="decrement">
                     -
                   </button>
-                  <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$key}}" min="1" max="1000" value="{{$cart['quantity']}}" placeholder="0">
+                  <input type="number" class="counter-btn-counter quantity" data-slug="qtyfor{{$cart['product_id']}}" min="1" max="1000" value="{{$cart['quantity']}}" placeholder="0">
                   <button class="counter-btn-inc counter-btn" data-action="increment">
                     +
                   </button>
@@ -147,7 +146,7 @@
                 <h6 class="shoping-card__product-totalprice font-body--lg-600">
                   {!!session('locale')['currency_symbol']!!} <span class="product-total"></span> {{$cart['total']}}
                 </h6>
-                <button class="close-btn remove-item" data-product="{{$key}}product">
+                <button class="close-btn remove-item" data-product="{{$cart['product_id']}}product">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 23C18.0748 23 23 18.0748 23 12C23 5.92525 18.0748 1 12 1C5.92525 1 1 5.92525 1 12C1 18.0748 5.92525 23 12 23Z" stroke="#CCCCCC" stroke-miterlimit="10"></path>
                     <path d="M16 8L8 16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>

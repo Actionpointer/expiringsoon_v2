@@ -128,7 +128,7 @@ class OrderController extends Controller
     public function checkout(Shop $shop = null){
         
         $user = auth()->user();
-        $items = session('cart');
+        $items = session('carts');
         if(!isset($items)){
             return redirect()->back();
         }

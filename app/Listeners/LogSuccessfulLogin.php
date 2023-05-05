@@ -47,7 +47,7 @@ class LogSuccessfulLogin
             $this->resetShops($user->shop->user);
         }
         if($user->role->name == 'shopper'){
-            $cart = session('cart');
+            $cart = session('carts');
             if($cart){
                 foreach($cart as $key => $value){
                     $this->addToCartDb($value['product'],$value['quantity'],true);
