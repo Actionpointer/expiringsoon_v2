@@ -13,8 +13,9 @@ class OrderObserver
     public function created(Order $order)
     {
         if($order->deliveryfee){
+            $admin = User::where('role_id',Role::where('name','superadmin')->first()->id)->first();
             Settlement::create(['description'=> 'Shipment','order_id'=> $order->id,
-            'receiver_id' => $order->deliverer == 'admin' ? User::where('role_id',Role::where('name','superadmin')->first()->id)->first() : $order->shop_id,
+            'receiver_id' => $order->deliverer == 'admin' ? $admin->id : $order->shop_id,
             'receiver_type' => $order->deliverer == 'admin' ? 'App\Models\User' : 'App\Models\Shop',
             'amount' => $order->deliveryfee,'status'=> $order->deliverer == 'admin'? true:false]);
         }

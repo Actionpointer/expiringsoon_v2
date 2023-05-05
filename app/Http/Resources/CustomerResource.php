@@ -33,12 +33,13 @@ class CustomerResource extends JsonResource
             "state_id"=> $this->state_id,
             "state_name"=> $this->state->name,
             "status"=> $this->status,
-            "recent_orders"=> OrderResource::collection(Order::where('user_id',$this->id)->whereHas('statuses')->get()),
+            // "recent_orders"=> OrderResource::collection(Order::where('user_id',$this->id)->whereHas('statuses')->get()),
             'payment_gateway'=> $this->country->payment_gateway,            
             'payout_gateway'=> $this->country->payout_gateway,
             'currency'=> $this->country->currency->symbol,
             'cart'=> $this->carts->pluck('product_id')->combine($this->carts->pluck('quantity')),
-            'wishlist' => $this->likes->pluck('product_id')->toArray()
+            'wishlist' => $this->likes->pluck('product_id')->toArray(),
+            "created_at" => $this->created_at
         ];
     }
 }

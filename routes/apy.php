@@ -54,7 +54,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('address/delete',[AddressController::class,'destroy']);
 
     Route::post('checkout',[OrderController::class,'checkout_api']);
-    Route::post('checkout/confirm',[OrderController::class,'confirmcheckout']);
+    Route::post('checkout/confirm',[OrderController::class,'confirmcheckout_api']);
 
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('order/{order_id}',[OrderController::class, 'show']);

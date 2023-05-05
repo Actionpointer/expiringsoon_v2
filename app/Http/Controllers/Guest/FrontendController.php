@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Guest;
 
+use App\Models\Role;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Advert;
 use App\Models\Category;
+use App\Models\Shipment;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\GeoLocationTrait;
-use App\Models\Shipment;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Collection;
 
 class FrontendController extends Controller
 {

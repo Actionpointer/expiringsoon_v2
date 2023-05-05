@@ -43,6 +43,7 @@ auto-renew subscription & adset
 add password strength meter
 create an order on the shipment partners website, if integrated. Also we need to receive a webhook from shipment company when the item has been shipped so we can mark this item shipped
 stripe PAYMENTS, REFUND & PAYOUT
+
 Newsletters[
     Products - Customers
     Coupon - Customers

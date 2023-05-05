@@ -181,7 +181,6 @@ class OrderController extends Controller
     } 
 
     public function confirmcheckout(Request $request){
-        // dd($request->all());
         try{
             if(!count($request->carts)){
                 return request()->expectsJson() ?
@@ -251,6 +250,81 @@ class OrderController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function confirmcheckout_api(Request $request){
+        try{
+            if(!count($request->carts)){
+                return request()->expectsJson() ?
+                response()->json([
+                   'status' => false,
+                   'message'=> 'Cart cannot be empty'
+               ], 401) :
+               redirect()->back()->with(['result'=> '0','message'=> 'Cart cannot be empty']);
+            }
+            if(!$request->address_id && array_sum(array_column($request->deliveries,'delivery_amount'))){
+                return request()->expectsJson() ?
+                 response()->json([
+                    'status' => false,
+                    'message'=> 'Delivery Address must be set'
+                ], 401) :
+                redirect()->back()->with(['result'=> '0','message'=> 'Delivery Address must be set']);
+            }
+            $user = auth()->user();
+            $carts = Cart::whereIn('id',$request->carts)->get();
+            $vat = $user->country->vat;
+            $address = Address::find($request->address_id);
+            $orders = collect([]);
+            $shipping = ['amount'=> 0,'shipper'=> 'pickup','hours'=> 0,'by'=>'pickup'];
+            $deliveries = collect($request->deliveries);
+            foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
+                $subtotal = 0;
+                if($deliveries->firstWhere('shop_id',$shop_id)['delivery_amount']){
+                    $shipping = $this->getShopShipment($shop_id,$address->state_id); 
+                }
+                //dd($shipping_fee);
+                $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
+                    'deliveryfee' => $shipping['amount'],'deliverer'=> $shipping['by'],'expected_at'=> $shipping['hours'] ? now()->addHours($shipping['hours']) : null
+                ]);
+                if($shipping['by'] == 'admin'){
+                    $shipment = Shipment::create(['address_id'=> $address->id,'rate_id'=> $shipping['rate_id'],'order_id'=> $order->id,'amount'=> $shipping['amount']]); 
+                } 
+                foreach($carts->where('shop_id',$shop_id) as $cart){
+                    $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->total]);
+                    $subtotal += $cart->total;
+                }
+                $order->subtotal = $subtotal;
+                $order->vat = $vat * $subtotal / 100;
+                $order->total = ($vat * $subtotal / 100) + $subtotal + $order->deliveryfee;
+                $order->save();
+                $orders->push($order);
+            }
+            //take payment
+            $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
+            if(!$result['link']){
+                return request()->expectsJson() ? 
+                    response()->json([
+                        'status' => false,
+                        'message' => 'Something went wrong',
+                    ], 401) :
+                    redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
+            }else{
+                return request()->expectsJson() ? 
+                response()->json([
+                    'status' => true,
+                    'message' => 'Open payment link on browser to complete payment',
+                    'data' => $result,
+                ], 200) :
+                redirect()->to($result['link']);
+            }    
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+        
+
     }
     
     public function messages(Order $order){

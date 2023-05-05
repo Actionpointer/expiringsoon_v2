@@ -138,6 +138,7 @@
                                 <div class="bill-card__payment-method-item ">
                                   <div class="form-check">
                                       @if($user->addresses->isNotEmpty() && $rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first())
+                                          
                                           <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
                                           <label class="form-check-label font-body--400" for="cash">
                                             {!!$user->country->currency->symbol!!}
