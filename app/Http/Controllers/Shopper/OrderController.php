@@ -322,8 +322,7 @@ class OrderController extends Controller
                 'status' => false,
                 'message' => $th->getMessage()
             ], 500);
-        }
-        
+        }   
 
     }
     
