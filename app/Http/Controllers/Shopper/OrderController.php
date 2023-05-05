@@ -217,7 +217,7 @@ class OrderController extends Controller
                     $shipment = Shipment::create(['address_id'=> $address->id,'rate_id'=> $shipping['rate_id'],'order_id'=> $order->id,'amount'=> $shipping['amount']]); 
                 } 
                 foreach($carts->where('shop_id',$shop_id) as $cart){
-                    $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->total]);
+                    $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->quantity * $cart->amount]);
                     $subtotal += $cart->total;
                 }
                 $order->subtotal = $subtotal;
@@ -290,7 +290,7 @@ class OrderController extends Controller
                     $shipment = Shipment::create(['address_id'=> $address->id,'rate_id'=> $shipping['rate_id'],'order_id'=> $order->id,'amount'=> $shipping['amount']]); 
                 } 
                 foreach($carts->where('shop_id',$shop_id) as $cart){
-                    $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->total]);
+                    $order_item = OrderItem::create(['order_id'=> $order->id,'product_id'=> $cart->product_id,'quantity'=> $cart->quantity,'amount'=> $cart->amount,'total'=> $cart->quantity * $cart->amount]);
                     $subtotal += $cart->total;
                 }
                 $order->subtotal = $subtotal;
@@ -300,6 +300,7 @@ class OrderController extends Controller
                 $orders->push($order);
             }
             //take payment
+            dd($orders);
             $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
             if(!$result['link']){
                 return request()->expectsJson() ? 
