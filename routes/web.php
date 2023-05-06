@@ -26,15 +26,11 @@ Route::get('/eg', function () {
                     ->toMail($adset->user);
 });
 
-Route::get('/broadcast', function () {
+Route::get('broadcast', function () {
     $payout = \App\Models\Payout::find(2);
     return (new App\Notifications\PayoutStatusNotification($payout))
                     ->toMail($payout->user);
-
 });
-
-
-
 
 Route::view('email','emails.completed');
 Route::view('help','help.index')->name('help.index');
@@ -57,7 +53,6 @@ Route::get('hotdeals',[ProductController::class, 'hotdeals'])->name('hotdeals');
 Route::get('categories',[ProductController::class,'categories'])->name('product.categories');
 Route::post('getSubcategories', [ProductController::class, 'getSubcategories'])->name('product.getSubcategories');
 
-
 Route::get('getStates/{country_id?}', [ResourcesController::class, 'states'])->name('states');
 Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name('cities');
 
@@ -72,9 +67,7 @@ Route::post('product/remove-from-wish',[CartController::class,'removefromwish'])
 Route::post('product/sortFilter',[CartController::class,'sortFilter'])->name('product.sortFilter');
 
 Route::get('payment/callback',[App\Http\Controllers\PaymentController::class,'paymentcallback'])->name('payment.callback');
-// Route::post('payment/status',[App\Http\Controllers\PaymentController::class,'status'])->name('payment.status');
 Route::post('payout/callback',[App\Http\Controllers\PayoutController::class,'payoutcallback'])->name('payout.callback');
-
 
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
 Route::get('receipt/{payout}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');

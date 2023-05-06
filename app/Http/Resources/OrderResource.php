@@ -19,7 +19,7 @@ class OrderResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'id'=> $this->id,
+            'id' => $this->id,
             'slug' => $this->slug,
             'user_id' => $this->user_id,
             'shop_id' => $this->shop_id,
@@ -27,9 +27,9 @@ class OrderResource extends JsonResource
             'shop_image' => $this->shop->image,
             'expected_at' => $this->expected_at,
             'total' => $this->total,
-            'currency'=> $this->shop->country->currency->symbol,
-            'status'=> $this->status,
-            'created_at'=> $this->created_at,
+            'currency' => $this->shop->country->currency->symbol,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
             'items' => $this->items->count()
         ];
     }

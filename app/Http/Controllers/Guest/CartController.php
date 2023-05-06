@@ -115,7 +115,4 @@ class CartController extends Controller
         return response()->json(['wish_count'=> $wish],200);
     }
     
-
-    
-
 }

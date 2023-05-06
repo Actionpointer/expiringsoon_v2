@@ -83,7 +83,6 @@ trait CartTrait
         return $carts;
     }
 
-
     protected function removeFromCartSession(Product $product){
         $carts = session('carts');
         if($carts && $carts->count()){
