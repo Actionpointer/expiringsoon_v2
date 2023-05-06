@@ -32,13 +32,27 @@ class SubscriptionController extends Controller
             $user = auth()->user();
             if($request->has('subscription_id')){
                 $subscription = Subscription::find($request->subscription_id);
-                if($user->subscription && $user->subscription->id == $subscription->id && $user->subscription->renew_at && $user->subscription->renew_at > now()){
-                    return request()->expectsJson() ? 
-                    response()->json([
-                        'status' => false,
-                        'message' => 'Subscription already exist',
-                    ], 401) :
-                    redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
+                if($user->subscription && $user->subscription->id == $subscription->id){
+                    if($user->subscription->renew_at && $user->subscription->renew_at > now()){
+                        return request()->expectsJson() ? 
+                        response()->json([
+                            'status' => false,
+                            'message' => 'Subscription already exist',
+                        ], 401) :
+                        redirect()->back()->with(['result'=> 0,'message'=> 'Subscription already exist']);
+                    }
+                    if($user->subscription->end_at && $user->subscription->end_at < now()){
+                        $subscription = Subscription::create(
+                            ['user_id'=> auth()->id(),
+                            'plan_id'=> $user->subscription->plan_id,
+                            'amount'=> $request->coupon_used ? $user->subscription->plan['months_'.$request->duration] - $this->getCoupon($request->coupon_used,$user->subscription->plan['months_'.$request->duration])['value'] : $user->subscription->plan['months_'.$request->duration],
+                            'start_at'=> now(),
+                            'renew_at'=> $this->renewal_period($request->duration),
+                            'end_at'=> now()->addMonths($request->duration),
+                            'coupon' => $request->coupon_used,
+                            'auto_renew'=> $request->auto_renew ? true:false
+                        ]);
+                    }  
                 }
             }
             if($request->has('plan')){

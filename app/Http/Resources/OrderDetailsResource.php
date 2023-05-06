@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Order;
 use App\Http\Resources\ReviewResource;
+use App\Http\Resources\OrderItemsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderDetailsResource extends JsonResource
@@ -18,16 +20,30 @@ class OrderDetailsResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'id' => $this->id,
-            'product_id' => $this->product->id,
-            'product_name' => $this->product->name,
-            'product_slug' => $this->product->slug,
-            'product_image' => $this->product->image,
-            'quantity' => $this->quantity,
-            'amount' => $this->amount,
+            
+            'slug' => $this->slug,
+            'id'=> $this->id,
+            'user_id' => $this->user_id,
+            'user_name' => $this->user->name,
+            'shop_id' => $this->shop_id,
+            'shop_name' => $this->shop->name,
+            'shop_image' => $this->shop->image,
+            'address_id' => $this->address_id,
+            'address' => $this->address_id ? $this->address->street.' '.($this->address->city ? $this->address->city->name:'').' '.$this->address->state->name : '',
+            'contact_name' => $this->address_id ? $this->address->contact_name : '',
+            'contact_phone' => $this->address_id ? $this->address->contact_phone : '',
+            'deliverer' => $this->deliverer,
+            'expected_at' => $this->expected_at,
+            'deliveryfee' => $this->delivery_fee,
+            'vat' => $this->vat,
+            'subtotal' => $this->subtotal,
             'total' => $this->total,
+            'currency'=> $this->shop->country->currency->symbol,
+            'status'=> $this->status,
+            "statuses"=> auth()->user()->role->name == 'shopper' ? $this->getCustomerOrderStatuses(Order::find($this->id)) : $this->getVendorOrderStatuses(Order::find($this->id)),
             'created_at'=> $this->created_at,
-            "review" => new ReviewResource($this->product->reviews->firstWhere('user_id',$this->order->user_id))
+            'items_count' => $this->items->count(),
+            'items' => OrderItemsResource::collection($this->items),
         ];
     }
 }

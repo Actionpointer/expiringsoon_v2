@@ -16,7 +16,7 @@ class FrontendController extends Controller
     use GeoLocationTrait;
     
     public function index(){
-        dd(session('carts'));
+
         $categories = Category::orderBy('name','ASC')->take(8)->get();
         $state_id = session('locale')['state_id'];
         $advert_A = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"A")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
