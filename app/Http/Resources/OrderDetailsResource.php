@@ -3,12 +3,13 @@
 namespace App\Http\Resources;
 
 use App\Models\Order;
-use App\Http\Resources\ReviewResource;
+use App\Http\Traits\OrderTrait;
 use App\Http\Resources\OrderItemsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderDetailsResource extends JsonResource
 {
+    use OrderTrait;
     
     /**
      * Transform the resource into an array.
