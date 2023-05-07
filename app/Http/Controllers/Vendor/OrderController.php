@@ -71,7 +71,7 @@ class OrderController extends Controller
             response()->json([
                 'status' => true,
                 'message' => $order->items->count() ? 'Order Details retrieved Successfully' :'No details retrieved',
-                'data' => OrderDetailsResource::collection($order)
+                'data' => new OrderDetailsResource($order)
             ], 200):
             view('vendor.shop.orders.view',compact('shop','order','statuses','messages'));
     }
