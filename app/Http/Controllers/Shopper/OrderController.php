@@ -73,7 +73,8 @@ class OrderController extends Controller
     }
 
     public function update(Request $request){
-        switch($request->status){
+
+        switch(strtolower($request->status)){
             
             case 'cancelled':
                     $message = 'Order has been cancelled and refund initiated';
@@ -100,7 +101,7 @@ class OrderController extends Controller
                     $message = 'Order has been updated';
                 break;
         }
-        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> $request->status]);
+        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status)]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
