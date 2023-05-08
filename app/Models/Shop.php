@@ -131,9 +131,10 @@ class Shop extends Model
         return $this->belongsTo(City::class);
     }
     
-    public function Rates(){
+    public function rates(){
         return $this->hasMany(Rate::class);
     }
+
     public function categories(){
         $categories = $this->products->pluck('category_id');
         $categories = Category::whereIn('id',$categories)->get();
@@ -174,6 +175,7 @@ class Shop extends Model
     public function reviews(){
         return $this->morphMany(Review::class,'reviewable');
     }
+    
     public function ratings(){
         if($this->morphMany(Review::class,'reviewable')->count())
         return $this->morphMany(Review::class,'reviewable')->sum('rating') / $this->morphMany(Review::class,'reviewable')->count();

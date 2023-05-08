@@ -22,6 +22,8 @@ class ShopResource extends JsonResource
         return [
             "id"=> $this->id,
             "name"=> $this->name,
+            "email"=> $this->email,
+            "phone"=> $this->phone,
             "image"=> $this->image,
             "address"=> $this->address,
             "city"=> $this->city ? $this->city->name : '',
@@ -35,6 +37,8 @@ class ShopResource extends JsonResource
             "wallet"=> $this->wallet,
             "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),
+            "opened_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->whereNotIn('name',['completed','closed'])->count(),
+            "total_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->count()
         ];
     }
 }

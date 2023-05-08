@@ -30,9 +30,9 @@
     </div>
 </div>
   <!-- breedcrumb section end   -->
-  @if (session('statuss'))
+  @if (session('status'))
     <div class="alert alert-success">
-        {{ session('statuss') }}
+        {{ session('status') }}
     </div>
 @endif
   @include('layouts.session')

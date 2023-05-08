@@ -30,13 +30,14 @@ class ShopController extends Controller
     
     public function index(){
         $user = auth()->user();
+        $shops = $user->shops;
         return request()->expectsJson() ?  
         response()->json([
             'status' => true,
             'message' => $user->shops->count() ? 'Shops retrieved Successfully':'No Shops retrieved',
-            'data' => ShopResource::collection($user->shops),
+            'data' => ShopResource::collection($shops),
             'count' => $user->shops->count()
-        ], 200) : view('vendor.shop.list',compact('user'));
+        ], 200) : view('vendor.shop.list',compact('user','shops'));
     }
 
     public function show(Shop $shop){
@@ -279,6 +280,10 @@ class ShopController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function verification(Request $request){
+        
     }
 
     public function notifications(Shop $shop){

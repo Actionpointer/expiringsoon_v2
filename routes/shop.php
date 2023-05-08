@@ -11,6 +11,7 @@ use App\Http\Controllers\Vendor\ShipmentController;
 Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],function (){
     Route::get('dashboard', [ShopController::class, 'show'])->name('show');
     Route::get('settings',[ShopController::class, 'settings'])->name('settings');
+    Route::post('verification',[ShopController::class, 'verification'])->name('verification');
     // Route::post('address',[ShopController::class, 'address'])->name('address');
     // Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
     

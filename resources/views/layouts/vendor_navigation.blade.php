@@ -35,7 +35,7 @@
           </a>
         </li>
          <!--  Verification    -->
-         <li class="dashboard__nav-item-link @if(Route::is('vendor.verification')) active @endif">
+         {{-- <li class="dashboard__nav-item-link @if(Route::is('vendor.verification')) active @endif">
           <a href="{{route('vendor.verification')}}" class="font-body--lg-400">
             <span class="icon">
               <svg  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +44,7 @@
             </span>
             <span class="name"> Verification </span>
           </a>
-        </li>
+        </li> --}}
 
         <li class="dashboard__nav-item-link @if(Route::is('vendor.banking')) active @endif">
           <a href="{{route('vendor.banking')}}" class="font-body--lg-400">

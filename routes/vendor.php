@@ -11,7 +11,7 @@ use App\Http\Controllers\Vendor\StaffController;
 Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum','role:vendor']],function () {
     Route::get('get-started',[StaffController::class, 'orientation'])->name('orientation');
     Route::get('dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
-    Route::get('verification',[StaffController::class,'verification'])->name('verification');
+    // Route::get('verification',[StaffController::class,'verification'])->name('verification');
     Route::post('kyc',[StaffController::class,'kyc'])->name('kyc');
     Route::get('notifications',[StaffController::class, 'notifications'])->name('notifications');
     Route::post('notifications/read',[StaffController::class, 'readNotifications'])->name('notifications.read');
