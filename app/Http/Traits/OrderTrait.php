@@ -100,7 +100,7 @@ trait OrderTrait
 
     protected function getCustomerOrderStatuses(Order $order){
         $statuses = [];
-        switch($order->status){
+        switch(strtolower($order->status)){
             case 'processing':
                 if($order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_user_cancel_period']) > now()) 
                 $statuses = ['Cancel'=>'cancelled'];
