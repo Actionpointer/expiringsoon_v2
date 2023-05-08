@@ -3,10 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
-use App\Models\Product;
 use App\Models\OrderStatus;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\ProductResource;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ShopResource extends JsonResource
@@ -22,40 +21,20 @@ class ShopResource extends JsonResource
         // return parent::toArray($request);
         return [
             "id"=> $this->id,
-            "user_id"=> $this->user_id,
-            "slug"=> $this->slug,
             "name"=> $this->name,
-            "description"=> $this->description,
-            "email"=> $this->email,
-            "phone"=> $this->phone,
-            "prefix"=> $this->country->dial,
-            "mobile"=> $this->mobile,
             "image"=> $this->image,
             "address"=> $this->address,
-            "city_id"=> $this->city_id,
             "city"=> $this->city ? $this->city->name : '',
-            "state_id"=> $this->state_id,
             "state"=> $this->state->name,
-            "country_id"=> $this->country_id,
             "country"=> $this->country->name,
-            "discount30"=> $this->discount30,
-            "discount60"=> $this->discount60,
-            "discount90"=> $this->discount90,
-            "discount120"=> $this->discount120,
             "status"=> $this->status,
             "approved"=> $this->approved,
             "published"=> $this->published,
             "verified"=> $this->verified(),
             "certified"=> $this->certified(),
             "wallet"=> $this->wallet,
-            "unavailable_balance"=> $this->orders->filter(function($value){
-                                        return $value->statuses->count() && $value->statuses->whereNotIn('name',['completed','cancellled'])->count();
-                                    })->sum('subtotal'),
             "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),
-            "opened_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->whereNotIn('name',['completed','closed'])->count(),
-            "total_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->count(),
-            // "staff" => UserResource::collection(User::where('shop_id',$this->id)->get())
         ];
     }
 }

@@ -54,36 +54,16 @@
                   <div class="dashboard__user-profile-info">
                     <h5 class="font-body--xl-500 name">{{$user->name}}</h5>
                     <h6 class="my-2 text-dark">{{$user->subscription->plan->name}} Subscription @if($user->subscription->is_free) | <a href="{{route('vendor.plans')}}"><u>upgrade</u></a> @endif </h6>
-                      @if($user->subscription->end_at && $user->subscription->end_at > now())
-                            
-                          @if($user->subscription->renew_at < now())
-                            <p>Subscription will expire on {{$user->subscription->end_at->format('d-M-Y')}} </p>
-                            
-                          @else
-                          
-                            {{-- @if($user->subscription->auto_renew) 
-                                
-                              <form class="" action="{{route('vendor.subscription.cancel_renew')}}" method="POST"> @csrf 
-                                  <input type="hidden" name="subscription_id" value="{{$user->subscription->id}}"> 
-                                  <p>Subscription will auto-renew on ({{$user->subscription->end_at->format('d-M-Y')}}) | 
-                                  <button type="submit"><u>Cancel Auto-Renew</u></button></p>  
-                              </form> 
-                              <form class="" action="{{route('vendor.plans.subscribe')}}" method="POST"> @csrf 
-                                <input type="hidden" name="subscription_id" value="{{$user->subscription->id}}"> 
-                                <button type="submit"><u>Renew Now </u></button>
-                              </form>
-                            @else --}}
-
-                              <form class="" action="{{route('vendor.plans.subscribe')}}" method="POST"> @csrf 
-                                <input type="hidden" name="subscription_id" value="{{$user->subscription->id}}"> 
-                                <p>Subscription will expire on {{$user->subscription->end_at->format('d-M-Y')}}, afterwhich you will be downgraded to the free plan </p> 
-                                <button type="submit"><u>Renew Now </u></button>
-                              </form>
-
-                            {{-- @endif  --}}
-                            
-                          @endif
-                      @endif
+                    @if($user->subscription->renew_at && $user->subscription->renew_at > now())
+                      <p>Subscription will expire on {{$user->subscription->end_at->format('d-M-Y')}} </p>
+                    @endif
+                    @if($user->subscription->renew_at && $user->subscription->renew_at < now() && $user->subscription->end_at > now() )
+                      <form class="" action="{{route('vendor.plans.subscribe')}}" method="POST"> @csrf 
+                        <input type="hidden" name="subscription_id" value="{{$user->subscription->id}}"> 
+                        <p>Subscription will expire in {{$user->subscription->end_at->diffInDays(now())}}, afterwhich you will be downgraded to the free plan </p> 
+                        <button type="submit"><u>Renew Now </u></button>
+                      </form>
+                    @endif
                         
                     <div class="d-flex justify-content-center mt-3">
                       <div style="float:left;padding-right:20px;margin-right:20px;border-right:2px solid #e0dfdf">

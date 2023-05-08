@@ -7,10 +7,9 @@ use App\Models\State;
 use App\Models\Advert;
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\ShopDetailsResource;
 
 class ShopController extends Controller
 {
@@ -76,6 +75,13 @@ class ShopController extends Controller
             ],400): 
             redirect()->back()->with(['result'=> 0,'message'=> 'Shop is not available']);
         }
+        if(request()->expectsJson()){
+            return  response()->json([
+                'status' => true,
+                'message' => 'Product details retrieved Successfully',
+                'data' =>  new ShopDetailsResource($shop),
+                ], 200);
+        }
         $category = null;
         $categories = Category::has('products')->get();
         $products = Product::where('shop_id',$shop->id)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
@@ -91,24 +97,8 @@ class ShopController extends Controller
                 $products = $products->orderBy('price','desc');
             }
         }
-        $products = $products->paginate(2);
-        return request()->expectsJson() ?
-            response()->json([
-                'status' => true,
-                'message' => 'Product details retrieved Successfully',
-                'data' => ProductResource::collection($products),
-                'meta'=> [
-                    "total"=> $products->total(),
-                    "per_page"=> $products->perPage(),
-                    "current_page"=> $products->currentPage(),
-                    "last_page"=> $products->lastPage(),
-                    "first_page_url"=> $products->url(1),
-                    "last_page_url"=> $products->url($products->lastPage()),
-                    "next_page_url"=> $products->nextPageUrl(),
-                    "prev_page_url"=> $products->previousPageUrl(),
-                ]
-            ], 200) :
-            view('frontend.shop.view',compact('shop','categories','products','category'));
+        $products = $products->paginate(16);
+        return view('frontend.shop.view',compact('shop','categories','products','category'));
 
     }
 }

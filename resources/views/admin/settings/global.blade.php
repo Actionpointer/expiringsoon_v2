@@ -417,34 +417,34 @@
                     </div>
                     <!-- Countries -->
                     <div class="tab-pane fade" id="pills-countries" role="tabpanel" aria-labelledby="pills-countries-tab">
-                      <div class="row products-tab__feedback"> 
+                      <div class="products-tab__feedback"> 
                           <!-- Manage Countries  -->
-                          <div class="dashboard__content-card">
-                              <div class="dashboard__content-card-header">
+                          <div class="dashboard__order-history">
+                              <div class="dashboard__order-history-title">
                               <h5 class="font-body--xl-500">Manage Countries</h5>
                               </div>
-                              <div class="dashboard__content-card-body">
+                              <div class="dashboard__order-history-table">
                                   <div class="table-responsive">
                                       <table class="table display datatable" style="width:100%;font-size:13px">
                                       <thead>
                                           <tr>
-                                              <th scope="col" class="">Country</th>
-                                              <th scope="col" class="">Currency</th>
-                                              <th scope="col" class="">Location</th>
-                                              <th scope="col" class="">Payment Gateway</th>
-                                              <th scope="col" class="">Payout Gateway</th>
-                                              <th scope="col" class="">Settings</th>
+                                              <th scope="col" class="dashboard__order-history-table-title">Country</th>
+                                              <th scope="col" class="dashboard__order-history-table-title">Currency</th>
+                                              <th scope="col" class="dashboard__order-history-table-title">Location</th>
+                                              <th scope="col" class="dashboard__order-history-table-title">Payment Gateway</th>
+                                              <th scope="col" class="dashboard__order-history-table-title">Payout Gateway</th>
+                                              <th scope="col" class="dashboard__order-history-table-title text-end">Settings</th>
                                           </tr>
                                       </thead>
                                       <tbody>
                                           @foreach ($countries as $country)
                                               <tr>
-                                                  <td>{{$country->name}}</td>
-                                                  <td>{{$country->currency->name}}</td>
-                                                  <td>{{$country->states->count()}} states, {{$country->cities->count()}} cities</td>
-                                                  <td>{{$country->payment_gateway}}</td>
-                                                  <td>{{$country->payout_gateway}}</td>
-                                                  <td><a href="{{route('admin.settings.country',$country)}}" target="_blank">Open Settings</a></td>
+                                                  <td class="dashboard__order-history-table-item">{{$country->name}}</td>
+                                                  <td class="dashboard__order-history-table-item">{{$country->currency->name}}</td>
+                                                  <td class="dashboard__order-history-table-item">{{$country->states->count()}} states, {{$country->cities->count()}} cities</td>
+                                                  <td class="dashboard__order-history-table-item">{{$country->payment_gateway}}</td>
+                                                  <td class="dashboard__order-history-table-item">{{$country->payout_gateway}}</td>
+                                                  <td class="dashboard__order-history-table-item"><a href="{{route('admin.settings.country',$country)}}" target="_blank">Settings</a></td>
                                               </tr>
                                               
                                           @endforeach

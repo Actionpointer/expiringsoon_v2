@@ -44,69 +44,69 @@
                 </div>
                 <div class="dashboard__order-history-table">
                     <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="dashboard__order-history-table-title"> Shop
-                            </th>
-                            
-                            <th scope="col" class="dashboard__order-history-table-title"> Products
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Sales
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Earnings
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Wallet
-                            </th>
-                            <th scope="col" class="dashboard__order-history-table-title"></th>
-                        </tr>
-                        </thead>
-                        <tbody>                     
-                            @forelse($user->shops as $shop)        
-                                <tr>
-                                    <!-- Order Id  -->
-                                    <td class="dashboard__order-history-table-item order-id"> 
-                                        <span style="font-weight:500">{{$shop->name}}</span><br/>
-                                    </td>
-                                    <!-- Vendor Split  -->
-                                    <td class="dashboard__order-history-table-item order-total "> 
-                                        <p class="order-total-price">   {{number_format($shop->products->count(), 0)}} </p>
-                                    </td>
-                                    <!-- Site Split  -->
-                                    <td class="dashboard__order-history-table-item order-total"> 
-                                        <p class="order-total-price">   {!!$shop->country->currency->symbol!!}
-                                            {{number_format($shop->orders->filter(function($value){ return $value->statuses->count(); })->sum('subtotal') , 0)}} 
-                                        </p>
-                                    </td>
-                                    <!-- Status -->
-                                    <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} 
-                                            {{number_format(
-                                                $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
-                                            ,2)}}
-                                    </td>
-                                    <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->wallet,2)}}</td>
-                                    <!-- Details page  -->
-                                    <td class="dashboard__order-history-table-item   order-details "> 
-                                        <a href="{{route('vendor.shop.show',$shop)}}">
-                                            <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Go to Storefront
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                            <tr>
-                                <td colspan="7">
-                                  <div style="margin:auto;padding:1%;text-align:center;">
-                                    <p>Let's begin creating your shop.</p><br>
-                                    <a href="{{route('vendor.shop.create')}}">Create Shop</a>
-                                    
-                                </div>
-                                </td>
-                            </tr>
-                                
-                            @endforelse
-                        </tbody>
-                    </table>
+                      <table class="table">
+                          <thead>
+                          <tr>
+                              <th scope="col" class="dashboard__order-history-table-title"> Shop
+                              </th>
+                              
+                              <th scope="col" class="dashboard__order-history-table-title"> Products
+                              </th>
+                              <th scope="col" class="dashboard__order-history-table-title"> Sales
+                              </th>
+                              <th scope="col" class="dashboard__order-history-table-title"> Earnings
+                              </th>
+                              <th scope="col" class="dashboard__order-history-table-title"> Wallet
+                              </th>
+                              <th scope="col" class="dashboard__order-history-table-title"></th>
+                          </tr>
+                          </thead>
+                          <tbody>                     
+                              @forelse($user->shops as $shop)        
+                                  <tr>
+                                      <!-- Order Id  -->
+                                      <td class="dashboard__order-history-table-item order-id"> 
+                                          <span style="font-weight:500">{{$shop->name}}</span><br/>
+                                      </td>
+                                      <!-- Vendor Split  -->
+                                      <td class="dashboard__order-history-table-item order-total "> 
+                                          <p class="order-total-price">   {{number_format($shop->products->count(), 0)}} </p>
+                                      </td>
+                                      <!-- Site Split  -->
+                                      <td class="dashboard__order-history-table-item order-total"> 
+                                          <p class="order-total-price">   {!!$shop->country->currency->symbol!!}
+                                              {{number_format($shop->orders->filter(function($value){ return $value->statuses->count(); })->sum('subtotal') , 0)}} 
+                                          </p>
+                                      </td>
+                                      <!-- Status -->
+                                      <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} 
+                                              {{number_format(
+                                                  $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
+                                              ,2)}}
+                                      </td>
+                                      <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->wallet,2)}}</td>
+                                      <!-- Details page  -->
+                                      <td class="dashboard__order-history-table-item   order-details "> 
+                                          <a href="{{route('vendor.shop.show',$shop)}}">
+                                              <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Go to Storefront
+                                              </span>
+                                          </a>
+                                      </td>
+                                  </tr>
+                              @empty
+                              <tr>
+                                  <td colspan="7">
+                                    <div style="margin:auto;padding:1%;text-align:center;">
+                                      <p>Let's begin creating your shop.</p><br>
+                                      <a href="{{route('vendor.shop.create')}}">Create Shop</a>
+                                      
+                                  </div>
+                                  </td>
+                              </tr>
+                                  
+                              @endforelse
+                          </tbody>
+                      </table>
                     </div>
                 </div>
               </div>

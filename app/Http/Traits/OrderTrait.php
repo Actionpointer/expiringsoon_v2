@@ -125,7 +125,7 @@ trait OrderTrait
 
     protected function getVendorOrderStatuses(Order $order){
         $statuses = [];
-        switch($order->status){
+        switch(strtolower($order->status)){
             case 'processing': 
                 if(in_array($order->deliverer,["pickup","admin"])) $statuses = ['Ready'=>'ready'];
                 else $statuses = ['Shipped'=>'shipped'];
@@ -147,7 +147,7 @@ trait OrderTrait
 
     protected function getLogisticsOrderStatuses(Order $order){
         $statuses = [];
-        switch($order->status){
+        switch(strtolower($order->status)){
             case 'ready':
                 if($order->deliverer == "admin") $statuses = ['Shipped'=>'shipped','Delivered'=>'delivered'];
                 break;
@@ -162,7 +162,7 @@ trait OrderTrait
 
     protected function getAdminOrderStatuses(Order $order){
         $statuses = [];
-        switch($order->status){
+        switch(strtolower($order->status)){
             case 'disputed':
                 $statuses = ['Close'=>'closed'];
                 break;

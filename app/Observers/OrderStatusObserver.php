@@ -28,7 +28,7 @@ class OrderStatusObserver
     {
         OrderStatus::where('order_id',$orderStatus->order_id)->where('name','!=',$orderStatus->name)->delete();
 
-        switch($orderStatus->name){
+        switch(strtolower($orderStatus->name)){
             case 'processing': $this->processing($orderStatus);
             break;
             case 'cancelled': $this->cancelled($orderStatus);

@@ -49,7 +49,7 @@
             <button type="submit" class="button button--md w-100">{{ __('Send Password Reset Link') }}</button>
           </div>
           <div class="form-register">
-            You remember? <a href="{{route('register')}}">Login Now</a>
+            You remember? <a href="{{route('login')}}">Login Now</a>
           </div>
         </form>
       </div>

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Models\Bank;
 use App\Models\City;
+use App\Models\Rate;
 use App\Models\Shop;
 use App\Models\State;
 use App\Events\DeleteShop;
-use App\Models\Rate;
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ShopDetailsResource;
 use App\Http\Resources\NotificationResource;
 
 class ShopController extends Controller
@@ -44,7 +45,7 @@ class ShopController extends Controller
             response()->json([
                 'status' => true,
                 'message' => 'Shop retrieved Successfully',
-                'data' => new ShopResource($shop)
+                'data' => new ShopDetailsResource($shop)
             ], 200):
             view('vendor.shop.dashboard',compact('shop'));
         }else{
