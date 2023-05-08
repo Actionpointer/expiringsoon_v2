@@ -2,12 +2,13 @@
 
 namespace App\Models;
 use App\Models\City;
+use App\Models\Rate;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Address;
+use App\Models\Country;
 use App\Models\Product;
 use App\Models\Location;
-use App\Models\Rate;
 use App\Observers\StateObserver;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +21,10 @@ class State extends Model
         parent::boot();
         parent::observe(new StateObserver);
     }
+    public function country(){
+        return $this->belongsTo(Country::class);
+    }
+
     public function cities(){
         return $this->hasMany(City::class);
     }

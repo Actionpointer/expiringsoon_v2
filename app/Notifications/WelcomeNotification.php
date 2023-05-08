@@ -2,10 +2,14 @@
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class WelcomeNotification extends Notification
 {
@@ -34,14 +38,23 @@ class WelcomeNotification extends Notification
 
     public function toMail($notifiable)
     {
-        if($notifiable->role == 'vendor' && !$notifiable->shop_id){
-            $view = 'emails.user.welcome_vendor';
+        $url = null;
+        if($notifiable->role->name == 'vendor' && !$notifiable->email_verified_at){
+            $url = URL::temporarySignedRoute(
+                'verification.verify',
+                Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
+                [
+                    'id' => $notifiable->getKey(),
+                    'hash' => sha1($notifiable->getEmailForVerification()),
+                ]
+            );
+            // $view = 'emails.user.welcome_vendor';
         }
-        if($notifiable->role == 'shopper'){
-            $view = 'emails.user.welcome';
-        }
+        // if($notifiable->role->name == 'shopper'){
+        //     $view = 'emails.user.welcome';
+        // }
         return (new MailMessage)->subject('Welcome Aboard')->view(
-            $view, ['user' => $notifiable]
+            'emails.user.welcome', ['user' => $notifiable,'url'=> $url]
         );
     }
 

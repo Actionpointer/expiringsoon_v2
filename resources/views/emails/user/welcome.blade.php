@@ -140,6 +140,13 @@
 															<div style="margin:auto;width:80%">Expiring Soon is an online shopping destination where you can shop groceries and have them shipped directly to your home or office at your convenience!</div></td>
 														</tr>
 														<!-- Button -->
+														@if(isset($url))
+														<tr>
+															<td class="text-btn-large" bgcolor="#cd6502" style="font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; border:0px solid #cd6502; padding:15px 35px;">
+																<a href="{{$url}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;padding:15px 180px;"><span class="link-2" style="color:#fff; text-decoration:none;">Confirm Your Email</span></a>
+															</td>
+														</tr> 
+														@else
 														<tr>
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
@@ -149,6 +156,7 @@
 																</table>
 															</td>
 														</tr>
+														@endif
 														<!-- END Button -->
 													</table>
 												</td>

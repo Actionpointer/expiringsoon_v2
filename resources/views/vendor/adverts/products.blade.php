@@ -84,7 +84,6 @@
                                         <th scope="col" class="dashboard__order-history-table-title"> Location </th>
                                         <th scope="col" class="dashboard__order-history-table-title"> Views</th>
                                         <th scope="col" class="dashboard__order-history-table-title"> Clicks</th>
-                                        
                                         <th scope="col" class="dashboard__order-history-table-title"></th>
                                     </tr>
                                     </thead>
@@ -120,31 +119,16 @@
                                                 </td>
                                                 
                                                 <!-- Date  -->
-                                                <td class="cart-table-item align-middle"> {{ $advert->state->name}}</td>
+                                                <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
                                                 <td class="cart-table-item align-middle"> {{ $advert->views}}</td>
-                                                <!-- Total  -->
-                                                <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td>
-          
-                                                <td class="cart-table-item align-middle"> 
-                                                    @if($advert->running)
-                                                    <span class="d-block text-success">Ad is running </span>
-                                                    @else
-                                                    <span class="d-block text-danger">Ad is inactive</span>
-                                                    @endif  
-                                                </td>
-                                                <!-- Status -->
-                                                
+                                                <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td> 
                                                 <td class="cart-table-item align-middle">
-                                                    <div class="dropdown">
-                                                        <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                        <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                        <button class="btn btn-sm btn-danger" type="submit">
-                                                            Remove
-                                                        </button>
-                                                        </form>
-                                                        
-                                                        
-                                                    </div>
+                                                  <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
+                                                    <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                    <button class="btn btn-sm btn-danger" type="submit">
+                                                      Remove
+                                                    </button>
+                                                  </form>
                                                 </td>
                                             </tr>
                                         
@@ -201,24 +185,17 @@
                                             </td>
                                             
                                             <!-- Date  -->
-                                            <td class="cart-table-item align-middle"> {{ $advert->state->name}}</td>
+                                            <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
                                             <td class="cart-table-item align-middle"> {{ $advert->views}}</td>
                                             <!-- Total  -->
-                                            <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td>
-      
-                                            
-                                            
+                                            <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td>                                          
                                             <td class="cart-table-item align-middle">
-                                                <div class="dropdown">
-                                                    <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                    <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                    <button class="btn btn-sm btn-danger" type="submit">
-                                                        Remove
-                                                    </button>
-                                                    </form>
-                                                    
-                                                    
-                                                </div>
+                                              <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
+                                                <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                <button class="btn btn-sm btn-danger" type="submit">
+                                                    Remove
+                                                </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     
@@ -243,7 +220,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($adset->adverts->where('status',false) as $advert)        
+                                      @foreach($adset->adverts->where('running',false)->where('approved',true) as $advert)        
                                           <tr class="border-top">
                                               <td class="cart-table-item align-middle" >
                                                   <div class="d-flex flex-column flex-md-row">
@@ -272,31 +249,25 @@
                                                       </div>
                                                   </div>
                                               </td>
-                                              
-                                              <!-- Date  -->
-                                              <td class="cart-table-item align-middle"> {{ $advert->state->name}}</td>
-                                              
-        
+
+                                              <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
+
                                               <td class="cart-table-item align-middle"> 
-                                                  @if($advert->running)
-                                                  <span class="d-block text-success">Ad is running </span>
-                                                  @else
-                                                  <span class="d-block text-danger">Ad is inactive</span>
+                                                  @if(!$advert->status)
+                                                  <span class="d-block text-success">Product is not showing </span>
+                                                  @elseif(!$advert->adset->active)
+                                                  <span class="d-block text-danger">Adset is expired</span>
                                                   @endif  
                                               </td>
                                               <!-- Status -->
                                               
                                               <td class="cart-table-item align-middle">
-                                                  <div class="dropdown">
-                                                      <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                      <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                      <button class="btn btn-sm btn-danger" type="submit">
-                                                          Remove
-                                                      </button>
-                                                      </form>
-                                                      
-                                                      
-                                                  </div>
+                                                  <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
+                                                    <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                    <button class="btn btn-sm btn-danger" type="submit">
+                                                      Remove
+                                                    </button>
+                                                  </form>
                                               </td>
                                           </tr>
                                       

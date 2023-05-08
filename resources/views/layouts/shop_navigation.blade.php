@@ -13,7 +13,7 @@
           </a>
         </li>
         <!-- My Products  -->
-        <li class="dashboard__nav-item-link @if(Route::is('shop.product.list')) active @endif">
+        <li class="dashboard__nav-item-link @if(Route::is('vendor.shop.product.list')) active @endif">
           <a href="{{route('vendor.shop.product.list',$shop)}}" class="font-body--lg-400">
             <span class="icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
