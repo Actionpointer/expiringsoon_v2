@@ -267,18 +267,16 @@
                               <p style="font-size:11px;color:#888">Documents required for payout requests</p>
                             </div>
                             <div class="dashboard__content-card-body">
-                              <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-bottom:10px;font-size:13px;">
-                                Upload all of the following documents so we can authenticate your account
+                              <div class="py-2 text-uppercase">
+                                
+                                <div class="text-uppercase">Upload all of the following documents so we can authenticate your account</div>  
+                                
+                                
                               </div>
-                              @error('document')
-                                <div style="border-bottom:1px solid #ddd;padding-bottom:10px;margin-bottom:10px;font-size:13px;color:red">
-                                  {{$message}}
-                                </div>
-                              @enderror
                               
-                              <div class="d-flex" style="padding-bottom:20px;margin-top:10px;">
+                              <div class="d-flex py-3 border-top">
                                 <div class="docimg text-center">
-                                  <a href="{{route('profile')}}" onclick="performClick('idcard');">
+                                  <a href="{{route('profile')}}#verification">
                                     <img  @if($user->kyc->where('type','idcard')->first()) 
                                             @if($user->kyc->where('type','idcard')->where('doctype','application')->first()) 
                                               src="{{asset('src/images/site/icon-pdf.jpg')}}" 
@@ -292,10 +290,10 @@
                                 </div>
                                 <div class="docinfo d-flex justify-content-between align-items-center">
                                   <div>
-                                    <span style="font-size:14px;text-transform:uppercase">Owner ID</span>
+                                    <a href="{{route('profile')}}#verification" style="font-size:14px;text-transform:uppercase">Owner ID</a>
                                       <br />
                                       <span style="font-weight:500;font-size:12px;">
-                                      Upload National ID Card / Driver's License / International Passport
+                                      National ID Card / Driver's License / International Passport
                                     </span>
                                   </div>
                                   @if($user->kyc->where('type','idcard')->first()) 
@@ -313,36 +311,29 @@
                                   @endif
             
                                 </div>
-                                <div class="align-self-center mx-1">
-                                  <form method="post" enctype="multipart/form-data" action="{{route('vendor.kyc')}}">@csrf
-                                    <input type="hidden" name="type" value="idcard">
-                                    <input type="file" style="display: none" name="document" id="idcard" onchange="readURL(this,'idcard')" accept=".pdf, .png, .jpg, .jpeg" />
-                                    <button class="button button--md" id="idcard_submit" type="submit" style="display: none">Upload</button>
-                                  </form>
-                                </div>
-                                
                               </div>
-                              <div class="d-flex" style="border-bottom: 1px solid #ddd;padding-bottom:20px;margin-top:10px;">
+
+                              <div class="d-flex py-3 border-top">
+                                
                                 <div class="docimg">
                                   <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}x');">
-                                    <img 
-                                      @if($shop->addressproof) 
-                                        @if($shop->addressproof->doctype == 'application')) 
-                                          src="{{asset('src/images/site/icon-pdf.jpg')}}" 
-                                        @else
-                                          src="{{Storage::url($shop->addressproof->document)}}" 
-                                        @endif 
-                                      @else
-                                          src="{{asset('src/images/site/icon-jpg.jpg')}}"
-                                      @endif 
-                                      id="item{{$shop->id}}x_preview">
+                                    <img  @if($shop->addressproof)  
+                                            @if($shop->addressproof->doctype == 'application')) 
+                                              src="{{asset('src/images/site/icon-pdf.jpg')}}" 
+                                            @else
+                                              src="{{Storage::url($shop->addressproof->document)}}" 
+                                            @endif 
+                                          @else
+                                              src="{{asset('src/images/site/icon-jpg.jpg')}}"
+                                          @endif id="item{{$shop->id}}x_preview"
+                                    >
                                     <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload image</small>
                                   </a>
-                                  
                                 </div>
+
                                 <div class="docinfo d-flex justify-content-between align-items-center">
                                   <div>
-                                    <span style="font-size:14px;text-transform:uppercase">Address Proof</span>
+                                    <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}x');"  style="font-size:14px;text-transform:uppercase">Address Proof</a>
                                       <br />
                                       <span style="font-weight:500;font-size:12px">
                                       Upload Utility Bill e.g Electricity Bill, Waste Bill etc
@@ -363,27 +354,28 @@
                                   @endif
                                 </div>
                                 <div class="align-self-center mx-1">
-                                  <form method="post" enctype="multipart/form-data" action="{{route('vendor.kyc')}}">@csrf
+                                  <form method="post" enctype="multipart/form-data" action="{{route('vendor.shop.verification',$shop)}}">@csrf
                                     <input type="hidden" name="type" value="addressproof">
                                     <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                    <input type="file" style="display: none" name="document" id="item{{$shop->id}}x" onchange="readURL(this,'item{{$shop->id}}x')" accept=".pdf, .png, .jpg, .jpeg" />
+                                    <input type="file" style="display: none" name="document" id="item{{$shop->id}}x" onchange="readVURL(this,'item{{$shop->id}}x')" accept=".pdf, .png, .jpg, .jpeg" />
                                     <button class="button button--md" id="item{{$shop->id}}x_submit" type="submit" style="display: none">Upload</button>
                                   </form>
                                 </div>
                               </div>
-                              <div class="d-flex" style="margin-top:10px;">
+
+                              <div class="d-flex py-3 border-top">
                                 <div class="docimg">
                                   <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}y');">
                                     <img 
                                         @if($shop->companydoc) 
-                                        @if($shop->companydoc->doctype == 'application')) 
-                                          src="{{asset('src/images/site/icon-pdf.jpg')}}" 
+                                          @if($shop->companydoc->doctype == 'application') 
+                                            src="{{asset('src/images/site/icon-pdf.jpg')}}" 
+                                          @else
+                                            src="{{Storage::url($shop->companydoc->document)}}" 
+                                          @endif 
                                         @else
-                                          src="{{Storage::url($shop->companydoc->document)}}" 
+                                            src="{{asset('src/images/site/icon-jpg.jpg')}}"
                                         @endif 
-                                      @else
-                                          src="{{asset('src/images/site/icon-jpg.jpg')}}"
-                                      @endif 
                                       src="{{asset('src/images/site/icon-jpg.jpg')}}" 
                                       id="item{{$shop->id}}y_preview">
                                     <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload image</small>
@@ -392,7 +384,7 @@
                                 </div>
                                 <div class="docinfo d-flex justify-content-between align-items-center">
                                   <div>
-                                    <span style="font-size:14px;text-transform:uppercase">Company Document</span>
+                                    <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}y');" style="font-size:14px;text-transform:uppercase">Company Document</a>
                                       <br />
                                       <span style="font-weight:500;font-size:12px">
                                       Upload CAC
@@ -413,10 +405,10 @@
                                   @endif
                                 </div>
                                 <div class="align-self-center mx-1">
-                                  <form method="post" enctype="multipart/form-data" action="{{route('vendor.kyc')}}">@csrf
+                                  <form method="post" enctype="multipart/form-data" action="{{route('vendor.shop.verification',$shop)}}">@csrf
                                     <input type="hidden" name="type" value="companydoc">
                                     <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                    <input type="file" style="display: none" name="document" id="item{{$shop->id}}y" onchange="readURL(this,'item{{$shop->id}}y')" accept=".pdf, .png, .jpg, .jpeg" />
+                                    <input type="file" style="display: none" name="document" id="item{{$shop->id}}y" onchange="readVURL(this,'item{{$shop->id}}y')" accept=".pdf, .png, .jpg, .jpeg" />
                                     <button class="button button--md" id="item{{$shop->id}}y_submit" type="submit" style="display: none">Upload</button>
                                   </form>
                                 </div>
@@ -739,6 +731,24 @@
           reader.readAsDataURL(input.files[0]);
       }
   }
+
+  function readVURL(input,output) {
+      
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            if(e.target.result.split(';')[0].split('/')[1] == 'pdf'){
+              $('#'+output+'_preview').attr('src', "{{asset('src/images/site/icon-pdf.jpg')}}" );
+            }else{
+              $('#'+output+'_preview').attr('src', e.target.result);
+            }
+            
+          }
+          reader.readAsDataURL(input.files[0]);
+      }
+      $('#'+output+'_submit').show()
+  }
+
   $('.edit-discount').click(function(){
       var period = $(this).attr('data-period')
       var discount = $(this).attr('data-discount')

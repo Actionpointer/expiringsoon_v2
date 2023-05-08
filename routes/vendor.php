@@ -11,7 +11,6 @@ use App\Http\Controllers\Vendor\StaffController;
 Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum','role:vendor']],function () {
     Route::get('get-started',[StaffController::class, 'orientation'])->name('orientation');
     Route::get('dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
-    // Route::get('verification',[StaffController::class,'verification'])->name('verification');
     Route::post('kyc',[StaffController::class,'kyc'])->name('kyc');
     Route::get('notifications',[StaffController::class, 'notifications'])->name('notifications');
     Route::post('notifications/read',[StaffController::class, 'readNotifications'])->name('notifications.read');
@@ -31,13 +30,12 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
     
      //adplans bought, and buy adplans
      Route::get('adsets', [AdsetController::class, 'index'])->name('adsets');   
+     Route::get('adset/create', [AdsetController::class, 'create'])->name('adset.create');   
      Route::post('subscription/adsets', [AdsetController::class, 'subscribe'])->name('adset.subscribe');   
      Route::post('adset/cancel-renewal', [AdsetController::class, 'cancel_renewal'])->name('adset.cancel_renew');   
 
     Route::post('applycoupon',[PaymentController::class, 'apply'])->name('applycoupon');
     Route::get('transactions',[PaymentController::class,'index'])->name('payments');
-    
-    
     
     //list adds, create ads (both shop and products)
     Route::get('adverts/{adset}',[AdvertController::class,'ads'])->name('adverts');

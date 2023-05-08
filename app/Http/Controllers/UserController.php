@@ -40,7 +40,7 @@ class UserController extends Controller
             'phone' => ['nullable','string',Rule::unique('users')->ignore($user)],
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'state_id' => 'nullable|numeric',
-            'city_id' => 'nullable|numeric',
+            'city_id' => 'nullable',
         ],[
             'photo.max' => 'The image is too heavy. Standard size is 2mb',
         ]);

@@ -55,37 +55,28 @@ class StaffController extends Controller
         // dd($request->all());
         $user = auth()->user();
         try {
-            
-                $validator = Validator::make($request->all(), 
-                [
-                    'shop_id' => [Rule::requiredIf(in_array($request->type,['addressproof','companydoc'])),'numeric'],
-                    'type' => 'required|string',
-                    'document' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
-                ]);
-                if($validator->fails()){
-                    return request()->expectsJson() ?  
-                        response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
-                        redirect()->back()->withErrors($validator)->withInput();
-                }
-                
-                $verifiable_id = $request->type == 'idcard' ?  $user->id : $request->shop_id;
-                $verifiable_type = $request->type == 'idcard' ?  'App\Models\User' : 'App\Models\Shop';
-                if($request->type == 'idcard' && $user_idcard = $user->kyc->where('type','idcard')->first()){
-                    Storage::delete('public/'.$user_idcard->document);
-                }
-                if($card = $user->kyc->where('type',$request->type)->where('verifiable_type',$verifiable_type)->where('verifiable_id',$verifiable_id)->first()){
-                    Storage::delete('public/'.$card->document);
-                }
-                
-                $doctype = explode('/',$request->file('document')->getClientMimeType())[0];
-                // dd($doctype);
-                $document = 'uploads/'.time().'.'.$request->file('document')->getClientOriginalExtension();
-                $request->file('document')->storeAs('public/',$document);
-                $kyc = Kyc::updateOrCreate(['user_id'=> $user->id,'verifiable_id'=> $verifiable_id,
-                'verifiable_type'=> $verifiable_type,'type'=> $request->type],['doctype'=> $doctype,'document'=> $document]);
+            $validator = Validator::make($request->all(), 
+            [
+                'document' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
+            ]);
+            if($validator->fails()){
                 return request()->expectsJson() ?  
-                    response()->json(['status' => true,'message' => 'Verification Document Saved'],200):   
-                    redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
+                    response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
+                    redirect()->back()->with(['result'=> '0','message'=> $validator->errors()->first()]);
+            }
+            
+            $doc_type = explode('/',$request->file('document')->getClientMimeType())[0];
+            $document = 'uploads/'.time().'.'.$request->file('document')->getClientOriginalExtension();
+            if($user_idcard = $user->kyc->where('type','idcard')->first()){
+                Storage::delete('public/'.$user_idcard->document);
+                $user_idcard->delete();
+            }
+            $kyc = Kyc::create(['user_id' => $user->id,'verifiable_id'=> $user->id,'verifiable_type'=> 'App\Models\User','type'=> 'idcard',
+            'doctype'=> $doc_type,'document'=> $document]);
+            $request->file('document')->storeAs('public/',$document);
+            return request()->expectsJson() ?  
+                response()->json(['status' => true,'message' => 'Verification Document Saved'],200):   
+                redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
         }catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -172,15 +163,6 @@ class StaffController extends Controller
         return redirect()->back()->with(['result'=> 1,'message'=> 'Staff created successfully']);
        
     }
-
-    // public function index($shop_id){
-    //     $shop = Shop::find($shop_id);
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'Shop Staff retrieved Successfully',
-    //         'data' => UserResource::collection($shop->staff),
-    //     ], 200);
-    // }
 
     public function update(Shop $shop,Request $request){
         $validator = Validator::make($request->all(), [

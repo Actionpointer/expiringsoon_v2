@@ -90,15 +90,25 @@
                                     <option value="{{$state->id}}" @if($user->state_id == $state->id) selected @endif>{{$state->name}}</option> 
                                   @endforeach
                               </select>
+                              @error('state_id')
+                                <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                              @enderror
                             </div>
                             <div class="contact-form-input">
                               <label for="city">City</label>
                               <select name="city_id" class="select2 cities">
-                                <option>Select City</option>
+                                <option></option>
                                 @foreach ($user->state->cities as $city)
                                   <option value="{{$city->id}}" @if($city->id == $user->city_id) selected @endif>{{ucwords(strtolower($city->name))}}</option>
                                 @endforeach
                               </select>
+                              @error('city_id')
+                                <span class="invalid-feedback d-block text-danger mb-4" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                              @enderror
                               
                             </div>
 
@@ -258,7 +268,7 @@
               @endif
 
               @if(auth()->user()->role->name == 'vendor')
-              <div class="dashboard__content-card">
+              <div class="dashboard__content-card" id="verification">
                 <div class="dashboard__content-card-header">
                   <h5 class="font-body--xl-500">Verification Document</h5>
                   <p style="font-size:11px;color:#888;text-transform:uppercase">Documents required for payout requests</p>
@@ -315,7 +325,7 @@
                     <div class="align-self-center mx-1">
                       <form method="post" enctype="multipart/form-data" action="{{route('vendor.kyc')}}">@csrf
                         <input type="hidden" name="type" value="idcard">
-                        <input type="file" style="display: none" name="document" id="idcard" onchange="readURL(this,'idcard')" accept=".pdf, .png, .jpg, .jpeg" />
+                        <input type="file" style="display: none" name="document" id="idcard" onchange="readVURL(this,'idcard')" accept=".pdf, .png, .jpg, .jpeg" />
                         <button class="button button--md" id="idcard_submit" type="submit" style="display: none">Upload</button>
                       </form>
                     </div>
@@ -352,6 +362,23 @@
           }
           reader.readAsDataURL(input.files[0]);
       }
+  }
+
+  function readVURL(input,output) {
+      
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            if(e.target.result.split(';')[0].split('/')[1] == 'pdf'){
+              $('#'+output+'_preview').attr('src', "{{asset('src/images/site/icon-pdf.jpg')}}" );
+            }else{
+              $('#'+output+'_preview').attr('src', e.target.result);
+            }
+            
+          }
+          reader.readAsDataURL(input.files[0]);
+      }
+      $('#'+output+'_submit').show()
   }
   
   $(document).on('change','.states',function(){

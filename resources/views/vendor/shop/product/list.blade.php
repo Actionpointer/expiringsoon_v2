@@ -42,10 +42,10 @@
     <div class="container">
       <div class="row dashboard__content">
         @include('layouts.shop_navigation')
-        <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
+        <div class="col-lg-9 section--xl pt-0" style="font-size:13px">
           <div class="container">
             <!-- Order History  -->
-            <div class="dashboard__order-history" style="padding:10px;font-size:13px">
+            <div class="dashboard__order-history" style="font-size:13px">
               <div class="dashboard__order-history-title d-flex flex-column flex-md-row justify-content-between">
                 <h2 class="font-body--xl-500 ">My Products</h2>
                 
@@ -63,7 +63,7 @@
               </div>
               <div class="dashboard__order-history-table">
                 <div class="table-responsive">
-                  <table id="datatable" class="table display" style="width:100%;font-size:13px">
+                  <table id="datatable" class="table border-start-0 border-end-0">
                     <thead>
                       <tr>
                           {{-- <th scope="col" class="cart-table-title"></th> --}}

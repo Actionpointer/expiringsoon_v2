@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vendor;
 
 
+use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\City;
 use App\Models\Rate;
@@ -283,7 +284,43 @@ class ShopController extends Controller
     }
 
     public function verification(Request $request){
-        
+        // dd($request->all());
+        $user = auth()->user();
+        try {
+            
+            $validator = Validator::make($request->all(), 
+            [
+                'shop_id' => 'required|numeric',
+                'type' => 'required|string',
+                'document' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
+            ]);
+            if($validator->fails()){
+                return request()->expectsJson() ?  
+                    response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
+                    redirect()->back()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
+            }
+                
+            $verifiable_id = $request->shop_id;
+            $verifiable_type = 'App\Models\Shop';
+            if($card = $user->kyc->where('type',$request->type)->where('verifiable_type',$verifiable_type)->where('verifiable_id',$verifiable_id)->first()){
+                Storage::delete('public/'.$card->document);
+            }
+            
+            $doctype = explode('/',$request->file('document')->getClientMimeType())[0];
+                // dd($doctype);
+            $document = 'uploads/'.time().'.'.$request->file('document')->getClientOriginalExtension();
+            $request->file('document')->storeAs('public/',$document);
+            $kyc = Kyc::updateOrCreate(['user_id'=> $user->id,'verifiable_id'=> $verifiable_id,
+                'verifiable_type'=> $verifiable_type,'type'=> $request->type],['doctype'=> $doctype,'document'=> $document]);
+            return request()->expectsJson() ?  
+                    response()->json(['status' => true,'message' => 'Verification Document Saved'],200):   
+                    redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);
+        }catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     public function notifications(Shop $shop){

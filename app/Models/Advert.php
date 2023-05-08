@@ -57,6 +57,10 @@ class Advert extends Model
        }
     }
 
+    public function getRunningAttribute(){
+        return $this->approved && $this->status && $this->adset->status && $this->adset->start_at < now() && $this->adset->end_at > now();
+    }
+
     public function scopeWithinState($query,$state_id=null){
         if(!$state_id){
             $state_id = session('locale')['state_id'];;
@@ -79,9 +83,7 @@ class Advert extends Model
         }  
     }
 
-    public function getRunningAttribute(){
-        return $this->approved && $this->adset->status && $this->adset->start_at < now() && $this->adset->end_at > now();
-    }
+    
     
     public function scopeRunning($query){
         return $query->where('approved',true)->whereHas('adset', function (Builder $qry) 

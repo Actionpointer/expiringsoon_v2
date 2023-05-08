@@ -82,12 +82,12 @@
                         <!-- Total  -->
                         <td class=" dashboard__order-history-table-item order-total ">
                           <p class="order-total-price">
-                            {!!$payment->currency->symbol!!} {{$payment->amount}}
+                            {!!$payment->currency->symbol!!}{{$payment->amount}}
                           </p>
                         </td>
                         <td class=" dashboard__order-history-table-item order-ortal ">
                           <p class="order-total-price">
-                            <span class="quantity"> {{$payment->items->first()->paymentable_type == 'App\Models\Subscription' ? 'Subscription: '.$payment->items->first()->paymentable->plan->name : 'Adset: '.$payment->items->first()->paymentable->adplan->name}}</span>
+                            <span class="quantity"> {{$payment->items->first()->paymentable_type == 'App\Models\Subscription' ? 'Subscription': 'Adset'}}</span>
                           </p>
                         </td>
                         <!-- Status -->

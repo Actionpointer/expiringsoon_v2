@@ -30,7 +30,12 @@ class AdsetController extends Controller
         $adsets = Adset::where('user_id',$user->id)->where('status',true)->get();
         return request()->expectsJson()
         ? response()->json(['status' => true, 'message' => 'Adsets retrieved Successfully','data' => AdsetResource::collection($adsets)], 200)
-        : view('vendor.adverts.adsets',compact('user','adsets','adplans')); 
+        : view('vendor.adsets.list',compact('user','adsets','adplans')); 
+    }
+
+    public function create(){
+        $adplans = Adplan::all();
+        return view('vendor.adsets.create',compact('adplans'));
     }
 
     public function subscribe(Request $request){
