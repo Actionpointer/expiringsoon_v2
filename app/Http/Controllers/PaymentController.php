@@ -142,35 +142,9 @@ class PaymentController extends Controller
         return view('receipt',compact('payout'));
     }
 
-    // public function verification(){
-    //     if(!request()->query() || !request()->query('transaction_id') || !request()->query('tx_ref'))
-    //     \abort(404);
-    //     $trans_id = request()->query('transaction_id');
-    //     $trans_ref = request()->query('tx_ref');
-    //     $trans_status = request()->query('status');
-    //     $response = $this->verifyPayment($trans_id);
-    //     // dd($response);
-    //     $payment = Payment::where('reference',$trans_ref)->first();
-    //     if($trans_status == 'successful' && $response->status == 'success' && $payment && $response && $payment->reference == $response->data->tx_ref  && $response->data->currency == $payment->currency && $response->data->amount >= $payment->amount){
-    //         $payment->method = $response->data->payment_type;
-    //         $payment->status = 'success';
-    //         $payment->save();
-    //     }else{
-    //         $payment->status = 'failed';
-    //         $payment->save();
-    //     }
-    //     // else mark payment failed
-    //     return redirect()->route('payment.status',$payment);
-    // }
-
-    
-
-    // public function topup(Request $request){
-    //     if($url = $this->initializePayment($request->amount)){
-    //         return redirect()->to($url);
-    //     }else
-    //         return redirect()->back()->with(['result'=> '0','message'=> 'Error Processing Payment']);
-    // }
+    public function payoutcallback(){
+        
+    }
 
     
     

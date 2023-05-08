@@ -67,7 +67,7 @@ Route::post('product/remove-from-wish',[CartController::class,'removefromwish'])
 Route::post('product/sortFilter',[CartController::class,'sortFilter'])->name('product.sortFilter');
 
 Route::get('payment/callback',[App\Http\Controllers\PaymentController::class,'paymentcallback'])->name('payment.callback');
-Route::post('payout/callback',[App\Http\Controllers\PayoutController::class,'payoutcallback'])->name('payout.callback');
+Route::post('payout/callback',[App\Http\Controllers\PaymentController::class,'payoutcallback'])->name('payout.callback');
 
 Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
 Route::get('receipt/{payout}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');

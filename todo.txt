@@ -19,6 +19,7 @@ when order rejected but was not returned. - cron job
 admin should know orders that are stuck in a particular status e.g processing, or shipped, or ready - cron
 8.
 retry payout with job -
+retry payout with flutterwave -
 
 5.
 swiper.js is displaying duplicates
