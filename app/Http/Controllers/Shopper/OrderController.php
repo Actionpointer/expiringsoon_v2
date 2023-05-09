@@ -53,10 +53,8 @@ class OrderController extends Controller
     }
     
     public function show(Order $order){
-        
-        if(!request()->expectsJson()){
-            OrderMessage::where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
-        }
+        OrderMessage::where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
+        // dd($order->user_id == auth()->id());
         $messages = OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\User');
         })->orWhere(function($qeury) use($order){

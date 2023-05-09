@@ -17,7 +17,7 @@ class VendorPaymentResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id'=> $this->id,
-            'item' => $this->items->first()->paymentable_type == 'App\Models\Subscription' ? 'Subscription: '.$this->items->first()->paymentable->plan->name : 'Adset: '.$this->items->first()->paymentable->adplan->name,
+            'item' => $this->items->first()->paymentable_type == 'App\Models\Subscription' ? 'Subscription' : 'Adset ',
             'user_id' => $this->user_id,
             'currency'=> $this->currency->symbol,
             'amount' => $this->amount,

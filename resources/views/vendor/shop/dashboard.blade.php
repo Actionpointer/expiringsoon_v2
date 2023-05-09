@@ -168,14 +168,31 @@
                       </div>
                     </div>
 
-                    <div class="dashboard__totalpayment-card-body">
-                      <div class="dashboard__totalpayment-card-body-item">
-                        <h5 class="font-body--md-400">No Notification</h5>
-                        
-                      </div>
-                      
-                     
-                    </div>
+                    <div class="dashboard__totalpayment-card-body"> 
+                      @forelse($shop->unreadNotifications as $notification)
+                        <div class="dashboard__totalpayment-card-body-item">
+                          <div class="d-flex">
+                              <div>
+                                <small class="muted font-body--sm-400 text-nowrap">{{$notification->created_at->format('d-M')}}</small>
+                              </div>
+                              
+                              <h5 class="font-body--sm-400 px-2"> 
+                                {{$notification->data['body']}}
+                              </h5>
+                              @if($notification->data['url'])
+                              <div>
+                                <a href="{{url($notification->data['url'])}}" class="btn btn-sm btn-outline-dark">View</a>
+                              </div>
+                              @endif
+                              
+                          </div>
+                        </div>
+                      @empty
+                        <div class="dashboard__totalpayment-card-body-item pt-5 justify-content-center">
+                          <h5 class="font-body--lg-600">No Unread Notification</h5>
+                        </div>
+                      @endforelse
+                  </div>
                   </div>
                 </div>
               </div>
