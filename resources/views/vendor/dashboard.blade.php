@@ -76,7 +76,7 @@
                       <div style="float:left;margin-right:10px">
                           <p align="left" class="font-body--md-400 designation">Balance</p>
                           <div style="margin-top:-10px">
-                              {{-- <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!$user->country->currency->symbol!!}{{number_format($user->shops->sum('wallet'), 2)}}</a> --}}
+                              <a href="#" class="edit font-body--lg-500" style="font-size:20px">{!!$user->country->currency->symbol!!}{{number_format($user->shops->sum('wallet'), 2)}}</a>
                           </div>
                       </div>
                       

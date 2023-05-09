@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Alert;
+use App\Models\User;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,8 +14,9 @@ class SecurityController extends Controller
     }
     public function index()
     {
-        $alerts = Alert::orderBy('severity','desc')->orderBy('status','asc')->paginate(10);
-        return view('admin.security',compact('alerts'));
+        $locations = Location::where('status','false')->paginate(10);
+        $users = User::all();
+        return view('admin.security',compact('locations','users'));
     }
 
     /**

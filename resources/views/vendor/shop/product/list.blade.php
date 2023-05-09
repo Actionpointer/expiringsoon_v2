@@ -37,7 +37,7 @@
           </ul>
       </div>
     </div>
-</div>
+  </div>
   <!-- breedcrumb section end   -->
   @include('layouts.session')
   <div class="dashboard section">

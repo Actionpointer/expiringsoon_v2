@@ -31,7 +31,8 @@ trait GeoLocationTrait
             'currency_id'=> $location->country->currency_id,
             'currency_iso'=> $location->country->currency->iso,
             'currency_name'=> $location->country->currency->name,
-            'currency_symbol'=> $location->country->currency->symbol,  
+            'currency_symbol'=> $location->country->currency->symbol,
+            'status' => $location->status  
         ];
     }
 
@@ -66,7 +67,7 @@ trait GeoLocationTrait
             $location = Location::updateOrCreate([
                 'ipaddress'=> $geo_location['geoplugin_request'],
                 'country_id'=> $country->id,
-                'user_id'=> auth()->check() ? auth()->id() : null,
+                'status'=> true,
                 'state_id'=> $state->id,
                 'city_id'=> $city->id
             ]);

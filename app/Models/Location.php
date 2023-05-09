@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Location extends Model
 {
     use HasFactory;
-    protected $fillable = ['ipaddress','user_id','country_id','state_id','city_id'];
+    protected $fillable = ['ipaddress','status','country_id','state_id','city_id'];
 
     public function country(){
         return $this->belongsTo(Country::class);
@@ -21,5 +21,8 @@ class Location extends Model
     }
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    public function getPlaceAttribute(){
+        return ($this->city? $this->city->name.', ':'').$this->state->name.','.$this->country->name;
     }
 }

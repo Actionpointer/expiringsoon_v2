@@ -54,21 +54,33 @@
                   <table id="datatable" class="table display" style="width:100%;font-size:13px">
                     <thead>
                       <tr>
-                        <th scope="col" class="dashboard__order-history-table-title">  Date</th>
-                        <th scope="col" class="dashboard__order-history-table-title">  Description</th>
-                        <th scope="col" class="dashboard__order-history-table-title">  Severity</th>
+                        <th scope="col" class="dashboard__order-history-table-title d-flex align-content-center">  
+                          {{-- <div class="d-flex align-contents-center"> --}}
+                            <div class="form-check pt-2">
+                              <label class="form-check-label" for="existing">  </label>
+                              <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
+                            </div>
+                            <span class="font-body--md-700">IP ADDRESS</span>
+                          {{-- </div> --}}
+                           
+                        </th>
+                        <th scope="col" class="dashboard__order-history-table-title">  Location</th>
                         <th scope="col" class="dashboard__order-history-table-title">  Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($alerts as $alert)
+                      @forelse($locations as $location)
                             <tr>
-                                <td class="dashboard__order-history-table-item order-date "> {{$alert->created_at->format('d M,Y h:i A')}}</td>
+                                
                                 <!-- Details page  -->
                                 <td class="dashboard__order-history-table-item   order-details ">
-                                    {{$alert->description}}
+                                  <div class="form-check pt-2">
+                                    <label class="form-check-label font-body--400" for="existing"> </label>
+                                    <input class="form-check-input checkboxes" type="checkbox" name="payouts[]" value="{{$location->id}}" >
+                                  </div>
+                                    {{$location->ipaddress}}
                                 </td>
-                                <td class="dashboard__order-history-table-item   order-status "> {{$alert->severity}}</td>
+                                <td class="dashboard__order-history-table-item   order-status "> {{$location->place}}</td>
                                 
                                 <td class="dashboard__order-history-table-item order-details ">
                                     <button class="btn btn-success"> Resolved</button>
