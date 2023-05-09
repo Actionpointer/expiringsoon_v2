@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Ixudra\Curl\Facades\Curl;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GeoLocationTrait;
 
 class SecurityController extends Controller
 {
+    use GeoLocationTrait;
+
     public function __construct(){
         $this->middleware('auth');
     }
@@ -35,9 +39,19 @@ class SecurityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function ip_block(Request $request)
     {
-        //
+        $location = Location::where('ipaddress',$request->ipaddress)->first();
+        if(!$location){
+            $result = Curl::to('http://www.geoplugin.net/php.gp?ip='.$request->ipaddress)->get();
+            $geo_location =  unserialize($result);
+            $location = $this->saveLocation($geo_location);
+        }
+        if($location){
+            $location->status = false;
+            $location->save();
+        }
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Ip address blocked']);
     }
 
     /**
@@ -46,9 +60,12 @@ class SecurityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function ip_release(Request $request)
     {
-        //
+        $location = Location::find($request->location_id);
+        $location->status = true;
+        $location->save();
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Ip address released']);
     }
 
     /**

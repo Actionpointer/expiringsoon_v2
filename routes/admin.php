@@ -36,6 +36,9 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
             Route::post('ad/pricing',[SettingsController::class, 'ad_pricing'])->name('ad.pricing');            
         });
         Route::get('security',[SecurityController::class, 'index'])->name('security');
+        Route::post('security/ipaddress/block',[SecurityController::class, 'ip_block'])->name('security.ip_block');
+        Route::post('security/ipaddress/release',[SecurityController::class, 'ip_release'])->name('security.ip_release');
+
         Route::get('categories',[ProductController::class, 'categories'])->name('categories');
         Route::post('category/store',[ProductController::class, 'category_store'])->name('category.store');
         Route::post('category/update',[ProductController::class, 'category_update'])->name('category.update');
