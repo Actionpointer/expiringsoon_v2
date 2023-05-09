@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ProductDetailsResource;
 
 class ProductController extends Controller
 {
@@ -45,7 +46,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Products retrieved Successfully',
-                'data' => new ProductResource($product)
+                'data' => new ProductDetailsResource($product)
             ], 200);
         }else{
             return response()->json([

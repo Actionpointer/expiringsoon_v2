@@ -51,8 +51,8 @@ class CartController extends Controller
         $product = Product::find($request->product_id);
         if(!$product)
         abort(404);
-        $quantity = $request->quantity ?? 1;
-        $update = $request->update ?? false;
+        $quantity = $request->quantity ? $request->quantity : 1;
+        $update = $request->update ? true: false;
         $carts = $this->addToCartSession($product,$quantity,$update);
         if(auth()->check()){
             $this->addToCartDb($product,$quantity,$update);

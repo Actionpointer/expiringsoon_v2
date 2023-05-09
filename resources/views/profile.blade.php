@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @push('styles')
-
+<style>
+    #generate{
+      border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    padding-bottom: 10px;
+    }
+</style>
 @endpush
 @section('title')Account Settings | User Dashboard @endsection
 @section('main')

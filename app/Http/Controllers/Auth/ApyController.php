@@ -18,6 +18,7 @@ class ApyController extends Controller
 
     public function register(Request $request)
     {
+
         try {
             //Validated
             $validateUser = Validator::make($request->all(), 
@@ -45,7 +46,7 @@ class ApyController extends Controller
                 'phone' => $request->phone,
                 'country_id' => session('locale')['country_id'],
                 'state_id' => session('locale')['state_id'],
-                'role' => $role_id,
+                'role_id' => $role_id,
             ]);
 
             return response()->json([
