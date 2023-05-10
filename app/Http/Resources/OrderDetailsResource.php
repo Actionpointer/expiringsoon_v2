@@ -30,7 +30,7 @@ class OrderDetailsResource extends JsonResource
             'shop_name' => $this->shop->name,
             'shop_image' => $this->shop->image,
             'address_id' => $this->address_id,
-            'address' => $this->address_id && $this->address ? $this->address->street.' '.($this->address->city ? $this->address->city->name:'').' '.$this->address->state->name : '',
+            'address' => $this->address_id && $this->address ? $this->address->street.' '.($this->address->city ? $this->address->city->name:'').' '.($this->address->state ? $this->address->state->name:'') : '',
             'contact_name' => $this->address_id && $this->address ? $this->address->contact_name : '',
             'contact_phone' => $this->address_id && $this->address ? $this->address->contact_phone : '',
             'deliverer' => $this->deliverer,

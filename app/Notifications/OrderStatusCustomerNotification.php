@@ -94,7 +94,8 @@ class OrderStatusCustomerNotification extends Notification
         return [
             'subject' => $subject,
             'body' => $message,
-            'url'=> route('order.show',[$this->status->order])
+            'url'=> route('order.show',[$this->status->order]),
+            'related_to'=> 'order',
         ];
     }
 }

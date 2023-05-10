@@ -109,7 +109,8 @@ class OrderStatusVendorNotification extends Notification
             'subject' => $subject,
             'body' => $message,
             'url'=> route('vendor.shop.order.view',[$this->status->order->shop,$this->status->order]),
-            'id'=> $this->status->order_id
+            'id'=> $this->status->order_id,
+            'related_to'=> 'order'
         ];
     }
 }
