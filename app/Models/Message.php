@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Message extends Model
 {
     use HasFactory;
-    protected $fillable = ['sender_id','receiver_id','body','read_at'];
-    protected $dates = ['read_at'];
+    protected $fillable = ['sender_id','receiver_id','body'];
 
     public function sender(){
         return $this->belongsTo(User::class,'sender_id');

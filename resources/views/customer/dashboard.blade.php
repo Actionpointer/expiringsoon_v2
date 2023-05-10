@@ -190,5 +190,5 @@
   <!-- dashboard Secton  End  -->
 @endsection
 @push('scripts')
-
+@include('layouts.front')
 @endpush

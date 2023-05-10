@@ -14,7 +14,7 @@ class MessageController extends Controller
     public function index()
     {
         $user = auth()->user();
-        Message::where('receiver_id',$user->id)->update(['read_at'=> now()]);
+        
         $messages = Message::where(function ($query) use($user) {
             return $query->where('sender_id',$user->id)
                          ->orWhere('receiver_id',$user->id); } )->get();

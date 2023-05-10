@@ -238,6 +238,7 @@
   <!-- dashboard Secton  End  -->
 @endsection
 @push('scripts')
+@include('layouts.front')
 <script>
   
   $(document).on('change','.states',function(){

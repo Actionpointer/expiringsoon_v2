@@ -113,6 +113,8 @@
 @endsection
 @push('scripts')
 
+@include('layouts.front')
+
     <script type="text/javascript" src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script>
     <script src="{{asset('src/plugins/datatable/assets/buttons/dataTables.buttons.min.js')}}"></script>

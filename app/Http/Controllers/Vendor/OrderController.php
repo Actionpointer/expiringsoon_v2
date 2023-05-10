@@ -58,9 +58,7 @@ class OrderController extends Controller
     
 
     public function show(Shop $shop,Order $order){
-        if(!request()->expectsJson()){
-            OrderMessage::where('order_id',$order->id)->where('receiver_id',$shop->id)->where('receiver_type','App\Models\Shop')->whereNull('read_at')->update(['read_at'=>now()]);
-        }
+        
         $messages = OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop');
         })->orWhere(function($qeury) use($order){
@@ -88,7 +86,6 @@ class OrderController extends Controller
     }
 
     public function messages(Shop $shop,Order $order){
-        OrderMessage::where('order_id',$order->id)->where('receiver_id',$shop->id)->where('receiver_type','App\Models\Shop')->whereNull('read_at')->update(['read_at'=>now()]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

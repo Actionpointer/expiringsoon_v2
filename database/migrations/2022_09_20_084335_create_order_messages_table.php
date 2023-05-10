@@ -19,7 +19,6 @@ class CreateOrderMessagesTable extends Migration
             $table->unsignedBigInteger('sender_id');
             $table->string('sender_type'); //sent by who? admin, buyer, shop
             $table->text('body'); //the message
-            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
