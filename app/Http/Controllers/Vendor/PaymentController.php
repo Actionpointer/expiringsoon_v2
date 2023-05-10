@@ -23,6 +23,7 @@ class PaymentController extends Controller
     //vendor payments to us
     public function index(){
         $user = auth()->user();
+        $user->unreadNotifications->whereJsonContains('data->related_to','payment')->markAsRead();
         $payments = $user->payments->where('status','success')->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ?  
         response()->json([
@@ -48,6 +49,7 @@ class PaymentController extends Controller
     
     //all payouts
     public function payouts(Shop $shop){
+        $shop->unreadNotifications->whereJsonContains('data->related_to','payout')->markAsRead();
         $payouts = $shop->payouts->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ? 
         response()->json([

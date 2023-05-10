@@ -35,7 +35,7 @@ class OrderController extends Controller
         if(!$status){
             $orders = $orders->whereHas('statuses');
         }
-        $orders = $orders->paginate(16);
+        $orders = $orders->orderBy('created_at','desc')->paginate(16);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
@@ -58,7 +58,7 @@ class OrderController extends Controller
     
 
     public function show(Shop $shop,Order $order){
-        
+        $notifications = $order->shop->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
         $messages = OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop');
         })->orWhere(function($qeury) use($order){
