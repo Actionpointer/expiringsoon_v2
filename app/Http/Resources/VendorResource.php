@@ -53,8 +53,7 @@ class VendorResource extends JsonResource
                 return Order::whereIn('shop_id',$this->shops->pluck('id')->toArray())->take(10)->count();
             }),
             "adverts_running"=> $this->adverts->where('running',true)->count(),
-            'payment_gateway'=> $this->country->payment_gateway,            
-            'payout_gateway'=> $this->country->payout_gateway,
+            'payout_account'=> $this->payout_account ? true:false,            
             'minimum_payout'=> $this->when(!$this->shop_id, function(){ 
                 return $this->minimum_payout();
             }),

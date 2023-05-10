@@ -12,7 +12,9 @@ use App\Models\Settlement;
 use Illuminate\Http\Request;
 use App\Events\DisbursePayout;
 use Illuminate\Validation\Rule;
+use App\Exports\SettlementsExport;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -29,6 +31,11 @@ class PaymentController extends Controller
     public function settlements(){
         $settlements = Settlement::within()->paginate(10);
         return view('admin.payments.settlements',compact('settlements'));
+    }
+
+    public function exportSettlement() 
+    {
+        return Excel::download(new SettlementsExport, 'settlements.xlsx');
     }
 
     public function payouts()

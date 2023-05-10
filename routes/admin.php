@@ -66,6 +66,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
     Route::group(['middleware'=> 'role:superadmin,admin,manager,auditor'],function(){
         Route::get('payments',[PaymentController::class, 'index'])->name('payments');
         Route::get('settlements',[PaymentController::class, 'settlements'])->name('settlements');
+        Route::get('settlements/export', [PaymentController::class, 'exportSettlement'])->name('settlements.export');
         Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');
     });
 

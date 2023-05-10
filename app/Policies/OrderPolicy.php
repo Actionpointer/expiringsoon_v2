@@ -16,9 +16,10 @@ class OrderPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
-    {
-        //
+    public function viewAny(User $user){
+        if($user->isAnyRole(['superadmin','admin','manager','customercare'])) {
+            return true;
+        }
     }
 
     /**
