@@ -41,22 +41,13 @@ class OrderController extends Controller
     
     public function index(){
         $user = auth()->user();
-        $orders = Order::where('user_id',$user->id)->whereHas('statuses')->orderBy('created_at','desc')->get();
+        $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
                 'message' => $orders->count() ? 'Orders retrieved Successfully':'No Order',
                 'data' => OrderResource::collection($orders),
-                'meta'=> [
-                    "total"=> $orders->total(),
-                    "per_page"=> $orders->perPage(),
-                    "current_page"=> $orders->currentPage(),
-                    "last_page"=> $orders->lastPage(),
-                    "first_page_url"=> $orders->url(1),
-                    "last_page_url"=> $orders->url($orders->lastPage()),
-                    "next_page_url"=> $orders->nextPageUrl(),
-                    "prev_page_url"=> $orders->previousPageUrl(),
-                ]
+                'count' => $orders->count()
             ], 200) :
             view('customer.orders.list',compact('user','orders')); 
     }
