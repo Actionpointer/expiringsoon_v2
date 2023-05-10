@@ -63,7 +63,7 @@ class OrderController extends Controller
             }
         }
         // dd($orders->get());
-        $orders = $orders->paginate(10);
+        $orders = $orders->paginate(16);
         return view('admin.orders.list',compact('orders','countries','country_id','status','shipment','sortBy','statuses'));
     }
 

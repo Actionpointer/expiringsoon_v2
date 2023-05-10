@@ -26,7 +26,7 @@
               <span> > </span>
             </a>
           </li>
-          <li><a href="{{route('admin.users')}}">Users <span> > </span></a></li>
+          <li><a href="#">Users <span> > </span></a></li>
           <li class="active"><a href="#">{{$user->name}}</a></li>
         </ul>
       </div>

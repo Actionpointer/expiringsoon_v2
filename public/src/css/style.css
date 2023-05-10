@@ -997,13 +997,15 @@ a {
       width: 100%; } }
   @media (max-width: 767px) {
     .header--two .header__top-right div:nth-child(1) {
-      width: 30%; } }
+      width: 100%; 
+    } 
+  }
   @media (max-width: 767px) {
     .header--two .header__top-right div:nth-child(2) {
       width: 70%; } }
   @media (max-width: 767px) {
     .header--two .header__top-right .header__in {
-      text-align: right; } }
+      text-align: left; } }
 .header--two .header__bottom {
   background-color: transparent; }
   .header--two .header__bottom-content {

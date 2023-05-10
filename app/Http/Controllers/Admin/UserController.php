@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Kyc;
 use App\Models\Bank;
+use App\Models\Plan;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
@@ -40,15 +41,79 @@ class UserController extends Controller
     }
     
     public function customers(){
-        $users = User::within()->whereHas('role',function($query){$query->where('name','shopper');})->paginate(10);
+        
+        $country_id = null;
+        $sortBy = null;
+        $name = null;
+        $users = User::within()->whereHas('role',function($query){$query->where('name','shopper');});
+        if(request()->query() && request()->query('name')){
+            $name = request()->query('name');
+            $users = $users->where(function($or) use($name){
+                $or->where('fname','LIKE',"%$name%")->orWhere('lname','LIKE',"%$name%");
+            });
+        }
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $users = $users->where('country_id',$country_id);
+        }else{
+            $country_id = 0;
+        }
+        
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'name_asc'){
+                $users = $users->orderBy('fname','asc');
+            }
+            if(request()->query('sortBy') == 'name_desc'){
+                $users = $users->orderBy('fname','desc');
+            }
+            
+        }
         $countries = Country::all();
-        return view('admin.users.customers',compact('users','countries'));
+        $users = $users->paginate(16);
+        return view('admin.users.customers',compact('users','countries','country_id','sortBy','name'));
     }
 
-    public function vendors(){
-        $users = User::within()->whereHas('role',function($query){$query->where('name','vendor');})->paginate(10);
+    public function vendors(){$category = null;
+        $subscription = 0;
+        $country_id = null;
+        $sortBy = null;
+        $name = null;
+        $users = User::within()->whereHas('role',function($query){$query->where('name','vendor');});
+        if(request()->query() && request()->query('name')){
+            $name = request()->query('name');
+            $users = $users->where(function($or) use($name){
+                $or->where('fname','LIKE',"%$name%")->orWhere('lname','LIKE',"%$name%");
+            });
+        }
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $users = $users->where('country_id',$country_id);
+        }else{
+            $country_id = 0;
+        }
+
+        if(request()->query() && request()->query('subscription') && request()->query('subscription') != 'all'){
+            $subscription = request()->query('subscription');
+            $users = $users->whereHas('subscription',function($query) use($subscription){
+                $query->where('plan_id',$subscription);
+            });
+        }
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'name_asc'){
+                $users = $users->orderBy('fname','asc');
+            }
+            if(request()->query('sortBy') == 'name_desc'){
+                $users = $users->orderBy('fname','desc');
+            }
+            
+        }
+        
+        $plans = Plan::all();
         $countries = Country::all();
-        return view('admin.users.vendors',compact('users','countries'));
+        $users = $users->paginate(16);
+        return view('admin.users.vendors',compact('users','countries','plans','country_id','subscription','sortBy','name'));
     }
 
     public function staff(){

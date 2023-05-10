@@ -44,7 +44,7 @@
             <!-- Order History  -->
             <div class="dashboard__order-history">
               <div class="dashboard__order-history-title">
-                <h2 class="font-body--xl-500">Order History</h2>
+                <h2 class="font-body--xl-500">Orders</h2>
               </div>
               <div class="filter__sidebar">
                 <button class="filter">
@@ -108,7 +108,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+              </div>
               <div class="dashboard__order-history-table">
                 <div class="table-responsive">
                   <table class="table">

@@ -76,8 +76,8 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
         Route::post('coupons/update',[CouponController::class, 'update'])->name('coupon.update');
         Route::post('coupons/delete',[CouponController::class, 'destroy'])->name('coupon.delete');
 
-        Route::get('vendors',[UserController::class, 'vendors'])->name('subscriptions');
-        Route::get('customers',[UserController::class, 'customers'])->name('users');
+        Route::get('vendors',[UserController::class, 'vendors'])->name('vendors');
+        Route::get('customers',[UserController::class, 'customers'])->name('customers');
         Route::get('user/show/{user}',[UserController::class, 'show'])->name('user.show');
         Route::post('user',[UserController::class, 'manage'])->name('user.manage');
 

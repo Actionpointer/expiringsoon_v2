@@ -16,8 +16,8 @@
           </a>
         </li>
         @if(auth()->user()->isAnyRole(['superadmin','admin','manager','customercare']))
-          <li class="dashboard__nav-item-link @if(Route::is('admin.subscriptions')) active @endif">
-            <a href="{{route('admin.subscriptions')}}" class="font-body--lg-400">
+          <li class="dashboard__nav-item-link @if(Route::is('admin.vendors')) active @endif">
+            <a href="{{route('admin.vendors')}}" class="font-body--lg-400">
               <span class="icon">
                 <svg  width="20"  height="20"  viewBox="0 0 18 18"  fill="none"  xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.99993 7.66667C8.84088 7.66667 10.3333 6.17428 10.3333 4.33333C10.3333 2.49238 8.84088 1 6.99993 1C5.15898 1 3.6666 2.49238 3.6666 4.33333C3.6666 6.17428 5.15898 7.66667 6.99993 7.66667Z" stroke="currentColor" stroke-width="1.2" />  
@@ -25,6 +25,28 @@
                 </svg>
               </span>
               <span class="name">  Vendors</span>
+            </a>
+          </li>
+          <li class="dashboard__nav-item-link @if(Route::is('admin.customers')) active @endif">
+            <a href="{{route('admin.customers')}}" class="font-body--lg-400">
+              <span class="icon">
+                <svg  width="20"  height="20"  viewBox="0 0 18 18"  fill="none"  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.99993 7.66667C8.84088 7.66667 10.3333 6.17428 10.3333 4.33333C10.3333 2.49238 8.84088 1 6.99993 1C5.15898 1 3.6666 2.49238 3.6666 4.33333C3.6666 6.17428 5.15898 7.66667 6.99993 7.66667Z" stroke="currentColor" stroke-width="1.2" />  
+                  <path d="M9.49995 10.1665H4.49995C2.19828 10.1665 0.137447 12.2915 1.65161 14.024C2.68161 15.2023 4.38495 15.9998 6.99995 15.9998C9.61495 15.9998 11.3174 15.2023 12.3474 14.024C13.8624 12.2907 11.8008 10.1665 9.49995 10.1665Z" stroke="currentColor" stroke-width="1.2"/>
+                </svg>
+              </span>
+              <span class="name">  Customers</span>
+            </a>
+          </li>
+          <li class="dashboard__nav-item-link @if(Route::is('admin.shops')) active @endif">
+            <a href="{{route('admin.shops')}}" class="font-body--lg-400">
+              <span class="icon">
+                <svg  width="20"  height="20"  viewBox="0 0 18 18"  fill="none"  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.99993 7.66667C8.84088 7.66667 10.3333 6.17428 10.3333 4.33333C10.3333 2.49238 8.84088 1 6.99993 1C5.15898 1 3.6666 2.49238 3.6666 4.33333C3.6666 6.17428 5.15898 7.66667 6.99993 7.66667Z" stroke="currentColor" stroke-width="1.2" />  
+                  <path d="M9.49995 10.1665H4.49995C2.19828 10.1665 0.137447 12.2915 1.65161 14.024C2.68161 15.2023 4.38495 15.9998 6.99995 15.9998C9.61495 15.9998 11.3174 15.2023 12.3474 14.024C13.8624 12.2907 11.8008 10.1665 9.49995 10.1665Z" stroke="currentColor" stroke-width="1.2"/>
+                </svg>
+              </span>
+              <span class="name">  Shops</span>
             </a>
           </li>
           <li class="dashboard__nav-item-link @if(Route::is('admin.adsets')) active @endif">
@@ -49,17 +71,7 @@
               <span class="name">  Adverts</span>
             </a>
           </li>
-          <li class="dashboard__nav-item-link @if(Route::is('admin.shops')) active @endif">
-            <a href="{{route('admin.shops')}}" class="font-body--lg-400">
-              <span class="icon">
-                <svg  width="20"  height="20"  viewBox="0 0 18 18"  fill="none"  xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.99993 7.66667C8.84088 7.66667 10.3333 6.17428 10.3333 4.33333C10.3333 2.49238 8.84088 1 6.99993 1C5.15898 1 3.6666 2.49238 3.6666 4.33333C3.6666 6.17428 5.15898 7.66667 6.99993 7.66667Z" stroke="currentColor" stroke-width="1.2" />  
-                  <path d="M9.49995 10.1665H4.49995C2.19828 10.1665 0.137447 12.2915 1.65161 14.024C2.68161 15.2023 4.38495 15.9998 6.99995 15.9998C9.61495 15.9998 11.3174 15.2023 12.3474 14.024C13.8624 12.2907 11.8008 10.1665 9.49995 10.1665Z" stroke="currentColor" stroke-width="1.2"/>
-                </svg>
-              </span>
-              <span class="name">  Shops</span>
-            </a>
-          </li>
+          
           <li class="dashboard__nav-item-link @if(Route::is('admin.products')) active @endif">
             <a href="{{route('admin.products')}}" class="font-body--lg-400">
               <span class="icon">
@@ -70,17 +82,7 @@
               <span class="name">  Products </span>
             </a>
           </li>
-          <li class="dashboard__nav-item-link @if(Route::is('admin.users')) active @endif">
-            <a href="{{route('admin.users')}}" class="font-body--lg-400">
-              <span class="icon">
-                <svg  width="20"  height="20"  viewBox="0 0 18 18"  fill="none"  xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.99993 7.66667C8.84088 7.66667 10.3333 6.17428 10.3333 4.33333C10.3333 2.49238 8.84088 1 6.99993 1C5.15898 1 3.6666 2.49238 3.6666 4.33333C3.6666 6.17428 5.15898 7.66667 6.99993 7.66667Z" stroke="currentColor" stroke-width="1.2" />  
-                  <path d="M9.49995 10.1665H4.49995C2.19828 10.1665 0.137447 12.2915 1.65161 14.024C2.68161 15.2023 4.38495 15.9998 6.99995 15.9998C9.61495 15.9998 11.3174 15.2023 12.3474 14.024C13.8624 12.2907 11.8008 10.1665 9.49995 10.1665Z" stroke="currentColor" stroke-width="1.2"/>
-                </svg>
-              </span>
-              <span class="name">  Customers</span>
-            </a>
-          </li>
+          
           <li class="dashboard__nav-item-link @if(Route::is('admin.orders')) active @endif">
             <a href="{{route('admin.orders')}}" class="font-body--lg-400">
               <span class="icon">

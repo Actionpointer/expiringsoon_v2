@@ -2,7 +2,7 @@
 @push('styles')
 
 @endpush
-@section('title') Users | Expiring Soon @endsection
+@section('title') Vendors | Expiring Soon @endsection
 @section('main')
     <!-- breedcrumb section start  -->
   <div class="section breedcrumb">
@@ -24,7 +24,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Subscribers</a></li>
+          <li class="active"><a href="#">Vendors</a></li>
         </ul>
       </div>
     </div>
@@ -37,70 +37,118 @@
         @include('layouts.admin_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           <div class="container">
-            <div class="dashboard__content-card">
-              <div class="dashboard__content-card-header d-flex justify-content-between">
-                  <h5 class="font-body--xl-500">Manage Susbcription</h5>
-                  <a href="#" class="font-body--lg-500">{{number_format($users->count(), 0)}} users</a>
+            <div class="dashboard__order-history">
+              <div class="dashboard__order-history-title">
+                <h2 class="font-body--xl-500">Vendors</h2>
               </div>
-              <div class="dashboard__content-card-body px-0">
-                <table class="datatable table display" style="width:100%;font-size:13px">
-                  <thead>
-                    <tr>
-                      <th scope="col" class="cart-table-title">Vendor Details</th>
-                      <th scope="col" class="cart-table-title">Location</th>
-                      <th scope="col" class="cart-table-title">Shops</th>
-                      <th scope="col" class="cart-table-title">Plan</th>
-                      <th scope="col" class="cart-table-title">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($users as $user)
-                      <tr class="likeditem">
-                        <!-- Product item  -->
-                        <td class="cart-table-item align-middle">
-                            {{$user->name}} <br>
-                            <small>{{$user->email}}</small>
-                        </td>
-                        <td class="cart-table-item align-middle">
-                          {{$user->state->name}}, {{$user->country->name}} <br>
-                          <small>{{$user->phone}}</small>
-                      </td>
-                        <td class="cart-table-item order-date align-middle">      
-                          {{$user->shops->count()}}
-                        </td>
-                        
-                        <td class="cart-table-item order-date align-middle">
-                          @if(!$user->subscription->end_at)
-                          {{$user->subscription->plan->name}}
-                          @else {{$user->subscription->plan->name}} <br> <small>{{$user->subscription->start_at->format('d M,Y')}} - {{$user->subscription->end_at ? $user->subscription->end_at->format('d M,Y') : '-'}}</small>
-                          @endif
-                        </td>
-                        
-                        <!-- Stock Status  -->
-                        <td class="cart-table-item order-date align-middle">
-                            @if($user->subscription->end_at)
-                              @if($user->subscription->expired())
-                                  <button class="badge btn-danger">Expired </button>
-                              @elseif($user->subscription->renew_at && $user->subscription->renew_at < now())
-                                  <button class="badge btn-warning">Expiring </button>
-                              @elseif(!$user->subscription->status)
-                                  <button class="badge btn-danger">Not Active </button>
-                              @else 
-                                  <button class="badge btn-success">Active </button>
-                              @endif
-                            @else
-                              <button class="badge btn-success">Active </button>
-                            @endif
-                        </td>
+              <div class="filter__sidebar">
+                <button class="filter">
+                    <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 5.75C18.4142 5.75 18.75 5.41421 18.75 5C18.75 4.58579 18.4142 4.25 18 4.25V5.75ZM9 4.25C8.58579 4.25 8.25 4.58579 8.25 5C8.25 5.41421 8.58579 5.75 9 5.75V4.25ZM18 4.25H9V5.75H18V4.25Z" fill="white"></path>
+                        <path
+                            d="M13 14.75C13.4142 14.75 13.75 14.4142 13.75 14C13.75 13.5858 13.4142 13.25 13 13.25V14.75ZM4 13.25C3.58579 13.25 3.25 13.5858 3.25 14C3.25 14.4142 3.58579 14.75 4 14.75V13.25ZM13 13.25H4V14.75H13V13.25Z"
+                            fill="white"
+                        ></path>
+                        <circle cx="5" cy="5" r="4" stroke="white" stroke-width="1.5"></circle>
+                        <circle cx="17" cy="14" r="4" stroke="white" stroke-width="1.5"></circle>
+                    </svg>
+                </button>
+                <div class="filter-box">
+                    <div class="container">
+                        <form action="{{route('admin.vendors')}}" method="get" id="filterform">
+                            <div class="filter-box__top">
+                                <div class="filter-box__top-left">
+                                    @if(auth()->user()->role->name == 'superadmin')                                  
+                                    <div class="select-box--item" style="min-width: 200px!important">
+                                        <select name="country_id" id="country_id" class="select2" onchange="document.getElementById('filterform').submit();">
+                                            <option></option>
+                                            <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$users->count()}}</option>
+                                                @foreach ($countries->sortBy('category') as $country)
+                                                    <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$users->where('country_id',$country->id)->count()}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    @endif
+                                    <div class="form-input mb-0">
+                                      <input type="text" name="name" value="{{$name}}" placeholder="Search Name" oninput="this.value.length > 2 ? document.getElementById('filterform').submit() : ''">
+                                    </div>
+                                    <div class="select-box--item" style="min-width: 200px!important">
+                                        <select name="subscription" id="order_status" class="select2" onchange="document.getElementById('filterform').submit();">
+                                            <option></option>
+                                            <option value="all" @if($subscription == 'all') selected @endif>All Subscriptions</option>
+                                            @foreach ($plans as $plan)
+                                              <option value="{{$plan->id}}" @if($subscription == $plan->id) selected @endif>{{ucwords($plan->name)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="filter-box__top-right">
+                                  <div class="select-box--item" style="min-width: 200px!important">
+                                      <select name="sortBy" id="sort-byd" class="form-control" onchange="document.getElementById('filterform').submit();">
+                                          <option value="name_asc" @if($sortBy == 'name_asc') selected @endif>Sort by: Name Asc</option>
+                                          <option value="name_desc" @if($sortBy == 'name_desc') selected @endif>Sort by: Date Desc</option>  
+                                      </select>
+                                  </div>
+                              </div>
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+              <div class="dashboard__order-history-table">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="dashboard__order-history-table-title"> Vendor</th>
+                        <th scope="col" class="dashboard__order-history-table-title">  Location</th>
+                        <th scope="col" class="dashboard__order-history-table-title">  Subscription</th>
+                        <th scope="col" class="dashboard__order-history-table-title text-end">  Worth</th>
                       </tr>
-                    @endforeach
-                  </tbody>
-                </table>
-
+                    </thead>
+                    <tbody>
+                      @forelse($users as $user)
+                      <tr>
+                        <!-- Order Id  -->
+                        <td class="dashboard__order-history-table-item order-id"> 
+                          <a href="{{route('admin.user.show',$user)}}" class="text-success"> {{$user->name}}</a>
+                        </td>
+                        <!-- Date  -->
+                        <td class="dashboard__order-history-table-item order-date "> 
+                          {{$user->state->name}}, {{$user->country->name}}
+                        </td>
+          
+                        <td class="dashboard__order-history-table-item order-status "> 
+                          {{$user->subscription->plan->name}} - {{$user->subscription->end_at ? $user->subscription->end_at->diffInDays(now())." days remaning" : 'No expiry'}}
+                        </td>
+                        <!-- Total  -->
+                        <td class="dashboard__order-history-table-item order-total "> 
+                            <p class="order-total-price">   {!!$user->country->currency->symbol!!}{{ number_format($user->shops->sum('wallet'))}} </p>
+                        </td>
+                       
+                      </tr>  
+                        @empty
+                        <tr>
+                          <td colspan="5">
+                            <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
+                              <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
+                              <br />You have no subscribers at this time.
+                          </div>
+                          </td>
+                        </tr>
+                        
+                      @endforelse
+                      
+                    </tbody>
+                  </table>
+                </div>
                 @include('layouts.pagination',['data'=> $users])
               </div>
-            </div>  
-        </div>
+          </div>
+            
+          </div>
         </div>
       </div>
     </div>
