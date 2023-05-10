@@ -56,7 +56,6 @@ class CartController extends Controller
         $carts = $this->addToCartSession($product,$quantity,$update);
         if(auth()->check()){
             $this->addToCartDb($product,$quantity,$update);
-            $carts = auth()->user()->carts;
         }
         return in_array('web',request()->route()->middleware()) ?
             response()->json([
@@ -67,9 +66,9 @@ class CartController extends Controller
             ], 200):
             response()->json([
                 'status' => true,
-                'message' => $carts->count() ? 'Cart retrieved Successfully':'No item in cart',
-                'data' => CartResource::collection($carts),
-                'count' => $carts->count() ?? 0
+                'message' => auth()->user()->carts->count() ? 'Cart retrieved Successfully':'No item in cart',
+                'data' => CartResource::collection(auth()->user()->carts),
+                'count' => auth()->user()->carts->count() ?? 0
             ], 200);
         
     }
@@ -81,7 +80,6 @@ class CartController extends Controller
         $carts = $this->removeFromCartSession($product);
         if($user = auth()->user()){
             $this->removeFromCartDb($product);
-            $carts = $user->carts;
         }
         
         return in_array('web',request()->route()->middleware()) ?
@@ -93,9 +91,9 @@ class CartController extends Controller
             ], 200):
             response()->json([
                 'status' => true,
-                'message' => $carts->count() ? 'Cart retrieved Successfully':'No item in cart',
-                'data' => CartResource::collection($carts),
-                'count' => $carts->count() ?? 0
+                'message' => auth()->user()->carts->count() ? 'Cart retrieved Successfully':'No item in cart',
+                'data' => CartResource::collection(auth()->user()->carts),
+                'count' => auth()->user()->carts->count() ?? 0
             ], 200);
     }
 

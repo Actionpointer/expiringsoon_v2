@@ -10,6 +10,7 @@ $(document).on('click','.add-to-cart',function(){
             'product_id': product_id
         },
         success:function(data) {
+            console.log(data);
                 var cart_total = 0;
                 $(".cart-counter").text(data.count);
                 $(".ec-cart-count").text(data.count);
@@ -108,7 +109,6 @@ function updatecart(product_id,quantity){
 } 
 
 $(document).on('click','.remove-from-cart',function(){
-    alert('ok');
     var product_id = parseInt($(this).attr('data-product'));
 
     $.ajax({
