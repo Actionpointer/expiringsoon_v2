@@ -41,7 +41,7 @@ class OrderController extends Controller
     
     public function index(){
         $user = auth()->user();
-        $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
+        $orders = Order::where('user_id',$user->id)->whereHas('statuses')->orderBy('created_at','desc')->get();
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,

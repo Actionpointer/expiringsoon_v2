@@ -179,7 +179,7 @@
                               <h5 class="font-body--sm-400 px-2"> 
                                 {{$notification->data['body']}}
                               </h5>
-                              @if($notification->data['url'])
+                              @if(array_key_exists('url',$notification->data))
                               <div>
                                 <a href="{{url($notification->data['url'])}}" class="btn btn-sm btn-outline-dark">View</a>
                               </div>
