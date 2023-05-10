@@ -6,7 +6,6 @@ many events cannot call one listener - use subscribers to do this
 ad preview
 
 4. 
-security alerts ipaddress, failed logins, block ipaddress from security page, once someone is throttled etc
 export orders, revenue to excel file for auditors
 
 CRON JOB
@@ -28,7 +27,6 @@ hot deals mobile view (home page & hot deals page)
 
 NOTIFICATIONS
 
-
 Products[
     Product Status - Shop
 ]
@@ -36,13 +34,9 @@ Shops[
     Shop Status - Vendor
     Orientation - after creation - Vendor
 ]
-
-
 Users[
     KYC
     Security
     Welcome - Vendor
     Invitation - Staff
-
 ]
-

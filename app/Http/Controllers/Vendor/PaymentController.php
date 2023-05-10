@@ -7,6 +7,7 @@ use App\Models\Payout;
 use Illuminate\Http\Request;
 use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PayoutTrait;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopPayoutResource;
 use App\Http\Resources\VendorPaymentResource;
@@ -23,7 +24,7 @@ class PaymentController extends Controller
     //vendor payments to us
     public function index(){
         $user = auth()->user();
-        // $user->unreadNotifications->whereJsonContains('data->related_to','payment')->markAsRead();
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$user->id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','payment')->update(['read_at'=> now()]);
         $payments = $user->payments->where('status','success')->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ?  
         response()->json([
@@ -49,7 +50,7 @@ class PaymentController extends Controller
     
     //all payouts
     public function payouts(Shop $shop){
-        $shop->unreadNotifications->whereJsonContains('data->related_to','payout')->markAsRead();
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','payout')->update(['read_at'=> now()]);
         $payouts = $shop->payouts->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ? 
         response()->json([

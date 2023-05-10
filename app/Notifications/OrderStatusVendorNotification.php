@@ -6,6 +6,7 @@ use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\VendorAlertNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
@@ -85,6 +86,7 @@ class OrderStatusVendorNotification extends Notification
     
     public function toArray($notifiable)
     {
+        $this->status->order->shop->user->notify(new VendorAlertNotification($this->status->order->shop));
         switch($this->status->name){
             case 'processing': $subject = 'New Order'; $message = 'You have a new order containing '.$this->status->order->items->count().' items worth '.$this->status->order->subtotal;
             break;

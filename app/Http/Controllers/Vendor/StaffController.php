@@ -12,6 +12,7 @@ use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
@@ -33,8 +34,9 @@ class StaffController extends Controller
     }
 
     public function dashboard(){
-
+        
         $user = auth()->user(); 
+        DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$user->id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','user')->update(['read_at'=> now()]);
         $orders = Order::whereHas('statuses')->whereHas('shop',function($query) use($user){
             $query->where('user_id',$user->id);
         })->get();

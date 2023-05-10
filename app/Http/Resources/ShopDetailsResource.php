@@ -24,6 +24,7 @@ class ShopDetailsResource extends JsonResource
             "user_name"=> $this->user->name,
             "user_image"=> $this->user->image,
             "slug"=> $this->slug,
+            "url"=> route('vendor.show',$this->slug),
             "name"=> $this->name,
             "description"=> $this->description,
             "email"=> $this->email,

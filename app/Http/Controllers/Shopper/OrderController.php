@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\ProductResource;
@@ -53,7 +54,7 @@ class OrderController extends Controller
     }
     
     public function show(Order $order){
-        // $notifications = $order->user->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
+        DB::table('notifications')->whereNull('read_at')->where('notifiable_id',auth()->id())->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
         $messages = OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\User');
         })->orWhere(function($qeury) use($order){
@@ -345,18 +346,21 @@ class OrderController extends Controller
     public function message(Request $request){
         $order = Order::find($request->order_id);
         $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type, 'body'=> $request->body]);
+        
         if($message->receiver_type == 'App\Models\User'){
             $receiver = User::find($message->receiver_id);
         }else{
             $receiver = Shop::find($message->receiver_id);
         }
+        
         $receiver->notify(new OrderMessageNotification($message));
+        
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
             'message' => 'Message Sent Successfully',
         ], 200) :
-         redirect()->back();
+         redirect()->back()->with(['result'=> 1,'message'=> 'Message sent']);
     }
 
     public function review(Request $request){

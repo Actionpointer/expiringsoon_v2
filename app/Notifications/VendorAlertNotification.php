@@ -2,25 +2,25 @@
 
 namespace App\Notifications;
 
-use App\Models\Review;
+use App\Models\Shop;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Notifications\VendorAlertNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ProductReviewNotification extends Notification
+class VendorAlertNotification extends Notification
 {
     use Queueable;
-    public $review;
+    public $shop;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Review $review)
+    public function __construct(Shop $shop)
     {
-        $this->review = $review;
+        $this->shop = $shop;
     }
 
     /**
@@ -56,14 +56,12 @@ class ProductReviewNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        $this->review->product->shop->user->notify(new VendorAlertNotification($this->review->product->shop));
         return [
-            'subject' => 'New Product Review',
-            'body' => 'You have a new review on '.$this->review->product->name.'. Check it out!',
-            'url'=> route('product.show',$this->review->product),
-            'id'=> $this->review->product_id,
-            'related_to'=> 'product'
-        
+            'subject' => 'Shop Notification',
+            'body' => 'You have a new shop notification',
+            'url'=> route('vendor.shop.show',$this->shop),
+            'id'=> $this->shop->id,
+            'related_to'=> 'user'
         ];
     }
 }

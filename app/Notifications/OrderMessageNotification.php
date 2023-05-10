@@ -4,9 +4,10 @@ namespace App\Notifications;
 
 use App\Models\OrderMessage;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\VendorAlertNotification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class OrderMessageNotification extends Notification
 {
@@ -61,6 +62,7 @@ class OrderMessageNotification extends Notification
             }
         }else{
             $url = route('vendor.shop.order.view',[$this->orderMessage->order->shop,$this->orderMessage->order]);
+            $this->orderMessage->order->shop->user->notify(new VendorAlertNotification($this->orderMessage->order->shop));
         }
         return [
             'subject' => 'New Order Message',

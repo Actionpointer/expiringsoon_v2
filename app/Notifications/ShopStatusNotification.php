@@ -2,23 +2,24 @@
 
 namespace App\Notifications;
 
+use App\Models\Shop;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class ShopStatusNotification extends Notification
 {
     use Queueable;
-
+    public $shop;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Shop $shop)
     {
-        //
+        $this->shop = $shop;
     }
 
     /**
@@ -29,7 +30,7 @@ class ShopStatusNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -55,7 +56,11 @@ class ShopStatusNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            // 'subject' => 'Payout '.$this->payout->status,
+            // 'body' => $message,
+            // 'url'=> $notifiable->id == $this->payout->user_id ? route('vendor.shop.payouts',$this->payout->shop,$this->payout) : route('admin.payouts'),
+            // 'id'=> $this->payout->id,
+            // 'related_to'=> 'payout'
         ];
     }
 }

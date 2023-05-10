@@ -12,6 +12,7 @@ use App\Models\OrderStatus;
 use App\Models\OrderDispute;
 use App\Models\OrderMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Notifications\OrderMessageNotification;
 
@@ -68,7 +69,7 @@ class OrderController extends Controller
 
     public function show(Order $order){
         $user = auth()->user();
-        // $notifications = $user->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
+        DB::table('notifications')->whereNull('read_at')->where('notifiable_id',auth()->id())->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
         return view('admin.orders.view',compact('order'));
     }
 

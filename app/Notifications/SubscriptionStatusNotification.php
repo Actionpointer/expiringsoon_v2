@@ -69,7 +69,8 @@ class SubscriptionStatusNotification extends Notification
             'subject' => ucwords($this->status()).' Subscription',
             'body' => $message,
             'url' => route('vendor.dashboard'),
-            'id'=> $this->subscription->user_id
+            'id'=> $this->subscription->user_id,
+            'related_to'=> 'user'
         ];
     }
 }

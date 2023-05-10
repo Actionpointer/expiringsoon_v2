@@ -10,6 +10,7 @@ use App\Models\OrderStatus;
 use App\Models\OrderMessage;
 use Illuminate\Http\Request;
 use App\Http\Traits\OrderTrait;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderDetailsResource;
@@ -25,6 +26,7 @@ class OrderController extends Controller
     }
 
     public function index(Shop $shop,$status = null){
+        
         $orders = Order::where('shop_id',$shop->id);
         if($status == 'opened'){
             $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['processing','shipped','delivered']);});
@@ -58,7 +60,7 @@ class OrderController extends Controller
     
 
     public function show(Shop $shop,Order $order){
-        // $notifications = $order->shop->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
         $messages = OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop');
         })->orWhere(function($qeury) use($order){

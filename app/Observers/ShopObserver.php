@@ -40,7 +40,7 @@ class ShopObserver
                 $shop->addressproof->save();
                 $shop->approved = false;
                 $shop->save();
-                $shop->user->notify(new ShopStatusNotification('disapproved','Shop new address does not match address proof document'));
+                $shop->user->notify(new ShopStatusNotification($shop));
             }
             
         }
@@ -51,7 +51,7 @@ class ShopObserver
                 $shop->companydoc->save();
                 $shop->approved = false;
                 $shop->save();
-                $shop->user->notify(new ShopStatusNotification('disapproved','Shop new name does not match kyc document'));
+                $shop->user->notify(new ShopStatusNotification($shop));
             }
             
         }
