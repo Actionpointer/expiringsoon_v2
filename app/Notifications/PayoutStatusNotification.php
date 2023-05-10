@@ -67,7 +67,8 @@ class PayoutStatusNotification extends Notification
         return [
             'subject' => 'Payout '.$this->payout->status,
             'body' => $message,
-            'url'=> $notifiable->id == $this->payout->user_id ? route('vendor.shop.payouts',$this->payout->shop,$this->payout) : route('admin.payouts') 
+            'url'=> $notifiable->id == $this->payout->user_id ? route('vendor.shop.payouts',$this->payout->shop,$this->payout) : route('admin.payouts'),
+            'id'=> $this->payout->id
         ];
     }
 }

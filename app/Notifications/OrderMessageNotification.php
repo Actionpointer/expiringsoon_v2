@@ -65,7 +65,8 @@ class OrderMessageNotification extends Notification
         return [
             'subject' => 'New Order Message',
             'body' => 'You have a new message for order #'.$this->orderMessage->order->slug,
-            'url'=> $url
+            'url'=> $url,
+            'id'=> $this->orderMessage->order_id
         ];
     }
 }

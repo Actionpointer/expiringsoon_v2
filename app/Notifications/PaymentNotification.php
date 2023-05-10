@@ -62,7 +62,8 @@ class PaymentNotification extends Notification
         return [
             'subject' => 'Payment Received',
             'body' => 'Payment Received for '.str_replace('App\Models\\','',$purpose),
-            'url'=> $url 
+            'url'=> $url,
+            'id'=> $this->payment->id
         ];
     }
 }

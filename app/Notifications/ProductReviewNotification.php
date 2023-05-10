@@ -58,7 +58,8 @@ class ProductReviewNotification extends Notification
         return [
             'subject' => 'New Product Review',
             'body' => 'You have a new review on '.$this->review->product->name.'. Check it out!',
-            'url'=> route('product.show',$this->review->product) 
+            'url'=> route('product.show',$this->review->product),
+            'id'=> $this->review->product_id
         
         ];
     }

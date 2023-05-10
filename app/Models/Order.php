@@ -23,7 +23,7 @@ class Order extends Model
     use HasFactory,Sluggable;
     
     protected $fillable = ['slug','user_id','shop_id','address_id','deliveryfee','deliverer','expected_at','subtotal','vat','total','delivered_at'];
-    protected $dates = ['expected_at','delivered_at'];
+    protected $casts = ['expected_at'=> 'datetime'];
     protected $appends = ['status'];
 
     public function sluggable():array
@@ -78,7 +78,7 @@ class Order extends Model
     }
 
     public function address(){
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class)->withDefault();
     }
     
     public function scopeStatusFilter($query,$value){    
