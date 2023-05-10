@@ -124,7 +124,7 @@
             @forelse($items as $key=>$cart)
               <div class="shoping-card">
                 <div class="shoping-card__img-wrapper">
-                  <img src="./storage/{{$cart['image']}}" alt="product-item">
+                  <img src="{{$cart['image']}}" alt="product-item">
                 </div>
                 <h5 class="shoping-card__product-caption font-body--lg-400">
                   {{$cart['name']}}
