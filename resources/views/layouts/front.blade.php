@@ -66,7 +66,7 @@ function updatecart(product_id,quantity){
             '_token' : $('meta[name="csrf-token"]').attr('content'),
             'product_id': product_id,
             'quantity': quantity,
-            'update': true,
+            'update': 1,
         },
         success:function(data) {
                 // console.log(data.cart);
@@ -108,6 +108,7 @@ function updatecart(product_id,quantity){
 } 
 
 $(document).on('click','.remove-from-cart',function(){
+    alert('ok');
     var product_id = parseInt($(this).attr('data-product'));
 
     $.ajax({
