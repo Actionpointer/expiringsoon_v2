@@ -23,7 +23,7 @@ class PaymentController extends Controller
     //vendor payments to us
     public function index(){
         $user = auth()->user();
-        $user->unreadNotifications->whereJsonContains('data->related_to','payment')->markAsRead();
+        // $user->unreadNotifications->whereJsonContains('data->related_to','payment')->markAsRead();
         $payments = $user->payments->where('status','success')->sortByDesc('created_at')->take(100);
         return request()->expectsJson() ?  
         response()->json([

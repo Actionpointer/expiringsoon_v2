@@ -68,7 +68,7 @@ class OrderController extends Controller
 
     public function show(Order $order){
         $user = auth()->user();
-        $notifications = $user->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
+        // $notifications = $user->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
         return view('admin.orders.view',compact('order'));
     }
 

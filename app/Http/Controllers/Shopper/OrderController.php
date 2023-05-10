@@ -62,7 +62,7 @@ class OrderController extends Controller
     }
     
     public function show(Order $order){
-        $notifications = $order->user->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
+        // $notifications = $order->user->unreadNotifications->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->markAsRead();
         $messages = OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->user_id)->where('receiver_type','App\Models\User');
         })->orWhere(function($qeury) use($order){

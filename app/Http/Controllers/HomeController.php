@@ -36,8 +36,8 @@ class HomeController extends Controller
         $user = auth()->user(); 
         $user = \App\Models\User::find(1);
         // $notifications = $user->unreadNotifications->whereJsonContains('data->id',)->get();
-        $notifications = $user->unreadNotifications->where('type','App\Notifications\SubscriptionStatusNotification');
-        $notifications->first()->markAsRead();
+        // $notifications = $user->unreadNotifications->where('type','App\Notifications\SubscriptionStatusNotification');
+        // $notifications->first()->markAsRead();
         $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
         return view('customer.dashboard',compact('user','orders'));
     }
