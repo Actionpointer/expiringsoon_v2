@@ -89,6 +89,7 @@ class OrderController extends Controller
 
     public function messages(Order $order){
         $user = auth()->user();
+        $notifications = $user->unreadNotifications->whereJsonContains('data->url',route(''))->get();
         OrderMessage::where('order_id',$order->id)->where('sender_id',$user->id)->where('sender_type','App\Models\user')->whereNull('read_at')->update(['read_at'=>now()]);
         return view('admin.orders.messages',compact('order'));
     }

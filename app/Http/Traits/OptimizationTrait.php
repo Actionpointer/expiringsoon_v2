@@ -26,9 +26,9 @@ trait OptimizationTrait
     }
 
     protected function decreaseProducts(Order $order){
-        foreach($order->items as $cart){
-            $cart->product->stock -= $cart->quantity;
-            $cart->product->save();
+        foreach($order->items as $item){
+            $item->product->stock -= $item->quantity;
+            $item->product->save();
         }
     }
 

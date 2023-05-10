@@ -34,6 +34,11 @@ class HomeController extends Controller
     public function dashboard(){
         /** @var \App\Models\User $user **/         
         $user = auth()->user(); 
+        $product = \App\Models\Product::find(1);
+        $product->stock -= 1;
+        $product->save();
+        // $notifications = $user->unreadNotifications->whereJsonContains('data->url',route(''))->get();
+        
         $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
         return view('customer.dashboard',compact('user','orders'));
     }

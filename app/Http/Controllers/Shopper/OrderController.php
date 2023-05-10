@@ -131,14 +131,15 @@ class OrderController extends Controller
             return redirect()->back();
         }
         foreach($items as $key => $value){
-            $this->addToCartDb($value['product'],$value['quantity'],true);
+            $this->addToCartDb(Product::find($value['product_id']),$value['quantity'],true);
         }
         $carts = Cart::where('user_id',$user->id);
         if($shop){
             $carts = $carts->where('shop_id',$shop->id);
         }
+        
         $carts = $carts->whereHas('product',function($query) use($items){
-                    $query->whereIn('product_id',array_keys($items))->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
+                    $query->whereIn('product_id',$items->pluck('product_id')->toArray())->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
                  })->get();
         $order = $this->getOrder($carts);
         $rates = Rate::where('country_id',$user->country_id)->whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
