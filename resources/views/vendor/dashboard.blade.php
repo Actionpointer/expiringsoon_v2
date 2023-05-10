@@ -104,7 +104,7 @@
                         <div class="dashboard__totalpayment-card-body-item">
                           <div class="d-flex">
                               <div>
-                                <small class="muted font-body--sm-400 text-nowrap">12-May</small>
+                                <small class="muted font-body--sm-400 text-nowrap">{{$notification->created_at->format('d-M')}}</small>
                               </div>
                               
                               <h5 class="font-body--sm-400 px-2"> 

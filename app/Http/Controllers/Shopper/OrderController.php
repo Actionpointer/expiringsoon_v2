@@ -137,6 +137,7 @@ class OrderController extends Controller
             }
             else {
                 $carts = $this->removeFromCartSession($product); 
+                $this->removeFromCartDb($product); 
             }
         }
         $carts = Cart::where('user_id',$user->id);
