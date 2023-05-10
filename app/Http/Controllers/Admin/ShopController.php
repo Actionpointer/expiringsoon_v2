@@ -22,35 +22,49 @@ class ShopController extends Controller
     public function index(){
         
         $country_id = null;
+        $status = 'all';
         $sortBy = null;
         $name = null;
-        $users = Shop::within()->whereHas('role',function($query){$query->where('name','shopper');});
+        $shops = Shop::within();
         if(request()->query() && request()->query('name')){
             $name = request()->query('name');
-            $users = $users->where(function($or) use($name){
-                $or->where('fname','LIKE',"%$name%")->orWhere('lname','LIKE',"%$name%");
+            $shops = $shops->where(function($or) use($name){
+                $or->where('name','LIKE',"%$name%")->orWhereHas('user',function($us)use($name){
+                    $us->where('fname','LIKE',"%$name%")->orWhere('lname','LIKE',"%$name%");
+                });
             });
         }
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');
-            $users = $users->where('country_id',$country_id);
+            $shops = $shops->where('country_id',$country_id);
         }else{
             $country_id = 0;
+        }
+        if(request()->query() && request()->query('status') && request()->query('status') != 'all'){
+            $status = request()->query('status');
+            if($status == 'live')
+            $shops = $shops->isApproved()->isVisible()->isActive();
+            if($status == 'pending')
+            $shops = $shops->where('approved',false);
+            if($status == 'inactive')
+            $shops = $shops->where('status',false);
+            if($status == 'draft')
+            $shops = $shops->where('published',false);
         }
         
         if(request()->query() && request()->query('sortBy')){
             $sortBy = request()->query('sortBy');
             if(request()->query('sortBy') == 'name_asc'){
-                $users = $users->orderBy('fname','asc');
+                $shops = $shops->orderBy('name','asc');
             }
             if(request()->query('sortBy') == 'name_desc'){
-                $users = $users->orderBy('fname','desc');
+                $shops = $shops->orderBy('name','desc');
             }
             
         }
         $countries = Country::all();
-        $users = $users->paginate(16);
-        return view('admin.shops.list',compact('shops','countries','country_id','sortBy','name'));
+        $shops = $shops->paginate(16);
+        return view('admin.shops.list',compact('shops','status','countries','country_id','sortBy','name'));
     }
 
 

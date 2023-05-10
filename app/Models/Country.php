@@ -21,6 +21,9 @@ class Country extends Model
     public function users(){
         return $this->hasMany(User::class);
     }
+    public function shops(){
+        return $this->hasMany(Shop::class);
+    }
     public function states(){
         return $this->hasMany(State::class);
     }
