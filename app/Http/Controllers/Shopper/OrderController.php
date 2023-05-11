@@ -169,6 +169,12 @@ class OrderController extends Controller
             $query->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
         })->get();
         Cart::where('user_id',$user->id)->whereNotIn('id',$carts->pluck('id')->toArray())->delete();
+        if($carts->isEmpty()){
+            return response()->json([
+                'status' => false,
+                'message' => 'Cart is Empty',
+            ],401);
+        }
         foreach($carts->groupBy('shop_id') as $key=>$group){
             $shops[] = ['id'=> $key,'name'=> $group->first()->shop->name,
             'location'=> ($group->first()->shop->city ? $group->first()->shop->city->name.', ' : '').$group->first()->shop->state->name,

@@ -34,7 +34,7 @@ class PaymentController extends Controller
     }
 
     public function settlements(){
-        $settlements = Settlement::within()->paginate(4);
+        $settlements = Settlement::within()->paginate(50);
         $min_date = $settlements->min('created_at')->format('Y-m-d');
         $max_date = $settlements->min('created_at')->format('Y-m-d');
         // dd($min_date->format('Y-m-d'));
