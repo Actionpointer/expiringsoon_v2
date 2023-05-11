@@ -28,6 +28,7 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
     Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');
     
     Route::post('payout',[PaymentController::class, 'payout'])->name('payout');
+    Route::post('payout/manage',[PaymentController::class, 'payout_manage'])->name('payout.manage');
     
   
     Route::get('notifications',[ShopController::class, 'notifications'])->name('notifications');

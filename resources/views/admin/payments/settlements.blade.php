@@ -27,7 +27,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Paymens</a></li>
+          <li class="active"><a href="#">Settlements</a></li>
         </ul>
       </div>
     </div>
@@ -41,10 +41,63 @@
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           <div class="container">
             <div class="dashboard__content-card">
-                <div class="dashboard__content-card-header">
-                    <h5 class="font-body--xl-500">Settlements</h5>
+                <div class="dashboard__content-card-header d-flex justify-content-between">
+                  <h5 class="font-body--xl-500">Settlements</h5>
+                  @can('download','App\Models\Settlement')
+                  <a href="{{route('admin.settlements.export')}}">Download</a>
+                  @endcan
                 </div>
                 <div class="dashboard__content-card-body">
+                  <div class="accordion mb-3" id="faq-accordion">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          Download
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faq-accordion">
+                        <div class="accordion-body">
+                          <form action="{{route('admin.settlements.export')}}" method="post">@csrf
+                            <div class="row gx-0">
+                              <div class="col-3">
+                                  <label for="">Description</label>
+                                  <select name="description" id="purpose" class="select2">
+                                    <option></option>
+                                    <option value="all">All</option>
+                                    <option value="Refund">Refund</option>
+                                    <option value="Commission">Commission</option>
+                                    <option value="Shipment">Shipment</option>  
+                                  </select>
+                              </div>
+                              <div class="col-3">
+                                  <label for="">Status</label>
+                                  <select name="status" id="status" class="select2">
+                                    <option></option>
+                                    <option value="all">All</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="paid">Paid</option>   
+                                  </select>
+                              </div>
+                              <div class="col-4">
+                                <label for="">Daterange</label>
+                                <div class="input-group d-flex">
+                                  <div class="prepend">
+                                      <input type="date" min="{{$min_date}}" name="from_date" class="form-control-sm border text-secondary" style="height:50px;" />
+                                  </div>
+                                  <div>
+                                      <input type="date" max="{{$max_date}}" name="to_date" class="form-control-sm border text-secondary" style="height:50px;"  />
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-2">
+                                  <button class="button button--md mt-4">Submit</button>
+                              </div>
+                            </div> 
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <table id="datatable" class="table display" style="width:100%;font-size:13px">
                       <thead>
                           <tr>

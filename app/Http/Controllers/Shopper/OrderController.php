@@ -132,12 +132,9 @@ class OrderController extends Controller
         }
         foreach($items as $key => $value){
             $product = Product::find($value['product_id']);
-            if($product->certified()){
-                $this->addToCartDb($product,$value['quantity'],true);
-            }
-            else {
-                $carts = $this->removeFromCartSession($product); 
-                $this->removeFromCartDb($product); 
+            if(!$product->certified()){
+                $this->removeFromCartDb($product);
+                $carts = $this->removeFromCartSession($product);
             }
         }
         $carts = Cart::where('user_id',$user->id);

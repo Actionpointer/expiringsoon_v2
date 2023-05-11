@@ -223,7 +223,7 @@
             </div>
             
             <!-- Order History  -->
-            @if($user->role->name != 'auditor')
+            @can('list','App\Models\Order')
             <div class="dashboard__order-history" style="margin-top: 24px">
               <div class="dashboard__order-history-title">
                 <h2 class="font-body--xxl-500">Recent Orders</h2>
@@ -286,7 +286,7 @@
                 </div>
               </div>
             </div>
-            @endif
+            @endcan
           </div>
         </div>
       </div>

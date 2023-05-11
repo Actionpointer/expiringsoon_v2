@@ -50,8 +50,9 @@ trait CartTrait
                 else{
                     $carts = $carts->map(function ($item, $key) use($product,$quantity){
                         if($item['product_id'] == $product->id) {
-                            $item['quantity'] += $quantity;
-                            $item['total'] = $product->amount * $item['quantity'];
+                            $new_quantity = $item['quantity'] + $quantity;
+                            $item['quantity'] = $new_quantity;
+                            $item['total'] = $product->amount * $new_quantity;
                         }
                         return $item;
                     });
@@ -109,9 +110,10 @@ trait CartTrait
                     $dbcart->total = $quantity * $product->amount;
                 }   
                 else {
+                    $new_quantity = $dbcart->quantity + $quantity;
                     $dbcart->quantity = $dbcart->quantity + $quantity;
                     $dbcart->amount = $product->amount;
-                    $dbcart->total = ($dbcart->quantity + $quantity) * $product->amount;
+                    $dbcart->total = $new_quantity * $product->amount;
                 }
                 $dbcart->save();
             }

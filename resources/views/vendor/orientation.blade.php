@@ -24,7 +24,7 @@
                     <span> > </span>
                 </a>
                 </li>
-                <li class="active"><a href="{{route('wishlist')}}">Wishlist</a></li>
+                <li class="active"><a href="{{route('wishlist')}}">Orientation</a></li>
             </ul>
             </div>
         </div>

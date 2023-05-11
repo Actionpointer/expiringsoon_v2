@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Payout;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class PayoutsExport implements FromCollection
@@ -11,6 +12,6 @@ class PayoutsExport implements FromCollection
     */
     public function collection()
     {
-        //
+        return Payout::within()->where('status','paid')->get();
     }
 }

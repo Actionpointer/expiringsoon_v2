@@ -23,6 +23,8 @@ class ShopPolicy
     }
 
     
+
+    
     public function view(User $user, Shop $shop)
     {
         if($shop->user_id == $user->id || $user->shop_id == $shop->id){

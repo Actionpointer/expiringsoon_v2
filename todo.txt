@@ -5,8 +5,6 @@ many events cannot call one listener - use subscribers to do this
 3. 
 ad preview
 
-4. 
-export orders, revenue to excel file for auditors
 
 CRON JOB
 when order rejected but was not returned. - cron job

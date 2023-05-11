@@ -41,8 +41,11 @@
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
             <div class="container">
                 <div class="dashboard__content-card">
-                    <div class="dashboard__content-card-header">
+                    <div class="dashboard__content-card-header d-flex justify-content-between">
                         <h5 class="font-body--xl-500">Payments</h5>
+                        @can('download','App\Models\Payment')
+                        <a href="{{route('admin.payments.export')}}">Download</a>
+                        @endcan
                     </div>
                     <div class="dashboard__content-card-body px-0">
                         <form id="approveform" action="{{route('admin.payouts.manage')}}" method="POST">@csrf

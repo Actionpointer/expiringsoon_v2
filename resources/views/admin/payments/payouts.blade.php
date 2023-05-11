@@ -41,9 +41,12 @@
         <div class="col-lg-9 pt-0" style="padding:10px;font-size:13px">
           <div class="container">
             <div class="dashboard__content-card">
-                <div class="dashboard__content-card-header">
-                    <h5 class="font-body--xl-500">Payouts</h5>
-                </div>
+              <div class="dashboard__content-card-header d-flex justify-content-between">
+                <h5 class="font-body--xl-500">Payouts</h5>
+                @can('download','App\Models\Payout')
+                <a href="{{route('admin.payouts.export')}}">Download</a>
+                @endcan
+            </div>
                 <div class="dashboard__content-card-body px-0">
                   <div class="dropdown">
                     <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

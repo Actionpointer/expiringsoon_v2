@@ -64,6 +64,14 @@ class PaymentController extends Controller
     //request payout
     public function payout(Shop $shop,Request $request){
         $user = $shop->user;
+        if($request->payout_id){
+            Payout::where('id',$request->payout_id)->delete();
+            return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Payout Cancel Successful',
+            ], 200) : redirect()->back()->with(['result'=> '1','message'=> 'Payout Cancel Successful']);  
+        }
         if($request->amount < $shop->user->minimum_payout() || $request->amount > $shop->user->maximum_payout()){
             return request()->expectsJson() ? 
             response()->json([
@@ -94,6 +102,7 @@ class PaymentController extends Controller
             'message' => 'Payout Request Successful',
         ], 200) : redirect()->back()->with(['result'=> '1','message'=> 'Payout Request Successful']); 
     }
+
 
     public function payoutcallback(Request $request){
         

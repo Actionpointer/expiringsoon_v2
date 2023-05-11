@@ -112,7 +112,16 @@
                                   <td class="cart-table-item order-date align-middle">
                                     @switch($payout->status)
                                         @case('pending')
-                                              <p style="color:#cc7817;font-size:14px"><span id="status">Pending</span></p>
+                                              <div class="d-flex">
+                                                  <p style="color:#cc7817;font-size:14px">
+                                                    <span id="status">Pending</span>
+                                                  </p>
+                                                  <form action="{{route('vendor.shop.payout',$shop)}}" method="post" class="mx-3 d-inline" onsubmit="return confirm('Are you sure you want to cancel this payout?');">@csrf
+                                                    <input type="hidden" name="payout_id" value="{{$payout->id}}">
+                                                    <button class="btn btn-sm btn-danger">Cancel</button>
+                                                  </form>
+                                              </div>
+                                              
                                             @break
                                         @case('approved')
                                             <p style="color:#5e2ed9;font-size:14px;font-weight:500">Approved</p>
