@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Bank;
-use App\Models\Shop;
 use App\Models\Payout;
-use App\Models\Account;
+use App\Models\Country;
 use App\Models\Payment;
-use App\Models\Setting;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
-use App\Events\DisbursePayout;
 use App\Exports\PayoutsExport;
 use App\Exports\PaymentsExport;
-use Illuminate\Validation\Rule;
 use App\Exports\SettlementsExport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -26,52 +21,172 @@ class PaymentController extends Controller
     }
 
     public function index(){
-        $payments = Payment::within()->where('status','success')->paginate(10);
-        return view('admin.payments.index',compact('payments'));
+        
+        $description = 'all';
+        $country_id = null;
+        $sortBy = null;
+        $status = null;
+        $payments = Payment::within();
+        if(request()->query() && request()->query('status')){
+            $status = request()->query('status');
+            $payments = $payments->where('status',strtolower($status));
+        }
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $payments = $payments->whereHas('user',function($quement) use($country_id){
+                $quement->where('country_id',$country_id);
+            });
+        }else{
+            $country_id = 0;
+        }
+
+        if(request()->query() && request()->query('description') && request()->query('description') != 'all'){
+            $description = request()->query('description');
+            $item = 'App\Models\\'.$description;
+            $payments = $payments->whereHas('items',function($query) use($item){
+                $query->where('paymentable_type',$item);
+            });
+        }
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'date_asc'){
+                $payments = $payments->orderBy('created_at','asc');
+            }
+            if(request()->query('sortBy') == 'date_desc'){
+                $payments = $payments->orderBy('created_at','desc');
+            }
+            
+        }
+        $countries = Country::all();
+        if(request()->query() && request()->query('download')){
+            return Excel::download(new PaymentsExport($payments->get()), 'payments.xlsx');
+        }
+        $payments = $payments->paginate(16);
+        $min_date = $payments->min('created_at')->format('Y-m-d');
+        $max_date = $payments->max('created_at')->format('Y-m-d');
+        return view('admin.payments.index',compact('payments','min_date','max_date','countries','country_id','status','description','sortBy'));
     }
-    public function exportPayments(){
-        return Excel::download(new PaymentsExport, 'payments.xlsx');
-    }
+    
 
     public function settlements(){
-        $settlements = Settlement::within()->paginate(50);
-        $min_date = $settlements->min('created_at')->format('Y-m-d');
-        $max_date = $settlements->min('created_at')->format('Y-m-d');
-        // dd($min_date->format('Y-m-d'));
-        return view('admin.payments.settlements',compact('settlements','min_date','max_date'));
-    }
-
-    public function exportSettlements(Request $request){
+        $description = 'all';
+        $country_id = null;
+        $sortBy = null;
+        $status = 'all';
         $settlements = Settlement::within();
-        if($request->description && $request->description != 'all'){
-            $settlements = $settlements->where('description',$request->description);
+        if(request()->query() && request()->query('status') && request()->query('status') != 'all'){
+            $status = request()->query('status');
+            if($status == "paid"){
+                $settlements = $settlements->where('status',true);
+            }else{
+                $settlements = $settlements->where('status',false);
+            }
+           
         }
-        if($request->status && $request->status == 'pending'){
-            $settlements = $settlements->where('status',false);
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $settlements = $settlements->whereHas('receiver',function($quement) use($country_id){
+                $quement->where('country_id',$country_id);
+            });
+        }else{
+            $country_id = 0;
         }
-        if($request->status && $request->status == 'paid'){
-            $settlements = $settlements->where('status',true);
+        if(request()->query() && request()->query('description') && request()->query('description') != 'all'){
+            $description = request()->query('description');
+            $settlements = $settlements->where('description',$description);
         }
-        if($request->from_date){
-            $settlements = $settlements->where('created_at','>=',$request->from_date);
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'date_asc'){
+                $settlements = $settlements->orderBy('created_at','asc');
+            }
+            if(request()->query('sortBy') == 'date_desc'){
+                $settlements = $settlements->orderBy('created_at','desc');
+            }
+            
         }
-        if($request->to_date){
-            $settlements = $settlements->where('created_at','<=',$request->to_date);
+        $countries = Country::all();
+        if(request()->query() && request()->query('download')){
+            return Excel::download(new SettlementsExport($settlements->get()), 'settlements.xlsx');
         }
-        $settlements = $settlements->select()->get();
-        return Excel::download(new SettlementsExport($settlements), 'settlements.xlsx');
-
+        $settlements = $settlements->paginate(16);
+        $min_date = $settlements->min('created_at')->format('Y-m-d');
+        $max_date = $settlements->max('created_at')->format('Y-m-d');
+        return view('admin.payments.settlements',compact('settlements','min_date','max_date','countries','country_id','status','description','sortBy'));
     }
+
 
     public function payouts()
     {
-        $payouts = Payout::within()->orderBy('created_at','desc')->paginate(10);
-        return view('admin.payments.payouts',compact('payouts'));
-    }
-    public function exportPayouts(){
-        return Excel::download(new PayoutsExport, 'payouts.xlsx');
-    }
+        $receiver = null;
+        $country_id = null;
+        $channel = 'all';
+        $status = 'all';
+        $sortBy = null;
+        $payouts = Payout::within();
+        
+        if(request()->query() && request()->query('status') && request()->query('status') != 'all'){
+            $status = request()->query('status');
+            switch($status){
+                case 'paid': $payouts = $payouts->where('status','paid');
+                    break;
+                case 'pending': $payouts = $payouts->where('status','pending');
+                    break;
+                case 'approved': $payouts = $payouts->where('status','approved');
+                    break;
+                case 'processing': $payouts = $payouts->where('status','processing');
+                    break;
+                default: $payouts = $payouts->where('status','LIKE','%Rejected%');
+                break;
+                
+            } 
+        }
+        if(request()->query() && request()->query('channel') && request()->query('channel') != 'all'){
+            $channel = request()->query('channel');
+            $payouts = $payouts->where('channel',$channel);
+        }
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $payouts = $payouts->whereHas('receiver',function($quement) use($country_id){
+                $quement->where('country_id',$country_id);
+            });
+        }else{
+            $country_id = 0;
+        }
 
+        if(request()->query() && request()->query('receiver')){
+            $receiver = request()->query('receiver');
+            $payouts = $payouts->where(function($rec) use($receiver){
+                $rec->whereHas('user',function($qshment) use($receiver){ 
+                    $qshment->where('fname','LIKE',"%$receiver%")->orWhere('lname','LIKE',"%$receiver%");
+                })->orWhereHas('shop',function($shver) use($receiver){
+                    $shver->where('name','LIKE',"%$receiver%");
+                });
+            });
+        }
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'date_asc'){
+                $payouts = $payouts->orderBy('created_at','asc');
+            }
+            if(request()->query('sortBy') == 'date_desc'){
+                $payouts = $payouts->orderBy('created_at','desc');
+            }
+            
+        }
+        $countries = Country::all();
+        if(request()->query() && request()->query('download')){
+            return Excel::download(new PayoutsExport($payouts->get()), 'payouts.xlsx');
+        }
+        $payouts = $payouts->paginate(16);
+        
+        $min_date = $payouts->min('created_at')->format('Y-m-d');
+        $max_date = $payouts->max('created_at')->format('Y-m-d');
+        return view('admin.payments.payouts',compact('payouts','min_date','max_date','countries','country_id','status','receiver','channel','sortBy'));
+    
+        
+    }
+    
     public function update(Request $request)
     {
 

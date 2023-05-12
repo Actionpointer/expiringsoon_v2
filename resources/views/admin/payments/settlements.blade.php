@@ -1,9 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" /> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/buttons/demo.css')}}"/> --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/> --}}
-
+<link rel="stylesheet" type="text/css" href="{{asset('src/css/custom.css')}}"/>
 @endpush
 @section('title') Settlements | Expiring Soon @endsection
 @section('main')
@@ -38,44 +35,43 @@
     <div class="container">
       <div class="row dashboard__content">
         @include('layouts.admin_navigation')
-        <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
+        <div class="col-lg-9 section--xl pt-0">
           <div class="container">
-            <div class="dashboard__content-card">
-                <div class="dashboard__content-card-header d-flex justify-content-between">
-                  <h5 class="font-body--xl-500">Settlements</h5>
-                  @can('download','App\Models\Settlement')
-                  <a href="{{route('admin.settlements.export')}}">Download</a>
-                  @endcan
-                </div>
-                <div class="dashboard__content-card-body">
+            <div class="dashboard__order-history">
+              <div class="dashboard__order-history-title border-bottom">
+                <h2 class="font-body--xl-500">Settlements</h2>
+              </div>
+              <div class="dashboard__order-history-table">
+                <div class="m-4">
                   <div class="accordion mb-3" id="faq-accordion">
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="headingOne">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                          Download
+                          Manage
                         </button>
                       </h2>
+
                       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faq-accordion">
                         <div class="accordion-body">
-                          <form action="{{route('admin.settlements.export')}}" method="post">@csrf
-                            <div class="row gx-0">
+                          <form action="{{route('admin.settlements')}}" method="get">
+                            <div class="row">
                               <div class="col-3">
                                   <label for="">Description</label>
                                   <select name="description" id="purpose" class="select2">
                                     <option></option>
-                                    <option value="all">All</option>
-                                    <option value="Refund">Refund</option>
-                                    <option value="Commission">Commission</option>
-                                    <option value="Shipment">Shipment</option>  
+                                    <option value="all" @if($description == 'all') selected @endif>All</option>
+                                    <option value="refund" @if($description == 'refund') selected @endif>Refund</option>
+                                    <option value="commission" @if($description == 'commission') selected @endif>Commission</option>
+                                    <option value="shipment" @if($description == 'shipment') selected @endif>Shipment</option>  
                                   </select>
                               </div>
                               <div class="col-3">
                                   <label for="">Status</label>
                                   <select name="status" id="status" class="select2">
                                     <option></option>
-                                    <option value="all">All</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="paid">Paid</option>   
+                                    <option value="all" @if($status == 'all') selected @endif>All</option>
+                                    <option value="pending" @if($status == 'pending') selected @endif>Pending</option>
+                                    <option value="paid" @if($status == 'paid') selected @endif>Paid</option>   
                                   </select>
                               </div>
                               <div class="col-4">
@@ -89,23 +85,32 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-2">
-                                  <button class="button button--md mt-4">Submit</button>
-                              </div>
                             </div> 
+                            <div class="row mt-3 justify-content-center">
+                              <div class="col-md-2">
+                                <button class="button button--md" name="download" value="0">Filter</button>
+                              </div>
+                              @can('download','App\Models\Settlement')
+                              <div class="col-md-2">
+                                <button class="button button--md" name="download" value="1">Download</button>
+                              </div>
+                              @endcan
+                            </div>
                           </form>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <table id="datatable" class="table display" style="width:100%;font-size:13px">
+                </div>
+                <div class="table-responsive">
+                  <table class="table">
                       <thead>
                           <tr>
-                            <th scope="col" class="cart-table-title">Date</th>
-                            <th scope="col" class="cart-table-title">Recipient</th>
-                            <th scope="col" class="cart-table-title">Description</th>
-                            <th scope="col" class="cart-table-title">Amount</th>
-                            <th scope="col" class="cart-table-title">Status</th>
+                            <th scope="col" class="dashboard__order-history-table-title">Date</th>
+                            <th scope="col" class="dashboard__order-history-table-title">Recipient</th>
+                            <th scope="col" class="dashboard__order-history-table-title">Description</th>
+                            <th scope="col" class="dashboard__order-history-table-title">Amount</th>
+                            <th scope="col" class="dashboard__order-history-table-title">Status</th>
                             
                           </tr>
                       </thead>
@@ -145,10 +150,11 @@
                           
                       </tbody>
                   </table>
-                  @include('layouts.pagination',['data'=> $settlements])
                 </div>
+                @include('layouts.pagination',['data'=> $settlements])
+              </div>
             </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>

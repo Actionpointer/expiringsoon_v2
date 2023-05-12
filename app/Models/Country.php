@@ -7,6 +7,8 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
+use App\Models\Payout;
+use App\Models\Payment;
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,6 +38,12 @@ class Country extends Model
     }
     public function orders(){
         return $this->hasManyThrough(Order::class,Shop::class,'country_id','shop_id');
+    }
+    public function payments(){
+        return $this->hasManyThrough(Payment::class,User::class,'country_id','user_id');
+    }
+    public function payouts(){
+        return $this->hasManyThrough(Payout::class,User::class,'country_id','user_id');
     }
 
 }

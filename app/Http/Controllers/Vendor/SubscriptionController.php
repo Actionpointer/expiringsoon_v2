@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
     }
 
     public function plans(){
-        $plans = Plan::orderBy('id','desc')->get();
+        $plans = Plan::orderBy('id','asc')->get();
         $enterprises = $plans->keyBy('slug');
         $user = auth()->user();
         return request()->expectsJson()

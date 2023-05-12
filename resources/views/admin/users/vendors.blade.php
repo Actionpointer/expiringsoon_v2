@@ -87,7 +87,7 @@
                                   <div class="select-box--item" style="min-width: 200px!important">
                                       <select name="sortBy" id="sort-byd" class="form-control" onchange="document.getElementById('filterform').submit();">
                                           <option value="name_asc" @if($sortBy == 'name_asc') selected @endif>Sort by: Name Asc</option>
-                                          <option value="name_desc" @if($sortBy == 'name_desc') selected @endif>Sort by: Date Desc</option>  
+                                          <option value="name_desc" @if($sortBy == 'name_desc') selected @endif>Sort by: Name Desc</option>  
                                       </select>
                                   </div>
                               </div>

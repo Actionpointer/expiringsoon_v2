@@ -2,16 +2,19 @@
 
 namespace App\Exports;
 
-use App\Models\Payout;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class PayoutsExport implements FromCollection
+class PayoutsExport implements FromView
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    public $data;
+    public function __construct($data){
+        $this->data = $data;
+    }
+    public function view(): View
     {
-        return Payout::within()->where('status','paid')->get();
+        return view('admin.payments.exports.payouts', [
+            'payouts' => $this->data
+        ]);
     }
 }

@@ -729,7 +729,7 @@
                                     
                                 </div>
                                 <div class="cards-md__info d-flex justify-content-between align-items-center">
-                                    <a href="product.php?pid={{$item->id}}" class="cards-md__info-left">
+                                    <a href="{{route('product.show',$item)}}" class="cards-md__info-left">
                                         <h6 class="font-body--md-400 product-title">{{$item->name}}</h6>
                                         <div class="cards-md__info-price">
                                         @if($item->expire_at && $item->discount) 

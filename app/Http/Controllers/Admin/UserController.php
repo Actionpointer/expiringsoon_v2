@@ -74,7 +74,8 @@ class UserController extends Controller
         return view('admin.users.customers',compact('users','countries','country_id','sortBy','name'));
     }
 
-    public function vendors(){$category = null;
+    public function vendors(){
+        $category = null;
         $subscription = 0;
         $country_id = null;
         $sortBy = null;
