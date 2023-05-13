@@ -25,7 +25,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Paymens</a></li>
+          <li class="active"><a href="#">Payments</a></li>
         </ul>
       </div>
     </div>
@@ -73,10 +73,10 @@
                                     <label>Select Types</label>
                                     <select name="description" id="description" class="select2">
                                       <option></option>
-                                      <option value="all">All</option>
-                                      <option value="Order">Orders</option>
-                                      <option value="Subscription">Subscription</option>
-                                      <option value="Adset">Adsets</option>  
+                                      <option value="all" @if($status == 'all') selected @endif>All</option>
+                                      <option value="Order" @if($status == 'Order') selected @endif>Orders</option>
+                                      <option value="Subscription" @if($status == 'Subscription') selected @endif>Subscription</option>
+                                      <option value="Adset" @if($status == 'Adset') selected @endif>Adsets</option>  
                                     </select>
                                 </div>
                                 <div class="col-md-3">

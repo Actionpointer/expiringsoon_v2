@@ -24,7 +24,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Paymens</a></li>
+          <li class="active"><a href="#">Adsets</a></li>
         </ul>
       </div>
     </div>

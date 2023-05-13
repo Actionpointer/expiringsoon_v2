@@ -19,6 +19,7 @@ class Advert extends Model
     protected $fillable = [
         'advertable_id','advertable_type','adset_id','state_id','position','approved','photo','heading','subheading','offer'
     ];
+    //status means the state (not status) of the shop/product .e.g availability, approval, accessibility, etc
     protected $appends = ['status','running'];
 
     public static function boot()
@@ -50,11 +51,7 @@ class Advert extends Model
     }
 
     public function getStatusAttribute(){
-       if($this->advertable_type == 'App\Models\Shop'){
-            return $this->shop && $this->shop->certified();
-       }else{
-            return $this->product && $this->product->certified();
-       }
+        return $this->advertable && $this->advertable->certified();
     }
 
     public function getRunningAttribute(){
@@ -82,8 +79,6 @@ class Advert extends Model
             return $query->whereHas('state',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
         }  
     }
-
-    
     
     public function scopeRunning($query){
         return $query->where('approved',true)->whereHas('adset', function (Builder $qry) 
@@ -94,11 +89,12 @@ class Advert extends Model
         return $query->whereHas('product', function (Builder $qry){ 
                  $qry->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();});
     }
+
     public function scopeCertifiedShop($query){
         return $query->whereHas('shop', function (Builder $qry)  { 
-            $qry->where('status',true)->where('approved',true)->where('published',true)
+            $qry->isActive()->isApproved()->isVisible()
             ->whereHas('products',function(Builder $q){
-                $q->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();
+                $q->isValid()->isAccessible()->isAvailable()->isActive()->isApproved()->isVisible();
             });
         });
     }

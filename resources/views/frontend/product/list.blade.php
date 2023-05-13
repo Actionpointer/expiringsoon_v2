@@ -16,7 +16,7 @@
                         <span> > </span>
                     </a>
                 </li>
-                <li @if(!$category) active @endif>
+                <li @if(!$category) class="active" @endif>
                     <a href="{{route('product.list')}}">
                         Products
                         @if($category)  <span> ></span>@endif

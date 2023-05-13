@@ -75,9 +75,12 @@
                                           <thead>
                                               <tr>
                                                   <th scope="col">Name</th>
+                                                  @if(auth()->user()->role->name == 'superadmin')
+                                                  <th scope="col">Country</th>
+                                                  @endif
                                                   <th scope="col">Contact</th>
                                                   <th scope="col">Status</th>
-                                                  <th scope="col">Level</th>
+                                                  <th scope="col">Role</th>
                                                   <th scope="col">Manage</th>
                                                   <th></th>
                                               </tr>
@@ -86,8 +89,10 @@
                                               @foreach ($users as $user)
                                                   <tr>
                                                       <td>{{$user->name}}</td>
-                                                      <td>{{$user->email}}<br>{{$user->mobile}}
-                                                      </td>
+                                                      @if(auth()->user()->role->name == 'superadmin')
+                                                      <td>{{$user->country->name}}</td>
+                                                      @endif
+                                                      <td>{{$user->email}}<br>{{$user->mobile}} </td>
                                                       <td>@if($user->status) Active @else Suspended @endif</td>
                                                       <td>{{$user->role->name}}</td>
                                                       <td>
@@ -246,8 +251,6 @@
                     </div>  
                 </div>
             </div>
-            <!-- Set VAT -->
-            
           </div>
         </div>
       </div>

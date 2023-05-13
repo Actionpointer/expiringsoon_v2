@@ -86,7 +86,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>                     
-                                        @foreach($adset->adverts->where('running',true) as $advert)        
+                                        @foreach($adset->adverts->where('running',true)->where('status',true) as $advert)        
                                             <tr class="border-top">
                                                 <td class="cart-table-item align-middle" >
                                                     <div class="d-flex flex-column flex-md-row">
@@ -226,7 +226,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($adset->adverts->where('running',false)->where('approved',true) as $advert)        
+                                      @foreach($adset->adverts->where('running',true)->where('approved',true)->where('status',false) as $advert)        
                                           <tr class="border-top">
                                               <td class="cart-table-item align-middle" >
                                                   <div class="d-flex flex-column flex-md-row">
@@ -310,8 +310,9 @@
                                         </select>
                                       </div>
                                       <div class="contact-form-file mb-3">
-                                        <label for="category" class="d-block">Display Image</label>
+                                        <label for="category" class="d-block">Display Image </label>
                                         <input type="file" name="photo" placeholder="" />
+                                        <small class="d-block">Image must be less than 100kb in size and must be exactly 1200px width and 500px height </small>
                                       </div>
                                       <div class="contact-form-input">
                                         <label for="category">Heading</label>

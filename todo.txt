@@ -1,36 +1,19 @@
 one event can call many listeners
 many events cannot call one listener - use subscribers to do this
 
-
-3. 
-ad preview
-
+vendor add shop advert with exact resolution, size and graphics
+admin:ad preview
 admin: defaulting orders -processing, shipped, ready, 
+admin kyc assessment, and notification to vendor
 
+Invitation - Staff
 retry payout with job -
 retry payout with flutterwave -
 
-5.
 swiper.js is displaying duplicates
 
-
-12.
 hot deals mobile view (home page & hot deals page)
 
-
-
-NOTIFICATIONS
-
-Products[
-    Product Status - Shop
-]
 Shops[
-    Shop Status - Vendor
     Orientation - after creation - Vendor
-]
-Users[
-    KYC
-    Security
-    Welcome - Vendor
-    Invitation - Staff
 ]

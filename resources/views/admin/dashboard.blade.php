@@ -59,11 +59,11 @@
                 <div class="dashboard__user-billing dashboard-card">
                   <h2 class="dashboard__user-billing-title font-body--md-500"> Summary </h2>
                   <div class="dashboard__user-billing-info">
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Products :</span> <strong>{{\App\Models\Product::count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Shops :</span> <strong>{{\App\Models\Shop::count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Adverts :</span> <strong>{{\App\Models\Advert::count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Customers :</span> <strong>{{\App\Models\Role::where('name','shopper')->first()->users->count()}}</strong></p>
-                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Orders :</span> <strong>{{App\Models\Order::count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Products :</span> <strong>{{\App\Models\Product::within()->count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Shops :</span> <strong>{{\App\Models\Shop::within()->count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Adverts :</span> <strong>{{\App\Models\Advert::within()->count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Customers :</span> <strong>{{\App\Models\User::within()->whereHas('role',function($query){ $query->where('name','shopper');})->count()}}</strong></p>
+                    <p class="dashboard__user-billing-location font-body--md-400 d-flex justify-content-between border-bottom"> <span> Total Orders :</span> <strong>{{App\Models\Order::within()->count()}}</strong></p>
                   </div>
                 </div>
               </div>
@@ -159,20 +159,20 @@
                       <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.shops')}}?search=pending">
                         <h5 class="font-body--md-400 text-primary">Shops:</h5>
                         <p class="font-body--md-500">
-                            10
+                          {{\App\Models\Shop::within()->where('approved',false)->count()}}
                         </p>
                       </a>
                       <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.products')}}?search=pending">
                         <h5 class="font-body--md-400 text-primary">Products:</h5>
-                        <p class="font-body--md-500">4</p>
+                        <p class="font-body--md-500">{{\App\Models\Product::within()->where('approved',false)->count()}}</p>
                       </a>
                       <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.adverts')}}?search=pending">
                         <h5 class="font-body--md-400 text-primary">Adverts</h5>
-                        <p class="font-body--md-500">1</p>
+                        <p class="font-body--md-500">{{\App\Models\Advert::within()->where('approved',false)->count()}}</p>
                       </a>
                       <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.payouts')}}?search=pending">
                         <h5 class="font-body--md-400 text-primary">Payouts</h5>
-                        <p class="font-body--md-500">2</p>
+                        <p class="font-body--md-500">{{\App\Models\Payout::within()->where('status','pending')->count()}}</p>
                       </a>
                       
                       

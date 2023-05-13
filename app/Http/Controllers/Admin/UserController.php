@@ -34,9 +34,9 @@ class UserController extends Controller
     public function dashboard(){
         $user = auth()->user();
         DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$user->id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','user')->update(['read_at'=> now()]);
-        $documents = Kyc::where('status',false)->whereNull('reason')->take(5)->get(); 
-        $orders = Order::whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed']);})->latest()->take(5)->get();   
-        $payouts = Payout::where('status','pending')->orderBy('created_at','asc')->take(5)->get();   
+        $documents = Kyc::within()->where('status',false)->whereNull('reason')->take(5)->get(); 
+        $orders = Order::within()->whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed']);})->latest()->take(5)->get();   
+        $payouts = Payout::within()->where('status','pending')->orderBy('created_at','asc')->take(5)->get();   
         return view('admin.dashboard',compact('user','documents','orders','payouts'));
     }
     

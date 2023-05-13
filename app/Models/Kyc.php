@@ -23,5 +23,20 @@ class Kyc extends Model
         parent::boot();
         parent::observe(new \App\Observers\KycObserver);
     }
+
+    public function scopeWithin($query,$value = null){
+        if($value){
+            return $query->whereHas('user',function($p)use($value){
+                $p->where('country_id',$value);
+            });
+        }
+        elseif(auth()->check()){
+            if(auth()->user()->role->name == 'superadmin')
+            return $query;
+            else return $query->whereHas('user',function ($q) { $q->where('country_id',auth()->user()->country_id); });
+        }else{
+            return $query->whereHas('user',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
+        }  
+    }
     
 }

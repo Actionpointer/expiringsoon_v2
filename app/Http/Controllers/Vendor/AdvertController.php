@@ -33,6 +33,7 @@ class AdvertController extends Controller
         if($adset->adplan->type == 'products'){
             $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());})->get();
             $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
+            // dd($products->first()->shop->name);
             return view('vendor.adverts.products',compact('adset','products','categories','shops','states','state_id'));
         }else
         return view('vendor.adverts.shops',compact('adset','shops','states','state_id'));

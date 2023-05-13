@@ -62,8 +62,8 @@ class PaymentController extends Controller
             return Excel::download(new PaymentsExport($payments->get()), 'payments.xlsx');
         }
         $payments = $payments->paginate(16);
-        $min_date = $payments->min('created_at')->format('Y-m-d');
-        $max_date = $payments->max('created_at')->format('Y-m-d');
+        $min_date = $payments->total() ? $payments->min('created_at')->format('Y-m-d') : null;
+        $max_date = $payments->total() ? $payments->max('created_at')->format('Y-m-d') : null;
         return view('admin.payments.index',compact('payments','min_date','max_date','countries','country_id','status','description','sortBy'));
     }
 
@@ -109,8 +109,8 @@ class PaymentController extends Controller
             return Excel::download(new SettlementsExport($settlements->get()), 'settlements.xlsx');
         }
         $settlements = $settlements->paginate(16);
-        $min_date = $settlements->min('created_at')->format('Y-m-d');
-        $max_date = $settlements->max('created_at')->format('Y-m-d');
+        $min_date = $settlements->total() ? $settlements->min('created_at')->format('Y-m-d') : null;
+        $max_date = $settlements->total() ? $settlements->max('created_at')->format('Y-m-d') : null;
         return view('admin.payments.settlements',compact('settlements','min_date','max_date','countries','country_id','status','description','sortBy'));
     }
 
@@ -177,8 +177,8 @@ class PaymentController extends Controller
         }
         $payouts = $payouts->paginate(16);
         
-        $min_date = $payouts->min('created_at')->format('Y-m-d');
-        $max_date = $payouts->max('created_at')->format('Y-m-d');
+        $min_date = $payouts->total() ? $payouts->min('created_at')->format('Y-m-d') : null;
+        $max_date = $payouts->total() ? $payouts->max('created_at')->format('Y-m-d') : null;
         return view('admin.payments.payouts',compact('payouts','min_date','max_date','countries','country_id','status','receiver','channel','sortBy'));
         
     }

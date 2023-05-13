@@ -88,7 +88,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>                     
-                                        @foreach($adset->adverts->where('running',true) as $advert)        
+                                        @foreach($adset->adverts->where('running',true)->where('status',true) as $advert)        
                                             <tr class="border-top">
                                                 <td class="cart-table-item align-middle" >
                                                     <div class="d-flex flex-column flex-md-row">
@@ -220,7 +220,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($adset->adverts->where('running',false)->where('approved',true) as $advert)        
+                                      @foreach($adset->adverts->where('running',true)->where('approved',true)->where('status',false) as $advert)        
                                           <tr class="border-top">
                                               <td class="cart-table-item align-middle" >
                                                   <div class="d-flex flex-column flex-md-row">
@@ -253,11 +253,7 @@
                                               <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
 
                                               <td class="cart-table-item align-middle"> 
-                                                  @if(!$advert->status)
-                                                  <span class="d-block text-success">Product is not showing </span>
-                                                  @elseif(!$advert->adset->active)
-                                                  <span class="d-block text-danger">Adset is expired</span>
-                                                  @endif  
+                                                  <span class="d-block text-danger">Product is not showing </span> 
                                               </td>
                                               <!-- Status -->
                                               
@@ -286,10 +282,7 @@
                                     <div class="col-lg-8">
                                       <form method="POST" action="{{route('vendor.advert.store.products')}}">@csrf
                                           <input type="hidden" name="adset_id" value="{{$adset->id}}">
-                                          
-                                          
                                           <div class="my-3 filter" style="display: block;">
-                                              
                                               <div class="contact-form-input">
                                                 <label>Filter by Shop</label>
                                                 <select id="shops" name="shops[]" class="select2 w-100" multiple>
@@ -300,7 +293,6 @@
                                               </div>
                                           </div>
                                           <div class="my-3 filter" style="display: block;">
-                                              
                                               <div class="contact-form-input">
                                                 <label>Filter by Categories</label>
                                                 <select id="categories" name="categories[]" class="select2 w-100" multiple>
@@ -393,7 +385,7 @@
           },
           success:function(data) {
             $('#product').children().remove()
-            console.log('filtered product count '+data.data.length)
+            console.log('filtered product count '+data)
             data.data.forEach(element => {
               $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
             });

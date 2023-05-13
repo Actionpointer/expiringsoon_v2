@@ -6,98 +6,17 @@
     Home
 @endsection
 @section('main')
-    <!-- Banner  Section Start  -->
-    {{-- <section class="banner banner--02">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-3 order-2 order-xl-0">
-                    <ul class="card-category">
-                        @foreach($categories as $category)
-                        <li>
-                        <a href="{{route('product.list')}}?cat={{$category->id}}">{{$category->name}} {{$category->products->count()}}</a>
-                        </li>
-                        @endforeach
-                        <li class="card-category--view-all">
-                            <a href="shop.php">
-                                <span class="icon">
-                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8.25 0.75V8.25H0.75V9.75H8.25V17.25H9.75V9.75H17.25V8.25H9.75V0.75H8.25Z" fill="currentColor" />
-                                    </svg>
-                                </span>
-                                View all Categories
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-xl-9 order-1 order-xl-0">
-                    <div class="swiper-container banner-slider--02">
-                        <div class="swiper-wrapper">
-                            @forelse ($advert_A as $item)
-                            <div class="swiper-slide">
-                                <div class="banner__wrapper-img banner__wrapper--img-01">
-                                    <img src="{{Storage::url($item->shop->banner)}}" alt="banner" />
-
-                                    <div class="banner__wrapper-text" style="max-width: 400px;">
-                                        <h2 class="font-title--xl w-100" style="max-width: 100% !important">
-                                            {{$item->shop->name}}
-                                        </h2>
-                                        <div class="sale-off">
-                                            <h5 class="font-body--xl-500 w-100" style="max-width: 80% !important">{{$item->shop->description}}</h5>
-                                        </div>
-                                        <a href="{{route('vendor.show',$item->shop)}}" class="button button--md">
-                                            Shop now
-                                            <span>
-                                                <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            @empty
-                            <div class="swiper-slide">
-                                <div class="banner__wrapper-img banner__wrapper--img-02">
-                                    <img src="{{asset('src/images/banner/banner-lg-01.png')}}" alt="banner" />
-
-                                    <div class="banner__wrapper-text">
-                                        <h2 class="font-title--xl">
-                                            Fresh & Healthy Organic Food
-                                        </h2>
-                                        <div class="sale-off">
-                                            <h5 class="font-body--xxxl-500">Sale up to <span>48% </span>off</h5>
-                                        </div>
-                                        <a href="shop.php?cat=1" class="button button--md">
-                                            Shop now
-                                            <span>
-                                                <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforelse
-                        </div>
-                        <div class="swiper-pagination"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    <!-- Banner Section end  -->
-    <!-- Banner  Section Start  -->
+   
     <section class="banner banner--04">
         <div class="container">
-            <div class="swiper-container banner-slider--04 swiper-container-fade swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events">
-                <div class="swiper-wrapper" id="swiper-wrapper-4174e6f28ab62e57" aria-live="off" style="transition-duration: 0ms;"><div class="swiper-slide swiper-slide-duplicate swiper-slide-next swiper-slide-duplicate-prev" data-swiper-slide-index="2" role="group" aria-label="1 / 5" style="width: 1296px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+            <div class="swiper-container banner-slider--04">
+                <div class="swiper-wrapper">
+                    @forelse ($advert_A as $item)
+                    <div class="swiper-slide">
                         <div class="row banner--04__content">
                             <div class="col-lg-6">
                                 <div class="banner--04__img-wrapper">
-                                    <img src="{{asset('src/images/banner/banner-sm-06.png')}}" alt="banner" class="img-fluid">
+                                    <img src="{{Storage::url($item->photo)}}" alt="banner" class="img-fluid">
                                     <div class="off-sale">
                                         <p>
                                             <span>80%</span>
@@ -108,7 +27,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="banner--04__text-content">
-                                    <h5 class="title">Welcome to shopery</h5>
+                                    <h5 class="title">{{$item->shop->name}}</h5>
                                     <h2 class="font-title--xxxl">
                                         Fresh &amp; Healthy Organic Food
                                     </h2>
@@ -116,7 +35,7 @@
                                     <p class="font-body--md-400">
                                         Free shipping on all your order. we deliver, you enjoy
                                     </p>
-                                    <a href="https://shopery.netlify.app/main/home-04.html#" class="button button--md">
+                                    <a href="{{route('vendor.show',$item->shop)}}" class="button button--md">
                                         Shop now
                                         <span>
                                             <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +48,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide swiper-slide-duplicate-active" data-swiper-slide-index="0" role="group" aria-label="2 / 5" style="width: 1296px; opacity: 1; transform: translate3d(-1296px, 0px, 0px); transition-duration: 0ms;">
+                    @empty
+                    <div class="swiper-slide">
                         <div class="row banner--04__content">
                             <div class="col-lg-6">
                                 <div class="banner--04__img-wrapper">
@@ -149,7 +69,7 @@
                                         Fresh &amp; Healthy Organic Food
                                     </h2>
                                     <p class="font-body--md-400">
-                                        Free shipping on all your order. we deliver, you enjoy
+                                        Free coupons on all your order. we deliver, you enjoy
                                     </p>
                                     <a href="https://shopery.netlify.app/main/home-04.html#" class="button button--md">
                                         Shop now
@@ -164,115 +84,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" data-swiper-slide-index="1" role="group" aria-label="3 / 5" style="width: 1296px; opacity: 1; transform: translate3d(-2592px, 0px, 0px); transition-duration: 0ms;">
-                        <div class="row banner--04__content">
-                            <div class="col-lg-6">
-                                <div class="banner--04__img-wrapper">
-                                    <img src="{{asset('src/images/banner/banner-sm-12.png')}}" alt="banner" class="img-fluid">
-                                    <div class="off-sale">
-                                        <p>
-                                            <span>50%</span>
-                                            off
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="banner--04__text-content">
-                                    <h5 class="title">Welcome to shopery</h5>
-                                    <h2 class="font-title--xxxl">
-                                        Fresh &amp; Healthy Organic Food
-                                    </h2>
-
-                                    <p class="font-body--md-400">
-                                        Free shipping on all your order. we deliver, you enjoy
-                                    </p>
-                                    <a href="https://shopery.netlify.app/main/home-04.html#" class="button button--md">
-                                        Shop now
-                                        <span>
-                                            <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide swiper-slide-prev swiper-slide-duplicate-next" data-swiper-slide-index="2" role="group" aria-label="4 / 5" style="width: 1296px; opacity: 1; transform: translate3d(-3888px, 0px, 0px); transition-duration: 0ms;">
-                        <div class="row banner--04__content">
-                            <div class="col-lg-6">
-                                <div class="banner--04__img-wrapper">
-                                    <img src="{{asset('src/images/banner/banner-sm-06.png')}}" alt="banner" class="img-fluid">
-                                    <div class="off-sale">
-                                        <p>
-                                            <span>80%</span>
-                                            off
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="banner--04__text-content">
-                                    <h5 class="title">Welcome to shopery</h5>
-                                    <h2 class="font-title--xxxl">
-                                        Fresh &amp; Healthy Organic Food
-                                    </h2>
-
-                                    <p class="font-body--md-400">
-                                        Free shipping on all your order. we deliver, you enjoy
-                                    </p>
-                                    <a href="https://shopery.netlify.app/main/home-04.html#" class="button button--md">
-                                        Shop now
-                                        <span>
-                                            <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <div class="swiper-slide swiper-slide-duplicate swiper-slide-active" data-swiper-slide-index="0" role="group" aria-label="5 / 5" style="width: 1296px; opacity: 1; transform: translate3d(-5184px, 0px, 0px); transition-duration: 0ms;">
-                        <div class="row banner--04__content">
-                            <div class="col-lg-6">
-                                <div class="banner--04__img-wrapper">
-                                    <img src="{{asset('src/images/banner/banner-sm-06.png')}}" alt="banner" class="img-fluid">
-                                    <div class="off-sale">
-                                        <p>
-                                            <span>70%</span>
-                                            off
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="banner--04__text-content">
-                                    <h5 class="title">Welcome to shopery</h5>
-                                    <h2 class="font-title--xxxl">
-                                        Fresh &amp; Healthy Organic Food
-                                    </h2>
-                                    <p class="font-body--md-400">
-                                        Free shipping on all your order. we deliver, you enjoy
-                                    </p>
-                                    <a href="https://shopery.netlify.app/main/home-04.html#" class="button button--md">
-                                        Shop now
-                                        <span>
-                                            <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div></div>
-                <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 3"></span></div>
-            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+                    @endforelse
+                    
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
 
             <div class="arrows">
                 <button class="arrows__btn swiper-button--prev" tabindex="0" aria-label="Previous slide" aria-controls="swiper-wrapper-fed519ebc3a9f7b3">
