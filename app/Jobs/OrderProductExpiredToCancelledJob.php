@@ -2,7 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\Payment;
+use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CheckPendingPaymentsJob implements ShouldQueue
+class OrderProductExpiredToCancelledJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,9 +32,15 @@ class CheckPendingPaymentsJob implements ShouldQueue
      */
     public function handle()
     {
-        $payments = Payment::where('status','pending')->where('created_at','>',now()->subHour())->get();
-        foreach($payments as $payment){
-            
+        $orders = Order::whereDoesntHave('statuses',function($query){
+            $query->where('name','delivered')->withTrashed();
+        })->whereHas('items',function($pqr){
+            $pqr->whereHas('product',function($abc){
+                $abc->where('expire_at','<',now());
+            });
+        })->get();
+        foreach($orders  as $order){
+            OrderStatus::create(['order_id'=> $order->id,'user_id'=> $order->user_id,'name'=> 'cancelled']);
         }
     }
 }

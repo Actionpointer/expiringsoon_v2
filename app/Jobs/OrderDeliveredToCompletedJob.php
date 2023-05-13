@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\Shop;
-use App\Models\User;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -12,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class ConvertDeliveredToCompletedJob implements ShouldQueue
+class OrderDeliveredToCompletedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -35,10 +34,13 @@ class ConvertDeliveredToCompletedJob implements ShouldQueue
     {
         //send message to vendor & user
         $period = cache('settings')['order_delivered_to_acceptance_period'];
-        $orders = Order::where('status','delivered')->where('delivered_at','>',now()->subHours($period))->get();
+
+        $orders = Order::whereHas('statuses',function($query) use($period){
+                $query->where('name','delivered')->where('created_at','<',now()->subHours($period));
+            })->get();
+
         foreach($orders as $order){
-            $order->status = 'completed';
-            $order->save();
+            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'completed']);
         }
     }
 }

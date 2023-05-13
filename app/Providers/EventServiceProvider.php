@@ -4,16 +4,13 @@ namespace App\Providers;
 
 
 use App\Events\DeleteShop;
-use App\Events\RenewAdset;
 use App\Events\RefundBuyer;
 use App\Events\RetryPayout;
 use App\Events\SettleVendor;
 use App\Events\DeleteProduct;
 use App\Events\DisbursePayout;
-use App\Events\OrderCompleted;
 use App\Events\OrderPurchased;
 use App\Listeners\DeletingShop;
-use App\Listeners\RenewingAdset;
 use App\Events\CheckPayoutStatus;
 use App\Listeners\BroadcastOrder;
 use App\Listeners\RefundingBuyer;
@@ -21,7 +18,6 @@ use App\Listeners\RetryingPayout;
 use App\Listeners\SettlingVendor;
 use App\Listeners\DeletingProduct;
 use App\Listeners\DisbursingPayout;
-use App\Listeners\RemoveFromWishList;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\CheckingPayoutStatus;
@@ -53,10 +49,6 @@ class EventServiceProvider extends ServiceProvider
         RefundBuyer::class => [
             RefundingBuyer::class
         ],
-        OrderCompleted::class => [
-            SettleVendor::class,
-            RemoveFromWishList::class,
-        ],
         SettleVendor::class => [
             SettlingVendor::class
         ],
@@ -67,9 +59,7 @@ class EventServiceProvider extends ServiceProvider
         RetryPayout::class => [
             RetryingPayout::class
         ],
-        RenewAdset::class => [
-            RenewingAdset::class
-        ],
+        
         CheckPayoutStatus::class => [
             CheckingPayoutStatus::class
         ],

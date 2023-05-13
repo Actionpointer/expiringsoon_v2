@@ -102,7 +102,7 @@ trait FlutterwaveTrait
         
     }
 
-    protected function retryFlutterWave(Payout $payout){
+    protected function retryPayoutFlutterWave(Payout $payout){
         $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id/retries")
             ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
             ->asJson()

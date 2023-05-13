@@ -94,7 +94,7 @@ trait PaystackTrait
     
     
 
-    protected function retryPaystack(Payout $payout){
+    protected function retryPayoutPaystack(Payout $payout){
         $response = Curl::to("https://api.paystack.com/v3/transfers/$payout->transfer_id/retries")
             ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
             ->asJson()

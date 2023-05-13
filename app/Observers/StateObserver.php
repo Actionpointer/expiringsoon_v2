@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\State;
-use App\Jobs\CreateCitiesJob;
+use App\Jobs\LocationCreateCitiesJob;
 
 class StateObserver
 {
@@ -15,7 +15,7 @@ class StateObserver
      */
     public function created(State $state)
     {
-        CreateCitiesJob::dispatch($state->country_id,$state->id);
+        LocationCreateCitiesJob::dispatch($state->country_id,$state->id);
     }
 
     /**

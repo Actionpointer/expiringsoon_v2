@@ -2,19 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Models\Payout;
+use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
-use App\Http\Traits\PayoutTrait;
-use App\Events\CheckPayoutStatus;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Notifications\SubscriptionStatusNotification;
 
-class RetryFailedPayoutJob implements ShouldQueue,ShouldBeUnique
+class SubscriptionExpiringNotifyJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PayoutTrait;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -33,9 +32,9 @@ class RetryFailedPayoutJob implements ShouldQueue,ShouldBeUnique
      */
     public function handle()
     {
-        $payouts = Payout::where('status','failed')->whereNotNull('transfer_id')->get();
-        foreach($payouts as $payout){
-            $this->retryFlutterWave($payout);
+        $subscriptions = Subscription::whereNotNull('end_at')->where('renew_at','<',now())->where('renew_at','>',now()->subHour())->get();
+        foreach($subscriptions as $subscription){
+            $subscriptions->user->notify(new SubscriptionStatusNotification($subscription));
         }
     }
 }

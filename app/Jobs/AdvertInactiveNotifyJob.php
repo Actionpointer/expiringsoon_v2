@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use App\Notifications\AdvertStatusNotification;
 
-class InactiveStatusUpdateJob implements ShouldQueue
+class AdvertInactiveNotifyJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

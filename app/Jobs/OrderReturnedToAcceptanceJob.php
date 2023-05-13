@@ -3,15 +3,15 @@
 namespace App\Jobs;
 
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use App\Notifications\OrderStatusVendorNotification;
 
-class CheckOrderExpectedDateJob implements ShouldQueue
+class OrderReturnedToAcceptanceJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,10 +32,13 @@ class CheckOrderExpectedDateJob implements ShouldQueue
      */
     public function handle()
     {
-        //send message to vendor & user
-        $orders = Order::where('status','processing')->where('expected_at','>',now())->where('expected_at','<=',now()->addDay())->get();
+        $period = cache('settings')['order_returned_to_acceptance_period'];
+        $orders = Order::whereHas('statuses',function($query) use($period){
+                $query->where('name','returned')->where('created_at','<',now()->subHours($period));
+            })->get();
+        
         foreach($orders as $order){
-            $order->shop->notify(new OrderStatusVendorNotification($order,'late'));
+            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'refunded']);
         }
     }
 }

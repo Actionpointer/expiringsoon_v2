@@ -5,8 +5,8 @@ use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
 use App\Models\Location;
-use App\Jobs\CreateCitiesJob;
-use App\Jobs\CreateStatesJob;
+use App\Jobs\LocationCreateCitiesJob;
+use App\Jobs\LocationCreateStatesJob;
 use Illuminate\Support\Facades\Auth;
 
 trait GeoLocationTrait
@@ -45,7 +45,7 @@ trait GeoLocationTrait
         $state = State::where('country_id',$country_id)->where('iso',$state_code)->first();
         if(!$state){
             $state = State::create(['country_id'=> $country_id,'iso'=> $state_code,'name'=> $state_name]);
-            CreateStatesJob::dispatch($country_id);
+            LocationCreateStatesJob::dispatch($country_id);
         }
         return $state;
     }
@@ -54,7 +54,7 @@ trait GeoLocationTrait
         $city = City::where('state_id',$state_id)->where('name',$city_name)->first();
         if(!$city){
             $city = City::create(['country_id'=> $country_id,'state_id'=> $state_id,'name'=> $city_name]);
-            CreateCitiesJob::dispatch($country_id,$state_id);
+            LocationCreateCitiesJob::dispatch($country_id,$state_id);
         }
         return $city;
     }

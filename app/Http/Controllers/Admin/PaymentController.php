@@ -66,7 +66,6 @@ class PaymentController extends Controller
         $max_date = $payments->max('created_at')->format('Y-m-d');
         return view('admin.payments.index',compact('payments','min_date','max_date','countries','country_id','status','description','sortBy'));
     }
-    
 
     public function settlements(){
         $description = 'all';
@@ -115,9 +114,7 @@ class PaymentController extends Controller
         return view('admin.payments.settlements',compact('settlements','min_date','max_date','countries','country_id','status','description','sortBy'));
     }
 
-
-    public function payouts()
-    {
+    public function payouts(){
         $receiver = null;
         $country_id = null;
         $channel = 'all';
@@ -183,12 +180,10 @@ class PaymentController extends Controller
         $min_date = $payouts->min('created_at')->format('Y-m-d');
         $max_date = $payouts->max('created_at')->format('Y-m-d');
         return view('admin.payments.payouts',compact('payouts','min_date','max_date','countries','country_id','status','receiver','channel','sortBy'));
-    
         
     }
     
-    public function update(Request $request)
-    {
+    public function update(Request $request){
 
         if($request->action == 'pay'){
             foreach($request->payouts as $req){ 
@@ -208,8 +203,5 @@ class PaymentController extends Controller
             return redirect()->back()->with(['result'=> '1','message'=> 'Payouts Rejected']);
         }   
     }
-    
-    
-
-    
+      
 }

@@ -2,19 +2,19 @@
 
 namespace App\Jobs;
 
-use App\Events\RetryPayout;
 use App\Models\Payout;
 use Illuminate\Bus\Queueable;
 use App\Http\Traits\PayoutTrait;
+use App\Events\CheckPayoutStatus;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class RetryPayoutJob implements ShouldQueue,ShouldBeUnique
+class PayoutStatusCheckJob implements ShouldQueue,ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PayoutTrait;
 
     /**
      * Create a new job instance.
@@ -26,23 +26,12 @@ class RetryPayoutJob implements ShouldQueue,ShouldBeUnique
         //
     }
 
-    public function uniqueId()
-    {
-        return $this->payout->id;
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
+    
     public function handle()
     {
-        $payouts = Payout::where('status','failed')->whereNotNull('transfer_id')->get();
+        $payouts = Payout::whereIn('status',['processing'])->whereNotNull('transfer_id')->get();
         foreach($payouts as $payout){
-            event(new RetryPayout($payout));
-            
+            $this->verifyPayout($payout);
         }
-        
     }
 }

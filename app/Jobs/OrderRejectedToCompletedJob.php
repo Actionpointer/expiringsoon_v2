@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CancelExpiredOrderProductsJob implements ShouldQueue
+class OrderRejectedToCompletedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,15 +32,14 @@ class CancelExpiredOrderProductsJob implements ShouldQueue
      */
     public function handle()
     {
-        $orders = Order::whereDoesntHave('statuses',function($query){
-            $query->where('name','delivered')->withTrashed();
-        })->whereHas('items',function($pqr){
-            $pqr->whereHas('product',function($abc){
-                $abc->where('expired_at','<',now());
-            });
-        })->get();
-        foreach($orders  as $order){
-            OrderStatus::create(['order_id'=> $order->id,'user_id'=> $order->user_id,'name'=> 'cancelled']);
+        $period = cache('settings')['order_rejected_to_returned_period'];
+
+        $orders = Order::whereHas('statuses',function($query) use($period){
+                $query->where('name','rejected')->where('created_at','<',now()->subHours($period));
+            })->get();
+        
+        foreach($orders as $order){
+            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'completed']);
         }
     }
 }

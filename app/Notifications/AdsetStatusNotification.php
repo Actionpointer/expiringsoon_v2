@@ -30,7 +30,7 @@ class AdsetStatusNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     public function status(){
@@ -51,7 +51,11 @@ class AdsetStatusNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'subject' => 'Adset '.$this->status(),
+            'body' => 'Your adset with id '.$this->adset->slug,
+            'url'=> route('vendor.adsets'),
+            'id'=> $this->adset->id,
+            'related_to'=> 'adset'
         ];
     }
 }

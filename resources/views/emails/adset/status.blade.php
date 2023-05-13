@@ -137,7 +137,7 @@
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:center; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Adset is {{$status}}!</span><br />
 																Dear {{$adset->user->name}} , <br>
-																Your adset with id {{$adset->id}} is now {{$status}} <br/> 
+																Your adset with id {{$adset->slug}} is now {{$status}} <br/> 
                                                                 @if($status == 'activated')
 																	You have added the following ads to this adsets <br/>
 																	Products: {{$adset->adverts->where('advertable_type','App\Models\Product')->count()}} <br/>

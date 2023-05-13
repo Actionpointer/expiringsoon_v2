@@ -24,8 +24,7 @@ class ShopController extends Controller
 {
     use SecurityTrait;
 
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth:sanctum');
     }
     
@@ -172,7 +171,7 @@ class ShopController extends Controller
                 'shop_id' => 'required|numeric|exists:shops,id',
                 // 'pin' => 'required|numeric',
                 'name' => 'nullable|string',
-                'email' => 'nullable|string|unique:shops',
+                'email' => ['nullable','string',Rule::unique('shops')->ignore($shop)],
                 'phone' => ['nullable','string',Rule::unique('shops')->ignore($shop)],
                 'published' => 'nullable|numeric',
                 'photo' => 'nullable|max:2048|image',
@@ -242,7 +241,6 @@ class ShopController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
-    
     }
 
     public function destroy(Request $request){

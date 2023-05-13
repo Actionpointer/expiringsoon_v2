@@ -2,19 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Models\Payout;
+use App\Models\Adset;
 use Illuminate\Bus\Queueable;
-use App\Http\Traits\PayoutTrait;
-use App\Events\CheckPayoutStatus;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Notifications\AdsetStatusNotification;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CheckPayoutStatusJob implements ShouldQueue,ShouldBeUnique
+class AdsetExpiredNotifyJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PayoutTrait;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -29,9 +28,9 @@ class CheckPayoutStatusJob implements ShouldQueue,ShouldBeUnique
     
     public function handle()
     {
-        $payouts = Payout::whereIn('status',['processing'])->whereNotNull('transfer_id')->get();
-        foreach($payouts as $payout){
-            $this->verifyPayout($payout);
+        $adsets = Adset::where('end_at','<',now())->where('end_at','>',now()->subHour())->get();
+        foreach($adsets as $adset){
+            $adset->user->notify(new AdsetStatusNotification($adset));
         }
     }
 }

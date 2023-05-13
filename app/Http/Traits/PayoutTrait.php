@@ -42,6 +42,22 @@ trait PayoutTrait
         
     }
 
+    protected function retryPayout(Payout $payout){
+        $user = $payout->user;
+        $gateway = $user->country->payout_gateway;
+        switch($gateway){
+            case 'paystack': $link = $this->retryPayoutPaystack($payout);
+            break;
+            case 'flutterwave': $link = $this->retryPayoutFlutterWave($payout);
+            break;
+            case 'paypal': $link = $this->retryPayoutPaypal($payout);
+            break;
+            case 'stripe': $link = $this->retryPayoutStripe($payout);
+            break;
+        }
+        return $link;
+    }
+
     public function verifybankaccount($bank_code,$account_number){
         $user = Auth::user();
         $gateway = $user->country->payout_gateway;

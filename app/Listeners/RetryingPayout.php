@@ -28,6 +28,6 @@ class RetryingPayout implements ShouldQueue
      */
     public function handle(RetryPayout $event)
     {
-        $this->retryFlutterWave($event->payout);
+        $this->retryPayout($event->payout);
     }
 }

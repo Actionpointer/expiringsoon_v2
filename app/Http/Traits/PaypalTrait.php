@@ -170,7 +170,7 @@ trait PaypalTrait
     
     
 
-    protected function retryPaypal(Payout $payout){
+    protected function retryPayoutPaypal(Payout $payout){
         $response = Curl::to("https://api.paystack.com/v3/transfers/$payout->transfer_id/retries")
             ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
             ->asJson()

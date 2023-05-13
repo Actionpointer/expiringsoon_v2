@@ -27,9 +27,7 @@ Route::get('/eg', function () {
 });
 
 Route::get('broadcast', function () {
-    $user = \App\Models\User::find(10);
-    return (new App\Notifications\WelcomeNotification($user))
-                    ->toMail($user);
+    \App\Jobs\SubscriptionExpiringNotifyJob::dispatch();
 });
 
 Route::view('email','emails.completed');
