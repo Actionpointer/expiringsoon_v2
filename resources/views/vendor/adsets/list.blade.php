@@ -65,7 +65,7 @@
                                     <thead>
                                     <tr>
                                         <th scope="col" class="dashboard__order-history-table-title"> Details</th>
-                                        <th scope="col" class="dashboard__order-history-table-title">Page</th>
+                                        
                                         <th scope="col" class="dashboard__order-history-table-title">Usage</th>
                                         <th scope="col" class="dashboard__order-history-table-title">Expiry</th>
                                         <th scope="col" class="dashboard__order-history-table-title"></th>
@@ -79,13 +79,10 @@
                                                     <span style="font-weight:500;white-space:nowrap">{{$adset->adplan->name}} -{{$adset->slug}}</span><br/>
                                                 </td>
                                                 <!-- Vendor Split  -->
-                                                <td class="dashboard__order-history-table-item order-total "> 
-                                                    {{$adset->adplan->page}}
-                                                </td>
-                                                <!-- Site Split  -->
+                                                
                                                 <td class="dashboard__order-history-table-item order-total"> 
                                                     <p class="order-total-price text-nowrap">   
-                                                        {{$adset->units}} {{$adset->adplan->type}}. {{$adset->adverts->count()}} used
+                                                        {{$adset->units}} units. {{$adset->adverts->count()}} used
                                                     </p>
                                                 </td>
                                                 <!-- Status -->
@@ -111,9 +108,8 @@
                                   <table class="table datatable">
                                       <thead>
                                       <tr>
-                                          <th scope="col" class="dashboard__order-history-table-title"> Details
-                                          </th>
-                                          <th scope="col" class="dashboard__order-history-table-title">Page</th>
+                                          <th scope="col" class="dashboard__order-history-table-title"> Details </th>
+                                          
                                           <th scope="col" class="dashboard__order-history-table-title">Usage</th>
                                           <th scope="col" class="dashboard__order-history-table-title">Expiry</th>
                                           <th scope="col" class="dashboard__order-history-table-title"></th>
@@ -127,10 +123,7 @@
                                                       <span style="font-weight:500" class="text-nowrap">{{$adset->adplan->name}} -{{$adset->slug}}</span><br/>
                                                   </td>
                                                   <!-- Vendor Split  -->
-                                                  <td class="dashboard__order-history-table-item order-total "> 
-                                                      {{$adset->adplan->page}}
-                                                  </td>
-                                                  <!-- Site Split  -->
+                                                  
                                                   <td class="dashboard__order-history-table-item order-total"> 
                                                       <p class="order-total-price text-nowrap">   
                                                           {{$adset->units}} {{$adset->adplan->type}}. {{$adset->adverts->count()}} used

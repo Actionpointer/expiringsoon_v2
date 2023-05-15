@@ -1,15 +1,3 @@
-<?php
-session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
-include("dbconnect.php");
-if(isset($_COOKIE['email'])){
-$query = "SELECT * FROM users WHERE email='".$_COOKIE['email']."'";
-$result = mysqli_query($con, $query);
-$uqr = mysqli_fetch_assoc($result);
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,33 +8,31 @@ $uqr = mysqli_fetch_assoc($result);
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>FAQs | Expiring Soon</title>
-        <link rel="icon" type="image/png" href="src/images/favicon/favicon-16x16.png" />
-        <link rel="stylesheet" href="src/plugins/swiper-bundle/script.min.css" />
-        <link rel="stylesheet" href="src/plugins/bvselect/style.css" />
-        <link rel="stylesheet" href="{{asset('src/plugins/venobox/style.css" />
-        <link rel="stylesheet" href="src/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="src/css/style.css" />
+        <link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
+        <link rel="stylesheet" href="{{asset('src/plugins/swiper-bundle/style.min.css')}}" />
+        <link rel="stylesheet" href="{{asset('src/plugins/bvselect/style.css')}}" />
+        <link rel="stylesheet" href="{{asset('src/plugins/venobox/style.css')}}" />
+        <link rel="stylesheet" href="{{asset('src/css/bootstrap.min.css')}}" />
+        <link rel="stylesheet" href="{{asset('src/css/style.css')}}" />
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> --}}
         <script>
 </script>
     </head>
     <body>
         <div class="loader">
             <div class="loader-icon">
-                <img src="src/images/loader.gif" alt="loader" />
+                <img src="{{asset('src/images/loader.gif')}}" alt="loader" />
             </div>
         </div>
 
-        <!-- Header start  -->
-        <?php include("header.php"); ?>
-        <!-- Header End  -->
+        
 
         <!-- breedcrumb section start  -->
         <div class="section breedcrumb">
             <div class="breedcrumb__img-wrapper">
-                <img src="src/images/banner/breedcrumb.jpg" alt="breedcrumb" />
+                <img src="{{asset('src/images/banner/breedcrumb.jpg')}}" alt="breedcrumb" />
                 <div class="container">
                     <ul class="breedcrumb__content">
                         <li>
@@ -998,23 +984,23 @@ not mandatory.
                       >
                         <div class="accordion-body">
                           Vendors are required to follow the following posting rules when posting items on Expiringsoon.shop:<br /><br />
-1. Every product item must have a name and an expiring date.<br />
-2. Every advert must contain a brief and clear description.<br />
-3. Every product must have an associated image (taken by the vendor and without any
-trademark or copyright violations). Advertised products violating copyrights of a 3 rd party will
-be taken down and may lead to sanctions on the vendor.<br />
-4. Every product has to be in an appropriate category.<br />
-5. Prices of items posted must correspond and not deviate significantly from the real retail or
-wholesale prices of such or similar products in offline and online shops before discounts are
-applied.<br />
-6. All posted products must be located in the location and country of posting.<br />
-7. Posted items must be ready to ship within 1 - 2 hours of receipt of order confirmation
-notification by Vendor.<br />
-8. All items and products must be legally permitted and not part of the Expiringsoon forbidden
-list of item.<br />
-9. Each item for sale must be posted separately with the quantities available indicated.<br />
-10. Replica products, counterfeit or compromised products are strictly forbidden, violation may
-lead to permanent global ban and closure of violating account and associated persons.
+                            1. Every product item must have a name and an expiring date.<br />
+                            2. Every advert must contain a brief and clear description.<br />
+                            3. Every product must have an associated image (taken by the vendor and without any
+                            trademark or copyright violations). Advertised products violating copyrights of a 3 rd party will
+                            be taken down and may lead to sanctions on the vendor.<br />
+                            4. Every product has to be in an appropriate category.<br />
+                            5. Prices of items posted must correspond and not deviate significantly from the real retail or
+                            wholesale prices of such or similar products in offline and online shops before discounts are
+                            applied.<br />
+                            6. All posted products must be located in the location and country of posting.<br />
+                            7. Posted items must be ready to ship within 1 - 2 hours of receipt of order confirmation
+                            notification by Vendor.<br />
+                            8. All items and products must be legally permitted and not part of the Expiringsoon forbidden
+                            list of item.<br />
+                            9. Each item for sale must be posted separately with the quantities available indicated.<br />
+                            10. Replica products, counterfeit or compromised products are strictly forbidden, violation may
+                            lead to permanent global ban and closure of violating account and associated persons.
                         </div>
                       </div>
                     </div>
@@ -1131,7 +1117,7 @@ If you have noticed any advert violating this prohibition list, please report to
                       >
                         <div class="accordion-body">
                           Product advert remain on the site for as much as 3 months or less and are available for purchase on
-discount as set by the vendor as their dates count down till they expire and become unavailable.
+                          discount as set by the vendor as their dates count down till they expire and become unavailable.
                         </div>
                       </div>
                     </div>
@@ -1141,7 +1127,7 @@ discount as set by the vendor as their dates count down till they expire and bec
               <div class="col-lg-6 order-lg-0 order-1">
                 <div class="faq__img-wrapper">
                   <img
-                    src="src/images/banner/banner-lg-09.png"
+                    src="{{asset('src/images/banner/banner-lg-09.png')}}"
                     alt="banner"
                     class="img-fluid"
                   />
@@ -1152,27 +1138,27 @@ discount as set by the vendor as their dates count down till they expire and bec
         </section>
 
         <!-- Footer Start -->
-        <?php include("footer.php"); ?>
+        
         <!-- Footer Area End -->
 
-        <script src="src/js/jquery.min.js"></script>
-        <script src="src/plugins/swiper-bundle/script.min.js"></script>
-        <script src="src/plugins/venobox/js/script.min.js"></script>
-        <script src="src/plugins/bvselect/script.js"></script>
-        <script src="src/js/bootstrap.bundle.min.js"></script>
-        <script src="src/js/main.js"></script>
-        <script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/61f6f04e9bd1f31184da1815/1fqm9ldm5';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
+        <script src="{{asset('src/js/jquery.min.js')}}"></script>
+        <script src="{{asset('src/plugins/swiper-bundle/script.min.js')}}"></script>
+        <script src="{{asset('src/plugins/venobox/script.min.js')}}"></script>
+        <script src="{{asset('src/plugins/bvselect/script.js')}}"></script>
+        <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{asset('src/js/main.js')}}"></script>
+        {{-- <script type="text/javascript">
+          var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+          (function(){
+          var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+          s1.async=true;
+          s1.src='https://embed.tawk.to/61f6f04e9bd1f31184da1815/1fqm9ldm5';
+          s1.charset='UTF-8';
+          s1.setAttribute('crossorigin','*');
+          s0.parentNode.insertBefore(s1,s0);
+          })();
+        </script> --}}
     </body>
 
-<!-- Mirrored from shopery.netlify.app/main/product-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 29 Dec 2021 14:28:45 GMT -->
+
 </html>

@@ -71,6 +71,7 @@
                       <label>Duration (days)</label>
                       <input type="number" name="days" placeholder="days" id="days" min="{{cache('settings')['minimum_advert_days']}}" value="{{cache('settings')['minimum_advert_days']}}"/>
                     </div>
+                    
                     <div class="bill-card">
                       <div class="bill-card__content">
                         <div class="bill-card__header">

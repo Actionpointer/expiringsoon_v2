@@ -30,6 +30,7 @@ Route::get('broadcast', function () {
     \App\Jobs\SubscriptionExpiringNotifyJob::dispatch();
 });
 
+Route::view('faq','faqs');
 Route::view('email','emails.completed');
 Route::view('help','help.index')->name('help.index');
 Route::view('help/shoppers','help.shoppers')->name('help.shoppers');
@@ -56,6 +57,7 @@ Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name
 
 Route::get('vendors', [ShopController::class, 'index'])->name('vendors');
 Route::get('vendors/{shop}', [ShopController::class, 'show'])->name('vendor.show');
+Route::get('adpreview/{adset}/{advert}',[HomeController::class,'adpreview'])->name('adpreview');
 
 Route::get('cart', [CartController::class, 'cart'])->name('cart');
 Route::post('product/add-to-cart',[CartController::class,'addtocart'])->name('product.addtocart');

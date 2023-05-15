@@ -17,7 +17,7 @@
                     <div class="swiper-container banner-slider--one">
                         <div class="swiper-wrapper">
                             @forelse ($advert_G as $item)
-                            <div class="swiper-slide">
+                            {{-- <div class="swiper-slide">
                                 <div class="banner__wrapper-img banner__wrapper--img-01">
                                     <img src="{{Storage::url($item->shop->banner)}}" alt="banner" />
 
@@ -39,11 +39,11 @@
                                         </a>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             @empty
                             <div class="swiper-slide">
                                 <div class="banner__wrapper-img banner__wrapper--img-01">
-                                    <img src="src/images/banner/banner-lg-03.jpg" alt="banner" />
+                                    <img src="{{asset('src/images/banner/banner-lg-03.jpg')}}" alt="banner" />
 
                                     <div class="banner__wrapper-text">
                                         <h2 class="font-title--xl">
@@ -147,7 +147,7 @@
                         </div>
                         @empty
                         <div class="banner__wrapper-img banner__wrapper--img-02">
-                            <img src="src/images/banner/banner-sm-05.png" alt="banner" />
+                            <img src="{{asset('src/images/banner/check3.png')}}" alt="banner" />
 
                             <div class="banner__wrapper-text">
                                 <h5 class="font-body--md-500">sSummer Sale</h5>

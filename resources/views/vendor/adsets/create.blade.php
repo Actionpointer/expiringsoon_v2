@@ -59,7 +59,6 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  
                                   @foreach ($adplans->sortBy('type') as $adplan)
                                     <tr class="item" data-plan="adplan_id{{$adplan->id}}" data-price="{{$adplan->price_per_day}}" data-days="{{cache('settings')['minimum_advert_days']}}" data-units="1" data-amount="{{$adplan->price_per_day * cache('settings')['minimum_advert_days']}}">
                                       <!-- Product item  -->
@@ -68,8 +67,8 @@
                                               <input class="form-check-input adplans" type="checkbox" name="adplans[{{$adplan->id}}]" value="{{$adplan->id}}" id="adplan_id{{$adplan->id}}">
                                               <label class="form-check-label font-body--400" for="adplan_id{{$adplan->id}}">
                                                   <div>
-                                                    <span class="lh-1">{{$adplan->description}} 
-                                                        <span class="d-block small">{{$adplan->page}}  <a href="#" class="text-muted text-lowercase"><i class="fa fa-info-circle"></i> info</a></span>
+                                                    <span class="lh-1">{{$adplan->name}} 
+                                                        <span class="d-block small">{{$adplan->type}} <a href="#" class="text-muted text-lowercase"><i class="fa fa-info-circle"></i> info</a></span>
                                                     </span>
                                                   </div>
                                                       

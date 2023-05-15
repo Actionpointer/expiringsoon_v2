@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Adplan;
+use App\Models\Feature;
 use App\Models\PaymentItem;
 use App\Observers\AdsetObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -58,6 +59,10 @@ class Adset extends Model
 
     public function adverts(){
         return $this->hasMany(Advert::class);
+    }
+
+    public function features(){
+        return $this->hasMany(Feature::class);
     }
     
     public function payment_item(){

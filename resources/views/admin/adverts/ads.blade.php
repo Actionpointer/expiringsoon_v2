@@ -70,12 +70,12 @@
                                 @endif
                                 
                                 <div class="col-md-3">
-                                    <label>Select Types</label>
+                                    <label>Select Target</label>
                                     <select name="type" id="types" class="form-control like_select2">
                                       <option></option>
                                       <option value="all" @if($type == 'all') selected @endif>All</option>
-                                      <option value="Shop" @if($type == 'Shop') selected @endif>Shops</option>
-                                      <option value="Product" @if($type == 'Product') selected @endif>Products</option>
+                                      <option value="Shop" @if($type == 'Shop') selected @endif>Shop</option>
+                                      <option value="Product" @if($type == 'Product') selected @endif>Product</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
@@ -115,11 +115,7 @@
                                   <div class="col-md-2">
                                     <button class="button button--md" name="download" value="0">Filter</button>
                                   </div>
-                                  @can('download','App\Models\Payment')
-                                  <div class="col-md-2">
-                                    <button class="button button--md" name="download" value="1">Download</button>
-                                  </div>
-                                  @endcan
+                                  
                                 </div>
                                 
                               </div> 
@@ -129,8 +125,6 @@
                       </div>
                     </div>
                   </div>
-                  
-        
                 <div class="table-responsive">
                   <table class="table">
                     <thead>
@@ -146,22 +140,13 @@
                       <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                           <!-- Product item  -->
                           <td class="">
-                              <a href=" @if($advert->advertable_type == 'App\Models\Product') {{route('product.show',$advert->advertable)}} @else {{route('vendor.show',$advert->advertable)}} @endif"  class="cart-table__product-item" >
+                              <a href="{{route('adpreview',[$advert->adset,$advert])}}"  class="cart-table__product-item" >
                                   <div class="cart-table__product-item-img">
-                                      @if($advert->advertable_type == 'App\Models\Product')
-                                          <img src="{{Storage::url($advert->advertable->photo)}}" alt="{{$advert->advertable->name}}" />
-                                      @else
-                                          <img src="{{Storage::url($advert->advertable->banner)}}" alt="{{$advert->advertable->name}}" />
-                                      @endif
+                                      <img src="{{$advert->image}}" alt="{{$advert->advertable->name}}" />
                                   </div>
                                   <div class="d-flex flex-column">
-                                      <h5 class="font-body--lg-400"> {{ $advert->advertable->name}}
-                                        @if($advert->advertable_type == 'App\Models\Product')
-                                            <small class="text-muted">(product)</small>
-                                        @else
-                                            <small class="text-muted">(shop)</small>
-                                        @endif
-                                      </h5>
+                                      <h5 class="font-body--lg-400"> {{ $advert->heading}}</h5>
+                                      <small class="text-muted">{{ $advert->subheading}}</small> 
                                   </div>
                               </a>
                           </td>
@@ -170,7 +155,7 @@
                                 {{$advert->views}} Views <br>
                                 {{$advert->clicks}} Clicks
                           </td>
-                          <!-- Stock Status  -->
+                          
                           <td class="cart-table-item stock-status order-date align-middle">
                             @if($advert->running && $advert->status)
                               <span class="font-body--md-400 in"> Live</span>
@@ -198,13 +183,9 @@
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <form class="d-inline" action="{{route('admin.adverts.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                                   <input type="hidden" name="advert_id" value="{{$advert->id}}">
-                                  <a href="#" class="dropdown-item">Preview</a>
                                   @if(!$advert->approved)
                                   <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
-                                  @else
-                                  <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
                                   @endif
-                                  
                                   <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
                                 </form>                                      
                               </div>

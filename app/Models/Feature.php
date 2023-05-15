@@ -2,43 +2,28 @@
 
 namespace App\Models;
 
-use App\Models\Shop;
-use App\Models\State;
 use App\Models\Adset;
+use App\Models\State;
 use App\Models\Product;
-use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Advert extends Model
+class Feature extends Model
 {
-    use HasFactory,GeoLocationTrait;
-
+    use HasFactory;
     protected $fillable = [
-        'advertable_id','advertable_type','adset_id','state_id','approved','photo','heading','subheading',
-        'offer','text_color','button_text','button_color'
+        'product_id','adset_id','state_id','approved'
     ];
     //status means the state (not status) of the shop/product .e.g availability, approval, accessibility, etc
-    protected $appends = ['status','running','image'];
+    protected $appends = ['running'];
 
-    public function advertable(){
-        return $this->morphTo();
+    public function adset(){
+        return $this->belongsTo(Adset::class);
     }
 
     public function product(){
-        //use only after separating the product from the shop
-        return $this->belongsTo(Product::class,'advertable_id');
-    }
-
-    public function shop(){
-        //use only after separating the product from the shop
-        return $this->belongsTo(Shop::class,'advertable_id');
-    }
-    
-    public function adset(){
-        return $this->belongsTo(Adset::class);
+        return $this->belongsTo(Product::class);
     }
 
     public function state(){
@@ -50,11 +35,11 @@ class Advert extends Model
     }
 
     public function getStatusAttribute(){
-        return $this->advertable && $this->advertable->certified();
+        return $this->product && $this->product->certified();
     }
-    
+
     public function getUrlAttribute(){
-        return $this->advertable_type == 'App\Models\Shop' ? route('vendor.shop.show',$this->advertable) : route('product.show',$this->advertable);
+        return route('product.show',$this->product);
     }
 
     public function getImageAttribute(){
@@ -85,21 +70,10 @@ class Advert extends Model
     
     public function scopeRunning($query){
         return $query->where('approved',true)->whereHas('adset', function (Builder $qry) 
-            { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); });
-    }
-
-    public function scopeCertifiedProduct($query){
-        return $query->whereHas('product', function (Builder $qry){ 
-                 $qry->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();});
-    }
-
-    public function scopeCertifiedShop($query){
-        return $query->whereHas('shop', function (Builder $qry)  { 
-            $qry->isActive()->isApproved()->isVisible()
-            ->whereHas('products',function(Builder $q){
-                $q->isValid()->isAccessible()->isAvailable()->isActive()->isApproved()->isVisible();
+            { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); })
+            ->whereHas('product',function($qpd){
+                $qpd->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();
             });
-        });
     }
 
 }

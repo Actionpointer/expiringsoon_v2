@@ -80,7 +80,8 @@ class ProductController extends Controller
                 
             ], 200);
         }else{
-            $advert = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"F")->orderBy('views','asc')->first();
+            // $advert = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"F")->orderBy('views','asc')->first();
+            $advert = null;
             if($advert){
                 $advert->views = $advert->views + 1;
                 $advert->save();
@@ -132,10 +133,13 @@ class ProductController extends Controller
 
         $state_id = session('locale')['state_id'];
         $categories = Category::orderBy('name','ASC')->take(8)->get();
-        $advert_C = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_D = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_E = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_Z = Advert::with('product')->within($state_id)->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
+        // $advert_C = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        // $advert_D = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+        // $advert_E = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $advert_C = [];
+        $advert_D = [];
+        $advert_E = [];
+        $advert_Z = Advert::with('product')->within($state_id)->running()->certifiedProduct()->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
         $products = Product::whereIn('id',$advert_Z->pluck('product_id'))->paginate(10);
         if(request()->expectsJson()){
             return response()->json([

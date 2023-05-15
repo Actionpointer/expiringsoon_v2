@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use PDO;
 use App\Models\Cart;
 use App\Models\Like;
 use App\Models\Shop;
 use App\Models\Advert;
 use App\Models\Review;
+use App\Models\Feature;
 use App\Models\Category;
 use App\Models\OrderItem;
 use App\Observers\ProductObserver;
@@ -99,6 +101,10 @@ class Product extends Model
         return $this->morphMany(Advert::class,'advertable');
     }
 
+    public function features(){
+        return $this->hasMany(Feature::class);
+    }
+
     public function scopeWithin($query,$value = null){
         if($value){
             return $query->whereHas('shop',function($p)use($value){
@@ -113,6 +119,7 @@ class Product extends Model
             return $query->whereHas('shop',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
         }  
     }
+
     //expiry
     public function getValidAttribute(){
         return $this->expire_at->subHours(cache('settings')['order_processing_to_delivery_period']) > now();
@@ -139,20 +146,25 @@ class Product extends Model
     public function scopeIsActive($query){
         return $query->where('status',true);
     }
+
     public function scopeIsVisible($query){
         return $query->where('published',true);
     }
+
     //accessible
     public function accessible(){
         return $this->shop->status && $this->shop->approved && $this->shop->published;
     }
+
     public function scopeIsAccessible($query){
         return $query->whereHas('shop',function ($q) { $q->where('status',true)->where('approved',true)->where('published',true); } );
     }
+
     //available
     public function getAvailableAttribute(){
         return $this->stock > cache('settings')['minimum_stock_level'];
     }
+
     public function scopeIsAvailable($query){
         return $query->where('stock','>',cache('settings')['minimum_stock_level']);
     }

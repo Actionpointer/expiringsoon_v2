@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Tag;
+use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Arr;
@@ -20,8 +21,56 @@ class ProductController extends Controller
     }
     
     public function index(){
-        $products = Product::within()->orderBy('expire_at','desc')->paginate(10);
-        return view('admin.products',compact('products'));
+        $country_id = null;
+        $status = 'all';
+        $sortBy = null;
+        $name = null;
+        $products = Product::within();
+        if(request()->query() && request()->query('name')){
+            $name = request()->query('name');
+            $products = $products->where('name','LIKE',"%$name%");
+        }
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $products = $products->whereHas('shop',function($quey) use($country_id){
+                $quey->where('country_id',$country_id);
+            });
+        }else{
+            $country_id = 0;
+        }
+        if(request()->query() && request()->query('status') && request()->query('status') != 'all'){
+            $status = request()->query('status');
+            if($status == 'live')
+            $products = $products->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();
+            if($status == 'pending')
+            $products = $products->where('approved',false);
+            if($status == 'inactive')
+            $products = $products->where('status',false);
+            if($status == 'draft')
+            $products = $products->where('published',false);
+            if($status == 'expired')
+            $products = $products->where('expire_at','<',now());
+            if($status == 'soldout')
+            $products = $products->where('stock','<',cache('settings')['maximum_stock_level']);
+            if($status == 'inaccessible')
+            $products = $products->whereHas('shop',function ($q) { $q->where('status',false)->orWhere('approved',false)->orWhere('published',false); } );
+        }
+        
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'name_asc'){
+                $products = $products->orderBy('name','asc');
+            }
+            if(request()->query('sortBy') == 'name_desc'){
+                $products = $products->orderBy('name','desc');
+            }
+            
+        }
+        $countries = Country::all();
+        $products = $products->paginate(16);
+        $min_date = $products->total() ? $products->min('created_at')->format('Y-m-d') : null;
+        $max_date = $products->total() ? $products->max('created_at')->format('Y-m-d') : null;
+        return view('admin.products',compact('products','min_date','max_date','countries','country_id','status','name','sortBy'));
     }
 
     public function manage(Request $request){

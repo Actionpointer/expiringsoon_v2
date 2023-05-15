@@ -45,7 +45,7 @@ Table Contents
 ======================== */
 if (document.getElementById('countdownTwo')) {
   $('#countdownTwo').syotimer({
-    year: 2021,
+    year: 2024,
     month: 9,
     day: 30,
     hour: 20,

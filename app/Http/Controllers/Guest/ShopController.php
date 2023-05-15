@@ -58,8 +58,10 @@ class ShopController extends Controller
                 
             ], 200);
         }else{
-            $advert_G = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-            $advert_H = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+            // $advert_G = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+            // $advert_H = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+            $advert_G = [];
+            $advert_H = [];
             return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
         }
         

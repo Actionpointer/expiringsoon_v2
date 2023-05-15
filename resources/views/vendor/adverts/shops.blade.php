@@ -2,6 +2,7 @@
 @push('styles')
 <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
 <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('src/css/custom.css')}}"/>
 @endpush
 @section('title') Adverts | Expiring Soon @endsection
 @section('main')
@@ -36,7 +37,7 @@
             <div class="container">
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
-                    <h2 class="font-body--xl-500">Adverts</h2>
+                    <h2 class="font-body--xl-500">Adverts for {{$adset->adplan->name}}</h2>
                     <span class="font-body--lg-600"> Adset No: {{$adset->slug}}</span>
                 </div>
                 <div class="products-tab__btn">
@@ -57,13 +58,13 @@
                               Inactive
                               </button>
                           </li>
-                          
+                          @if($adset->units > $adset->adverts->count()) 
                           <li class="nav-item" role="presentation">
                               <button class="nav-link" id="pills-draft-tab" data-bs-toggle="pill" data-bs-target="#pills-draft" type="button" role="tab" aria-controls="pills-draft" aria-selected="false">
-                                Add Shop
+                                Add Advert
                               </button>
                           </li>
-                          
+                          @endif
                           
                           
                           
@@ -78,7 +79,7 @@
                                 <table class="table datatable">
                                     <thead>
                                     <tr>
-                                        <th scope="col" class="dashboard__order-history-table-title"> Shop </th>
+                                        <th scope="col" class="dashboard__order-history-table-title"> Ad </th>
                                         <th scope="col" class="dashboard__order-history-table-title"> Location </th>
                                         <th scope="col" class="dashboard__order-history-table-title"> Views</th>
                                         <th scope="col" class="dashboard__order-history-table-title"> Clicks</th>
@@ -93,25 +94,20 @@
                                                         <div class="d-flex align-items-center">
                                                             <div class="form-check pt-2 d-inline-block">
                                                               <label class="form-check-label font-body--400" for="existing"> </label>
-                                                              <input class="form-check-input checkboxes" type="checkbox" name="shop[]" value="{{$advert->shop->id}}" >
+                                                              <input class="form-check-input checkboxes" type="checkbox" name="advert_id[]" value="{{$advert->id}}" >
                                                             </div>
-                                                            <a href="{{route('product.show',$advert->shop)}}" class="cart-table__product-item">
+                                                            <a href="{{$advert->url}}" class="cart-table__product-item">
                                                               <div class="cart-table__product-item-img">
-                                                                <img src="{{$advert->shop->image}}" alt="{{$advert->shop->name}}" />
+                                                                <img src="{{$advert->image}}" alt="{{$advert->heading}}" />
                                                               </div>
                                                             </a>
                                                         </div>
                                                         
-                                                        <div class="d-flex align-items-center">
-                                                          <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                            <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->shop->name}}
-                                                              <span>
-                                                                <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
-                                                                </svg>
-                                                              </span>
-                                                            </h5>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                          <a href="{{$advert->url}}" class="cart-table__product-item">
+                                                            <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->heading}} </h5>
                                                           </a>
+                                                          <span>{{$advert->offer}}</span> 
                                                         </div>
                                                     </div>
                                                 </td>
@@ -124,12 +120,13 @@
           
                                                 
                                                 <td class="cart-table-item align-middle">
-                                                    <div class="dropdown">
-                                                        <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                        <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                        <button class="btn btn-sm btn-danger" type="submit">
-                                                            Remove
-                                                        </button>
+                                                    <div class="button-group">
+                                                        <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
+                                                        <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
+                                                          <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                          <button class="btn btn-sm btn-danger" type="submit">
+                                                              Remove
+                                                          </button>
                                                         </form>
                                                         
                                                         
@@ -160,31 +157,26 @@
                                     @foreach($adset->adverts->where('approved',false) as $advert)        
                                         <tr class="border-top">
                                             <td class="cart-table-item align-middle" >
-                                                <div class="d-flex flex-column flex-md-row">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="form-check pt-2 d-inline-block">
-                                                          <label class="form-check-label font-body--400" for="existing"> </label>
-                                                          <input class="form-check-input checkboxes" type="checkbox" name="shop[]" value="{{$advert->shop->id}}" >
-                                                        </div>
-                                                        <a href="{{route('product.show',$advert->shop)}}" class="cart-table__product-item">
-                                                          <div class="cart-table__product-item-img">
-                                                            <img src="{{$advert->shop->image}}" alt="{{$advert->shop->name}}" />
-                                                          </div>
-                                                        </a>
+                                              <div class="d-flex flex-column flex-md-row">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="form-check pt-2 d-inline-block">
+                                                      <label class="form-check-label font-body--400" for="existing"> </label>
+                                                      <input class="form-check-input checkboxes" type="checkbox" name="advert_id[]" value="{{$advert->id}}" >
                                                     </div>
-                                                    
-                                                    <div class="d-flex align-items-center">
-                                                      <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                        <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->shop->name}}
-                                                          <span>
-                                                            <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
-                                                            </svg>
-                                                          </span>
-                                                        </h5>
-                                                      </a>
-                                                    </div>
+                                                    <a href="{{$advert->url}}" class="cart-table__product-item">
+                                                      <div class="cart-table__product-item-img">
+                                                        <img src="{{$advert->image}}" alt="{{$advert->heading}}" />
+                                                      </div>
+                                                    </a>
                                                 </div>
+                                                
+                                                <div class="d-flex flex-column justify-content-center">
+                                                  <a href="{{$advert->url}}" class="cart-table__product-item">
+                                                    <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->heading}} </h5>
+                                                  </a>
+                                                  <span>{{$advert->offer}}</span> 
+                                                </div>
+                                              </div>
                                             </td>
                                             <td class="cart-table-item align-middle"> {{ $advert->state->name}}</td>
                                             <!-- Date  -->
@@ -193,16 +185,17 @@
                                             <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td>
                                             
                                             <td class="cart-table-item align-middle">
-                                                <div class="dropdown">
-                                                    <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                    <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                    <button class="btn btn-sm btn-danger" type="submit">
-                                                        Remove
-                                                    </button>
-                                                    </form>
-                                                    
-                                                    
-                                                </div>
+                                              <div class="button-group">
+                                                <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
+                                                <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
+                                                  <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                  <button class="btn btn-sm btn-danger" type="submit">
+                                                      Remove
+                                                  </button>
+                                                </form>
+                                                
+                                                
+                                            </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -229,31 +222,26 @@
                                       @foreach($adset->adverts->where('running',true)->where('approved',true)->where('status',false) as $advert)        
                                           <tr class="border-top">
                                               <td class="cart-table-item align-middle" >
-                                                  <div class="d-flex flex-column flex-md-row">
-                                                      <div class="d-flex align-items-center">
-                                                          <div class="form-check pt-2 d-inline-block">
-                                                            <label class="form-check-label font-body--400" for="existing"> </label>
-                                                            <input class="form-check-input checkboxes" type="checkbox" name="shop[]" value="{{$advert->shop->id}}" >
-                                                          </div>
-                                                          <a href="{{route('product.show',$advert->shop)}}" class="cart-table__product-item">
-                                                            <div class="cart-table__product-item-img">
-                                                              <img src="{{$advert->shop->image}}" alt="{{$advert->shop->name}}" />
-                                                            </div>
-                                                          </a>
+                                                <div class="d-flex flex-column flex-md-row">
+                                                  <div class="d-flex align-items-center">
+                                                      <div class="form-check pt-2 d-inline-block">
+                                                        <label class="form-check-label font-body--400" for="existing"> </label>
+                                                        <input class="form-check-input checkboxes" type="checkbox" name="advert_id[]" value="{{$advert->id}}" >
                                                       </div>
-                                                      
-                                                      <div class="d-flex align-items-center">
-                                                        <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                          <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->shop->name}}
-                                                            <span>
-                                                              <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                  <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
-                                                              </svg>
-                                                            </span>
-                                                          </h5>
-                                                        </a>
-                                                      </div>
+                                                      <a href="{{$advert->url}}" class="cart-table__product-item">
+                                                        <div class="cart-table__product-item-img">
+                                                          <img src="{{$advert->image}}" alt="{{$advert->heading}}" />
+                                                        </div>
+                                                      </a>
                                                   </div>
+                                                  
+                                                  <div class="d-flex flex-column justify-content-center">
+                                                    <a href="{{$advert->url}}" class="cart-table__product-item">
+                                                      <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->heading}} </h5>
+                                                    </a>
+                                                    <span>{{$advert->offer}}</span> 
+                                                  </div>
+                                                </div>
                                               </td>
                                               
                                               <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
@@ -268,12 +256,15 @@
                                               <!-- Status -->
                                               
                                               <td class="cart-table-item align-middle">
-                                                <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                  <input type="hidden" name="adverts[]" value="{{$advert->id}}">
-                                                  <button class="btn btn-sm btn-danger" type="submit">
-                                                      Remove
-                                                  </button>
-                                                </form>
+                                                <div class="button-group">
+                                                  <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
+                                                  <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
+                                                    <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                    <button class="btn btn-sm btn-danger" type="submit">
+                                                        Remove
+                                                    </button>
+                                                  </form> 
+                                                </div>
                                               </td>
                                           </tr>
                                       @endforeach
@@ -283,7 +274,7 @@
                           </div>
                         </div>
                         
-                        
+                        @if($adset->units > $adset->adverts->count()) 
                         <div class="tab-pane fade" id="pills-draft" role="tabpanel" aria-labelledby="pills-draft-tab">
                             <div class="products-tab__description">
                               <section class="shoping-cart section section--xl pt-0 pb-5">
@@ -291,16 +282,6 @@
                                   <div class="col-lg-8">
                                     <form method="POST" action="{{route('vendor.advert.store.shops')}}" enctype="multipart/form-data">@csrf
                                       <input type="hidden" name="adset_id" value="{{$adset->id}}">
-                                      
-                                      <div class="contact-form-input">
-                                          <label>Select Shops</label>
-                                          <select id="shops" name="shop_id" class="select2" @if($adset->units <= $adset->adverts->count()) disabled @endif>
-                                            @foreach ($shops as $shop)
-                                              <option value="{{$shop->id}}">{{$shop->name}} </option>  
-                                            @endforeach 
-                                          </select>
-                                      </div>
-                                    
                                       <div class="contact-form-input">
                                         <label>Show in Location</label>
                                         <select id="stateselect" name="state_id" class="select2" required>
@@ -312,7 +293,7 @@
                                       <div class="contact-form-file mb-3">
                                         <label for="category" class="d-block">Display Image </label>
                                         <input type="file" name="photo" placeholder="" />
-                                        <small class="d-block">Image must be less than 100kb in size and must be exactly 1200px width and 500px height </small>
+                                        <small class="d-block">{{$adset->adplan->instruction}} </small>
                                       </div>
                                       <div class="contact-form-input">
                                         <label for="category">Heading</label>
@@ -320,12 +301,67 @@
                                       </div>
                                       <div class="contact-form-input">
                                         <label for="category">Subheading</label>
-                                        <input type="text" name="subheading" placeholder="" />
+                                        <input type="text" name="subheading"  placeholder="" />
                                       </div>
+                                      
                                       <div class="contact-form-input">
                                         <label for="category">Offer Text</label>
-                                        <input type="text" name="offer" placeholder="e.g Sales 50% off" />
+                                        <input type="text" name="offer" placeholder="e.g Sales 50% off" maxlength="20"/>
                                       </div>
+                                      <div class="contact-form-input">
+                                        <label for="category">Text Color (for heading & subheading & offer)</label>
+                                        <select type="text" name="text_color" class="form-control like_select2">
+                                            <option value="black">Black</option>
+                                            <option value="white">White</option>
+                                        </select>
+                                      </div>
+                                      <div class="contact-form__content-group justify-content-start mb-3">
+                                        <label class="font-body--md-500">Link to: </label>
+                                        <div class="form-check mx-3">
+                                          <label class="form-check-label font-body--400" for="type_shop"> 
+                                              Shop
+                                          </label>
+                                          <input class="form-check-input linkto" type="radio" name="type" id="type_shop" value="shop" checked>
+                                        </div>
+                                        <div class="form-check mx-3">
+                                          <label class="form-check-label font-body--400" for="type_product"> 
+                                              Product
+                                          </label>
+                                          <input class="form-check-input linkto" type="radio" name="type" id="type_product" value="product" >
+                                        </div>
+                                      </div>
+                                      <div class="contact-form-input" id="show_shops">
+                                        <label>Select Shop</label>
+                                        <select id="shops" name="shop_id" class="select2">
+                                          @foreach ($shops as $shop)
+                                            <option value="{{$shop->id}}">{{$shop->name}} </option>  
+                                          @endforeach 
+                                        </select>
+                                      </div>
+                                      <div class="contact-form-input" id="show_products" style="display:none;">
+                                        <label>Select Product</label>
+                                        <select id="products" name="product_id" class="select2">
+                                            @foreach ($products as $product)
+                                              <option value="{{$product->id}}">{{$product->name}}</option>  
+                                            @endforeach      
+                                        </select>
+                                      </div>
+                                      <div class="contact-form-input">
+                                        <label for="category">Button Text</label>
+                                        <select name="button_text" class="form-control like_select2">
+                                          <option value="Shop Now">Shop Now</option>
+                                          <option value="Buy Now">Buy Now</option>
+                                          <option value="Hurry Now">Hurry Now</option>
+                                      </select>
+                                      </div>
+                                      <div class="contact-form-input">
+                                        <label for="category">Button Color</label>
+                                        <select name="button_color" class="form-control like_select2">
+                                            <option value="green">Green</option>
+                                            <option value="white">White</option>
+                                        </select>
+                                      </div>
+                                      
                                       <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($adset->units <= $adset->adverts->count()) disabled @endif>
                                         Create Ad
                                       </button>
@@ -336,7 +372,7 @@
                               </section>                   
                             </div>
                         </div> 
-      
+                        @endif
                     </div>
                 </div>
 
@@ -373,12 +409,15 @@
 <script>
   var limit = @json($adset->units);
   var used = @json($adset->adverts->count());
-  $('.select2#shop[multiple]').select2({
-    maximumSelectionLength:limit-used,
-  })
-  $('#addbankaccount').click(function(e){
-      e.preventDefault();
-      $('#pills-plans-tab').tab('show');
+  $('.linkto').on('change',function(){
+      if($(this).val() == 'product'){
+        $('#show_shops').hide();
+        $('#show_products').fadeIn();
+      }else{
+        $('#show_products').hide();
+        $('#show_shops').fadeIn();
+        
+      }
   })
 </script>
 @endpush

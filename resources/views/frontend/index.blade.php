@@ -11,44 +11,6 @@
         <div class="container">
             <div class="swiper-container banner-slider--04">
                 <div class="swiper-wrapper">
-                    @forelse ($advert_A as $item)
-                    <div class="swiper-slide">
-                        <div class="row banner--04__content">
-                            <div class="col-lg-6">
-                                <div class="banner--04__img-wrapper">
-                                    <img src="{{Storage::url($item->photo)}}" alt="banner" class="img-fluid">
-                                    <div class="off-sale">
-                                        <p>
-                                            <span>80%</span>
-                                            off
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="banner--04__text-content">
-                                    <h5 class="title">{{$item->shop->name}}</h5>
-                                    <h2 class="font-title--xxxl">
-                                        Fresh &amp; Healthy Organic Food
-                                    </h2>
-
-                                    <p class="font-body--md-400">
-                                        Free shipping on all your order. we deliver, you enjoy
-                                    </p>
-                                    <a href="{{route('vendor.show',$item->shop)}}" class="button button--md">
-                                        Shop now
-                                        <span>
-                                            <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @empty
                     <div class="swiper-slide">
                         <div class="row banner--04__content">
                             <div class="col-lg-6">
@@ -84,9 +46,43 @@
                             </div>
                         </div>
                     </div>
-                    @endforelse
-                    
+                    <div class="swiper-slide">
+                        <div class="row banner--04__content">
+                            <div class="col-lg-6">
+                                <div class="banner--04__img-wrapper">
+                                    <img src="{{asset('src/images/banner/banner-sm-12.png')}}" alt="banner" class="img-fluid">
+                                    <div class="off-sale">
+                                        <p>
+                                            <span>70%</span>
+                                            off
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="banner--04__text-content">
+                                    <h5 class="title">Welcome to shopery</h5>
+                                    <h2 class="font-title--xxxl">
+                                        Fresh &amp; Healthy Organic Food
+                                    </h2>
+                                    <p class="font-body--md-400">
+                                        Free coupons on all your order. we deliver, you enjoy
+                                    </p>
+                                    <a href="https://shopery.netlify.app/main/home-04.html#" class="button button--md">
+                                        Shop now
+                                        <span>
+                                            <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="swiper-pagination"></div>
             </div>
 
@@ -121,9 +117,9 @@
                                 </svg>
                             </span>
                             <div class="cards-ship__item-process-info">
-                                <h2 class="font-body--lg-600">Free Shipping</h2>
+                                <h2 class="font-body--lg-600">Fast Shipping</h2>
                                 <p class="font-body--md-400">
-                                    Free shipping on all your order
+                                    Quick & flexible shipping on your order
                                 </p>
                             </div>
                         </div>
@@ -178,36 +174,6 @@
     <section class="cyclone section section--lg section--green-0">
         <div class="container">
             <div class="row">
-                @forelse ($advert_B as $item)  
-                <div class="col-xl-4 col-md-6">
-                    <div class="cards-ss cards-ss--lg">
-                        <div class="cards-ss__img-wrapper">
-                            <img src="{{Storage::url($item->photo)}}" alt="banner" />
-                            <div class="cards-ss__content text-center">
-                                <h6 class="font-body--md-500">{{strtoupper($item->subheading)}}</h6>
-                                <h2 class="font-title--lg">{{$item->heading}} </h2>
-
-                                <div class="cards-ss__startpackage">
-                                    <p>
-                                        
-                                        <span class="font-body--xxl-600">{{$item->offer}}</span>
-                                    </p>
-                                </div>
-
-                                <a href="{{route('vendor.show',$item->advertable)}}" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @empty
                 <div class="col-xl-4 col-md-6">
                     <div class="cards-ss cards-ss--lg">
                         <div class="cards-ss__img-wrapper">
@@ -282,9 +248,6 @@
                         </div>
                     </div>
                 </div>
-                @endforelse
-                
-                
             </div>
         </div>
     </section>

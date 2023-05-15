@@ -40,15 +40,20 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
     //list adds, create ads (both shop and products)
     Route::get('adverts/{adset}',[AdvertController::class,'ads'])->name('adverts');
 
-    //create adsetd ads
-    Route::post('adset/products',[AdvertController::class,'adset_products'])->name('adset.products');
-    Route::post('adset/products/subscription',[AdvertController::class,'adset_products_subscription'])->name('adset.products.subscription');
+    //store featured adsets
+    Route::post('adset/products',[AdvertController::class,'feature_products'])->name('adset.products');
+
+    Route::post('adset/products/subscription',[AdvertController::class,'feature_products_subscription'])->name('adset.products.subscription');
 
     Route::post('adverts/product/filter',[AdvertController::class,'filter_products'])->name('advert.filter_product');
+    
+    //store featured ads to adset
     Route::post('adverts/store/product',[AdvertController::class,'store_product_advert'])->name('advert.store.products');
+    //store adverts to adsets
     Route::post('adverts/store/shop',[AdvertController::class,'store_shop_advert'])->name('advert.store.shops');
     
-    Route::post('adverts/manage',[AdvertController::class,'remove'])->name('advert.remove');
+    Route::post('adverts/manage',[AdvertController::class,'advert_remove'])->name('advert.remove');
+    Route::post('feature/manage',[AdvertController::class,'feature_remove'])->name('feature.remove');
     include('shop.php');
     
 });

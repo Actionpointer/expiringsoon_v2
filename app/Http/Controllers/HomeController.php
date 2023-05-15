@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adset;
 use App\Models\Order;
+use App\Models\Advert;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\DB;
 use App\Http\Traits\GeoLocationTrait;
@@ -39,5 +41,9 @@ class HomeController extends Controller
         $orders = Order::where('user_id',$user->id)->whereHas('statuses')->get();
         return view('customer.dashboard',compact('user','orders'));
     }
+
+    public function adpreview(Adset $adset,Advert $advert){
+        return view('vendor.adverts.preview',compact('advert'));
+    }   
     
 }

@@ -37,7 +37,7 @@
             <div class="container">
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
-                    <h2 class="font-body--xl-500">Adverts</h2>
+                    <h2 class="font-body--xl-500">{{$adset->adplan->name}} Adverts</h2>
                     <span class="font-body--lg-600"> Adset No: {{$adset->slug}}</span>
                 </div>
                 <div class="products-tab__btn">
@@ -59,13 +59,13 @@
                               Inactive
                               </button>
                           </li>
-                          
+                          @if($adset->units > $adset->features->count())
                           <li class="nav-item" role="presentation">
                               <button class="nav-link" id="pills-draft-tab" data-bs-toggle="pill" data-bs-target="#pills-draft" type="button" role="tab" aria-controls="pills-draft" aria-selected="false">
                                 Add Product
                               </button>
                           </li>
-                          
+                          @endif
                           
                           
                           
@@ -88,25 +88,25 @@
                                     </tr>
                                     </thead>
                                     <tbody>                     
-                                        @foreach($adset->adverts->where('running',true)->where('status',true) as $advert)        
+                                        @foreach($adset->features->where('running',true) as $feature)        
                                             <tr class="border-top">
                                                 <td class="cart-table-item align-middle" >
                                                     <div class="d-flex flex-column flex-md-row">
                                                         <div class="d-flex align-items-center">
                                                             <div class="form-check pt-2 d-inline-block">
                                                               <label class="form-check-label font-body--400" for="existing"> </label>
-                                                              <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$advert->product->id}}" >
+                                                              <input class="form-check-input checkboxes" type="checkbox" name="features[]" value="{{$feature->id}}" >
                                                             </div>
-                                                            <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
+                                                            <a href="{{$feature->url}}" class="cart-table__product-item">
                                                               <div class="cart-table__product-item-img">
-                                                                <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
+                                                                <img src="{{$feature->product->image}}" alt="{{$feature->product->name}}" />
                                                               </div>
                                                             </a>
                                                         </div>
                                                         
                                                         <div class="d-flex align-items-center">
-                                                          <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                            <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->product->name}}
+                                                          <a href="{{$feature->url}}" class="cart-table__product-item">
+                                                            <h5 class="font-body--lg-400" style="font-size:14px"> {{$feature->product->name}}
                                                               <span>
                                                                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
@@ -119,12 +119,12 @@
                                                 </td>
                                                 
                                                 <!-- Date  -->
-                                                <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
-                                                <td class="cart-table-item align-middle"> {{ $advert->views}}</td>
-                                                <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td> 
+                                                <td class="cart-table-item align-middle"> {{ $feature->state->name}}, {{ $feature->state->country->name}}</td>
+                                                <td class="cart-table-item align-middle"> {{ $feature->views}}</td>
+                                                <td class="cart-table-item align-middle ">  {{ $feature->clicks}} </td> 
                                                 <td class="cart-table-item align-middle">
-                                                  <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                    <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                  <form action="{{route('vendor.feature.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
+                                                    <input type="hidden" name="features[]" value="{{$feature->id}}">
                                                     <button class="btn btn-sm btn-danger" type="submit">
                                                       Remove
                                                     </button>
@@ -154,44 +154,44 @@
                                 </tr>
                                 </thead>
                                 <tbody>                     
-                                    @foreach($adset->adverts->where('approved',false) as $advert)        
+                                    @foreach($adset->features->where('approved',false) as $feature)        
                                         <tr class="border-top">
                                             <td class="cart-table-item align-middle" >
-                                                <div class="d-flex flex-column flex-md-row">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="form-check pt-2 d-inline-block">
-                                                          <label class="form-check-label font-body--400" for="existing"> </label>
-                                                          <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$advert->product->id}}" >
-                                                        </div>
-                                                        <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                          <div class="cart-table__product-item-img">
-                                                            <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
-                                                          </div>
-                                                        </a>
+                                              <div class="d-flex flex-column flex-md-row">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="form-check pt-2 d-inline-block">
+                                                      <label class="form-check-label font-body--400" for="existing"> </label>
+                                                      <input class="form-check-input checkboxes" type="checkbox" name="features[]" value="{{$feature->id}}" >
                                                     </div>
-                                                    
-                                                    <div class="d-flex align-items-center">
-                                                      <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                        <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->product->name}}
-                                                          <span>
-                                                            <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
-                                                            </svg>
-                                                          </span>
-                                                        </h5>
-                                                      </a>
-                                                    </div>
+                                                    <a href="{{$feature->url}}" class="cart-table__product-item">
+                                                      <div class="cart-table__product-item-img">
+                                                        <img src="{{$feature->product->image}}" alt="{{$feature->product->name}}" />
+                                                      </div>
+                                                    </a>
                                                 </div>
+                                                
+                                                <div class="d-flex align-items-center">
+                                                  <a href="{{$feature->url}}" class="cart-table__product-item">
+                                                    <h5 class="font-body--lg-400" style="font-size:14px"> {{$feature->product->name}}
+                                                      <span>
+                                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
+                                                        </svg>
+                                                      </span>
+                                                    </h5>
+                                                  </a>
+                                                </div>
+                                              </div>
                                             </td>
                                             
                                             <!-- Date  -->
-                                            <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
-                                            <td class="cart-table-item align-middle"> {{ $advert->views}}</td>
+                                            <td class="cart-table-item align-middle"> {{ $feature->state->name}}, {{ $feature->state->country->name}}</td>
+                                            <td class="cart-table-item align-middle"> {{ $feature->views}}</td>
                                             <!-- Total  -->
-                                            <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td>                                          
+                                            <td class="cart-table-item align-middle ">  {{ $feature->clicks}} </td>                                          
                                             <td class="cart-table-item align-middle">
-                                              <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                              <form action="{{route('vendor.feature.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
+                                                <input type="hidden" name="features[]" value="{{$feature->id}}">
                                                 <button class="btn btn-sm btn-danger" type="submit">
                                                     Remove
                                                 </button>
@@ -220,37 +220,37 @@
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($adset->adverts->where('running',true)->where('approved',true)->where('status',false) as $advert)        
+                                      @foreach($adset->features->where('status',false) as $feature)        
                                           <tr class="border-top">
                                               <td class="cart-table-item align-middle" >
-                                                  <div class="d-flex flex-column flex-md-row">
-                                                      <div class="d-flex align-items-center">
-                                                          <div class="form-check pt-2 d-inline-block">
-                                                            <label class="form-check-label font-body--400" for="existing"> </label>
-                                                            <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$advert->product->id}}" >
-                                                          </div>
-                                                          <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                            <div class="cart-table__product-item-img">
-                                                              <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" />
-                                                            </div>
-                                                          </a>
+                                                <div class="d-flex flex-column flex-md-row">
+                                                  <div class="d-flex align-items-center">
+                                                      <div class="form-check pt-2 d-inline-block">
+                                                        <label class="form-check-label font-body--400" for="existing"> </label>
+                                                        <input class="form-check-input checkboxes" type="checkbox" name="features[]" value="{{$feature->id}}" >
                                                       </div>
-                                                      
-                                                      <div class="d-flex align-items-center">
-                                                        <a href="{{route('product.show',$advert->product)}}" class="cart-table__product-item">
-                                                          <h5 class="font-body--lg-400" style="font-size:14px"> {{$advert->product->name}}
-                                                            <span>
-                                                              <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                  <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
-                                                              </svg>
-                                                            </span>
-                                                          </h5>
-                                                        </a>
-                                                      </div>
+                                                      <a href="{{$feature->url}}" class="cart-table__product-item">
+                                                        <div class="cart-table__product-item-img">
+                                                          <img src="{{$feature->product->image}}" alt="{{$feature->product->name}}" />
+                                                        </div>
+                                                      </a>
                                                   </div>
+                                                  
+                                                  <div class="d-flex align-items-center">
+                                                    <a href="{{$feature->url}}" class="cart-table__product-item">
+                                                      <h5 class="font-body--lg-400" style="font-size:14px"> {{$feature->product->name}}
+                                                        <span>
+                                                          <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                              <path d="M9.31008 13.9111L12.8566 16.1577C13.31 16.4446 13.8725 16.0177 13.7381 15.4884L12.7138 11.4581C12.6848 11.3458 12.6882 11.2276 12.7234 11.1172C12.7586 11.0067 12.8243 10.9085 12.9129 10.8337L16.0933 8.18711C16.5106 7.83949 16.2958 7.14593 15.7586 7.11105L11.6056 6.84105C11.4938 6.83312 11.3866 6.79359 11.2964 6.72707C11.2061 6.66055 11.1367 6.56977 11.096 6.4653L9.5469 2.56493C9.50471 2.45408 9.42984 2.35867 9.33219 2.29136C9.23455 2.22404 9.11875 2.18799 9.00015 2.18799C8.88155 2.18799 8.76574 2.22404 8.6681 2.29136C8.57046 2.35867 8.49558 2.45408 8.4534 2.56493L6.90427 6.4653C6.86372 6.56988 6.79429 6.66077 6.70406 6.7274C6.61383 6.79402 6.50652 6.83364 6.39465 6.84161L2.24171 7.11161C1.70508 7.14593 1.48908 7.83949 1.90702 8.18711L5.0874 10.8342C5.17588 10.909 5.2415 11.0072 5.27673 11.1175C5.31195 11.2278 5.31534 11.3459 5.28652 11.4581L4.33702 15.1959C4.17558 15.8309 4.85115 16.3434 5.39452 15.9986L8.69077 13.9111C8.78342 13.8522 8.89093 13.8209 9.00071 13.8209C9.11049 13.8209 9.218 13.8522 9.31065 13.9111H9.31008Z" fill="#2c742f"></path>
+                                                          </svg>
+                                                        </span>
+                                                      </h5>
+                                                    </a>
+                                                  </div>
+                                              </div>
                                               </td>
 
-                                              <td class="cart-table-item align-middle"> {{ $advert->state->name}}, {{ $advert->state->country->name}}</td>
+                                              <td class="cart-table-item align-middle"> {{ $feature->state->name}}, {{ $feature->state->country->name}}</td>
 
                                               <td class="cart-table-item align-middle"> 
                                                   <span class="d-block text-danger">Product is not showing </span> 
@@ -258,8 +258,8 @@
                                               <!-- Status -->
                                               
                                               <td class="cart-table-item align-middle">
-                                                  <form action="{{route('vendor.advert.remove')}}" method="post" class="d-inline">@csrf
-                                                    <input type="hidden" name="adverts[]" value="{{$advert->id}}">
+                                                  <form action="{{route('vendor.feature.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
+                                                    <input type="hidden" name="features[]" value="{{$feature->id}}">
                                                     <button class="btn btn-sm btn-danger" type="submit">
                                                       Remove
                                                     </button>
@@ -274,7 +274,7 @@
                           </div>
                         </div>
                         
-                        <!--  Advert  -->
+                        @if($adset->units > $adset->features->count())
                         <div class="tab-pane fade" id="pills-draft" role="tabpanel" aria-labelledby="pills-draft-tab">
                             <div class="products-tab__description">
                                 <section class="shoping-cart section section--xl pt-0">
@@ -305,7 +305,7 @@
                                         {{-- @endif --}}
                                         <div class="contact-form-input">
                                             <label>Select Products</label>
-                                            <select id="product" name="products[]" class="select2" multiple @if($adset->units <= $adset->adverts->count()) disabled @endif required>
+                                            <select id="product" name="products[]" class="select2" multiple @if($adset->units <= $adset->features->count()) disabled @endif required>
                                                 @foreach ($products as $product)
                                                   <option value="{{$product->id}}">{{$product->name}} in {{$product->shop->name}}</option>  
                                                 @endforeach      
@@ -320,7 +320,7 @@
                                               @endforeach     
                                           </select>
                                         </div>
-                                        <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($adset->units <= $adset->adverts->count()) disabled @endif>
+                                        <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($adset->units <= $adset->features->count()) disabled @endif>
                                           Create Advert
                                         </button>
                                         
@@ -330,6 +330,7 @@
                                 </section>                   
                             </div>
                         </div> 
+                        @endif
       
                     </div>
                 </div>
@@ -366,7 +367,7 @@
 </script>
 <script>
     var limit = @json($adset->units);
-    var used = @json($adset->adverts->count());
+    var used = @json($adset->features->count());
     $('.select2#product[multiple]').select2({
       maximumSelectionLength:limit-used,
     })
