@@ -328,7 +328,7 @@ class ShopController extends Controller
             response()->json([
                 'status' => true,
                 'message' => $shop->notifications->count() ? 'Notifications retrieved Successfully':'No Notifications retrieved',
-                'data' => NotificationResource::collection($shop->notifications),
+                'data' => $shop->notifications->sortByDesc('created_at'),
                 'count' => $shop->notifications->count()
             ], 200) :
             view('vendor.shop.notifications',compact('notifications','shop'));

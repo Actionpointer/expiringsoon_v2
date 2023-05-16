@@ -13,8 +13,8 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
         Route::get('get-started',[StaffController::class, 'orientation'])->name('orientation');
         Route::get('dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
         Route::post('kyc',[StaffController::class,'kyc'])->name('kyc');
-        Route::get('notifications',[StaffController::class, 'notifications'])->name('notifications');
-        Route::post('notifications/read',[StaffController::class, 'readNotifications'])->name('notifications.read');
+        // Route::get('notifications',[StaffController::class, 'notifications'])->name('notifications');
+        // Route::post('notifications/read',[StaffController::class, 'readNotifications'])->name('notifications.read');
 
         Route::get('banking',[StaffController::class, 'banking'])->name('banking');
         Route::post('bank-account_number_verification',[StaffController::class,'accountNumberResolve'])->name('account_number_verification');

@@ -142,7 +142,7 @@ class UserController extends Controller
             response()->json([
                 'status' => true,
                 'message' => $user->notifications->count() ? 'Notifications retrieved Successfully':'No Notifications retrieved',
-                'data' => $user->notifications,
+                'data' => $user->notifications->sortByDesc('created_at'),
                 'count' => $user->notifications->count()
             ], 200) :
             view('customer.notifications',compact('user','notifications'));

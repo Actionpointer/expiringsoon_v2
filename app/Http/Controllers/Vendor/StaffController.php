@@ -184,28 +184,4 @@ class StaffController extends Controller
         return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Deleted Staff']);
     }
 
-    public function notifications(){
-        /** @var \App\Models\User $user **/
-        $user = auth()->user();
-        $notifications = $user->notifications()->orderBy('created_at','desc')->paginate(10);
-        return request()->expectsJson() ?
-            response()->json([
-                'status' => true,
-                'message' => $user->notifications->count() ? 'Notifications retrieved Successfully':'No Notifications retrieved',
-                'data' => NotificationResource::collection($user->notifications),
-                'count' => $user->notifications->count()
-            ], 200) :
-            view('vendor.notifications',compact('user','notifications'));
-    }
-
-    public function readNotifications(Request $request){
-        $user = auth()->user();
-        $user->unreadNotifications->markAsRead();
-        return request()->expectsJson() ?
-            response()->json([
-                'status' => true,
-                'message' => 'Notifications marked read',
-            ], 200) :
-            redirect()->back()->with(['result'=> 1,'message'=> 'Notifications marked read']);
-    }
 }
