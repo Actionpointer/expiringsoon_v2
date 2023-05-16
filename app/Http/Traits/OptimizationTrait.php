@@ -32,6 +32,13 @@ trait OptimizationTrait
         }
     }
 
+    protected function increaseProducts(Order $order){
+        foreach($order->items as $item){
+            $item->product->stock += $item->quantity;
+            $item->product->save();
+        }
+    }
+
     public function adjustCart(Order $order)
     {
         foreach($order->items as $item){

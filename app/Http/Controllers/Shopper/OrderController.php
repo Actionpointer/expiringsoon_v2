@@ -108,7 +108,6 @@ class OrderController extends Controller
          redirect()->back()->with(['result'=> 1,'message'=> $message]);
     }
     
-
     public function wishlist(){
         $user = auth()->user();
         $likes = Like::where('user_id',$user->id)->get();
@@ -121,7 +120,6 @@ class OrderController extends Controller
             ], 200) :
             view('customer.wishlist',compact('likes'));
     }
-
 
     public function checkout(Shop $shop = null){
         
@@ -366,27 +364,5 @@ class OrderController extends Controller
          redirect()->back()->with(['result'=> 1,'message'=> 'Message sent']);
     }
 
-    public function review(Request $request){
-        $product = Product::find($request->product_id);
-        if($product->reviewable()){
-            $review = Review::create(['product_id'=> $request->product_id,'user_id'=> auth()->id(),' rating'=> $request->rating,'comment'=> $request->comment]);
-            return request()->expectsJson() ? 
-            response()->json([
-                'status' => true,
-                'message' => 'Review Added Successfully',
-            ], 200):
-            redirect()->back()->with(['result'=> 1,'message'=> 'Review successfully added']); 
-        }else{
-            return request()->expectsJson() ? 
-            response()->json([
-                'status' => false,
-                'message' => 'Review Could Not Be Saved',
-            ], 401):
-            redirect()->back()->with(['result'=> 1,'message'=> 'Review Could Not Be Saved']); 
-        }
-        
-    }
-
-    
     
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Guest\FrontendController;
+use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('/eg', function () {
@@ -38,7 +39,7 @@ Route::view('help/vendors','help.vendors')->name('help.vendors');
 Route::view('help/api/documentation','help.apidocumentation')->name('help.api_documentation');
 Route::view('help/faq','help.faq')->name('help.faq');
 Route::view('help/download','help.download')->name('help.download');
-Route::view('help/contact','frontend.contact')->name('help.contact');
+Route::view('contact','frontend.contact')->name('contact');
 Route::get('shipments',[FrontendController::class,'shipment'])->name('shipment');
 Route::post('shipment/search',[FrontendController::class,'shipment_search'])->name('shipment.search');
 Route::post('shipment/updated',[FrontendController::class,'shipment_update'])->name('shipment.update');
@@ -102,7 +103,7 @@ Route::group(['middleware'=> 'verified'],function(){
     Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
     Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
     // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
-    Route::post('order/review',[OrderController::class, 'review'])->name('order.review');
+    Route::post('order/review',[ReviewController::class, 'review'])->name('order.review');
 
     // Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
     Route::post('order/message',[OrderController::class, 'message'])->name('order.message');

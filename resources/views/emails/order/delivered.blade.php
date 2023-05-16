@@ -136,7 +136,7 @@
 																<br/>Your order {{$order->slug}} has been delivered @if(isset($shop)) to your customer. <br/>Thank you for using Expiring Soon. @endif
 																@if(isset($user))
 																<br/>In case you are not happy with your purchase, you may still be able to return it. At Expiring Soon, we have an option for Easy Return & Quick Refund.
-																You have the option to return an item within 7 days of delivery if it's not matching your expectation (e.g wrong /defective /expired), and in some cases for change of mind too.
+																You have the option to return an item within {{cache('settings')['order_rejected_to_returned_period']}} hours of delivery if it's not matching your expectation (e.g wrong /defective /expired).
 																<br/>Thank you for shopping with Expiring Soon. 
 																@endif
 															</td>

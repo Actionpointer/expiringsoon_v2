@@ -101,7 +101,7 @@ class ApiController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-            if($user->role->name != 'vendor'){
+            if(!in_array($user->role->name,['vendor','staff'])){
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized Login Attempt',

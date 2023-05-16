@@ -30,6 +30,7 @@ class PlanResource extends JsonResource
             "commission_fixed"=> $this->commission_fixed,
             "minimum_payout"=> $this->minimum_payout,
             "maximum_payout"=> $this->maximum_payout,
+            "currency"=> auth()->user()->country->currency->symbol
         ];
     }
 }

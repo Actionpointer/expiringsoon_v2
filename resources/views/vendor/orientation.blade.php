@@ -57,7 +57,7 @@
                                         <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <p>Create a shop. <a href="#" class="text-muted small"><i>See how</i></a></p>
+                                <p>Create a shop. <a href="{{route('help.vendors')}}#shop" class="text-muted small"><i>See how</i></a></p>
                             </li>
                             <li>
                                 <span class="icon">
@@ -66,7 +66,7 @@
                                         <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <p>Create products in your shop <a href="#" class="text-muted small"><i>See how</i></a></p>
+                                <p>Create products in your shop <a href="{{route('help.vendors')}}#products" class="text-muted small"><i>See how</i></a></p>
                             </li>
                             <li>
                                 <span class="icon">
@@ -75,7 +75,7 @@
                                         <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <p>Get a subscription plan to unlock more features. <a href="#" class="text-muted small"><i>See how</i></a></p>
+                                <p>Get a subscription plan to unlock more features. <a href="{{route('help.vendors')}}#subscriptions" class="text-muted small"><i>See how</i></a></p>
                             </li>
                             <li>
                                 <span class="icon">
@@ -84,7 +84,7 @@
                                         <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <p>Verify both yourself and your business <a href="#" class="text-muted small"><i>See how</i></a></p>
+                                <p>Verify both yourself and your business <a href="{{route('help.vendors')}}#verification" class="text-muted small"><i>See how</i></a></p>
                             </li>
                             <li>
                                 <span class="icon">
@@ -93,7 +93,7 @@
                                         <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <p>Setup your bank accounts <a href="#" class="text-muted small"><i>See how</i></a></p>
+                                <p>Setup your bank accounts <a href="{{route('help.vendors')}}#banking" class="text-muted small"><i>See how</i></a></p>
                             </li>
                             <li>
                                 <span class="icon">
@@ -102,7 +102,7 @@
                                         <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <p>Manage Orders <a href="#" class="text-muted small"><i>See how</i></a></p>
+                                <p>Manage Orders <a href="{{route('help.vendors')}}#orders" class="text-muted small"><i>See how</i></a></p>
                             </li>
                         </ul>
                         <a href="{{route('vendor.dashboard')}}" class="button button--md">

@@ -65,6 +65,9 @@ class OrderStatusObserver
     }
 
     public function cancelled(OrderStatus $orderStatus){
+        $this->increaseProducts($orderStatus->order);
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
         event(new RefundBuyer($orderStatus->order,$orderStatus->order->total));
     }
 
@@ -92,7 +95,6 @@ class OrderStatusObserver
         if($orderStatus->order->deliverer == "admin"){
             $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         }
-        
     }
     
     public function completed(OrderStatus $orderStatus)

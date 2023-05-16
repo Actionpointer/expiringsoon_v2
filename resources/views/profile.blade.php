@@ -1,13 +1,7 @@
 @extends('layouts.app')
 
 @push('styles')
-<style>
-    #generate{
-      border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px;
-    padding-bottom: 10px;
-    }
-</style>
+
 @endpush
 @section('title')Account Settings | User Dashboard @endsection
 @section('main')
@@ -178,12 +172,7 @@
                         <div class="contact-form-input"> 
                           <label for="npassword">New Password </label>
                           <input   type="password" id="newPassword" name="password" placeholder="" autocomplete="new-password" required />
-                          <span class="icon" onclick="showPassword('npassword',this)"> 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > 
-                              <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> 
-                              <circle cx="12" cy="12" r="3"></circle> 
-                            </svg> 
-                          </span>
+                          
                         </div>
                         @error('password')
                         <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -194,12 +183,6 @@
                         <div class="contact-form-input">
                           <label for="confirmPassword">Confirm Password</label>
                           <input   type="password"   id="confirmPassword"   name="password_confirmation"  autocomplete="new-password" placeholder=""   required />
-                          <span   class="icon"   onclick="showPassword('confirmPassword',this)">   
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
-                              <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> 
-                              <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                          </span>
                         </div>
                       </div>
                       <div id="passmatch" style="font-size:13px;font-weight:450"></div>
@@ -224,7 +207,7 @@
                         <!-- New Password  -->
                         <div class="contact-form-input"> <label for="newPin">New Pin </label>
                           <input   type="password" id="newPin" name="pin" minlength="4" maxlength="4" placeholder="" autocomplete="new-pin" required />
-                          <span class="icon" onclick="showPassword('npassword',this)"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> <circle cx="12" cy="12" r="3"></circle> </svg> </span>
+                          <span class="icon" onclick="showPassword('newPin',this)"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" > <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> <circle cx="12" cy="12" r="3"></circle> </svg> </span>
                         </div>
                         @error('pin')
                         <span class="invalid-feedback d-block text-danger mb-4" role="alert">
@@ -233,37 +216,25 @@
                         @enderror
                         
                         <!-- confirm  Password  -->
-                        <div class="contact-form-input">
-                          <label for="confirmPin">Confirm Pin</label>
-                          <input   type="password"   id="confirmPin"   name="pin_confirmation" minlength="4" maxlength="4"  autocomplete="new-pin" placeholder=""   required />
-                          <span   class="icon"   onclick="showPassword('confirmPassword',this)">   
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
-                              <path   d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" ></path> 
-                              <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                          </span>
+                        <div class="contact-form-input" id="generate_button">
+                          <button class="btn btn-dark btn-lg generate mt-4" type="button">Generate One Time Password</button>
+                        </div>
+                        <div class="contact-form-input" id="otp_field" style="display:none;">
+                          <label for="number1"><span id="otp_response"></span>  </label>
+                          <input type="text" name="otp" class="form-control" placeholder="Enter OTP" />
                         </div>
                         
                       </div>
-                      <div class="contact-form-input">
-                        <label for="number1">One Time Password</label>
-                        <div class="input-group d-flex">
-                          <div class="append">
-                            <button class="btn btn-dark btn-lg" type="button" id="generate">Click to Generate OTP</button>
-                          </div>
-                           <input type="text" name="otp" class="form-control" placeholder="Enter OTP" />
-                        
-                            
-                          </div>
-                      </div>
-                      <span id="otp_response"></span>
+                      
+                      
+                      
                       @error('otp')
                         <span class="invalid-feedback d-block text-danger mb-4" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                       @enderror
-                      <div id="passmatch" style="font-size:13px;font-weight:450"></div>
-                      <div class="contact-form-btn">
+                      
+                      <div class="contact-form-btn" id="submit_otp" style="display:none">
                         <button type="submit" class="button button--md" type="submit"> Save New Pin
                         </button>
                       </div>
@@ -409,19 +380,22 @@
       })
   })
 
-  $(document).on('click','#generate',function(){
+  $(document).on('click','.generate',function(){
       $.ajax({
         type:'GET',
         dataType: 'json',
         url: "{{route('generate_otp')}}",
         success:function(data) {
-          console.log(data)
+          $('#generate_button').hide()
+          $('#otp_field,#submit_otp').show();
           if(data.data){
             $('#otp_response').addClass('text-success')
+            $('#otp_response').html(data.message+`. Didn't receive it? <a href="javascript:void(0)" class="generate">Resend</a>`)
           }else {
             $('#otp_response').addClass('text-danger')
+            $('#otp_response').text(data.message)
           }
-          $('#otp_response').text(data.message)
+          
         },
         error: function (data, textStatus, errorThrown) {
             console.log(data);

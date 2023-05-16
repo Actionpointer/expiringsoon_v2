@@ -11,6 +11,7 @@ use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
+use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
 /*
@@ -31,6 +32,8 @@ Route::get('product/{product_id}',[ProductController::class,'show']);
 Route::get('hotdeals',[ProductController::class, 'hotdeals']);
 Route::get('vendors',[ShopController::class, 'index']);
 Route::get('vendor/{shop_id}',[ShopController::class, 'show']);
+
+Route::get('reviews/{product_id}',[ReviewController::class,'reviews']);
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=> 'user'],function(){
@@ -62,9 +65,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::get('orders/{order_id}/messages',[OrderController::class,'messages']);
     Route::post('order/message',[OrderController::class, 'message']);
 
-    Route::post('order/review',[OrderController::class, 'review']);
-
-    Route::get('reviews/{product_id}',[ProductController::class,'reviews']);
+    Route::post('order/review',[ReviewController::class, 'review']);
 
     Route::group(['prefix'=> 'transactions'],function(){
         Route::get('/',[PaymentController::class, 'index']);    

@@ -162,29 +162,7 @@ class ProductController extends Controller
         return view('frontend.hotdeals',compact('categories','advert_C','advert_D','advert_E','advert_Z'));
     }
 
-    public function reviews(Product $product){
-        $reviews = Review::where('product_id',$product->id)->paginate(16);
-        if(request()->expectsJson()){
-            return response()->json([
-                'status' => true,
-                'message' => 'Reviews Retrieved',
-                'data' => ReviewResource::collection($reviews),
-                'meta'=> [
-                    "total"=> $reviews->total(),
-                    "per_page"=> $reviews->perPage(),
-                    "current_page"=> $reviews->currentPage(),
-                    "last_page"=> $reviews->lastPage(),
-                    "first_page_url"=> $reviews->url(1),
-                    "last_page_url"=> $reviews->url($reviews->lastPage()),
-                    "next_page_url"=> $reviews->nextPageUrl(),
-                    "prev_page_url"=> $reviews->previousPageUrl(),
-                ]
-                
-            ], 200);
-        }else{
-            return view('frontend.product.reviews',compact('reviews'));
-        }
-    }
+    
 
     
 

@@ -95,7 +95,7 @@
                         </div><!--//icon-holder-->
                         <h3 class="title">Contact Us</h3>
                         <p class="intro">We love feedbacks and we love to solve problems.</p>
-                        <a class="link" href="{{route('help.contact')}}"><span></span></a>
+                        <a class="link" href="{{route('contact')}}"><span></span></a>
                     </div><!--//item-inner-->
                 </div><!--//item-->
             </div><!--//cards-->

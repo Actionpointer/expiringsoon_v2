@@ -120,7 +120,7 @@
           
                                                 
                                                 <td class="cart-table-item align-middle">
-                                                    <div class="button-group">
+                                                    <div class="button-group text-nowrap">
                                                         <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
                                                         <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
                                                           <input type="hidden" name="adverts[]" value="{{$advert->id}}">
@@ -185,7 +185,7 @@
                                             <td class="cart-table-item align-middle ">  {{ $advert->clicks}} </td>
                                             
                                             <td class="cart-table-item align-middle">
-                                              <div class="button-group">
+                                              <div class="button-group text-nowrap">
                                                 <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
                                                 <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
                                                   <input type="hidden" name="adverts[]" value="{{$advert->id}}">
@@ -256,7 +256,7 @@
                                               <!-- Status -->
                                               
                                               <td class="cart-table-item align-middle">
-                                                <div class="button-group">
+                                                <div class="button-group text-nowrap">
                                                   <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
                                                   <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
                                                     <input type="hidden" name="adverts[]" value="{{$advert->id}}">

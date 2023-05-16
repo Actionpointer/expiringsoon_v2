@@ -2,96 +2,61 @@
 
 namespace App\Http\Controllers\Shopper;
 
-use App\Models\Order;
 use App\Models\Review;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReviewResource;
 
 class ReviewController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth:sanctum')->only('review');
+    }
     
-    public function review(Order $order,Request $request){
-        if($request->product_id == 'all'){
-            foreach($order->details as $detail){
-                $this->createReview($order->user_id,$request->body,$request->rating,$detail->product->id,$order->id);
-            }
+    public function reviews(Product $product){
+        $reviews = Review::where('product_id',$product->id)->paginate(16);
+        if(request()->expectsJson()){
+            return response()->json([
+                'status' => true,
+                'message' => 'Reviews Retrieved',
+                'data' => ReviewResource::collection($reviews),
+                'meta'=> [
+                    "total"=> $reviews->total(),
+                    "per_page"=> $reviews->perPage(),
+                    "current_page"=> $reviews->currentPage(),
+                    "last_page"=> $reviews->lastPage(),
+                    "first_page_url"=> $reviews->url(1),
+                    "last_page_url"=> $reviews->url($reviews->lastPage()),
+                    "next_page_url"=> $reviews->nextPageUrl(),
+                    "prev_page_url"=> $reviews->previousPageUrl(),
+                ]
+                
+            ], 200);
         }else{
-            $this->createReview($order->user_id,$request->body,$request->rating,$request->product_id,$order->id);
+            return view('frontend.product.reviews',compact('reviews'));
         }
-        return redirect()->back();
-    }
-    
-    public function createReview($user,$body,$rating,$product,$order){
-        $review = Review::create(['user_id'=> $user,'body'=> $body,'product_id'=> $product,'order_id'=> $order]);
-    }
-    public function index()
-    {
-        //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function review(Request $request){
+        $product = Product::find($request->product_id);
+        if($product->reviewable()){
+            $review = Review::create(['product_id'=> $request->product_id,'user_id'=> auth()->id(),'rating'=> $request->rating,'comment'=> $request->comment]);
+            return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'message' => 'Review Added Successfully',
+            ], 200):
+            redirect()->back()->with(['result'=> 1,'message'=> 'Review successfully added']); 
+        }else{
+            return request()->expectsJson() ? 
+            response()->json([
+                'status' => false,
+                'message' => 'Review Could Not Be Saved',
+            ], 401):
+            redirect()->back()->with(['result'=> 1,'message'=> 'Review Could Not Be Saved']); 
+        }
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

@@ -7,6 +7,7 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
+use App\Models\Advert;
 use App\Models\Payout;
 use App\Models\Payment;
 use App\Models\Product;
@@ -36,6 +37,9 @@ class Country extends Model
 
     public function cities(){
         return $this->hasManyThrough(City::class,State::class,'country_id','state_id');
+    }
+    public function adverts(){
+        return $this->hasManyThrough(Advert::class,State::class,'country_id','state_id');
     }
     public function orders(){
         return $this->hasManyThrough(Order::class,Shop::class,'country_id','shop_id');

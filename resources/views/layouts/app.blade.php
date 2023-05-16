@@ -529,16 +529,16 @@
                                         <h2 class="font-body--lg-500">Help</h2>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="contact.php"> Contact Us </a>
+                                        <a href="{{route('contact')}}"> Contact Us </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="faqs.php"> FAQs </a>
+                                        <a href="{{route('help.index')}}"> Help </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="terms.php"> Terms &amp; Conditions </a>
+                                        <a href="#"> Terms &amp; Conditions </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="privacy.php"> Privacy Policy </a>
+                                        <a href="#"> Privacy Policy </a>
                                     </li>
                                 </ul>
                             </div>

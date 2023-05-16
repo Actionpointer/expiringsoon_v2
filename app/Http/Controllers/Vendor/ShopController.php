@@ -334,5 +334,6 @@ class ShopController extends Controller
             view('shop.notifications',compact('notifications'));
             
     }
+    
         
 }
