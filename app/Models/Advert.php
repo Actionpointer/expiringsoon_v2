@@ -63,7 +63,7 @@ class Advert extends Model
 
     public function scopeWithinState($query,$state_id=null){
         if(!$state_id){
-            $state_id = session('locale')['state_id'];;
+            $state_id = session('locale')['state_id'];
         }
         return $query->where('state_id',$state_id);
     }

@@ -61,16 +61,4 @@ Newsletters[
     Coupon - Vendors
 ]
 
-
-$users = \App\Models\User::whereHas('adsets',function($query){
-                    $query->active()->whereHas('adverts',function($puery){
-                        $puery->where(function($wuery){
-                            $wuery->where('advertable_type','App\Models\Product')->whereHas('product',function($pd){
-                                $pd->where('status',false);
-                            })->orWhere('advertable_type','App\Models\Shop')->whereHas('shop',function($sh){
-                                $sh->where('status',false);
-                            });
-                        });
-                });
-        })->get();
-dd($users);
+advert audience network

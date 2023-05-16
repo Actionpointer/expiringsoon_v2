@@ -60,6 +60,7 @@ class LoginController extends Controller
     }
 
     public function forcepassword(Request $request){
+         
         $validator = Validator::make($request->all(), [
             'password' => 'required','string','confirmed'
         ]);
@@ -68,6 +69,7 @@ class LoginController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
+        /** @var \App\Models\User $user **/
         $user = auth()->user();
         $user->password = Hash::make($request->password);
         $user->require_password_change = false;

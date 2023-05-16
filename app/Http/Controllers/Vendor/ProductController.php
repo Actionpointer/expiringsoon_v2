@@ -94,9 +94,8 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            /** @var \App\Models\User $user **/
-            $user = auth()->user();
-            $shop = Shop::where('id',$request->shop_id)->where('user_id',$user->id)->first();
+            
+            $shop = Shop::find($request->shop_id);
             if($request->hasFile('photo')){
                 $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
                 $request->file('photo')->storeAs('public/',$photo);

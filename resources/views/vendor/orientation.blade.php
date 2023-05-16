@@ -30,9 +30,6 @@
         </div>
     </div>
         <!-- breedcrumb section end   -->
-
-    
-
     <section class="hero section--xl section">
         <div class="container">
             <div class="row hero__content">
@@ -41,7 +38,7 @@
                         <img src="{{asset('src/images/members/img-11.png')}}" alt="img" class="img-fluid">
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="hero__text-content">
                         <h6>
                             Now, What's Next.
@@ -49,75 +46,91 @@
                         <p class="info--two">
                             Now that you've registered, here a few things you might want to do next to get you started with making money on expiringsoon and having the best experience as a vendor.   
                         </p>
-                        <ul class="hero__list-info">
-                            <li>
-                                <span class="icon">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
-                                        <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <div class="row">
+                            <div class="col-md-6">
+                              <ul class="hero__list-info">
+                                <li>
+                                    <span class="icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
+                                            <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                    <p>Create a shop. <a href="{{route('help.vendors')}}#shop" class="text-muted small"><i>See how</i></a></p>
+                                </li>
+                                <li>
+                                    <span class="icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
+                                            <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                    <p>Create products in your shop <a href="{{route('help.vendors')}}#products" class="text-muted small"><i>See how</i></a></p>
+                                </li>
+                                <li>
+                                    <span class="icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
+                                            <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                    <p>Get a subscription plan to unlock more features. <a href="{{route('help.vendors')}}#subscriptions" class="text-muted small"><i>See how</i></a></p>
+                                </li>
+                                <li>
+                                    <span class="icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
+                                            <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                    <p>Verify both yourself and your business <a href="{{route('help.vendors')}}#verification" class="text-muted small"><i>See how</i></a></p>
+                                </li>
+                                <li>
+                                    <span class="icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
+                                            <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                    <p>Setup your bank accounts <a href="{{route('help.vendors')}}#banking" class="text-muted small"><i>See how</i></a></p>
+                                </li>
+                                <li>
+                                    <span class="icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
+                                            <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                    <p>Manage Orders <a href="{{route('help.vendors')}}#orders" class="text-muted small"><i>See how</i></a></p>
+                                </li>
+                              </ul>
+                              <a href="{{route('vendor.dashboard')}}" class="button button--md">
+                                  Vendor Dashboard
+                                  <span>
+                                      <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                          <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                      </svg>
+                                  </span>
+                              </a>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="products-video">
+                                <img src="{{asset('src/images/members/img-10.png')}}" alt="img-src">
+                                <a href="https://youtu.be/JkaxUblCGz0" class="play-icon venobox vbox-item" data-autoplay="true" data-vbtype="video">
+                                    <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 0V18L14 9L0 0Z" fill="currentColor"></path>
                                     </svg>
-                                </span>
-                                <p>Create a shop. <a href="{{route('help.vendors')}}#shop" class="text-muted small"><i>See how</i></a></p>
-                            </li>
-                            <li>
-                                <span class="icon">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
-                                        <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </span>
-                                <p>Create products in your shop <a href="{{route('help.vendors')}}#products" class="text-muted small"><i>See how</i></a></p>
-                            </li>
-                            <li>
-                                <span class="icon">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
-                                        <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </span>
-                                <p>Get a subscription plan to unlock more features. <a href="{{route('help.vendors')}}#subscriptions" class="text-muted small"><i>See how</i></a></p>
-                            </li>
-                            <li>
-                                <span class="icon">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
-                                        <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </span>
-                                <p>Verify both yourself and your business <a href="{{route('help.vendors')}}#verification" class="text-muted small"><i>See how</i></a></p>
-                            </li>
-                            <li>
-                                <span class="icon">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
-                                        <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </span>
-                                <p>Setup your bank accounts <a href="{{route('help.vendors')}}#banking" class="text-muted small"><i>See how</i></a></p>
-                            </li>
-                            <li>
-                                <span class="icon">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.1" width="20" height="20" rx="10" fill="#00B307"></rect>
-                                        <path d="M14.4168 7.125L8.68766 12.8542L6.0835 10.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </span>
-                                <p>Manage Orders <a href="{{route('help.vendors')}}#orders" class="text-muted small"><i>See how</i></a></p>
-                            </li>
-                        </ul>
-                        <a href="{{route('vendor.dashboard')}}" class="button button--md">
-                            Vendor Dashboard
-                            <span>
-                                <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </span>
-                        </a>
+                                </a>
+                            </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
                 
             </div>
+            
         </div>
     </section>
 
@@ -232,7 +245,6 @@
         </div>
     </section>
     
-  
 @endsection
 @push('scripts')
 {{-- <script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script> --}}

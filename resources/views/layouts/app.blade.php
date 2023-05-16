@@ -642,6 +642,7 @@
     @include('layouts.side_cart')
     <script src="{{asset('src/js/jquery.min.js')}}"></script>
     <script src="{{asset('src/plugins/swiper-bundle/script.min.js')}}"></script>
+    <script src="{{asset('src/plugins/venobox/script.min.js')}}"></script>
     <script src="{{asset('src/plugins/bvselect/script.js')}}"></script>
     <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('src/js/jquery.syotimer.min.js')}}"></script>

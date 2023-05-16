@@ -8,7 +8,7 @@
     @break
 
     @case('staff')
-        @include('layouts.shop_navigation')
+        @include('layouts.shop_navigation',['shop' => auth()->user()->shop])
     @break
 
     @default

@@ -14,20 +14,13 @@ swiper.js is displaying duplicates
 
 hot deals mobile view (home page & hot deals page)
 
-Shops[
-    Orientation - after creation - Vendor
-]
-
-advert audience network
 charge the vendor commission for their shipments also
+phone number verification
 
 after delivery, options are [received, or not received]
 after received, [review or complain]
 after complain,[returned]
-
 if not received, [dispute]
 
-phone number verification
+
 search at the top
-Maximum payout on subscription slider
-Maximum number of products

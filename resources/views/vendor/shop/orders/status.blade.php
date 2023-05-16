@@ -11,7 +11,7 @@
       <h2 class="font-body--md-400">Order received</h2>
     </div>
 
-    <div class="progress__bar-item @if(in_array($status,['processing','ready','shipped','delivered','completed','rejected','returned','refunded','disputed','closed'])) active @endif">
+    <div class="progress__bar-item @if(in_array($status,['processing','cancelled','ready','shipped','delivered','completed','rejected','returned','refunded','disputed','closed'])) active @endif">
       <div class="progress__bar-item-ball">
         <p class=" font-body--md-400 count-number count-number-active " > 02 </p>
         <span class="check-mark">

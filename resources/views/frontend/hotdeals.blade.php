@@ -7,180 +7,14 @@
 @endsection
 @section('main')
     
-<section class="banner banner--01 sales-banner--two">
-    <div class="container">
-        <div class="row">
-            @forelse($advert_D as $advert)
-                <div class="col-lg-6">
-                    <div class="banner-sale--two cards-ss--md">
-                        <div class="banner-sale--two__img-wrapper">
-                            <img src="{{Storage::url($advert->shop->banner)}}" alt="banner">
-                            <div class="banner-sale--two__text-content">
-                                {{-- <span class="title">100% Organic</span> --}}
-                                <h5 class="font-title--md">{{$advert->shop->name}}</h5>
-                                <p class="font-body--md-400">{{$advert->shop->description}}</p>
-                                <a href="{{route('vendor.show',$advert->shop)}}" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-lg-6">
-                    <div class="banner-sale--two cards-ss--md">
-                        <div class="banner-sale--two__img-wrapper">
-                            <img src="src/images/banner/banner-sm-15.png" alt="banner">
-                            <div class="banner-sale--two__text-content">
-                                <span class="title">100% Organic</span>
-                                <h5 class="font-title--md">Fruit &amp; Vegetable</h5>
-                                <p class="font-body--md-400">Starting at: <span>$11.99</span></p>
-                                <a href="#" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="banner-sale--two cards-ss--md">
-                        <div class="banner-sale--two__img-wrapper">
-                            <img src="src/images/banner/banner-sm-14.png" alt="banner">
-                            <div class="banner-sale--two__text-content">
-                                <span class="title">sale off the week</span>
-                                <h5 class="font-title--md">Sales of the Year</h5>
-
-                                <div class="banner-sale__countdown syotimer timer" id="countdownTwo">
-                                    {{-- <div class="timer-head-block"></div>
-                                    <div class="timer-body-block">
-                                        <p style="font-size: 1.2em;">The countdown is finished!</p>
-                                    </div>
-                                    <div class="timer-foot-block"></div> --}}
-                                </div>
-
-                                <a href="#" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforelse
-
-            @forelse($advert_E as $advert)
-                <div class="col-lg-4 col-md-6">
-                    <div class="cards-ss cards-ss--md cards-ss--md-three">
-                        <div class="cards-ss--md__img-wrapper">
-                            <img src="src/images/banner/banner-sm-11.png" alt="banner-sale" />
-                            <div class="cards-ss--md__text-content">
-                                <h5>100% Organic</h5>
-                                <h2 class="font-title--sm">Quick Breakfast</h2>
-                                <a href="#" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-lg-4 col-md-6">
-                    <div class="cards-ss cards-ss--md cards-ss--md-one">
-                        <div class="cards-ss--md__img-wrapper">
-                            <img src="src/images/banner/banner-sm-09.png" alt="banner-sale" />
-                            <div class="cards-ss--md__text-content">
-                                <h2 class="font-title--sm">100% Fresh Cow Milk</h2>
-                                <p>Starting at <span>$14.99</span></p>
-                                <a href="#" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="cards-ss cards-ss--md cards-ss--md-two">
-                        <div class="cards-ss--md__img-wrapper">
-                            <img src="src/images/banner/banner-sm-10.png" alt="banner-sale" />
-                            <div class="cards-ss--md__text-content">
-                                <h5>Drink Sale</h5>
-                                <h2 class="font-title--sm">Water & Soft Drink</h2>
-
-                                <a href="#" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="cards-ss cards-ss--md cards-ss--md-three">
-                        <div class="cards-ss--md__img-wrapper">
-                            <img src="src/images/banner/banner-sm-11.png" alt="banner-sale" />
-                            <div class="cards-ss--md__text-content">
-                                <h5>100% Organic</h5>
-                                <h2 class="font-title--sm">Quick Breakfast</h2>
-                                <a href="#" class="button button--md">
-                                    Shop now
-                                    <span>
-                                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforelse
-            
-            
-        </div>
-    </div>
-</section>
+    @include('frontend.adverts.card_horizontal')
 
     <!-- Our Products Section Start  -->
     <section class="our-products section section--xxl section--green-0">
         <div class="container">
             <div class="section__head section__head--four">
                 <h2 class="section--title-four font-title--lg">
-                     Hot Deals
+                        Hot Deals
                 </h2>
 
                 <ul class="our-products__menu nav nav-tabs" id="myTab" role="tablist">
@@ -2116,10 +1950,41 @@
         </div>
     </section>
     <!-- Our Products Section end   -->
+    @include('frontend.adverts.mini_cards_3')
 
+    <section class="best-deals section section--xxl section--green-0">
+        <div class="container">
+            <div class="best-deals__content">
+                <span class="title">Best Deals</span>
+                <h2 class="font-title--lg">Our Special Products Deal of the Month</h2>
     
-
-    <!-- featured  Start  -->
+                <div class="best-deals__countdown syotimer timer" id="countdownTwo">
+                    
+                </div>
+    
+                <a href="#" class="button button--md">
+                    Shop now
+                    <span>
+                        <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </span>
+                </a>
+    
+                <div class="best-deals__img-content">
+                    <div class="best-deals__img-content--one">
+                        <img src="{{asset('src/images/banner/banner-sm-06.png')}}" alt="banner-sm">
+                    </div>
+                    <div class="best-deals__img-content--two">
+                        <img src="{{asset('src/images/banner/banner-sm-13.png')}}" alt="banner-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        
+    @if($advert_Z->isNotEmpty())
     <section class="section section--xxl featured">
         <div class="container">
             <div class="section__head section__head--four">
@@ -2193,6 +2058,7 @@
             </div>
         </div>
     </section>
+    @endif
     <!-- featured  end  -->
 
 @endsection

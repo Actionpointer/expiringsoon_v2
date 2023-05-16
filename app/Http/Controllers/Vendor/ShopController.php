@@ -331,7 +331,7 @@ class ShopController extends Controller
                 'data' => NotificationResource::collection($shop->notifications),
                 'count' => $shop->notifications->count()
             ], 200) :
-            view('shop.notifications',compact('notifications'));
+            view('vendor.shop.notifications',compact('notifications','shop'));
             
     }
     
