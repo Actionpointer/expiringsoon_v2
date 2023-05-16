@@ -6,7 +6,7 @@ admin:ad preview
 admin: defaulting orders -processing, shipped, ready, 
 admin kyc assessment, and notification to vendor
 
-Invitation - Staff
+
 retry payout with job -
 retry payout with flutterwave -
 
@@ -23,4 +23,5 @@ after complain,[returned]
 if not received, [dispute]
 
 
+are we going to be changing payment gateway? cos that will impact the saved payout account
 search at the top

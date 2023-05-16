@@ -127,7 +127,7 @@
                                             </div>
                                             <div class="contact-form-input">
                                                 <label for="pin">Enter Your Access Pin</label>
-                                                <input type="text" name="pin" id="pin{{$country->id}}" value="" placeholder="Access pin">
+                                                <input type="text" name="pin" id="pin{{$country->id}}" value="" required placeholder="Access pin">
                                             </div>
                                             <div class="contact-form-btn">
                                                 <button class="button button--md " type="submit">
