@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li class="">
-                    <a href="shop.php"> Shop <span> ></span> </a>
+                    <a href="#"> Shop <span> ></span> </a>
                 </li>
                 <li class="active"><a href="#" id="active">{{$shop->name}}</a></li>
             </ul>

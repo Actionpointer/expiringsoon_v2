@@ -13,7 +13,7 @@
     
                                 <div id="countdownTwo" class="countdown-clock"></div>
     
-                                <a href="shop.php" class="button button--md">
+                                <a href="{{$advert->url}}" class="button button--md">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +39,7 @@
                 
                                             <div id="countdownTwo" class="countdown-clock"></div>
                 
-                                            <a href="shop.php" class="button button--md">
+                                            <a href="#" class="button button--md">
                                                 Shop now
                                                 <span>
                                                     <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">

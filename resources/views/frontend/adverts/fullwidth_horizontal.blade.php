@@ -2,13 +2,13 @@
     <div class="container">
         @if($advert)
         <div class="banner-sales__content">
-            <img src="{{Storage::url($advert->shop->banner)}}" alt="banner" />
+            <img src="{{$advert->image)}}" alt="banner" />
             <div class="text-content">
                 
-                <h2 class="font-title--lg">{{$advert->shop->name}}</h2>
-                <span class="title d-block">{{$advert->shop->description}}</span>
+                <h2 class="font-title--lg">{{$advert->heading}}</h2>
+                <span class="title d-block">{{$advert->subheading}}</span>
                 {{-- <div id="countdown" class="countdown-clock"></div> --}}
-                <a href="{{route('vendor.show',$advert->shop)}}" class="button button--md">
+                <a href="{{$advert->url}}" class="button button--md">
                     Shop Now
                     <span>
                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">

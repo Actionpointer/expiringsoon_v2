@@ -69,13 +69,13 @@
                     @for($i = 0;$i < 3;$i++)
                         @if($minis->has($i))
                             <div class="banner__wrapper-img banner__wrapper--img-02">
-                                <img src="{{Storage::url($item->shop->banner)}}" alt="banner" />
+                                <img src="{{$minis[$i]->image}}" alt="banner" />
 
                                 <div class="banner__wrapper-text">
                                     {{-- <h5 class="font-body--md-500">Summer Sale</h5> --}}
-                                    <h2 class="font-title--sm">{{$item->shop->name}}</h2>
-                                    <p class="font-body--md-400">{{$item->shop->description}}</p>
-                                    <a href="{{route('vendor.show',$item->shop)}}" class="button button--md">
+                                    <h2 class="font-title--sm">{{$minis[$i]->heading}}</h2>
+                                    <p class="font-body--md-400">{{$minis[$i]->subheading}}</p>
+                                    <a href="{{$minis[$i]->url}}" class="button button--md">
                                         Shop now
                                         <span>
                                             <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,7 +93,7 @@
                                     <img src="{{asset('src/images/banner/check3.png')}}" alt="banner" />
 
                                     <div class="banner__wrapper-text">
-                                        <h5 class="font-body--md-500">sSummer Sale</h5>
+                                        <h5 class="font-body--md-500">Summer Sale</h5>
                                         <h2 class="font-title--sm">75% off</h2>
                                         <p class="font-body--md-400">Only Fruit & Vegetable</p>
                                         <a href="#" class="button button--md">

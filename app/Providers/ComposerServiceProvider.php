@@ -41,7 +41,7 @@ class ComposerServiceProvider extends ServiceProvider
                 $ads->views += 1;
                 $ads->save();
             }
-            $view->with('ads',$ads);
+            $view->with('advert',$ads);
         });
 
         View::composer('frontend.adverts.mini_cards_3', function ($view) {

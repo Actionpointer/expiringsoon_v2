@@ -50,7 +50,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="shop.php">
+                            <a href="#">
                                 Shop
                                 <span> > </span>
                             </a>

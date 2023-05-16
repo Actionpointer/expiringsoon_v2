@@ -437,7 +437,7 @@
                             <a href="{{route('home')}}" class="header__mobile-menu-item-link">Home</a>
                         </li>
                         <li class="header__mobile-menu-item">
-                            <a href="shop.php" class="header__mobile-menu-item-link">Shop</a>
+                            <a href="#" class="header__mobile-menu-item-link">Shop</a>
                         </li>
                         <li class="header__mobile-menu-item">
                             @guest
