@@ -80,6 +80,7 @@ class ShopController extends Controller
     }
     
     public function kyc(Request $request){
+        // dd($request->all());
         $kyc = Kyc::find($request->kyc_id);
         $kyc->status = $request->status;
         $kyc->reason = $request->reason ?? null;

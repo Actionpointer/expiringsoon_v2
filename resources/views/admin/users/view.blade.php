@@ -169,23 +169,30 @@
                                 <td>{{$user->idcard->type}}</td>
                                 <td>{{$user->idcard->created_at->format('d-m-Y')}}</td>
                                   <td>
-                                    @if(!$user->idcard->status)
-                                      Pending {{$user->idcard->reason}}
-                                    @else
+                                    @if($user->idcard->reason)
+                                      Rejected:  {{$user->idcard->reason}}
+                                    @elseif($user->idcard->status)
                                       Approved
+                                    @else
+                                      Pending
                                     @endif
                                 </td>
                                 <td>
-                                  @if(!$user->idcard->status)
+                                  
                                   <form action="{{route('admin.kyc.manage')}}" method="post" class="d-inline" onsubmit="return confirm('Do you really want to approve document?');">@csrf
                                     <input type="hidden" name="kyc_id" value="{{$user->idcard->id}}">
+                                    
+                                    @if(!$user->idcard->status)
                                     <input type="hidden" name="status" value="1">
                                     <button class="btn btn-success" type="submit">Approve</button>
+                                    @endif
+                                    @if(!$user->idcard->reason)
+                                    
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#rateedit{{$user->idcard->id}}">Reject</button>
+                                    @endif
                                   </form>
-                                  @endif 
-                                  @if(!$user->idcard->reason)
-                                  <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#rateedit{{$user->idcard->id}}">Reject</button>
-                                  @endif
+                                  
+                                  
                                 </td>
                             </tr>
                             <div class="modal fade" id="rateedit{{$user->idcard->id}}" tabindex="-1" aria-labelledby="rateedit{{$user->idcard->id}}ModalLabel" aria-hidden="true">
@@ -204,7 +211,7 @@
                                                 <label for="hours">Reason</label>
                                                 <textarea name="reason" class="form-control" placeholder="Rejection Reason"></textarea>
                                               </div>
-                                      
+                                              <input type="hidden" name="status" value="0">
                                               <div class="contact-form-btn">
                                                   <button class="button button--md" type="submit">
                                                       Reject

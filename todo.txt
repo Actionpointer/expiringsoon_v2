@@ -7,7 +7,6 @@ admin: defaulting orders -processing, shipped, ready,
 admin kyc assessment, and notification to vendor
 
 kyc
-retry payout with job -
 
 
 swiper.js is displaying duplicates
