@@ -2,7 +2,7 @@
     <div class="container">
         @if($advert)
         <div class="banner-sales__content">
-            <img src="{{$advert->image)}}" alt="banner" />
+            <img src="{{$advert->image}}" alt="banner" />
             <div class="text-content">
                 
                 <h2 class="font-title--lg">{{$advert->heading}}</h2>
