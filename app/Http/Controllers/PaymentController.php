@@ -142,9 +142,6 @@ class PaymentController extends Controller
         return view('receipt',compact('payout'));
     }
 
-    public function payoutcallback(){
-        
-    }
 
     
     

@@ -2,19 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Models\Payout;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use App\Http\Traits\PayoutTrait;
-use App\Events\CheckPayoutStatus;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class PayoutStatusCheckJob implements ShouldQueue,ShouldBeUnique
+class AdminPendingActivitiesJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PayoutTrait;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -26,12 +24,18 @@ class PayoutStatusCheckJob implements ShouldQueue,ShouldBeUnique
         //
     }
 
-    
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
     public function handle()
     {
-        $payouts = Payout::where('status','processing')->whereNotNull('transfer_id')->get();
-        foreach($payouts as $payout){
-            $this->verifyPayout($payout);
-        }
+        $users = User::within()->whereHas('role',function($query){$query->whereIn('name',['admin','manager']);})->get();
+        //kyc
+        //payouts
+        //shops pending
+        //adverts pending
+        //products pending
     }
 }

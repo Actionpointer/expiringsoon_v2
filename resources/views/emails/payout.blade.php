@@ -134,10 +134,7 @@
 																
 																
 																@switch($payout->status)
-																	@case('pending') 
-																	<span style="font-size:16px;font-weight:600"> New Payout Request,</span><br/>	
-																	<br />We have a new payout request of {!! $payout->currency->symbol !!}{{$payout->amount}} waiting for your approval. Visit <a href="{{route('admin.payouts')}}"><u>Payouts</u> </a> to manage request<br/> .
-																	@break
+																	
 																	@case('processing') 
 																	<span style="font-size:16px;font-weight:600"> Payout {{$payout->status}}	</span><br/>
 																	<br/> Your Payout request of {!!$payout->currency->symbol!!} {{$payout->amount}} is being processed. 

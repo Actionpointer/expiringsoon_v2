@@ -71,6 +71,51 @@ trait PaystackTrait
 
 
     public function payoutPaystack(Payout $payout){
+        
+        $response = Curl::to('https://api.paystack.co/transfer')
+        ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+        ->withHeader('Content-Type: application/json')
+        ->withData( array("source" => "balance", "reason"=> "Withdrawal Payout", "amount"=> $payout->amount * 100, "recipient"=> $payout->user->payout_account,
+        "currency"=> $payout->currency->code,"reference"=> $payout->reference ) )
+        ->asJson()                
+        ->post();
+        
+        
+      if(!$response || !$response->status || $response->data->status == 'failed'){
+          $payout->transfer_id = $response->data->transfer_code ?? '';
+          $payout->status = 'failed';
+          $payout->save();
+      }
+      if($response && $response->status && in_array($response->data->status,['success','pending'])){
+          $payout->transfer_id = $response->data->transfer_code ?? '';
+          $payout->status = 'processing';
+          $payout->save();
+      }
+    }
+
+    protected function verifyPayoutPaystack(Payout $payout){
+      $response = Curl::to("https://api.paystack.co/transfer/verify/$payout->reference")
+          ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+          ->asJson()
+          ->get();
+          if(!$response || !$response->status || $response->data->status == 'failed'){
+                $payout->status = 'failed';
+                $payout->save();
+          }
+          if($response && $response->status && $response->data->status == 'success'){
+                $payout->status = 'paid'; 
+                $payout->paid_at = now(); 
+                $payout->save();
+          }
+    }
+    
+    
+
+    protected function retryPayoutPaystack(Payout $payout){
+        if($payout->status == 'failed'){
+          $payout->reference = uniqid();
+          $payout->save();
+        } 
         $response = Curl::to('https://api.paystack.co/transfer')
         ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
         ->withHeader('Content-Type: application/json')
@@ -79,27 +124,17 @@ trait PaystackTrait
         ->asJson()                
         ->post();
         // dd($response);
-        if($response &&  isset($response->status) && $response->status)
-          return true;
-        else return false;
-    }
-
-    protected function verifyPayoutPaystack(Payout $payout){
-      $response = Curl::to("https://api.paystack.co/transfer/verify/$payout->reference")
-          ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-          ->asJson()
-          ->get();
-      //check the status and update
-    }
-    
-    
-
-    protected function retryPayoutPaystack(Payout $payout){
-        $response = Curl::to("https://api.paystack.com/v3/transfers/$payout->transfer_id/retries")
-            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-            ->asJson()
-            ->get();
-        //check the status and update
+        
+        if(!$response || !$response->status || $response->data->status == 'failed'){
+            $payout->transfer_id = $response->data->transfer_code ?? '';
+            $payout->status = 'failed';
+            $payout->save();
+        }
+        if($response && $response->status && in_array($response->data->status,['success','pending'])){
+            $payout->transfer_id = $response->data->transfer_code ?? '';
+            $payout->status = 'processing';
+            $payout->save();
+        }
     }
 
     

@@ -6,6 +6,7 @@ use App\Models\Payout;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\VendorAlertNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class PayoutStatusNotification extends Notification
@@ -29,9 +30,9 @@ class PayoutStatusNotification extends Notification
      */
     public function via($notifiable)
     {
-        if($this->payout->status == 'approved'){
+        if($this->payout->status == 'approved' || $this->payout->status == 'processing'){
             return ['database'];
-        }else return ['mail'];
+        }else return ['mail','database'];
     }
 
     /**
@@ -51,19 +52,16 @@ class PayoutStatusNotification extends Notification
     {
         
         switch($this->payout->status){
-            case 'pending': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been requested and waiting your approval';
-        
+            case 'approved': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been approved';
             break;
             case 'processing': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' is being processed';
-            break;
-            case 'approved': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been approved';
             break;
             case 'paid': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been paid';
             break;
             default: $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' was '.$this->payout->status;
             break;
         }
-        
+        $this->payout->user->notify(new VendorAlertNotification($this->payout->shop));
         return [
             'subject' => 'Payout '.$this->payout->status,
             'body' => $message,

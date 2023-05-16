@@ -6,15 +6,15 @@ admin:ad preview
 admin: defaulting orders -processing, shipped, ready, 
 admin kyc assessment, and notification to vendor
 
-
+kyc
 retry payout with job -
-retry payout with flutterwave -
+
 
 swiper.js is displaying duplicates
 
 hot deals mobile view (home page & hot deals page)
 
-charge the vendor commission for their shipments also
+
 phone number verification
 
 after delivery, options are [received, or not received]
@@ -24,4 +24,7 @@ if not received, [dispute]
 
 
 are we going to be changing payment gateway? cos that will impact the saved payout account
+charges on payout
+charge the vendor commission for their shipments also
+
 search at the top

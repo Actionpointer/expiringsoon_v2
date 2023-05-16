@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Payout;
-use App\Events\RetryPayout;
 use Illuminate\Bus\Queueable;
 use App\Http\Traits\PayoutTrait;
 use Illuminate\Queue\SerializesModels;
@@ -12,13 +11,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class PayoutRetryFailedJob implements ShouldQueue
+class PayoutApprovedToProcessingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PayoutTrait;
 
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
-        
+        //
     }
 
     /**
@@ -28,10 +32,11 @@ class PayoutRetryFailedJob implements ShouldQueue
      */
     public function handle()
     {
-        $payouts = Payout::where('status','failed')->get();
-        foreach($payouts as $payout){
-            $this->retryPayout($payout);
+        $payouts = Payout::where('status','approved')->whereNull('transfer_id')->get();
+        if(cache('settings')['automatic_payout']){
+            foreach($payouts as $payout){
+                $this->initializePayout($payout);
+            }
         }
-        
     }
 }

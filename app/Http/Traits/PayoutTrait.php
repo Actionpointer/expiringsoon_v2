@@ -15,30 +15,30 @@ trait PayoutTrait
         $user = $payout->user;
         $gateway = $user->country->payout_gateway;
         switch($gateway){
-            case 'paystack': $link = $this->payoutPaystack($payout);
+            case 'paystack': $this->payoutPaystack($payout);
             break;
-            case 'flutterwave': $link = $this->payoutFlutterWave($payout);
+            case 'flutterwave': $this->payoutFlutterWave($payout);
             break;
-            case 'paypal': $link = $this->payoutPaypal($payout);
+            case 'paypal': $this->payoutPaypal($payout);
             break;
-            case 'stripe': $link = $this->payoutStripe($payout);
+            case 'stripe': $this->payoutStripe($payout);
             break;
         }
-        return $link;
     }
 
     protected function verifyPayout(Payout $payout){
         $gateway = $payout->user->country->payout_gateway;
         switch($gateway){
-            case 'paystack': $details = $this->verifyPayoutPaystack($payout);
+            case 'paystack': $this->verifyPayoutPaystack($payout);
             break;
-            case 'flutterwave': $details = $this->verifyPayoutFlutterwave($payout);
+            case 'flutterwave': $this->verifyPayoutFlutterwave($payout);
             break;
-            case 'paypal': $details = $this->verifyPayoutPaypal($payout);
+            case 'paypal': $this->verifyPayoutPaypal($payout);
             break;
-            case 'stripe': $details = $this->verifyPayoutStripe($payout);
+            case 'stripe': $this->verifyPayoutStripe($payout);
             break;
         }
+        //save to paid/failed
         
     }
 
@@ -46,27 +46,28 @@ trait PayoutTrait
         $user = $payout->user;
         $gateway = $user->country->payout_gateway;
         switch($gateway){
-            case 'paystack': $link = $this->retryPayoutPaystack($payout);
+            case 'paystack': $this->retryPayoutPaystack($payout);
             break;
-            case 'flutterwave': $link = $this->retryPayoutFlutterWave($payout);
+            case 'flutterwave': $this->retryPayoutFlutterWave($payout);
             break;
-            case 'paypal': $link = $this->retryPayoutPaypal($payout);
+            case 'paypal': $this->retryPayoutPaypal($payout);
             break;
-            case 'stripe': $link = $this->retryPayoutStripe($payout);
+            case 'stripe': $this->retryPayoutStripe($payout);
             break;
         }
-        return $link;
+        //save to paid/failed
     }
 
     public function verifybankaccount($bank_code,$account_number){
         $user = Auth::user();
         $gateway = $user->country->payout_gateway;
-        switch($gateway){
-            case 'paystack':  $result = $this->resolveBankAccountByPaystack($bank_code,$account_number);
-            break;
-            case 'flutterwave': $result = $this->resolveBankAccountByFlutter($bank_code,$account_number);
-            break;
-        }
+        // switch($gateway){
+        //     case 'paystack':  $result = $this->resolveBankAccountByPaystack($bank_code,$account_number);
+        //     break;
+        //     case 'flutterwave': $result = $this->resolveBankAccountByFlutter($bank_code,$account_number);
+        //     break;
+        // }
+        $result = $this->resolveBankAccountByPaystack($bank_code,$account_number);
         return $result;
     }
     

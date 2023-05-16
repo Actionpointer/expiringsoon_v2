@@ -165,7 +165,7 @@ trait PaypalTrait
           ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
           ->asJson()
           ->get();
-      //check the status and update
+      //check the status and save status
   }
     
     

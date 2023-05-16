@@ -59,12 +59,18 @@ class SettingsController extends Controller
     }
      
     public function plans(Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $plan = Plan::where('id',$request->plan_id)->update(['name'=> $request->name,'description'=>  $request->description,'products'=> $request->products,'shops'=> $request->shops,'months_1'=> $request->months_1,'months_3'=> $request->months_3,'months_6' => $request->months_6,'months_12' => $request->months_12]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'Plan Updated Successfully']);
     }
 
     public function plan_pricing(Request $request){
         // dd('here');
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $price = Price::updateOrCreate(['plan_id'=> $request->plan_id,'currency_id'=> $request->currency_id],[
         'minimum_payout'=> $request->minimum_payout,'maximum_payout'=> $request->maximum_payout,
         'commission_percentage'=> $request->commission_percentage,'commission_fixed'=> $request->commission_fixed,
@@ -76,12 +82,17 @@ class SettingsController extends Controller
     }
 
     public function adplans(Request $request){  
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $plan = AdPlan::where('id',$request->adplan_id)->update(['name'=> $request->name,'description'=>  $request->description]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'Updated advert plan successfully']);
     }
 
     public function ad_pricing(Request $request){
-        // dd($request->all());
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         foreach($request->currencies as $currency){
             $cost = Cost::updateOrCreate(['adplan_id'=> $request->adplan_id,'currency_id'=> $currency],['amount'=> $request->amount[$currency] ]); 
         }

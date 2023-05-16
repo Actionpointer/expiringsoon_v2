@@ -92,10 +92,6 @@ class PaymentController extends Controller
         'reference'=> uniqid(),'amount'=> $request->amount,'status'=> cache('settings')['auto_approve_payout'] ? 'approved':'pending']);
         $shop->wallet -= $request->amount;
         $shop->save();
-        if($payout->status == "approved" && cache('settings')['automatic_payout']){
-            $payout->status = 'processing';
-            $payout->save();
-        }
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

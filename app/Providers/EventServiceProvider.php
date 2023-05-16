@@ -8,7 +8,6 @@ use App\Events\RefundBuyer;
 use App\Events\RetryPayout;
 use App\Events\SettleVendor;
 use App\Events\DeleteProduct;
-use App\Events\DisbursePayout;
 use App\Events\OrderPurchased;
 use App\Listeners\DeletingShop;
 use App\Events\CheckPayoutStatus;
@@ -17,7 +16,6 @@ use App\Listeners\RefundingBuyer;
 use App\Listeners\RetryingPayout;
 use App\Listeners\SettlingVendor;
 use App\Listeners\DeletingProduct;
-use App\Listeners\DisbursingPayout;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\CheckingPayoutStatus;
@@ -53,9 +51,6 @@ class EventServiceProvider extends ServiceProvider
             SettlingVendor::class
         ],
         
-        DisbursePayout::class => [
-            DisbursingPayout::class
-        ],
         RetryPayout::class => [
             RetryingPayout::class
         ],

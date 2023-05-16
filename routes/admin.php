@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\ShipmentController;
 
 Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,admin,manager,customercare,auditor'],function(){
     Route::get('dashboard',[UserController::class, 'dashboard'])->name('dashboard');
-    
+    Route::get('payouta/{payout}',[PaymentController::class, 'fetch']);
     Route::group(['middleware'=> 'role:superadmin'],function(){
         Route::group(['prefix'=> 'settings','as'=>'settings.'],function(){
             Route::get('/',[SettingsController::class, 'index'])->name('global');
@@ -45,10 +45,10 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
         Route::post('category/delete',[ProductController::class, 'category_destroy'])->name('category.destroy');
 
     });
-
+    
     Route::group(['middleware'=> 'role:superadmin,admin,manager'],function(){
         Route::post('payouts/manage',[PaymentController::class, 'update'])->name('payouts.manage');
-
+        
         Route::group(['prefix'=> 'staff','as'=>'staff.'],function(){
             Route::get('/',[UserController::class, 'staff'])->name('list');
             Route::post('store',[UserController::class, 'store'])->name('store');

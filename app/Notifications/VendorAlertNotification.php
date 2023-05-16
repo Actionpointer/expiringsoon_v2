@@ -57,11 +57,11 @@ class VendorAlertNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'subject' => 'Shop Notification',
+            'subject' => $this->shop->name,
             'body' => 'You have a new shop notification',
             'url'=> route('vendor.shop.show',$this->shop),
             'id'=> $this->shop->id,
-            'related_to'=> 'user'
+            'related_to'=> 'shop'
         ];
     }
 }

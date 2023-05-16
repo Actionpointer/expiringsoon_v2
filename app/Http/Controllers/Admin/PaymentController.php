@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Payment;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
+use Ixudra\Curl\Facades\Curl;
 use App\Exports\PayoutsExport;
 use App\Exports\PaymentsExport;
 use App\Exports\SettlementsExport;
@@ -189,7 +190,7 @@ class PaymentController extends Controller
             foreach($request->payouts as $req){ 
                 $payout = Payout::find($req);
                 if(cache('settings')['automatic_payout']){
-                    $payout->status = 'processing';
+                    $payout->status = 'approved';
                     $payout->save();
                 }else{
                     $payout->status = 'paid';
@@ -197,11 +198,20 @@ class PaymentController extends Controller
                     $payout->save();
                 }
             }
-            return redirect()->back()->with(['result'=> '1','message'=> 'Payout Processing']);
+            return redirect()->back()->with(['result'=> '1','message'=> 'Payout Approved']);
         }else{
             $payout = Payout::whereIn('id',$request->payouts)->update(['status'=> 'Rejected. '.$request->reason]);
-            return redirect()->back()->with(['result'=> '1','message'=> 'Payouts Rejected']);
+            return redirect()->back()->with(['result'=> '0','message'=> 'Payouts Rejected']);
         }   
+    }
+
+    public function fetch(Payout $payout){
+        
+        $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id")
+            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
+            ->asJson()
+            ->get(); 
+        dd($response);
     }
       
 }

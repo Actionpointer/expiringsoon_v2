@@ -558,7 +558,7 @@
                                               <tr>
                                                   <th scope="col">Plan</th>
                                                   <th scope="col">Type</th>
-                                                  <th scope="col">Page</th>
+                                                 
                                                   <th scope="col">Description</th>
                                                   <th scope="col">Price</th>
                                               </tr>
@@ -566,7 +566,7 @@
                                               <tr>
                                                   <td>{{$adplan->name}}</td>
                                                   <td>{{ucwords($adplan->type)}}</td>
-                                                  <td>{{$adplan->page}}</td>
+                                                 
                                                   <td>{{ucwords($adplan->description)}}</td>
                                                   <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#adplan_price{{$adplan->id}}">Set Prices</a></td>
                                               </tr>

@@ -5,20 +5,18 @@ namespace App\Console;
 use App\Jobs\PayoutRetryFailedJob;
 use App\Jobs\PayoutStatusCheckJob;
 use App\Jobs\AdsetExpiredNotifyJob;
-use App\Jobs\ExpiredStatusUpdateJob;
 use App\Jobs\SubscriptionExpiredJob;
 use App\Jobs\AdvertInactiveNotifyJob;
-use App\Jobs\ExpiringStatusUpdateJob;
-use App\Jobs\InactiveStatusUpdateJob;
+
 use App\Jobs\PaymentPendingDeleteJob;
-use App\Jobs\CheckOrderExpectedDateJob;
+
 use App\Jobs\OrderRejectedToCompletedJob;
 use App\Jobs\OrderDeliveredToCompletedJob;
 use App\Jobs\OrderReturnedToAcceptanceJob;
 use App\Jobs\OrderProcessingToCancelledJob;
+use App\Jobs\PayoutApprovedToProcessingJob;
 use App\Jobs\SubscriptionExpiringNotifyJob;
 use Illuminate\Console\Scheduling\Schedule;
-use App\Jobs\ConvertDeliveredToCompletedJob;
 use App\Jobs\OrderProductExpiredToCancelledJob;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -50,10 +48,13 @@ class Kernel extends ConsoleKernel
         $schedule->job(new OrderRejectedToCompletedJob)->hourly();
         $schedule->job(new OrderReturnedToAcceptanceJob)->hourly();
         $schedule->job(new PaymentPendingDeleteJob)->hourly();
+        $schedule->job(new PayoutApprovedToProcessingJob)->hourly();
         $schedule->job(new PayoutRetryFailedJob)->hourly();
         $schedule->job(new PayoutStatusCheckJob)->hourly();
         $schedule->job(new SubscriptionExpiredJob)->hourly();
         $schedule->job(new SubscriptionExpiringNotifyJob)->hourly();
+
+
 
         // Your cronjob should run this: php /path/to/laravel/artisan queue:work --stop-when-empty
     }
