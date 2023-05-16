@@ -10,7 +10,9 @@ class PayoutObserver
 {
 
     public function updated(Payout $payout){
-        $payout->shop->notify(new PayoutStatusNotification($payout));
+        if($payout->isDirty('status') && in_array($payout->status,['approved','processing','paid'])){
+            $payout->shop->notify(new PayoutStatusNotification($payout));
+        }
     }
 
 }

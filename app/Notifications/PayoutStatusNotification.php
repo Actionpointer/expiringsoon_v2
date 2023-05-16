@@ -58,6 +58,8 @@ class PayoutStatusNotification extends Notification
             break;
             case 'paid': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has been paid';
             break;
+            case 'failed': $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' has failed';
+            break;
             default: $message = 'Payout of '.$this->payout->currency->iso.' '.$this->payout->amount.' was '.$this->payout->status;
             break;
         }
