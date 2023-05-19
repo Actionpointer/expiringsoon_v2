@@ -48,10 +48,10 @@ class OrderController extends Controller
             $orders = $orders->whereHas('statuses');
         }
         if($status == 'opened'){
-            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['processing','shipped','delivered']);});
+            $orders = $orders->whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed','refunded']);});
         }
-        if($status == 'completed'){
-            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed']);});
+        if($status == 'closed'){
+            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed','refunded']);});
         }
         $orders = $orders->orderBy('created_at','desc')->paginate(16);
         return request()->expectsJson() ?

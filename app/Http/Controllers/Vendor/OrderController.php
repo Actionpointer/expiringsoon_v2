@@ -29,10 +29,13 @@ class OrderController extends Controller
         
         $orders = Order::where('shop_id',$shop->id);
         if($status == 'opened'){
-            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['processing','ready','shipped','delivered']);});
+            $orders = $orders->whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed','refunded','disputed']);});
         }
         if($status == 'closed'){
-            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed']);});
+            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed','refunded']);});
+        }
+        if($status == 'disputed'){
+            $orders = $orders->whereHas('statuses',function($query){$query->where('name','disputed');});
         }
         if(!$status){
             $orders = $orders->whereHas('statuses');

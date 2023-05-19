@@ -39,6 +39,8 @@ class OrderStatusObserver
             break;
             case 'delivered': $this->delivered($orderStatus);
             break;
+            case 'received': $this->received($orderStatus);
+            break;
             case 'completed': $this->completed($orderStatus);
             break;
             case 'rejected': $this->rejected($orderStatus);
@@ -95,6 +97,10 @@ class OrderStatusObserver
         if($orderStatus->order->deliverer == "admin"){
             $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         }
+    }
+
+    public function received(OrderStatus $orderStatus){
+        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
     
     public function completed(OrderStatus $orderStatus)
