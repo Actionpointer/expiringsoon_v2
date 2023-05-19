@@ -20,11 +20,9 @@ class PaymentController extends Controller
     }
 
     public function paymentcallback(){       
-        //dd(request()->all());
         $user = auth()->user();
         $gateway = $user->country->payment_gateway;
         if(request()->expectsJson()){
-            dd('say ok');
             if(!request()->reference){
                 return response()->json([
                     'status' => false,
