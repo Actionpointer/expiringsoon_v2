@@ -19,10 +19,12 @@ class PaymentController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function paymentcallback(){        
+    public function paymentcallback(){       
+        //dd(request()->all());
         $user = auth()->user();
         $gateway = $user->country->payment_gateway;
         if(request()->expectsJson()){
+            dd('say ok');
             if(!request()->reference){
                 return response()->json([
                     'status' => false,
@@ -55,7 +57,6 @@ class PaymentController extends Controller
                 }
             }
         } 
-        $reference = 
         $payment = Payment::where('reference',$reference)->first();
         //if payment was already successful before now
         if(!$payment || $payment->status == 'success' || $payment->user_id != $user->id){
