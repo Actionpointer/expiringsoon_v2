@@ -40,9 +40,20 @@ class OrderController extends Controller
         $this->middleware('auth:sanctum');
     }
     
-    public function index(){
+    public function index($status = null){
         $user = auth()->user();
-        $orders = Order::where('user_id',$user->id)->whereHas('statuses')->orderBy('created_at','desc')->get();
+        
+        $orders = Order::where('user_id',$user->id);
+        if(!$status){
+            $orders = $orders->whereHas('statuses');
+        }
+        if($status == 'opened'){
+            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['processing','shipped','delivered']);});
+        }
+        if($status == 'completed'){
+            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed']);});
+        }
+        $orders = $orders->orderBy('created_at','desc')->paginate(16);
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,

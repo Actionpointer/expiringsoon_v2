@@ -85,10 +85,10 @@ class RegisterController extends Controller
     
     protected function create(array $data)
     {
+        // dd($data);
         $role = $data['role'] ?? 'shopper';
         $role_id = Role::where('name',$role)->first()->id;
         return User::create([
-            // 'username' => $data['username'],
             'email' => $data['email'],
             'email_verified_at' => $role == 'shoppper' ? now() : null,
             'password' => Hash::make($data['password']),

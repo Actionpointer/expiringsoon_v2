@@ -112,7 +112,7 @@
                         @endforeach
                     </tr>
                     <tr class="">
-                        <th scope="row" class="font-body--md-400 py-3 ps-5 mb-0">No of Products</th>
+                        <th scope="row" class="font-body--md-400 py-3 ps-5 mb-0">Maximum number of Products</th>
                         @foreach($plans as $plan)
                             <td class="text-center @if(!$loop->last) border-right @endif">
                                 @if($plan->products == '-1')
@@ -146,7 +146,7 @@
                         @endforeach
                     </tr>
                     <tr class="">
-                        <th scope="row" class="bg-light py-3 px-4 mb-0">Commission</th>
+                        <th scope="row" class="bg-light py-3 px-4 mb-0">Our Commission</th>
                         @foreach($plans as $plan)
                             <td class="bg-light"></td>
                         @endforeach

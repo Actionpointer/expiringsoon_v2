@@ -37,11 +37,7 @@ class PaymentController extends Controller
                 switch($gateway){
                     case 'paystack': 
                         if(!request()->query('reference')) \abort(404);
-                        if(request()->query('status') != 'success') {
-                            
-                            return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
-                        
-                        }
+
                         $reference = request()->query('reference');
                     break;
                     case 'flutterwave':
@@ -59,7 +55,7 @@ class PaymentController extends Controller
                 }
             }
         } 
-        // dd($reference);
+        $reference = 
         $payment = Payment::where('reference',$reference)->first();
         //if payment was already successful before now
         if(!$payment || $payment->status == 'success' || $payment->user_id != $user->id){
@@ -83,28 +79,31 @@ class PaymentController extends Controller
         $payment->status = 'success';
         $payment->method = $details['method'];
         $payment->save();
-        $this->giveValueAfterPayment($payment);
+        $redirect_to = $this->giveValueAfterPayment($payment);
         return request()->expectsJson() ? 
             response()->json([
                 'status' => true,
                 'message' => 'Payment Successful',
             ], 200) :
-            redirect()->route('home')->with(['result'=>1,'message'=> 'Payment Successful']);
+            redirect()->route($redirect_to)->with(['result'=>1,'message'=> 'Payment Successful']);
        
     }
 
     public function giveValueAfterPayment(Payment $payment){
+        $redirect_to = null;
         if($payment->status){
             foreach($payment->items as $item){
                 if($item->paymentable_type == 'App\Models\Order'){
                     $order = Order::find($item->paymentable_id);
                     // OrderStatus::create(['order_id'=> $item->paymentable_id,'user_id'=> $payment->user_id,'name'=> 'processing']);
                     $status = $order->statuses()->create(['user_id'=> $payment->user_id,'name'=> 'processing']);
+                    $redirect_to = 'orders';
                 }
                 if($item->paymentable_type == 'App\Models\Adset'){
                     $adset = Adset::find($item->paymentable_id);
                     $adset->status = true;
                     $adset->save();
+                    $redirect_to = 'vendor.adsets';
                 }
                 if($item->paymentable_type == 'App\Models\Subscription'){
                     $subscription = Subscription::find($item->paymentable_id);
@@ -127,28 +126,21 @@ class PaymentController extends Controller
                     $subscription->save();
                     $subscription->user->save();
                     Subscription::where('user_id',$payment->user->id)->whereNull('end_at')->delete();
+                    $redirect_to = 'vendor.dashboard';
                 }
             }
         }
+        return $redirect_to;
         
     }
 
     public function invoice(Payment $payment){
         return view('invoice',compact('payment'));
-    }
-    
+    } 
     
     public function receipt(Payout $payout){
         return view('receipt',compact('payout'));
     }
-
-
-    
-    
-    
-    
-    
-
 
     
 }

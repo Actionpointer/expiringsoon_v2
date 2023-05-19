@@ -140,7 +140,7 @@
 														</tr>
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																Dear {{$subscription->user->name}} ,Your subscription to {{$subscription->plan->name}} plan has 
+																Dear {{$subscription->user->name}} ,Your subscription to {{$subscription->plan->name}} plan 
                                                                 @if($status == 'activated') has been activated. <br>
                                                                     With this subscription you can have upto {{$subscription->plan->shops}} activated shops and {{$subscription->plan->products}} activated products in total. 
                                                                     You currently have the following: <br/>

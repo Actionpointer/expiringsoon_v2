@@ -26,4 +26,9 @@ are we going to be changing payment gateway? cos that will impact the saved payo
 charges on payout
 charge the vendor commission for their shipments also
 
+store the subscription plan items on the subscription table
+store the product details on the order details table.
+
 search at the top
+
+

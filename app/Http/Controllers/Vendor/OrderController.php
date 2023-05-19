@@ -20,8 +20,8 @@ use App\Notifications\OrderMessageNotification;
 class OrderController extends Controller
 {
     use OrderTrait;
-    public function __construct()
-    {
+
+    public function __construct(){
         $this->middleware('auth');
     }
 
@@ -29,7 +29,7 @@ class OrderController extends Controller
         
         $orders = Order::where('shop_id',$shop->id);
         if($status == 'opened'){
-            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['processing','shipped','delivered']);});
+            $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['processing','ready','shipped','delivered']);});
         }
         if($status == 'closed'){
             $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed']);});
