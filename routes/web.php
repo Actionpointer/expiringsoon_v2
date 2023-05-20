@@ -10,25 +10,15 @@ use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
+use App\Http\Controllers\Shopper\SalesController;
 use App\Http\Controllers\Guest\FrontendController;
 use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
-Route::get('/eg', function () {
-    // $countries = \App\Models\Country::where('payout_gateway','paypal')->get();
-    // $users = \App\Models\User::where('role_id',6)->whereIn('country_id',$countries->pluck('id')->toArray())->get();
-    // foreach($users as $user){
-    //     $user->payout_account = $user->email;
-    //     $user->save();
-    // }
-    // return "Event broadcaasted!";
-    $adset = \App\Models\Subscription::where('end_at','<',now())->delete();
-    return (new App\Notifications\SubscriptionStatusNotification($adset))
-                    ->toMail($adset->user);
-});
-
 Route::get('broadcast', function () {
-    \App\Jobs\PayoutApprovedToProcessingJob::dispatch();
+    $user = \App\Models\User::find(46);
+    $user->notify(new App\Notifications\WelcomeNotification);
+    return 'done';
 });
 
 Route::view('faq','faqs');
@@ -93,10 +83,11 @@ Route::group(['middleware'=> 'verified'],function(){
     Route::post('address/store',[AddressController::class, 'store'])->name('address.store');
     Route::post('address/update',[AddressController::class, 'update'])->name('address.update');
     Route::post('address/delete',[AddressController::class, 'destroy'])->name('address.delete');
-    Route::get('wishlist', [OrderController::class, 'wishlist'])->name('wishlist');
-    Route::get('checkout/{shop?}',[OrderController::class,'checkout'])->name('checkout');
-    Route::post('checkout/getshipment',[OrderController::class,'shipment'])->name('checkout.shipment');
-    Route::post('checkout/confirm',[OrderController::class,'confirmcheckout'])->name('confirmcheckout');
+
+    Route::get('wishlist', [SalesController::class, 'wishlist'])->name('wishlist');
+    Route::get('checkout/{shop?}',[SalesController::class,'checkout'])->name('checkout');
+    Route::post('checkout/getshipment',[SalesController::class,'shipment'])->name('checkout.shipment');
+    Route::post('checkout/confirm',[SalesController::class,'confirmcheckout'])->name('confirmcheckout');
 
     Route::get('orders', [OrderController::class, 'index'])->name('orders');
     Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');

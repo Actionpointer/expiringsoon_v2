@@ -10,11 +10,12 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
+use BeyondCode\LaravelWebSockets\WebSockets\Channels\PrivateChannel;
 
 class WelcomeNotification extends Notification
 {
     use Queueable;
-
     /**
      * Create a new notification instance.
      *
@@ -22,7 +23,7 @@ class WelcomeNotification extends Notification
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
@@ -33,7 +34,7 @@ class WelcomeNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['broadcast'];
     }
 
     public function toMail($notifiable)
@@ -64,4 +65,13 @@ class WelcomeNotification extends Notification
             //
         ];
     }
+
+    public function toBroadcast($notifiable){
+        return new BroadcastMessage([
+            'message' => 'I Love you',
+            'user' => 'Omobolarin Sweet',
+            'id'=> $notifiable->id
+        ]);
+    }
+
 }

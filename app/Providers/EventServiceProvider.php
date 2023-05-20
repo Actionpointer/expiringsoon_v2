@@ -40,6 +40,9 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\Login' => [
             'App\Listeners\LogSuccessfulLogin',
         ],
+        // 'Illuminate\Notifications\Events\NotificationSent' => [
+        //     'App\Listeners\BroadCastTheNotification',
+        // ],
        
         OrderPurchased::class => [
             BroadcastOrder::class

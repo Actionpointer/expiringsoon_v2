@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Vendor;
 
+use App\Events\BroadcastOrderMessage;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Order;
@@ -60,15 +61,20 @@ class OrderController extends Controller
         view('vendor.shop.orders.list',compact('shop','orders'));
 
     }
-    
 
     public function show(Shop $shop,Order $order){
         $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
+        
+        OrderMessage::where(function($query) use($order){
+            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop')->whereNull('read_at');
+        })->update(['read_at'=> now()]);
+
         $messages = OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop');
         })->orWhere(function($qeury) use($order){
             return $qeury->where('order_id',$order->id)->where('sender_id',$order->shop_id)->where('sender_type','App\Models\Shop');
         })->orderBy('created_at','desc')->get();
+
         $statuses = $this->getVendorOrderStatuses($order);
         return request()->expectsJson() ? 
             response()->json([
@@ -78,7 +84,6 @@ class OrderController extends Controller
             ], 200):
             view('vendor.shop.orders.view',compact('shop','order','statuses','messages'));
     }
-
 
     public function update(Request $request){
         $order = Order::find($request->order_id);
@@ -92,6 +97,12 @@ class OrderController extends Controller
     }
 
     public function messages(Shop $shop,Order $order){
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
+        
+        OrderMessage::where(function($query) use($order){
+            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop')->whereNull('read_at');
+        })->update(['read_at'=> now()]);
+
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
@@ -105,12 +116,6 @@ class OrderController extends Controller
     public function message(Shop $shop,Request $request){
         $order = Order::find($request->order_id);
         $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type,'body'=> $request->body]);
-        if($message->receiver_type == 'App\Models\User'){
-            $receiver = User::find($message->receiver_id);
-        }else{
-            $receiver = Shop::find($message->receiver_id);
-        }
-        $receiver->notify(new OrderMessageNotification($message));
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

@@ -13,6 +13,7 @@ use App\Events\DeleteShop;
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
 use Illuminate\Support\Facades\Storage;
@@ -42,6 +43,7 @@ class ShopController extends Controller
 
     public function show(Shop $shop){
         if($shop){
+            DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->user_id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->id',$shop->id)->whereJsonContains('data->related_to','shop')->update(['read_at'=> now()]);
             return request()->expectsJson() ?  
             response()->json([
                 'status' => true,

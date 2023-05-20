@@ -135,10 +135,10 @@
                                                         
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:center; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Adset is {{$status}}!</span><br />
+																<span style="font-size:16px;font-weight:600">Adset {{$status}}!</span><br />
 																Dear {{$adset->user->name}} , <br>
-																Your adset with id {{$adset->slug}} is now {{$status}} <br/> 
-                                                                @if($status == 'activated')
+																Your adset with id {{$adset->slug}} {{$status}} <br/> 
+                                                                @if($status == 'has been activated')
 																	You have added the following ads to this adsets <br/>
 																	Products: {{$adset->adverts->where('advertable_type','App\Models\Product')->count()}} <br/>
 																	Shops: {{$adset->adverts->where('advertable_type','App\Models\Shop')->count()}}
@@ -148,7 +148,7 @@
 														<tr>
 															<td class="text-btn-large" align="center">
 																<div style="background:#5fb882;width:50%;color:#fff; font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; padding:15px 35px;border-bottom:1px solid #ddd">
-																	@if($status == 'activated')
+																	@if($status == 'has been activated')
 																	<a href="{{route('vendor.adverts',$adset)}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
 																		<span class="link-2" style="color:#fff; text-decoration:none;">Manage Ads</span>
 																	</a>

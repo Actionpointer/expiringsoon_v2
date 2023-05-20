@@ -11,6 +11,7 @@ use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
+use App\Http\Controllers\Shopper\SalesController;
 use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
@@ -43,7 +44,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
     });
-    Route::get('wishlist', [OrderController::class, 'wishlist']);
+    Route::get('wishlist', [SalesController::class, 'wishlist']);
     Route::post('wishlist/add',[CartController::class,'addtowish']);
     Route::post('wishlist/remove',[CartController::class,'removefromwish']);
 
@@ -56,8 +57,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('address/update',[AddressController::class,'update']);
     Route::post('address/delete',[AddressController::class,'destroy']);
 
-    Route::post('checkout',[OrderController::class,'checkout_api']);
-    Route::post('checkout/confirm',[OrderController::class,'confirmcheckout_api']);
+    Route::post('checkout',[SalesController::class,'checkout_api']);
+    Route::post('checkout/confirm',[SalesController::class,'confirmcheckout_api']);
 
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('order/{order_id}',[OrderController::class, 'show']);

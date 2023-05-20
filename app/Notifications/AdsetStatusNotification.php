@@ -35,9 +35,9 @@ class AdsetStatusNotification extends Notification
 
     public function status(){
         if($this->adset->end_at <= now()){
-            return 'expired';
+            return 'has expired';
         }elseif($this->adset->status){
-            return 'activated';
+            return 'has been activated';
         }
     }
 
@@ -52,7 +52,7 @@ class AdsetStatusNotification extends Notification
     {
         return [
             'subject' => 'Adset '.$this->status(),
-            'body' => 'Your adset with id '.$this->adset->slug,
+            'body' => 'Your adset with id '.$this->adset->slug.' '.$this->status(),
             'url'=> route('vendor.adsets'),
             'id'=> $this->adset->id,
             'related_to'=> 'adset'

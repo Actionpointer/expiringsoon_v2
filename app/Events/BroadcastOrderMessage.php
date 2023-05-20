@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Order;
+use App\Models\OrderMessage;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -12,7 +12,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class TestBroadcast implements ShouldBroadcastNow
+class BroadcastOrderMessage implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,24 +21,23 @@ class TestBroadcast implements ShouldBroadcastNow
      *
      * @return void
      */
-    public $order;
-    public function __construct(Order $order)
+    public $oMessage;
+    public function __construct(OrderMessage $oMessage)
     {
-        $this->order = $order;
+        $this->oMessage = $oMessage;
     }
 
     /**
      * Get the channels the event should broadcast on.
-     *RemoveFromWishList::class,
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()
     {
-        return new Channel('ourneworder');
+        return new PrivateChannel('users.'.$this->oMessage->id);
     }
 
     public function broadcastAs()
     {
-        return 'TestBroadcast';
+        return 'orderMessage';
     }
 }
