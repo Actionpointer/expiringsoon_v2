@@ -60,7 +60,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('checkout',[SalesController::class,'checkout_api']);
     Route::post('checkout/confirm',[SalesController::class,'confirmcheckout_api']);
 
-    Route::get('orders', [OrderController::class, 'index']);
+    Route::get('orders/{status?}', [OrderController::class, 'index']);
     Route::get('order/{order_id}',[OrderController::class, 'show']);
     Route::post('order/update',[OrderController::class, 'update']); 
     Route::get('orders/{order_id}/messages',[OrderController::class,'messages']);
