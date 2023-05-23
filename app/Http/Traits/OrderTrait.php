@@ -103,19 +103,19 @@ trait OrderTrait
         switch(strtolower($order->status)){
             case 'processing':
                 if($order->statuses->firstWhere('name','processing')->created_at->addHours(cache('settings')['order_processing_to_user_cancel_period']) > now()) 
-                $statuses = ['Cancel'=>'cancelled'];
+                $statuses = ['Cancel Order'=>'cancelled'];
             break;
             case 'ready':
                 if($order->deliverer == "pickup") 
-                $statuses = ['Completed'=>'completed','Reject'=>'rejected'];
+                $statuses = ['Received & Satisfied'=>'completed','I have issues with the order'=>'rejected'];
             break;
             case 'delivered':
                 if($order->statuses->firstWhere('name','delivered')->created_at->addHours(cache('settings')['order_delivered_to_acceptance_period']) > now()) 
-                $statuses = ['Received'=>'completed','Reject'=>'rejected'];
+                $statuses = ['Received & Satisfied'=>'completed','I have issues with the order'=>'rejected','I did not receive the order'=> 'disputed'];
                 break;
-            case 'rejected':
-                if($order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_returned_period']) > now())
-                $statuses = ['Returned'=>'returned'];
+            case 'reversed':
+                if($order->statuses->firstWhere('name','reversed')->created_at->addHours(cache('settings')['order_reversed_to_returned_period']) > now())
+                $statuses = ['I have returned the items'=>'returned'];
                 break;
             default: $statuses = [];
                 break;
@@ -136,8 +136,12 @@ trait OrderTrait
             case 'shipped':
                 if($order->deliverer == "vendor") $statuses = ['Delivered'=> 'delivered'];
                 break;
+            case 'rejected':
+                if($order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_reversed_period']) > now())
+                $statuses = ['Retrieve Items then Refund'=> 'reversed','Refund Customer'=>'refunded','Send new Items to Customer'=> 'processing'];
+                break;
             case 'returned':
-                $statuses = ['Refund'=>'refunded','Reject'=>'disputed'];
+                $statuses = ['Received & OK'=>'refunded','Reject Returned Items'=>'disputed','I did not receive Items'=> 'disputed'];
                 break;
             default: $statuses = [];
                 break;

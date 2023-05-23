@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class OrderStatus extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['name','order_id','user_id'];
+    protected $fillable = ['name','description','order_id','user_id'];
     
     public static function boot()
     {

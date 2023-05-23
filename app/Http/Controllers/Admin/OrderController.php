@@ -74,7 +74,7 @@ class OrderController extends Controller
     }
 
     public function update(Request $request){
-        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status)]);
+        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status),'description'=> $request->description]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
@@ -86,7 +86,7 @@ class OrderController extends Controller
     public function resolution(Request $request){
         $order = Order::find($request->order_id);
         OrderDispute::create(['order_id'=> $request->order_id,'arbitrator_id'=> auth()->id(),'seller'=> $request->seller,'buyer'=> $request->buyer,'remark'=> $request->remark]);
-        OrderStatus::create(['order_id'=> $order->id,'user_id'=> auth()->id(),'name'=> 'closed']);
+        OrderStatus::create(['order_id'=> $order->id,'user_id'=> auth()->id(),'name'=> 'closed','description'=> $request->remark]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'Order Dispute Successfully Resolved']);
     }
 

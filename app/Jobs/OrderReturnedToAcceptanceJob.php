@@ -38,7 +38,7 @@ class OrderReturnedToAcceptanceJob implements ShouldQueue
             })->get();
         
         foreach($orders as $order){
-            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'refunded']);
+            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'refunded','description'=> 'Auto Refund Customer']);
         }
     }
 }

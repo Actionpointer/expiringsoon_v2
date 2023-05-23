@@ -95,7 +95,6 @@ class PaymentController extends Controller
             foreach($payment->items as $item){
                 if($item->paymentable_type == 'App\Models\Order'){
                     $order = Order::find($item->paymentable_id);
-                    // OrderStatus::create(['order_id'=> $item->paymentable_id,'user_id'=> $payment->user_id,'name'=> 'processing']);
                     $status = $order->statuses()->create(['user_id'=> $payment->user_id,'name'=> 'processing']);
                     $redirect_to = 'orders';
                 }

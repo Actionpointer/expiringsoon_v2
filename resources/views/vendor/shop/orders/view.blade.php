@@ -156,18 +156,12 @@
                           <label for="states" class="font-body--md-600">Update Order Status: </label>
                       </div>
                       <div class="mx-3 pt-1">
-                        <select id="" name="status" class="form-control" required style="min-width:250px">
-                          <option selected disabled>Select </option>
-                          @foreach($statuses as $key => $value)
-                            <option value="{{$value}}">{{$key}}</option>
-                          @endforeach
-                        </select>
+                        @foreach($statuses as $key => $value)
+                          <button class="button button--md" type="submit" name="status" value="{{$value}}">{{$key}}</button>
+                        @endforeach
+                        
                       </div>
-                      <div class="pt-2 pt-md-0">
-                        <button class="button button--md" type="submit" id="btn-update">
-                          Save Status
-                        </button>
-                      </div>
+                      
                   </div>
                   
                 </form>

@@ -103,7 +103,7 @@ class OrderController extends Controller
                     $message = 'Order has been updated';
                 break;
         }
-        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status)]);
+        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status),'description'=> $request->description]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

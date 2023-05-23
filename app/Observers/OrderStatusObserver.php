@@ -39,11 +39,11 @@ class OrderStatusObserver
             break;
             case 'delivered': $this->delivered($orderStatus);
             break;
-            case 'received': $this->received($orderStatus);
-            break;
             case 'completed': $this->completed($orderStatus);
             break;
             case 'rejected': $this->rejected($orderStatus);
+            break;
+            case 'reversed': $this->reversed($orderStatus);
             break;
             case 'returned': $this->returned($orderStatus);
             break;
@@ -98,10 +98,6 @@ class OrderStatusObserver
             $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         }
     }
-
-    public function received(OrderStatus $orderStatus){
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
-    }
     
     public function completed(OrderStatus $orderStatus)
     {
@@ -115,6 +111,10 @@ class OrderStatusObserver
         Settlement::where('order_id',$orderStatus->order_id)->where('description','Commission')->delete();
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+    }
+
+    public function reversed(OrderStatus $orderStatus){
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
     }
     
     public function returned(OrderStatus $orderStatus)

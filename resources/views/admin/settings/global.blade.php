@@ -167,12 +167,16 @@
                                                       </div>
                                                       
                                                       <div class="form-group row mb-2 font-body--md-400">
-                                                          <label for="vat" class="col-8 ">Order Rejected to Returned Hours</label>
-                                                          <input type="text" class="col-4" name="order_rejected_to_returned_period" placeholder="Set Rejected to Returned Period" value="{{$settings->firstWhere('name','order_rejected_to_returned_period')->value}}" />
+                                                          <label for="vat" class="col-8 ">Order Rejected to Reversal Hours</label>
+                                                          <input type="text" class="col-4" name="order_rejected_to_reversal_period" placeholder="Set Rejected to Reversal Period" value="{{$settings->firstWhere('name','order_rejected_to_reversal_period')->value}}" />
+                                                      </div>
+                                                      <div class="form-group row mb-2 font-body--md-400">
+                                                        <label for="vat" class="col-8 ">Order Reversal to Return Hours</label>
+                                                        <input type="text" class="col-4" name="order_reversed_to_returned_period" placeholder="Set Reversal to Returned Period" value="{{$settings->firstWhere('name','order_reversed_to_returned_period')->value}}" />
                                                       </div>
                                                       <div class="form-group row mb-2 font-body--md-400">
                                                           <label for="vat" class="col-8 ">Order Returned to Acceptance Hours</label>
-                                                          <input type="text" class="col-4" name="order_returned_to_acceptance_period" placeholder="Set Rejected to Acceptance Period" value="{{$settings->firstWhere('name','order_returned_to_acceptance_period')->value}}" />
+                                                          <input type="text" class="col-4" name="order_returned_to_acceptance_period" placeholder="Set Returned to Acceptance Period" value="{{$settings->firstWhere('name','order_returned_to_acceptance_period')->value}}" />
                                                       </div>
                                                       
                                                       {{-- <div class="contact-form-btn">

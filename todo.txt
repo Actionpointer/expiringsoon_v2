@@ -16,19 +16,27 @@ hot deals mobile view (home page & hot deals page)
 
 phone number verification
 
-after delivery, options are [received, or not received]
-after received, [review or complain]
-after complain,[returned]
-if not received, [dispute]
 
+on change settings->payout_gateway, send email to all users of that gateway, especially if its paypal & stripe
 
-are we going to be changing payment gateway? cos that will impact the saved payout account
 charges on payout
+
 charge the vendor commission for their shipments also
 
 store the subscription plan items on the subscription table
+
 store the product details on the order details table.
 
-search at the top
 
 
+after delivery, options are [
+    A. received & complete, B. received but rejecting, C. not received
+]
+if A. then [review]
+if B. show options. [What I ordered is not what I got, Incomplete order, Items  are expired, Items are damaged]
+if C. dispute opened
+
+when B. show vendor these options
+[i.send new items to customer | ii.refund customer ]
+if i. order is changed back to processing, 
+if ii. order is changed to retrieve/recall

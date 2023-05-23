@@ -87,7 +87,7 @@ class OrderController extends Controller
 
     public function update(Request $request){
         $order = Order::find($request->order_id);
-        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> $order->user_id,'name'=> strtolower($request->status)]);
+        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> $order->user_id,'name'=> strtolower($request->status),'description'=> $request->description]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

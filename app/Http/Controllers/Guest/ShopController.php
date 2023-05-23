@@ -18,7 +18,7 @@ class ShopController extends Controller
         $category = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->get();
-        
+        $name = null;
         $shops = Shop::isActive()->isApproved()->isVisible()->isSelling();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
@@ -30,6 +30,10 @@ class ShopController extends Controller
             $shops = $shops->whereHas('products',function($query) use($category_id){
                 $query->where('category_id',$category_id);
             });
+        }
+        if(request()->query() && request()->query('name')){
+            $name = request()->query('name');
+            $shops = $shops->where('name','LIKE',"%$name%");
         }
         if(request()->query() && request()->query('sortBy')){
             if(request()->query('sortBy') == 'name_asc'){
@@ -62,7 +66,7 @@ class ShopController extends Controller
             // $advert_H = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
             $advert_G = [];
             $advert_H = [];
-            return view('frontend.shop.list',compact('shops','category','categories','states','state_id','advert_G','advert_H'));
+            return view('frontend.shop.list',compact('shops','category','categories','name','states','state_id','advert_G','advert_H'));
         }
         
         

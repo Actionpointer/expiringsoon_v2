@@ -50,7 +50,7 @@ class ProductDetailsResource extends JsonResource
             'reviewable'=> $this->reviewable(),
             "reviews" => ReviewResource::collection($this->reviews->sortByDesc('rating')->take(3)),
             "expected_hours"=> cache('settings')['order_processing_to_delivery_period'],
-            "refund_hours" => cache('settings')['order_processing_to_delivery_period'] + cache('settings')['order_delivered_to_acceptance_period'] + cache('settings')['order_rejected_to_returned_period'] + cache('settings')['order_returned_to_acceptance_period']
+            "refund_hours" => cache('settings')['order_processing_to_delivery_period'] + cache('settings')['order_delivered_to_acceptance_period'] + cache('settings')['order_rejected_to_reversal_period'] + cache('settings')['order_reversed_to_returned_period'] + cache('settings')['order_returned_to_acceptance_period']
             
         ];
     }

@@ -29,7 +29,7 @@ class OrderProcessingToCancelledJob implements ShouldQueue
                 $query->where('name','processing')->where('created_at','<',now()->subHours($period));
             })->get();
         foreach($orders as $order){
-            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'cancelled']);
+            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'cancelled','description'=> 'Failure to Process Order']);
         }
     }
 }

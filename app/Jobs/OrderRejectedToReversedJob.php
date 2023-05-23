@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class OrderRejectedToCompletedJob implements ShouldQueue
+class OrderRejectedToReversedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,14 +32,14 @@ class OrderRejectedToCompletedJob implements ShouldQueue
      */
     public function handle()
     {
-        $period = cache('settings')['order_rejected_to_returned_period'];
+        $period = cache('settings')['order_rejected_to_reversal_period'];
 
         $orders = Order::whereHas('statuses',function($query) use($period){
                 $query->where('name','rejected')->where('created_at','<',now()->subHours($period));
             })->get();
         
         foreach($orders as $order){
-            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'completed']);
+            OrderStatus::create(['order_id' => $order->id, 'user_id'=> $order->user_id, 'name' => 'reversed','description'=> 'Auto Reversal']);
         }
     }
 }

@@ -55,6 +55,8 @@ class OrderStatusCustomerNotification extends Notification
             break;
             case 'rejected': $view = 'emails.order.rejected';
             break;
+            case 'reversed': $view = 'emails.order.reversed';
+            break;
             case 'refunded': $view = 'emails.order.refunded';
             break;
             case 'disputed': $view = 'emails.order.disputed';

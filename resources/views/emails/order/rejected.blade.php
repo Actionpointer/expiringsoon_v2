@@ -134,7 +134,9 @@
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Dear {{$user->name}},</span>
-																<br/>Your order with number {{$order->slug}} has been rejected. We apologise for any inconvenience you might
+																<br/>Your order with number {{$order->slug}} has been rejected because of the following reason: <br>
+																{{$status->description}} <br>
+																We apologise for any inconvenience you might
 																have experienced on this order and kindly encourage you to dialogue with 
 																the vendor through the order interface to explain why you rejected the order.
 															</td>
@@ -143,20 +145,11 @@
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Order #{{$order->slug}} Rejected,</span>
-																<br />Your order with number {{$order->slug}} has been rejected by your customer. We encourage you to dialogue with 
-																the customer through the order interface to understand why the customer rejected this order.
+																<br />Your order with number {{$order->slug}} has been rejected by your customer because of {{$status->description}}. We encourage you to specify on the order 
+																dashboard whether the items should be sent back to you and the customer refunded, or you will send new items to the customer
 															</td>
 														</tr>
 														@endif
-														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																Rejected items are expected to be returned to the vendor before {{$status->created_at->addHours(cache('settings')['order_rejected_to_returned_period'])->format('d-M-Y h:i A')}}. Failure to do so will lead to automatic closure of the 
-																order and disbursement of funds to the vendor.
-																
-															</td>
-														</tr>
-														
-														
 														
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">

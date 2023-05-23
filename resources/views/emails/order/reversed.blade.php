@@ -128,52 +128,20 @@
 									<td style="padding-bottom: 10px;">
 										<table width="100%" border="0" cellspacing="0" cellpadding="0">
 											<tr>
-												<td class="p30-15" style="padding: 20px 30px 0px;">
+												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
-														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">@if(isset($user)) Dear {{$user->name}} @else Order Delivered for {{$shop->name}} @endif,</span>
-																<br/>Your order {{$order->slug}} has been delivered @if(isset($shop)) to your customer. <br/>Thank you for using Expiring Soon. @endif
-																@if(isset($user))
-																<br/>In case you are not happy with your purchase, you may still be able to return it. At Expiring Soon, we have an option for Easy Return & Quick Refund.
-																If the order does not matching your expectation (e.g incomplete order, wrong items, defective or expired products), kindly report the order on your 
-																dashboard within {{cache('settings')['order_delivered_to_acceptance_period']}} hours after delivery, i.e before {{$status->created_at->addHours(cache('settings')['order_delivered_to_acceptance_period'])->format('d-m-Y h:i A')}}.
-																<br/>Thank you for shopping with Expiring Soon. 
-																@endif
-															</td>
-														</tr>
-														<tr>
-															<td class="fluid-img" align="center">
-																<img src="{{asset('src/images/site/tracking-bar-delivered.jpg')}}" border="0" width="100%" alt="" />
-															</td>
-														</tr>
-														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
-																<div style="display:flex;justify-content:space-between">
-																	@if(($order->deliverer == 'admin' && isset($user)) || $order->deliverer == 'vendor')
-																		<div style="">
-																			<span style="font-weight:600">Delivery Address</span><br />
-																				{{ucwords(strtolower($order->address->contact_name))}}<br />
-																				{{ucwords(strtolower($order->address->street))}}<br/>
-																				{{ucwords(strtolower($order->address->city ? $order->address->city->name.', ' : ''))}} {{ucwords(strtolower($order->address->state->name))}} <br/>
-																				{{$order->address->contact_phone}}
-																		</div>
-																	@endif
-																	<div style="">
-																		<span style="font-weight:600">Summary</span><br />
-																		Order #: {{$order->slug}}<br />
-																		Delivery Date: {{$status->created_at->format('d/m/y')}}<br />
-																	</div>
-																</div>
-																
-															</td>
-														</tr>
 														
 														<tr>
-															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">Dear {{$user->name}},</span>
+																<br/>We apologise once again for any inconvenience you might have experienced on your order #{{$order->slug}}.  <br>
+																Before we issue a refund to you, Rejected items are expected to be returned to the vendor before {{$status->created_at->addHours(cache('settings')['order_reversed_to_returned_period'])->format('d-M-Y h:i A')}}.
+																<br>Please kindly note that failure to do before the given timeline so will lead to automatic closure of the 
+																order and disbursement of funds to the vendor.
 																
 															</td>
 														</tr>
+													
 														<tr>
 															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
 																<div class="cart-row">
@@ -209,32 +177,27 @@
 																	<div class="cart-item"><span style="font-weight: 600;">Total</span></div>
 																	<div class="cart-item"><span style="font-weight: 600;">{!!$order->shop->country->currency->symbol!!}{{$order->total}}</span></div>
 																</div>
-																{{-- <div class="cart-row">
-																	<div class="cart-item-name">Payment Method</div>
-																	<div class="cart-item-qty"><span style="font-weight: 600;">Card</span></div>
-																	<div class="cart-item">&nbsp</div>
-																	<div class="cart-item">&nbsp</div>
-																</div> --}}
+																
+															</td>
+														</tr>
+														
+														<!-- Button -->
+														<tr>
+															<td align="center">
+																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+																	<tr>
+																		<td class="text-button" style="padding:12px">
+																			<a @if(isset($user)) href="{{route('order.show',$order)}}" @else href="{{route('vendor.shop.order.view',[$shop,$order])}}" @endif target="_blank" class="link">
+																				<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
+																			</a>
+																		</td>
+																	</tr>
+																</table>
 															</td>
 														</tr>
 														<tr>
-															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left;padding-top:20px;border-top:1px solid #ddd">
-																<div style="text-align:center">
-																	<a href="{{route('order.show',$order)}}" target="_blank" class="link">
-																		<img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175">
-																	</a>
-																</div>
-																<div style="">
-																	<span style="font-weight:600">Please Note:</span>
-																	<br/>If you did not receive this order, kindly call support at   <span style="color:#00b207">08053434343 </span> 
-																	or email us at <span style="color:#00b207">abc@gmail.com.</span> 
-																	<br /><br />
-																</div>
-															</td>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;"></td>
 														</tr>
-														<!-- Button -->
-														
-														
 														<!-- END Button -->
 													</table>
 												</td>
