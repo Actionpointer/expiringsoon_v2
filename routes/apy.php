@@ -25,7 +25,7 @@ use App\Http\Controllers\Shopper\AddressController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::view('help','help.app.shoppers');
 Route::post('register', [ApyController::class, 'register']);
 Route::post('login', [ApyController::class, 'login']);                                               
 Route::get('products',[ProductController::class,'index']);

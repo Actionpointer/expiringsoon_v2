@@ -37,6 +37,7 @@ Route::post('webhook',function(Request $request){
     return response()->json(200);
 });
 
+
 Route::post('register', [ApiController::class, 'register']);
 Route::post('login/vendor', [ApiController::class, 'login']);
 Route::post('email/resend',[VerificationController::class,'resend']);                                            
