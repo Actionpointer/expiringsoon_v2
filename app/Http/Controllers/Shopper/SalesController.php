@@ -12,12 +12,17 @@ use App\Models\Product;
 use App\Models\Shipment;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use App\Http\Traits\CartTrait;
+use App\Http\Traits\PaymentTrait;
+use App\Http\Traits\WishlistTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 
 
 class SalesController extends Controller
 {
+    use CartTrait,WishlistTrait,PaymentTrait;
+    
     public function __construct(){
         $this->middleware('auth:sanctum');
     }
