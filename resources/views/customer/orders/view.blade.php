@@ -416,7 +416,7 @@
   Pusher.logToConsole = true;
   var pusher = new Pusher('30f7e5194b874bf1230b', {
       cluster: 'eu',
-      wsHost: 'expiringsoon.test',
+      wsHost: url,
       wsPort: 6001,
       wssPort: 6001,
       forceTLS: false,
