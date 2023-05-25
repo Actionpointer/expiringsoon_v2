@@ -137,7 +137,7 @@ trait OrderTrait
                 if($order->deliverer == "vendor") $statuses = ['Delivered'=> 'delivered'];
                 break;
             case 'rejected':
-                if($order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_reversed_period']) > now())
+                if($order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_reversal_period']) > now())
                 $statuses = ['Retrieve Items then Refund'=> 'reversed','Refund Customer'=>'refunded','Send new Items to Customer'=> 'processing'];
                 break;
             case 'returned':

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Shopper;
 
 use App\Models\Cart;
 use App\Models\Like;
