@@ -8,6 +8,7 @@ use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
+use App\Http\Controllers\Guest\AdvertController;
 use App\Http\Controllers\Guest\ProductController;
 use App\Http\Controllers\Shopper\OrderController;
 use App\Http\Controllers\Shopper\SalesController;
@@ -35,7 +36,8 @@ Route::post('shipment/search',[FrontendController::class,'shipment_search'])->na
 Route::post('shipment/updated',[FrontendController::class,'shipment_update'])->name('shipment.update');
 
 Route::get('/', [FrontendController::class, 'index'])->name('index');
-Route::get('advert/{advert}', [FrontendController::class, 'redirect'])->name('advert.redirect');
+Route::get('advert/{advert}', [AdvertController::class, 'ad_click'])->name('advert.click');
+Route::get('featured/{feature}', [AdvertController::class, 'featured_click'])->name('featured.click');
 
 Route::get('products', [ProductController::class, 'index'])->name('product.list');
 Route::get('product/{product}', [ProductController::class, 'show'])->name('product.show');

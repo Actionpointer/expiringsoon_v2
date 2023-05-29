@@ -126,7 +126,7 @@ class OrderStatusObserver
     {
         event(new RefundBuyer($orderStatus->order,$orderStatus->order->subtotal));
         event(new SettleVendor($orderStatus->order));
-        $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
     }
 
     public function disputed(OrderStatus $orderStatus)

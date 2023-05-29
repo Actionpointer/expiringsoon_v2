@@ -75,7 +75,7 @@
                                     <div class="cards-md cards-md--four w-100">
                                         <div class="cards-md__img-wrapper">
                                             <a href="{{route('vendor.show',$shop)}}">
-                                                <img src="./storage/{{$shop->banner}}" alt="{{$shop->name}}" onerror="this.src='img/no-image.png';" />
+                                                <img src="{{$shop->image}}" alt="{{$shop->name}}"/>
                                             </a>
                                         </div>
                                         <div class="cards-md__info d-flex justify-content-between align-items-center">

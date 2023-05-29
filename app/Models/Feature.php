@@ -39,16 +39,23 @@ class Feature extends Model
     }
 
     public function getUrlAttribute(){
-        return route('product.show',$this->product);
+        return route('featured.click',$this);
     }
 
     public function getImageAttribute(){
-        return $this->photo ? config('app.url')."/storage/$this->photo":null;  
+        if($photo = $this->product->photo){
+            return config('app.url')."/storage/$photo";
+        }else return asset('src/images/site/no-image.png');  
     }
 
     public function scopeWithinState($query,$state_id=null){
         if(!$state_id){
-            $state_id = session('locale')['state_id'];;
+            if(auth()->check()){
+                $state_id = auth()->user()->state_id;
+            }else{
+                $state_id = session('locale')['state_id'];
+            }
+            
         }
         return $query->where('state_id',$state_id);
     }

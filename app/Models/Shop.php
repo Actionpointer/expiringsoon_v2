@@ -63,7 +63,7 @@ class Shop extends Model
     }
 
     public function getImageAttribute(){
-        return $this->banner ? config('app.url')."/storage/$this->banner":null;   
+        return $this->banner ? config('app.url')."/storage/$this->banner": asset('src/images/site/no-image.png');   
     }
 
     public function scopeWithin($query,$value = null){

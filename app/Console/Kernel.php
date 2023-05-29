@@ -7,10 +7,9 @@ use App\Jobs\PayoutStatusCheckJob;
 use App\Jobs\AdsetExpiredNotifyJob;
 use App\Jobs\SubscriptionExpiredJob;
 use App\Jobs\AdvertInactiveNotifyJob;
-
 use App\Jobs\PaymentPendingDeleteJob;
-
-use App\Jobs\OrderRejectedToCompletedJob;
+use App\Jobs\OrderRejectedToReversedJob;
+use App\Jobs\OrderReversedToCompletedJob;
 use App\Jobs\OrderDeliveredToCompletedJob;
 use App\Jobs\OrderReturnedToAcceptanceJob;
 use App\Jobs\OrderProcessingToCancelledJob;
@@ -45,7 +44,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new OrderDeliveredToCompletedJob)->hourly();
         $schedule->job(new OrderProcessingToCancelledJob)->hourly();
         $schedule->job(new OrderProductExpiredToCancelledJob)->hourly();
-        $schedule->job(new OrderRejectedToCompletedJob)->hourly();
+        $schedule->job(new OrderRejectedToReversedJob)->hourly();
+        $schedule->job(new OrderReversedToCompletedJob)->hourly();
         $schedule->job(new OrderReturnedToAcceptanceJob)->hourly();
         $schedule->job(new PaymentPendingDeleteJob)->hourly();
         $schedule->job(new PayoutApprovedToProcessingJob)->hourly();

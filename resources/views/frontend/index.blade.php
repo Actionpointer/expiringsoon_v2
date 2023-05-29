@@ -220,93 +220,8 @@
     </section>
 
     <!-- featured  Start  -->
-    @if($advert_Z->isNotEmpty())
-        <section class="section" style="margin-bottom:30px">
-            <div class="container">
-                <div class="row">   
-                    <div class="col-lg-12" style="margin-top:30px">
-                        <div class="section__head">
-                            <h2 class="section--title-one font-title--sm">Featured Products</h2>
-                            <a href="{{route('hotdeals')}}">
-                                View All 
-                                <span>
-                                    <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16 7.50049H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M9.95001 1.47559L16 7.49959L9.95001 13.5246" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="swiper-container featured-slider--one">
-                            <div class="swiper-wrapper">
-                                @foreach($advert_Z as $advert)
-                                    <div class="swiper-slide">
-                                        <div class="cards-md w-100">
-                                            <div class="cards-md__img-wrapper">
-                                                <a href="{{route('advert.redirect',$advert)}}">
-                                                    <img src="{{Storage::url($advert->product->photo)}}" alt="{{$advert->product->name}}" onerror="this.src='img/no-image.png';" />
-                                                </a>
-                                                @if($advert->product->price > $advert->product->amount)
-                                                    <span class="tag blue font-body--md-400">sale {{floor($advert->discount)}}% off </span>
-                                                @endif
-                                                @if($advert->product->stock == 0)
-                                                    <span class="tag danger font-body--md-400" style="background:#ea4b4833; color:#ea4b48;font-weight:500;font-size:13px">Out of Stock</span>
-                                                @endif
-                                                @if(Auth::check() && !$advert->product->likes->where('user_id',Auth::id())->count())
-                                                    <div class="cards-md__favs-list">
-                                                        <span class="action-btn">
-                                                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" id="{{$advert->product->id}}" class="add-to-wish" data-product="{{$advert->product->id}}product">
-                                                                <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </div>
-                                                @endif
-
-                                                @if(Auth::check() && $advert->product->likes->where('user_id',Auth::id())->count())
-                                                    <div class="cards-md__favs-list show-heart">
-                                                        <span class="action-btn liked">
-                                                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" id2="{{$advert->product->id}}" class="remove-from-wish">
-                                                                <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </div>
-                                                @endif
-                                                
-                                            </div>
-                                            <div class="cards-md__info d-flex justify-content-between align-items-center">
-                                                <a href="{{route('advert.redirect',$advert)}}" class="cards-md__info-left">
-                                                    <h6 class="font-body--md-400">{{$advert->product->name}}</h6>
-                                                    <div class="cards-md__info-price">
-                                                        @if($advert->product->price > $advert->product->amount)
-                                                            <span class="font-body--lg-500">{!!$advert->product->shop->country->currency->symbol!!}{{number_format($advert->product->amount, 0)}}</span>
-                                                            <del class="font-body--lg-400" style="color:#00b207">{!!$advert->product->shop->country->currency->symbol!!}{{number_format($advert->product->price, 0)}}</del>
-                                                        @else
-                                                            <span class="font-body--lg-500">{!!$advert->product->shop->country->currency->symbol!!}{{number_format($advert->product->price, 0)}}</span>
-                                                        @endif
-                                                    </div>
-                                                    <ul class="d-flex" style="color:#888;font-size:12px">
-                                                        <li>Expires in <span style="font-weight:550;color:#d42222">{{$advert->product->expire_at->diffInDays(now())}} days</span><li>
-                                                    </ul>
-                                                </a>
-                                                <div class="cards-md__info-right">
-                                                    <span class="action-btn">
-                                                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-cart" id3="{{$advert->product->id}}" data-price="{{$advert->product->amount}}" data-product="{{$advert->product->id}}product">
-                                                            <path d="M6.66667 8.83333H4.16667L2.5 18H17.5L15.8333 8.83333H13.3333M6.66667 8.83333V6.33333C6.66667 4.49239 8.15905 3 10 3V3C11.8409 3 13.3333 4.49238 13.3333 6.33333V8.83333M6.66667 8.83333H13.3333M6.66667 8.83333V11.3333M13.3333 8.83333V11.3333" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" >
-                                                            </path>
-                                                        </svg>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach                               
-                            </div>
-                            <div class="swiper-pagination featured-pagination"></div>
-                        </div>
-                    </div>   
-                </div>
-            </div>
-        </section>
+    @if($features->count())
+        @include('frontend.adverts.featured_products')
     @endif
     <!-- featured  end  -->
 
@@ -1002,7 +917,7 @@
     </section>
 
     <!-- hotdeals  starts  -->
-    @if($advert_Z->where('product.discount','>=',2)->isNotEmpty())
+    {{-- @if($advert_Z->where('product.discount','>=',2)->isNotEmpty())
         <section class="deals section--gray section--lg">
             <div class="container">
                 <div class="section__head">
@@ -1714,7 +1629,7 @@
                 </div>
             </div>
         </section>
-    @endif
+    @endif --}}
     <!-- hotdeals  ends  -->
 
     <!-- Modal -->

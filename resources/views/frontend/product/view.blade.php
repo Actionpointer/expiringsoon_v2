@@ -700,7 +700,7 @@
             </div>
         </div>
     </section>
-
+    @if($similar->isNotEmpty())
     <section class="section section--xl related pt-0">
         <div class="container">
             <div class="section__head justify-content-center">
@@ -787,6 +787,7 @@
             </div>
         </div>
     </section>
+    @endif
     <!-- Related Product Section   end  -->
     
 @endsection

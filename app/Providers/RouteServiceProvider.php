@@ -39,6 +39,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('state_id', function ($value) {
             return \App\Models\State::where('id', $value)->first();
         });
+        Route::bind('advert_id', function ($value) {
+            return \App\Models\Advert::where('id', $value)->first();
+        });
 
         $this->configureRateLimiting();
 

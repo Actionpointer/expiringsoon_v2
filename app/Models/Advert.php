@@ -54,7 +54,7 @@ class Advert extends Model
     }
     
     public function getUrlAttribute(){
-        return $this->advertable_type == 'App\Models\Shop' ? route('vendor.shop.show',$this->advertable) : route('product.show',$this->advertable);
+        return route('advert.click',$this);
     }
 
     public function getImageAttribute(){
@@ -63,7 +63,12 @@ class Advert extends Model
 
     public function scopeWithinState($query,$state_id=null){
         if(!$state_id){
-            $state_id = session('locale')['state_id'];
+            if(auth()->check()){
+                $state_id = auth()->user()->state_id;
+            }else{
+                $state_id = session('locale')['state_id'];
+            }
+            
         }
         return $query->where('state_id',$state_id);
     }

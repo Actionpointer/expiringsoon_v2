@@ -416,13 +416,13 @@
   Pusher.logToConsole = true;
   var pusher = new Pusher('30f7e5194b874bf1230b', {
       cluster: 'eu',
-      wsHost: url,
+      wsHost: window.location.hostname,
       wsPort: 6001,
       wssPort: 6001,
       forceTLS: false,
       enabledTransports: ['ws'],
       debug: true,
-      authEndpoint: url+'/broadcasting/auth', // The URL of your Laravel app's auth endpoint
+      authEndpoint: '/broadcasting/auth', // The URL of your Laravel app's auth endpoint
       auth: {
           headers: {
           'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include the CSRF token if CSRF protection is enabled

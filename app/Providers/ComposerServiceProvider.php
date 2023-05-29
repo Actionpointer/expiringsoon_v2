@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Advert;
+use App\Models\Feature;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -54,5 +55,12 @@ class ComposerServiceProvider extends ServiceProvider
             $minis = Advert::running()->withinState()->whereHas('adset',function($query){$query->active()->where('adplan_id',5);})->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
             $view->with(['sliders'=> $sliders,'minis'=> $minis]);
         });
+
+        View::composer(['frontend.index','frontend.hotdeals','frontend.product.categories'], function ($view) {
+            $features = Feature::with('product')->withinState()->running()->orderBy('views','asc')->take(10)->get()->each(function ($item, $key) {$item->increment('views'); });
+            $view->with(['features'=> $features]);
+        });
+
+        
     }
 }

@@ -25,7 +25,7 @@ class ProductController extends Controller
         $tag = null;
         $categories = Category::has('products')->get();
         $states = State::has('products')->where('country_id',session('locale')['country_id'])->get();
-        $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
+        $products = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->orderBy('features_count','desc');
         if(request()->query() && request()->query('shop_id')){
             $shop_id = request()->query('shop_id');
             $products = $products->where('shop_id',$shop_id);
@@ -36,7 +36,6 @@ class ProductController extends Controller
                 $qry->where('state_id',$state_id);
             });
         }else{$state_id = 0;}
-
         if(request()->query() && request()->query('category_id')){
             $products = $products->where('category_id',request()->query('category_id'));
             $category = Category::find(request()->query('category_id'));
@@ -80,21 +79,13 @@ class ProductController extends Controller
                 
             ], 200);
         }else{
-            // $advert = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"F")->orderBy('views','asc')->first();
-            $advert = null;
-            if($advert){
-                $advert->views = $advert->views + 1;
-                $advert->save();
-            }
-            // dd(array_filter($products->pluck('tags')->flatten()->toArray()));
-            return view('frontend.product.list',compact('advert','products','tag','category','categories','states','state_id'));
+            return view('frontend.product.list',compact('products','tag','category','categories','states','state_id'));
         }
     }
 
     public function categories(){
         $categories = Category::all();
-        $advert_Z = Advert::with('product')->within()->running()->certifiedProduct()->where('position',"Z")->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
-        return view('frontend.product.categories',compact('categories','advert_Z'));
+        return view('frontend.product.categories',compact('categories'));
     }
 
     public function show(Product $product){
@@ -107,12 +98,7 @@ class ProductController extends Controller
             ], 400) :
             redirect()->back()->with(['result'=> 0,'message'=> 'Product is no longer available']);
         }
-        $similar = Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->whereHas('adverts',function($query){
-            $query->running()->certifiedProduct();
-        })->get();
-        if($similar->isEmpty()){
-            $similar = Product::where('category_id',$product->category_id)->where('id','!=',$product->id)->get();
-        }
+        $similar = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->where('category_id',$product->category_id)->where('id','!=',$product->id)->orderBy('features_count','desc')->get();
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
@@ -131,21 +117,13 @@ class ProductController extends Controller
 
     public function hotdeals(){
 
-        $state_id = session('locale')['state_id'];
         $categories = Category::orderBy('name','ASC')->take(8)->get();
-        // $advert_C = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"C")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        // $advert_D = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"D")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
-        // $advert_E = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"E")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_C = [];
-        $advert_D = [];
-        $advert_E = [];
-        $advert_Z = Advert::with('product')->within($state_id)->running()->certifiedProduct()->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
-        $products = Product::whereIn('id',$advert_Z->pluck('product_id'))->paginate(10);
+        $products = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->orderBy('features_count','desc');
         if(request()->expectsJson()){
             return response()->json([
                 'status' => true,
                 'message' => $products->count() ? 'Hotdeals Retrieved' : 'No hotdeals retrieved',
-                'data' => ProductResource::collection($products),
+                'data' => ProductResource::collection($products->get()),
                 'meta'=> [
                     "total"=> $products->total(),
                     "per_page"=> $products->perPage(),
@@ -158,8 +136,11 @@ class ProductController extends Controller
                 ]
                 
             ], 200);
-        }else
-        return view('frontend.hotdeals',compact('categories','advert_C','advert_D','advert_E','advert_Z'));
+        }else{
+            $products = $products->get();
+            return view('frontend.hotdeals',compact('categories','products'));
+        }
+        
     }
 
     

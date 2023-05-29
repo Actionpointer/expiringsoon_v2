@@ -1,15 +1,13 @@
-one event can call many listeners
-many events cannot call one listener - use subscribers to do this
+-one event can call many listeners
+-many events cannot call one listener - use subscribers to do this
 
 vendor add shop advert with exact resolution, size and graphics
 admin:ad preview
+
 admin: defaulting orders -processing, shipped, ready, 
 admin kyc assessment, and notification to vendor
 
 kyc
-
-
-swiper.js is displaying duplicates
 
 hot deals mobile view (home page & hot deals page)
 
@@ -26,7 +24,6 @@ charge the vendor commission for their shipments also
 store the subscription plan items on the subscription table
 
 store the product details on the order details table.
-
 
 
 after delivery, options are [

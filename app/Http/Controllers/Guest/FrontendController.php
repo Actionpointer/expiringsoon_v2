@@ -18,23 +18,7 @@ class FrontendController extends Controller
     public function index(){
         $categories = Category::orderBy('name','ASC')->take(8)->get();
         $state_id = session('locale')['state_id'];
-        // $advert_A = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"A")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        // $advert_B = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"B")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_Z = Advert::with('product')->within($state_id)->running()->certifiedProduct()->orderBy('views','asc')->get()->each(function ($item, $key) {$item->increment('views'); });
-        $advert_A = null;
-        $advert_B = null;
-        $advert_C = null;
-        return view('frontend.index',compact('categories','advert_A','advert_B','advert_Z'));
-    }
-    
-    public function redirect(Advert $advert){
-        $advert->clicks =+ 1;
-        $advert->save();
-        if($advert->advertable_type == 'App\Models\Product'){
-            return redirect()->route('product.show',$advert->advertable);
-        }else{
-            return redirect()->route('vendor.show',$advert->advertable);
-        } 
+        return view('frontend.index',compact('categories'));
     }
 
     public function shipment(){

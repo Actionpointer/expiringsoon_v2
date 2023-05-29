@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Resources\CustomerResource;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\ApyController;
+use App\Http\Controllers\Guest\AdvertController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ShopController;
 use App\Http\Controllers\Guest\ProductController;
@@ -75,15 +76,11 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::get('generate/otp',[UserController::class, 'generate_otp']);
     Route::post('edit-pin',[UserController::class, 'pin']);
     
-    
-    
-    
+    Route::get('adverts',[AdvertController::class,'ads']);
+    Route::get('advert/{advert_id}', [AdvertController::class, 'ad_click']);
 
-    
-    // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
-    
-    // Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
-    
+    Route::get('featured', [AdvertController::class, 'featured']);
+    Route::get('featured/{feature_id}', [AdvertController::class, 'featured_click']);
 
     
 });

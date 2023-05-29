@@ -902,9 +902,10 @@ var deals = new Swiper('.deals-products--slider', {
 });
 
 // 16.6    Featured Sliders
+
 var featured = new Swiper('.featured-slider--one', {
   spaceBetween: 0,
-  loop: true,
+  loop: false,
   loopFillGroupWithBlank: true,
   autoplay: {
     delay: 4000,
