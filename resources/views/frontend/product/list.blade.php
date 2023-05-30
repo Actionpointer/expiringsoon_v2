@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-    
+    <link rel="stylesheet" href="{{asset('src/css/custom.css')}}">
 @endpush
 @section('title') Products @endsection
 @section('main')
@@ -36,66 +36,51 @@
     
     <!-- Banner Section End  -->
 
-    <!-- Filter section Start  -->
-    <div class="filter__sidebar">
-        <button class="filter">
-            <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 5.75C18.4142 5.75 18.75 5.41421 18.75 5C18.75 4.58579 18.4142 4.25 18 4.25V5.75ZM9 4.25C8.58579 4.25 8.25 4.58579 8.25 5C8.25 5.41421 8.58579 5.75 9 5.75V4.25ZM18 4.25H9V5.75H18V4.25Z" fill="white"></path>
-                <path
-                    d="M13 14.75C13.4142 14.75 13.75 14.4142 13.75 14C13.75 13.5858 13.4142 13.25 13 13.25V14.75ZM4 13.25C3.58579 13.25 3.25 13.5858 3.25 14C3.25 14.4142 3.58579 14.75 4 14.75V13.25ZM13 13.25H4V14.75H13V13.25Z"
-                    fill="white"
-                ></path>
-                <circle cx="5" cy="5" r="4" stroke="white" stroke-width="1.5"></circle>
-                <circle cx="17" cy="14" r="4" stroke="white" stroke-width="1.5"></circle>
-            </svg>
-        </button>
-        <div class="filter-box">
-            <div class="container">
-                <form action="{{route('product.list')}}" method="get" id="filterform">
-                    <div class="filter-box__top">
-                        <div class="filter-box__top-left">
-                            <div class="select-box--item" style="min-width: 200px!important">
-                                <select name="category_id" id="category_id" class="select2 w-100" onchange="document.getElementById('filterform').submit();">
-                                    <option value="0" >All Categories</option>
-                                        @foreach ($categories->sortBy('category') as $cat)
-                                            <option value="{{$cat->id}}" @if($category && $category->id == $cat->id) selected @endif>{{$cat->name}}</option>
-                                        @endforeach
-                                </select>
-                            </div>
-                            <div class="select-box--item" style="min-width: 200px!important">
-                                <select name="tag" id="tag_id" class="select2 w-100" onchange="document.getElementById('filterform').submit();">
-                                    <option value="0" >All Tags</option>
-                                        @foreach (array_filter($products->pluck('tags')->flatten()->toArray()) as $tags)
-                                            <option value="{{$tags}}" @if($tag && $tag == $tags) selected @endif>{{$tags}}</option>
-                                        @endforeach
-                                </select>
-                            </div>
-                            {{-- dd(array_filter($products->pluck('tags')->toArray())); --}}
-                            <div class="select-box--item" style="min-width: 200px!important">
-                                <select name="state_id" id="state_id" class="select2" onchange="document.getElementById('filterform').submit();">
-                                    <option value="0" @if($state_id == 0) selected @endif>All States</option>
-                                    @foreach ($states as $state)
-                                        <option value="{{$state->id}}" @if($state_id == $state->id) selected @endif>{{$state->name}}</option>
+   
+    <div class="container">
+        <form action="{{route('product.list')}}" method="get" id="filterform">
+            <div class="row my-3">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-3" >
+                            <select name="category_id" id="category_id" class="select2 w-100" onchange="document.getElementById('filterform').submit();">
+                                <option value="0" >All Categories</option>
+                                    @foreach ($categories->sortBy('category') as $cat)
+                                        <option value="{{$cat->id}}" @if($category && $category->id == $cat->id) selected @endif>{{$cat->name}}</option>
                                     @endforeach
-                                </select>
-                            </div>
+                            </select>
                         </div>
-                        <div class="filter-box__top-right">
-                            <div class="select-box--item">
-                                <select name="sortBy" id="sort-by" class="filter__dropdown-menu" onchange="document.getElementById('filterform').submit();">
-                                    <option value="price_asc">Sort by: Price Asc</option>
-                                    <option value="price_desc">Sort by: Price Desc</option>
-                                    <option value="expiry_asc">Sort by: Expiry date Asc</option>
-                                    <option value="expiry_desc">Sort by: Expiry date Desc</option>
-                                    
-                                </select>
-                            </div>
+                        <div class="col-md-3" >
+                            <select name="tag" id="tag_id" class="select2 w-100" onchange="document.getElementById('filterform').submit();">
+                                <option value="0" >All Tags</option>
+                                    @foreach (array_filter($products->pluck('tags')->flatten()->toArray()) as $tags)
+                                        <option value="{{$tags}}" @if($tag && $tag == $tags) selected @endif>{{$tags}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3" >
+                            <select name="state_id" id="state_id" class="select2" onchange="document.getElementById('filterform').submit();">
+                                <option value="0" @if($state_id == 0) selected @endif>All States</option>
+                                @foreach ($states as $state)
+                                    <option value="{{$state->id}}" @if($state_id == $state->id) selected @endif>{{$state->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="col-md-2">
+                    <select name="sortBy" id="sort-bys" class="form-control like_select2" onchange="document.getElementById('filterform').submit();">
+                        <option value="price_asc">Sort by: Price Asc</option>
+                        <option value="price_desc">Sort by: Price Desc</option>
+                        <option value="expiry_asc">Sort by: Expiry date Asc</option>
+                        <option value="expiry_desc">Sort by: Expiry date Desc</option>
+                        
+                    </select>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
+
     <!-- Filter section End  -->
 
     <!-- Shop list Section Start  -->

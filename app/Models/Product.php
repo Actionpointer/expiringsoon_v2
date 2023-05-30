@@ -122,11 +122,13 @@ class Product extends Model
 
     //expiry
     public function getValidAttribute(){
-        return $this->expire_at->subHours(cache('settings')['order_processing_to_delivery_period']) > now();
+        $hours = cache('settings')['order_processing_to_delivery_period'] + cache('settings')['order_delivered_to_acceptance_period'];
+        return $this->expire_at->subHours($hours) > now();
     }
 
     public function scopeIsValid($query){
-        return $query->where('expire_at','>',now()->addHours(cache('settings')['order_processing_to_delivery_period']));
+        $hours = cache('settings')['order_processing_to_delivery_period'] + cache('settings')['order_delivered_to_acceptance_period'];
+        return $query->where('expire_at','>',now()->addHours($hours));
     }
     
     public function certified(){

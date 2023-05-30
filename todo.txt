@@ -9,10 +9,8 @@ admin kyc assessment, and notification to vendor
 
 kyc
 
-hot deals mobile view (home page & hot deals page)
 
-
-phone number verification
+-phone number verification
 
 
 on change settings->payout_gateway, send email to all users of that gateway, especially if its paypal & stripe

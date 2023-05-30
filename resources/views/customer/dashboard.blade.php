@@ -84,25 +84,24 @@
                   </div>
 
                   <div class="dashboard__totalpayment-card-body">
-                      @forelse($user->unreadNotifications as $notification)
-                        <div class="dashboard__totalpayment-card-body-item">
+                    @forelse($user->unreadNotifications->sortBy('created_at')->take(4) as $notification)
+                      <div class="dashboard__totalpayment-card-body-item">
                           <div class="d-flex">
                               <div>
-                                <small class="muted font-body--sm-400 text-nowrap">{{$notification->created_at->format('d-M')}}</small>
+                                <p class="muted font-body--sm-400 text-nowrap">{{$notification->created_at->format('d-M')}}</p>
                               </div>
                               
                               <h5 class="font-body--sm-400 px-2"> 
                                 {{$notification->data['body']}}
-                              </h5>
-                              @if(array_key_exists('url',$notification->data))
-                              <div>
-                                <a href="{{url($notification->data['url'])}}" class="btn btn-sm btn-outline-dark">View</a>
-                              </div>
-                              @endif
-                              
+                              </h5> 
                           </div>
-                        </div>
-                      @empty
+                          @if(array_key_exists('url',$notification->data))
+                          <div class="ml-auto">
+                            <a href="{{url($notification->data['url'])}}" class="btn btn-sm btn-outline-dark">View</a>
+                          </div>
+                          @endif
+                      </div>
+                    @empty
                         <div class="dashboard__totalpayment-card-body-item pt-5 justify-content-center">
                           <h5 class="font-body--lg-600">No Unread Notification</h5>
                         </div>

@@ -134,19 +134,19 @@
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Dear {{$user->name}},</span>
-																<br/>Your order with number {{$order->slug}} has been rejected because of the following reason: <br>
+																<br/>Your order with number {{$order->slug}} has been rejected because of the following reason: 
 																{{$status->description}} <br>
 																We apologise for any inconvenience you might
-																have experienced on this order and kindly encourage you to dialogue with 
-																the vendor through the order interface to explain why you rejected the order.
+																have experienced on this order and assure you that we are currently looking into the situation to ensure your 
+																complaint is resolved.
 															</td>
 														</tr>
 														@else
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Order #{{$order->slug}} Rejected,</span>
-																<br />Your order with number {{$order->slug}} has been rejected by your customer because of {{$status->description}}. We encourage you to specify on the order 
-																dashboard whether the items should be sent back to you and the customer refunded, or you will send new items to the customer
+																<br />Your order with number {{$order->slug}} has been rejected by your customer because of the highlighted reason: <code>{{$status->description}}</code>. Kindly visit the order interface to manage
+																the situation with the order by specifying whether the items should be sent back to you and the customer refunded, or you will send new items to the customer
 															</td>
 														</tr>
 														@endif

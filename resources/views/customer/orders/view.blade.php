@@ -156,8 +156,67 @@
                 <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
                     <div class="mx-3 pt-1">
                       @foreach($statuses as $key => $value)
-                        <button class="button button--md " type="submit" name="status" value="{{$value}}">{{$key}}</button>
+                        @if($value != 'rejected')
+                          <button class="button button--md @if(in_array($value,['cancelled','disputed'])) bg-danger @endif" 
+                            type="submit" name="status" value="{{$value}}">
+                          {{$key}}
+                          </button>
+                        @else  
+                          <div class="accordion mt-2" id="shop">
+                            <!-- All Categories  -->
+                            <div class="accordion-item shop-item">
+                                <h2 class="accordion-header" id="shop-item-accordion--one">
+                                    <button class="accordion-button shop-button font-body--xxl-500 collapsed text-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        I have issues with this order
+                                        <span class="icon">
+                                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M13 7L7 1L1 7" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse  collapse" aria-labelledby="shop-item-accordion--one" data-bs-parent="#shop" style="">
+                                    <div class="accordion-body ">
+                                        <div class="categories">
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="Order is incomplete" id="fruit">
+                                                    <label class="form-check-label" for="fruit"> Order is incomplete </label>
+                                                </div>
+                                            </div>
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="Product is Damaged" id="vegetable" checked="">
+                                                    <label class="form-check-label" for="vegetable"> Product is Damaged </label>
+                                                </div>
+                                            </div>
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="Product is Expired" id="cooking" checked="">
+                                                    <label class="form-check-label" for="cooking"> Product is Expired </label>
+                                                </div>
+                                            </div>
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="What I ordered is different from this" id="snacks" checked="">
+                                                    <label class="form-check-label" for="snacks"> What I ordered is different from this </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="button button--md bg-danger " 
+                                          type="submit" name="status" value="{{$value}}">
+                                          Reject Order
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                          </div>
+                        @endif
+                        
                       @endforeach
+                      
                     </div>
                 </div>
                 

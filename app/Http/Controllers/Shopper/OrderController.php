@@ -75,7 +75,7 @@ class OrderController extends Controller
     }
 
     public function update(Request $request){
-
+        // dd($request->all());
         switch(strtolower($request->status)){
             
             case 'cancelled':

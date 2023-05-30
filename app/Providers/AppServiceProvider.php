@@ -30,6 +30,5 @@ class AppServiceProvider extends ServiceProvider
         $settings = Cache::rememberForever('settings', function () {
             return \App\Models\Setting::select(['name','value'])->get()->pluck('value','name')->toArray();
         });      
-        
     }
 }
