@@ -138,7 +138,13 @@ class ProductController extends Controller
             ], 200);
         }else{
             $products = $products->get();
-            return view('frontend.hotdeals',compact('categories','products'));
+            $ranges = [[0,19],[20,30],[30,40],[40,50],[50,100]];
+            $counter = [];
+            foreach($ranges as $range){
+                $counter[] = $products->whereBetween('discount',$range)->count();
+            }
+            $highest = array_search(max($counter),$counter);
+            return view('frontend.hotdeals',compact('categories','products','ranges','highest'));
         }
         
     }
