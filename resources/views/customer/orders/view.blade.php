@@ -469,7 +469,7 @@
 @include('layouts.front')
 
 <script>
-  let user = @json(auth()->id());
+
   let order = @json($order->id);
   var channel = pusher.subscribe('private-order.'+order);
   channel.bind('message.created', function(data) {
