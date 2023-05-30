@@ -1,12 +1,13 @@
 <script src="https://js.pusher.com/7.2.0/pusher.min.js"></script>
 <script>
     let user = @json(auth()->id());
+    let order = @json($order->id);
     let url = window.location.origin;
     if(user){
         Pusher.logToConsole = true;
         var pusher = new Pusher('30f7e5194b874bf1230b', {
             cluster: 'eu',
-            wsHost: 'expiringsoon.test',
+            wsHost: window.location.hostname,
             wsPort: 6001,
             wssPort: 6001,
             forceTLS: false,

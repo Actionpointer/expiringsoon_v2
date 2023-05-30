@@ -1,16 +1,19 @@
 -one event can call many listeners
 -many events cannot call one listener - use subscribers to do this
 
+-phone number verification
+
+
+
+
 vendor add shop advert with exact resolution, size and graphics
 admin:ad preview
 
-admin: defaulting orders -processing, shipped, ready, 
-admin kyc assessment, and notification to vendor
 
+admin kyc assessment, and notification to vendor
 kyc
 
 
--phone number verification
 
 
 on change settings->payout_gateway, send email to all users of that gateway, especially if its paypal & stripe
@@ -23,15 +26,7 @@ store the subscription plan items on the subscription table
 
 store the product details on the order details table.
 
+follow vendor
 
-after delivery, options are [
-    A. received & complete, B. received but rejecting, C. not received
-]
-if A. then [review]
-if B. show options. [What I ordered is not what I got, Incomplete order, Items  are expired, Items are damaged]
-if C. dispute opened
 
-when B. show vendor these options
-[i.send new items to customer | ii.refund customer ]
-if i. order is changed back to processing, 
-if ii. order is changed to retrieve/recall
+

@@ -17,7 +17,7 @@ use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('broadcast', function () {
-    $user = \App\Models\User::find(46);
+    $user = \App\Models\User::find(31);
     $user->notify(new App\Notifications\WelcomeNotification);
     return 'done';
 });

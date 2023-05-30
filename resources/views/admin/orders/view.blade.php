@@ -175,31 +175,7 @@
               <!-- Progress  -->
               
               @include('vendor.shop.orders.status',['status'=> $order->status])
-              
-              <!-- Update status  -->
-              @if(in_array($order->status,["ready","shipped"]))
-              <form method="post" class="my-5" id="orderstatus" action="{{route('admin.order.update')}}">@csrf
-                <input type="hidden" name="order_id" value=" {{$order->id}}">
-                <div class="py-1 text-center">
-                  <label for="states" class="font-body--md-600">Update Order Status: </label>
-                </div>
-                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
-                  
-                  <div class="mx-3 pt-1">
-                    <select id="" name="status" class="form-control" required="true" style="min-width:250px">
-                      <option selected disabled value="null">Select </option>
-                      <option value="shipped">Shipped</option>
-                      <option value="delivered">Delivered</option>
-                    </select>
-                  </div>
-                  <div class="pt-2 pt-md-0">
-                    <button class="button button--md" type="submit" id="btn-update">
-                      Save Status
-                    </button>
-                  </div>
-                </div>
-              </form>
-              @endif
+
               @if($order->status == "disputed")
               <form method="post" class="my-5" id="orderstatus" action="{{route('admin.order.resolution')}}" onsubmit="return confirm('Are you sure the dispute has been resolved between the parties?');">@csrf
                 <div class="mb-3 text-center">

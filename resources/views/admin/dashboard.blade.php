@@ -68,77 +68,6 @@
                 </div>
               </div>
             </div>
-            @if($user->role->name != 'auditor')
-              @if ($documents->isNotEmpty())
-                <!-- KYC Documents -->
-                <div class="dashboard__order-history" style="margin-top: 24px">
-                  <div class="dashboard__order-history-title">
-                    <h2 class="font-body--xxl-500">KYC Documents</h2>
-                    <a href="#" class="font-body--lg-500">&nbsp</a>
-                  </div>
-                  <div class="dashboard__order-history-table">
-                    <div class="table-responsive">
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col" class="dashboard__order-history-table-title"> Date</th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Type </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Applicant</th>
-                            <th scope="col" class="dashboard__order-history-table-title"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          
-                            @foreach ($documents as $document)
-                                <tr>
-
-                                  <td class="dashboard__order-history-table-item order-total " >
-                                    {{$document->created_at->format('l, M jS, Y')}}
-                                  </td>
-                                  <!-- Status -->
-                                  <td class="dashboard__order-history-table-item order-status">
-                                      {{ucwords($document->type)}}
-                                  </td>
-
-                                    <td class="dashboard__order-history-table-item order-date">
-                                      <div class="d-flex">
-                                        @if($document->verifiable_type == 'App\Models\Shop')
-                                          <img @if(!$document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
-                                        @else
-                                          <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
-                                        @endif
-                                        <p class="order-total-price ps-2">
-                        
-                                            {{$document->verifiable->name}}
-                                            <br />
-                                            <span style="font-size:12px;color:#888">
-                                                {{$document->verifiable->email}}
-                                            </span>
-                                        
-                                        </p>
-                                      </div>
-                                      
-                                    </td>
-                                    <!-- Total  -->
-                                    
-                                    <!-- Details page  -->
-                                    <td class=" dashboard__order-history-table-item order-details ">
-                                      @if($document->verifiable_type == 'App\Models\Shop')
-                                        <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
-                                      @else
-                                        <a href="{{route('admin.user.show',$document->verifiable)}}"> View User</a>
-                                      @endif
-                                    </td>
-                                </tr>
-                            
-                            @endforeach
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              @endif
-            @endif
             <!-- Approvals and notifications  -->
             <div class="my-3">
               <div class="row">
@@ -220,12 +149,89 @@
                 </div>
               </div>
             </div>
+            @if($user->role->name != 'auditor')
+                <!-- KYC Documents -->
+                <div class="dashboard__order-history" style="margin-top: 24px">
+                  <div class="dashboard__order-history-title">
+                    <h2 class="font-body--xxl-500">KYC Documents</h2>
+                    <a href="#" class="font-body--lg-500">&nbsp</a>
+                  </div>
+                  <div class="dashboard__order-history-table">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="dashboard__order-history-table-title"> Date</th>
+                            <th scope="col" class="dashboard__order-history-table-title"> Type </th>
+                            <th scope="col" class="dashboard__order-history-table-title"> Applicant</th>
+                            <th scope="col" class="dashboard__order-history-table-title"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                            @forelse ($documents as $document)
+                                <tr>
+
+                                  <td class="dashboard__order-history-table-item order-total " >
+                                    {{$document->created_at->format('l, M jS, Y')}}
+                                  </td>
+                                  <!-- Status -->
+                                  <td class="dashboard__order-history-table-item order-status">
+                                      {{ucwords($document->type)}}
+                                  </td>
+
+                                    <td class="dashboard__order-history-table-item order-date">
+                                      <div class="d-flex">
+                                        @if($document->verifiable_type == 'App\Models\Shop')
+                                          <img @if(!$document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                        @else
+                                          <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
+                                        @endif
+                                        <p class="order-total-price ps-2">
+                        
+                                            {{$document->verifiable->name}}
+                                            <br />
+                                            <span style="font-size:12px;color:#888">
+                                                {{$document->verifiable->email}}
+                                            </span>
+                                        
+                                        </p>
+                                      </div>
+                                      
+                                    </td>
+                                    <!-- Total  -->
+                                    
+                                    <!-- Details page  -->
+                                    <td class=" dashboard__order-history-table-item order-details ">
+                                      @if($document->verifiable_type == 'App\Models\Shop')
+                                        <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
+                                      @else
+                                        <a href="{{route('admin.user.show',$document->verifiable)}}"> View User</a>
+                                      @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                  <td colspan="4">
+                                    <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
+                                      <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}"><br />No pending KYC at this time.
+                                    </div>
+                                  </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+            @endif
+            
             
             <!-- Order History  -->
             @can('list','App\Models\Order')
             <div class="dashboard__order-history" style="margin-top: 24px">
               <div class="dashboard__order-history-title">
-                <h2 class="font-body--xxl-500">Recent Orders</h2>
+                <h2 class="font-body--xxl-500">Defaulting Orders</h2>
                 <a href="{{route('admin.orders')}}" class="font-body--lg-500">See All</a>
               </div>
               <div class="dashboard__order-history-table">
@@ -233,51 +239,54 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col" class="dashboard__order-history-table-title"> Order Id
-                        </th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Date
-                        </th>
-                        <th scope="col" class="dashboard__order-history-table-title"> Total
-                        </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Order Id </th>
                         <th scope="col" class="dashboard__order-history-table-title"> Status </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Since </th>
+                        <th scope="col" class="dashboard__order-history-table-title"> Total </th>
                         <th scope="col" class="dashboard__order-history-table-title"> Delivery </th>
                         <th scope="col" class="dashboard__order-history-table-title"></th>
                       </tr>
                     </thead>
                     <tbody>
                       
-                      @forelse ($orders as $order)
+                      @forelse ($statuses as $status)
                             
                         <tr>
                             <!-- Order Id  -->
                             <td class="dashboard__order-history-table-item order-id"> 
-                                <span style="font-weight:500">#{{$order->id}}</span>
+                                <span style="font-weight:500">#{{$status->order->id}}</span>
+                            </td>
+                            <td class="   dashboard__order-history-table-item   order-status "> 
+                              {{ucwords($status->name)}}
                             </td>
                             <!-- Date  -->
                             <td class="dashboard__order-history-table-item order-date "> 
-                                {{$order->created_at->format('d-m-Y h:i A')}}
+                                {{$status->created_at->format('d-m-Y h:i A')}}
                             </td>
                             <!-- Total  -->
                             <td class="   dashboard__order-history-table-item   order-total "> 
-                                <p class="order-total-price">   {!!$order->shop->country->currency->symbol!!}{{ number_format($order->total)}} </p>
+                                <p class="order-total-price">   {!!$status->order->shop->country->currency->symbol!!}{{ number_format($status->order->total)}} </p>
                             </td>
                             <!-- Status -->
+                            
                             <td class="   dashboard__order-history-table-item   order-status "> 
-                                {{$order->status}}
-                            </td>
-                            <td class="   dashboard__order-history-table-item   order-status "> 
-                              Delivery Type: {{ucwords($order->deliverer)}}
+                              Delivery Type: {{ucwords($status->order->deliverer)}}
                               
                             </td>
                             <!-- Details page  -->
                             <td class="   dashboard__order-history-table-item   order-details "> 
-                                <a href="{{route('admin.order.show',$order)}}"> View Order</a>
+                                <a href="{{route('admin.order.show',$status->order)}}"> View Order</a>
                             </td>
                         </tr>
                       @empty
-                      <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
+                      <tr>
+                        <td colspan="6">
+                          <div style="margin:auto;padding:1%;text-align:center;margin-bottom:5%">
                             <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}"><br />You have no orders at this time.
-                        </div>
+                          </div>
+                        </td>
+                      </tr>
+                      
                       @endforelse
                     
                     </tbody>

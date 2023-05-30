@@ -11,6 +11,7 @@ use App\Models\State;
 use App\Models\Payout;
 use App\Models\Address;
 use App\Models\Country;
+use App\Models\OrderStatus;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Rules\OtpValidateRule;
@@ -32,12 +33,18 @@ class UserController extends Controller
     }
 
     public function dashboard(){
+        $processing = cache('settings')['order_processing_to_auto_cancel_period'];
+        $shipping = cache('settings')['order_processing_to_delivery_period'] - cache('settings')['order_processing_to_shipment_period'];
         $user = auth()->user();
         DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$user->id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','user')->update(['read_at'=> now()]);
         $documents = Kyc::within()->where('status',false)->whereNull('reason')->take(5)->get(); 
-        $orders = Order::within()->whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed']);})->latest()->take(5)->get();   
+        $statuses = OrderStatus::within()->where(function($query) use($processing,$shipping){
+                        $query->where('name','processing')->where('created_at','<',now()->subHours($processing))
+                            ->orWhere('name','shipped')->where('created_at','<',now()->subHours($shipping))
+                            ->orWhere('name','ready')->where('created_at','<',now()->subHours(24));
+                        })->latest()->take(5)->get();   
         $payouts = Payout::within()->where('status','pending')->orderBy('created_at','asc')->take(5)->get();   
-        return view('admin.dashboard',compact('user','documents','orders','payouts'));
+        return view('admin.dashboard',compact('user','documents','statuses','payouts'));
     }
     
     public function customers(){

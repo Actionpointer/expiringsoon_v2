@@ -127,14 +127,14 @@ trait OrderTrait
         $statuses = [];
         switch(strtolower($order->status)){
             case 'processing': 
-                if(in_array($order->deliverer,["pickup","admin"])) $statuses = ['Ready'=>'ready'];
-                else $statuses = ['Shipped'=>'shipped'];
+                if(in_array($order->deliverer,["pickup","admin"])) $statuses = ['Mark Ready'=>'ready'];
+                else $statuses = ['Mark Shipped'=>'shipped'];
             break;
             case 'ready':
-                if($order->deliverer == "vendor") $statuses = ['Delivered'=> 'delivered'];
+                if($order->deliverer == "vendor") $statuses = ['Mark Delivered'=> 'delivered'];
             break;
             case 'shipped':
-                if($order->deliverer == "vendor") $statuses = ['Delivered'=> 'delivered'];
+                if($order->deliverer == "vendor") $statuses = ['Mark Delivered'=> 'delivered'];
                 break;
             case 'rejected':
                 if($order->statuses->firstWhere('name','rejected')->created_at->addHours(cache('settings')['order_rejected_to_reversal_period']) > now())
@@ -153,10 +153,10 @@ trait OrderTrait
         $statuses = [];
         switch(strtolower($order->status)){
             case 'ready':
-                if($order->deliverer == "admin") $statuses = ['Shipped'=>'shipped','Delivered'=>'delivered'];
+                if($order->deliverer == "admin") $statuses = ['Mark Shipped'=>'shipped','Delivered'=>'delivered'];
                 break;
             case 'shipped':
-                if($order->deliverer == "admin") $statuses = ['Delivered'=>'delivered'];
+                if($order->deliverer == "admin") $statuses = ['Mark Delivered'=>'delivered'];
                 break;
             default: $statuses = [];
                 break;
@@ -164,17 +164,6 @@ trait OrderTrait
         return $statuses;
     }
 
-    protected function getAdminOrderStatuses(Order $order){
-        $statuses = [];
-        switch(strtolower($order->status)){
-            case 'disputed':
-                $statuses = ['Close'=>'closed'];
-                break;
-            default:  $statuses = [];
-                break;
-        }
-        return $statuses;
-    }
 
     // protected function getDeliveryCharge(){
     //     $state = State::all();

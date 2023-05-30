@@ -79,7 +79,7 @@ class OrderController extends Controller
         switch(strtolower($request->status)){
             
             case 'cancelled':
-                    $message = 'Order has been cancelled and refund initiated';
+                    $message = 'User Cancelled Order';
                 break;
             case 'completed': 
                     $message = 'Order has been completed';
@@ -97,19 +97,19 @@ class OrderController extends Controller
                         ], 401) :
                         redirect()->back()->with(['result'=> 0,'message'=> 'No item in the order is valid for return']);
                 }
-                $message = 'Order has been rejected';
+                $message = $request->description;
                 break;
             case 'returned':
-                    $message = 'Order has been updated';
+                    $message = 'Order has been returned';
                 break;
         }
-        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status),'description'=> $request->description]);
+        OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status),'description'=> $message]);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,
-            'message' => $message,
+            'message' => 'Order Updated Successfully',
         ], 200) :
-         redirect()->back()->with(['result'=> 1,'message'=> $message]);
+         redirect()->back()->with(['result'=> 1,'message'=> 'Order Updated Successfully']);
     }
     
     public function messages(Order $order){

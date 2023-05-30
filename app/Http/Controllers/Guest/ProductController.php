@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ReviewResource;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Resources\ProductDetailsResource;
 
 class ProductController extends Controller
@@ -60,7 +61,12 @@ class ProductController extends Controller
                 $products = $products->orderBy('expire_at','desc');
             }
         }
-        $products = $products->paginate(16);
+        $products_paginated = $products->paginate(16);
+        $products = $products_paginated->sortBy(function($item) {
+            return $item->discount;
+        });
+    
+        $products = new LengthAwarePaginator($products, $products_paginated->total(), $products_paginated->perPage());
         if(request()->expectsJson()){
             return response()->json([
                 'status' => true,

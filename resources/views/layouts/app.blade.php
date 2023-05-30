@@ -650,7 +650,37 @@
     <script src="{{asset('src/js/main.js')}}"></script>
     <script src="{{asset('pusher.js')}}"></script>
     
-    
+    <script>
+        let user = @json(auth()->id());
+        if(user){
+            let url = window.location.origin;
+            Pusher.logToConsole = true;
+            var pusher = new Pusher('30f7e5194b874bf1230b', {
+                cluster: 'eu',
+                wsHost: window.location.hostname,
+                wssHost: window.location.hostname,
+                wsPort: 6001,
+                wssPort: 6001,
+                forceTLS: false,
+                enabledTransports: ['ws'],
+                debug: true,
+                authEndpoint: url+'/broadcasting/auth', // The URL of your Laravel app's auth endpoint
+                auth: {
+                    headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include the CSRF token if CSRF protection is enabled
+                    }
+                }
+            });
+            var channelz = pusher.subscribe('private-users.'+user);
+            channelz.bind('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', function(data) {
+                console.log('Received event:', data);
+                
+            });
+        }
+        
+        
+        
+      </script>
     @stack('scripts')
 </body>
 </html>
