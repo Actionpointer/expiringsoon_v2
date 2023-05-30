@@ -126,10 +126,11 @@ class ProductController extends Controller
         $categories = Category::orderBy('name','ASC')->take(8)->get();
         $products = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->orderBy('features_count','desc');
         if(request()->expectsJson()){
+            $products = $products->paginate(16);
             return response()->json([
                 'status' => true,
                 'message' => $products->count() ? 'Hotdeals Retrieved' : 'No hotdeals retrieved',
-                'data' => ProductResource::collection($products->get()),
+                'data' => ProductResource::collection($products),
                 'meta'=> [
                     "total"=> $products->total(),
                     "per_page"=> $products->perPage(),
