@@ -812,7 +812,7 @@
     @if($features->count())
         @include('frontend.adverts.featured_products')
     @endif  
-    <!-- featured  end  -->
+    <!-- featureds  end  -->
 
 @endsection
 
