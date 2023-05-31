@@ -13,7 +13,7 @@ class AdvertController extends Controller
 {
     //
     public function ads(){
-        $ads = Advert::running()->withinState()->whereHas('adset',function($query){$query->active()->where('adplan_id',1);})->orderBy('views','asc')->take(5)->get()->each(function ($item, $key) {$item->increment('views'); });
+        $ads = Advert::running()->withinState()->whereHas('adset',function($query){$query->active()->where('adplan_id',5);})->orderBy('views','asc')->take(5)->get()->each(function ($item, $key) {$item->increment('views'); });
         return response()->json([
             'status' => true,
             'message' => 'Adverts retrieved Successfully',

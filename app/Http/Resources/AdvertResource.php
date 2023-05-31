@@ -19,6 +19,12 @@ class AdvertResource extends JsonResource
             
             'id' => $this->id,
             'image' => $this->image,
+            'heading' => $this->heading,
+            'subheading' => $this->subheading,
+            'offer' => $this->offer,
+            'text_color' => $this->text_color,
+            'button_text' => $this->button_text,
+            'button_color' => $this->button_color,
             'state' => $this->state->name,
             'views' => $this->views,
             'clicks' => $this->clicks,
@@ -27,7 +33,7 @@ class AdvertResource extends JsonResource
             'approved' => $this->approved,
             'created_at'=> $this->created_at,
             'item_type' => str_replace('App\Models\\','',$this->advertable_type),
-            'item' => $this->advertable
+            'item_id' => $this->advertable_id
         ];
     }
 }
