@@ -35,7 +35,6 @@ Route::get('hotdeals',[ProductController::class, 'hotdeals']);
 Route::get('vendors',[ShopController::class, 'index']);
 Route::get('vendor/{shop_id}',[ShopController::class, 'show']);
 
-
 Route::get('reviews/{product_id}',[ReviewController::class,'reviews']);
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
@@ -70,8 +69,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('order/update',[OrderController::class, 'update']); 
     Route::get('orders/{order_id}/messages',[OrderController::class,'messages']);
     Route::post('order/message',[OrderController::class, 'message']);
-
     Route::post('order/review',[ReviewController::class, 'review']);
+
 
     Route::group(['prefix'=> 'transactions'],function(){
         Route::get('/',[PaymentController::class, 'index']);    
