@@ -648,7 +648,8 @@
     <script src="{{asset('src/js/jquery.syotimer.min.js')}}"></script>
     <script src="{{asset('src/plugins/select2/js/select2.min.js')}}"></script>
     <script src="{{asset('src/js/main.js')}}"></script>
-    <script src="{{asset('pusher.js')}}"></script>
+    <!--<script src="{{asset('pusher.js')}}"></script>-->
+    <script src="https://js.pusher.com/4.4/pusher.min.js"></script>
     
     <script>
         let user = @json(auth()->id());
@@ -657,17 +658,17 @@
             Pusher.logToConsole = true;
             var pusher = new Pusher('30f7e5194b874bf1230b', {
                 cluster: 'eu',
-                wsHost: window.location.hostname,
-                wssHost: window.location.hostname,
+                wsHost: 'expiringsoon.shop',
+                wssHost: 'expiringsoon.shop',
                 wsPort: 6001,
                 wssPort: 6001,
-                forceTLS: false,
-                enabledTransports: ['ws'],
+                forceTLS: true,
+                enabledTransports: ['ws','wss'],
                 debug: true,
-                authEndpoint: url+'/broadcasting/auth', // The URL of your Laravel app's auth endpoint
+                authEndpoint: 'expiringsoon.shop/broadcasting/auth',
                 auth: {
                     headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include the CSRF token if CSRF protection is enabled
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 }
             });
