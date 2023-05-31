@@ -4,3 +4,8 @@
     color: #999;
     font-size:14px;
 }
+
+.unfollow:hover{
+    background-color: rgb(226, 12, 12) !important;
+    color: #fff !important;
+}

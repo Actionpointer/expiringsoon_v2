@@ -12,6 +12,7 @@ use App\Rules\OtpValidateRule;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\ShopResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -158,6 +159,17 @@ class UserController extends Controller
                 'message' => 'Notifications marked read',
             ], 200) :
             redirect()->back()->with(['result'=> 1,'message'=> 'Notifications marked read']);
+    }
+
+    public function followings(){
+        /** @var \App\Models\User $user **/
+        $user = auth()->user();
+        return request()->expectsJson() ? 
+            response()->json([
+                'status' => true,
+                'data' => ShopResource::collection($user->following),
+            ], 200) :
+            view('customer.following');
     }
 
 }

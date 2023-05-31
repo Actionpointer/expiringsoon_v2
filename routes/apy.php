@@ -35,6 +35,7 @@ Route::get('hotdeals',[ProductController::class, 'hotdeals']);
 Route::get('vendors',[ShopController::class, 'index']);
 Route::get('vendor/{shop_id}',[ShopController::class, 'show']);
 
+
 Route::get('reviews/{product_id}',[ReviewController::class,'reviews']);
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
@@ -44,7 +45,10 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         });
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
+        Route::get('following',[UserController::class, 'followings']);
     });
+    Route::get('vendor/follow/{shop_id}',[ShopController::class, 'follow']);
+    Route::get('vendor/unfollow/{shop_id}',[ShopController::class, 'unfollow']);
     Route::get('wishlist', [SalesController::class, 'wishlist']);
     Route::post('wishlist/add',[CartController::class,'addtowish']);
     Route::post('wishlist/remove',[CartController::class,'removefromwish']);

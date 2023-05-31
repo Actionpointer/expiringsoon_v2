@@ -13,6 +13,9 @@ use App\Http\Resources\ShopDetailsResource;
 
 class ShopController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth:sanctum')->only(['follow','unfollow']);
+    }
     
     public function index(){
         $category = null;
@@ -106,5 +109,19 @@ class ShopController extends Controller
         $products = $products->paginate(16);
         return view('frontend.shop.view',compact('shop','categories','products','category'));
 
+    }
+
+    public function follow(Shop $shop){
+        /** @var \App\Models\User $user **/
+        $user = auth()->user();
+        $user->following()->attach($shop->id);
+        return response()->json(['status'=> true],200);
+    }
+
+    public function unfollow(Shop $shop){
+        /** @var \App\Models\User $user **/
+        $user = auth()->user();
+        $user->following()->detach($shop->id);
+        return response()->json(['status'=> true],200);
     }
 }

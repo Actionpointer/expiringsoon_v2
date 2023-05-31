@@ -107,6 +107,9 @@ class Shop extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function followers(){
+        return $this->belongsToMany(User::class, 'follows', 'shop_id', 'user_id');
+    }
     public function staff(){
         return $this->hasMany(User::class);
     }
