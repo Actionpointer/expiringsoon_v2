@@ -74,6 +74,7 @@ class SettingsController extends Controller
         $price = Price::updateOrCreate(['plan_id'=> $request->plan_id,'currency_id'=> $request->currency_id],[
         'minimum_payout'=> $request->minimum_payout,'maximum_payout'=> $request->maximum_payout,
         'commission_percentage'=> $request->commission_percentage,'commission_fixed'=> $request->commission_fixed,
+        'shipment_percentage'=> $request->shipment_percentage,'shipment_fixed'=> $request->shipment_fixed,
         'months_1'=> $request->months_1,'months_3'=> $request->months_3,
         'months_6'=> $request->months_6,'months_12'=> $request->months_12]);
         

@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 @endpush
-@section('title') Admin Settings | Expiring Soon @endsection
+@section('title') Admin Plan Settings | Expiring Soon @endsection
 @section('main')
 <!-- breedcrumb section start  -->
 <div class="section breedcrumb">
@@ -28,7 +28,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Settings</a></li>
+          <li class="active"><a href="#">Plan Settings</a></li>
         </ul>
       </div>
     </div>
@@ -104,6 +104,24 @@
                                                         <div>
                                                             <i class="small text-sm text-muted">Fixed</i>
                                                             <input type="number" name="commission_fixed" value="{{$plan->prices->firstWhere('currency_id',$currency->id)->commission_fixed ?? 0}}" class="form-control"   />
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                            <div class="contact-form-input row ">
+                                                <div class="col-md-2">
+                                                    <label for="number1" class="pt-3">Shipment Charges</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div class="input-group d-flex">
+                                                        <div class="prepend">
+                                                            <i class="small text-sm text-muted">Percentage</i>
+                                                            <input type="number" name="shipment_percentage" value="{{$plan->prices->firstWhere('currency_id',$currency->id)->shipment_percentage ?? 0}}" class="form-control" />
+                                                            
+                                                        </div>
+                                                        <div>
+                                                            <i class="small text-sm text-muted">Fixed</i>
+                                                            <input type="number" name="shipment_fixed" value="{{$plan->prices->firstWhere('currency_id',$currency->id)->shipment_fixed ?? 0}}" class="form-control"   />
                                                         </div>
                                                     </div>
                                                 </div>  

@@ -1,32 +1,24 @@
 -one event can call many listeners
 -many events cannot call one listener - use subscribers to do this
-
+-charges on payout {add that to commission}
 -phone number verification
-
-
 
 
 vendor add shop advert with exact resolution, size and graphics
 admin:ad preview
-
 
 admin kyc assessment, and notification to vendor
 kyc
 
 
 
-
+version2
 on change settings->payout_gateway, send email to all users of that gateway, especially if its paypal & stripe
-
-charges on payout
-
-charge the vendor commission for their shipments also
-
+send email to followers of shops
 store the subscription plan items on the subscription table
 
 store the product details on the order details table.
 
-follow vendor
 
 
 

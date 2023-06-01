@@ -24,7 +24,7 @@ class Plan extends Model
     }
 
     protected $fillable = ['name','slug','description','products','shops'];
-    protected $appends = ['minimum_payout','maximum_payout','commission_percentage','commission_fixed','months_1','months_3','months_6','months_12'];
+    protected $appends = ['minimum_payout','maximum_payout','commission_percentage','commission_fixed','shipment_percentage','shipment_fixed','months_1','months_3','months_6','months_12'];
     
     public function getRouteKeyName(){
         return 'slug';
@@ -40,6 +40,12 @@ class Plan extends Model
     }
     public function getCommissionFixedAttribute(){
         return $this->prices->firstWhere('currency_id',auth()->user()->country->currency_id)->commission_fixed ?? 0 ;
+    }
+    public function getShipmentPercentageAttribute(){
+        return $this->prices->firstWhere('currency_id',auth()->user()->country->currency_id)->shipment_percentage ?? 0 ;
+    }
+    public function getShipmentFixedAttribute(){
+        return $this->prices->firstWhere('currency_id',auth()->user()->country->currency_id)->shipment_fixed ?? 0 ;
     }
     public function getMonths1Attribute(){
         return $this->prices->firstWhere('currency_id',auth()->user()->country->currency_id)->months_1 ?? 0 ;
