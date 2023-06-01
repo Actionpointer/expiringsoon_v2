@@ -588,6 +588,7 @@
                                     <div class="contact-form-input">
                                         <label for="amounts">Amount</label>
                                         <input type="number" name="amount" placeholder="delivery cost" />
+                                        <small class="small text-muted"><i>Please note that we charge {{$shop->user->subscription->plan->commission_percentage}}% + {!! $shop->country->currency->symbol !!}{{$shop->user->subscription->plan->shipment_fixed}} on your delivery cost as transfer processing fee</i></small>
                                     </div>
                                     
                                     <div class="contact-form-btn">
