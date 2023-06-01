@@ -106,7 +106,7 @@
         <div class="form-check">
           <input   class="form-check-input"   type="checkbox"   value=""   id="remember" required/>
           <label class="form-check-label" for="remember">
-            Accept all terms & Conditions
+            <a href="{{route('terms')}}" target="_blank">Accept all terms & Conditions</a> 
           </label>
         </div>
       </div>

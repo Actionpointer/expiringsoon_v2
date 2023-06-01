@@ -172,7 +172,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function following(){
-        return $this->belongsToMany(Shop::class, 'follows', 'user_id', 'shop_id');
+        return $this->belongsToMany(Shop::class,'follows','user_id','shop_id');
     }
 
     public function kyc(){

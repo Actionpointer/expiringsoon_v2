@@ -235,7 +235,7 @@
                                     <a href="{{route('profile')}}">Profile</a>
                                   </li>
                                   <li class="header__navigation-drop-menu-link">
-                                    <a @if(in_array(auth()->user()->role,['vendor','shopper'])) href="#" @else href="#" @endif>Support</a>
+                                    <a @if(in_array(auth()->user()->role->name,['vendor','staff'])) href="{{route('help.vendors')}}" @elseif(auth()->user()->role->name == 'shopper') href="{{route('help.shoppers')}}" @else href="{{route('help.index')}}"  @endif>Support</a>
                                   </li>
                                   <li class="header__navigation-drop-menu-link">
                                     <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-forms').submit();">Logout</a>
@@ -535,10 +535,10 @@
                                         <a href="{{route('help.index')}}"> Help </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="#"> Terms &amp; Conditions </a>
+                                        <a href="{{route('terms')}}"> Terms &amp; Conditions </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="#"> Privacy Policy </a>
+                                        <a href="{{route('privacy')}}"> Privacy Policy </a>
                                     </li>
                                 </ul>
                             </div>

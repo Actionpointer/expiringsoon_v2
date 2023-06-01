@@ -22,7 +22,8 @@ Route::get('broadcast', function () {
     return 'done';
 });
 
-Route::view('faq','faqs');
+Route::view('terms','frontend.legal.term_of_use')->name('terms');
+Route::view('privacy_policy','frontend.legal.privacy_policy')->name('privacy');
 Route::view('email','emails.completed');
 Route::view('help','help.index')->name('help.index');
 Route::view('help/shoppers','help.shoppers')->name('help.shoppers');
@@ -50,6 +51,9 @@ Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name
 
 Route::get('vendors', [ShopController::class, 'index'])->name('vendors');
 Route::get('vendors/{shop}', [ShopController::class, 'show'])->name('vendor.show');
+Route::get('vendor/follow/{shop}',[ShopController::class, 'follow'])->name('vendor.follow');
+Route::get('vendor/unfollow/{shop}',[ShopController::class, 'unfollow'])->name('vendor.unfollow');
+
 Route::get('adpreview/{adset}/{advert}',[HomeController::class,'adpreview'])->name('adpreview');
 
 Route::get('cart', [CartController::class, 'cart'])->name('cart');

@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use App\Models\OrderStatus;
-use App\Http\Resources\UserResource;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ShopResource extends JsonResource
@@ -18,6 +17,7 @@ class ShopResource extends JsonResource
      */
     public function toArray($request)
     {
+        $user = Auth::user();
         // return parent::toArray($request);
         return [
             "id"=> $this->id,
@@ -39,9 +39,7 @@ class ShopResource extends JsonResource
             "total_products"=> $this->products->count(),
             "opened_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->whereNotIn('name',['completed','closed'])->count(),
             "total_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->count(),
-            "is_following"=> $this->when(auth()->check(), function(){ 
-                return auth()->user()->following->firstWhere('id',$this->id) ? true:false; 
-            }),
+            "is_following"=> $request->user('sanctum') ? ($request->user('sanctum')->following->firstWhere('id',$this->id) ? true:false) : null
         ];
     }
 }

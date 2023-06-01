@@ -56,10 +56,8 @@ class ShopDetailsResource extends JsonResource
             "total_products"=> $this->products->count(),
             "opened_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->whereNotIn('name',['completed','closed'])->count(),
             "total_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->count(),
-            "is_following"=> $this->when(auth()->check(), function(){ 
-                return auth()->user()->following->firstWhere('id',$this->id) ? true:false; 
-            }),
-            
+            "is_following"=> $request->user('sanctum') ? ($request->user('sanctum')->following->firstWhere('id',$this->id) ? true:false) : null
+ 
         ];
     }
 }
