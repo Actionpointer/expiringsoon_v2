@@ -9,9 +9,9 @@
                             <img src="{{$ads[$i]->image}}" alt="banner">
                             <div class="banner-sale--two__text-content">
                                 {{-- <span class="title">100% Organic</span> --}}
-                                <h5 class="font-title--md">{{$ads[$i]->heading}}</h5>
-                                <p class="font-body--md-400">{{$ads[$i]->subheading}}</p>
-                                <a href="{{$advert->url}}" class="button button--md">
+                                <h5 class="font-title--md @if($ads[$i]->text_color == 'white') text-white @else text-dark @endif">{{$ads[$i]->heading}}</h5>
+                                <p class="font-body--md-400 @if($ads[$i]->text_color == 'white') text-white @else text-dark @endif">{{$ads[$i]->subheading}}</p>
+                                <a href="{{$ads[$i]->url}}" class="button button--md @if($ads[$i]->button_color == 'white') bg-white text-success @else bg-success text-white @endif">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">

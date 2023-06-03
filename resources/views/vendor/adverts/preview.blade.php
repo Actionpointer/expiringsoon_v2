@@ -18,7 +18,7 @@
                     <div class="cards-ss cards-ss--lg">
                         <div class="cards-ss__img-wrapper">
                             <img src="{{$advert->image}}" alt="banner" />
-                            <div class="cards-ss__content text-center">
+                            <div class="cards-ss__content text-center @if($advert->text_color == 'white') text-white @else text-dark @endif">
                                 <h6 class="font-body--md-500">{{strtoupper($advert->subheading)}}</h6>
                                 <h2 class="font-title--lg">{{$advert->heading}} </h2>
 
@@ -28,7 +28,7 @@
                                     </p>
                                 </div>
 
-                                <a href="{{$advert->url}}" class="button button--md">
+                                <a href="{{$advert->url}}" class="button button--md @if($advert->button_color == 'white') bg-white text-success @else bg-success text-white @endif">
                                     {{$advert->button_text}}
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">

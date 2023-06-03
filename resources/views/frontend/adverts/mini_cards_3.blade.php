@@ -8,9 +8,9 @@
                         <div class="cards-ss--md__img-wrapper">
                             <img src="{{$ads[$i]->image}}" alt="banner-sale" />
                             <div class="cards-ss--md__text-content">
-                                <h5>{{$ads[$i]->subheading}}</h5>
-                                <h2 class="font-title--sm">{{$ads[$i]->heading}}</h2>
-                                <a href="{{$ads->url}}" class="button button--md">
+                                <h5 class="@if($ads[$i]->text_color == 'white') text-white @else text-dark @endif">{{$ads[$i]->subheading}}</h5>
+                                <h2 class="font-title--sm @if($ads[$i]->text_color == 'white') text-white @else text-dark @endif">{{$ads[$i]->heading}}</h2>
+                                <a href="{{$ads->url}}" class="button button--md @if($ads[$i]->button_color == 'white') bg-white text-success @else bg-success text-white @endif">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">

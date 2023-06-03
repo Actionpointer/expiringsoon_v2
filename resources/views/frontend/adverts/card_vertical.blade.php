@@ -7,13 +7,15 @@
                     <div class="cards-ss cards-ss--lg">
                         <div class="cards-ss__img-wrapper">
                             <img src="{{$ads[$i]->image}}" alt="banner" />
-                            <div class="cards-ss__content text-center">
+                            <div class="cards-ss__content text-center @if($ads[$i]->text_color == 'white') text-white @else text-dark @endif">
                                 <h6 class="font-body--md-500">{{$ads[$i]->subheading}}</h6>
                                 <h2 class="font-title--lg">{{$ads[$i]->heading}} </h2>
     
-                                <div id="countdownTwo" class="countdown-clock"></div>
+                                <div class="cards-ss__saleoff">
+                                    <p> <span>{{$ads[$i]->offer}}</span></p>
+                                </div>
     
-                                <a href="{{$advert->url}}" class="button button--md">
+                                <a href="{{$advert->url}}" class="button button--md @if($ads[$i]->button_color == 'white') bg-white text-success @else bg-success text-white @endif">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -11,16 +11,16 @@
                                 <img src="{{$slider->image}}" alt="banner" />
 
                                 <div class="banner__wrapper-text" style="max-width: 400px;">
-                                    <h2 class="font-title--xl w-100" style="max-width: 100% !important">
+                                    <h2 class="font-title--xl w-100 @if($slider->text_color == 'white') text-white @else text-dark @endif" style="max-width: 100% !important">
                                         {{$slider->heading}}
                                     </h2>
-                                    <div class="sale-off">
-                                        <h5 class="font-body--xl-500 w-100" style="max-width: 80% !important">{{$slider->offer}}</h5>
-                                        <p class="font-body--md">
+                                    <div class="sale-off  @if($slider->text_color == 'white') border-white @else border-dark @endif">
+                                        <h5 class="font-body--xl-500 w-100 @if($slider->text_color == 'white') text-white @else text-dark @endif" style="max-width: 80% !important">{{$slider->offer}}</h5>
+                                        <p class="font-body--md @if($slider->text_color == 'white') text-white @else text-dark @endif">
                                             {{$slider->subheading}}
                                         </p>
                                     </div>
-                                    <a href="{{$slider->url}}" class="button button--md">
+                                    <a href="{{$slider->url}}" class="button button--md @if($slider->button_color == 'white') bg-white text-success @else bg-success text-white @endif">
                                         Shop now
                                         <span>
                                             <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
