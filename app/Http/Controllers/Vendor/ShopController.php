@@ -16,10 +16,12 @@ use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\ShopDetailsResource;
 use App\Http\Resources\NotificationResource;
+
 
 class ShopController extends Controller
 {
@@ -90,9 +92,12 @@ class ShopController extends Controller
             }
             $size = getimagesize($request->photo);
             $extension = image_type_to_extension($size[2]);
-            $banner = 'public/uploads/'.time().'.'.$extension;
-            $contents = file_get_contents($request->photo);
-            Storage::put($banner, $contents);
+            $banner = 'uploads/'.time().'.'.$extension;
+            $path = storage_path('app/public/'.$banner);                   
+            $imgFile = Image::make(file_get_contents($request->photo));
+            $imgFile->resize(null, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($path);
             $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
             'address'=> $request->address,'country_id'=> $user->country_id ,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> 1]);
             
@@ -136,7 +141,12 @@ class ShopController extends Controller
 
             if($request->hasFile('photo')){
                 $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                $request->file('photo')->storeAs('public/',$banner);
+                $path = storage_path('app/public/'.$banner);
+                $imgFile = Image::make($request->file('photo'));
+                // $imgFile->fit(150,150)->save($path);
+                $imgFile->resize(null, 400, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path);
             }
             $shop = Shop::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
             'address'=> $request->address,'country_id'=> $user->country_id ,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
@@ -211,13 +221,20 @@ class ShopController extends Controller
                     if($shop->banner) 
                     Storage::delete('public/'.$shop->banner);
                     $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                    $request->file('photo')->storeAs('public/',$banner);
+                    $path = storage_path('app/public/'.$banner);
+                    $imgFile = Image::make($request->file('photo'));
+                    $imgFile->resize(null, 400, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path);
                 }else{
                     $size = getimagesize($request->photo);
                     $extension = image_type_to_extension($size[2]);
-                    $banner = 'public/uploads/'.time().'.'.$extension;
-                    $contents = file_get_contents($request->photo);
-                    Storage::put($banner, $contents);
+                    $banner = 'uploads/'.time().'.'.$extension;
+                    $path = storage_path('app/public/'.$banner);                   
+                    $imgFile = Image::make(file_get_contents($request->photo));
+                    $imgFile->resize(null, 400, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path);
                 }
                 $shop->banner = $banner;
             } 

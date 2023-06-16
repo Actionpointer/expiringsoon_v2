@@ -46,6 +46,7 @@ class ProductDetailsResource extends JsonResource
             "discount60"=> $this->discount60,
             "discount90"=> $this->discount90,
             "discount120"=> $this->discount120,
+            "shipping"=> $this->shipping,
             'rating' => $this->ratings(),
             'reviewable'=> $this->reviewable(),
             "reviews" => ReviewResource::collection($this->reviews->sortByDesc('rating')->take(3)),

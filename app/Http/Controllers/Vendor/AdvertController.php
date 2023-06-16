@@ -16,6 +16,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\GeoLocationTrait;
+use Intervention\Image\Facades\Image;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Validator;
 
@@ -70,7 +71,9 @@ class AdvertController extends Controller
         $adset = Adset::find($request->adset_id);
         if($request->hasFile('photo')){
             $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $request->file('photo')->storeAs('public/',$photo);
+            $path = storage_path('app/public/'.$photo);
+            $imgFile = Image::make($request->file('photo'));
+            $imgFile->fit(150,150)->save($path);
         } 
         if($adset->units > $adset->adverts->count()){
             $advert = Advert::create(['advertable_id'=> $request->type == 'shop' ? $request->shop_id: $request->product_id,

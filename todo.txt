@@ -20,5 +20,10 @@ store the product details on the order details table.
 
 use balance to buy adverts
 
+measure order status defaults and penalize vendor
+
+check advert image quality as validation
+
+
 
 

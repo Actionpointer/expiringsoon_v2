@@ -14,6 +14,7 @@ use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ShopResource;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,9 +59,13 @@ class UserController extends Controller
         if($request->phone) $user->phone = $request->phone;
         if($request->hasFile('photo')){
             if($user->pic) Storage::delete('public/'.$user->pic);
-            $name = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $request->file('photo')->storeAs('public/',$name);
-            $user->pic = $name;
+            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $path = storage_path('app/public/'.$photo);
+            $imgFile = Image::make($request->file('photo'));
+            $imgFile->resize(200, 200, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($path);
+            $user->pic = $photo;
         }
         $user->save();
         return request()->expectsJson() ? 

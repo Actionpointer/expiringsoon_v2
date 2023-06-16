@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\NewStaffNotification;
@@ -161,7 +162,7 @@ class StaffController extends Controller
             return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not create user']);
         }
         $role_id = Role::where('name','staff')->first()->id;
-        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'role_id'=> $role_id,'shop_id'=> $shop->id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password),
+        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'role_id'=> $role_id,'shop_id'=> $shop->id,'email'=> $request->email,'email_verified_at'=> now(),'phone'=> $request->phone,'password'=> Hash::make($request->password),
         'state_id'=> $shop->state_id,'country_id'=> $shop->country_id,'require_password_change'=> true]);
         $user->notify(new NewStaffNotification($request->password));
         return redirect()->back()->with(['result'=> 1,'message'=> 'Staff created successfully']);

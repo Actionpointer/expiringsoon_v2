@@ -313,16 +313,40 @@
                         </tbody>
                       </table>
                       
-                    </div>
-
-                    <div class="contact-form-btn">
-                      <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
-                        Save as Draft
-                      </button>
-                      <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
-                        Publish Product
-                      </button>
-                    </div>  
+                    </div> 
+                  </div>
+                </div>
+                <div class="dashboard__content-card">
+                  <div class="dashboard__content-card-header">
+                  <h5 class="font-body--xl-500">Special Shipment Charge</h5>
+                  </div>
+                  <div class="dashboard__content-card-body">
+                    <div class="contact-form__content">
+                      <p class="font-body--md-500 mb-2">Amount set below will be added to the shipment rates setup in your shop settings. <br>
+                         Note: This amount will not be applied when the customer selects pickup delivery option.
+                      </p>
+                      <div class="input-group d-flex flex-nowrap">
+                          <div class="input-group-append">
+                            <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
+                          </div>   
+                          <input class="form-control-sm border-light" type="number" name="shipping" step="0.001" placeholder="Amount (optional)" value="{{$product->shipping}}">
+                          
+                      </div>
+                      @error('shipping')
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                      @enderror
+                      
+                      <div class="contact-form-btn">
+                        <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
+                          Save as Draft
+                        </button>
+                        <button class="button button--md my-1" name="published" value="1" type="submit" id="submit">
+                          Publish Product
+                        </button>
+                      </div> 
+                    </div> 
                   </div>
                 </div>
               </form>

@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Vendor;
 
 use Carbon\Carbon;
 use App\Models\Tag;
-use App\Models\Cart;
-use App\Models\Like;
 use App\Models\Shop;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Intervention\Image\Facades\Image;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -77,8 +76,9 @@ class ProductController extends Controller
                 'discount120' => 'nullable|lt:price|gt:discount90',
                 'discount90' => 'nullable|lt:price|gt:discount60',
                 'discount60' => 'nullable|lt:price|gt:discount30',
-                'discount30' => 'nullable|lt:price',    
+                'discount30' => 'nullable|lt:price',   
                 'published' => 'required|numeric',   
+                'shipping' => 'nullable|numeric',   
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 5mb',
                 'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
@@ -94,18 +94,22 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            
             $shop = Shop::find($request->shop_id);
             if($request->hasFile('photo')){
                 $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                $request->file('photo')->storeAs('public/',$photo);
+                $path = storage_path('app/public/'.$photo);
+                $imgFile = Image::make($request->file('photo'));
+                // $imgFile->fit(150,150)->save($path);
+                $imgFile->resize(null, 500, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path);
             } 
             $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,
             'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id,
             'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),
             'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
             'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-            'published'=> $request->published]);
+            'published'=> $request->published,'shipping'=> $request->shipping]);
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
                     redirect()->route('vendor.shop.product.list',$shop);
@@ -147,7 +151,8 @@ class ProductController extends Controller
                 'discount90' => 'nullable|lt:price|gt:discount60',
                 'discount60' => 'nullable|lt:price|gt:discount30',
                 'discount30' => 'nullable|lt:price',   
-                'published' => 'required|numeric',  
+                'published' => 'required|numeric', 
+                'shipping' => 'nullable|numeric', 
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 5mb',
                 'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
@@ -174,10 +179,19 @@ class ProductController extends Controller
             if($request->hasFile('photo')){
                 if($product->photo) Storage::delete('public/'.$product->photo);
                 $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                $request->file('photo')->storeAs('public/',$photo);
+                $path = storage_path('app/public/'.$photo);
+                $imgFile = Image::make($request->file('photo'));
+                // $imgFile->fit(150,150)->save($path);
+                $imgFile->resize(null, 500, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path);
                 $product->update(['photo'=> $photo]);
             } 
-            $product->update(['name'=> $request->name,'shop_id'=> $product->shop_id,'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published]);
+            $product->update(['name'=> $request->name,'shop_id'=> $product->shop_id,'description'=> $request->description,
+            'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,
+            'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,
+            'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,
+            'published'=> $request->published,'shipping'=> $request->shipping]);
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Updated Successfully','data'=> new ProductDetailsResource($product)], 200) :
                     redirect()->route('vendor.shop.product.list',$product->shop);

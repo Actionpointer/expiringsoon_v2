@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\AdvertResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdsetResource extends JsonResource
@@ -26,6 +25,7 @@ class AdsetResource extends JsonResource
             'active' => $this->active,
             'status' => $this->status,
             'amount' => $this->amount,
+            'ad_count' => $this->adverts->count(),
             'auto_renew' => $this->auto_renew,
             'created_at'=> $this->created_at
         ];
