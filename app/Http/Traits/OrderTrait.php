@@ -141,7 +141,7 @@ trait OrderTrait
                 $statuses = ['Retrieve Items then Refund'=> 'reversed','Refund Customer'=>'refunded','Send new Items to Customer'=> 'processing'];
                 break;
             case 'returned':
-                $statuses = ['Received & OK'=>'refunded','Reject Returned Items'=>'disputed','I did not receive Items'=> 'disputed'];
+                $statuses = ['Received & OK'=>'refunded','Reject Returned Items / Customer Claims'=>'disputed'];
                 break;
             default: $statuses = [];
                 break;

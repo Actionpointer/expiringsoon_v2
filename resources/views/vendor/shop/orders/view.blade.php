@@ -153,12 +153,70 @@
                   <input type="hidden" name="order_id" value=" {{$order->id}}">
                   <div class="py-1 text-center">
                     <label for="states" class="font-body--md-600">Update Order Status: </label>
-                </div>
-                  <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
+                  </div>
+                  <div class="d-flex flex-column flex-md-row justify-content-center align-items-center text-center">
                       
                       <div class="mx-3 pt-1">
                         @foreach($statuses as $key => $value)
-                          <button class="button button--md" type="submit" name="status" value="{{$value}}">{{$key}}</button>
+                          @if($value != 'disputed')
+                            <button class="button button--md" type="submit" name="status" value="{{$value}}">{{$key}}</button>
+                          @else
+                          <div class="accordion mt-2 text-start" id="shop">
+                            <!-- All Categories  -->
+                            <div class="accordion-item shop-item">
+                                <h2 class="accordion-header" id="shop-item-accordion--one">
+                                    <button class="accordion-button shop-button font-body--xxl-500 collapsed text-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        Reject returned items/customer's claim
+                                        <span class="icon">
+                                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M13 7L7 1L1 7" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse  collapse" aria-labelledby="shop-item-accordion--one" data-bs-parent="#shop" style="">
+                                    <div class="accordion-body ">
+                                        <div class="categories">
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="Customer's claim is not true" id="fruit" checked>
+                                                    <label class="form-check-label" for="fruit"> Customer's claim is not true </label>
+                                                </div>
+                                            </div>
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="Product was in good condition at delivery" id="vegetable" >
+                                                    <label class="form-check-label" for="vegetable"> Product was in good condition at delivery </label>
+                                                </div>
+                                            </div>
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="User didn't send item on time" id="cooking">
+                                                    <label class="form-check-label" for="cooking"> User didn't send item on time </label>
+                                                </div>
+                                            </div>
+                                            <div class="categories-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="description" value="User has used item" id="snacks">
+                                                    <label class="form-check-label" for="snacks"> User has used item </label>
+                                                </div>
+                                            </div>
+                                            <div class="categories-item">
+                                              <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="description" value="I did not receive the item" id="dessert">
+                                                  <label class="form-check-label" for="dessert"> I did not receive the item </label>
+                                              </div>
+                                          </div>
+                                        </div>
+                                        <button class="button button--md bg-danger " 
+                                          type="submit" name="status" value="{{$value}}">
+                                          Reject Returned Items/Customer's Claim
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          @endif
                         @endforeach
                         
                       </div>

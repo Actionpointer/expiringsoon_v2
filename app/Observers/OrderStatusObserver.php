@@ -8,6 +8,7 @@ use App\Models\Settlement;
 use App\Events\RefundBuyer;
 use App\Models\OrderStatus;
 use App\Events\SettleVendor;
+use App\Models\OrderMessage;
 use App\Events\OrderPurchased;
 use App\Http\Traits\OptimizationTrait;
 use Illuminate\Support\Facades\Notification;
@@ -131,6 +132,19 @@ class OrderStatusObserver
 
     public function disputed(OrderStatus $orderStatus)
     {
+        if($orderStatus->order->user_id != $orderStatus->user_id){
+            $sender_id = $orderStatus->order->shop_id;
+            $sender_type = 'App\Models\Shop';
+            $receiver_id = $orderStatus->user_id;
+            $receiver_type = 'App\Models\User';
+        }else{
+            $sender_id = $orderStatus->user_id; 
+            $sender_type = 'App\Models\User';
+            $receiver_id = $orderStatus->order->shop_id;
+            $receiver_type = 'App\Models\Shop';
+        }
+        OrderMessage::create(['order_id'=> $orderStatus->order_id,'sender_id'=> $sender_id,'sender_type'=> $sender_type,'receiver_id'=> $receiver_id ,'receiver_type'=> $receiver_type, 'body'=> $orderStatus->description]);
+        
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
     }
