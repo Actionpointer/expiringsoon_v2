@@ -40,7 +40,7 @@ class WelcomeNotification extends Notification
     public function toMail($notifiable)
     {
         $url = null;
-        if(in_array($notifiable->role->name,['vendor','staff']) && !$notifiable->email_verified_at){
+        if($notifiable->role->name == 'vendor' && !$notifiable->email_verified_at){
             $url = URL::temporarySignedRoute(
                 'verification.verify',
                 Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),

@@ -7,8 +7,17 @@
 vendor add shop advert with exact resolution, size and graphics
 admin:ad preview
 
+admin staff add email notification
 admin kyc assessment management, and notification to vendor kyc
-
+arbitrator selection
+arbitrator monitoring
+order dispute email to admin & arbitrator
+customer - who i'm following| vendors - number of people following me
+featured product sends email to followers
+shipment fee recalculation
+kyc multiple documents
+change password, send email
+ad preview
 
 
 version2

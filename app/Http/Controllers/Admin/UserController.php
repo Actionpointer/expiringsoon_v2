@@ -125,9 +125,10 @@ class UserController extends Controller
     }
 
     public function staff(){
-        $users = User::within()->whereHas('role',function($query){$query->whereIn('name',['admin','manager','customercare','auditor']);})->paginate(10);
+        $roles = ['admin','manager','customercare','auditor','arbitrator'];
+        $users = User::within()->whereHas('role',function($query)use($roles){$query->whereIn('name',$roles);})->paginate(10);
         $countries = Country::all();
-        return view('admin.users.staff',compact('users','countries'));
+        return view('admin.users.staff',compact('users','countries','roles'));
     }
 
     public function show(User $user){
@@ -173,7 +174,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> 'Could not update user']);
         }
-        $user = User::where('id',$request->user_id)->update(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'email'=> $request->email,'phone'=> $request->phone]);
+        $user = User::where('id',$request->user_id)->update(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role_id'=> $request->role,'email'=> $request->email,'phone'=> $request->phone]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'Successfully Updated User']);
     }
 

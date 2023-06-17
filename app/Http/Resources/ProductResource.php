@@ -28,6 +28,9 @@ class ProductResource extends JsonResource
             "stock"=> $this->stock,
             "discount"=> $this->discount,
             "expire_at"=> $this->expire_at,
+            "status"=> $this->status,
+            "approved"=> $this->approved,
+            "valid"=> $this->valid,
         ];
     }
 }

@@ -148,7 +148,7 @@
                       </div>
                       <div class="col-lg-12 order-lg-0 order-1">
                         @if(auth()->user()->shops->count() >= auth()->user()->max_shops) 
-                        <h3 class="text-danger">The status of this shop will be <strong>INACTIVE</strong></h3>
+                        <h3 class="text-danger">The status of this shop will be <strong>INACTIVE</strong> except you <a href="{{route('vendor.plans')}}">upgrade</a></h3>
                         @endif
                         <div class="contact-form-btn">
                           <button class="button button--md bg-secondary" name="published" value="0" type="submit"> Create as Draft</button>

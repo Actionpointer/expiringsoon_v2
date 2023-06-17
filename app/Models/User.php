@@ -221,6 +221,10 @@ class User extends Authenticatable implements MustVerifyEmail
         }  
     }
 
+    public function disputeCases(){
+        return $this->hasMany(Order::class,'arbitrator_id')->whereHas('statuses',function($query){$query->where('name','disputed');});
+    }
+
 
     public function receivesBroadcastNotificationsOn(){
         return 'users.'.$this->id;

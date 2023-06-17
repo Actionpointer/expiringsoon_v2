@@ -308,7 +308,8 @@
                     </div>
 
                     @if($shop->user->total_products >= $shop->user->max_products) 
-                    <h3 class="text-danger">The status of this product will be <strong>INACTIVE</strong></h3>
+                    <h3 class="text-danger">The status of this product will be <strong>INACTIVE</strong> @if(auth()->id() == $shop->user_id) except you <a href="{{route('vendor.plans')}}">upgrade</a> @endif</h3>
+                    
                     @endif
                      
                   </div>

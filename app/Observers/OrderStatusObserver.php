@@ -132,6 +132,7 @@ class OrderStatusObserver
 
     public function disputed(OrderStatus $orderStatus)
     {
+        
         if($orderStatus->order->user_id != $orderStatus->user_id){
             $sender_id = $orderStatus->order->shop_id;
             $sender_type = 'App\Models\Shop';
@@ -162,6 +163,13 @@ class OrderStatusObserver
         event(new SettleVendor($orderStatus->order));
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+    }
+
+    public function getArbitrator(OrderStatus $orderStatus){
+        $users = User::within()->whereHas('disputeCases')->orderBy('')->get();
+        if($users->isNotEmpty()){
+            // return $user-
+        }
     }
     
 }
