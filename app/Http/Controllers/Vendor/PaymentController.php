@@ -60,7 +60,7 @@ class PaymentController extends Controller
     public function payouts(Shop $shop){
         $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','payout')->update(['read_at'=> now()]);
         
-        $payouts = Payout::where('shop_id',$shop->id)->whereNotNull('paid_at');
+        $payouts = Payout::where('shop_id',$shop->id);
 
         if(request()->query() && request()->query('start_date') && request()->query('end_date')){
             $start = request()->query('start_date');
