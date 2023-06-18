@@ -2,11 +2,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Vendor\ShopController;
-use App\Http\Controllers\Vendor\AdvertController;
-use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\AdsetController;
-use App\Http\Controllers\Vendor\SubscriptionController;
 use App\Http\Controllers\Vendor\StaffController;
+use App\Http\Controllers\Vendor\AdvertController;
+use App\Http\Controllers\Vendor\FeatureController;
+use App\Http\Controllers\Vendor\PaymentController;
+use App\Http\Controllers\Vendor\SubscriptionController;
 
 Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum','role:vendor,staff']],function () {
     Route::group(['middleware'=> 'role:vendor'],function(){
@@ -36,22 +37,27 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
         Route::get('transactions',[PaymentController::class,'index'])->name('payments');
         
         //list adds, create ads (both shop and products)
-        Route::get('adverts/{adset}',[AdvertController::class,'ads'])->name('adverts');
+        Route::get('adverts/{adset}',[AdvertController::class,'index'])->name('adverts');
+        Route::get('adverts/create/{adset}',[AdvertController::class,'create'])->name('advert.create');
+        Route::post('adverts/store',[AdvertController::class,'store'])->name('advert.store');
+        Route::get('adverts/edit/{advert}',[AdvertController::class,'edit'])->name('advert.edit');
+        Route::post('adverts/update',[AdvertController::class,'update'])->name('advert.update');
+        Route::post('adverts/remove',[AdvertController::class,'remove'])->name('advert.remove');
+
 
         //store featured adsets
-        Route::post('adset/products',[AdvertController::class,'feature_products'])->name('adset.products');
-
-        Route::post('adset/products/subscription',[AdvertController::class,'feature_products_subscription'])->name('adset.products.subscription');
-
-        Route::post('adverts/product/filter',[AdvertController::class,'filter_products'])->name('advert.filter_product');
+        Route::post('adset/products',[FeatureController::class,'feature_products'])->name('adset.products');
+        Route::post('adset/products/subscription',[FeatureController::class,'feature_products_subscription'])->name('adset.products.subscription');
+        Route::post('adverts/product/filter',[FeatureController::class,'filter_products'])->name('advert.filter_product');
         
         //store featured ads to adset
-        Route::post('adverts/store/product',[AdvertController::class,'store_featured_advert'])->name('advert.feature.products');
+        Route::post('adverts/store/product',[FeatureController::class,'store_featured_advert'])->name('advert.feature.products');
+        Route::post('feature/manage',[FeatureController::class,'feature_remove'])->name('feature.remove');
         //store adverts to adsets
-        Route::post('adverts/store/shop',[AdvertController::class,'store_normal_advert'])->name('advert.store');
         
-        Route::post('adverts/manage',[AdvertController::class,'advert_remove'])->name('advert.remove');
-        Route::post('feature/manage',[AdvertController::class,'feature_remove'])->name('feature.remove');
+        
+        
+        
     });
     
     include('shop.php');

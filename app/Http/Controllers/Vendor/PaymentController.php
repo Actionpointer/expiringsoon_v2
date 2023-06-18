@@ -44,7 +44,7 @@ class PaymentController extends Controller
             $end = request()->query('end_date');
             $settlements = $settlements->whereBetween('created_at',[$start,$end]);
         }else{
-            $settlements = $settlements->whereBetween('created_at',[now(),now()->subDays(14)]);
+            $settlements = $settlements->whereBetween('created_at',[now(),now()->subMonth()]);
         }
         $settlements = $settlements->sortByDesc('created_at');
         return request()->expectsJson() ?  
@@ -59,7 +59,18 @@ class PaymentController extends Controller
     //all payouts
     public function payouts(Shop $shop){
         $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','payout')->update(['read_at'=> now()]);
-        $payouts = $shop->payouts->sortByDesc('created_at')->take(100);
+        
+        $payouts = Payout::where('shop_id',$shop->id)->whereNotNull('paid_at');
+
+        if(request()->query() && request()->query('start_date') && request()->query('end_date')){
+            $start = request()->query('start_date');
+            $end = request()->query('end_date');
+            $payouts = $payouts->whereBetween('created_at',[$start,$end]);
+        }else{
+            $payouts = $payouts->whereBetween('created_at',[now(),now()->subMonth()]);
+        }
+        $payouts = $payouts->orderBy('created_at','desc')->get();
+
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

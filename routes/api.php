@@ -2,16 +2,16 @@
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Resources\VendorResource;
 use Illuminate\Support\Facades\Route;
+use App\Http\Resources\VendorResource;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\ApiController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\Vendor\ShopController;
+use App\Http\Controllers\Vendor\AdsetController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\StaffController;
-use App\Http\Controllers\Vendor\AdvertController;
-use App\Http\Controllers\Vendor\AdsetController;
+use App\Http\Controllers\Vendor\FeatureController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
@@ -121,9 +121,10 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('plans',[AdsetController::class,'plans']);
         Route::post('subscribe',[AdsetController::class,'store']);
         Route::post('cancel_renewal',[AdsetController::class,'cancel_renewal']);
-        Route::post('ads/filter',[AdvertController::class,'filter_products']);
-        Route::post('ads/store',[AdvertController::class,'store_product_advert']);
-        Route::post('ads/delete',[AdvertController::class,'remove']);
+
+        Route::post('ads/filter',[FeatureController::class,'filter_products']);
+        Route::post('ads/store',[FeatureController::class,'store_featured_advert']);
+        Route::post('ads/delete',[FeatureController::class,'advert_remove']);
     });
 
     Route::post('payment/status',[App\Http\Controllers\PaymentController::class,'paymentcallback']);

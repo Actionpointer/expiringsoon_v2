@@ -37,8 +37,12 @@
             <div class="container">
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
-                    <h2 class="font-body--xl-500">Adverts for {{$adset->adplan->name}}</h2>
-                    <span class="font-body--lg-600"> Adset No: {{$adset->slug}}</span>
+                    <h2 class="font-body--xl-500">Adverts for {{$adset->adplan->name}} - Adset No: {{$adset->slug}}</h2>
+                    @if($adset->units > $adset->adverts->count()) 
+                    <a class="button button-md text-white mx-0" href="{{route('vendor.advert.create',$adset)}}">
+                      Add Advert
+                    </a>
+                    @endif
                 </div>
                 <div class="products-tab__btn">
                   <div class="container">
@@ -55,18 +59,9 @@
                           </li>
                           <li class="nav-item" role="presentation">
                               <button class="nav-link" id="pills-inactive-tab" data-bs-toggle="pill" data-bs-target="#pills-inactive" type="button" role="tab" aria-controls="pills-inactive" aria-selected="false">
-                              Inactive
+                                Inactive
                               </button>
-                          </li>
-                          @if($adset->units > $adset->adverts->count()) 
-                          <li class="nav-item" role="presentation">
-                              <button class="nav-link" id="pills-draft-tab" data-bs-toggle="pill" data-bs-target="#pills-draft" type="button" role="tab" aria-controls="pills-draft" aria-selected="false">
-                                Add Advert
-                              </button>
-                          </li>
-                          @endif
-                          
-                          
+                          </li> 
                           
                       </ul>
                   </div>
@@ -122,6 +117,7 @@
                                                 <td class="cart-table-item align-middle">
                                                     <div class="button-group text-nowrap">
                                                         <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
+                                                        <a href="{{route('vendor.advert.edit',$advert)}}" class="btn btn-sm btn-outline-info">Edit</a>
                                                         <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
                                                           <input type="hidden" name="adverts[]" value="{{$advert->id}}">
                                                           <button class="btn btn-sm btn-danger" type="submit">
@@ -187,6 +183,7 @@
                                             <td class="cart-table-item align-middle">
                                               <div class="button-group text-nowrap">
                                                 <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
+                                                <a href="{{route('vendor.advert.edit',$advert)}}" class="btn btn-sm btn-outline-info">Edit</a>
                                                 <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
                                                   <input type="hidden" name="adverts[]" value="{{$advert->id}}">
                                                   <button class="btn btn-sm btn-danger" type="submit">
@@ -258,6 +255,7 @@
                                               <td class="cart-table-item align-middle">
                                                 <div class="button-group text-nowrap">
                                                   <a href="{{route('adpreview',[$advert->adset,$advert])}}" class="btn btn-sm btn-outline-primary">Preview</a>
+                                                  <a href="{{route('vendor.advert.edit',$advert)}}" class="btn btn-sm btn-outline-info">Edit</a>
                                                   <form action="{{route('vendor.advert.remove')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this advert?');" class="d-inline">@csrf
                                                     <input type="hidden" name="adverts[]" value="{{$advert->id}}">
                                                     <button class="btn btn-sm btn-danger" type="submit">
@@ -273,106 +271,7 @@
                             </div>
                           </div>
                         </div>
-                        
-                        @if($adset->units > $adset->adverts->count()) 
-                        <div class="tab-pane fade" id="pills-draft" role="tabpanel" aria-labelledby="pills-draft-tab">
-                            <div class="products-tab__description">
-                              <section class="shoping-cart section section--xl pt-0 pb-5">
-                                <div class="row shoping-cart__content justify-content-center">              
-                                  <div class="col-lg-8">
-                                    <form method="POST" action="{{route('vendor.advert.store')}}" enctype="multipart/form-data">@csrf
-                                      <input type="hidden" name="adset_id" value="{{$adset->id}}">
-                                      <div class="contact-form-input">
-                                        <label>Show in Location</label>
-                                        <select id="stateselect" name="state_id" class="select2" required>
-                                          @foreach ($states as $state)
-                                            <option value="{{$state->id}}" @if($state->id == $state_id) selected @endif>{{$state->name}}</option>  
-                                          @endforeach     
-                                        </select>
-                                      </div>
-                                      <div class="contact-form-file mb-3">
-                                        <label for="category" class="d-block">Display Image </label>
-                                        <input type="file" name="photo" placeholder="" />
-                                        <small class="d-block">{{$adset->adplan->instruction}} </small>
-                                      </div>
-                                      <div class="contact-form-input">
-                                        <label for="category">Heading</label>
-                                        <input type="text" name="heading" placeholder="" />
-                                      </div>
-                                      <div class="contact-form-input">
-                                        <label for="category">Subheading</label>
-                                        <input type="text" name="subheading"  placeholder="" />
-                                      </div>
-                                      
-                                      <div class="contact-form-input">
-                                        <label for="category">Offer Text</label>
-                                        <input type="text" name="offer" placeholder="e.g Sales 50% off" maxlength="20"/>
-                                      </div>
-                                      <div class="contact-form-input">
-                                        <label for="category">Text Color (for heading & subheading & offer)</label>
-                                        <select type="text" name="text_color" class="form-control like_select2">
-                                            <option value="black">Black</option>
-                                            <option value="white">White</option>
-                                        </select>
-                                      </div>
-                                      <div class="contact-form__content-group justify-content-start mb-3">
-                                        <label class="font-body--md-500">Link to: </label>
-                                        <div class="form-check mx-3">
-                                          <label class="form-check-label font-body--400" for="type_shop"> 
-                                              Shop
-                                          </label>
-                                          <input class="form-check-input linkto" type="radio" name="type" id="type_shop" value="shop" checked>
-                                        </div>
-                                        <div class="form-check mx-3">
-                                          <label class="form-check-label font-body--400" for="type_product"> 
-                                              Product
-                                          </label>
-                                          <input class="form-check-input linkto" type="radio" name="type" id="type_product" value="product" >
-                                        </div>
-                                      </div>
-                                      <div class="contact-form-input" id="show_shops">
-                                        <label>Select Shop</label>
-                                        <select id="shops" name="shop_id" class="select2">
-                                          @foreach ($shops as $shop)
-                                            <option value="{{$shop->id}}">{{$shop->name}} </option>  
-                                          @endforeach 
-                                        </select>
-                                      </div>
-                                      <div class="contact-form-input" id="show_products" style="display:none;">
-                                        <label>Select Product</label>
-                                        <select id="products" name="product_id" class="select2">
-                                            @foreach ($products as $product)
-                                              <option value="{{$product->id}}">{{$product->name}}</option>  
-                                            @endforeach      
-                                        </select>
-                                      </div>
-                                      <div class="contact-form-input">
-                                        <label for="category">Button Text</label>
-                                        <select name="button_text" class="form-control like_select2">
-                                          <option value="Shop Now">Shop Now</option>
-                                          <option value="Buy Now">Buy Now</option>
-                                          <option value="Hurry Now">Hurry Now</option>
-                                      </select>
-                                      </div>
-                                      <div class="contact-form-input">
-                                        <label for="category">Button Color</label>
-                                        <select name="button_color" class="form-control like_select2">
-                                            <option value="green">Green</option>
-                                            <option value="white">White</option>
-                                        </select>
-                                      </div>
-                                      
-                                      <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($adset->units <= $adset->adverts->count()) disabled @endif>
-                                        Create Ad
-                                      </button>
-                                      
-                                    </form>
-                                  </div>
-                                </div>
-                              </section>                   
-                            </div>
-                        </div> 
-                        @endif
+                         
                     </div>
                 </div>
 
@@ -406,18 +305,5 @@
         });
     });
 </script>
-<script>
-  var limit = @json($adset->units);
-  var used = @json($adset->adverts->count());
-  $('.linkto').on('change',function(){
-      if($(this).val() == 'product'){
-        $('#show_shops').hide();
-        $('#show_products').fadeIn();
-      }else{
-        $('#show_products').hide();
-        $('#show_shops').fadeIn();
-        
-      }
-  })
-</script>
+
 @endpush
