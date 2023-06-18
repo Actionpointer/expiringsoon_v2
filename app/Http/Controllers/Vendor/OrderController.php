@@ -30,7 +30,7 @@ class OrderController extends Controller
         
         $orders = Order::where('shop_id',$shop->id);
         if($status == 'opened'){
-            $orders = $orders->whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed','refunded','disputed']);});
+            $orders = $orders->whereHas('statuses',function($query){$query->whereNotIn('name',['cancelled','completed','closed','refunded']);});
         }
         if($status == 'closed'){
             $orders = $orders->whereHas('statuses',function($query){$query->whereIn('name',['cancelled','completed','closed','refunded']);});
@@ -97,9 +97,7 @@ class OrderController extends Controller
     }
 
     public function messages(Shop $shop,Order $order){
-        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
-        
-        OrderMessage::where(function($query) use($order){
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);        OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop')->whereNull('read_at');
         })->update(['read_at'=> now()]);
 

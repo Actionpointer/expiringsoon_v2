@@ -130,33 +130,24 @@
 											<tr>
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
-														@if(isset($user))
+														
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Dear {{$user->name}},</span>
-																<br />There appears to be a misunderstanding between you and the vendor involved in this order #: {{$order->slug}}. A disputed
-																resolution case has been opened cancelled. A refund of payments made has been initiated to
-																the same payment channel you used to make payment. Please you may expect to receive the funds back in 
-																your possessions within 5 to 7 business days.
-																<br/> Thank you for shopping with Expiring Soon.
+																<span style="font-size:16px;font-weight:600">@if(isset($user)) Dear {{$user->name}}, @else Order #: {{$order->id}} in Dispute @endif</span>
+																<br />There appears to be a misunderstanding between you and the @if(isset($user)) customer @else vendor @endif involved in this order #: {{$order->slug}}. 
+																A disputed resolution case has been opened and an arbitrator has been assigned to resolve the dispute. 
+																Kindly cooperate with the dispute resolution team and participate effectively in the case procedures to ensure speedily resolution.
+																
 															</td>
 														</tr>
-														@else
-														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Order #: {{$order->id}} Cancelled,</span>
-																<br />Order #: {{$order->id}} has been cancelled. No further actions are required on this order.
-																<br/> Thank you for using Expiring Soon.
-															</td>
-														</tr>
-														@endif
+														
 														<tr>
 															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;padding-top:10px">
 																<div style="">
 																	<span style="font-weight:600">Summary</span><br />
 																	Order #: {{$order->id}}<br />
 																	Order Amount: {!!$order->shop->country->currency->symbol!!}{{$order->subtotal}}<br />
-																	Cancelled Date: {{$status->created_at->format('d/m/y')}}<br />
+																	Dispute Start Date: {{$status->created_at->format('d/m/y')}}<br />
 																</div>
 																
 															</td>

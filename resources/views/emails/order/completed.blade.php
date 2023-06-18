@@ -145,7 +145,7 @@
 																	<span style="font-weight:600">Summary</span><br />
 																	Order #: {{$order->id}}<br />
 																	Order Amount: {!!$order->shop->country->currency->symbol!!}{{$order->subtotal}}<br />
-																	Completed Date: {{$status->created_at->format('d/m/y')}}<br />
+																	Completed Date: {{$status->created_at->format('d/m/y h:i A')}}<br />
 																</div>
 																
 															</td>

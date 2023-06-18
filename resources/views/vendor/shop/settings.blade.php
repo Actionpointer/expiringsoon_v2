@@ -277,14 +277,14 @@
                               <div class="d-flex py-3 border-top">
                                 <div class="docimg text-center">
                                   <a href="{{route('profile')}}#verification">
-                                    <img  @if($user->kyc->where('type','idcard')->first()) 
-                                            @if($user->kyc->where('type','idcard')->where('doctype','application')->first()) 
+                                    <img  @if($user->idcard) 
+                                            @if($user->idcard->doctype == 'application') 
                                               src="{{asset('src/images/site/icon-pdf.jpg')}}" 
                                             @else
-                                              src="{{Storage::url($user->kyc->where('type','idcard')->first()->document)}}" 
+                                              src="{{Storage::url($user->idcard->document)}}" 
                                             @endif 
                                           @else
-                                              src="{{asset('src/images/site/icon-jpg.jpg')}}"
+                                              src="{{asset('src/images/site/icon.jpg')}}"
                                           @endif >
                                   </a>
                                 </div>
@@ -296,16 +296,16 @@
                                       National ID Card / Driver's License / International Passport
                                     </span>
                                   </div>
-                                  @if($user->kyc->where('type','idcard')->first()) 
+                                  @if($user->idcard) 
                                       <div>
-                                        <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($user->kyc->where('type','idcard')->first()->status ) #00b207; @else #ff0000; @endif">
-                                          @if($user->kyc->where('type','idcard')->first()->status) Approved
-                                          @elseif($user->kyc->where('type','idcard')->first()->reason) Rejected
+                                        <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($user->idcard->status ) #00b207; @else #ff0000; @endif">
+                                          @if($user->idcard->status) Approved
+                                          @elseif($user->idcard->reason) Rejected
                                           @else Pending Approval  
                                           @endif 
                                         </span>
-                                        @if($user->kyc->where('type','idcard')->first()->reason)
-                                          <span class="d-block font-body--sm-400 text-danger">{{$user->kyc->where('type','idcard')->first()->reason}}</span>
+                                        @if($user->idcard->reason)
+                                          <span class="d-block font-body--sm-400 text-danger">{{$user->idcard->reason}}</span>
                                         @endif
                                       </div> 
                                   @endif
@@ -316,7 +316,7 @@
                               <div class="d-flex py-3 border-top">
                                 
                                 <div class="docimg">
-                                  <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}x');">
+                                  <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}x');" class="text-center">
                                     <img  @if($shop->addressproof)  
                                             @if($shop->addressproof->doctype == 'application')) 
                                               src="{{asset('src/images/site/icon-pdf.jpg')}}" 
@@ -324,10 +324,10 @@
                                               src="{{Storage::url($shop->addressproof->document)}}" 
                                             @endif 
                                           @else
-                                              src="{{asset('src/images/site/icon-jpg.jpg')}}"
+                                              src="{{asset('src/images/site/icon.jpg')}}"
                                           @endif id="item{{$shop->id}}x_preview"
                                     >
-                                    <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload image</small>
+                                    <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload File</small>
                                   </a>
                                 </div>
 
@@ -357,7 +357,7 @@
                                   <form method="post" enctype="multipart/form-data" action="{{route('vendor.shop.verification',$shop)}}">@csrf
                                     <input type="hidden" name="type" value="addressproof">
                                     <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                    <input type="file" style="display: none" name="document" id="item{{$shop->id}}x" onchange="readVURL(this,'item{{$shop->id}}x')" accept=".pdf, .png, .jpg, .jpeg" />
+                                    <input type="file" style="display: none" name="document[]" id="item{{$shop->id}}x" onchange="readVURL(this,'item{{$shop->id}}x')" accept=".pdf, .png, .jpg, .jpeg" />
                                     <button class="button button--md" id="item{{$shop->id}}x_submit" type="submit" style="display: none">Upload</button>
                                   </form>
                                 </div>
@@ -365,50 +365,54 @@
 
                               <div class="d-flex py-3 border-top">
                                 <div class="docimg">
-                                  <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}y');">
-                                    <img 
-                                        @if($shop->companydoc) 
-                                          @if($shop->companydoc->doctype == 'application') 
+                                  <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}y');" class="text-center">
+                                    <img src="{{asset('src/images/site/iconm.jpg')}}" id="item{{$shop->id}}y_preview">
+                                        {{-- @if($shop->companydocs) 
+                                          @if($shop->companydocs->doctype == 'application') 
                                             src="{{asset('src/images/site/icon-pdf.jpg')}}" 
                                           @else
-                                            src="{{Storage::url($shop->companydoc->document)}}" 
+                                            src="{{Storage::url($shop->companydocs->document)}}" 
                                           @endif 
                                         @else
-                                            src="{{asset('src/images/site/icon-jpg.jpg')}}"
+                                            
                                         @endif 
-                                      src="{{asset('src/images/site/icon-jpg.jpg')}}" 
-                                      id="item{{$shop->id}}y_preview">
-                                    <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload image</small>
+                                      src="{{asset('src/images/site/icon-jpg.jpg')}}"  --}}
+                                      
+                                    <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload Files</small>
                                   </a>
                                   
                                 </div>
                                 <div class="docinfo d-flex justify-content-between align-items-center">
                                   <div>
-                                    <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}y');" style="font-size:14px;text-transform:uppercase">Company Document</a>
+                                    <a href="javascript:void(0)" onclick="performClick('item{{$shop->id}}y');" style="font-size:14px;text-transform:uppercase">Company Documents</a>
                                       <br />
                                       <span style="font-weight:500;font-size:12px">
-                                      Upload CAC
+                                      Upload all company documents
                                     </span>
                                   </div>
-                                  @if($shop->companydoc) 
-                                      <div>
-                                        <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->companydoc->status ) #00b207; @else #ff0000; @endif">
-                                          @if($shop->companydoc->status) Approved
-                                          @elseif($shop->companydoc->reason) Rejected
-                                          @else Pending Approval  
-                                          @endif 
-                                        </span>
-                                        @if($shop->companydoc->reason)
-                                          <span class="d-block font-body--sm-400 text-danger">{{$shop->companydoc->reason}}</span>
-                                        @endif
-                                      </div> 
-                                  @endif
+                                  <div class="d-flex flex-column">
+                                    @forelse($shop->companydocs as $companydoc) 
+                                        <div>
+                                          <a href="{{Storage::url($companydoc->document)}}" target="_blank">File :</a>
+                                          <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($companydoc->status ) #00b207; @else #ff0000; @endif">
+                                            @if($companydoc->status) Approved
+                                            @elseif($companydoc->reason) Rejected
+                                            @else Pending Approval  
+                                            @endif 
+                                          </span>
+                                          @if($companydoc->reason)
+                                            <span class="d-block font-body--sm-400 text-danger">{{$companydoc->reason}}</span>
+                                          @endif
+                                        </div>  
+                                      @empty
+                                    @endforelse
+                                  </div> 
                                 </div>
                                 <div class="align-self-center mx-1">
                                   <form method="post" enctype="multipart/form-data" action="{{route('vendor.shop.verification',$shop)}}">@csrf
                                     <input type="hidden" name="type" value="companydoc">
                                     <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                    <input type="file" style="display: none" name="document" id="item{{$shop->id}}y" onchange="readVURL(this,'item{{$shop->id}}y')" accept=".pdf, .png, .jpg, .jpeg" />
+                                    <input type="file" style="display: none" name="document[]" multiple id="item{{$shop->id}}y" onchange="readVURL(this,'item{{$shop->id}}y')" accept=".pdf, .png, .jpg, .jpeg" />
                                     <button class="button button--md" id="item{{$shop->id}}y_submit" type="submit" style="display: none">Upload</button>
                                   </form>
                                 </div>

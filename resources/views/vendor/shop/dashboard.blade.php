@@ -1,6 +1,18 @@
 @extends('layouts.app')
 @push('styles')
+<meta property="og:title" content="Check out {{ucwords($shop->name)}} on Expiring Soon| Amazing Discounts ongoing">
+<meta property="og:type" content="article" />
+<meta property="og:image" content="{{$shop->image}}">
+<meta property="og:description" content="Rush hour discount offers on all products at {{route('vendor.show',$shop)}}. Buy Now while stock last">
+<meta property="og:url" content="{{route('vendor.show',$shop)}}">
 
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@site_username">
+<meta name="twitter:title" content="Check out {{ucwords($shop->name)}} on Expiring Soon| Amazing Discounts ongoing">
+<meta name="twitter:description" content="Rush hour discount offers on all products at {{route('vendor.show',$shop)}}. Buy Now while stock last">
+<meta name="twitter:creator" content="@creator_username">
+<meta name="twitter:image" content="{{$shop->image}}">
+<meta name="twitter:domain" content="https://expiringsoon.shop">
 @endpush
 @section('title'){{$shop->name}} | Vendor Dashboard @endsection
 @section('main')
@@ -108,6 +120,43 @@
                   @if($shop->user_id == auth()->id())
                   <a href="{{route('vendor.shop.settings',$shop)}}" class="dashboard__user-billing-editaddress font-body--lg-500" > Shop Settings</a>
                   @endif
+                  <div class="social-site mt-3">
+                            
+                    <ul class="social-icon">
+                        <li class="pt-2 pe-2">Share:</li>
+                        <li class="social-icon-link">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{route('vendor.show',$shop)}}" 
+                            target="_blank"
+                            rel="noopener noreferrer" >
+                                <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.99764 2.98875H9.64089V0.12675C9.35739 0.08775 8.38239 0 7.24689 0C4.87764 0 3.25464 1.49025 3.25464 4.22925V6.75H0.640137V9.9495H3.25464V18H6.46014V9.95025H8.96889L9.36714 6.75075H6.45939V4.5465C6.46014 3.62175 6.70914 2.98875 7.99764 2.98875Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="social-icon-link">
+                            <a href="https://twitter.com/intent/tweet?text=Get Unbelievable Discount on {{$shop->name}} at {{route('vendor.show',$shop)}}" target="_blank" rel="noopener noreferrer">
+                                <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M18 2.41888C17.3306 2.7125 16.6174 2.90713 15.8737 3.00163C16.6388 2.54488 17.2226 1.82713 17.4971 0.962C16.7839 1.38725 15.9964 1.68763 15.1571 1.85525C14.4799 1.13413 13.5146 0.6875 12.4616 0.6875C10.4186 0.6875 8.77387 2.34575 8.77387 4.37863C8.77387 4.67113 8.79862 4.95238 8.85938 5.22013C5.7915 5.0705 3.07687 3.60013 1.25325 1.36025C0.934875 1.91263 0.748125 2.54488 0.748125 3.2255C0.748125 4.5035 1.40625 5.63638 2.38725 6.29225C1.79437 6.281 1.21275 6.10888 0.72 5.83775C0.72 5.849 0.72 5.86363 0.72 5.87825C0.72 7.6715 1.99912 9.161 3.6765 9.50413C3.37612 9.58625 3.04875 9.62563 2.709 9.62563C2.47275 9.62563 2.23425 9.61213 2.01038 9.56263C2.4885 11.024 3.84525 12.0984 5.4585 12.1333C4.203 13.1154 2.60888 13.7071 0.883125 13.7071C0.5805 13.7071 0.29025 13.6936 0 13.6565C1.63462 14.7106 3.57188 15.3125 5.661 15.3125C12.4515 15.3125 16.164 9.6875 16.164 4.81175C16.164 4.64863 16.1584 4.49113 16.1505 4.33475C16.8829 3.815 17.4982 3.16588 18 2.41888Z"
+                                        fill="currentColor"
+                                    ></path>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="social-icon-link">
+                            <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/shareArticle?mini=false&url={{route('vendor.show',$shop)}}&title={{$shop->name}}&summary=Get unbeatable discount offers on all products at {{route('vendor.show',$shop)}} Buy Now while stock last&source=ExpiringSoon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16"> <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/> </svg>
+                            </a>
+                        </li>
+                        <li class="social-icon-link">
+                            <a target="_blank" rel="noopener noreferrer" href="https://api.whatsapp.com/send?text=Check%20out%20{{$shop->name}}%20shop%20onExpiringSoon/">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/> </svg>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
                 </div>
               </div>
             </div>
@@ -148,6 +197,10 @@
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Products:</h5>
                         <p class="font-body--md-500">{{number_format($shop->products->count())}}</p>
+                      </div>
+                      <div class="dashboard__totalpayment-card-body-item">
+                        <h5 class="font-body--md-400">Followers:</h5>
+                        <p class="font-body--md-500">{{number_format($shop->followers->count())}}</p>
                       </div>
                       
                       {{-- <div class="dashboard__totalpayment-card-body-item total" >

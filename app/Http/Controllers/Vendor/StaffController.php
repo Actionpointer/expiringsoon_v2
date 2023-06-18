@@ -60,23 +60,24 @@ class StaffController extends Controller
         try {
             $validator = Validator::make($request->all(), 
             [
-                'document' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
+                'document.*' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
             ]);
             if($validator->fails()){
                 return request()->expectsJson() ?  
                     response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
                     redirect()->back()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            
-            $doc_type = explode('/',$request->file('document')->getClientMimeType())[0];
-            $document = 'uploads/'.time().'.'.$request->file('document')->getClientOriginalExtension();
-            if($user_idcard = $user->kyc->where('type','idcard')->first()){
-                Storage::delete('public/'.$user_idcard->document);
-                $user_idcard->delete();
+            foreach($request->file('document') as $file){
+                $doc_type = explode('/',$file->getClientMimeType())[0];
+                $document = 'uploads/'.time().'.'.$file->getClientOriginalExtension();
+                if($user_idcard = $user->kyc->where('type','idcard')->first()){
+                    Storage::delete('public/'.$user_idcard->document);
+                    $user_idcard->delete();
+                }
+                $kyc = Kyc::create(['user_id' => $user->id,'verifiable_id'=> $user->id,'verifiable_type'=> 'App\Models\User','type'=> 'idcard',
+                'doctype'=> $doc_type,'document'=> $document]);
+                $file->storeAs('public/',$document);
             }
-            $kyc = Kyc::create(['user_id' => $user->id,'verifiable_id'=> $user->id,'verifiable_type'=> 'App\Models\User','type'=> 'idcard',
-            'doctype'=> $doc_type,'document'=> $document]);
-            $request->file('document')->storeAs('public/',$document);
             return request()->expectsJson() ?  
                 response()->json(['status' => true,'message' => 'Verification Document Saved'],200):   
                 redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);

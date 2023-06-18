@@ -1,9 +1,6 @@
 @extends('layouts.app')
-@push('styles')
-    {{-- <link rel="stylesheet" href="{{asset('src/css/custom.css')}}"> --}}
-@endpush
 
-@section('title') {{$shop->name}} Products | Expiring Soon @endsection
+@section('title') {{$shop->name}} {{$shop->name}} | Expiring Soon @endsection
 @section('main')
     <!-- Breadcrumb Section Start  -->
     <div class="breedcrumb breedcrumb--two">
@@ -43,12 +40,15 @@
                         <a href="javascript:void(0)" data-shop="{{$shop->slug}}" @if(auth()->user()->following->isNotEmpty() && auth()->user()->following->where('id',$shop->id)->count()) data-url="{{route('vendor.unfollow',$shop)}}"  class="unfollow button button--md bg-white text-success" @else data-url="{{route('vendor.follow',$shop)}}"  class="follow button button--md" @endif>
                             @if(auth()->user()->following->isNotEmpty() && auth()->user()->following->where('id',$shop->id)->count()) Following @else Follow @endif
                         </a>
+                        <span class="text-white"><span id="number_follow">{{$shop->followers->count()}}</span> following</span>
                     @endauth
+                        
+                        
                 </div>
-                <div class="sale-off">
+                {{-- <div class="sale-off">
                     <h5>60%</h5>
                     <p>off</p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -244,6 +244,7 @@
                     clicked.removeClass("follow"); 
                     clicked.addClass("unfollow bg-white text-success");
                     clicked.attr("data-url",window.location.origin+'/vendor/unfollow/'+shop);
+                    $('#number_follow').text(parseInt($('#number_follow').text()) + 1)
                 },
                 error: function (data, textStatus, errorThrown) {
                     console.log(data);
@@ -266,6 +267,7 @@
                     clicked.css("background-color", '');
                     clicked.removeClass("unfollow bg-white text-success");
                     clicked.attr("data-url",window.location.origin+'/vendor/follow/'+shop);
+                    $('#number_follow').text(parseInt($('#number_follow').text()) - 1)
                 },
                 error: function (data, textStatus, errorThrown) {
                     console.log(data);

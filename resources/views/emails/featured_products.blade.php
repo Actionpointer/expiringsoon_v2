@@ -1,7 +1,5 @@
-<!DOCTYPE html PUBLIC>
-<html>
+<!DOCTYPE html>
 <head>
-	
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Password Reset | Expiring Soon</title>
+	<title>Order Receipt No. 4343 | Expiring Soon</title>
 	
 	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
@@ -115,10 +113,10 @@
 							<!-- END Header -->
 
 							<!-- Hero Image -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img" align="center" style="padding:10px">
-										<img src="{{asset('src/images/site/img-verify.jpg')}}" border="0" width="200" alt="" />
+									<td class="fluid-img">
+										<img src="{{$product->image}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -133,24 +131,44 @@
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:center; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Password changed successfully!</span>
-																<br />Your password has been updated. If you didn't make this change, please report
-																to us immediately by contacting info@expiringsoon.shop
-																<br/> Thank you for shopping with Expiring Soon.
-															</td>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">{{$product->name}}</span>
+																@if($product->discount > 1)
+																	<br />{{floor($product->discount)}}% off | Buy Now at : 
+																	<span style="font-size:16px;font-weight:600">
+																		<del class="font-body--xxl-400">
+																			{!!$product->shop->country->currency->symbol!!}{{number_format($product->price, 0)}}
+																		</del> 
+																			{!!$product->shop->country->currency->symbol!!}{{number_format($product->amount, 0)}}
+																	</span>
+																	
+																@else
+																<br />Buy Now at : {!!$product->shop->country->currency->symbol!!}{{number_format($product->amount, 0)}}
+																@endif
+																
+															<br />{{$product->description}}</td>
 														</tr>
-														{{-- <tr>
-															<td class="text-btn-large" align="center">
-																<div style="background:#5fb882;width:50%;color:#fff; font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; padding:15px 35px;border-bottom:1px solid #ddd">
-																	<a href="https://expiring.soon/login.php" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
-																		<span class="link-2" style="color:#fff; text-decoration:none;">Click here to Login</span>
-																	</a>
+														
+														
+														<tr>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<div style="margin:auto;width:100%">
+																	<span style="font-weight:600">Quantity Remaining: {{$product->stock}}</span><br />
+																	
 																</div>
 															</td>
-														</tr> --}}
+														</tr>
 														<tr>
-															<td class="text-center" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:center; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;">
+															<td class="text-btn-large" bgcolor="#00FA00" style="font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; border:0px solid #cd6502; padding:15px 35px;">
+																<a href="{{route('product.show',$product)}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;padding:15px 180px;">
+																	<span class="link-2" style="color:#fff; text-decoration:none;">Order Now</span>
+																</a>
+															</td>
+														</tr> 
+														 
+														
+														<tr>
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;">
 															</td>
 														</tr>
 														<!-- END Button -->
@@ -167,7 +185,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="p30-15 bbrr" style="padding: 20px 20px; border-radius:0px 0px 26px 26px;" bgcolor="#ffffff">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top:40px; border-top:1px solid #ddd">
 											<tr>
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">

@@ -143,7 +143,9 @@
 														@if(isset($url))
 														<tr>
 															<td class="text-btn-large" bgcolor="#cd6502" style="font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; border:0px solid #cd6502; padding:15px 35px;">
-																<a href="{{$url}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;padding:15px 180px;"><span class="link-2" style="color:#fff; text-decoration:none;">Confirm Your Email</span></a>
+																<a href="{{$url}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;padding:15px 180px;">
+																	<span class="link-2" style="color:#fff; text-decoration:none;">Confirm Your Email</span>
+																</a>
 															</td>
 														</tr> 
 														@else
@@ -151,7 +153,9 @@
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="{{url(config('app.url'))}}" target="_blank" class="link"><img src="{{asset('src/images/site/btn-welcome.png')}}" width="200"></a></td>
+																		<td class="text-button" style="padding:12px">
+																			<a href="{{url(config('app.url'))}}" target="_blank" class="link">
+																				<img src="{{asset('src/images/site/btn-welcome.png')}}" width="200"></a></td>
 																	</tr>
 																</table>
 															</td>

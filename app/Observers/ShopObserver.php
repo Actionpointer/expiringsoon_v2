@@ -45,12 +45,14 @@ class ShopObserver
             
         }
         if($shop->isDirty('name')){
-            if($shop->companydoc){
-                $shop->companydoc->status = false;
-                $shop->companydoc->reason = 'Shop new name does not match kyc document';
-                $shop->companydoc->save();
-                $shop->approved = false;
-                $shop->save();
+            if($shop->companydocs->isNotEmpty()){
+                foreach($shop->companydocs as $companydoc){
+                    $companydoc->status = false;
+                    $companydoc->reason = 'Shop new name does not match kyc document';
+                    $companydoc->save();
+                    $shop->approved = false;
+                    $shop->save(); 
+                }
                 $shop->user->notify(new ShopStatusNotification($shop));
             }
             

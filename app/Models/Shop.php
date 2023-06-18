@@ -122,8 +122,9 @@ class Shop extends Model
     public function addressproof(){
         return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
     }
-    public function companydoc(){
-        return $this->MorphOne(Kyc::class,'verifiable')->where('type','companydoc');
+
+    public function companydocs(){
+        return $this->MorphMany(Kyc::class,'verifiable')->where('type','companydoc');
     }
     
     public function country(){

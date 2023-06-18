@@ -280,7 +280,7 @@
                               <section class="shoping-cart section section--xl pt-0 pb-5">
                                 <div class="row shoping-cart__content justify-content-center">              
                                   <div class="col-lg-8">
-                                    <form method="POST" action="{{route('vendor.advert.store.shops')}}" enctype="multipart/form-data">@csrf
+                                    <form method="POST" action="{{route('vendor.advert.store')}}" enctype="multipart/form-data">@csrf
                                       <input type="hidden" name="adset_id" value="{{$adset->id}}">
                                       <div class="contact-form-input">
                                         <label>Show in Location</label>

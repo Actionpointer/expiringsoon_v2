@@ -136,7 +136,7 @@
                                                                 You have some packages for pickup and delivery. Package will be ready for pickup in about 48hours.
                                                                 @else
                                                                 Package with number {{$shipment->order->slug}} is now ready for pickup and delivery. <br/>
-                                                                Kindly note that delivery of this package is expected on or before the {{$shipment->created_at->addHours(cache('settings')['order_processing_to_delivery_period'])->format("jS \of\ M, Y")}}. <br/>
+                                                                Kindly note that delivery of this package is expected on or before the {{$shipment->created_at->addHours(cache('settings')['order_processing_to_delivery_period'])->format("jS \of\ M, Y \at\ h:i A")}}. <br/>
                                                                 @endif
                                                             </td>
 														</tr>

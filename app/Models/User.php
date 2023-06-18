@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable,Sluggable,HasApiTokens;
 
     protected $fillable = [
-        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role_id','state_id','status','require_password_change'
+        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role_id','state_id','status','require_password_change','email_verified_at'
     ];
 
     protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];
@@ -226,9 +226,9 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    public function receivesBroadcastNotificationsOn(){
-        return 'users.'.$this->id;
-    }
+    // public function receivesBroadcastNotificationsOn(){
+    //     return 'users.'.$this->id;
+    // }
     
 
         

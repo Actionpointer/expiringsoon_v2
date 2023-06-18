@@ -269,11 +269,11 @@
                                   src="{{Storage::url($user->kyc->where('type','idcard')->first()->document)}}" 
                                 @endif 
                               @else
-                                  src="{{asset('src/images/site/icon-jpg.jpg')}}"
+                                  src="{{asset('src/images/site/icon.jpg')}}"
                               @endif 
                               
                               id="idcard_preview">
-                        <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload image</small>
+                        <small style="font-size:10px;text-decoration:underline" class="text-muted">Upload File</small>
                       </a>
                     </div>
                     <div class="docinfo d-flex justify-content-between align-items-center">
@@ -302,7 +302,7 @@
                     <div class="align-self-center mx-1">
                       <form method="post" enctype="multipart/form-data" action="{{route('vendor.kyc')}}">@csrf
                         <input type="hidden" name="type" value="idcard">
-                        <input type="file" style="display: none" name="document" id="idcard" onchange="readVURL(this,'idcard')" accept=".pdf, .png, .jpg, .jpeg" />
+                        <input type="file" style="display: none" name="document[]" id="idcard" onchange="readVURL(this,'idcard')" accept=".pdf, .png, .jpg, .jpeg" />
                         <button class="button button--md" id="idcard_submit" type="submit" style="display: none">Upload</button>
                       </form>
                     </div>

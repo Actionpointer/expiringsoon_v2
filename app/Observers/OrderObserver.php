@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Settlement;
+use App\Notifications\ArbitratorNotification;
 
 class OrderObserver
 {
@@ -38,6 +39,10 @@ class OrderObserver
             $commission = ($commission_percentage * $order->subtotal / 100) - $commission_fixed;
             Settlement::create(['description'=> 'Commission','order_id'=> $order->id, 
             'receiver_id' => $order->shop_id, 'receiver_type' => 'App\Models\Shop', 'amount' => $commission]);
+        }
+        if($order->isDirty('arbitrator_id') && $order->arbitrator_id){
+            $user = User::find($order->arbitrator_id);
+            $user->notify(new ArbitratorNotification($order));
         }
         
         

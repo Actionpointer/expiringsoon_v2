@@ -37,8 +37,16 @@ class PaymentController extends Controller
 
     //shop earnings
     public function earnings(Shop $shop){
-        $settlements = $shop->settlements->where('status',true)->sortByDesc('created_at')->take(100);
-        // dd($settlements);
+        $settlements = $shop->settlements->where('status',true);
+
+        if(request()->query() && request()->query('start_date') && request()->query('end_date')){
+            $start = request()->query('start_date');
+            $end = request()->query('end_date');
+            $settlements = $settlements->whereBetween('created_at',[$start,$end]);
+        }else{
+            $settlements = $settlements->whereBetween('created_at',[now(),now()->subDays(14)]);
+        }
+        $settlements = $settlements->sortByDesc('created_at');
         return request()->expectsJson() ?  
         response()->json([
             'status' => true,

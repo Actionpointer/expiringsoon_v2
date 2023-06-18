@@ -73,6 +73,11 @@ class OrderController extends Controller
         return view('admin.orders.view',compact('order'));
     }
 
+    public function disputes(){
+        
+        return view('admin.orders.view',compact('order'));
+    }
+
     public function update(Request $request){
         OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status),'description'=> $request->description]);
         return request()->expectsJson() ? 
@@ -101,8 +106,6 @@ class OrderController extends Controller
         // dd($request->all());
         
         $order = Order::find($request->order_id);
-        $order->arbitrator_id = auth()->id();
-        $order->save();
         $receiver_id = $request->receiver == 'buyer'? $order->user_id : $order->shop_id;
         $receiver_type = $request->receiver == 'buyer'? 'App\Models\User' : 'App\Models\Shop';
         $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $receiver_id ,'receiver_type'=> $receiver_type, 'body'=> $request->body]);

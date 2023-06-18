@@ -46,9 +46,9 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
         Route::post('adverts/product/filter',[AdvertController::class,'filter_products'])->name('advert.filter_product');
         
         //store featured ads to adset
-        Route::post('adverts/store/product',[AdvertController::class,'store_product_advert'])->name('advert.store.products');
+        Route::post('adverts/store/product',[AdvertController::class,'store_featured_advert'])->name('advert.feature.products');
         //store adverts to adsets
-        Route::post('adverts/store/shop',[AdvertController::class,'store_shop_advert'])->name('advert.store.shops');
+        Route::post('adverts/store/shop',[AdvertController::class,'store_normal_advert'])->name('advert.store');
         
         Route::post('adverts/manage',[AdvertController::class,'advert_remove'])->name('advert.remove');
         Route::post('feature/manage',[AdvertController::class,'feature_remove'])->name('feature.remove');

@@ -43,7 +43,8 @@ class HomeController extends Controller
     }
 
     public function adpreview(Adset $adset,Advert $advert){
-        return view('vendor.adverts.preview',compact('advert'));
+        $adplan_id = $adset->adplan->id;
+        return view('vendor.adverts.preview',compact('advert','adplan_id'));
     }   
     
 }

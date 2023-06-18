@@ -2,22 +2,32 @@
 -many events cannot call one listener - use subscribers to do this
 -charges on payout {add that to commission}
 -phone number verification
+-change password, send email
+-vendor add shop advert with exact resolution, size and graphics
+-customer - who i'm following| vendors - number of people following me
+-featured product sends email to followers
+-ad preview
+-kyc multiple documents
 
 
-vendor add shop advert with exact resolution, size and graphics
-admin:ad preview
+admin staff add - email notification
 
-admin staff add email notification
-admin kyc assessment management, and notification to vendor kyc
-arbitrator selection
+admin kyc assessment management, 
+
+and notification to vendor kyc
 arbitrator monitoring
+arbitrator login
+
 order dispute email to admin & arbitrator
-customer - who i'm following| vendors - number of people following me
-featured product sends email to followers
+
+
+
 shipment fee recalculation
-kyc multiple documents
-change password, send email
-ad preview
+
+
+
+
+ORDER MESSAGE MODEL, RE-ENABLE BROADCAST
 
 
 version2

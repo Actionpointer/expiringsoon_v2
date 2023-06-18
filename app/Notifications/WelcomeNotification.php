@@ -34,7 +34,7 @@ class WelcomeNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['broadcast'];
+        return ['mail'];
     }
 
     public function toMail($notifiable)

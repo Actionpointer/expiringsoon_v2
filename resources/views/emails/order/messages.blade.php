@@ -154,7 +154,8 @@
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link"><img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175"></a></td>
+																		<td class="text-button" style="padding:12px">
+																			<a href="https://ng.expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link"><img src="{{asset('src/images/site/btn-orderdetails.png')}}" width="175"></a></td>
 																	</tr>
 																</table>
 															</td>
@@ -183,7 +184,8 @@
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
+																<a href="#" target="_blank"><img src="{{asset('src/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
 														</tr>
 													</table>
 												</td>

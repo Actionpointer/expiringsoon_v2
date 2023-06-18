@@ -47,8 +47,8 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('password', [UserController::class, 'password']);
         Route::get('following',[UserController::class, 'followings']);
     });
-    Route::get('vendor/follow/{shop_id}',[ShopController::class, 'follow']);
-    Route::get('vendor/unfollow/{shop_id}',[ShopController::class, 'unfollow']);
+    Route::get('vendor/follow/{shop_id}',[SalesController::class, 'follow']);
+    Route::get('vendor/unfollow/{shop_id}',[SalesController::class, 'unfollow']);
     Route::get('wishlist', [SalesController::class, 'wishlist']);
     Route::post('wishlist/add',[CartController::class,'addtowish']);
     Route::post('wishlist/remove',[CartController::class,'removefromwish']);

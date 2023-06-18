@@ -132,17 +132,19 @@ class OrderStatusObserver
 
     public function disputed(OrderStatus $orderStatus)
     {
-        
-        if($orderStatus->order->user_id != $orderStatus->user_id){
-            $sender_id = $orderStatus->order->shop_id;
-            $sender_type = 'App\Models\Shop';
-            $receiver_id = $orderStatus->user_id;
-            $receiver_type = 'App\Models\User';
-        }else{
+        $arbitrator_id = $this->getArbitrator();
+        $orderStatus->order->arbitrator_id = $arbitrator_id;
+        $orderStatus->order->save();
+        if($orderStatus->order->user_id == $orderStatus->user_id){
             $sender_id = $orderStatus->user_id; 
             $sender_type = 'App\Models\User';
-            $receiver_id = $orderStatus->order->shop_id;
-            $receiver_type = 'App\Models\Shop';
+            $receiver_id = $arbitrator_id;
+            $receiver_type = 'App\Models\User';
+        }else{
+            $sender_id = $orderStatus->order->shop_id;
+            $sender_type = 'App\Models\Shop';
+            $receiver_id = $arbitrator_id;
+            $receiver_type = 'App\Models\User';
         }
         OrderMessage::create(['order_id'=> $orderStatus->order_id,'sender_id'=> $sender_id,'sender_type'=> $sender_type,'receiver_id'=> $receiver_id ,'receiver_type'=> $receiver_type, 'body'=> $orderStatus->description]);
         
@@ -165,11 +167,12 @@ class OrderStatusObserver
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
 
-    public function getArbitrator(OrderStatus $orderStatus){
-        $users = User::within()->whereHas('disputeCases')->orderBy('')->get();
-        if($users->isNotEmpty()){
-            // return $user-
+    public function getArbitrator(){
+        $user = User::within()->whereHas('role',function($query){$query->where('name','arbitrator');})->withCount('disputeCases')->orderBy('dispute_cases_count','asc')->first();
+        if(!$user){
+            $user = User::within()->whereHas('role',function($query){$query->where('name','admin');})->first();
         }
+        return $user->id;
     }
     
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Adset;
 use App\Models\State;
 use App\Models\Product;
+use App\Observers\FeatureObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,12 @@ class Feature extends Model
     ];
     //status means the state (not status) of the shop/product .e.g availability, approval, accessibility, etc
     protected $appends = ['running'];
+
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new FeatureObserver);
+    }
 
     public function adset(){
         return $this->belongsTo(Adset::class);

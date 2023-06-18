@@ -280,7 +280,7 @@
                                 <section class="shoping-cart section section--xl pt-0">
                                   <div class="row shoping-cart__content justify-content-center">              
                                     <div class="col-lg-8">
-                                      <form method="POST" action="{{route('vendor.advert.store.products')}}">@csrf
+                                      <form method="POST" action="{{route('vendor.advert.feature.products')}}">@csrf
                                           <input type="hidden" name="adset_id" value="{{$adset->id}}">
                                           <div class="my-3 filter" style="display: block;">
                                               <div class="contact-form-input">

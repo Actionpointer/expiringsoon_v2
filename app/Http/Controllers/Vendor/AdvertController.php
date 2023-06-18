@@ -41,17 +41,20 @@ class AdvertController extends Controller
             // dd($products->first()->shop->name);
             return view('vendor.adverts.products',compact('adset','products','categories','shops','states','state_id'));
         }else{
-            return view('vendor.adverts.shops',compact('adset','shops','states','state_id','products'));
+            return view('vendor.adverts.ad',compact('adset','shops','states','state_id','products'));
         }
         
     }
 
-    public function store_shop_advert(Request $request){
+    public function store_normal_advert(Request $request){
+        $adset = Adset::find($request->adset_id);
+        $width = $adset->adplan->width;
+        $height = $adset->adplan->height;
         $validator = Validator::make($request->all(), [
             'type' => 'required|string',
             'shop_id' => [Rule::requiredIf(!$request->type == 'shop'),'numeric'],
             'product_id' => [Rule::requiredIf(!$request->type == 'product'),'numeric'],
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => ['required','image','mimes:jpeg,png,jpg,gif,svg','max:2048',"dimensions:width=$width,height=$height"],
             'state_id' => 'required|numeric',
             'heading' => 'required|string',
             'heading' => 'required|string',
@@ -61,6 +64,7 @@ class AdvertController extends Controller
             'button_text' => 'required|string',
             'button_color' => 'required|string',
         ],[
+            'photo.dimensions' => "The image dimensions must be $width by width and $height height",
             'photo.max' => 'The image is too heavy. Standard size is 2mb',
         ]);
         if ($validator->fails()) {
@@ -68,12 +72,11 @@ class AdvertController extends Controller
             response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
             redirect()->back()->with(['result'=> 0,'message'=> $validator->errors()->first() ]);
         }
-        $adset = Adset::find($request->adset_id);
         if($request->hasFile('photo')){
             $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $path = storage_path('app/public/'.$photo);
             $imgFile = Image::make($request->file('photo'));
-            $imgFile->fit(150,150)->save($path);
+            $imgFile->fit($width,$height)->save($path);
         } 
         if($adset->units > $adset->adverts->count()){
             $advert = Advert::create(['advertable_id'=> $request->type == 'shop' ? $request->shop_id: $request->product_id,
@@ -99,10 +102,8 @@ class AdvertController extends Controller
         ? response()->json(['status' => true, 'message' => 'Advert Deleted Successfully'], 200)
         : redirect()->back()->with(['result'=> 1,'message'=>'Ad Deleted Successfully']);
     }
-     
-    
 
-    public function store_product_advert(Request $request){
+    public function store_featured_advert(Request $request){
         $products = [];
         foreach($request->products as $product_id){
             $products[] = Product::find($product_id);
@@ -116,17 +117,6 @@ class AdvertController extends Controller
         return request()->expectsJson()
         ? response()->json(['status' => true, 'message' => 'Advert Created'], 200)
         : redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
-    }
-
-    public function filter_products(Request $request){
-        $shops = auth()->user()->shops;
-        $products = Product::whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());});
-        if($request->shops)
-            $products = $products->whereIn("shop_id",$request->shops);
-        if($request->categories)
-            $products = $products->whereIn('category_id', $request->categories);
-        $products = $products->with('shop')->get();
-        return response()->json(['status' => true,'message' => 'Products filtered ','data' => ProductResource::collection($products)],200);
     }
 
     public function feature_products(Request $request){
@@ -161,8 +151,18 @@ class AdvertController extends Controller
                 'data' => $result,
             ], 200) :
             redirect()->to($result['link']);
-        }    
-        
+        }       
+    }
+
+    public function filter_products(Request $request){
+        $shops = auth()->user()->shops;
+        $products = Product::whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());});
+        if($request->shops)
+            $products = $products->whereIn("shop_id",$request->shops);
+        if($request->categories)
+            $products = $products->whereIn('category_id', $request->categories);
+        $products = $products->with('shop')->get();
+        return response()->json(['status' => true,'message' => 'Products filtered ','data' => ProductResource::collection($products)],200);
     }
 
 }

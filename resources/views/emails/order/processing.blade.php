@@ -144,7 +144,7 @@
 														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">New Order from {{$order->user->name}},</span>
-																<br />Kindly fulfill the order before {{$order->created_at->addHours(cache('settings')['order_processing_to_delivery_period'])->format('d-M-Y')}}. Order will be automatically cancelled if not ready for delivery or shipped on or before {{$order->created_at->addHours(cache('settings')['order_processing_to_auto_cancel_period'])->format('d-M-Y')}}.
+																<br />Kindly fulfill the order before {{$order->created_at->addHours(cache('settings')['order_processing_to_delivery_period'])->format('d-M-Y h:i A')}}. Order will be automatically cancelled if not ready for delivery or shipped on or before {{$order->created_at->addHours(cache('settings')['order_processing_to_auto_cancel_period'])->format('d-M-Y h:i A')}}.
 
 																<br />Thank you for using Expiring Soon..
 															</td>

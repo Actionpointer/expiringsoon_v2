@@ -29,6 +29,14 @@
             <span class="name"> Wishlist</span>
           </a>
         </li>
+        <li class="dashboard__nav-item-link @if(Route::is('followings')) active @endif " >
+          <a href="{{route('followings')}}" class="font-body--lg-400">
+            <span class="icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path   d="M11.9997 21.0538C-7.99987 9.99967 6.00011 -2.00033 11.9997 5.58772C18.0001 -2.00034 32.0001 9.99967 11.9997 21.0538Z"   stroke="currentColor"   stroke-width="1.5" /></svg>
+            </span>
+            <span class="name"> Following</span>
+          </a>
+        </li>
         <!-- Order History -->
         <li class="dashboard__nav-item-link @if(Route::is('orders') || Route::is('order.show') || Route::is('order.messages')) active @endif ">
           <a href="{{route('orders')}}" class="font-body--lg-400">

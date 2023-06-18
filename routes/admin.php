@@ -72,7 +72,7 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
         Route::get('payouts/export', [PaymentController::class, 'exportPayouts'])->name('payouts.export');
     });
 
-    Route::group(['middleware'=> 'role:superadmin,admin,manager,customercare'],function(){
+    Route::group(['middleware'=> 'role:superadmin,admin,manager,customercare,arbitrator'],function(){
         
         Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
         Route::post('coupons/store',[CouponController::class, 'store'])->name('coupon.store');
@@ -96,8 +96,10 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
         Route::get('products',[ProductController::class, 'index'])->name('products');
         Route::post('products',[ProductController::class, 'manage'])->name('products.manage');
 
+
         Route::get('orders',[OrderController::class, 'index'])->name('orders');
         Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
+        Route::get('order/disputes',[OrderController::class, 'disputes'])->name('order.disputes');
         Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
         Route::post('order/resolution',[OrderController::class, 'resolution'])->name('order.resolution');
         Route::post('order/message/',[OrderController::class, 'message'])->name('order.message');

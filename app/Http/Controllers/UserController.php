@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ShopResource;
+use App\Notifications\PasswordChangedNotification;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -92,6 +93,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
             $user->require_password_change = false;
             $user->save();
+            $user->notify(new PasswordChangedNotification);
             return request()->expectsJson() ? 
             response()->json([
                 'status' => true,
@@ -174,7 +176,7 @@ class UserController extends Controller
                 'status' => true,
                 'data' => ShopResource::collection($user->following),
             ], 200) :
-            view('customer.following');
+            view('customer.followings',with(['followings'=> $user->following]));
     }
 
 }

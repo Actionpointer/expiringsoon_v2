@@ -15,11 +15,21 @@ use App\Http\Controllers\Shopper\SalesController;
 use App\Http\Controllers\Guest\FrontendController;
 use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
+use App\Notifications\WelcomeNotification;
 
 Route::get('broadcast', function () {
-    $user = \App\Models\User::find(31);
-    $user->notify(new App\Notifications\WelcomeNotification);
-    return 'done';
+    $user = \App\Models\User::find(1);
+    $product = \App\Models\Product::find(1);
+    return (new App\Notifications\FollowersFeaturedProductNotification($product))
+                    ->toMail($user);
+    // \App\Models\OrderMessage::create(['order_id'=> 209,'sender_id'=> 31,'sender_type'=> 'App\Models\Shop','receiver_id'=> 57 ,'receiver_type'=> 'App\Models\User', 'body'=> 'User has used the item']);
+    // $user = \App\Models\User::within()->whereHas('role',function($query){$query->where('name','arbitrator');})->withCount('disputeCases')->orderBy('dispute_cases_count','asc')->get();
+    // dd($user);
+    // if(!$user){
+    //     $user = \App\Models\User::within()->whereHas('role',function($query){$query->where('name','admin');})->first();
+    // }
+    // return $user->id;
+    return 'ok';
 });
 
 Route::view('terms','frontend.legal.term_of_use')->name('terms');
@@ -51,8 +61,8 @@ Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name
 
 Route::get('vendors', [ShopController::class, 'index'])->name('vendors');
 Route::get('vendors/{shop}', [ShopController::class, 'show'])->name('vendor.show');
-Route::get('vendor/follow/{shop}',[ShopController::class, 'follow'])->name('vendor.follow');
-Route::get('vendor/unfollow/{shop}',[ShopController::class, 'unfollow'])->name('vendor.unfollow');
+Route::get('vendor/follow/{shop}',[SalesController::class, 'follow'])->name('vendor.follow');
+Route::get('vendor/unfollow/{shop}',[SalesController::class, 'unfollow'])->name('vendor.unfollow');
 
 Route::get('adpreview/{adset}/{advert}',[HomeController::class,'adpreview'])->name('adpreview');
 
@@ -85,24 +95,30 @@ Route::group(['middleware'=> 'verified'],function(){
     Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
     Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
     Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
-    Route::get('addresses', [AddressController::class, 'index'])->name('addresses');
-    Route::post('address/store',[AddressController::class, 'store'])->name('address.store');
-    Route::post('address/update',[AddressController::class, 'update'])->name('address.update');
-    Route::post('address/delete',[AddressController::class, 'destroy'])->name('address.delete');
+    
 
-    Route::get('wishlist', [SalesController::class, 'wishlist'])->name('wishlist');
-    Route::get('checkout/{shop?}',[SalesController::class,'checkout'])->name('checkout');
-    Route::post('checkout/getshipment',[SalesController::class,'shipment'])->name('checkout.shipment');
-    Route::post('checkout/confirm',[SalesController::class,'confirmcheckout'])->name('confirmcheckout');
+    Route::group(['middleware'=> 'role:shopper'],function(){
+        Route::get('addresses', [AddressController::class, 'index'])->name('addresses');
+        Route::post('address/store',[AddressController::class, 'store'])->name('address.store');
+        Route::post('address/update',[AddressController::class, 'update'])->name('address.update');
+        Route::post('address/delete',[AddressController::class, 'destroy'])->name('address.delete');
 
-    Route::get('orders', [OrderController::class, 'index'])->name('orders');
-    Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
-    Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
-    // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
-    Route::post('order/review',[ReviewController::class, 'review'])->name('order.review');
+        Route::get('wishlist', [SalesController::class, 'wishlist'])->name('wishlist');
+        Route::get('following', [UserController::class, 'followings'])->name('followings');
+        Route::get('checkout/{shop?}',[SalesController::class,'checkout'])->name('checkout');
+        Route::post('checkout/getshipment',[SalesController::class,'shipment'])->name('checkout.shipment');
+        Route::post('checkout/confirm',[SalesController::class,'confirmcheckout'])->name('confirmcheckout');
 
-    // Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
-    Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
+        Route::get('orders', [OrderController::class, 'index'])->name('orders');
+        Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
+        Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
+        // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
+        Route::post('order/review',[ReviewController::class, 'review'])->name('order.review');
+
+        // Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
+        Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
+    });
+    
 
     include('vendor.php');
     include('admin.php');

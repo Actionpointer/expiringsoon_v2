@@ -131,7 +131,16 @@
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;"><span style="font-size:16px;font-weight:600">Dear Mike Okeji,</span><br />Thank you for shopping with Expiring Soon.</b>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																<span style="font-size:16px;font-weight:600">Dear Mike Okeji,</span>
+																<br />Thank you for shopping with Expiring Soon.
+																<br />
+																<h2 class="font-body--xxxl-500">
+																	<del class="font-body--xxl-400">$2,000</del> 
+																	$1500
+																</h2>
+																<span class="label sale-off">50% off </span>
+															</b>
 															<br /><br />Please help us improve our service by taking a moment to rate your experience with the vendor and the productsa(s) you ordered.</td>
 														</tr>
 														<tr>

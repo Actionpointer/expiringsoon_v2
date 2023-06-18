@@ -309,7 +309,7 @@ class ShopController extends Controller
             [
                 'shop_id' => 'required|numeric',
                 'type' => 'required|string',
-                'document' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
+                'document.*' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
             ]);
             if($validator->fails()){
                 return request()->expectsJson() ?  
@@ -319,16 +319,22 @@ class ShopController extends Controller
                 
             $verifiable_id = $request->shop_id;
             $verifiable_type = 'App\Models\Shop';
-            if($card = $user->kyc->where('type',$request->type)->where('verifiable_type',$verifiable_type)->where('verifiable_id',$verifiable_id)->first()){
-                Storage::delete('public/'.$card->document);
+
+            foreach($request->file('document') as $file){
+
+                if($card = $user->kyc->where('type','addressproof')->where('verifiable_type',$verifiable_type)->where('verifiable_id',$verifiable_id)->first()){
+                    Storage::delete('public/'.$card->document);
+                }else{
+
+                }
+                $doctype = explode('/',$file->getClientMimeType())[0];
+                $document = 'uploads/'.time().'.'.$file->getClientOriginalExtension();
+                $file->storeAs('public/',$document);
+                $kyc = Kyc::create(['user_id'=> $user->id,'verifiable_id'=> $verifiable_id,
+                    'verifiable_type'=> $verifiable_type,'type'=> $request->type,'doctype'=> $doctype,'document'=> $document]);
             }
+
             
-            $doctype = explode('/',$request->file('document')->getClientMimeType())[0];
-                // dd($doctype);
-            $document = 'uploads/'.time().'.'.$request->file('document')->getClientOriginalExtension();
-            $request->file('document')->storeAs('public/',$document);
-            $kyc = Kyc::updateOrCreate(['user_id'=> $user->id,'verifiable_id'=> $verifiable_id,
-                'verifiable_type'=> $verifiable_type,'type'=> $request->type],['doctype'=> $doctype,'document'=> $document]);
             return request()->expectsJson() ?  
                     response()->json(['status' => true,'message' => 'Verification Document Saved'],200):   
                     redirect()->back()->with(['result'=> '1','message'=> 'Verification Document Saved']);

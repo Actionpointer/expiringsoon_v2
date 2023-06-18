@@ -40,6 +40,22 @@ class SalesController extends Controller
             view('customer.wishlist',compact('likes'));
     }
 
+    public function follow(Shop $shop){
+        /** @var \App\Models\User $user **/
+        $user = auth()->user();
+        $user->following()->toggle([$shop->id]);
+        return response()->json(['status'=> true],200);
+    }
+
+    public function unfollow(Shop $shop){
+        /** @var \App\Models\User $user **/
+        $user = auth()->user();
+        $user->following()->toggle([$shop->id]);
+        return response()->json(['status'=> true],200);
+    }
+
+
+
     public function checkout(Shop $shop = null){
         
         $user = auth()->user();
