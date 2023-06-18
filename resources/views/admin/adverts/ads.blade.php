@@ -162,7 +162,7 @@
                             @endif
 
                             @if(!$advert->approved)
-                              <span class="font-body--md-400 out"> Pending Approval</span>
+                              <span class="font-body--md-400 out">@if($advert->rejection_reason) Rejected @else Pending Approval @endif</span>
                             @endif
 
                             @if($advert->approved && $advert->adset->status && $advert->adset->active && !$advert->status)
@@ -185,12 +185,48 @@
                                   <input type="hidden" name="advert_id" value="{{$advert->id}}">
                                   @if(!$advert->approved)
                                   <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
+                                  @else
+                                  <button class="btn btn-danger dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$advert->id}}">Reject</button>
                                   @endif
+
+                                  
+
+                                  
+                                  @if(auth()->user()->isRole('superadmin'))
                                   <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
+                                  @endif
                                 </form>                                      
                               </div>
                             </div>
                           </td>
+                          <div class="modal fade" id="reject{{$advert->id}}" tabindex="-1" aria-labelledby="reject{{$advert->id}}ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="reject{{$advert->id}}ModalLabel">Reject Advert</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{route('admin.adverts.manage')}}" method="post" id="reject{{$advert->id}}form">
+                                        @csrf 
+                                        <input type="hidden" name="advert_id" value="{{$advert->id}}">
+                                        <div class="contact-form__content my-3">
+                                            <div class="contact-form-input">
+                                              <label for="hours">Reason</label>
+                                              <textarea name="reason" class="form-control" placeholder="Rejection Reason"></textarea>
+                                            </div>
+                                    
+                                            <div class="contact-form-btn">
+                                              <button class="button button--md" type="submit" name="approved" value="0">Reject</button>
+                                              <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
                       </tr>
                       @empty
                       <tr>

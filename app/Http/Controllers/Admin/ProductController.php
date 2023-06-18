@@ -74,13 +74,23 @@ class ProductController extends Controller
     }
 
     public function manage(Request $request){
-        if($request->delete){
+        /** @var \App\Models\User $user **/ 
+        $user = auth()->user(); 
+        if($request->delete && $user->isRole('superadmin')){
             $products = Product::whereIn('id',$request->products)->whereDoesntHave('orders')->delete();
             return redirect()->back()->with(['result'=>1,'message'=> 'Products deleted Successfully']);
+        }elseif($request->approved){
+            // dd($request->all());
+            $products = Product::whereIn('id',$request->products)->update(['approved'=> $request->approved,'rejection_reason'=> null]);
+            return redirect()->back()->with(['result'=>1,'message'=> 'Products updated Successfully']);
         }else{
-            $products = Product::whereIn('id',$request->products)->update(['status'=> $request->approved]);
+            $product = Product::find($request->product_id);
+            $product->approved = $request->approved;
+            $product->rejection_reason = $request->reason;
+            $product->save();
+            return redirect()->back()->with(['result'=>1,'message'=> 'Products updated Successfully']);
         }
-        return redirect()->back()->with(['result'=>1,'message'=> 'Products updated Successfully']);
+        
     }
 
     public function categories(){

@@ -64,11 +64,12 @@
                                   @if(!$shop->approved)
                                   <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
                                   @else
-                                  <button type="submit" name="approved" value="0" class="dropdown-item">Disapprove</button>
+                                  <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$shop->id}}">Disapprove</button>
                                   @endif
                                 </form>                                      
                               </div>
-                            </div>    
+                            </div> 
+
                         </div>
                     </div>
                     <div class="col-lg-7 order-lg-0 order-2">
@@ -140,6 +141,34 @@
                               </table>
                           </div>
                         </div>
+                    </div>
+                  </div>
+                  <div class="modal fade" id="reject{{$shop->id}}" tabindex="-1" aria-labelledby="reject{{$shop->id}}ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="reject{{$shop->id}}ModalLabel">Disapprove Shop</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{route('admin.shop.manage')}}" method="post" id="reject{{$shop->id}}form">
+                                @csrf 
+                                <input type="hidden" name="shop_id" value="{{$shop->id}}">
+                                <div class="contact-form__content my-3">
+                                    <div class="contact-form-input">
+                                      <label for="hours">Reason</label>
+                                      <textarea name="reason" class="form-control" placeholder="Rejection Reason"></textarea>
+                                    </div>
+                            
+                                    <div class="contact-form-btn">
+                                      <button class="button button--md" type="submit" name="approved" value="0">Reject</button>
+                                      <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                      </div>
                     </div>
                   </div>
                 </div>

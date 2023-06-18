@@ -74,9 +74,18 @@ class ShopController extends Controller
 
     public function manage(Request $request){
         $shop = Shop::find($request->shop_id);
-        $shop->approved = $request->approved;
-        $shop->save();
-        return redirect()->back()->with(['result'=> '1','message'=> 'Shop Status Updated']);
+        if($request->approved){
+            $shop->approved = $request->approved;
+            $shop->rejection_reason = null;
+            $shop->save();
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Shop Approved Successfully']);
+        }else{
+            $shop->approved = $request->approved;
+            $shop->rejection_reason = $request->reason;
+            $shop->save();
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Shop Disapproved Successfully']);
+            
+        }
     }
     
     public function kyc(Request $request){

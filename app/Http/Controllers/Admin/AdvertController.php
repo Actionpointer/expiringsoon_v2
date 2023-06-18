@@ -91,14 +91,23 @@ class AdvertController extends Controller
     }
 
     public function manage(Request $request){
+        /** @var \App\Models\User $user **/             
+        $user = auth()->user(); 
         $advert = Advert::find($request->advert_id);
-        if($request->delete){
+        if($request->delete && $user->isRole('superadmin')){
             $advert->delete();
             return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Deleted Successfully']);
-        }else{
+        }elseif($request->approved){
             $advert->approved = $request->approved;
+            $advert->rejection_reason = null;
             $advert->save();
             return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Updated Successfully']);
+        }else{
+            $advert->approved = $request->approved;
+            $advert->rejection_reason = $request->reason;
+            $advert->save();
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Updated Successfully']);
+            
         }
     }
 

@@ -18,7 +18,7 @@ class Advert extends Model
 
     protected $fillable = [
         'advertable_id','advertable_type','adset_id','state_id','approved','photo','heading','subheading',
-        'offer','text_color','button_text','button_color'
+        'offer','text_color','button_text','button_color','rejection_reason'
     ];
     //status means the state (not status) of the shop/product .e.g availability, approval, accessibility, etc
     protected $appends = ['status','running','image'];

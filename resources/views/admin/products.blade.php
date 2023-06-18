@@ -171,7 +171,7 @@
                                 <span class="font-body--md-400 in me-1"> Live</span>
                               @endif
                               @if(!$product->approved)
-                                <span class="font-body--md-400 out me-1"> Pending Approval</span>
+                                <span class="font-body--md-400 out me-1"> @if($product->rejection_reason) Rejected @else Pending Approval @endif</span>
                               @endif
                               @if(!$product->status)
                                 <span class="font-body--md-400 out me-1"> Inactive</span>
@@ -197,15 +197,48 @@
                               
                               <form class="d-inline" action="{{route('admin.products.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
                                 <input type="hidden" name="products[]" value="{{$product->id}}">
-                                @if(!$product->approved)
-                                <button type="submit" name="approved" value="1" class="btn btn-sm btn-success">Approve</button>
-                                @endif
-                                <button type="submit" name="delete" value="1" class="btn btn-sm btn-danger">Delete</button>
+                                  @if(!$product->approved)
+                                  <button type="submit" name="approved" value="1" class="btn btn-sm btn-success">Approve</button>
+                                  @else
+                                  <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$product->id}}">Reject</button>
+                                  @endif
+
+                                  @if(auth()->user()->isRole('superadmin'))
+                                  <button type="submit" name="delete" value="1" class="btn btn-sm btn-danger">Delete</button>
+                                  @endif                               
+                                
                               </form>                                      
                               
                             </div>
                           </td>
-
+                          <div class="modal fade" id="reject{{$product->id}}" tabindex="-1" aria-labelledby="reject{{$product->id}}ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="reject{{$product->id}}ModalLabel">Reject Product</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{route('admin.products.manage')}}" method="post" id="reject{{$product->id}}form">
+                                        @csrf 
+                                        <input type="hidden" name="product_id" value="{{$product->id}}">
+                                        <div class="contact-form__content my-3">
+                                            <div class="contact-form-input">
+                                              <label for="hours">Reason</label>
+                                              <textarea name="reason" class="form-control" placeholder="Rejection Reason"></textarea>
+                                            </div>
+                                    
+                                            <div class="contact-form-btn">
+                                              <button class="button button--md" type="submit" name="approved" value="0">Reject</button>
+                                              <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
                       </tr>
                       @empty
                       <tr>
