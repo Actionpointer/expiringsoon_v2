@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Models\Adset;
 use App\Models\State;
+use App\Models\Adplan;
+use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -17,8 +19,6 @@ class FeatureController extends Controller
     }
 
     public function index(Adset $adset){
-        // $adset = auth()->user()->adsets->where('subscribable_id',$adset->id)->first();
-        // dd($adset->features->first()->product);
         $user = auth()->user();
         $shops = $user->shops->where('status',true)->where('published',true)->where('approved',true);
         $states = State::within()->get();
@@ -26,19 +26,10 @@ class FeatureController extends Controller
         $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->where("user_id",auth()->id());})->get();
         $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
             // dd($products->first()->shop->name);
-        return view('vendor.adverts.products',compact('adset','products','categories','shops','states','state_id'));
-        
-        
+        return view('vendor.features.index',compact('adset','products','categories','shops','states','state_id')); 
     }
 
-    public function feature_remove(Request $request){
-        $adverts = Feature::destroy($request->features);
-        return request()->expectsJson()
-        ? response()->json(['status' => true, 'message' => 'Advert Deleted Successfully'], 200)
-        : redirect()->back()->with(['result'=> 1,'message'=>'Ad Deleted Successfully']);
-    }
-
-    public function store_featured_advert(Request $request){
+    public function store(Request $request){
         $products = [];
         foreach($request->products as $product_id){
             $products[] = Product::find($product_id);
@@ -54,21 +45,28 @@ class FeatureController extends Controller
         : redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
     }
 
+    public function remove(Request $request){
+        $adverts = Feature::destroy($request->features);
+        return request()->expectsJson()
+        ? response()->json(['status' => true, 'message' => 'Advert Deleted Successfully'], 200)
+        : redirect()->back()->with(['result'=> 1,'message'=>'Ad Deleted Successfully']);
+    }
+    
     public function feature_products(Request $request){
         $products = Product::whereIn('id',$request->products)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->get();
         $allproducts = Product::where('shop_id',$request->shop_id)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->get();
         $states = State::all();
         $state_id = session('locale')['state_id'];
-        $adplan = Adplan::where('position','Z')->first();
-        return view('vendor.adverts.feature',compact('allproducts','products','states','state_id','adplan'));
+        $adplan = Adplan::where('width',null)->first();
+        return view('vendor.features.product',compact('allproducts','products','states','state_id','adplan'));
     }
 
-    public function feature_products_subscription(Request $request){
+    public function subscription(Request $request){
         // dd($request->all());
         $products = Product::whereIn('id',$request->products)->get();
         $adset = Adset::create(['user_id'=> auth()->id(),'adplan_id' => $request->adplan_id,'units'=> count($request->products),'amount'=> $request->amount,'start_at'=> now(),'end_at'=> now()->addDays($request->days),'auto_renew'=> $request->auto_renew ? true:false]);        
         foreach($products as $product){
-            $advert = Advert::create(['adset_id'=> $adset->id,'position'=> $adset->adplan->position,'advertable_id'=> $product->id,'advertable_type'=> get_class($product),'state_id'=> $request->state_id]);
+            Feature::create(['adset_id'=> $adset->id,'product_id'=> $product->id,'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_product_advert'] ? true:false]);
         }
         $result = $this->initializePayment($adset->amount,[$adset->id],'App\Models\Adset');
         if(!$result['link']){

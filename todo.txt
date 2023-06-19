@@ -8,21 +8,18 @@
 -featured product sends email to followers
 -ad preview
 -kyc multiple documents
-
+-shipment fee recalculation
 
 admin staff add - email notification
-
-admin kyc assessment management, 
-
+admin kyc - notification
 and notification to vendor kyc
-arbitrator monitoring
-arbitrator login
-
 order dispute email to admin & arbitrator
 
 
+arbitrator monitoring
+arbitrator login
 
-shipment fee recalculation
+
 
 
 

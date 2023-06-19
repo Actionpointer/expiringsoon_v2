@@ -79,6 +79,7 @@ class SalesController extends Controller
             return redirect()->route('cart')->with(['result'=> 0,'message'=> 'Some items are no longer available ']);
         }
         $order = $this->getOrder($carts);
+
         $rates = Rate::where('country_id',$user->country_id)->whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
         return view('frontend.checkout',compact('carts','user','order','rates'));
     }
@@ -105,8 +106,8 @@ class SalesController extends Controller
         foreach($carts->groupBy('shop_id') as $key=>$group){
             $shops[] = ['id'=> $key,'name'=> $group->first()->shop->name,
             'location'=> ($group->first()->shop->city ? $group->first()->shop->city->name.', ' : '').$group->first()->shop->state->name,
-            'delivery_amount' => $this->getShopShipment($key,$state_id)['amount'],
-            'delivery_hours' => $this->getShopShipment($key,$state_id)['hours']];
+            'delivery_amount' => $this->getShopShipment($carts,$key,$state_id)['amount'],
+            'delivery_hours' => $this->getShopShipment($carts,$key,$state_id)['hours']];
         }
         $order = $this->getOrder($carts);
         return response()->json([
@@ -149,7 +150,7 @@ class SalesController extends Controller
             foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
                 $subtotal = 0;
                 if($request->deliveries[$shop_id]){
-                    $shipping = $this->getShopShipment($shop_id,$address->state_id); 
+                    $shipping = $this->getShopShipment($carts,$shop_id,$address->state_id); 
                 }
                 //dd($shipping_fee);
                 $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,
@@ -222,7 +223,7 @@ class SalesController extends Controller
             foreach($carts->pluck('shop_id')->unique()->toArray() as $shop_id){
                 $subtotal = 0;
                 if($deliveries->firstWhere('shop_id',$shop_id)['delivery_amount']){
-                    $shipping = $this->getShopShipment($shop_id,$address->state_id); 
+                    $shipping = $this->getShopShipment($carts,$shop_id,$address->state_id); 
                 }
                 //dd($shipping_fee);
                 $order = Order::create(['shop_id'=> $shop_id,'user_id'=> $user->id,'address_id'=> $request->address_id,

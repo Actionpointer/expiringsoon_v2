@@ -46,8 +46,9 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
 
 
         //store featured adsets
+        Route::get('featureds/{adset}',[FeatureController::class,'index'])->name('featureds');
         Route::post('adset/products',[FeatureController::class,'feature_products'])->name('adset.products');
-        Route::post('adset/products/subscription',[FeatureController::class,'feature_products_subscription'])->name('adset.products.subscription');
+        Route::post('adset/products/subscription',[FeatureController::class,'subscription'])->name('adset.products.subscription');
         Route::post('adverts/product/filter',[FeatureController::class,'filter_products'])->name('advert.filter_product');
         
         //store featured ads to adset

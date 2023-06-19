@@ -27,6 +27,9 @@ class Cart extends Model
     public function shop(){
         return $this->belongsTo(Shop::class);
     }
+    public function getDeliveryCostAttribute(){
+        return $this->product->shipping * $this->quantity;
+    }
     
     
 }

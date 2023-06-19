@@ -38,7 +38,7 @@
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
                     <h2 class="font-body--xl-500">{{$adset->adplan->name}} Adverts</h2>
-                    <span class="font-body--lg-600"> Adset No: {{$adset->slug}}</span>
+                    <span class="font-body--lg-600"> Adset No: {{$adset->features->count()}} .{{$adset->slug}}</span>
                 </div>
                 <div class="products-tab__btn">
                   <div class="container">

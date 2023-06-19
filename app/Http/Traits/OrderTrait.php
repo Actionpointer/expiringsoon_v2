@@ -3,14 +3,15 @@ namespace App\Http\Traits;
 
 // use App\Coupon;
 use Carbon\Carbon;
+use App\Models\Cart;
 use App\Models\City;
+use App\Models\Rate;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\State;
 use App\Models\Coupon;
 use App\Models\Address;
 use App\Models\Setting;
-use App\Models\Rate;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,8 @@ trait OrderTrait
         if(!$cart)
         $order = ['subtotal'=> 0,'vat'=> 0,'vat_percent'=> $user->country->vat,'shipping'=> 0];
         else
-        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $user->country->vat/100 * $this->getSubtotal($cart),'vat_percent'=> $user->country->vat,'shipping'=> $this->getEachShipment($cart)['total']];
+        $order = ['subtotal'=> $this->getSubtotal($cart),'vat'=> $user->country->vat/100 * $this->getSubtotal($cart),
+        'vat_percent'=> $user->country->vat,'shipping'=> $this->getEachShipment($cart)['total']];
         $grandtotal = $order['subtotal'] + $order['vat'] + $order['shipping'];
         $order['grandtotal'] = $grandtotal;
         return $order;
@@ -38,41 +40,29 @@ trait OrderTrait
         return $subtotal;
     }
 
-    protected function getShopShipment2($shop_id,$address_id = null){
-        $user = auth()->user();
-        if($address_id){
-            $state_id = $user->addresses->where('id',$address_id)->first() ? $user->addresses->where('id',$address_id)->first()->state_id : 0;
-        }else{
-            $state_id = $user->addresses->where('main',true)->first() ? $user->addresses->where('main',true)->first()->state_id : 0;
-        }
-        $hours = 0;
-        $amount = 0;
-        $shipper = 'pickup';
-        if(Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
-            $hours = Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->hours;
-            $amount = Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()->amount;
-            $shipper = 'vendor';
-        }elseif(Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()){
-            $hours = Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()->hours;
-            $amount = Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()->amount;
-            $shipper = 'admin';
-        }
-        return ['hours'=> $hours,'amount'=>$amount,'shipper'=> $shipper];
-    }
+    
 
-    protected function getShopShipment($shop_id,$state_id){
+    protected function getShopShipment($carts,$shop_id,$state_id){
         $hours = 0;
         $amount = 0;
         $rate_id = null;
         $by = 'pickup';
+        $ship = [];
+        foreach($carts as $cart){
+            if(array_key_exists($cart->shop_id,$ship)){
+                $ship[$cart->shop_id] = $ship[$cart->shop_id] + $cart->delivery_cost;
+            }else{
+                $ship = [$cart->shop_id => $cart->delivery_cost];
+            }
+        }
         if($rate = Rate::where('shop_id',$shop_id)->where('destination_id',$state_id)->first()){
             $hours = $rate->hours;
-            $amount = $rate->amount;
+            $amount = $rate->amount + $ship[$shop_id];
             $rate_id = $rate->id;
             $by = 'vendor';
         }elseif($rate = Rate::whereNull('shop_id')->where('destination_id',$state_id)->first()){
             $hours = $rate->hours;
-            $amount = $rate->amount;
+            $amount = $rate->amount + $ship[$shop_id];
             $rate_id = $rate->id;
             $by = 'admin';
         }
@@ -87,16 +77,18 @@ trait OrderTrait
             $state_id = $user->addresses->where('main',true)->first() ? $user->addresses->where('main',true)->first()->state_id : 0;
         }
         $shop_ids = array_unique(array_column($carts, 'shop_id'));
+        $carts = Cart::whereIn('id',array_column($carts, 'id'))->get();
         $shipping = 0;
         $result = [];
         foreach($shop_ids as $shop_id){
-            $trip = $this->getShopShipment($shop_id,$state_id);
+            $trip = $this->getShopShipment($carts,$shop_id,$state_id);
             $shipping+= $trip['amount'];
             $result[] = array_merge($trip,['shop_id'=> $shop_id,'time'=> now()->addHours($trip['hours'])->format('l jS \of\ F')]);
         }
         return ['total'=> $shipping,'shipments'=> $result];
     
     }
+    
 
     protected function getCustomerOrderStatuses(Order $order){
         $statuses = [];
@@ -163,27 +155,6 @@ trait OrderTrait
         }
         return $statuses;
     }
-
-
-    // protected function getDeliveryCharge(){
-    //     $state = State::all();
-    //     $city = City::all();
-    //     $delivery = 0;
-    //     if(Auth::check() && $address = Auth::user()->addresses->where('status',true)->first()){
-    //         //check if customer lives in same state with us
-    //         if(in_array($address->state_id,$state->where('status',true)->pluck('id')->toArray())){
-    //              //check if he lives in same city with us
-    //             if(in_array($address->city_id,$city->where('status',true)->pluck('id')->toArray()))
-    //                 $delivery = Setting::where('name','same_city_delivery_charge')->first()->value;
-    //             elseif(in_array($address->city_id,$city->where('deliver_to',true)->pluck('id')->toArray()))
-    //                 $delivery = Setting::where('name','same_state_delivery_charge')->first()->value;
-    //         }
-    //         elseif(in_array($address->state_id,$state->where('deliver_to',true)->pluck('id')->toArray()))
-    //         $delivery = Setting::where('name','same_country_delivery_charge')->first()->value;
-    //     }
-    //     return $delivery * count($this->getDeliveries());
-    // }
-
     
     
     protected function getCoupon($code,$amount){

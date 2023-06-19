@@ -82,7 +82,7 @@
                                                 
                                                 <td class="dashboard__order-history-table-item order-total"> 
                                                     <p class="order-total-price text-nowrap">   
-                                                        {{$adset->units}} units. {{$adset->adverts->count()}} used
+                                                        {{$adset->units}} units. {{$adset->adplan->width ? $adset->adverts->count() : $adset->features->count()}} used
                                                     </p>
                                                 </td>
                                                 <!-- Status -->
@@ -92,7 +92,7 @@
                                                 
                                                 <!-- Details page  -->
                                                 <td class="dashboard__order-history-table-item   order-details "> 
-                                                    <a href="{{route('vendor.adverts',$adset)}}" class="button button--sm button--outline"> Manage Ads </a>
+                                                    <a @if($adset->adplan->width) href="{{route('vendor.adverts',$adset)}}" @else href="{{route('vendor.featureds',$adset)}}" @endif class="button button--sm button--outline"> Manage Ads </a>
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -54,21 +54,21 @@
                                   <div class="form-check">
                                       @if($user->addresses->isNotEmpty() && $rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first())
                                           
-                                          <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
+                                          <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount + $item->delivery_cost}}" data-state="checked" checked>
                                           <label class="form-check-label font-body--400" for="cash">
                                             {!!$user->country->currency->symbol!!}
                                             <span id="deliveryamount{{$item->shop_id}}">
-                                              {{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}
+                                              {{$rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount  + $item->delivery_cost}}
                                             </span> 
                                             <span id="deliverytext{{$item->shop_id}}">for delivery latest by</span> 
                                             <span id="deliverytime{{$item->shop_id}}"> {{now()->addHours($rates->where('shop_id',$item->shop_id)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->hours)->format('l jS \of\ F')}}</span>
                                           </label>
                                       @elseif($user->addresses->isNotEmpty() && $rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first())
-                                          <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}" data-state="checked" checked>
+                                          <input class="form-check-input shopdelivery" type="radio" name="deliveries[{{$item->shop_id}}]" id="shopdelivery{{$item->shop_id}}" value="{{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount  + $item->delivery_cost}}" data-state="checked" checked>
                                           <label class="form-check-label font-body--400" for="cash">
                                             {!!$user->country->currency->symbol!!}
                                             <span id="deliveryamount{{$item->shop_id}}">
-                                              {{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount}}
+                                              {{$rates->where('shop_id',null)->where('destination_id',$user->addresses->firstWhere('main',true)->state_id)->first()->amount  + $item->delivery_cost}}
                                             </span> 
                                             <span id="deliverytext{{$item->shop_id}}"> for delivery latest by </span> 
                                             <span id="deliverytime{{$item->shop_id}}">
