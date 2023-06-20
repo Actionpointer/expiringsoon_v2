@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\ShipmentController;
 
 Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,admin,manager,customercare,auditor'],function(){
     Route::get('dashboard',[UserController::class, 'dashboard'])->name('dashboard');
-    Route::get('payouta/{payout}',[PaymentController::class, 'fetch']);
     Route::group(['middleware'=> 'role:superadmin'],function(){
         Route::group(['prefix'=> 'settings','as'=>'settings.'],function(){
             Route::get('/',[SettingsController::class, 'index'])->name('global');
@@ -56,11 +55,12 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
             Route::post('delete',[UserController::class, 'destroy'])->name('delete');
         });
         Route::group(['prefix'=> 'shipments','as'=>'shipments.'],function(){
-            Route::get('rates',[ShipmentController::class, 'rates'])->name('rates');
-            Route::post('store',[ShipmentController::class, 'store'])->name('store');
-            Route::post('update',[ShipmentController::class, 'update'])->name('update');
-            Route::post('destroy',[ShipmentController::class, 'destroy'])->name('delete');
+            Route::get('rates',[ShipmentController::class,'rates'])->name('rates');
+            Route::post('store',[ShipmentController::class,'store'])->name('store');
+            Route::post('update',[ShipmentController::class,'update'])->name('update');
+            Route::post('destroy',[ShipmentController::class,'destroy'])->name('delete');
         });
+        Route::get('verifications',[SecurityController::class,'verifications'])->name('verifications');       
     });
 
     Route::group(['middleware'=> 'role:superadmin,admin,manager,auditor'],function(){
@@ -70,39 +70,41 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
         Route::post('settlements/export', [PaymentController::class, 'exportSettlements'])->name('settlements.export');
         Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');
         Route::get('payouts/export', [PaymentController::class, 'exportPayouts'])->name('payouts.export');
+        Route::get('revenue',[PaymentController::class, 'revenue'])->name('revenue');
     });
 
     Route::group(['middleware'=> 'role:superadmin,admin,manager,customercare,arbitrator'],function(){
-        
-        Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
-        Route::post('coupons/store',[CouponController::class, 'store'])->name('coupon.store');
-        Route::post('coupons/update',[CouponController::class, 'update'])->name('coupon.update');
-        Route::post('coupons/delete',[CouponController::class, 'destroy'])->name('coupon.delete');
+        Route::group(['middleware'=> 'role:superadmin,admin,manager,customercare'],function(){
+            Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
+            Route::post('coupons/store',[CouponController::class, 'store'])->name('coupon.store');
+            Route::post('coupons/update',[CouponController::class, 'update'])->name('coupon.update');
+            Route::post('coupons/delete',[CouponController::class, 'destroy'])->name('coupon.delete');
 
-        Route::get('vendors',[UserController::class, 'vendors'])->name('vendors');
-        Route::get('customers',[UserController::class, 'customers'])->name('customers');
-        Route::get('user/show/{user}',[UserController::class, 'show'])->name('user.show');
-        Route::post('user',[UserController::class, 'manage'])->name('user.manage');
+            Route::get('vendors',[UserController::class, 'vendors'])->name('vendors');
+            Route::get('customers',[UserController::class, 'customers'])->name('customers');
+            Route::get('user/show/{user}',[UserController::class, 'show'])->name('user.show');
+            Route::post('user',[UserController::class, 'manage'])->name('user.manage');
 
-        Route::get('adsets',[AdvertController::class, 'adsets'])->name('adsets');
-        Route::get('adverts',[AdvertController::class, 'index'])->name('adverts');
-        Route::post('adverts/manage',[AdvertController::class, 'manage'])->name('adverts.manage');
+            Route::get('adsets',[AdvertController::class, 'adsets'])->name('adsets');
+            Route::get('adverts',[AdvertController::class, 'index'])->name('adverts');
+            Route::post('adverts/manage',[AdvertController::class, 'manage'])->name('adverts.manage');
 
-        Route::get('shops', [ShopController::class, 'index'])->name('shops');
-        Route::get('shop/manage/{shop}', [ShopController::class, 'show'])->name('shop.show');
-        Route::post('shop/management', [ShopController::class, 'manage'])->name('shop.manage');
-        Route::post('shop/manage', [ShopController::class, 'kyc'])->name('kyc.manage');
+            Route::get('shops', [ShopController::class, 'index'])->name('shops');
+            Route::get('shop/manage/{shop}', [ShopController::class, 'show'])->name('shop.show');
+            Route::post('shop/management', [ShopController::class, 'manage'])->name('shop.manage');
+            Route::post('shop/manage', [ShopController::class, 'kyc'])->name('kyc.manage');
 
-        Route::get('products',[ProductController::class, 'index'])->name('products');
-        Route::post('products',[ProductController::class, 'manage'])->name('products.manage');
+            Route::get('products',[ProductController::class, 'index'])->name('products');
+            Route::post('products',[ProductController::class, 'manage'])->name('products.manage');
 
-
+        });
         Route::get('orders',[OrderController::class, 'index'])->name('orders');
         Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
         Route::get('order/disputes',[OrderController::class, 'disputes'])->name('order.disputes');
         Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
         Route::post('order/resolution',[OrderController::class, 'resolution'])->name('order.resolution');
         Route::post('order/message/',[OrderController::class, 'message'])->name('order.message');
+      
         
         Route::group(['prefix'=> 'shipments','as'=>'shipments.'],function(){
             Route::get('/',[ShipmentController::class, 'index'])->name('index');

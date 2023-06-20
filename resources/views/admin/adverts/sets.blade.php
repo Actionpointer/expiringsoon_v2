@@ -43,6 +43,85 @@
                   <a href="#" class="font-body--lg-500">{{number_format($adsets->count(), 0)}} Advert Subscriptions</a>
               </div>
               <div class="dashboard__content-card-body px-0">
+                <div class="m-4">
+                  <div class="accordion mb-3" id="faq-accordion">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          Manage
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faq-accordion">
+                        <div class="accordion-body">
+                          <form action="{{route('admin.adsets')}}" method="get">
+                            <div class="row">
+                              @if(auth()->user()->role->name == 'superadmin')                                  
+                                <div class="col-md-3">
+                                  <label>Select Country</label>
+                                    <select name="country_id" id="country_id" class="select2">
+                                        <option></option>
+                                        <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$adsets->total()}}</option>
+                                        @foreach ($countries->sortBy('category') as $country)
+                                          <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->adsets->count()}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                              @endif
+                              
+                              <div class="col-md-4">
+                                  <label>Select Ad Plan</label>
+                                  <select name="type" id="sort-byd" class="select2">
+                                    <option value="all" @if($type == 'all') selected @endif>All</option>
+                                    @foreach ($adplans as $adplan)
+                                    <option value="{{$adplan->id}}" @if($type == $adplan->id) selected @endif>{{$adplan->name}}</option>
+                                    @endforeach
+                                  </select>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Select Status</label>
+                                <select name="status" id="status" class="form-control like_select2" style="height:50px;">
+                                  <option value="all" @if($status == 'all') selected @endif>All</option>
+                                  <option value="active" @if($status == 'active') selected @endif>Active</option>
+                                  <option value="expired" @if($status == 'expired') selected @endif>Expired</option>
+                                  
+                                </select>
+                              </div>
+              
+                              <div class="col-md-4">
+                                  <label for="">Daterange</label>
+                                  <div class="input-group d-flex">
+                                    <div class="prepend">
+                                        <input type="date" min="{{$min_date}}" name="from_date" class="form-control-sm border text-secondary" style="height:50px;" />
+                                    </div>
+                                    <div>
+                                        <input type="date" max="{{$max_date}}" name="to_date" class="form-control-sm border text-secondary" style="height:50px;"  />
+                                    </div>
+                                  </div>
+                              </div>
+
+                              <div class="col-md-4">
+                                <label>Sort</label>
+                                <select name="sortBy" id="sort-byd" class="form-control like_select2" style="height:50px;">
+                                  
+                                  <option value="date_asc" @if($sortBy == 'date_asc') selected @endif>Sort by: Created Date Asc</option>
+                                  <option value="date_desc" @if($sortBy == 'date_desc') selected @endif>Sort by: Created Date Desc</option>    
+                                </select>
+                              </div>
+                              
+                              <div class="row mt-3 justify-content-center">
+                                <div class="col-md-2">
+                                  <button class="button button--md" name="download" value="0">Filter</button>
+                                </div>
+                                
+                              </div>
+                              
+                            </div> 
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <table class="table display" style="width:100%;font-size:13px">
                   <thead>
                     <tr>

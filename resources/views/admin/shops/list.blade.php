@@ -64,7 +64,7 @@
                                     <div class="select-box--item" style="min-width: 200px!important">
                                         <select name="country_id" id="country_id" class="w-100" onchange="document.getElementById('filterform').submit();">
                                             <option></option>
-                                            <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$shops->count()}}</option>
+                                            <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$shops->total()}}</option>
                                                 @foreach ($countries->sortBy('category') as $country)
                                                     <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->shops->count()}}</option>
                                                 @endforeach

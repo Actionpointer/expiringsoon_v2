@@ -38,7 +38,7 @@
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
                     <h2 class="font-body--xl-500">{{$adset->adplan->name}} Adverts</h2>
-                    <span class="font-body--lg-600"> Adset No: {{$adset->features->count()}} .{{$adset->slug}}</span>
+                    <span class="font-body--lg-600"> Adset No: {{$adset->slug}}</span>
                 </div>
                 <div class="products-tab__btn">
                   <div class="container">
@@ -280,7 +280,7 @@
                                 <section class="shoping-cart section section--xl pt-0">
                                   <div class="row shoping-cart__content justify-content-center">              
                                     <div class="col-lg-8">
-                                      <form method="POST" action="{{route('vendor.advert.feature.products')}}">@csrf
+                                      <form method="POST" action="{{route('vendor.featureds.store')}}">@csrf
                                           <input type="hidden" name="adset_id" value="{{$adset->id}}">
                                           <div class="my-3 filter" style="display: block;">
                                               <div class="contact-form-input">
@@ -378,7 +378,7 @@
       $.ajax({
           type:'POST',
           dataType: 'json',
-          url: "{{route('vendor.advert.filter_product')}}",
+          url: "{{route('vendor.feature.filter_product')}}",
           data:{
               '_token' : $('meta[name="csrf-token"]').attr('content'),
               'shops': shops,
@@ -404,7 +404,7 @@
       $.ajax({
           type:'POST',
           dataType: 'json',
-          url: "{{route('vendor.advert.filter_product')}}",
+          url: "{{route('vendor.feature.filter_product')}}",
           data:{
               '_token' : $('meta[name="csrf-token"]').attr('content'),
               'shops': shops,

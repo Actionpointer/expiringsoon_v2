@@ -33,6 +33,12 @@ class CouponPolicy
         //
     }
 
+    public function download(User $user){
+        if($user->isAnyRole(['superadmin','admin','manager'])) {
+            return true;
+        }
+    }
+
     /**
      * Determine whether the user can create models.
      *

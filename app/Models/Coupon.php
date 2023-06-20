@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,5 +36,9 @@ class Coupon extends Model
         }else{
             return $query->where('country_id',session('locale')['country_id']);
         }  
+    }
+
+    public function country(){
+        return $this->belongsTo(Country::class);
     }
 }

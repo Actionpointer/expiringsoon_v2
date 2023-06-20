@@ -66,7 +66,90 @@
                                             <form id="deleteform" action="{{route('admin.coupon.delete')}}" method="POST" onsubmit="return confirm('Are you sure you want to delete coupons?');">@csrf
                                                 
                                             </form>
-                                            <div class="dashboard__content-card-body">
+                                            <div class="m-4">
+                                                <div class="accordion mb-3" id="faq-accordion">
+                                                  <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingOne">
+                                                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                        Manage
+                                                      </button>
+                                                    </h2>
+                                                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faq-accordion">
+                                                      <div class="accordion-body">
+                                                        <form action="{{route('admin.coupons')}}" method="get">
+                                                          <div class="row">
+                                                            @if(auth()->user()->role->name == 'superadmin')                                  
+                                                              <div class="col-md-3">
+                                                                <label>Select Country</label>
+                                                                  <select name="country_id" id="country_id" class="select2">
+                                                                      <option></option>
+                                                                      <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$coupons->total()}}</option>
+                                                                      <option value="global" @if($country_id == 'global') selected @endif>Global - {{$coupons->where('country_id',null)->count()}}</option>
+                                                                      @foreach ($countries->sortBy('category') as $country)
+                                                                        <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->coupons->count()}}</option>
+                                                                      @endforeach
+                                                                  </select>
+                                                              </div>
+                                                            @endif
+                                                            
+                                                            <div class="col-md-3">
+                                                                <label>Select Role</label>
+                                                                <select name="role" id="role" class="form-control like_select2">
+                                                                  <option value="all" @if($role == 'all') selected @endif>All</option>
+                                                                  <option value="vendor" @if($role == 'vendor') selected @endif>Vendor</option>
+                                                                  <option value="shopper" @if($role == 'shopper') selected @endif>Shopper</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                              <label>Select Status</label>
+                                                              <select name="status" id="status" class="form-control like_select2">
+                                                                  <option value="all" @if($status == 'all') selected @endif>All </option>
+                                                                  <option value="true" @if($status) selected @endif>Active </option>
+                                                                  <option value="false" @if(!$status) selected @endif>Inactive </option>
+                                                                  
+                                                              </select>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                              <label>Search Title</label>
+                                                              <input name="name" id="name" value="{{$name}}" class="form-control like_select2">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                              <label for="">Daterange</label>
+                                                              <div class="input-group d-flex">
+                                                                <div class="prepend">
+                                                                    <input type="date" min="{{$min_date}}" name="from_date" class="form-control-sm border text-secondary" style="height:38px;" />
+                                                                </div>
+                                                                <div>
+                                                                    <input type="date" max="{{$max_date}}" name="to_date" class="form-control-sm border text-secondary" style="height:38px;"  />
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                              <label>Sort</label>
+                                                              <select name="sortBy" id="sort-byd" class="form-control like_select2">
+                                                                <option value="date_asc" @if($sortBy == 'date_asc') selected @endif>Sort by: Date Asc</option>
+                                                                <option value="date_desc" @if($sortBy == 'date_desc') selected @endif>Sort by: Date Desc</option>  
+                                                              </select>
+                                                            </div>
+                                                            <div class="row mt-3 justify-content-center">
+                                                              <div class="col-md-2">
+                                                                <button class="button button--md" name="download" value="0">Filter</button>
+                                                              </div>
+                                                              @can('download','App\Models\Coupon')
+                                                              <div class="col-md-2">
+                                                                <button class="button button--md" name="download" value="1">Download</button>
+                                                              </div>
+                                                              @endcan
+                                                            </div>
+                                                            
+                                                          </div> 
+                                                        </form>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="dashboard__content-card-body p-0">
                                                 <div class="table-responsive">
                                                     <table class="table display" style="width:100%;font-size:13px">
                                                         <thead>
@@ -81,7 +164,9 @@
                                                                         <span class="align-bottom">Title</span> 
                                                                     </div>
                                                                 </th>
+                                                                
                                                                 <th scope="col" class="cart-table-title align-middle">Code</th>
+                                                                <th scope="col" class="cart-table-title align-middle">Role</th>
                                                                 <th scope="col" class="cart-table-title align-middle">Discount</th>
                                                                 <th scope="col" class="cart-table-title align-middle">Period</th>
                                                                 <th scope="col" class="cart-table-title align-middle">Status</th>
@@ -103,8 +188,10 @@
                                                                             <span>{{$coupon->name}}</span>
                                                                         </div>
                                                                     </td>
+
                                                                     <td class="cart-table-item stock-status order-date align-middle"> {{$coupon->code}}</td>
-                                                                    <td class="cart-table-item stock-status order-date align-middle"> 
+                                                                    <td class="cart-table-item stock-status order-date align-middle"> {{ucwords($coupon->role)}}</td>
+                                                                    <td class="cart-table-item stock-status order-date align-middle"> @if(!$coupon->country_id) Global @else {{$coupon->country->name}} @endif :
                                                                         @if($coupon->is_percentage) 
                                                                             {{$coupon->value}}%  off 
                                                                         @else 
@@ -204,6 +291,7 @@
                                                                                             <label for="per_customer" class="">Limit Per User</label>
                                                                                             <input class="form-control " id="per_customer" value="{{$coupon->limit_per_user}}" type="number" name="per_customer" placeholder="no of times a user can use it">
                                                                                         </div>
+                                                                                        
                                                                                     </div>    
                                                                                     <div class="row">
                                                                                         @if(auth()->user()->role->name == 'superadmin')
@@ -219,6 +307,13 @@
                                                                                         @else
                                                                                             <input type="hidden" name="country_id" value="{{auth()->user()->country_id}}">
                                                                                         @endif
+                                                                                        <div class="contact-form-input col-md-4">
+                                                                                            <label class="">For Role</label>
+                                                                                            <select class="form-control-lg text-muted border w-100 " required="" name="role">
+                                                                                                <option value="vendor" @if($coupon->role == 'vendor') selected @endif>Vendors</option>
+                                                                                                <option value="shopper" @if($coupon->role == 'shopper' ) selected @endif>Shoppers</option>
+                                                                                            </select>
+                                                                                        </div>
                                                                                         <div class="contact-form-input col-md-4">
                                                                                             <label class="">Status</label>
                                                                                             <select class="form-control-lg text-muted border w-100 " required="" name="status">
@@ -327,6 +422,7 @@
                                                                 <label for="per_customer" class="">Limit Per User</label>
                                                                 <input class="form-control " id="per_customer" type="number" name="per_customer" placeholder="no of times a user can use it">
                                                             </div>
+                                                            
                                                         </div>    
                                                         <div class="row">
                                                             @if(auth()->user()->role->name == 'superadmin')
@@ -342,6 +438,13 @@
                                                             @else
                                                                 <input type="hidden" name="country_id" value="{{auth()->user()->country_id}}">
                                                             @endif
+                                                            <div class="contact-form-input col-md-4">
+                                                                <label class="">For Role</label>
+                                                                <select class="form-control-lg text-muted border w-100 " required="" name="role">
+                                                                    <option value="vendor" selected>Vendors</option>
+                                                                    <option value="shopper" >Shoppers</option>
+                                                                </select>
+                                                            </div>
                                                             <div class="contact-form-input col-md-4">
                                                                 <label class="">Status</label>
                                                                 <select class="form-control-lg text-muted border w-100 " required="" name="type">

@@ -45,7 +45,7 @@
             <section class="shoping-cart section section--xl pt-0">
               <div class="row shoping-cart__content justify-content-center">              
                 <div class="col-lg-8">
-                  <form method="POST" action="{{route('vendor.adset.products.subscription')}}">@csrf
+                  <form method="POST" action="{{route('vendor.feature.products.subscription')}}">@csrf
                       <input type="hidden" name="adplan_id" value="{{$adplan->id}}">
                       
                       

@@ -186,6 +186,15 @@ trait OrderTrait
             return ['description'=> "You have used this coupon before",'value'=> 0];
         }
 
+        if($coupon->role){
+            if(!auth()->check()){
+                return  ['description'=> "You must login to avail coupon",'value'=> 0];
+            }
+            if(auth()->user()->role->name != $coupon->role){
+                return ['description'=> "This coupon is not valid for ".auth()->user()->role->name,'value'=> 0];
+            }    
+        }
+
         if($coupon->is_percentage)
             return ['description'=> 'Discount has been applied to your order','value'=> $coupon->value /100 * $amount];
         else

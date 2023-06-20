@@ -49,10 +49,13 @@ class State extends Model
     }
     public function scopeWithin($query){
         if(auth()->check()){
-            $country = auth()->user()->role->name == 'superadmin' ? true: auth()->user()->country_id;
+            if(auth()->user()->role->name == 'superadmin')
+                return $query->limit('10');
+            else return $query->where('country_id',auth()->user()->country_id);
         }else{
             $country = session('locale')['country_id'];
+            return $query->where('country_id',$country);
         }
-        return $query->where('country_id',$country);
+        
     }
 }

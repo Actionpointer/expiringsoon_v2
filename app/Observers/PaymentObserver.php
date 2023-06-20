@@ -9,26 +9,18 @@ use App\Models\Subscription;
 
 class PaymentObserver
 {
-    /**
-     * Handle the Payment "created" event.
-     *
-     * @param  \App\Models\Payment  $payment
-     * @return void
-     */
+    
     public function created(Payment $payment)
     {
         //
     }
 
-    /**
-     * Handle the Payment "updated" event.
-     *
-     * @param  \App\Models\Payment  $payment
-     * @return void
-     */
     public function updated(Payment $payment)
     {
-        
+        if($payment->isDirty('status') && $payment->status == 'success'){
+            $items = $payment->items->where('paymentable_type','!=','')
+            
+        }
     }
 
     /**

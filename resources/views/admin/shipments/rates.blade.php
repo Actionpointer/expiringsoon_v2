@@ -1,11 +1,9 @@
 @extends('layouts.app')
 
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" /> 
 
-<link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
 @endpush
-@section('title') Admin Settings | Expiring Soon @endsection
+@section('title') Admin Shipping Rates | Expiring Soon @endsection
 @section('main')
 <!-- breedcrumb section start  -->
 <div class="section breedcrumb">
@@ -28,7 +26,7 @@
               <span> > </span>
             </a>
           </li>
-          <li class="active"><a href="#">Settings</a></li>
+          <li class="active"><a href="#">Shipping Rates</a></li>
         </ul>
       </div>
     </div>
@@ -65,32 +63,105 @@
                     <!-- General  -->
                     <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
                         <div class="products-tab__description">
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                <h5 class="font-body--xl-500">Manage Shipping Rates</h5>
+                            <div class="dashboard__order-history">
+                                <div class="dashboard__order-history-title">
+                                    <h5 class="font-body--xl-500">Manage Shipping Rates</h5>
                                 </div>
-                                <div class="dashboard__content-card-body">
+                                <div class="dashboard__order-history-table">
+                                    <div class="m-4">
+                                        <div class="accordion mb-3" id="faq-accordion">
+                                          <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                Manage
+                                              </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faq-accordion">
+                                              <div class="accordion-body">
+                                                <form action="{{route('admin.shipments.rates')}}" method="get">
+                                                  <div class="row location">
+                                                    @if(auth()->user()->role->name == 'superadmin')                                  
+                                                      <div class="col-md-3">
+                                                        <label>Select Country</label>
+                                                          <select name="country_id" id="country_id" class="select2 country">
+                                                              <option></option>
+                                                              <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$rates->total()}}</option>
+                                                              @foreach ($countries->sortBy('name') as $country)
+                                                                <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->rates->count()}}</option>
+                                                              @endforeach
+                                                          </select>
+                                                      </div>
+                                                    @endif
+                                                    <div class="col-md-3">
+                                                        <label>Select Origin</label>
+                                                        <select name="origin_id" id="filter_origin_id" class="select2 states">
+                                                            <option value="0" @if($origin_id == 0) selected @endif>All States - {{$rates->total()}}</option>
+                                                            @foreach ($states->sortBy('name') as $state)
+                                                                <option value="{{$state->id}}" @if($origin_id == $state->id) selected @endif>{{$state->name}} - {{$state->rates->count()}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label>Select Destination</label>
+                                                        <select name="destination_id" id="filter_destination_id" class="select2 states">
+                                                            <option value="0" @if($destination_id == 0) selected @endif>All States - {{$rates->total()}}</option>
+                                                            @foreach ($states->sortBy('name') as $state)
+                                                                <option value="{{$state->id}}" @if($destination_id == $state->id) selected @endif>{{$state->name}} - {{$state->rates->count()}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-3">
+                                                        <label>Shipper</label>
+                                                            <input type="text" name="name" class="form-control like_select2" value="{{$name}}" placeholder="Search Shipper" style="height:50px">
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                      <label>Sort</label>
+                                                      <select name="sortBy" id="sort-byd" class="form-control like_select2" style="height:50px;">
+                                                        
+                                                        <option value="amount_asc" @if($sortBy == 'amount_asc') selected @endif>Sort by: Amount Asc</option>
+                                                        <option value="amount_desc" @if($sortBy == 'amount_desc') selected @endif>Sort by: Amount Date Desc</option>    
+                                                      </select>
+                                                    </div>
+                                                    
+                                                    <div class="row mt-3 justify-content-center">
+                                                      <div class="col-md-2">
+                                                        <button class="button button--md" name="download" value="0">Filter</button>
+                                                      </div>
+                                                      
+                                                    </div>
+                                                    
+                                                  </div> 
+                                                </form>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
                                     <div class="table-responsive">
                                         <table class="table display" style="width:100%;font-size:13px">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col" class="">Country</th>
-                                                    <th scope="col" class="">Origin</th>
-                                                    <th scope="col" class="">Destination</th>
-                                                    <th scope="col" class="">Hours</th>
-                                                    <th scope="col" class="">Amount</th>
-                                                    <th scope="col" class="">Action</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title">Country</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title">Origin</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title">Destination</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title">Shipper</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title">Hours</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title">Amount</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title text-end">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($rates as $rate)
                                                     <tr>
-                                                        <td>{{$rate->country->name}}</td>
-                                                        <td>{{$rate->origin->name}}</td>
-                                                        <td>{{$rate->destination->name}}</td>
-                                                        <td>{{$rate->hours}}</td>
-                                                        <td>{!! $rate->country->currency->symbol !!}{{$rate->amount}}</td>
-                                                        <td> 
+                                                        <td class="dashboard__order-history-table-item">{{$rate->country->name}}</td>
+                                                        <td class="dashboard__order-history-table-item">{{$rate->origin->name}}</td>
+                                                        <td class="dashboard__order-history-table-item">{{$rate->destination->name}}</td>
+                                                        <td class="dashboard__order-history-table-item">{{$rate->company_name}}</td>
+                                                        <td class="dashboard__order-history-table-item">{{$rate->hours}}</td>
+                                                        <td class="dashboard__order-history-table-item">{!! $rate->country->currency->symbol !!}{{$rate->amount}}</td>
+                                                        <td class="dashboard__order-history-table-item"> 
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit </a> | 
                                                             <form class="d-inline" action="{{route('admin.shipments.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
                                                                 <input type="hidden" name="rate_id" value="{{$rate->id}}">
@@ -108,20 +179,37 @@
                                                                     <form action="{{route('admin.shipments.update')}}" method="post" id="rateedit{{$rate->id}}">
                                                                         @csrf 
                                                                         <input type="hidden" name="rate_id" value="{{$rate->id}}">
+                                                                        
                                                                         <div class="contact-form__content my-3 location">
-                                                                            <div class="contact-form-input">
-                                                                                <label for="countrisdes">Country </label>
-                                                                                <select id="countrisdes{{$rate->id}}" name="country_id" class="select2 country" >
-                                                                                    @foreach ($countries as $country)
-                                                                                        <option value="{{$country->id}}" @if($rate->country_id == $country->id) selected @endif>{{$country->name}}</option>
-                                                                                    @endforeach
-                                                                                </select>
+                                                                            <div class="contact-form__content-group">
+                                                                                <div class="contact-form-input">
+                                                                                    <label for="countrisdes">Country </label>
+                                                                                    <select id="countrisdes{{$rate->id}}" name="country_id" class="select2 country" >
+                                                                                        @foreach ($countries as $country)
+                                                                                            <option value="{{$country->id}}" @if($rate->country_id == $country->id) selected @endif>{{$country->name}}</option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="contact-form-input">
+                                                                                    <label for="shipper">Shipper Name</label>
+                                                                                    <input type="text" name="company_name" value="{{$rate->company_name}}" placeholder="Logistic Company Name" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="contact-form__content-group">
+                                                                                <div class="contact-form-input">
+                                                                                    <label for="shipper">Shipper Email</label>
+                                                                                    <input type="text" name="company_email" value="{{$rate->company_email}}" placeholder="Logistic Company Email" />
+                                                                                </div>
+                                                                                <div class="contact-form-input">
+                                                                                    <label for="shipper">Shipper Phone</label>
+                                                                                    <input type="text" name="company_phone" value="{{$rate->company_phone}}" placeholder="Logistic Company Phone" />
+                                                                                </div>
                                                                             </div>
                                                                             <div class="contact-form__content-group">
                                                                                 <div class="contact-form-input">
                                                                                     <label for="origin">Origin </label>
                                                                                     <select id="countryz{{$rate->id}}" name="origin_id" class="select2 states" >
-                                                                                        @foreach ($states as $state)
+                                                                                        @foreach ($rate->country->states as $state)
                                                                                             <option value="{{$state->id}}" @if($rate->origin_id == $state->id) selected @endif>{{$state->name}}</option>
                                                                                         @endforeach
                                                                                     </select>
@@ -129,7 +217,7 @@
                                                                                 <div class="contact-form-input">
                                                                                     <label for="destination">Destination </label>
                                                                                     <select id="destination_edit{{$rate->id}}" name="destination_id" class="select2 states" >
-                                                                                        @foreach ($states as $state)
+                                                                                        @foreach ($rate->country->states as $state)
                                                                                             <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
                                                                                         @endforeach
                                                                                     </select>
@@ -167,7 +255,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                
+                                    @include('layouts.pagination',['data'=> $rates])
                                 </div>
                             </div>    
                         </div>
@@ -198,17 +286,17 @@
                                                 @endif
                                                 <div class="contact-form-input">
                                                     <label for="shipper">Shipper Name</label>
-                                                    <input type="text" name="shipper_name" placeholder="Logistic Company Name" />
+                                                    <input type="text" name="company_name" placeholder="Logistic Company Name" />
                                                 </div>
                                             </div>
                                             <div class="contact-form__content-group">
                                                 <div class="contact-form-input">
                                                     <label for="shipper">Shipper Email</label>
-                                                    <input type="text" name="shipper_email" placeholder="Logistic Company Email" />
+                                                    <input type="text" name="company_email" placeholder="Logistic Company Email" />
                                                 </div>
                                                 <div class="contact-form-input">
                                                     <label for="shipper">Shipper Phone</label>
-                                                    <input type="text" name="shipper_phonw" placeholder="Logistic Company Phone" />
+                                                    <input type="text" name="company_phone" placeholder="Logistic Company Phone" />
                                                 </div>
                                             </div>
                                             <div class="contact-form__content-group">
@@ -267,26 +355,8 @@
   
 @endsection
 @push('scripts')
-<script src="{{asset('src/plugins/datatable/assets/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('src/plugins/datatable/assets/buttons/demo.js')}}"></script>
+
 <script>
-    var modal_select = false;
-    // var submittedform;
-    $(document).ready(function() {
-        $('.datatable').DataTable({
-            "pagingType": "full_numbers",
-            dom: 'lBfrtip',
-            "lengthMenu": [
-            [10, 25, 50, -1],
-            [10, 25, 50, "All"]
-            ],
-            responsive: true,
-            language: {
-            search: "_INPUT_",
-            searchPlaceholder: "Search",
-            }
-        });
-    });
     
     $(document).on('change','.country',function(){
         var clicked = $(this);

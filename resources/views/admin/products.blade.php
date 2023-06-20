@@ -101,11 +101,13 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                   <label>Sort</label>
                                   <select name="sortBy" id="sort-byd" class="form-control like_select2">
-                                    <option value="date_asc" @if($sortBy == 'date_asc') selected @endif>Sort by: Date Asc</option>
-                                    <option value="date_desc" @if($sortBy == 'date_desc') selected @endif>Sort by: Date Desc</option>  
+                                    <option value="name_asc" @if($sortBy == 'name_asc') selected @endif>Sort by: Name Asc</option>
+                                    <option value="name_desc" @if($sortBy == 'name_desc') selected @endif>Sort by: Name Desc</option>
+                                    <option value="date_asc" @if($sortBy == 'date_asc') selected @endif>Sort by: Expiry Asc</option>
+                                    <option value="date_desc" @if($sortBy == 'date_desc') selected @endif>Sort by: Expiry Desc</option>    
                                   </select>
                                 </div>
                                 

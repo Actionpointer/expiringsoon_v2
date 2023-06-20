@@ -48,6 +48,15 @@ class PaymentController extends Controller
                 $query->where('paymentable_type',$item);
             });
         }
+        if(request()->query() && request()->query('from_date')){
+            $from_date = request()->query('from_date');
+            $payments = $payments->where('created_at','>=',$from_date);
+        }
+        if(request()->query() && request()->query('to_date')){
+            $to_date = request()->query('to_date');
+            $payments = $payments->where('created_at','<=',$to_date);
+        }
+
         if(request()->query() && request()->query('sortBy')){
             $sortBy = request()->query('sortBy');
             if(request()->query('sortBy') == 'date_asc'){
@@ -95,6 +104,15 @@ class PaymentController extends Controller
             $description = request()->query('description');
             $settlements = $settlements->where('description',$description);
         }
+        if(request()->query() && request()->query('from_date')){
+            $from_date = request()->query('from_date');
+            $settlements = $settlements->where('created_at','>=',$from_date);
+        }
+        if(request()->query() && request()->query('to_date')){
+            $to_date = request()->query('to_date');
+            $settlements = $settlements->where('created_at','<=',$to_date);
+        }
+
         if(request()->query() && request()->query('sortBy')){
             $sortBy = request()->query('sortBy');
             if(request()->query('sortBy') == 'date_asc'){
@@ -151,6 +169,14 @@ class PaymentController extends Controller
         }else{
             $country_id = 0;
         }
+        if(request()->query() && request()->query('from_date')){
+            $from_date = request()->query('from_date');
+            $payouts = $payouts->where('created_at','>=',$from_date);
+        }
+        if(request()->query() && request()->query('to_date')){
+            $to_date = request()->query('to_date');
+            $payouts = $payouts->where('created_at','<=',$to_date);
+        }
 
         if(request()->query() && request()->query('receiver')){
             $receiver = request()->query('receiver');
@@ -205,13 +231,8 @@ class PaymentController extends Controller
         }   
     }
 
-    public function fetch(Payout $payout){
-        
-        $response = Curl::to("https://api.flutterwave.com/v3/transfers/$payout->transfer_id")
-            ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
-            ->asJson()
-            ->get(); 
-        dd($response);
+    public function revenue(){
+       return view('admin.');
     }
       
 }

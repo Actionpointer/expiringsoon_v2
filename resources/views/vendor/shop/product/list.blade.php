@@ -53,7 +53,7 @@
                     <a href="{{route('vendor.shop.product.create',$shop)}}" class="font-body--lg-500"> Add Product</a>
                 </div>
                 <div style="display:none">
-                    <form id="featureform" action="{{route('vendor.adset.products')}}" method="POST">@csrf
+                    <form id="featureform" action="{{route('vendor.feature.products')}}" method="POST">@csrf
                       <input type="hidden" name="shop_id" value="{{$shop->id}}" >
                     </form>
                     <form id="deleteform" action="{{route('vendor.shop.products.destroy',$shop)}}" method="POST">@csrf
@@ -184,7 +184,7 @@
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                       <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="dropdown-item">Edit</a>
                                                       @if(auth()->id() == $shop->user_id)
-                                                        <form class="d-inline" action="{{route('vendor.adset.products')}}"  method="POST">@csrf
+                                                        <form class="d-inline" action="{{route('vendor.feature.products')}}"  method="POST">@csrf
                                                           <input type="hidden" name="shop_id" value="{{$shop->id}}">
                                                           <input type="hidden" name="products[]" value="{{$product->id}}">
                                                           <button type="submit" class="dropdown-item">Feature</button>

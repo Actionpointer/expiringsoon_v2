@@ -55,6 +55,15 @@ class ProductController extends Controller
             if($status == 'inaccessible')
             $products = $products->whereHas('shop',function ($q) { $q->where('status',false)->orWhere('approved',false)->orWhere('published',false); } );
         }
+
+        if(request()->query() && request()->query('from_date')){
+            $from_date = request()->query('from_date');
+            $products = $products->where('created_at','>=',$from_date);
+        }
+        if(request()->query() && request()->query('to_date')){
+            $to_date = request()->query('to_date');
+            $products = $products->where('created_at','<=',$to_date);
+        }
         
         if(request()->query() && request()->query('sortBy')){
             $sortBy = request()->query('sortBy');
@@ -64,8 +73,16 @@ class ProductController extends Controller
             if(request()->query('sortBy') == 'name_desc'){
                 $products = $products->orderBy('name','desc');
             }
+            if(request()->query('sortBy') == 'date_asc'){
+                $products = $products->orderBy('expire_at','asc');
+            }
+            if(request()->query('sortBy') == 'date_desc'){
+                $products = $products->orderBy('expire_at','desc');
+            }
+
             
         }
+        
         $countries = Country::all();
         $products = $products->paginate(16);
         $min_date = $products->total() ? $products->min('created_at')->format('Y-m-d') : null;

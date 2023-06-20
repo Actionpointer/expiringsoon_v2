@@ -71,6 +71,15 @@ class AdvertController extends Controller
             $item = 'App\Models\\'.$type;
             $adverts = $adverts->where('advertable_type',$item);
         }
+        if(request()->query() && request()->query('from_date')){
+            $from_date = request()->query('from_date');
+            $adverts = $adverts->where('created_at','>=',$from_date);
+        }
+        if(request()->query() && request()->query('to_date')){
+            $to_date = request()->query('to_date');
+            $adverts = $adverts->where('created_at','<=',$to_date);
+        }
+
 
         if(request()->query() && request()->query('sortBy')){
             $sortBy = request()->query('sortBy');
@@ -112,8 +121,62 @@ class AdvertController extends Controller
     }
 
     public function adsets(){
-        $adsets = Adset::within()->paginate(10);
-        return view('admin.adverts.sets',compact('adsets'));
+        $type = 'all';
+        $country_id = null;
+        $sortBy = null;
+        $status = 'all';
+        $adsets = Adset::within()->where('status',true);
+        if(request()->query() && request()->query('status') && request()->query('status') != 'all'){
+            $status = request()->query('status');
+            if($status == 'active'){
+                $adsets = $adsets->where('start_at','<',now())->where('end_at','>',now());
+            }
+            if($status == 'expired'){
+                $adsets = $adsets->where('start_at','<',now())->where('end_at','<',now());
+            }
+        }
+
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $adsets = $adsets->whereHas('user',function($quement) use($country_id){
+                $quement->where('country_id',$country_id);
+            });
+        }else{
+            $country_id = 0;
+        }
+
+        if(request()->query() && request()->query('type') && request()->query('type') != 'all'){
+            $type = request()->query('type');
+            $adsets = $adsets->where('adplan_id',$type);
+        }
+
+        if(request()->query() && request()->query('from_date')){
+            $from_date = request()->query('from_date');
+            $adsets = $adsets->where('start_at','>=',$from_date);
+        }
+        if(request()->query() && request()->query('to_date')){
+            $to_date = request()->query('to_date');
+            $adsets = $adsets->where('end_at','<=',$to_date);
+        }
+
+
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'date_asc'){
+                $adsets = $adsets->orderBy('created_at','asc');
+            }
+            if(request()->query('sortBy') == 'date_desc'){
+                $adsets = $adsets->orderBy('created_at','desc');
+            }
+        }
+
+        $countries = Country::all();
+        $adplans = Adplan::all();
+        $adsets = $adsets->paginate(16);
+        $min_date = $adsets->total() ? $adsets->min('created_at')->format('Y-m-d') : null;
+        $max_date = $adsets->total() ? $adsets->max('created_at')->format('Y-m-d') : null;
+        
+        return view('admin.adverts.sets',compact('adsets','adplans','min_date','max_date','countries','country_id','status','type','sortBy'));
     }
 
 
