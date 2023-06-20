@@ -127,10 +127,11 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('plans',[AdsetController::class,'plans']);
         Route::post('subscribe',[AdsetController::class,'store']);
         Route::post('cancel_renewal',[AdsetController::class,'cancel_renewal']);
-
+        
         Route::post('ads/filter',[FeatureController::class,'filter_products']);
         Route::post('ads/store',[FeatureController::class,'store']);
         Route::post('ads/delete',[FeatureController::class,'remove']);
+
     });
 
     Route::post('payment/status',[App\Http\Controllers\PaymentController::class,'paymentcallback']);
