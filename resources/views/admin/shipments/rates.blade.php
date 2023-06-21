@@ -148,6 +148,7 @@
                                                     <th scope="col" class="dashboard__order-history-table-title">Destination</th>
                                                     <th scope="col" class="dashboard__order-history-table-title">Shipper</th>
                                                     <th scope="col" class="dashboard__order-history-table-title">Hours</th>
+                                                    <th scope="col" class="dashboard__order-history-table-title">Actual</th>
                                                     <th scope="col" class="dashboard__order-history-table-title">Amount</th>
                                                     <th scope="col" class="dashboard__order-history-table-title text-end">Action</th>
                                                 </tr>
@@ -160,93 +161,100 @@
                                                         <td class="dashboard__order-history-table-item">{{$rate->destination->name}}</td>
                                                         <td class="dashboard__order-history-table-item">{{$rate->company_name}}</td>
                                                         <td class="dashboard__order-history-table-item">{{$rate->hours}}</td>
+                                                        <td class="dashboard__order-history-table-item">{!! $rate->country->currency->symbol !!}{{$rate->actual}}</td>
                                                         <td class="dashboard__order-history-table-item">{!! $rate->country->currency->symbol !!}{{$rate->amount}}</td>
                                                         <td class="dashboard__order-history-table-item"> 
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}">Edit </a> | 
-                                                            <form class="d-inline" action="{{route('admin.shipments.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
-                                                                <input type="hidden" name="rate_id" value="{{$rate->id}}">
-                                                                <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
-                                                            </form>
+                                                            <div class="d-flex">
+                                                                <a href="#" title="Edit" data-bs-toggle="modal" data-bs-target="#rateedit{{$rate->id}}" class="btn btn-sm border mx-1"><i class="fa fa-pencil"></i> </a>
+                                                                <form class="d-inline" action="{{route('admin.shipments.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                                    <input type="hidden" name="rate_id" value="{{$rate->id}}">
+                                                                    <button type="submit" name="delete" value="1" title="Delete" class="btn btn-sm border text-danger mx-1"><i class="fa fa-trash"></i></button>
+                                                                </form>
+                                                            </div>
+                                                            
                                                         </td>
                                                         <div class="modal fade" id="rateedit{{$rate->id}}" tabindex="-1" aria-labelledby="rateedit{{$rate->id}}ModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                <h5 class="modal-title" id="rateedit{{$rate->id}}ModalLabel">Edit Shipping Rate</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form action="{{route('admin.shipments.update')}}" method="post" id="rateedit{{$rate->id}}">
-                                                                        @csrf 
-                                                                        <input type="hidden" name="rate_id" value="{{$rate->id}}">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                    <h5 class="modal-title" id="rateedit{{$rate->id}}ModalLabel">Edit Shipping Rate</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form action="{{route('admin.shipments.update')}}" method="post" id="rateedit{{$rate->id}}">
+                                                                            @csrf 
+                                                                            <input type="hidden" name="rate_id" value="{{$rate->id}}">
+                                                                            
+                                                                            <div class="contact-form__content my-3 location">
+                                                                                <div class="contact-form__content-group">
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="countrisdes">Country </label>
+                                                                                        <select id="countrisdes{{$rate->id}}" name="country_id" class="select2 country" >
+                                                                                            @foreach ($countries as $country)
+                                                                                                <option value="{{$country->id}}" @if($rate->country_id == $country->id) selected @endif>{{$country->name}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="shipper">Shipper Name</label>
+                                                                                        <input type="text" name="company_name" value="{{$rate->company_name}}" placeholder="Logistic Company Name" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="contact-form__content-group">
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="shipper">Shipper Email</label>
+                                                                                        <input type="text" name="company_email" value="{{$rate->company_email}}" placeholder="Logistic Company Email" />
+                                                                                    </div>
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="shipper">Shipper Phone</label>
+                                                                                        <input type="text" name="company_phone" value="{{$rate->company_phone}}" placeholder="Logistic Company Phone" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="contact-form__content-group">
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="origin">Origin </label>
+                                                                                        <select id="countryz{{$rate->id}}" name="origin_id" class="select2 states" >
+                                                                                            @foreach ($rate->country->states as $state)
+                                                                                                <option value="{{$state->id}}" @if($rate->origin_id == $state->id) selected @endif>{{$state->name}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="destination">Destination </label>
+                                                                                        <select id="destination_edit{{$rate->id}}" name="destination_id" class="select2 states" >
+                                                                                            @foreach ($rate->country->states as $state)
+                                                                                                <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
                                                                         
-                                                                        <div class="contact-form__content my-3 location">
-                                                                            <div class="contact-form__content-group">
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="countrisdes">Country </label>
-                                                                                    <select id="countrisdes{{$rate->id}}" name="country_id" class="select2 country" >
-                                                                                        @foreach ($countries as $country)
-                                                                                            <option value="{{$country->id}}" @if($rate->country_id == $country->id) selected @endif>{{$country->name}}</option>
-                                                                                        @endforeach
-                                                                                    </select>
+                                                                                <div class="contact-form__content-group">
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="hours">Hours</label>
+                                                                                        <input type="number" name="hours" value="{{$rate->hours}}" placeholder="hours" />
+                                                                                    </div>
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="amounts">Actual (Cost)</label>
+                                                                                        <input type="number" name="actual" value="{{$rate->actual}}" placeholder="Delivery cost " />
+                                                                                    </div>
+                                                                                    <div class="contact-form-input">
+                                                                                        <label for="amounts">Amount (Price)</label>
+                                                                                        <input type="number" name="amount" value="{{$rate->amount}}" placeholder="Delivery price" />
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="shipper">Shipper Name</label>
-                                                                                    <input type="text" name="company_name" value="{{$rate->company_name}}" placeholder="Logistic Company Name" />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="contact-form__content-group">
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="shipper">Shipper Email</label>
-                                                                                    <input type="text" name="company_email" value="{{$rate->company_email}}" placeholder="Logistic Company Email" />
-                                                                                </div>
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="shipper">Shipper Phone</label>
-                                                                                    <input type="text" name="company_phone" value="{{$rate->company_phone}}" placeholder="Logistic Company Phone" />
+                                                                        
+                                                                                <div class="contact-form-btn">
+                                                                                    <button class="button button--md" type="submit">
+                                                                                        Update Shipping Rate
+                                                                                    </button>
+                                                                                    <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="contact-form__content-group">
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="origin">Origin </label>
-                                                                                    <select id="countryz{{$rate->id}}" name="origin_id" class="select2 states" >
-                                                                                        @foreach ($rate->country->states as $state)
-                                                                                            <option value="{{$state->id}}" @if($rate->origin_id == $state->id) selected @endif>{{$state->name}}</option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="destination">Destination </label>
-                                                                                    <select id="destination_edit{{$rate->id}}" name="destination_id" class="select2 states" >
-                                                                                        @foreach ($rate->country->states as $state)
-                                                                                            <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
+                                                                        </form>
+                                                                    </div>
                                                                     
-                                                                            <div class="contact-form__content-group">
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="hours">Hours</label>
-                                                                                    <input type="number" name="hours" value="{{$rate->hours}}" placeholder="hours" />
-                                                                                </div>
-                                                                    
-                                                                                <div class="contact-form-input">
-                                                                                    <label for="amounts">Amount</label>
-                                                                                    <input type="number" name="amount" value="{{$rate->amount}}" placeholder="Delivery cost" />
-                                                                                </div>
-                                                                            </div>
-                                                                    
-                                                                            <div class="contact-form-btn">
-                                                                                <button class="button button--md" type="submit">
-                                                                                    Update Shipping Rate
-                                                                                </button>
-                                                                                <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </form>
                                                                 </div>
-                                                                
-                                                            </div>
                                                             </div>
                                                         </div>
                                                     </tr>
@@ -323,10 +331,13 @@
                                                     <label for="hours">Hours</label>
                                                     <input type="number" name="hours" max="{{cache('settings')['order_processing_to_delivery_period']}}" placeholder="hours" />
                                                 </div>
-        
                                                 <div class="contact-form-input">
-                                                    <label for="amounts">Amount</label>
-                                                    <input type="number" name="amount" placeholder="Delivery cost" />
+                                                    <label for="actual">Actual (Cost)</label>
+                                                    <input type="number" name="actual" placeholder="Delivery cost " />
+                                                </div>
+                                                <div class="contact-form-input">
+                                                    <label for="amounts">Amount (Price)</label>
+                                                    <input type="number" name="amount" placeholder="Delivery price" />
                                                 </div>
                                             </div>
         

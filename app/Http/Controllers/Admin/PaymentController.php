@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Payout;
 use App\Models\Country;
 use App\Models\Payment;
+use App\Models\Revenue;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
 use App\Exports\PayoutsExport;
 use App\Exports\PaymentsExport;
+use App\Exports\RevenuesExport;
 use App\Exports\SettlementsExport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -94,8 +96,8 @@ class PaymentController extends Controller
         }
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');
-            $settlements = $settlements->whereHas('receiver',function($quement) use($country_id){
-                $quement->where('country_id',$country_id);
+            $settlements = $settlements->whereHas('receiver',function($query) use($country_id){
+                $query->where('country_id',$country_id);
             });
         }else{
             $country_id = 0;
@@ -163,8 +165,8 @@ class PaymentController extends Controller
         }
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');
-            $payouts = $payouts->whereHas('receiver',function($quement) use($country_id){
-                $quement->where('country_id',$country_id);
+            $payouts = $payouts->whereHas('receiver',function($query) use($country_id){
+                $query->where('country_id',$country_id);
             });
         }else{
             $country_id = 0;
@@ -232,7 +234,50 @@ class PaymentController extends Controller
     }
 
     public function revenue(){
-       return view('admin.');
+        $country_id = null;
+        $type = 'all';
+        $sortBy = null;
+        $revenues = Revenue::within();
+        
+        
+        if(request()->query() && request()->query('type') && request()->query('type') != 'all'){
+            $type = request()->query('type');
+            $revenues = $revenues->where('type',$type);
+        }
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $revenues = $revenues->where('country_id',$country_id);
+        }else{
+            $country_id = 0;
+        }
+        if(request()->query() && request()->query('from_date')){
+            $from_date = request()->query('from_date');
+            $revenues = $revenues->where('created_at','>=',$from_date);
+        }
+        if(request()->query() && request()->query('to_date')){
+            $to_date = request()->query('to_date');
+            $revenues = $revenues->where('created_at','<=',$to_date);
+        }
+
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'date_asc'){
+                $revenues = $revenues->orderBy('created_at','asc');
+            }
+            if(request()->query('sortBy') == 'date_desc'){
+                $revenues = $revenues->orderBy('created_at','desc');
+            }
+            
+        }
+        $countries = Country::all();
+        if(request()->query() && request()->query('download')){
+            return Excel::download(new RevenuesExport($revenues->get()), 'revenues.xlsx');
+        }
+        $revenues = $revenues->paginate(16);
+        
+        $min_date = $revenues->total() ? $revenues->min('created_at')->format('Y-m-d') : null;
+        $max_date = $revenues->total() ? $revenues->max('created_at')->format('Y-m-d') : null;
+        return view('admin.payments.revenue',compact('revenues','min_date','max_date','countries','country_id','type','sortBy'));
     }
       
 }

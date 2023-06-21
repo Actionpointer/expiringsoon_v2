@@ -219,7 +219,7 @@
                                           <p style="color:#d92e2e;font-size:14px"><span id="status">Failed</span></p>
                                         @break
                                         @case('paid')
-                                          <p style="color:#00b207;font-size:14px;font-weight:500">Paid at {{$payout->paid_at->format('d-m-y h:i')}}</p>
+                                          <p style="color:#00b207;font-size:14px;font-weight:500">Payout Paid at {{$payout->paid_at->format('d-m-y h:i')}}</p>
                                         @break
 
                                         @default

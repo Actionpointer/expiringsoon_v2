@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Revenue;
 use App\Models\Settlement;
 
 class SettlementObserver
@@ -14,37 +15,28 @@ class SettlementObserver
      */
     public function created(Settlement $settlement)
     {
-        //send an email to vendor ? should you?
+
+        if($settlement->status){
+            Revenue::create(['country_id'=> $settlement->receiver->country_id,'currency_id'=> $settlement->receiver->country->currency_id,
+            'amount'=> $settlement->charges,'description'=> $settlement->description]);
+        }
     }
 
     public function updated(Settlement $settlement)
     {
-        //if paid, send an email to vendor
+
         if($settlement->isDirty('status') && $settlement->status){
-            /*
-                send email to customer
-           */
-            
+            Revenue::create(['country_id'=> $settlement->receiver->country_id,'currency_id'=> $settlement->receiver->country->currency_id,
+            'amount'=> $settlement->charges,'description'=> $settlement->description]);
         }
     }
 
-    /**
-     * Handle the Settlement "deleted" event.
-     *
-     * @param  \App\Models\Settlement  $settlement
-     * @return void
-     */
     public function deleted(Settlement $settlement)
     {
         //
     }
 
-    /**
-     * Handle the Settlement "restored" event.
-     *
-     * @param  \App\Models\Settlement  $settlement
-     * @return void
-     */
+    
     public function restored(Settlement $settlement)
     {
         //

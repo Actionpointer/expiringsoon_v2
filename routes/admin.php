@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShipmentController;
 
-Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,admin,manager,customercare,auditor'],function(){
+Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,admin,manager,customercare,auditor,arbitrator'],function(){
     Route::get('dashboard',[UserController::class, 'dashboard'])->name('dashboard');
     Route::group(['middleware'=> 'role:superadmin'],function(){
         Route::group(['prefix'=> 'settings','as'=>'settings.'],function(){

@@ -146,7 +146,7 @@
 																	@break
 																	@case('paid') 
 																	<span style="font-size:16px;font-weight:600"> Payout {{$payout->status}}	</span><br/>
-																	<br/> Payout of {!!$payout->currency->symbol!!} {{$payout->amount}} has been paid. 
+																	<br/> Payout of {!!$payout->currency->symbol!!} {{$payout->amount}} has been paid at {{$payout->paid_at->format('h:i A - jS F Y')}}
 																	@break
 																	@default
 																	<span style="font-size:16px;font-weight:600">Payout Rejected</span> <br/>

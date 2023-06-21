@@ -40,6 +40,6 @@ measure order status defaults and penalize vendor
 
 check advert image quality as validation
 
-
+deleting a product should not delete the orders
 
 

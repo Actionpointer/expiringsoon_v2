@@ -73,6 +73,7 @@ class ShipmentController extends Controller
         $rate->company_phone = $request->company_phone;
         $rate->hours = $request->hours;
         $rate->amount = $request->amount;
+        $rate->actual = $request->actual;
         $rate->save();
         return redirect()->back()->with(['result'=>1,'message'=> 'Shipping Rate Saved']);
     }
@@ -88,6 +89,7 @@ class ShipmentController extends Controller
         $rate->company_phone = $request->company_phone;
         $rate->hours = $request->hours;
         $rate->amount = $request->amount;
+        $rate->actual = $request->actual;
         $rate->save();
         return redirect()->back()->with(['result'=>1,'message'=> 'Shipping Rate Updated']);
     }

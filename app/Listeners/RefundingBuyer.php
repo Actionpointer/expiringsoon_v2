@@ -29,8 +29,9 @@ class RefundingBuyer
      */
     public function handle(RefundBuyer $event)
     {
+         // $event->order->subtotal  should this amount be less the transfer fees?
         $settlement = Settlement::create(['description'=> 'Refund','order_id'=> $event->order->id, 
-            'receiver_id' => $event->order->user_id, 'receiver_type' => 'App\Models\User', 'amount' => $event->amount]);
+            'receiver_id' => $event->order->user_id, 'receiver_type' => 'App\Models\User', 'amount' => $event->amount,'charges'=>0]);
         $settlement->status = $this->initializeRefund($settlement);
         $settlement->save(); 
         

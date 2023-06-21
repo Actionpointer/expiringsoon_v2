@@ -18,10 +18,12 @@ use App\Http\Controllers\Shopper\AddressController;
 use App\Notifications\WelcomeNotification;
 
 Route::get('broadcast', function () {
-    $user = \App\Models\User::find(1);
+    // $user = \App\Models\User::find(1);
+    // $product = \App\Models\Product::find(1);
+    // return (new App\Notifications\FollowersFeaturedProductNotification($product))
+    //                 ->toMail($user);
     $product = \App\Models\Product::find(1);
-    return (new App\Notifications\FollowersFeaturedProductNotification($product))
-                    ->toMail($user);
+    $product->delete();
     // \App\Models\OrderMessage::create(['order_id'=> 209,'sender_id'=> 31,'sender_type'=> 'App\Models\Shop','receiver_id'=> 57 ,'receiver_type'=> 'App\Models\User', 'body'=> 'User has used the item']);
     // $user = \App\Models\User::within()->whereHas('role',function($query){$query->where('name','arbitrator');})->withCount('disputeCases')->orderBy('dispute_cases_count','asc')->get();
     // dd($user);

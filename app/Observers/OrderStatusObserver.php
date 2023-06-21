@@ -64,13 +64,13 @@ class OrderStatusObserver
         $this->adjustCart($orderStatus->order);
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
-        
     }
 
     public function cancelled(OrderStatus $orderStatus){
         $this->increaseProducts($orderStatus->order);
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
+        Settlement::where('order_id',$orderStatus->order_id)->delete();
         event(new RefundBuyer($orderStatus->order,$orderStatus->order->total));
     }
 
@@ -108,8 +108,6 @@ class OrderStatusObserver
 
     public function rejected(OrderStatus $orderStatus)
     {
-        //delete one settlement where description is vendor commission
-        Settlement::where('order_id',$orderStatus->order_id)->where('description','Commission')->delete();
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }
@@ -125,6 +123,8 @@ class OrderStatusObserver
 
     public function refunded(OrderStatus $orderStatus)
     {
+        //delete one settlement where description is vendor commission
+        Settlement::where('order_id',$orderStatus->order_id)->where('description','Caommission')->delete();
         event(new RefundBuyer($orderStatus->order,$orderStatus->order->subtotal));
         event(new SettleVendor($orderStatus->order));
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
@@ -135,6 +135,7 @@ class OrderStatusObserver
         $arbitrator_id = $this->getArbitrator();
         $orderStatus->order->arbitrator_id = $arbitrator_id;
         $orderStatus->order->save();
+
         if($orderStatus->order->user_id == $orderStatus->user_id){
             $sender_id = $orderStatus->user_id; 
             $sender_type = 'App\Models\User';
@@ -155,14 +156,13 @@ class OrderStatusObserver
     public function closed(OrderStatus $orderStatus)
     {
         $dispute = $orderStatus->order->dispute;
-        if($dispute->seller > 0){
-            Settlement::create(['description'=> 'Commission','order_id'=> $orderStatus->order_id, 
-            'receiver_id' => $orderStatus->order->shop_id, 'receiver_type' => 'App\Models\Shop', 'amount' => $orderStatus->order->subtotal * $dispute->seller / 100]);
+        if($dispute->winner == 'vendor'){
+            event(new SettleVendor($orderStatus->order));
+        }else{
+            Settlement::where('order_id',$orderStatus->order_id)->delete();
+            event(new RefundBuyer($orderStatus->order,$orderStatus->order->total));
         }
-        if($dispute->buyer > 0){
-            event(new RefundBuyer($orderStatus->order,$orderStatus->order->subtotal * $dispute->buyer / 100));
-        }
-        event(new SettleVendor($orderStatus->order));
+        
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
         $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
     }

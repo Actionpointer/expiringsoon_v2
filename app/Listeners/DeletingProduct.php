@@ -2,10 +2,16 @@
 
 namespace App\Listeners;
 
+use App\Models\Cart;
+use App\Models\Like;
+use App\Models\Order;
+use App\Models\Advert;
+use App\Models\Feature;
+use App\Models\OrderItem;
 use App\Events\DeleteProduct;
 use App\Http\Traits\OptimizationTrait;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class DeletingProduct
 {
@@ -18,12 +24,14 @@ class DeletingProduct
 
     public function handle(DeleteProduct $event)
     {
-        $event->product->adverts->delete();
-        $event->product->carts->delete();
-        $event->product->likes->delete();
-        $event->product->orders->each(function($item){
-            $item->order->delete();
-        });
-        $event->product->orders->delete();
+        $product_id = $event->product->id;
+        Advert::where('advertable_id',$product_id)->where('advertable_type','App\Models\Product')->delete();
+        Feature::where('product_id',$product_id)->delete();
+        Cart::where('product_id',$product_id)->delete();
+        Like::where('product_id',$product_id)->delete();
+        Order::whereHas('items',function($query) use($product_id){
+            $query->where('product_id',$product_id);
+        })->delete();
+        OrderItem::where('product_id',$product_id)->delete();
     }
 }

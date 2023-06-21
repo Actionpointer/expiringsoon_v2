@@ -12,7 +12,7 @@ class Settlement extends Model
 {
     use HasFactory,SoftDeletes;
     
-    protected $fillable = ['receiver_id','receiver_type','order_id','description','amount','status'];
+    protected $fillable = ['receiver_id','receiver_type','order_id','description','amount','charges','status'];
 
     public function order(){
         return $this->belongsTo(Order::class);

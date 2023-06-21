@@ -71,7 +71,7 @@ class CouponController extends Controller
         
         $min_date = $coupons->total() ? $coupons->min('start_at')->format('Y-m-d') : null;
         $max_date = $coupons->total() ? $coupons->max('start_at')->format('Y-m-d') : null;
-        return view('admin.coupons',compact('coupons','min_date','max_date','countries','country_id','status','name','role','sortBy'));
+        return view('admin.coupons.index',compact('coupons','min_date','max_date','countries','country_id','status','name','role','sortBy'));
 
     }
 

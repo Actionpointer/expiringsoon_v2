@@ -60,7 +60,7 @@
                                   <label>Select Country</label>
                                     <select name="country_id" id="country_id" class="select2">
                                         <option></option>
-                                        <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$payouts->total()}}</option>
+                                        <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$revenues->total()}}</option>
                                         @foreach ($countries->sortBy('category') as $country)
                                           <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->payouts->count()}}</option>
                                         @endforeach
@@ -69,33 +69,19 @@
                               @endif
                               
                               <div class="col-md-3">
-                                  <label>Select Channel</label>
-                                  <select name="channel" id="channel" class="select2">
+                                  <label>Select Type</label>
+                                  <select name="type" id="type" class="select2">
                                     <option></option>
-                                    <option value="all" @if($channel == 'all') selected @endif>All</option>
-                                    <option value="Paystack" @if($channel == 'Paystack') selected @endif>Paystack</option>
-                                    <option value="Flutterwave" @if($channel == 'Flutterwave') selected @endif>Flutterwave</option>
-                                    <option value="Paypal" @if($channel == 'Paypal') selected @endif>Paypal</option>  
-                                    <option value="Stripe" @if($channel == 'Stripe') selected @endif>Stripe</option>  
+                                    <option value="all" @if($type == 'all') selected @endif>All</option>
+                                    <option value="adset" @if($type == 'adset') selected @endif>Adset</option>
+                                    <option value="subscription" @if($type == 'subscription') selected @endif>Subscription</option>
+                                    <option value="commission" @if($type == 'commission') selected @endif>Commission</option>  
+                                    <option value="shipment" @if($type == 'shipment') selected @endif>Shipment</option>  
                                   </select>
                               </div>
-                              <div class="col-md-3">
-                                <label>Select Status</label>
-                                <select name="status" id="status" class="select2">
-                                    <option></option>
-                                    <option value="all" @if($status == 'all') selected @endif>All </option>
-                                    <option value="paid" @if($status == 'paid') selected @endif>Paid </option>
-                                    <option value="pending" @if($status == 'pending') selected @endif>Pending </option>
-                                    <option value="processing" @if($status == 'processing') selected @endif>Processing </option>
-                                    <option value="approved" @if($status == 'approved') selected @endif>Approved </option>
-                                    <option value="cancelled" @if($status == 'cancelled') selected @endif>Cancelled </option>
-                                </select>
-                              </div>
-                              <div class="col-md-3">
-                                <label>Search Shop or User</label>
-                                <input name="receiver" id="receiver" value="{{$receiver}}" class="form-control like_select2">
-                              </div>
-                              <div class="col-md-4">
+                              
+                              
+                              <div class="col-md-5">
                                 <label for="">Daterange</label>
                                 <div class="input-group d-flex">
                                   <div class="prepend">
@@ -106,7 +92,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-md-2">
+                              <div class="col-md-3">
                                 <label>Sort</label>
                                 <select name="sortBy" id="sort-byd" class="form-control like_select2">
                                   <option value="date_asc" @if($sortBy == 'date_asc') selected @endif>Sort by: Date Asc</option>
@@ -136,49 +122,43 @@
                   <table class="table display">
                       <thead>
                           <tr>
-                            <th scope="col" class="dashboard__order-history-table-title"><span>Reference</span> </th>
-                            <th scope="col" class="dashboard__order-history-table-title">Recipient</th>
-                            <th scope="col" class="dashboard__order-history-table-title">Destination</th>
+                            <th scope="col" class="dashboard__order-history-table-title"><span>Country</span> </th>
+                            <th scope="col" class="dashboard__order-history-table-title">Description</th>
+                            <th scope="col" class="dashboard__order-history-table-title">Date</th>
                             <th scope="col" class="dashboard__order-history-table-title">Amount</th>
-                            <th scope="col" class="dashboard__order-history-table-title">Status</th>
+                            
                             
                           </tr>
                       </thead>
                       <tbody>
-                          @forelse ($payouts as $payout)
+                          @forelse ($revenues as $revenue)
                               <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
-                                  <td class="dashboard__order-history-table-item align-middle"> {{$payout->reference}} </td>
-                                  <td class="cart-table-item order-date align-middle"> {{ $payout->created_at->format('d-m-Y')}} </td>
+                                  <td class="dashboard__order-history-table-item align-middle"> {{$revenue->country->name}} </td>
+                                 <td class="cart-table-item order-date align-middle">{{ucwords($revenue->description)}} </td> 
+                                  <td class="cart-table-item order-date align-middle"> {{ $revenue->created_at->format('d-m-Y')}} </td>
+                                 
                                   <td class="cart-table-item order-date align-middle">
-                                    <div style="margin-top:10px">
-                                      <span class="font-body--lg-500" style="color:#000">
-                                          {{$payout->user->name}}
-                                      </span>
-                                      <br />
-                                      <span style="font-size:12px;color:#888">
-                                          {{$payout->channel}}:{{$payout->destination}}
-                                      </span>
-                                    </div>
+                                    <p class="font-body--md-400" style="color:#00b207">{!!$revenue->currency->symbol!!}{{ number_format($revenue->amount, 2)}}</p>
                                   </td>
-                                  <td class="cart-table-item order-date align-middle">
-                                    <p class="font-body--md-400" style="color:#00b207">{!!$payout->user->country->currency->symbol!!}{{ number_format($payout->amount, 2)}}</p>
-                                  </td>
-                                  <td class="cart-table-item order-date align-middle">
-                                      
-                                  </td>  
+                                   
                               </tr>   
                           @empty
+                          <tr>
+                            <td colspan="4">
                               <div style="margin:auto;padding:1%;text-align:center">
-                                  <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
-                                  <br />No Payout </span>
-                              </div>
+                                <img style="padding:10px;width:100px" src="{{asset('src/images/site/exclamation.png')}}">
+                                <br />No Revenue yet </span>
+                            </div>
+                            </td>
+                          </tr>
+                              
                           @endforelse
                           
                       </tbody>
                   </table>
                 </div>
                   
-                  @include('layouts.pagination',['data'=> $payouts])
+                  @include('layouts.pagination',['data'=> $revenues])
               </div>
             </div>
           </div>  
@@ -186,35 +166,6 @@
       </div>
     </div>
   </div>
-
-<div class="modal fade" id="approval" tabindex="-1" aria-labelledby="approvalModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="approvalModalLabel">Comfirm Payout</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="approveform" action="{{route('admin.payouts')}}" method="post">@csrf
-            <input type="hidden" name="action" value="pay">
-            <div class="contact-form__content my-3">
-              <div class="contact-form-input">
-                  <label for="pin">Enter Your Access Pin</label>
-                  <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
-              </div>
-              <div class="contact-form-btn">
-                  <button class="button button--md" type="submit"> Continue </button>
-                  <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer justify-content-start">
-          <span class="small text-muted">Set or reset your access pin from your <a href="{{route('profile')}}">profile</a></span>
-        </div>
-      </div>
-    </div>
-</div>
 
 @endsection
 
