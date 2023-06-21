@@ -79,7 +79,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::get('generate/otp',[UserController::class, 'generate_otp']);
     Route::post('edit-pin',[UserController::class, 'pin']);
     
-    Route::get('adverts',[AdvertController::class,'ads']);
+   
     Route::get('advert/{advert_id}', [AdvertController::class, 'ad_click']);
 
     Route::get('featured', [AdvertController::class, 'featured']);
@@ -87,3 +87,4 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
 
     
 });
+ Route::get('adverts',[AdvertController::class,'ads']);
