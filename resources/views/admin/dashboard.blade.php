@@ -103,6 +103,10 @@
                         <h5 class="font-body--md-400 text-primary">Payouts</h5>
                         <p class="font-body--md-500">{{\App\Models\Payout::within()->where('status','pending')->count()}}</p>
                       </a>
+                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.payouts')}}?search=pending">
+                        <h5 class="font-body--md-400 text-primary">KYC</h5>
+                        <p class="font-body--md-500">{{\App\Models\Kyc::within()->where('status',false)->whereNull('reason')->count()}}</p>
+                      </a>
                       
                       
                       
@@ -149,12 +153,12 @@
                 </div>
               </div>
             </div>
-            @if($user->role->name != 'auditor' && $documents->isNotEmpty())
-                <!-- KYC Documents -->
+            @if(in_array($user->role->name,['superadmin','admin','arbitrator']) && $disputes->isNotEmpty())
+                <!-- Disputes-->
                 <div class="dashboard__order-history" style="margin-top: 24px">
                   <div class="dashboard__order-history-title">
-                    <h2 class="font-body--xxl-500">KYC Documents</h2>
-                    <a href="{{route('admin.verifications')}}" class="font-body--lg-500">view all</a>
+                    <h2 class="font-body--xxl-500">Dispute Cases</h2>
+                    <a class="font-body--md-500">{{$disputes->count()}} Cases</a>
                   </div>
                   <div class="dashboard__order-history-table">
                     <div class="table-responsive">
@@ -162,51 +166,35 @@
                         <thead>
                           <tr>
                             <th scope="col" class="dashboard__order-history-table-title"> Date</th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Type </th>
-                            <th scope="col" class="dashboard__order-history-table-title"> Applicant</th>
+                            <th scope="col" class="dashboard__order-history-table-title"> Subject </th>
+                            <th scope="col" class="dashboard__order-history-table-title"> Status</th>
                             <th scope="col" class="dashboard__order-history-table-title"></th>
                           </tr>
                         </thead>
                         <tbody>
-                            @forelse ($documents as $document)
+                            @forelse ($disputes as $dispute)
                                 <tr>
 
                                   <td class="dashboard__order-history-table-item order-total " >
-                                    {{$document->created_at->format('l, M jS, Y')}}
+                                    {{$dispute->created_at->format('l, M jS, Y')}}
                                   </td>
                                   <!-- Status -->
                                   <td class="dashboard__order-history-table-item order-status">
-                                      {{ucwords($document->type)}}
+                                      {{ucwords($dispute->description)}}
                                   </td>
 
-                                    <td class="dashboard__order-history-table-item order-date">
-                                      <div class="d-flex">
-                                        @if($document->verifiable_type == 'App\Models\Shop')
-                                          <img @if(!$document->verifiable->banner) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->banner)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
-                                        @else
-                                          <img @if(!$document->verifiable->photo) src="{{asset('src/images/site/avatar.png')}}" @else src="{{Storage::url($document->verifiable->photo)}}" @endif alt="{{$document->verifiable->name}}" style="width:50px;height:50px;border-radius:50px;border:1px solid #ddd;padding:3px" />
-                                        @endif
-                                        <p class="order-total-price ps-2">
-                        
-                                            {{$document->verifiable->name}}
-                                            <br />
-                                            <span style="font-size:12px;color:#888">
-                                                {{$document->verifiable->email}}
-                                            </span>
-                                        
-                                        </p>
-                                      </div>
-                                      
-                                    </td>
-                                    <!-- Total  -->
+                                  <td class="dashboard__order-history-table-item order-status">
+                                    @if($dispute->order->messages->where('sender_id','!=',$dispute->order->user_id)->where('sender_type','App\Models\User')->isNotEmpty())
+                                    Ongoing
+                                    @else New
+                                    @endif
+                                  </td>  
                                     
                                     <!-- Details page  -->
                                     <td class=" dashboard__order-history-table-item order-details ">
-                                      @if($document->verifiable_type == 'App\Models\Shop')
-                                        <a href="{{route('admin.shop.show',$document->verifiable)}}"> View Shop</a>
-                                      @else
-                                        <a href="{{route('admin.user.show',$document->verifiable)}}"> View User</a>
-                                      @endif
+                                      
+                                        <a href="{{route('admin.order.show',$dispute->order)}}"> View Order</a>
+                                      
                                     </td>
                                 </tr>
                             @empty
