@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Kyc;
 use App\Models\City;
 use App\Models\Rate;
 use App\Models\Shop;
@@ -66,6 +67,10 @@ class Country extends Model
     }
     public function payouts(){
         return $this->hasManyThrough(Payout::class,User::class,'country_id','user_id');
+    }
+
+    public function kycs(){
+        return $this->hasManyThrough(Kyc::class,User::class,'country_id','user_id');
     }
 
 }

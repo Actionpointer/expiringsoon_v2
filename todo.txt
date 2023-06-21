@@ -10,6 +10,7 @@
 -kyc multiple documents
 -shipment fee recalculation
 
+
 admin staff add - email notification
 admin kyc - notification
 and notification to vendor kyc

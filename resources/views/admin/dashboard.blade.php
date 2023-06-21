@@ -149,12 +149,12 @@
                 </div>
               </div>
             </div>
-            @if($user->role->name != 'auditor')
+            @if($user->role->name != 'auditor' && $documents->isNotEmpty())
                 <!-- KYC Documents -->
                 <div class="dashboard__order-history" style="margin-top: 24px">
                   <div class="dashboard__order-history-title">
                     <h2 class="font-body--xxl-500">KYC Documents</h2>
-                    <a href="#" class="font-body--lg-500">&nbsp</a>
+                    <a href="{{route('admin.verifications')}}" class="font-body--lg-500">view all</a>
                   </div>
                   <div class="dashboard__order-history-table">
                     <div class="table-responsive">
@@ -168,7 +168,6 @@
                           </tr>
                         </thead>
                         <tbody>
-                          
                             @forelse ($documents as $document)
                                 <tr>
 
