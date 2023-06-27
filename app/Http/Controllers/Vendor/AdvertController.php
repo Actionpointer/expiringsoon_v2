@@ -87,7 +87,8 @@ class AdvertController extends Controller
             'offer'=> $request->offer, 'text_color'=> $request->text_color, 'button_text'=> $request->button_text,
             'button_color'=> $request->button_color,'approved'=> cache('settings')['auto_approve_shop_advert'] ? true:false]);
         } 
-        return redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
+        return redirect()->route('vendor.adverts',$adset)->with(['result'=> 1,'message'=>'Ad Created']);
+        // return redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
     }
 
     public function edit(Advert $advert){
