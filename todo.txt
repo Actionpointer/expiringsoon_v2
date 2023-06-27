@@ -12,13 +12,12 @@
 
 
 admin staff add - email notification
-admin kyc - notification
-and notification to vendor kyc
-order dispute email to admin & arbitrator
+admin notifications - [kyc,]
+vendor notifications - [kyc]
 
+order dispute email to admin
 
-arbitrator monitoring
-arbitrator login
+accountability for arbitrators
 
 
 

@@ -1,5 +1,21 @@
 @extends('layouts.app')
+@push('styles')
+    
+@endpush
+<meta property="og:title" content="Check out {{ucwords($shop->name)}} on Expiring Soon| Amazing Discounts ongoing">
+<meta property="og:type" content="article" />
+<meta property="og:image" content="{{$shop->image}}">
+<meta property="og:description" content="Rush hour discount offers on all products at {{route('vendor.show',$shop)}}. Buy Now while stock last">
+<meta property="og:url" content="{{route('vendor.show',$shop)}}">
 
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@site_username">
+<meta name="twitter:title" content="Check out {{ucwords($shop->name)}} on Expiring Soon| Amazing Discounts ongoing">
+<meta name="twitter:description" content="Rush hour discount offers on all products at {{route('vendor.show',$shop)}}. Buy Now while stock last">
+<meta name="twitter:creator" content="@creator_username">
+<meta name="twitter:image" content="{{$shop->image}}">
+<meta name="twitter:domain" content="https://expiringsoon.shop">
+@endpush
 @section('title') {{$shop->name}} {{$shop->name}} | Expiring Soon @endsection
 @section('main')
     <!-- Breadcrumb Section Start  -->

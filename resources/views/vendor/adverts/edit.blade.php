@@ -57,7 +57,7 @@
                             </div>
                             <div class="contact-form-file mb-3">
                               <label for="category" class="d-block">Display Image </label>
-                              <img src="{{$advert->image}}" alt="">
+                              <img src="{{$advert->image}}" class="img-thumbnail" alt="">
                             </div>
                             <div class="contact-form-file mb-3">
                               <label for="category" class="d-block">Replace Image (optional)</label>
@@ -131,7 +131,7 @@
                               </select>
                             </div>
                             
-                            <button class="button button--lg w-100" style="margin-top: 20px" type="submit" @if($advert->adset->units <= $advert->adset->adverts->count()) disabled @endif>
+                            <button class="button button--lg w-100" style="margin-top: 20px" type="submit">
                               Update Ad
                             </button>
                             
