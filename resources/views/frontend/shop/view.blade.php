@@ -1,7 +1,5 @@
 @extends('layouts.app')
 @push('styles')
-    
-@endpush
 <meta property="og:title" content="Check out {{ucwords($shop->name)}} on Expiring Soon| Amazing Discounts ongoing">
 <meta property="og:type" content="article" />
 <meta property="og:image" content="{{$shop->image}}">
