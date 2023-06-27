@@ -153,7 +153,7 @@
                           
                             @if($adset->deleted_at || $adset->end_at < now())
                                 <button class="badge btn-danger">Expired </button>
-                            @elseif($adset->end_at->diffInMonths(now()) < 2)
+                            @elseif($adset->end_at->diffInDays(now()) < 7)
                                 <button class="badge btn-warning">Expiring </button>
                             @else
                                 <button class="badge btn-success">Active </button>

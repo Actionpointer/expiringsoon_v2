@@ -141,7 +141,7 @@ class AdvertController extends Controller
         'adset_id'=> $adset->id, 'state_id'=> $request->state_id,
         'photo'=> $photo,'heading'=> $request->heading,'subheading'=> $request->subheading,
         'offer'=> $request->offer, 'text_color'=> $request->text_color, 'button_text'=> $request->button_text,
-        'button_color'=> $request->button_color,'approved'=> cache('settings')['auto_approve_shop_advert'] ? true:false]);
+        'button_color'=> $request->button_color,'approved'=> false]);
 
         return redirect()->route('vendor.adverts',$advert->adset)->with(['result'=> 1,'message'=>'Ad Updated']);
     }

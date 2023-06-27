@@ -61,16 +61,16 @@
                             </div>
                             <div class="contact-form-input">
                               <label for="category">Heading</label>
-                              <input type="text" name="heading" placeholder="" />
+                              <input type="text" value="{{old('heading')}}" name="heading" placeholder="" />
                             </div>
                             <div class="contact-form-input">
                               <label for="category">Subheading</label>
-                              <input type="text" name="subheading"  placeholder="" />
+                              <input type="text" value="{{old('subheading')}}" name="subheading"  placeholder="" />
                             </div>
                             
                             <div class="contact-form-input">
                               <label for="category">Offer Text</label>
-                              <input type="text" name="offer" placeholder="e.g Sales 50% off" maxlength="20"/>
+                              <input type="text" name="offer" value="{{old('offer')}}" placeholder="e.g Sales 50% off" maxlength="20"/>
                             </div>
                             <div class="contact-form-input">
                               <label for="category">Text Color (for heading & subheading & offer)</label>

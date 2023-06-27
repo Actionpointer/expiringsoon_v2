@@ -99,7 +99,7 @@
                                 <input class="form-check-input linkto" type="radio" name="type" id="type_product" value="product" @if($advert->advertable_type == "App\Models\Product") checked @endif >
                               </div>
                             </div>
-                            <div class="contact-form-input" id="show_shops">
+                            <div class="contact-form-input" id="show_shops" @if($advert->advertable_type == "App\Models\Product") style="display:none;" @endif>
                               <label>Select Shop</label>
                               <select id="shops" name="shop_id" class="select2">
                                 @foreach ($shops as $shop)
@@ -107,7 +107,7 @@
                                 @endforeach 
                               </select>
                             </div>
-                            <div class="contact-form-input" id="show_products" style="display:none;">
+                            <div class="contact-form-input" id="show_products" @if($advert->advertable_type == "App\Models\Shop") style="display:none;" @endif>
                               <label>Select Product</label>
                               <select id="products" name="product_id" class="select2">
                                   @foreach ($products as $product)
