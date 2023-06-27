@@ -15,7 +15,7 @@
                                     <p> <span>{{$ads[$i]->offer}}</span></p>
                                 </div>
     
-                                <a href="{{$advert->url}}" class="button button--md @if($ads[$i]->button_color == 'white') bg-white text-success @else bg-success text-white @endif">
+                                <a href="{{$ads[$i]->url}}" class="button button--md @if($ads[$i]->button_color == 'white') bg-white text-success @else bg-success text-white @endif">
                                     Shop now
                                     <span>
                                         <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
