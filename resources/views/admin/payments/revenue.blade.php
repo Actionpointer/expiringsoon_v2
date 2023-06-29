@@ -53,7 +53,7 @@
                       </h2>
                       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faq-accordion">
                         <div class="accordion-body">
-                          <form action="{{route('admin.payouts')}}" method="get">
+                          <form action="{{route('admin.revenue')}}" method="get">
                             <div class="row">
                               @if(auth()->user()->role->name == 'superadmin')                                  
                                 <div class="col-md-3">
@@ -62,7 +62,7 @@
                                         <option></option>
                                         <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$revenues->total()}}</option>
                                         @foreach ($countries->sortBy('category') as $country)
-                                          <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->payouts->count()}}</option>
+                                          <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->revenues->count()}}</option>
                                         @endforeach
                                     </select>
                                 </div>

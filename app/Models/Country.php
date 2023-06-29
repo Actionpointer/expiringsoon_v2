@@ -15,6 +15,7 @@ use App\Models\Coupon;
 use App\Models\Payout;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Revenue;
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,6 +44,9 @@ class Country extends Model
     }
     public function rates(){
         return $this->hasMany(Rate::class);
+    }
+    public function revenues(){
+        return $this->hasMany(Revenue::class);
     }
     public function shipments(){
         return $this->hasManyThrough(Shipment::class,Rate::class,'country_id','rate_id');
