@@ -96,7 +96,7 @@
                                 <input name="receiver" id="receiver" value="{{$receiver}}" class="form-control like_select2">
                               </div>
                               <div class="col-md-4">
-                                <label for="">Daterange</label>
+                                <label for="">Date range</label>
                                 <div class="input-group d-flex">
                                   <div class="prepend">
                                       <input type="date" min="{{$min_date}}" name="from_date" class="form-control-sm border text-secondary" style="height:50px;" />

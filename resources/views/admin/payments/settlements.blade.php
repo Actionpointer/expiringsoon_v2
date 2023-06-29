@@ -75,7 +75,7 @@
                                   </select>
                               </div>
                               <div class="col-4">
-                                <label for="">Daterange</label>
+                                <label for="">Date range</label>
                                 <div class="input-group d-flex">
                                   <div class="prepend">
                                       <input type="date" min="{{$min_date}}" name="from_date" class="form-control-sm border text-secondary" style="height:50px;" />
