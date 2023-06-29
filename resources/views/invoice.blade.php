@@ -176,7 +176,7 @@
                           <tr>
                             <!-- Product item  -->
                             <td class="dashboard__order-history-table-item align-middle">
-                              <a href="{{route('order.show',$item->paymentable)}}">#{{$item->paymentable->id}} <span class="small">click to view </span></a>
+                              <a @if(auth()->user()->role->name == "shopper") href="{{route('order.show',$item->paymentable)}}" @else href="{{route('admin.order.show',$item->paymentable)}}" @endif>#{{$item->paymentable->id}} <span class="small">click to view </span></a>
                             </td>
                             <!-- Order  -->
                             <td class="dashboard__order-history-table-item order-date align-middle "     >
