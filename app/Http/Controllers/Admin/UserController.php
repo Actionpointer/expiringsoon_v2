@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\Plan;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
@@ -164,7 +165,8 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
         }
         $state = State::where('country_id',$request->country_id)->first();
-        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role_id'=> $request->role,'state_id'=> $state->id,'country_id'=> $request->country_id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+        $role_id = Role::where('name',$request->role)->first()->id;
+        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role_id'=> $role_id,'state_id'=> $state->id,'country_id'=> $request->country_id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
     }
 
