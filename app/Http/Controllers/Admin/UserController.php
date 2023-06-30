@@ -41,11 +41,11 @@ class UserController extends Controller
         $user = auth()->user();
         DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$user->id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','user')->update(['read_at'=> now()]);
         $disputes = OrderStatus::within()->where('name','disputed'); 
-        if($user->isAnyRole(['superadmin','admin'])){
+        // if($user->isAnyRole(['superadmin','admin'])){
             $disputes = $disputes->get();
-        }else{
-            $disputes = $disputes->whereHas('role',function($query){ $query->where('arbitrary_id',auth()->id()); })->get();
-        }
+        // }else{
+        //     $disputes = $disputes->whereHas('role',function($query){ $query->where('arbitrary_id',auth()->id()); })->get();
+        // }
         $statuses = OrderStatus::within()->where(function($query) use($processing,$shipping){
                         $query->where('name','processing')->where('created_at','<',now()->subHours($processing))
                             ->orWhere('name','shipped')->where('created_at','<',now()->subHours($shipping))
