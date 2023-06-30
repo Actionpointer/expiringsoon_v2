@@ -164,7 +164,7 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
         }
         $state = State::where('country_id',$request->country_id)->first();
-        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role'=> $request->role,'state_id'=> $state->id,'country_id'=> $request->country_id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
+        $user = User::create(['fname'=> $request->fname,'lname'=> $request->lname,'status'=> $request->status,'role_id'=> $request->role,'state_id'=> $state->id,'country_id'=> $request->country_id,'email'=> $request->email,'phone'=> $request->phone,'password'=> Hash::make($request->password)]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'User created successfully']);
     }
 
