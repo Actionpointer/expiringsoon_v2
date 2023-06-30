@@ -242,7 +242,7 @@ class PaymentController extends Controller
         
         if(request()->query() && request()->query('type') && request()->query('type') != 'all'){
             $type = request()->query('type');
-            $revenues = $revenues->where('type',$type);
+            $revenues = $revenues->where('description',$type);
         }
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');
