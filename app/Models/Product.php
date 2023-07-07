@@ -35,7 +35,7 @@ class Product extends Model
         return 'slug';
     }
     
-    protected $fillable = ['name','shop_id','slug','description','stock','category_id','published','approved', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120','shipping','rejection_reason'];
+    protected $fillable = ['name','shop_id','slug','description','stock','category_id','published','approved', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120','package_id','rejection_reason'];
     protected $appends = ['amount','image','discount','valid','available'];
 
     // protected $dates = ['expire_at'];

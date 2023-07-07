@@ -205,7 +205,7 @@ class ShopController extends Controller
             // if(!$this->checkPin($request)['result']){
             //     return request()->expectsJson() ?  
             //      response()->json([
-            //         'status' => false,
+            //         'status' => false,gi
             //         'message' => 'Invalid Pin',
             //     ], 401) :
             //     redirect()->back()->with(['result'=> '0','message'=> 'Invalid Pin']);

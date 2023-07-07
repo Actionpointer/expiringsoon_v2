@@ -25,6 +25,7 @@ class ProductController extends Controller
    
     public function index(Shop $shop){
         $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->get();
+        // dd($products);
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
@@ -111,10 +112,10 @@ class ProductController extends Controller
             'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),
             'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
             'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-            'published'=> $request->published,'package_id'=> $request->package_id]);
+            'published'=> $request->published,'status'=> $shop->certified() ? true:false ,'package_id'=> $request->package_id]);
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
-                    redirect()->route('vendor.shop.product.list',$shop);
+                    redirect()->route('vendor.shop.product.list',$shop)->with(['result'=>1,'message'=> 'Product Created Successfully']);
         
         } catch (\Throwable $th) {
             return response()->json([
@@ -194,10 +195,10 @@ class ProductController extends Controller
             'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,
             'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,
             'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-            'published'=> $request->published,'package_id'=> $request->package_id]);
+            'published'=> $request->published,'status'=> $shop->certified() ? true:false ,'package_id'=> $request->package_id]);
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Updated Successfully','data'=> new ProductDetailsResource($product)], 200) :
-                    redirect()->route('vendor.shop.product.list',$product->shop);
+                    redirect()->route('vendor.shop.product.list',$product->shop)->with(['result'=>1,'message'=> 'Product Created Successfully']);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

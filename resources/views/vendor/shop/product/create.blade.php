@@ -316,24 +316,26 @@
                 </div>
                 <div class="dashboard__content-card">
                   <div class="dashboard__content-card-header">
-                  <h5 class="font-body--xl-500">Special Shipment Charge</h5>
+                  <h5 class="font-body--xl-500">Packaging</h5>
                   </div>
                   <div class="dashboard__content-card-body">
                     <div class="contact-form__content">
-                      <p class="font-body--md-500 mb-2">Amount set below will be added to the shipment rates setup in your shop settings. <br>
-                         Note: This amount will not be applied when the customer selects pickup delivery option.
-                      </p>
-                      <div class="input-group d-flex flex-nowrap">
-                        <div class="input-group-append">
-                          <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
-                        </div>   
-                        <input class="form-control-sm border-light" type="number" name="shipping" value="{{ old('shipping') }}" step="0.001" placeholder="Amount (optional)">
-                      </div>
-                      @error('shipping')
+                      <p class="font-body--md-500 mb-2">Which type of packaging is most suitable for the product.  </p>
+                      <div class="contact-form-input">
+                        <label for="states">Packages</label>
+                        <select id="package_id" name="package_id" class="select2" required>
+                            <option value="" selected>Select</option>
+                            @foreach ($packages as $package)
+                                <option value="{{$package->id}}">{{$package->name}} - {{$package->description}}</option>
+                            @endforeach
+
+                        </select>
+                        @error('package_id')
                             <span class="invalid-feedback d-block" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                      @enderror
+                        @enderror
+                      </div>
                       
                       <div class="contact-form-btn">
                         <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
