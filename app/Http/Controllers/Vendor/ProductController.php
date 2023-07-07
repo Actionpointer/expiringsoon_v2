@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Vendor;
 use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Shop;
+use App\Models\Package;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderStatus;
@@ -37,7 +38,8 @@ class ProductController extends Controller
     public function create(Shop $shop){
         $categories = Category::all();
         $tags = Tag::all(); 
-        return view('vendor.shop.product.create',compact('shop','categories','tags'));
+        $packages = Package::all();
+        return view('vendor.shop.product.create',compact('shop','categories','tags','packages'));
     }
 
     public function details(Shop $shop,Product $product){
@@ -78,7 +80,7 @@ class ProductController extends Controller
                 'discount60' => 'nullable|lt:price|gt:discount30',
                 'discount30' => 'nullable|lt:price',   
                 'published' => 'required|numeric',   
-                'shipping' => 'nullable|numeric',   
+                'package_id' => 'required|numeric',   
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 5mb',
                 'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
@@ -109,7 +111,7 @@ class ProductController extends Controller
             'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),
             'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
             'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-            'published'=> $request->published,'shipping'=> $request->shipping]);
+            'published'=> $request->published,'package_id'=> $request->package_id]);
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
                     redirect()->route('vendor.shop.product.list',$shop);
@@ -126,7 +128,8 @@ class ProductController extends Controller
     public function edit(Shop $shop,Product $product){
         $categories = Category::all();
         $tags = Tag::all(); 
-        return view('vendor.shop.product.edit',compact('shop','product','categories','tags'));
+        $packages = Package::all();
+        return view('vendor.shop.product.edit',compact('shop','product','categories','tags','packages'));
     }
 
     public function update(Shop $shop,Request $request){
@@ -152,7 +155,7 @@ class ProductController extends Controller
                 'discount60' => 'nullable|lt:price|gt:discount30',
                 'discount30' => 'nullable|lt:price',   
                 'published' => 'required|numeric', 
-                'shipping' => 'nullable|numeric', 
+                'package_id' => 'required|numeric', 
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 5mb',
                 'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
@@ -191,7 +194,7 @@ class ProductController extends Controller
             'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,
             'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,
             'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-            'published'=> $request->published,'shipping'=> $request->shipping]);
+            'published'=> $request->published,'package_id'=> $request->package_id]);
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Updated Successfully','data'=> new ProductDetailsResource($product)], 200) :
                     redirect()->route('vendor.shop.product.list',$product->shop);

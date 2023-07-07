@@ -9,6 +9,7 @@ use App\Models\Shop;
 use App\Models\Advert;
 use App\Models\Review;
 use App\Models\Feature;
+use App\Models\Package;
 use App\Models\Category;
 use App\Models\OrderItem;
 use App\Observers\ProductObserver;
@@ -173,6 +174,10 @@ class Product extends Model
     
     public function reviews(){
         return $this->hasMany(Review::class);
+    }
+
+    public function package(){
+        return $this->belongsTo(Package::class);
     }
 
     public function reviewable(){
