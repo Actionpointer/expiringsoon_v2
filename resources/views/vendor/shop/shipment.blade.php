@@ -225,10 +225,11 @@
                                         <td>{{$prate['description']}}</td>
                                         <td>
                                           <div class="input-group d-flex flex-nowrap">
+                                              <input type="hidden" name="packages[{{$loop->index}}][id]" value="{{$prate['id']}}">
                                               <div class="input-group-prepend">
                                                 <span class="input-group-text">{!! $shop->country->currency->symbol !!}</span>
                                               </div>
-                                              <input class="form-control-sm border-light" type="number" name="discount30" value="{{$prate['amount']}}">
+                                              <input class="form-control-sm border-light" type="number" name="packages[{{$loop->index}}][amount]" value="{{$prate['amount']}}">
                                               
                                           </div>
                                         </td>

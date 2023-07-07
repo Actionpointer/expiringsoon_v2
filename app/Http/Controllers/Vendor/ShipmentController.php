@@ -7,6 +7,7 @@ use App\Models\Rate;
 use App\Models\Shop;
 use App\Models\State;
 use App\Models\Package;
+use App\Models\PackageRate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -36,7 +37,7 @@ class ShipmentController extends Controller
                 $ShopPackageRates = $shop->packageRates;
                 $packageRates = collect([]);
                 foreach($packages as $package){
-                    $packageRates->push(['name'=> $package->name,'description'=> $package->description,'image'=> $package->image,'amount'=> $ShopPackageRates->firstWhere('package_id',$package->id) ? $ShopPackageRates->firstWhere('package_id',$package->id)->amount : 0]);
+                    $packageRates->push(['id'=> $package->id,'name'=> $package->name,'description'=> $package->description,'image'=> $package->image,'amount'=> $ShopPackageRates->firstWhere('package_id',$package->id) ? $ShopPackageRates->firstWhere('package_id',$package->id)->amount : 0]);
                 }
                 return view('vendor.shop.shipment',compact('rates','packageRates','states','cities','shop'));
             }
@@ -158,7 +159,7 @@ class ShipmentController extends Controller
         $rates = $shop->packageRates;
         $result = collect([]);
         foreach($packages as $package){
-            $result->push(['name'=> $package->name,'size'=> $package->description,'image'=> $package->image,'amount'=> $rates->firstWhere('package_id',$package->id) ? $rates->firstWhere('package_id',$package->id)->amount : 0]);
+            $result->push(['id'=> $package->id,'name'=> $package->name,'description'=> $package->description,'image'=> $package->image,'amount'=> $rates->firstWhere('package_id',$package->id) ? $rates->firstWhere('package_id',$package->id)->amount : 0]);
         }
         return response()->json([
             'status' => true,
@@ -168,6 +169,19 @@ class ShipmentController extends Controller
     }
 
     public function packages_manage(Request $request){
+        $shop = Shop::find($request->shop_id);
+        $result = collect([]);
+        foreach($request->packages as $pack){
+            $rate = PackageRate::updateOrCreate(['package_id'=> $pack['id'],'shop_id'=> $request->shop_id],['amount'=> $pack['amount'],'country_id'=> $shop->country_id]);
+            $result->push(['id'=> $rate->package_id,'name'=> $rate->package->name,'description'=> $rate->package->description,'image'=> $rate->package->image,'amount'=> $pack['amount']]);
+        }
+        return request()->expectsJson() ?
+        response()->json([
+            'status' => true,
+            'message' => 'Package rates updated Successfully',
+            'data'=> PackageRateResource::collection($result)
+        ], 200) :
+        redirect()->back()->with(['result'=> 1,'message'=> 'Package Rate Updated']);
         
     }
     

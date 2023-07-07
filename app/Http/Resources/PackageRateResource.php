@@ -15,13 +15,5 @@ class PackageRateResource extends JsonResource
     public function toArray($request)
     {
         return parent::toArray($request);
-        // return [
-        //     "id"=> $this->id,
-        //     "name"=> $this->name,
-        //     "image"=> $this->slug,
-        //     "description"=> $this->description,
-        //     "amount"=> $this->rates->where('shop_id'),
-        //     "currency"=> auth()->user()->country->currency->symbol
-        // ];
     }
 }
