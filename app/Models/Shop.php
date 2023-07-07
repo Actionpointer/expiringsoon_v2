@@ -17,6 +17,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
+use App\Models\PackageRate;
 use App\Models\OrderMessage;
 use App\Observers\ShopObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -139,6 +140,9 @@ class Shop extends Model
     
     public function rates(){
         return $this->hasMany(Rate::class);
+    }
+    public function packageRates(){
+        return $this->hasMany(PackageRate::class);
     }
 
     public function categories(){

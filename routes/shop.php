@@ -14,7 +14,10 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
     Route::post('verification',[ShopController::class, 'verification'])->name('verification');
     // Route::post('address',[ShopController::class, 'address'])->name('address');
     // Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
-    
+    Route::get('packaging/rates',[ShipmentController::class,'packages'])->name('packages');
+    Route::post('packaging/rates',[ShipmentController::class,'packages_manage'])->name('packages.manage');
+
+    Route::get('shipping',[ShipmentController::class, 'index'])->name('shipping');
     Route::post('shipping/store',[ShipmentController::class, 'store'])->name('shipping.store');
     Route::post('shipping/update',[ShipmentController::class,'update'])->name('shipping.update');
     Route::post('shipping/delete',[ShipmentController::class,'delete'])->name('shipping.delete');

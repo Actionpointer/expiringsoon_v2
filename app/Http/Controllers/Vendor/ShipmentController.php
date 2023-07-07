@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Vendor;
 
+use App\Models\City;
+use App\Models\Rate;
 use App\Models\Shop;
 use App\Models\State;
-use App\Models\Rate;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\PackageRateResource;
 use App\Http\Resources\ShipmentRateResource;
 
 class ShipmentController extends Controller
@@ -19,12 +22,26 @@ class ShipmentController extends Controller
     public function index(Shop $shop){
         try {
             $rates = Rate::where('shop_id',$shop->id)->get();
-            return response()->json([
-                'status' => true,
-                'message' => $rates->count() ? 'Shipping rates fetched Successfully' : 'No shipping rates found',
-                'data'=> ShipmentRateResource::collection($rates),
-                'count' => $rates->count()
-            ], 200);
+            if(request()->expectsJson()){
+                return response()->json([
+                    'status' => true,
+                    'message' => $rates->count() ? 'Shipping rates fetched Successfully' : 'No shipping rates found',
+                    'data'=> ShipmentRateResource::collection($rates),
+                    'count' => $rates->count()
+                ], 200);
+            }else{
+                $states = $shop->country->states;
+                $cities = City::where('state_id',$shop->state_id)->get();
+                $packages = Package::all();
+                $ShopPackageRates = $shop->packageRates;
+                $packageRates = collect([]);
+                foreach($packages as $package){
+                    $packageRates->push(['name'=> $package->name,'description'=> $package->description,'image'=> $package->image,'amount'=> $ShopPackageRates->firstWhere('package_id',$package->id) ? $ShopPackageRates->firstWhere('package_id',$package->id)->amount : 0]);
+                }
+                return view('vendor.shop.shipment',compact('rates','packageRates','states','cities','shop'));
+            }
+            
+            
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -135,6 +152,23 @@ class ShipmentController extends Controller
                 ], 500);
             }
     }
-    
+
+    public function packages(Shop $shop){
+        $packages = Package::all();
+        $rates = $shop->packageRates;
+        $result = collect([]);
+        foreach($packages as $package){
+            $result->push(['name'=> $package->name,'size'=> $package->description,'image'=> $package->image,'amount'=> $rates->firstWhere('package_id',$package->id) ? $rates->firstWhere('package_id',$package->id)->amount : 0]);
+        }
+        return response()->json([
+            'status' => true,
+            'message' => $rates->count() ? 'Package rates fetched Successfully' : 'No package rates found',
+            'data'=> PackageRateResource::collection($result)
+        ], 200);
+    }
+
+    public function packages_manage(Request $request){
+        
+    }
     
 }

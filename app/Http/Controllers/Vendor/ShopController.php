@@ -171,8 +171,7 @@ class ShopController extends Controller
         $banks = Bank::all();
         $states = $shop->country->states;
         $cities = City::where('state_id',$shop->state_id)->get();
-        $rates = Rate::where('shop_id',$shop->id)->get();
-        return view('vendor.shop.settings',compact('user','shop','banks','states','cities','rates'));
+        return view('vendor.shop.settings',compact('user','shop','banks','states','cities'));
     }
     
     public function update(Request $request){

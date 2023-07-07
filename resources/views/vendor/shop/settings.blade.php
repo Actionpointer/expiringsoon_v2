@@ -58,11 +58,7 @@
                           </button>
                       </li>
                 
-                      <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#pills-shipping" type="button" role="tab" aria-controls="pills-shipping" aria-selected="false">
-                            Shipping
-                        </button>
-                      </li>
+                      
                       
                       
                   </ul>
@@ -563,7 +559,7 @@
                       </div>
                       
                       <!--  Shipping  -->
-                      <div class="tab-pane fade" id="pills-shipping" role="tabpanel" aria-labelledby="pills-shipping-tab">
+                      {{-- <div class="tab-pane fade" id="pills-shipping" role="tabpanel" aria-labelledby="pills-shipping-tab">
                         <div class="row products-tab__feedback">
                             <!-- Add Category  -->
                             <div class="dashboard__content-card">
@@ -698,7 +694,7 @@
                             </div>
                           
                         </div>
-                      </div>
+                      </div> --}}
 
                   </div>
               </div>
