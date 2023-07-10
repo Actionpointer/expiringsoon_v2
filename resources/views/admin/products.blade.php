@@ -71,7 +71,7 @@
                                 
                                 <div class="col-md-3">
                                     <label>Search Name</label>
-                                    <input type="text" name="name" value="{{$name}}" class="form-control like_select2" id="search_name">
+                                    <input type="text" name="name" placeholder="Product or Shop" value="{{$name}}" class="form-control like_select2" id="search_name">
                                 </div>
                                 <div class="col-md-3">
                                   <label>Select Status</label>
@@ -201,7 +201,6 @@
                                 <input type="hidden" name="products[]" value="{{$product->id}}">
                                   @if(!$product->approved)
                                   <button type="submit" name="approved" value="1" class="btn btn-sm btn-success">Approve</button>
-                                  @else
                                   <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$product->id}}">Reject</button>
                                   @endif
 

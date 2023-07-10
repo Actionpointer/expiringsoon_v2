@@ -118,7 +118,7 @@
                           </div>
                         </div>
               
-                        <div class="col-lg-12">
+                        <div class="offset-md-2 col-lg-8">
                           <div class="bill-card">
                             <div class="bill-card__content">
                               <div class="bill-card__header">
@@ -139,15 +139,37 @@
                                   
                                   <!-- total  -->
                                   <div class="bill-card__memo-item total">
-                                    <p class="font-body--lg-400">SubTotal:</p>
+                                    <p class="font-body--lg-400">Amount:</p>
                                     <span class="font-body--xl-500">{!!auth()->user()->country->currency->symbol!!}
                                       <span id="subtotal">0.00</span> </span>
                                   </div>
+                                  <div class="bill-card__memo-item">
+                                    <p class="font-body--lg-400">Discount:</p>
+                                    <span class="font-body--xl-500">-{!!$user->country->currency->symbol!!}
+                                    <span id="discount_text" class="ms-0">0</span> 
+                                    </span>
+                                </div>
+                                <div class="bill-card__memo-item mb-3">
+                                    <p class="font-body--lg-400">Total:</p>
+                                    <span class="font-body--xl-500">{!!$user->country->currency->symbol!!}
+                                        <span id="total" class="ms-0">0.00</span> 
+                                    </span>
+                                </div>
     
                                   {{-- <div class="form-check py-2">
                                     <label class="form-check-label" for="autorenew" > Auto-renew</label>
                                     <input class="form-check-input checkboxes" type="checkbox" name="auto_renew" value="1" checked>
                                   </div> --}}
+                                  <input type="hidden" name="amount" id="amount">
+                                  <div class="mt-3">
+                                      <div class="newsletter-card__input w-100">
+                                          <input type="text" name="coupon" id="coupon_code" placeholder="Enter Coupon Code">
+                                          <button class="button button--lg" type="button" id="coupon_button"> Apply Coupon </button>
+                                      </div>
+                                      <small id="coupon_description" class="d-block text-info text-center"></small>
+                                  </div>
+                                  <input type="hidden" name="discount" id="discount" value="0">
+                                  <input type="hidden" name="coupon_used" id="coupon_used">
     
                                 </div>
                                 
@@ -227,16 +249,49 @@
 
   function updatesummary(){
       let subtotal = 0;
+      let discount = parseInt($('#discount').val());
       $('.adplans:checked').each(function(index){
           subtotal += parseInt($(this).closest('.item').find('.amount').val());
       });
       $('#adset').text($('.adplans:checked').length)
       $('#subtotal').text(subtotal);
+      $('#total').text(subtotal - discount);
+      $('#amount').val(subtotal);
   }
 
   $('.adplans').on('change',function(){
       updatesummary()
   })
+
+  $('#coupon_button').on('click',function(){
+        let code = $('#coupon_code').val()
+        let amount = $('#amount').val()
+        if(code != ''){
+            $.ajax({
+                type:'POST',
+                dataType: 'json',
+                url: "{{route('vendor.applycoupon')}}",
+                data:{
+                    '_token' : $('meta[name="csrf-token"]').attr('content'),
+                    'code': code,
+                    'amount': amount,
+                },
+                success:function(data) {
+                    console.log(data)
+                    if(data.value != 0){
+                        $('#discount').val(data.value);
+                        $('#total').text(parseInt(amount) - parseInt(data.value))
+                        $('#discount_text').html(data.value);
+                        $('#coupon_used').val(code);
+                    }
+                    $('#coupon_description').html(data.description);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            })
+        }  
+    })
 
 </script>
 @endpush

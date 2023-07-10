@@ -41,7 +41,6 @@ trait OrderTrait
     }
 
     
-
     protected function getShopShipment($carts,$shop_id,$state_id){
         $hours = 0;
         $amount = 0;

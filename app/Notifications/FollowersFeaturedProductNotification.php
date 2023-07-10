@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Product;
+use App\Models\Shop;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,16 +11,16 @@ use Illuminate\Notifications\Messages\MailMessage;
 class FollowersFeaturedProductNotification extends Notification
 {
     use Queueable;
-    public $product;
+    public $shop;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Product $product)
+    public function __construct(Shop $shop)
     {
-        $this->product = $product;
+        $this->shop = $shop;
     }
 
     /**
@@ -42,7 +42,7 @@ class FollowersFeaturedProductNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->subject('Featured Product')->view('emails.featured_products',['product'=> $this->product]);
+        return (new MailMessage)->subject('Featured Product')->view('emails.featured_products',['shop'=> $this->shop]);
     }
 
     /**

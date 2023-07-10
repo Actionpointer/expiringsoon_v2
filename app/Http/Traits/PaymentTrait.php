@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Traits;
+use App\Models\Coupon;
 use App\Models\Payment;
 use App\Models\Settlement;
 use App\Models\PaymentItem;
@@ -12,10 +13,16 @@ trait PaymentTrait
 {
     use PaystackTrait,FlutterwaveTrait,PaypalTrait;
 
-    protected function initializePayment($amount,$items,$type){
+    protected function initializePayment($amount,$items,$type,$coupon){
         $user = auth()->user();
         $gateway = $user->country->payment_gateway;
-        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> $user->country->currency_id,'reference'=> uniqid(),'amount'=> $amount ,'vat'=> $user->country->vat]);
+        $coupon_id = null;
+        if($coupon){
+            $payable = $coupon ? $amount - $this->getCoupon($coupon,$amount)[1] : $amount;
+            $coupon_id = Coupon::where('code',$coupon)->first()->id;
+        }
+        
+        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> $user->country->currency_id,'reference'=> uniqid(),'coupon_id'=> $coupon_id,'amount'=> $payable ,'vat'=> $user->country->vat]);
         foreach($items as $item){
             PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
         }

@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
                     'auto_renew'=> $request->auto_renew ? true:false
                 ]);
             }
-            $result = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription');
+            $result = $this->initializePayment($subscription->amount,[$subscription->id],'App\Models\Subscription',$request->coupon_used);
             if(!$result['link']){
                 return request()->expectsJson() ? 
                     response()->json([

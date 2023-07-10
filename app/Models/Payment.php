@@ -13,7 +13,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['reference','method','user_id','currency_id','status','amount','vat'];
+    protected $fillable = ['reference','method','user_id','currency_id','status','amount','coupon_id','vat'];
 
     public static function boot()
     {

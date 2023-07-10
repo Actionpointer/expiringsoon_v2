@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\Shop;
-use App\Models\State;
 use App\Models\Adset;
+use App\Models\State;
 use App\Models\Product;
+use App\Observers\AdvertObserver;
 use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Advert extends Model
@@ -23,6 +24,13 @@ class Advert extends Model
     //status means the state (not status) of the shop/product .e.g availability, approval, accessibility, etc
     protected $appends = ['status','running','image'];
 
+    
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new AdvertObserver);
+    }
+    
     public function advertable(){
         return $this->morphTo();
     }

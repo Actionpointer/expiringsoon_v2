@@ -139,9 +139,9 @@
 																Dear {{$adset->user->name}} , <br>
 																Your adset with id {{$adset->slug}} {{$status}} <br/> 
                                                                 @if($status == 'has been activated')
-																	You have added the following ads to this adsets <br/>
-																	Products: {{$adset->adverts->where('advertable_type','App\Models\Product')->count()}} <br/>
-																	Shops: {{$adset->adverts->where('advertable_type','App\Models\Shop')->count()}}
+																	Adset contains the following <br/>
+																	Units: {{$adset->units}} <br/>
+																	Used: {{$adset->adverts->count()}}
 																@endif
                                                             </td>
 														</tr>

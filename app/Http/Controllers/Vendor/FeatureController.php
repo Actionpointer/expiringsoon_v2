@@ -68,7 +68,7 @@ class FeatureController extends Controller
         foreach($products as $product){
             Feature::create(['adset_id'=> $adset->id,'product_id'=> $product->id,'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_product_advert'] ? true:false]);
         }
-        $result = $this->initializePayment($adset->amount,[$adset->id],'App\Models\Adset');
+        $result = $this->initializePayment($adset->amount,[$adset->id],'App\Models\Adset',$request->coupon_used);
         if(!$result['link']){
             return request()->expectsJson() ? 
                 response()->json([

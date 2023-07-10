@@ -185,13 +185,9 @@
                                   <input type="hidden" name="advert_id" value="{{$advert->id}}">
                                   @if(!$advert->approved)
                                   <button type="submit" name="approved" value="1" class="dropdown-item">Approve</button>
-                                  @else
                                   <button class="btn btn-danger dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$advert->id}}">Reject</button>
                                   @endif
 
-                                  
-
-                                  
                                   @if(auth()->user()->isRole('superadmin'))
                                   <button type="submit" name="delete" value="1" class="dropdown-item">Delete</button>
                                   @endif

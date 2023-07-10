@@ -131,8 +131,8 @@
                                 @enderror
                               </div>
                               <div class="contact-form-input col-lg-6">
-                                <label for="city">city *</label>
-                                <select name="city_id" class="select2 cities" required>
+                                <label for="city">city</label>
+                                <select name="city_id" class="select2 cities">
                                     @foreach ($cities as $city)
                                       <option value="{{$city->id}}">{{ucwords(strtolower($city->name))}}</option>
                                     @endforeach

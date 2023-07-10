@@ -28,7 +28,8 @@ class ProductController extends Controller
         $products = Product::within();
         if(request()->query() && request()->query('name')){
             $name = request()->query('name');
-            $products = $products->where('name','LIKE',"%$name%");
+            $products = $products->where(function($query) use($name) {
+                $query->where('name','LIKE',"%$name%")->orWhereHas('shop',function($qry) use($name){ $qry->where('name','LIKE',"%$name%");});});
         }
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');

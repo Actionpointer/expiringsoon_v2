@@ -150,7 +150,8 @@
                                                                     Subscription will expire on {{$subscription->end_at->format('d-m-y h:i A')}}
 
                                                                 @else has expired. <br>
-                                                                    You have been automatically subscribed to Free Plan so you may continue to use expiring soon with limited features, shops and products
+                                                                    You have been automatically subscribed to Free Plan so you may continue to use expiring soon with limited features, shops and products. This implies that some
+																	of your existing shops and products might be inactive.
                                                                 @endif
                                                                 
                                                             </td>

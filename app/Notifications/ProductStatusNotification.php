@@ -6,19 +6,20 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Product;
 
 class ProductStatusNotification extends Notification
 {
     use Queueable;
-
+    public $product;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Product $product)
     {
-        //
+        $this->product = $product;
     }
 
     /**
@@ -40,10 +41,9 @@ class ProductStatusNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new MailMessage)->view(
+            'emails.products', ['product'=> $this->product]
+        );
     }
 
     /**

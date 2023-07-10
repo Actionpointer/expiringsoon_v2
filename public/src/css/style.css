@@ -3138,7 +3138,7 @@ body.overlay {
     border-radius: 46px;
     margin-right: 22px; }
     .newsletter__input input {
-      /* width: 492px; */
+      width: 100%;
       height: 52px;
       border-radius: 46px;
       padding: 14px 24px;
@@ -5013,7 +5013,7 @@ body.overlay {
     }
   .button--lg {
     font-size: 16px;
-    line-height: 19.2px;
+    line-height: 20px;
     padding: 16px 40px; }
   .button--outline {
     color: #00b207;
@@ -9566,7 +9566,7 @@ body.overlay {
       .newsletter-card__input {
         width: 100%; } }
     .newsletter-card__input input {
-      width: 80%;
+      width: 100%;
       height: inherit;
       border-radius: inherit;
       overflow: hidden;

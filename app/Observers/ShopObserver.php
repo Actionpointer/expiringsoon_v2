@@ -40,22 +40,28 @@ class ShopObserver
                 $shop->addressproof->save();
                 $shop->approved = false;
                 $shop->save();
-                $shop->user->notify(new ShopStatusNotification($shop));
             }
             
         }
         if($shop->isDirty('name')){
+            if($shop->certificate){
+                $shop->certificate->status = false;
+                $shop->certificate->save();
+                $shop->approved = false;
+                $shop->save(); 
+            }
             if($shop->companydocs->isNotEmpty()){
                 foreach($shop->companydocs as $companydoc){
                     $companydoc->status = false;
-                    $companydoc->reason = 'Shop new name does not match kyc document';
                     $companydoc->save();
                     $shop->approved = false;
                     $shop->save(); 
-                }
-                $shop->user->notify(new ShopStatusNotification($shop));
+                }   
             }
             
+        }
+        if($shop->isDirty('rejection_reason')){
+            $shop->notify(new ShopStatusNotification($shop));
         }
     }
 

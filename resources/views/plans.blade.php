@@ -418,7 +418,7 @@
                     if(data.value != 0){
                         $('#discount').val(data.value);
                         $('#total').text(parseInt(amount) - parseInt(data.value))
-                        $('#amount').val(parseInt(amount) - parseInt(data.value))
+                        // $('#amount').val(parseInt(amount) - parseInt(data.value))
                         $('#discount_text').html(data.value);
                         $('#coupon_used').val(code);
                     }

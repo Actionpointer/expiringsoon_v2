@@ -2,7 +2,12 @@
 @push('styles')
 <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/assets/css/jquery.dataTables.min.css')}}" />
 <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/datatable/custom.css')}}"/>
-
+<style>
+  .select2-container li:only-child,
+.select2-container input:placeholder-shown {
+  width: 100% !important;
+}
+</style>
 @endpush
 @section('title') Adverts | Expiring Soon @endsection
 @section('main')
@@ -368,8 +373,9 @@
 <script>
     var limit = @json($adset->units);
     var used = @json($adset->features->count());
-    $('.select2#product[multiple]').select2({
+    $('#product').select2({
       maximumSelectionLength:limit-used,
+      placeholder:'Select Multiple'
     })
 
     $(document).on('change','#shops',function(){
@@ -390,7 +396,9 @@
             data.data.forEach(element => {
               $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
             });
-            $('#product').select2();
+            $('#product').select2({
+              maximumSelectionLength:limit-used,
+            });
           },
           error: function (data, textStatus, errorThrown) {
               console.log(data);
@@ -416,7 +424,9 @@
             data.data.forEach(element => {
               $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
             });
-            $('#product').select2();
+            $('#product').select2({
+              maximumSelectionLength:limit-used,
+            });
               
               //adjust all the subtotals and grandtotals here
           },

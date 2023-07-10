@@ -2,9 +2,10 @@
 
 namespace App\Observers;
 
+use App\Models\Product;
 use App\Events\DeleteProduct;
 use App\Http\Traits\OptimizationTrait;
-use App\Models\Product;
+use App\Notifications\ProductStatusNotification;
 
 class ProductObserver
 {
@@ -31,7 +32,9 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
-        //
+        if($product->isDirty('rejection_reason')){
+            $product->shop->notify(new ProductStatusNotification($product));
+        }
     }
 
     /**

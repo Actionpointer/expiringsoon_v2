@@ -1,7 +1,5 @@
-<!DOCTYPE html PUBLIC>
-<html>
+<!DOCTYPE html>
 <head>
-	
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<title>Adverts | Expiring Soon</title>
+	<title>Advert @if($advert->approved) Approved @else Rejected @endif | Expiring Soon</title>
 	
 	<link rel="icon" type="image/png" href="{{asset('src/images/favicon/favicon-16x16.png')}}" />
 	<meta name="msapplication-TileImage" content="{{asset('src/images/favicon/favicon-16x16.png')}}" />
@@ -115,10 +113,10 @@
 							<!-- END Header -->
 
 							<!-- Hero Image -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img" align="center" style="padding:10px">
-										<img src="{{asset('src/images/site/img-shoppingbag.jpg')}}" border="0" width="200" alt="" />
+									<td class="fluid-img">
+										<img src="{{asset('src/images/site/img-delivered.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -133,41 +131,28 @@
 												<td class="p30-15" style="padding: 20px 30px;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:center; padding-bottom:15px;">
-																<span style="font-size:16px;font-weight:600">Some Advert are not showing!</span>
-																
-															</td>
-														</tr>
-														<tr>
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
-																
-																Some of your ads are not showing. Affected adsets are: 
-																@foreach ($adsets as $adset)
-																	<a href="{{route('vendor.adverts',$adset)}}"><u>{{$adset->slug}}</u></a> @if(!$loop->last) , @else . @endif
-																@endforeach
-																<br/>
-																Here are a few things that might be the problem<br/> 
-																<ul>
-																	<li>Your adset subscription has expired</li>
-																	<li>Your user subscription has expired and therefore some of your shops or products are no longer visible</li>
-																	<li>Your shop or products are not approved</li>
-																	<li>Your shop or products are not not published</li>
-																	<li>Your products are no longer available in stock</li>
-																	<li>Your products have expired</li>
-																</ul>
-															</td>
+																<span style="font-size:16px;font-weight:600">Dear {{$advert->adset->user->name}},</span>
+																<br />Your Advert for {{str_replace('App\Models\\','',$advert->advertable_type)}} "{{$advert->advertable->name}}" has been @if($advert->approved) Approved @else Rejected @endif
+																@if($advert->rejection_reason)
+															    <br />Rejection Reason:  {{$advert->rejection_reason}}
+                                                                @endif
+                                                                <br /><br />Thank you for using Expiring Soon
+                                                            </td>
 														</tr>
+														
+														
+														
 														<tr>
-															<td class="text-btn-large" align="center">
-																<div style="background:#5fb882;width:50%;color:#fff; font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; padding:15px 35px;border-bottom:1px solid #ddd">
-																	<a href="{{route('vendor.adsets')}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;">
-																		<span class="link-2" style="color:#fff; text-decoration:none;">Manage Ads</span>
-																	</a>
-																</div>
+															<td class="text-btn-large" bgcolor="#00FA00" style="font-family:'Poppins', Arial,sans-serif; font-size:15px; line-height:18px; text-align:center; border:0px solid #cd6502; padding:15px 35px;">
+																<a href="{{route('vendor.adverts',$advert->adset)}}" target="_blank" class="link-2" style="color:#fff; text-decoration:none;padding:15px 180px;">
+																	<span class="link-2" style="color:#fff; text-decoration:none;">Manage Advert</span>
+																</a>
 															</td>
-														</tr>
+														</tr> 
+														
 														<tr>
-															<td class="text-center" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:center; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;">
+															<td class="text-center pb25" style="color:#666666; font-family:Poppins,sans-serif; font-size:14px; line-height:30px; text-align:center; padding-top:10px;">
 															</td>
 														</tr>
 														<!-- END Button -->
@@ -184,7 +169,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="p30-15 bbrr" style="padding: 20px 20px; border-radius:0px 0px 26px 26px;" bgcolor="#ffffff">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top:40px; border-top:1px solid #ddd">
 											<tr>
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">

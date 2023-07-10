@@ -35,10 +35,12 @@ class AdsetController extends Controller
 
     public function create(){
         $adplans = Adplan::all();
-        return view('vendor.adsets.create',compact('adplans'));
+        $user = auth()->user();
+        return view('vendor.adsets.create',compact('adplans','user'));
     }
 
     public function subscribe(Request $request){
+        dd($request->all());
         try{
             $adsets = collect([]);
             // dd($request->all());
@@ -47,11 +49,11 @@ class AdsetController extends Controller
                 $adsets->push($adset);
             }else{
                 foreach($request->adplans as $key=>$plan){
-                    $adset = Adset::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->amount[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key]),'auto_renew'=> $request->auto_renew ? true:false ]);
+                    $adset = Adset::create(['user_id'=> auth()->id(),'adplan_id' => $plan,'units'=> $request->units[$key],'amount'=> $request->days[$key] * $request->units[$key] * $request->price[$key],'start_at'=> now(),'end_at'=> now()->addDays($request->days[$key]),'auto_renew'=> $request->auto_renew ? true:false ]);
                     $adsets->push($adset);
                 }
             }
-            $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
+            $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset',$request->coupon_used);
             
             if(!$result['link']){
                 return redirect()->back()->with(['result'=> 0,'message'=> 'Something went wrong, Please try again later']);
@@ -77,7 +79,7 @@ class AdsetController extends Controller
                 $adsets->push($adset);
             }  
         }
-        $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset');
+        $result = $this->initializePayment($adsets->sum('amount'),$adsets->pluck('id')->toArray(),'App\Models\Adset',$request->coupon_used);
         if(!$result['link']){
             return response()->json([
                     'status' => false,

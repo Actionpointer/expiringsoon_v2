@@ -13,6 +13,7 @@ use App\Models\Advert;
 use App\Models\Payout;
 use App\Models\Review;
 use App\Models\Country;
+use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Settlement;
@@ -123,6 +124,9 @@ class Shop extends Model
     public function addressproof(){
         return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
     }
+    public function certificate(){
+        return $this->MorphOne(Kyc::class,'verifiable')->where('type','certificate');
+    }
 
     public function companydocs(){
         return $this->MorphMany(Kyc::class,'verifiable')->where('type','companydoc');
@@ -161,6 +165,10 @@ class Shop extends Model
     public function adverts(){
         return $this->morphMany(Advert::class,'advertable');
     }
+    public function features(){
+        $this->hasManyThrough(Feature::class,Product::class);
+    }
+
     public function carts(){
         return $this->hasMany(Cart::class);
     }

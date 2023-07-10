@@ -170,7 +170,7 @@ class SalesController extends Controller
                 $orders->push($order);
             }
             //take payment
-            $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
+            $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order',$request->coupon_used);
             if(!$result['link']){
                 return request()->expectsJson() ? 
                     response()->json([
@@ -243,7 +243,7 @@ class SalesController extends Controller
                 $orders->push($order);
             }
             //take payment
-            $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order');
+            $result = $this->initializePayment($orders->sum('total'),$orders->pluck('id')->toArray(),'App\Models\Order',$request->coupon_used);
             if(!$result['link']){
                 return request()->expectsJson() ? 
                     response()->json([

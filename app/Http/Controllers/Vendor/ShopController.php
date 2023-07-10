@@ -64,8 +64,9 @@ class ShopController extends Controller
     }
 
     public function create(){
-        $states = State::all();
-        $cities = City::all();
+        $user = auth()->user();
+        $states = $user->country->states;
+        $cities = $user->country->cities;
         return view('vendor.shop.create',compact('states','cities'));
     }
 
@@ -78,7 +79,6 @@ class ShopController extends Controller
                 'name' => 'required|max:255',
                 'address' => 'required|string',
                 'state_id' => 'required|numeric',
-                'city_id' => 'required|numeric',
                 'email' => 'required|string|unique:shops',
                 'phone' => 'required|string|unique:shops',
                 'photo' => ['required','string','url','not-regex:(.svg|.gif)']
@@ -124,7 +124,6 @@ class ShopController extends Controller
                 'name' => 'required|max:255',
                 'address' => 'required|string',
                 'state_id' => 'required|numeric',
-                'city_id' => 'required|numeric',
                 'email' => 'required|string|unique:shops',
                 'phone' => 'required|string|unique:shops',
                 'photo' => 'required|max:2048|image',
@@ -168,10 +167,9 @@ class ShopController extends Controller
 
     public function settings(Shop $shop){
         $user = auth()->user();
-        $banks = Bank::all();
         $states = $shop->country->states;
         $cities = City::where('state_id',$shop->state_id)->get();
-        return view('vendor.shop.settings',compact('user','shop','banks','states','cities'));
+        return view('vendor.shop.settings',compact('user','shop','states','cities'));
     }
     
     public function update(Request $request){
@@ -188,7 +186,6 @@ class ShopController extends Controller
                 'photo' => 'nullable|max:2048|image',
                 'address' => 'nullable|string',
                 'state_id' => 'nullable|numeric',
-                'city_id' => 'nullable|numeric',
                 'discount30' => 'nullable|string',
                 'discount60' => 'nullable|string',
                 'discount90' => 'nullable|string',
@@ -299,7 +296,12 @@ class ShopController extends Controller
         }
     }
 
-    public function verification(Request $request){
+    public function verification(Shop $shop){
+        $user = auth()->user();
+        return view('vendor.shop.verification',compact('user','shop'));
+    }
+
+    public function verify(Request $request){
         // dd($request->all());
         $user = auth()->user();
         try {
@@ -308,14 +310,15 @@ class ShopController extends Controller
             [
                 'shop_id' => 'required|numeric',
                 'type' => 'required|string',
-                'document.*' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:4096',
+                'document.*' => 'required|file|mimes:jpeg,png,jpg,pdf,doc,docx|max:2048',
+            ],[
+                'document.*.max' => 'The document is too heavy. Standard size is 2mb',
             ]);
             if($validator->fails()){
                 return request()->expectsJson() ?  
                     response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
                     redirect()->back()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
             }
-                
             $verifiable_id = $request->shop_id;
             $verifiable_type = 'App\Models\Shop';
 
@@ -344,6 +347,8 @@ class ShopController extends Controller
             ], 500);
         }
     }
+
+    
 
     public function notifications(Shop $shop){
         $shop->unreadNotifications->markAsRead();

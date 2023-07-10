@@ -177,7 +177,9 @@ class Product extends Model
     }
 
     public function package(){
-        return $this->belongsTo(Package::class);
+        return $this->belongsTo(Package::class)->withDefault([
+            'name' => 'No Package Selected',
+        ]);
     }
 
     public function reviewable(){

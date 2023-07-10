@@ -138,7 +138,25 @@
 
 															
 														</tr>
-														
+														<tr>
+															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
+																
+																Some of your ads are not showing. Affected adsets are: 
+																@foreach ($adsets as $adset)
+																	<a href="{{route('vendor.adverts',$adset)}}"><u>{{$adset->slug}}</u></a> @if(!$loop->last) , @else . @endif
+																@endforeach
+																<br/>
+																Here are a few things that might be the problem<br/> 
+																<ul>
+																	<li>Your adset subscription has expired</li>
+																	<li>Your user subscription has expired and therefore some of your shops or products are no longer visible</li>
+																	<li>Your shop or products are not approved</li>
+																	<li>Your shop or products are not not published</li>
+																	<li>Your products are no longer available in stock</li>
+																	<li>Your products have expired</li>
+																</ul>
+															</td>
+														</tr>
 														<tr>
 															<td style="color:#666666; font-family:Poppins,sans-serif; font-size:13px; line-height:30px; padding-bottom:25px;">
 																<div class="cart-row">

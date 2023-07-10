@@ -112,15 +112,7 @@
 							</table>
 							<!-- END Header -->
 
-							<!-- Hero Image -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0">
-								<tr>
-									<td class="fluid-img">
-										<img src="{{$product->image}}" border="0" width="100%" alt="" />
-									</td>
-								</tr>
-							</table>
-							<!-- END Hero Image -->
+							
 
 							<!-- Intro -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="font-size:13px">
