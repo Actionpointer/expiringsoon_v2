@@ -87,7 +87,7 @@ Route::group(['middleware'=> 'verified'],function(){
     Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
     Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
     Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
-    
+    Route::post('applycoupon',[ResourcesController::class, 'coupon'])->name('applycoupon');
 
     Route::group(['middleware'=> 'role:shopper'],function(){
         Route::get('addresses', [AddressController::class, 'index'])->name('addresses');

@@ -407,7 +407,7 @@
             $.ajax({
                 type:'POST',
                 dataType: 'json',
-                url: "{{route('vendor.applycoupon')}}",
+                url: "{{route('applycoupon')}}",
                 data:{
                     '_token' : $('meta[name="csrf-token"]').attr('content'),
                     'code': code,

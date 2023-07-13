@@ -34,7 +34,7 @@ Route::group(['prefix'=> 'vendor','as'=>'vendor.','middleware'=> ['auth:sanctum'
         Route::post('subscription/adsets', [AdsetController::class, 'subscribe'])->name('adset.subscribe');   
         Route::post('adset/cancel-renewal', [AdsetController::class, 'cancel_renewal'])->name('adset.cancel_renew');   
 
-        Route::post('applycoupon',[ResourcesController::class, 'coupon'])->name('applycoupon');
+        
         Route::get('transactions',[PaymentController::class,'index'])->name('payments');
         
         //list adds, create ads (both shop and products)

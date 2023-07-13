@@ -148,7 +148,7 @@
                                     <span class="font-body--xl-500">-{!!$user->country->currency->symbol!!}
                                     <span id="discount_text" class="ms-0">0</span> 
                                     </span>
-                                </div>
+                                  </div>
                                 <div class="bill-card__memo-item mb-3">
                                     <p class="font-body--lg-400">Total:</p>
                                     <span class="font-body--xl-500">{!!$user->country->currency->symbol!!}
@@ -264,34 +264,34 @@
   })
 
   $('#coupon_button').on('click',function(){
-        let code = $('#coupon_code').val()
-        let amount = $('#amount').val()
-        if(code != ''){
-            $.ajax({
-                type:'POST',
-                dataType: 'json',
-                url: "{{route('vendor.applycoupon')}}",
-                data:{
-                    '_token' : $('meta[name="csrf-token"]').attr('content'),
-                    'code': code,
-                    'amount': amount,
-                },
-                success:function(data) {
-                    console.log(data)
-                    if(data.value != 0){
-                        $('#discount').val(data.value);
-                        $('#total').text(parseInt(amount) - parseInt(data.value))
-                        $('#discount_text').html(data.value);
-                        $('#coupon_used').val(code);
-                    }
-                    $('#coupon_description').html(data.description);
-                },
-                error: function (data, textStatus, errorThrown) {
-                    console.log(data);
-                },
-            })
-        }  
-    })
+      let code = $('#coupon_code').val()
+      let amount = $('#amount').val()
+      if(code != ''){
+          $.ajax({
+              type:'POST',
+              dataType: 'json',
+              url: "{{route('applycoupon')}}",
+              data:{
+                  '_token' : $('meta[name="csrf-token"]').attr('content'),
+                  'code': code,
+                  'amount': amount,
+              },
+              success:function(data) {
+                  console.log(data)
+                  if(data.value != 0){
+                      $('#discount').val(data.value);
+                      $('#total').text(parseInt(amount) - parseInt(data.value))
+                      $('#discount_text').html(data.value);
+                      $('#coupon_used').val(code);
+                  }
+                  $('#coupon_description').html(data.description);
+              },
+              error: function (data, textStatus, errorThrown) {
+                  console.log(data);
+              },
+          })
+      }  
+  })
 
 </script>
 @endpush

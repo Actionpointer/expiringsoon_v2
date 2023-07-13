@@ -244,6 +244,12 @@
                         <span id="vat_cost" data-value="{{$order['vat_percent']}}">{{number_format($order['vat'],2)}}</span>
                       </span>
                     </div>
+                    <div class="bill-card__memo-item">
+                      <p class="font-body--lg-400">Discount:</p>
+                      <span class="font-body--xl-500">-{!!$user->country->currency->symbol!!}
+                      <span id="discount_text" class="ms-0">0</span> 
+                      </span>
+                    </div>
                     <!-- total  -->
                     <div class="bill-card__memo-item total">
                       <p class="font-body--lg-400">Total:</p>
@@ -252,6 +258,16 @@
                         <span id="grandtotal" data-value="{{$order['grandtotal']}}">{{number_format($order['grandtotal'],2)}}</span>
                       </span>
                     </div>
+                    <input type="hidden" name="amount" id="amount" value="{{$order['subtotal']}}">
+                    <div class="mt-3">
+                        <div class="newsletter-card__input w-100">
+                            <input type="text" name="coupon" id="coupon_code" placeholder="Enter Coupon Code">
+                            <button class="button button--lg" type="button" id="coupon_button"> Apply Coupon </button>
+                        </div>
+                        <small id="coupon_description" class="d-block text-info text-center"></small>
+                    </div>
+                    <input type="hidden" name="discount" id="discount" value="0">
+                    <input type="hidden" name="coupon_used" id="coupon_used">
                   </div>
                 </div>
               </div>
@@ -416,6 +432,37 @@
           $(myform).submit();
         }
         
+    })
+
+    $('#coupon_button').on('click',function(){
+      let code = $('#coupon_code').val()
+      let amount = $('#amount').val()
+      if(code != ''){
+          $.ajax({
+              type:'POST',
+              dataType: 'json',
+              url: "{{route('applycoupon')}}",
+              data:{
+                  '_token' : $('meta[name="csrf-token"]').attr('content'),
+                  'code': code,
+                  'amount': amount,
+              },
+              success:function(data) {
+                  console.log(data)
+                  if(data.value != 0){
+                      $('#discount').val(data.value);
+                      $('#grandtotal').text(parseInt($('#grandtotal').attr('data-value')) - parseInt(data.value))
+                      $('#discount_text').html(data.value);
+                      $('#coupon_used').val(code);
+                      // recalculateGrandTotal();
+                  }
+                  $('#coupon_description').html(data.description);
+              },
+              error: function (data, textStatus, errorThrown) {
+                  console.log(data);
+              },
+          })
+      }  
     })
     
 </script>
