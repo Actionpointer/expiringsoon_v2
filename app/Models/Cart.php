@@ -28,7 +28,7 @@ class Cart extends Model
         return $this->belongsTo(Shop::class);
     }
     public function getDeliveryCostAttribute(){
-        return $this->product->shop->packageRates->firstWhere('package_id',$this->product->package_id)->amount * $this->quantity;
+        return $this->product->shop->packageRates->isNotEmpty() && $this->product->shop->packageRates->firstWhere('package_id',$this->product->package_id) ? $this->product->shop->packageRates->firstWhere('package_id',$this->product->package_id)->amount * $this->quantity : 0;
     }
     
     
