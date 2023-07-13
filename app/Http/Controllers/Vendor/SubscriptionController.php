@@ -45,7 +45,7 @@ class SubscriptionController extends Controller
                         $subscription = Subscription::create(
                             ['user_id'=> auth()->id(),
                             'plan_id'=> $user->subscription->plan_id,
-                            'amount'=> $request->coupon_used ? $user->subscription->plan['months_'.$request->duration] - $this->getCoupon($request->coupon_used,$user->subscription->plan['months_'.$request->duration])['value'] : $user->subscription->plan['months_'.$request->duration],
+                            'amount'=> $user->subscription->plan['months_'.$request->duration],
                             'start_at'=> now(),
                             'renew_at'=> $this->renewal_period($request->duration),
                             'end_at'=> now()->addMonths($request->duration),
@@ -68,7 +68,7 @@ class SubscriptionController extends Controller
                 $subscription = Subscription::create(
                     ['user_id'=> auth()->id(),
                     'plan_id'=> $plan->id,
-                    'amount'=> $request->coupon_used ? $plan['months_'.$request->duration] - $this->getCoupon($request->coupon_used,$plan['months_'.$request->duration])['value'] : $plan['months_'.$request->duration],
+                    'amount'=> $plan['months_'.$request->duration],
                     'start_at'=> now(),
                     'renew_at'=> $this->renewal_period($request->duration),
                     'end_at'=> now()->addMonths($request->duration),

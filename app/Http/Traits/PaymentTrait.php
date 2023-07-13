@@ -4,6 +4,7 @@ use App\Models\Coupon;
 use App\Models\Payment;
 use App\Models\Settlement;
 use App\Models\PaymentItem;
+use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PaypalTrait;
 use App\Http\Traits\PaystackTrait;
 use App\Http\Traits\FlutterwaveTrait;
@@ -11,18 +12,19 @@ use App\Http\Traits\FlutterwaveTrait;
 
 trait PaymentTrait
 {
-    use PaystackTrait,FlutterwaveTrait,PaypalTrait;
+    use PaystackTrait,FlutterwaveTrait,PaypalTrait,OrderTrait;
 
     protected function initializePayment($amount,$items,$type,$coupon){
         $user = auth()->user();
         $gateway = $user->country->payment_gateway;
         $coupon_id = null;
+        $coupon_value = 0;
         if($coupon){
-            $payable = $coupon ? $amount - $this->getCoupon($coupon,$amount)[1] : $amount;
+            $coupon_value = $this->getCoupon($coupon,$amount)['value'];
             $coupon_id = Coupon::where('code',$coupon)->first()->id;
         }
         
-        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> $user->country->currency_id,'reference'=> uniqid(),'coupon_id'=> $coupon_id,'amount'=> $payable ,'vat'=> $user->country->vat]);
+        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> $user->country->currency_id, 'reference'=> uniqid(),'coupon_id'=> $coupon_id,'coupon_value'=> $coupon_value,'amount'=> $amount ,'vat'=> $user->country->vat]);
         foreach($items as $item){
             PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
         }

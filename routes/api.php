@@ -53,12 +53,14 @@ Route::get('categories', [ResourcesController::class, 'categories']);
 Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);
 
 
+
 Route::group(['middleware'=> 'auth:sanctum'],function(){
     Route::get('/user', function (Request $request) {
         return new VendorResource(User::findOrFail($request->user()->id));
     });
     Route::get('notifications',[UserController::class,'notifications']);
     Route::post('notifications/read',[UserController::class,'readNotifications']);
+    Route::post('applycoupon',[ResourcesController::class, 'coupon'])->name('applycoupon');
 });
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
@@ -132,6 +134,6 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     });
 
     Route::post('payment/status',[App\Http\Controllers\PaymentController::class,'paymentcallback']);
-
+    
     
 });

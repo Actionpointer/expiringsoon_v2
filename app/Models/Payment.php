@@ -13,7 +13,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['reference','method','user_id','currency_id','status','amount','coupon_id','vat'];
+    protected $fillable = ['reference','method','user_id','currency_id','status','amount','coupon_id','coupon_value','vat'];
 
     public static function boot()
     {
@@ -47,5 +47,9 @@ class Payment extends Model
         }else{
             return $query->whereHas('user',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
         }  
+    }
+
+    public function getPayableAttribute(){
+        return $this->amount - $this->coupon_value;
     }
 }

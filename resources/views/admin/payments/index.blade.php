@@ -140,6 +140,7 @@
                           <th scope="col" class="dashboard__order-history-table-title">User</th>
                           
                           <th scope="col" class="dashboard__order-history-table-title">Status</th>
+                          <th scope="col" class="dashboard__order-history-table-title">Discount</th>
                           <th scope="col" class="dashboard__order-history-table-title">Amount</th>
                         </tr>
                     </thead>
@@ -168,9 +169,11 @@
                                   @endif
                               </td>
                                 <td class="cart-table-item order-date align-middle">
-                                    <p class="font-body--lg-500" style="color:#00b207">{!!$payment->user->country->currency->symbol!!}{{ number_format($payment->amount, 2)}}</p>
+                                    <p class="font-body--lg-500" style="color:#00b207">{!!$payment->user->country->currency->symbol!!}{{ number_format($payment->coupon_value)}}</p>
                                 </td>
-                                
+                                <td class="cart-table-item order-date align-middle">
+                                  <p class="font-body--lg-500" style="color:#00b207">{!!$payment->user->country->currency->symbol!!}{{ number_format($payment->payable, 2)}}</p>
+                                </td>
                                 
                                 
                                 

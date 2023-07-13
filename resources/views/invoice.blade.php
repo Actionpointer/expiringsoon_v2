@@ -137,10 +137,14 @@
                           <h5 class="font-body--md-400">VAT {{$payment->vat}}%:</h5>
                           <p class="font-body--md-500">{!!$payment->user->country->currency->symbol!!}{{number_format(($payment->amount * $payment->vat) / ($payment->vat+100))}}</p>
                         </div>
+                        <div class="dashboard__totalpayment-card-body-item">
+                          <h5 class="font-body--md-400">Discount:</h5>
+                          <p class="font-body--md-500">-{!!$payment->user->country->currency->symbol!!}{{number_format($payment->coupon_value)}}</p>
+                        </div>
                         
                         <div class="dashboard__totalpayment-card-body-item total" >
                           <h5 class="font-body--xl-400">Amount:</h5>
-                          <p class="font-body--xl-500">{!!$payment->user->country->currency->symbol!!} {{number_format($payment->amount, 2)}}</p>
+                          <p class="font-body--xl-500">{!!$payment->user->country->currency->symbol!!} {{number_format($payment->payable, 2)}}</p>
                         </div>
                       </div>
                     </div>

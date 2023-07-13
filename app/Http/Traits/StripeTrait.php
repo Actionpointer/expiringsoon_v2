@@ -45,17 +45,17 @@ trait StripeTrait
                               "quantity" => "1",
                               "unit_amount" => [
                                   "currency_code" => $payment->currency->code,
-                                  "value" => $payment->amount,
+                                  "value" => $payment->payable,
                               ],
                           ],
                       ],
                       "amount" => [
                           "currency_code" => $payment->currency->code,
-                          "value" => $payment->amount,
+                          "value" => $payment->payable,
                           "breakdown" => [
                               "item_total" => [
                                   "currency_code" => $payment->currency->code,
-                                  "value" => $payment->amount,
+                                  "value" => $payment->payable,
                               ],
                           ],
                       ],

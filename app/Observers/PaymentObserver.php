@@ -21,7 +21,7 @@ class PaymentObserver
         if($payment->isDirty('status') && $payment->status == 'success'){
             if($item = $payment->items->where('paymentable_type','!=','App\Models\Order')->first()){
                 Revenue::create(['country_id'=> $payment->user->country_id,'currency_id'=> $payment->currency_id,
-                'amount'=> $payment->amount,'description'=> str_replace('App\Models\\','',$item->paymentable_type)]);
+                'amount'=> $payment->payable,'description'=> str_replace('App\Models\\','',$item->paymentable_type)]);
             }
             
         }

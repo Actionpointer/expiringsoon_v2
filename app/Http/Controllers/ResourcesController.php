@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\State;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Http\Traits\OrderTrait;
 
 class ResourcesController extends Controller
 {
+    use OrderTrait;
     
     public function categories(){
         $categories = Category::all();
@@ -105,7 +108,10 @@ class ResourcesController extends Controller
         }
     }
 
-    
-    
-    
+    public function coupon(Request $request){
+        $code = $request->code;
+        $amount = $request->amount;
+        return $this->getCoupon($code,$amount);
+    }
+  
 }

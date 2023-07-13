@@ -67,7 +67,7 @@ class PaymentController extends Controller
             }else \abort(404);
         }
         $details = $this->verifyPayment($payment);
-        if(!$details['status'] || $details['trx_status'] != 'success' || $details['amount'] < $payment->amount){
+        if(!$details['status'] || $details['trx_status'] != 'success' || $details['amount'] < $payment->payable){
             if(request()->expectsJson()){
                 return response()->json([
                     'status' => false,

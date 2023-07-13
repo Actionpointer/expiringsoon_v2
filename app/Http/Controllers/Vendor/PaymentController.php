@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Vendor;
 use App\Models\Shop;
 use App\Models\Payout;
 use Illuminate\Http\Request;
-use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PayoutTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -15,7 +14,7 @@ use App\Http\Resources\ShopSettlementResource;
 
 class PaymentController extends Controller
 {
-    use PayoutTrait,OrderTrait;
+    use PayoutTrait;
 
     public function __construct(){
         $this->middleware('auth:sanctum');
@@ -123,12 +122,6 @@ class PaymentController extends Controller
         
     }  
 
-
-    public function apply(Request $request){
-        $code = $request->code;
-        $amount = $request->amount;
-        return $this->getCoupon($code,$amount);
-    }
 
     
 }

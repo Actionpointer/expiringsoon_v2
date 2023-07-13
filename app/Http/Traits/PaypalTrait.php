@@ -46,17 +46,17 @@ trait PaypalTrait
                                 "quantity" => "1",
                                 "unit_amount" => [
                                     "currency_code" => $payment->currency->iso,
-                                    "value" => $payment->amount,
+                                    "value" => $payment->payable,
                                 ],
                             ],
                         ],
                         "amount" => [
                             "currency_code" => $payment->currency->iso,
-                            "value" => $payment->amount,
+                            "value" => $payment->payable,
                             "breakdown" => [
                                 "item_total" => [
                                     "currency_code" => $payment->currency->iso,
-                                    "value" => $payment->amount,
+                                    "value" => $payment->payable,
                                 ],
                             ],
                         ],

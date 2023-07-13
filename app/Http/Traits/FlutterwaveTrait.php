@@ -14,7 +14,7 @@ trait FlutterwaveTrait
         ->withHeader('Authorization: Bearer '.config('services.flutter.secret'))
         ->withData( array('customer' => ['email'=> $payment->user->email,'phonenumber'=> $payment->user->phone,'name'=> $payment->user->fname.' '.$payment->user->lname],
                         'tx_ref'=> $payment->reference,"currency" => session('locale')['currency_iso'],"payment_options"=>"card,account,ussd",
-                        "redirect_url"=> route('payment.callback'),'amount'=> $payment->amount,
+                        "redirect_url"=> route('payment.callback'),'amount'=> $payment->payable,
                         "customizations"=> [
                             "title" => "Expiring Soon",
                             "description" => "Payment",

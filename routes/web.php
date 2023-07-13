@@ -15,7 +15,6 @@ use App\Http\Controllers\Shopper\SalesController;
 use App\Http\Controllers\Guest\FrontendController;
 use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
-use App\Notifications\WelcomeNotification;
 
 Route::get('broadcast', function () {
     // $user = \App\Models\User::find(1);
