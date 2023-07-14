@@ -21,6 +21,7 @@ class OrderMessageResource extends JsonResource
             'sender_name' => $this->sender_type == 'App\Models\User' ? $this->order->user->name :$this->order->shop->name,
             'sender_type' => $this->sender_type == 'App\Models\User' ? 'user' :'shop',
             'body' => $this->body,
+            'attachment' => $this->file,
             'created_at'=> $this->created_at
         ];
     }

@@ -7,22 +7,16 @@ use App\Models\Bank;
 use App\Models\Plan;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Order;
 use App\Models\State;
 use App\Models\Payout;
-use App\Models\Address;
 use App\Models\Country;
 use App\Models\OrderStatus;
-use App\Models\Subscription;
 use Illuminate\Http\Request;
-use App\Rules\OtpValidateRule;
-use App\Models\OneTimePassword;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -41,11 +35,11 @@ class UserController extends Controller
         $user = auth()->user();
         DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$user->id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','user')->update(['read_at'=> now()]);
         $disputes = OrderStatus::within()->where('name','disputed'); 
-        // if($user->isAnyRole(['superadmin','admin'])){
+        if($user->isAnyRole(['superadmin','admin'])){
             $disputes = $disputes->get();
-        // }else{
-        //     $disputes = $disputes->whereHas('role',function($query){ $query->where('arbitrary_id',auth()->id()); })->get();
-        // }
+        }else{
+            $disputes = $disputes->whereHas('order',function($query){ $query->where('arbitrator_id',auth()->id()); })->get();
+        }
         $statuses = OrderStatus::within()->where(function($query) use($processing,$shipping){
                         $query->where('name','processing')->where('created_at','<',now()->subHours($processing))
                             ->orWhere('name','shipped')->where('created_at','<',now()->subHours($shipping))

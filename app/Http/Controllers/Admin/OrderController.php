@@ -6,18 +6,19 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Country;
-use App\Models\Settlement;
-use App\Events\RefundBuyer;
 use App\Models\OrderStatus;
 use App\Models\OrderDispute;
 use App\Models\OrderMessage;
 use Illuminate\Http\Request;
+use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Notifications\OrderMessageNotification;
 
 class OrderController extends Controller
 {
+    use SecurityTrait;
     public function __construct()
     {
         $this->middleware('auth');
@@ -67,17 +68,51 @@ class OrderController extends Controller
         return view('admin.orders.list',compact('orders','countries','country_id','status','shipment','sortBy','statuses'));
     }
 
+    public function disputes(){
+        $sortBy = null;
+        $status = 'all';
+        $countries = Country::has('orders')->get();
+        $disputes = OrderStatus::withTrashed()->where('name','disputed');
+        if(request()->query() && request()->query('status')){
+            $status = request()->query('status');
+            if($status == 'ongoing'){
+                $disputes = $disputes->whereNull('deleted_at');
+            }
+            if($status == 'closed'){
+                $disputes = $disputes->whereNotNull('deleted_at');
+            }
+            
+        }
+        if(request()->query() && request()->query('country_id')){
+            $country_id = request()->query('country_id');
+            $disputes = $disputes->whereHas('order',function($query) use($country_id){ $query->within($country_id);});
+        }else{
+            $disputes = $disputes->whereHas('order',function($query){ $query->within();});
+            $country_id = 0;
+        }
+        if(request()->query() && request()->query('sortBy')){
+            $sortBy = request()->query('sortBy');
+            if(request()->query('sortBy') == 'date_asc'){
+                $disputes = $disputes->orderBy('created_at','asc');
+            }
+            if(request()->query('sortBy') == 'date_desc'){
+                $disputes = $disputes->orderBy('created_at','desc');
+            }
+            
+        }
+
+        $disputes = $disputes->paginate(16);
+        return view('admin.orders.disputes',compact('disputes','countries','country_id','status','sortBy'));
+    }
+
+
     public function show(Order $order){
         $user = auth()->user();
         DB::table('notifications')->whereNull('read_at')->where('notifiable_id',auth()->id())->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
         return view('admin.orders.view',compact('order'));
     }
 
-    public function disputes(){
-        
-        return view('admin.orders.view',compact('order'));
-    }
-
+    
     public function update(Request $request){
         OrderStatus::create(['order_id'=> $request->order_id,'user_id'=> auth()->id(),'name'=> strtolower($request->status),'description'=> $request->description]);
         return request()->expectsJson() ? 
@@ -89,26 +124,24 @@ class OrderController extends Controller
     }
 
     public function resolution(Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $order = Order::find($request->order_id);
         OrderDispute::create(['order_id'=> $request->order_id,'arbitrator_id'=> auth()->id(),'seller'=> $request->seller,'buyer'=> $request->buyer,'remark'=> $request->remark]);
         OrderStatus::create(['order_id'=> $order->id,'user_id'=> auth()->id(),'name'=> 'closed','description'=> $request->remark]);
         return redirect()->back()->with(['result'=> 1,'message'=> 'Order Dispute Successfully Resolved']);
     }
-
-    public function messages(Order $order){
-        $user = auth()->user();
-        $notifications = $user->unreadNotifications->whereJsonContains('data->url',route(''))->get();
-        
-        return view('admin.orders.messages',compact('order'));
-    }
     
     public function message(Request $request){
-        // dd($request->all());
-        
         $order = Order::find($request->order_id);
         $receiver_id = $request->receiver == 'buyer'? $order->user_id : $order->shop_id;
         $receiver_type = $request->receiver == 'buyer'? 'App\Models\User' : 'App\Models\Shop';
-        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $receiver_id ,'receiver_type'=> $receiver_type, 'body'=> $request->body]);
+        if($request->hasFile('file')){
+            $document = 'uploads/'.time().'.'.$request->file('file')->getClientOriginalExtension();
+            $request->file('file')->storeAs('public/',$document);
+        }
+        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $receiver_id ,'receiver_type'=> $receiver_type, 'body'=> $request->body,'attachment'=> $document ?? '']);
         if($message->receiver_type == 'App\Models\User'){
             $receiver = User::find($message->receiver_id);
         }else{

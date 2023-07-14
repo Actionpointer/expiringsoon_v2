@@ -94,7 +94,12 @@
                                                       @endif
                                                       <td>{{$user->email}}<br>{{$user->mobile}} </td>
                                                       <td>@if($user->status) Active @else Suspended @endif</td>
-                                                      <td>{{$user->role->name}}</td>
+                                                      <td>
+                                                            {{$user->role->name}}
+                                                            @if($user->role->name == 'arbitrator')
+                                                                - {{$user->disputes->count()}} cases
+                                                            @endif
+                                                        </td>
                                                       <td>
                                                           @if($user->id != Auth::id()) 
                                                           <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block';$('.select2').select2();">Edit </a> | 

@@ -68,7 +68,7 @@ trait StripeTrait
           ])
           ->asJson()
           ->post();
-      dd($response);
+      //dd($response);
       if($response && $response->status == 'CREATED' && $response->links[1]->href){
           return redirect()->to($response->links[1]->href);
       }
@@ -96,7 +96,7 @@ trait StripeTrait
         "currency"=> $payout->currency->code,"reference"=> $payout->reference ) )
         ->asJson()                
         ->post();
-        dd($response);
+        //dd($response);
         if($response &&  isset($response->status) && $response->status)
           return true;
         else return false;

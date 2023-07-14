@@ -135,7 +135,6 @@ class ProductController extends Controller
 
     public function update(Shop $shop,Request $request){
         // dd($request->all());
-        
         try {
             $date_limit = now()->addHours(cache('settings')['order_processing_to_delivery_period']);
             $date_beyond = Carbon::parse('2038-01-01');

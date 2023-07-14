@@ -158,7 +158,7 @@
                 <div class="dashboard__order-history" style="margin-top: 24px">
                   <div class="dashboard__order-history-title">
                     <h2 class="font-body--xxl-500">Dispute Cases</h2>
-                    <a class="font-body--md-500">{{$disputes->count()}} Cases</a>
+                    <a class="font-body--md-500" href="{{route('admin.order.disputes')}}">{{$disputes->count()}} Cases</a>
                   </div>
                   <div class="dashboard__order-history-table">
                     <div class="table-responsive">

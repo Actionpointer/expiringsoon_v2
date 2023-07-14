@@ -111,7 +111,6 @@ class PaymentController extends Controller
                 'message' => 'Adjust payout to match minimum and maximum payout',
             ], 401) :  redirect()->back()->with(['result'=> '0','message'=> 'Insufficient Balance']);
         }
-        dd($request->all());
         $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,'currency_id'=> $user->country->currency_id,
         'channel'=> $user->country->payout_gateway,
         'reference'=> uniqid(),'amount'=> $request->amount,'status'=> cache('settings')['auto_approve_payout'] ? 'approved':'pending']);

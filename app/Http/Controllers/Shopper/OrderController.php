@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Shopper;
 
-
-use App\Models\Shop;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -15,11 +13,9 @@ use App\Http\Traits\PaymentTrait;
 use App\Http\Traits\WishlistTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Events\BroadcastOrderMessage;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderDetailsResource;
 use App\Http\Resources\OrderMessageResource;
-use App\Notifications\OrderMessageNotification;
 
 class OrderController extends Controller
 {
@@ -125,7 +121,11 @@ class OrderController extends Controller
     
     public function message(Request $request){
         $order = Order::find($request->order_id);
-        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type, 'body'=> $request->body]);
+        if($request->hasFile('file')){
+            $document = 'uploads/'.time().'.'.$request->file('file')->getClientOriginalExtension();
+            $request->file('file')->storeAs('public/',$document);
+        }
+        $message = OrderMessage::create(['order_id'=> $order->id,'sender_id'=> $request->sender_id,'sender_type'=>'App\Models\User','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type, 'body'=> $request->body,'attachment'=> $document ?? '']);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

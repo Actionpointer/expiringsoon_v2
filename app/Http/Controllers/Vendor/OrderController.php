@@ -97,7 +97,8 @@ class OrderController extends Controller
     }
 
     public function messages(Shop $shop,Order $order){
-        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);        OrderMessage::where(function($query) use($order){
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);        
+        OrderMessage::where(function($query) use($order){
             return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop')->whereNull('read_at');
         })->update(['read_at'=> now()]);
 
@@ -113,7 +114,11 @@ class OrderController extends Controller
 
     public function message(Shop $shop,Request $request){
         $order = Order::find($request->order_id);
-        $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type,'body'=> $request->body]);
+        if($request->hasFile('file')){
+            $document = 'uploads/'.time().'.'.$request->file('file')->getClientOriginalExtension();
+            $request->file('file')->storeAs('public/',$document);
+        }
+        $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type,'body'=> $request->body,'attachment'=> $document ?? '']);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

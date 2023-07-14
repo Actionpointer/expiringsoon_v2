@@ -199,7 +199,10 @@
                         
                         <div class="pt-2 pt-md-0 text-center">
                           <div class="contact-form-input contact-form-textarea" style="margin-top:20px">
-                            <textarea name="remark" id="remark" placeholder="Remark"></textarea>
+                            <textarea name="remark" id="remark" placeholder="Remark" required></textarea>
+                          </div>
+                          <div class="contact-form-input" style="margin-top:20px">
+                            <input name="pin" id="pin" placeholder="Enter Pin" required>
                           </div>
                           <button class="button button--md w-100" type="submit" id="btn-update">
                             Close Dispute
@@ -367,7 +370,7 @@
                         @if($order->status == 'disputed')
                         <div class="comment-box pt-0"> 
                           <h5 class="font-body--md-400">Write a message to buyer & seller </h5>
-                          <form action="{{route('admin.order.message')}}" method="POST" class="mt-2">@csrf
+                          <form action="{{route('admin.order.message')}}" method="POST" class="mt-2" enctype="multipart/form-data">@csrf
                             <input type="hidden" name="order_id" value=" {{$order->id}}">
                             <input type="hidden" name="sender_id" value=" {{auth()->id()}}">
                             <input type="hidden" name="sender_type" value="App\Models\User">
@@ -420,7 +423,10 @@
                                   <p class="date">{{$message->created_at->format('d M,Y h:i A')}}</p>
                                 </div>
                                 <p class="user-message">
-                                  {{$message->body}}
+                                  {{$message->body}} 
+                                  @if($message->attachment) 
+                                    <a href="{{Storage::url($message->attachment)}}" target="_blank">{{$message->attachment}}</a> 
+                                  @endif
                                 </p>
                               </div>
                             </div>

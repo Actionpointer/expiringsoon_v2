@@ -99,8 +99,8 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
 
         });
         Route::get('orders',[OrderController::class, 'index'])->name('orders');
-        Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
         Route::get('order/disputes',[OrderController::class, 'disputes'])->name('order.disputes');
+        Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
         Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
         Route::post('order/resolution',[OrderController::class, 'resolution'])->name('order.resolution');
         Route::post('order/message/',[OrderController::class, 'message'])->name('order.message');

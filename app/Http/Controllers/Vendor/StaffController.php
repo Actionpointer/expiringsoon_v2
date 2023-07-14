@@ -14,13 +14,10 @@ use Illuminate\Validation\Rule;
 use App\Http\Traits\PayoutTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\NewStaffNotification;
-use App\Http\Resources\NotificationResource;
 
 class StaffController extends Controller
 {

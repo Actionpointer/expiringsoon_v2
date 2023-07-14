@@ -30,6 +30,10 @@ class OrderMessage extends Model
         return $this->morphTo();
     }
 
+    public function getFileAttribute(){
+        return $this->attachment ? config('app.url')."/storage/$this->attachment":null;  
+    }
+
     // public function broadcastOn($event)
     // {
     //     return [new PrivateChannel('order.'.$this->order_id)];

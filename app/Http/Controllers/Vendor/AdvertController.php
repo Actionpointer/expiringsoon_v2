@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\Adset;
 use App\Models\State;
-use App\Models\Adplan;
 use App\Models\Advert;
-use App\Models\Feature;
 use App\Models\Product;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\GeoLocationTrait;
 use Intervention\Image\Facades\Image;
-use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
