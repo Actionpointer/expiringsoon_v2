@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pin;
 use App\Models\Bank;
-
-
 use App\Models\State;
 use App\Models\Address;
 use Illuminate\Http\Request;
@@ -13,11 +12,11 @@ use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ShopResource;
-use App\Notifications\PasswordChangedNotification;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\PasswordChangedNotification;
 
 class UserController extends Controller
 {
@@ -132,9 +131,7 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput()->with(['result'=> '0','message'=> 'PIN operation was not successful!']);
         }
-        
-        $user->pin = Hash::make($request->pin);
-        $user->save();
+        $pin = Pin::updateOrCreate(['user_id'=> $user->id],['body'=> Hash::make($request->pin),'last_updated_at'=> now()]);
         return request()->expectsJson() ? 
             response()->json([
                 'status' => true,

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Coupon;
 use App\Models\Currency;
 use App\Models\PaymentItem;
 use App\Observers\PaymentObserver;
@@ -30,6 +31,10 @@ class Payment extends Model
     public function currency(){
         return $this->belongsTo(Currency::class);
     }
+    public function coupon(){
+        return $this->belongsTo(Coupon::class);
+    }
+
     public function getRouteKeyName(){
         return 'reference';
     }
@@ -48,6 +53,7 @@ class Payment extends Model
             return $query->whereHas('user',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
         }  
     }
+
 
     public function getPayableAttribute(){
         return $this->amount - $this->coupon_value;

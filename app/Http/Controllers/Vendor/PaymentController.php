@@ -11,10 +11,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopPayoutResource;
 use App\Http\Resources\VendorPaymentResource;
 use App\Http\Resources\ShopSettlementResource;
+use App\Http\Traits\SecurityTrait;
 
 class PaymentController extends Controller
 {
-    use PayoutTrait;
+    use PayoutTrait,SecurityTrait;
 
     public function __construct(){
         $this->middleware('auth:sanctum');
@@ -81,6 +82,12 @@ class PaymentController extends Controller
 
     //request payout
     public function payout(Shop $shop,Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
+        if(!$this->pinRecentlyChanged()){
+            return redirect()->back()->with(['result'=> 0,'message'=> 'Please wait for 24 hours after pin change']);
+        }
         $user = $shop->user;
         if($request->payout_id){
             Payout::where('id',$request->payout_id)->delete();
@@ -104,7 +111,7 @@ class PaymentController extends Controller
                 'message' => 'Adjust payout to match minimum and maximum payout',
             ], 401) :  redirect()->back()->with(['result'=> '0','message'=> 'Insufficient Balance']);
         }
-        
+        dd($request->all());
         $payout = Payout::create(['user_id'=> $user->id,'shop_id'=> $shop->id,'currency_id'=> $user->country->currency_id,
         'channel'=> $user->country->payout_gateway,
         'reference'=> uniqid(),'amount'=> $request->amount,'status'=> cache('settings')['auto_approve_payout'] ? 'approved':'pending']);

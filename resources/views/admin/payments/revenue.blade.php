@@ -124,6 +124,7 @@
                           <tr>
                             <th scope="col" class="dashboard__order-history-table-title"><span>Country</span> </th>
                             <th scope="col" class="dashboard__order-history-table-title">Description</th>
+                            <th scope="col" class="dashboard__order-history-table-title">Payment Ref</th>
                             <th scope="col" class="dashboard__order-history-table-title">Date</th>
                             <th scope="col" class="dashboard__order-history-table-title">Amount</th>
                             
@@ -135,6 +136,9 @@
                               <tr class="likeditem" style="border-bottom:1px solid #f1f1f1">
                                   <td class="dashboard__order-history-table-item align-middle"> {{$revenue->country->name}} </td>
                                  <td class="cart-table-item order-date align-middle">{{ucwords($revenue->description)}} </td> 
+                                 <td class="cart-table-item order-date align-middle">
+                                    <a href="{{route('invoice',$revenue->payment)}}">{{$revenue->payment->reference}} </a>
+                                  </td> 
                                   <td class="cart-table-item order-date align-middle"> {{ $revenue->created_at->format('d-m-Y')}} </td>
                                  
                                   <td class="cart-table-item order-date align-middle">

@@ -17,7 +17,7 @@ class SettlementObserver
     {
 
         if($settlement->status){
-            Revenue::create(['country_id'=> $settlement->receiver->country_id,'currency_id'=> $settlement->receiver->country->currency_id,
+            Revenue::create(['payment_id'=> $settlement->order->payment_item->payment->id,'country_id'=> $settlement->receiver->country_id,'currency_id'=> $settlement->receiver->country->currency_id,
             'amount'=> $settlement->charges,'description'=> $settlement->description]);
         }
     }
@@ -26,7 +26,7 @@ class SettlementObserver
     {
 
         if($settlement->isDirty('status') && $settlement->status){
-            Revenue::create(['country_id'=> $settlement->receiver->country_id,'currency_id'=> $settlement->receiver->country->currency_id,
+            Revenue::create(['payment_id'=> $settlement->order->payment_item->payment->id,'country_id'=> $settlement->receiver->country_id,'currency_id'=> $settlement->receiver->country->currency_id,
             'amount'=> $settlement->charges,'description'=> $settlement->description]);
         }
     }

@@ -217,7 +217,7 @@
                         
                         <!-- confirm  Password  -->
                         <div class="contact-form-input" id="generate_button">
-                          <button class="btn btn-dark btn-lg generate mt-4" type="button">Generate One Time Password</button>
+                          <button class="btn btn-dark btn-lg generate mt-4" type="button">Generate One Time Password <i class="fa fa-refresh"></i></button>
                         </div>
                         <div class="contact-form-input" id="otp_field" style="display:none;">
                           <label for="number1"><span id="otp_response"></span>  </label>
@@ -381,6 +381,7 @@
   })
 
   $(document).on('click','.generate',function(){
+      $('.fa-refresh').addClass('fa-spin');
       $.ajax({
         type:'GET',
         dataType: 'json',

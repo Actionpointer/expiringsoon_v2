@@ -10,12 +10,15 @@ use Illuminate\Support\Facades\RateLimiter;
 trait SecurityTrait
 {
     protected function checkPin(Request $request){
-        
+        $access = false;
         $executed = RateLimiter::attempt(
             'access-pin:'.auth()->user()->id,
             $perMinute = cache('settings')['throttle_security_attempt'],
             function() {
-                $access = Hash::check(request()->pin, auth()->user()->pin);
+                if(!auth()->user()->pin){
+                    return ['result'=> 0,'message'=> 'Pin is not set. Set pin at profile'];
+                }
+                $access = Hash::check(request()->pin, auth()->user()->pin->body);
                 if(!$access){
                     return ['result'=> 0,'message'=> 'Wrong Pin'];
                 }
@@ -30,6 +33,11 @@ trait SecurityTrait
         }
         
         
+    }
+
+    protected function pinRecentlyChanged(){
+        $user = auth()->user();
+        return $user->pin && $user->pin->last_updated_at->diffInHours(now()) > 24;
     }
 
     public function generateOTP(User $user){

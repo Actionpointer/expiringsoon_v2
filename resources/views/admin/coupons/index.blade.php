@@ -106,7 +106,6 @@
                                                                   <option value="all" @if($status == 'all') selected @endif>All </option>
                                                                   <option value="true" @if($status) selected @endif>Active </option>
                                                                   <option value="false" @if(!$status) selected @endif>Inactive </option>
-                                                                  
                                                               </select>
                                                             </div>
                                                             <div class="col-md-3">
@@ -169,7 +168,7 @@
                                                                 <th scope="col" class="cart-table-title align-middle">Role</th>
                                                                 <th scope="col" class="cart-table-title align-middle">Discount</th>
                                                                 <th scope="col" class="cart-table-title align-middle">Period</th>
-                                                                <th scope="col" class="cart-table-title align-middle">Status</th>
+                                                                <th scope="col" class="cart-table-title align-middle">Qty</th>
                                                                 <th scope="col" class="cart-table-title align-middle">Action</th>
                                                             </tr>
                                                         </thead>
@@ -185,7 +184,13 @@
                                                                                 <label class="form-check-label font-body--400" for="existing"> </label>
                                                                                 <input class="form-check-input checkboxes" type="checkbox" name="coupons[]" value="{{$coupon->id}}" >
                                                                             </div>
-                                                                            <span>{{$coupon->name}}</span>
+                                                                            <span class="text-nowrap">
+                                                                                {{$coupon->name}} 
+                                                                                @if($coupon->status) 
+                                                                                    <i class="fa fa-circle text-success"></i> 
+                                                                                @else <i class="fa fa-circle text-danger"></i> 
+                                                                                @endif
+                                                                            </span>
                                                                         </div>
                                                                     </td>
 
@@ -199,17 +204,18 @@
                                                                         @endif
                                                                     </td>
                                                                     <td class="cart-table-item stock-status order-date align-middle"> 
-                                                                        @if($coupon->start_at && $coupon->end_at)
+                                                                        <small class="small">
+                                                                            @if($coupon->start_at && $coupon->end_at)
                                                                             {{ $coupon->start_at->format('M-d')}} to {{$coupon->end_at->format('M-d')}} 
-                                                                        @else 
-                                                                            - 
-                                                                        @endif
+                                                                            @else 
+                                                                                - 
+                                                                            @endif
+
+                                                                        </small>
+                                                                        
                                                                     </td>
                                                                     <td class="cart-table-item stock-status order-date align-middle">
-                                                                        @if($coupon->status) 
-                                                                            <i class="fa fa-circle text-success"></i> Active
-                                                                        @else <i class="fa fa-circle text-danger"></i> Inactive
-                                                                        @endif 
+                                                                        {{$coupon->available}} of {{$coupon->quantity}}
                                                                     </td>
                                                                     <td class="cart-table-item stock-status order-date align-middle">
                                                                         <button class="btn btn-xs btn-info text-white" data-bs-toggle="modal" data-bs-target="#editcoupon{{$coupon->id}}"><i class="fa fa-pencil"></i></button> 

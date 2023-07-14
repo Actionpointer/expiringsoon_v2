@@ -199,6 +199,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Role::class);
     }
 
+    public function pin(){
+        return $this->hasOne(Pin::class);
+    }
+
     public function isRole($value){
         return $this->role->name == $value;
     }

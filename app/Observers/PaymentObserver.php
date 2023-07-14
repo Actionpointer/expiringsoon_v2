@@ -20,10 +20,13 @@ class PaymentObserver
     {
         if($payment->isDirty('status') && $payment->status == 'success'){
             if($item = $payment->items->where('paymentable_type','!=','App\Models\Order')->first()){
-                Revenue::create(['country_id'=> $payment->user->country_id,'currency_id'=> $payment->currency_id,
+                Revenue::create(['payment_id'=> $payment->id ,'country_id'=> $payment->user->country_id,'currency_id'=> $payment->currency_id,
                 'amount'=> $payment->payable,'description'=> str_replace('App\Models\\','',$item->paymentable_type)]);
             }
-            
+            if($payment->coupon_id && $payment->coupon_value > 0){
+                $payment->coupon->available = $payment->coupon->available - 1;
+                $payment->coupon->save();
+            }
         }
     }
 

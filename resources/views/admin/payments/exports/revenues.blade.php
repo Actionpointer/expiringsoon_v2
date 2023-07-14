@@ -9,6 +9,7 @@
             <th>Description</th>
             <th>Currency</th>
             <th>Amount</th>
+            <th>Payment Reference</th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
             <td>{{ ucwords($revenue->description) }}</td>
             <td>{{ $revenue->currency->iso }}</td>
             <td>{{ number_format($revenue->amount, 2)}}</td>
+            <td>{{ $revenue->payment->reference }}</td>
         </tr>
     @endforeach
     </tbody>
