@@ -11,6 +11,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Jobs\MailShopFollowersJob;
 
 class FeatureController extends Controller
 {
@@ -31,6 +32,7 @@ class FeatureController extends Controller
 
     public function store(Request $request){
         $products = [];
+        $shops = [];
         foreach($request->products as $product_id){
             $products[] = Product::find($product_id);
         }
@@ -39,7 +41,9 @@ class FeatureController extends Controller
             if($adset->units > $adset->features->count()){
                 $advert = Feature::create(['adset_id'=> $adset->id,'product_id'=> $product->id,'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_product_advert'] ? true:false]);
             }
+            $shops[] = $product->shop;
         }
+        MailShopFollowersJob::dispatch(array_unique($shops));
         return request()->expectsJson()
         ? response()->json(['status' => true, 'message' => 'Advert Created'], 200)
         : redirect()->back()->with(['result'=> 1,'message'=>'Ad Created']);
@@ -63,11 +67,14 @@ class FeatureController extends Controller
 
     public function subscription(Request $request){
         // dd($request->all());
+        $shops = [];
         $products = Product::whereIn('id',$request->products)->get();
         $adset = Adset::create(['user_id'=> auth()->id(),'adplan_id' => $request->adplan_id,'units'=> count($request->products),'amount'=> $request->amount,'start_at'=> now(),'end_at'=> now()->addDays($request->days),'auto_renew'=> $request->auto_renew ? true:false]);        
         foreach($products as $product){
             Feature::create(['adset_id'=> $adset->id,'product_id'=> $product->id,'state_id'=> $request->state_id,'approved'=> cache('settings')['auto_approve_product_advert'] ? true:false]);
+            $shops[] = $product->shop;
         }
+        MailShopFollowersJob::dispatch(array_unique($shops));
         $result = $this->initializePayment($adset->amount,[$adset->id],'App\Models\Adset',$request->coupon_used);
         if(!$result['link']){
             return request()->expectsJson() ? 

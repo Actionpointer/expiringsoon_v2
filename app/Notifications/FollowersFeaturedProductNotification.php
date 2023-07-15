@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Shop;
+use App\Models\Feature;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,8 +42,9 @@ class FollowersFeaturedProductNotification extends Notification
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
-    {
-        return (new MailMessage)->subject('Featured Product')->view('emails.featured_products',['shop'=> $this->shop]);
+    {   
+        $features = Feature::whereHas('product',function($qry){$qry->where('shop_id',$this->shop->id);})->whereHas('adset',function($query){ $query->active();})->get();
+        return (new MailMessage)->subject('Featured Product')->view('emails.featured_products',['shop'=> $this->shop,'features'=> $features]);
     }
 
     /**

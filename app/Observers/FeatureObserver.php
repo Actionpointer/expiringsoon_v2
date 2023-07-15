@@ -16,8 +16,8 @@ class FeatureObserver
      */
     public function created(Feature $feature)
     {
-        $users = $feature->product->shop->followers;
-        Notification::send($users,new FollowersFeaturedProductNotification($feature->product));
+        // $users = $feature->product->shop->followers;
+        // Notification::send($users,new FollowersFeaturedProductNotification($feature->product));
     }
 
     /**

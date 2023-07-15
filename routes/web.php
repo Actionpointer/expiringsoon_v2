@@ -18,9 +18,10 @@ use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('broadcast', function () {
     // $user = \App\Models\User::find(1);
-    $product = \App\Models\Advert::find(3);
-    return (new App\Notifications\AdvertStatusNotification($product))
-                    ->toMail($product);
+    $shop = \App\Models\Shop::find(2);
+    // dd($shop->followers);
+    return (new App\Notifications\FollowersFeaturedProductNotification($shop))
+                    ->toMail($shop->followers);
     return 'ok';
 });
 

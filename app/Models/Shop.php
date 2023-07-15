@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\State;
 use App\Models\Advert;
+use App\Models\Follow;
 use App\Models\Payout;
 use App\Models\Review;
 use App\Models\Country;
@@ -111,7 +112,7 @@ class Shop extends Model
     }
 
     public function followers(){
-        return $this->belongsToMany(User::class,'follows','shop_id','user_id');
+        return $this->belongsToMany(User::class,Follow::class,'shop_id','user_id');
     }
 
     public function staff(){
@@ -166,7 +167,7 @@ class Shop extends Model
         return $this->morphMany(Advert::class,'advertable');
     }
     public function features(){
-        $this->hasManyThrough(Feature::class,Product::class);
+        return $this->hasManyThrough(Feature::class,Product::class);
     }
 
     public function carts(){
