@@ -32,10 +32,10 @@ trait OrderTrait
     }
 
     protected function getSubtotal(Array $cart){
+        // dd($cart);
         $subtotal = 0; 
         foreach($cart as $item){
-            $amount = array_key_exists('product',$item) ?  $item['product']->amount : $item['amount'];
-            $subtotal += $item['quantity'] * $amount;
+            $subtotal += $item['quantity'] * $item['amount'];
         }
         return $subtotal;
     }
