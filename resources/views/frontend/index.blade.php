@@ -61,7 +61,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="banner--04__text-content">
-                                    <h5 class="title">Welcome to shopery</h5>
+                                    <h5 class="title">Welcome to ExpiringSoon</h5>
                                     <h2 class="font-title--xxxl">
                                         Fresh &amp; Healthy Organic Food
                                     </h2>

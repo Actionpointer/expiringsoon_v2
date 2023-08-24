@@ -95,14 +95,17 @@ class ProductController extends Controller
     }
 
     public function show(Product $product){
+
         if(!$product->certified()){
-            return request()->expectsJson() ?
-            response()->json([
-                'status' => false,
-                'message' => 'Product is no longer available',
-                'data' => [],
-            ], 400) :
-            redirect()->back()->with(['result'=> 0,'message'=> 'Product is no longer available']);
+            if(!auth()->check() || auth()->user()->role->name == 'shopper'){
+                return request()->expectsJson() ?
+                response()->json([
+                    'status' => false,
+                    'message' => 'Product is no longer available',
+                    'data' => [],
+                ], 400) :
+                redirect()->back()->with(['result'=> 0,'message'=> 'Product is no longer available']);
+            }  
         }
         $similar = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->where('category_id',$product->category_id)->where('id','!=',$product->id)->orderBy('features_count','desc')->get();
         return request()->expectsJson() ?

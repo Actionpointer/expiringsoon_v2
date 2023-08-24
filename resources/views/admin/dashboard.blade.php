@@ -85,25 +85,25 @@
 
                     <div class="dashboard__totalpayment-card-body">
                       
-                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.shops')}}?search=pending">
+                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.shops')}}?status=pending">
                         <h5 class="font-body--md-400 text-primary">Shops:</h5>
                         <p class="font-body--md-500">
                           {{\App\Models\Shop::within()->where('approved',false)->count()}}
                         </p>
                       </a>
-                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.products')}}?search=pending">
+                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.products')}}?status=pending">
                         <h5 class="font-body--md-400 text-primary">Products:</h5>
                         <p class="font-body--md-500">{{\App\Models\Product::within()->where('approved',false)->count()}}</p>
                       </a>
-                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.adverts')}}?search=pending">
+                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.adverts')}}?status=pending">
                         <h5 class="font-body--md-400 text-primary">Adverts</h5>
                         <p class="font-body--md-500">{{\App\Models\Advert::within()->where('approved',false)->count()}}</p>
                       </a>
-                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.payouts')}}?search=pending">
+                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.payouts')}}?status=pending">
                         <h5 class="font-body--md-400 text-primary">Payouts</h5>
                         <p class="font-body--md-500">{{\App\Models\Payout::within()->where('status','pending')->count()}}</p>
                       </a>
-                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.payouts')}}?search=pending">
+                      <a class="dashboard__totalpayment-card-body-item" href="{{route('admin.payouts')}}?status=pending">
                         <h5 class="font-body--md-400 text-primary">KYC</h5>
                         <p class="font-body--md-500">{{\App\Models\Kyc::within()->where('status',false)->whereNull('reason')->count()}}</p>
                       </a>
