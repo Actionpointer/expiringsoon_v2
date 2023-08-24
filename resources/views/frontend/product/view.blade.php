@@ -141,6 +141,7 @@
                     <!-- Action button -->
                     <div class="products__content">
                         <div class="products__content-action">
+                            @if(!auth()->check() || auth()->user()->role->name == 'shopper')
                             <div class="counter-btn-wrapper products__content-action-item">
 
                                 <button class="counter-btn-dec counter-btn" id="minusBtn" onclick="decrement()">
@@ -151,6 +152,7 @@
                                     +
                                 </button>
                             </div>
+                            @endif
                             <!-- add to cart  -->
                             <form method="post" id="addtocart">
                             <input type="hidden" name="pid" id="product_id" value="{{$product->id}}">
@@ -175,7 +177,7 @@
                                 </button>
                                 @endif
                             @endif
-                          </form>
+                            </form>
 
                             <!-- fav  -->
                             {{-- <button class="button-fav products__content-action-item">
