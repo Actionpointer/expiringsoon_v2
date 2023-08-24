@@ -81,7 +81,7 @@
                                 <div class="col-md-3">
                                   <label>Select Status</label>
                                   <select name="status" id="status" class="select2">
-                                      <option></option>
+                                    <option value=""></option>
                                       <option value="all" @if($status == 'all') selected @endif> All </option>
                                       <option value="live" @if($status == 'live') selected @endif>Live </option>
                                       <option value="pending" @if($status == 'pending') selected @endif>Pending Approval</option>

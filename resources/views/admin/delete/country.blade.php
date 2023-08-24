@@ -1053,6 +1053,7 @@
                                             <div class="contact-form-input">
                                                 <label for="origin">Origin </label>
                                                 <select id="state" name="origin_id" class="select2">
+                                                    <option value=""></option>
                                                     @foreach ($states as $state)
                                                         <option value="{{$state->id}}">{{$state->name}}</option>
                                                     @endforeach
@@ -1061,6 +1062,7 @@
                                             <div class="contact-form-input">
                                                 <label for="postal">Destination </label>
                                                 <select id="postals" name="destination_id" class="select2">
+                                                    <option value=""></option>
                                                     @foreach ($states as $state)
                                                         <option value="{{$state->id}}">{{$state->name}}</option>
                                                     @endforeach

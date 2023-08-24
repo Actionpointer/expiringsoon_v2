@@ -17,11 +17,12 @@ use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('broadcast', function () {
-    // $user = \App\Models\User::find(1);
-    $shop = \App\Models\Shop::find(2);
-    // dd($shop->followers);
-    return (new App\Notifications\FollowersFeaturedProductNotification($shop))
-                    ->toMail($shop->followers);
+    $user = \App\Models\User::find(31);
+    // // $shop = \App\Models\Shop::find(2);
+    // // dd($shop->followers);
+    // return (new App\Notifications\FollowersFeaturedProductNotification($shop))
+    //                 ->toMail($shop->followers);
+    $user->notify(new App\Notifications\WelcomeNotification);
     return 'ok';
 });
 

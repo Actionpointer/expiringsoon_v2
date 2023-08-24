@@ -120,6 +120,7 @@
                               <div class="contact-form-input col-lg-6">
                                 <label for="states">state *</label>
                                 <select id="statess" name="state_id" class="select2 states" required>
+                                  <option value=""></option>
                                   @foreach ($states as $state)
                                     <option value="{{$state->id}}">{{$state->name}}</option>
                                   @endforeach

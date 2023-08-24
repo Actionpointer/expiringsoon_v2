@@ -128,7 +128,7 @@ class ProductController extends Controller
 
     public function edit(Shop $shop,Product $product){
         $categories = Category::all();
-        $tags = Tag::all(); 
+        $tags = Tag::all();
         $packages = Package::all();
         return view('vendor.shop.product.edit',compact('shop','product','categories','tags','packages'));
     }

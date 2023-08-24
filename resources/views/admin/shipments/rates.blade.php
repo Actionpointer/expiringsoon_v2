@@ -190,6 +190,7 @@
                                                                                     <div class="contact-form-input">
                                                                                         <label for="countrisdes">Country </label>
                                                                                         <select id="countrisdes{{$rate->id}}" name="country_id" class="select2 country" >
+                                                                                            <option value=""></option>
                                                                                             @foreach ($countries as $country)
                                                                                                 <option value="{{$country->id}}" @if($rate->country_id == $country->id) selected @endif>{{$country->name}}</option>
                                                                                             @endforeach
@@ -214,6 +215,7 @@
                                                                                     <div class="contact-form-input">
                                                                                         <label for="origin">Origin </label>
                                                                                         <select id="countryz{{$rate->id}}" name="origin_id" class="select2 states" >
+                                                                                            <option value=""></option>
                                                                                             @foreach ($rate->country->states as $state)
                                                                                                 <option value="{{$state->id}}" @if($rate->origin_id == $state->id) selected @endif>{{$state->name}}</option>
                                                                                             @endforeach
@@ -222,6 +224,7 @@
                                                                                     <div class="contact-form-input">
                                                                                         <label for="destination">Destination </label>
                                                                                         <select id="destination_edit{{$rate->id}}" name="destination_id" class="select2 states" >
+                                                                                            <option value=""></option>
                                                                                             @foreach ($rate->country->states as $state)
                                                                                                 <option value="{{$state->id}}" @if($rate->destination_id == $state->id) selected @endif>{{$state->name}}</option>
                                                                                             @endforeach

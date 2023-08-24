@@ -240,6 +240,7 @@
                                                 <div class="contact-form-input">
                                                     <label for="statex">State </label>
                                                     <select name="state_id" class="select2" required>
+                                                        <option value=""></option>
                                                         @foreach ($country->states as $state)
                                                             <option value="{{$state->id}}">{{$state->name}}-{{$state->cities->count()}} cities</option>
                                                         @endforeach

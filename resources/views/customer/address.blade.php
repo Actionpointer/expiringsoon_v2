@@ -118,7 +118,7 @@
                         </div>
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" name="main" value="1" id="main0" />
-                          <label class="form-check-label" for="main"> Main address </label>
+                          <label class="form-check-label" for="main"> Default address </label>
                         </div>
                         <div class="contact-form-btn">
                             <button class="button button--md" type="submit">Save New Address </button>
@@ -151,7 +151,7 @@
                                   <td>{{$address->contact_name}}</td>
                                   <td>{{$address->contact_phone}}</td>
                                   <td>{{$address->street.' '.($address->city ? $address->city->name : '').','.$address->state->name}}</td>
-                                  <td>@if($address->main) main @endif</td>
+                                  <td>@if($address->main) default @endif</td>
                                   <td>
                                     <div class="d-flex">
                                       <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$address->id}}).style.display='block'">Edit</a>| 

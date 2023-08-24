@@ -219,7 +219,7 @@
                             <span>|</span>
                             <a href="{{route('register')}}">Register</a>
                             <span>|</span>
-                            <a href="{{route('start-selling')}}">Start Selling</a>
+                            <a href="{{route('start-selling')}}">Vendor</a>
                             @else
                             <div class="header__navigation-menu-link p-0">
                                 <a href="#">
