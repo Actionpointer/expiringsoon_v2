@@ -23,7 +23,6 @@ trait PaymentTrait
             $coupon_value = $this->getCoupon($coupon,$amount)['value'];
             $coupon_id = Coupon::where('code',$coupon)->first()->id;
         }
-        
         $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> $user->country->currency_id, 'reference'=> uniqid(),'coupon_id'=> $coupon_id,'coupon_value'=> $coupon_value,'amount'=> $amount ,'vat'=> $user->country->vat]);
         foreach($items as $item){
             PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);

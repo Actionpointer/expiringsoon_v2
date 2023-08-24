@@ -259,7 +259,8 @@ class SalesController extends Controller
                     'data' => $result,
                 ], 200) :
                 redirect()->to($result['link']);
-            }    
+            }   
+            
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
