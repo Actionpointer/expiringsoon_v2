@@ -157,9 +157,9 @@
                             @if(!$product->isAvailable())
                               <button type="button" class="button button--md products__content-action-item button--disable">
                               @else
-                                
+                                @if(!auth()->check() || auth()->user()->role->name == 'shopper')
                                 <button type="button" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->price}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
-                                @endif
+                                
                                 Add to Cart
                                 <span>
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -172,8 +172,9 @@
                                         />
                                     </svg>
                                 </span>
-                            </button>
-                          
+                                </button>
+                                @endif
+                            @endif
                           </form>
 
                             <!-- fav  -->
