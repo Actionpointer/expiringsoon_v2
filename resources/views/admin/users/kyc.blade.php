@@ -170,8 +170,8 @@
                                     </td>
                                     <!-- Total  -->
                                     <td class="dashboard__order-history-table-item order-status">
-                                        @if($document->reason)
-                                            Rejected:  {{$document->reason}}
+                                        @if($document->rejected)
+                                            Rejected:  {{$document->rejected->reason}}
                                         @elseif($document->status)
                                             Approved
                                         @else

@@ -2,10 +2,11 @@
 
 namespace App\Observers;
 
-use App\Http\Traits\OptimizationTrait;
 use App\Models\User;
 use App\Models\Account;
+use App\Models\Rejection;
 use App\Models\Subscription;
+use App\Http\Traits\OptimizationTrait;
 use App\Notifications\WelcomeNotification;
 
 class UserObserver
@@ -51,8 +52,8 @@ class UserObserver
         if($user->isDirty('fname') || $user->isDirty('fname')){
             if($user->idcard){
                 $user->idcard->status = false;
-                $user->idcard->reason = 'User new name does not match idcard';
                 $user->idcard->save();
+                Rejection::create(['rejectable_id'=> $user->idcard->id,'rejectable_type'=> 'App\Models\Kyc','reason'=> 'User new name does not match idcard']);
             } 
         }
         session(['locale'=>  [ 'country_id'=> $user->country->id, 'country_name'=> $user->country->name, 'country_iso'=> $user->country->iso, 'state_name'=> $user->state->name, 'state_id'=> $user->state->id, 'dial'=> $user->country->dial, 'currency_id'=> $user->country->currency_id, 'currency_iso'=> $user->country->currency->iso, 'currency_name'=> $user->country->currency->name, 'currency_symbol'=> $user->country->currency->symbol] ]);

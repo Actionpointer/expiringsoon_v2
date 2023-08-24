@@ -6,6 +6,7 @@ use App\Models\Kyc;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Country;
+use App\Models\Rejection;
 use Illuminate\Http\Request; 
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
@@ -46,6 +47,9 @@ class ShopController extends Controller
             $shops = $shops->isApproved()->isVisible()->isActive();
             if($status == 'pending')
             $shops = $shops->where('approved',false);
+            if($status == 'rejected'){
+            $shops = $shops->has('rejected');
+            }
             if($status == 'inactive')
             $shops = $shops->where('status',false);
             if($status == 'draft')
@@ -76,14 +80,14 @@ class ShopController extends Controller
         $shop = Shop::find($request->shop_id);
         if($request->approved){
             $shop->approved = $request->approved;
-            $shop->rejection_reason = null;
             $shop->save();
+            Rejection::where('rejectable_id',$shop->id)->where('rejectable_type','App\Models\Shop')->delete();
             return redirect()->back()->with(['result'=> 1,'message'=> 'Shop Approved Successfully']);
         }else{
             $shop->approved = $request->approved;
-            $shop->rejection_reason = $request->reason;
             $shop->save();
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Shop Disapproved Successfully']);
+            $shop->rejected()->create(['reason'=> $request->reason,'rejectable_id'=> $shop->id,'rejectable_type' => get_class($shop)]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Shop Rejected Successfully']);
             
         }
     }
@@ -92,8 +96,13 @@ class ShopController extends Controller
         // dd($request->all());
         $kyc = Kyc::find($request->kyc_id);
         $kyc->status = $request->status;
-        $kyc->reason = $request->reason ?? null;
         $kyc->save();
+        if($request->reason){
+            $kyc->rejected()->create(['reason'=> $request->reason,'rejectable_id'=> $kyc->id,'rejectable_type' => get_class($kyc)]);
+        }else{
+            $kyc->rejected()->delete();
+        }
+        
         return redirect()->back()->with(['result'=> '1','message'=> 'KYC Document updated']);
 
     }

@@ -6,7 +6,6 @@ use App\Models\Shop;
 use App\Models\Adset;
 use App\Models\State;
 use App\Models\Product;
-use App\Observers\AdvertObserver;
 use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,17 +18,10 @@ class Advert extends Model
 
     protected $fillable = [
         'advertable_id','advertable_type','adset_id','state_id','approved','photo','heading','subheading',
-        'offer','text_color','button_text','button_color','rejection_reason'
+        'offer','text_color','button_text','button_color'
     ];
     //status means the state (not status) of the shop/product .e.g availability, approval, accessibility, etc
     protected $appends = ['status','running','image'];
-
-    
-    public static function boot()
-    {
-        parent::boot();
-        parent::observe(new AdvertObserver);
-    }
     
     public function advertable(){
         return $this->morphTo();
@@ -47,7 +39,7 @@ class Advert extends Model
     public function rejected(){
         return $this->morphOne(Rejection::class,'rejectable');
     }
-    
+
     public function shop(){
         //use only after separating the product from the shop
         return $this->belongsTo(Shop::class,'advertable_id');

@@ -78,12 +78,12 @@
                         <div>
                           <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($user->idcard->status ) #00b207; @else #ff0000; @endif">
                             @if($user->idcard->status) Approved
-                            @elseif($user->idcard->reason) Rejected
+                            @elseif($user->idcard->rejected) Rejected
                             @else Pending Approval  
                             @endif 
                           </span>
-                          @if($user->idcard->reason)
-                            <span class="d-block font-body--sm-400 text-danger">{{$user->idcard->reason}}</span>
+                          @if($user->idcard->rejected)
+                            <span class="d-block font-body--sm-400 text-danger">{{$user->idcard->rejected->reason}}</span>
                           @endif
                         </div> 
                     @endif
@@ -121,12 +121,12 @@
                         <div>
                           <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->addressproof->status ) #00b207; @else #ff0000; @endif">
                             @if($shop->addressproof->status) Approved
-                            @elseif($shop->addressproof->reason) Rejected
+                            @elseif($shop->addressproof->rejected) Rejected
                             @else Pending Approval  
                             @endif 
                           </span>
-                          @if($shop->addressproof->reason)
-                            <span class="d-block font-body--sm-400 text-danger">{{$shop->addressproof->reason}}</span>
+                          @if($shop->addressproof->rejected)
+                            <span class="d-block font-body--sm-400 text-danger">{{$shop->addressproof->rejected->reason}}</span>
                           @endif
                         </div> 
                     @endif
@@ -172,12 +172,12 @@
                         <div>
                           <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($shop->certificate->status ) #00b207; @else #ff0000; @endif">
                             @if($shop->certificate->status) Approved
-                            @elseif($shop->certificate->reason) Rejected
+                            @elseif($shop->certificate->rejected) Rejected
                             @else Pending Approval  
                             @endif 
                           </span>
-                          @if($shop->certificate->reason)
-                            <span class="d-block font-body--sm-400 text-danger">{{$shop->certificate->reason}}</span>
+                          @if($shop->certificate->rejected)
+                            <span class="d-block font-body--sm-400 text-danger">{{$shop->certificate->rejected->reason}}</span>
                           @endif
                         </div> 
                     @endif
@@ -226,12 +226,12 @@
                             <a href="{{Storage::url($companydoc->document)}}" target="_blank">File :</a>
                             <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($companydoc->status ) #00b207; @else #ff0000; @endif">
                               @if($companydoc->status) Approved
-                              @elseif($companydoc->reason) Rejected
+                              @elseif($companydoc->rejected) Rejected
                               @else Pending Approval  
                               @endif 
                             </span>
-                            @if($companydoc->reason)
-                              <span class="d-block font-body--sm-400 text-danger">{{$companydoc->reason}}</span>
+                            @if($companydoc->rejected)
+                              <span class="d-block font-body--sm-400 text-danger">{{$companydoc->rejected->reason}}</span>
                             @endif
                           </div>  
                         @empty

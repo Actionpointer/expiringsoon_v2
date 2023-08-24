@@ -242,6 +242,7 @@ class ShopController extends Controller
             $request->discount90 ? $shop->discount90 = $request->discount90:'';
             $request->discount120 ? $shop->discount120 = $request->discount120:'';
             $shop->save();
+            $shop->rejections()->delete();
             return request()->expectsJson() ?  
                 response()->json([
                 'status' => true,

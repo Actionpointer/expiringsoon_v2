@@ -30,9 +30,7 @@ class KycObserver
             $kyc->status = 0;
             $kyc->save();
         }
-        if($kyc->isDirty('reason') && $kyc->reason){
-            $kyc->user->notify(new KycRejectionNotification($kyc));
-        }
+        
     }
 
     /**

@@ -207,7 +207,11 @@
                                 <td>{{$kyc->created_at->format('d-m-Y')}}</td>
                                   <td>
                                     @if(!$kyc->status)
-                                      Pending {{$kyc->reason}}
+                                      @if($kyc->rejected)
+                                        Rejected: {{$kyc->rejected->reason}}
+                                        @else
+                                        Pending 
+                                      @endif
                                     @else
                                       Approved
                                     @endif
@@ -220,7 +224,7 @@
                                     <button class="btn btn-success" type="submit">Approve</button>
                                   </form>
                                   @endif 
-                                  @if(!$kyc->reason)
+                                  @if(!$kyc->rejected)
                                   <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#rateedit{{$kyc->id}}">Reject</button>
                                   @endif
                                 </td>

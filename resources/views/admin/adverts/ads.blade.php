@@ -162,7 +162,7 @@
                             @endif
 
                             @if(!$advert->approved)
-                              <span class="font-body--md-400 out">@if($advert->rejection_reason) Rejected @else Pending Approval @endif</span>
+                              <span class="font-body--md-400 out">@if($advert->rejected) Rejected @else Pending Approval @endif</span>
                             @endif
 
                             @if($advert->approved && $advert->adset->status && $advert->adset->active && !$advert->status)

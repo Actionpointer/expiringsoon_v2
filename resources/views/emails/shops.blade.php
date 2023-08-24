@@ -134,8 +134,8 @@
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Dear {{$shop->name}},</span>
 																<br />Your shop has been @if($shop->approved) Approved @else Rejected @endif
-																@if($shop->rejection_reason)
-															    <br />Rejection Reason:  {{$shop->rejection_reason}}
+																@if($shop->rejected)
+															    <br />Rejection Reason:  {{$shop->rejected->reason}}
                                                                 @endif
                                                                 <br /><br />Thank you for using Expiring Soon
                                                             </td>

@@ -169,8 +169,8 @@
                                 <td>{{$user->idcard->type}}</td>
                                 <td>{{$user->idcard->created_at->format('d-m-Y')}}</td>
                                   <td>
-                                    @if($user->idcard->reason)
-                                      Rejected:  {{$user->idcard->reason}}
+                                    @if($user->idcard->rejected)
+                                      Rejected:  {{$user->idcard->rejected->reason}}
                                     @elseif($user->idcard->status)
                                       Approved
                                     @else
@@ -186,7 +186,7 @@
                                     <input type="hidden" name="status" value="1">
                                     <button class="btn btn-success" type="submit">Approve</button>
                                     @endif
-                                    @if(!$user->idcard->reason)
+                                    @if(!$user->idcard->rejected)
                                     
                                     <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#rateedit{{$user->idcard->id}}">Reject</button>
                                     @endif

@@ -289,12 +289,12 @@
                           <div>
                             <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($user->kyc->where('type','idcard')->first()->status ) #00b207; @else #ff0000; @endif">
                               @if($user->kyc->where('type','idcard')->first()->status) Approved
-                              @elseif($user->kyc->where('type','idcard')->first()->reason) Rejected
+                              @elseif($user->kyc->where('type','idcard')->first()->rejected) Rejected
                               @else Pending Approval  
                               @endif 
                             </span>
-                            @if($user->kyc->where('type','idcard')->first()->reason)
-                              <span class="d-block font-body--sm-400 text-danger">{{$user->kyc->where('type','idcard')->first()->reason}}</span>
+                            @if($user->kyc->where('type','idcard')->first()->rejected)
+                              <span class="d-block font-body--sm-400 text-danger">{{$user->kyc->where('type','idcard')->first()->rejected->reason}}</span>
                             @endif
                           </div> 
                       @endif

@@ -144,7 +144,7 @@
                           @if($shop->certified())
                           <span class="font-body--md-400 in"> Live</span>
                           @elseif(!$shop->approved)
-                          <span class="font-body--md-400 out"> @if($shop->rejection_reason) Rejected @else Pending Approval @endif</span>
+                          <span class="font-body--md-400 out"> @if($shop->rejected) Rejected @else Pending Approval @endif</span>
                           @elseif(!$shop->status)     
                           <span class="font-body--md-400 out"> Inactive</span> 
                           @elseif(!$shop->published) 

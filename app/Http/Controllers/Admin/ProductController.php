@@ -102,8 +102,8 @@ class ProductController extends Controller
             return redirect()->back()->with(['result'=>1,'message'=> 'Products deleted Successfully']);
         }elseif($request->approved){
             // dd($request->all());
-            $products = Product::whereIn('id',$request->products)->update(['approved'=> $request->approved,'rejection_reason'=> null]);
-            Rejection::whereIn('rejectable_id',$products->pluck('id')->toArray())->where('rejectable_type','App\Models\Product')->delete();
+            $products = Product::whereIn('id',$request->products)->update(['approved'=> $request->approved]);
+            Rejection::whereIn('rejectable_id',$request->products)->where('rejectable_type','App\Models\Product')->delete();
             return redirect()->back()->with(['result'=>1,'message'=> 'Products updated Successfully']);
         }else{
             $product = Product::find($request->product_id);

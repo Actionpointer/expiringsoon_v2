@@ -137,7 +137,7 @@ class AdvertController extends Controller
         'photo'=> $photo,'heading'=> $request->heading,'subheading'=> $request->subheading,
         'offer'=> $request->offer, 'text_color'=> $request->text_color, 'button_text'=> $request->button_text,
         'button_color'=> $request->button_color,'approved'=> false]);
-
+        $advert->rejections()->delete();
         return redirect()->route('vendor.adverts',$advert->adset)->with(['result'=> 1,'message'=>'Ad Updated']);
     }
 

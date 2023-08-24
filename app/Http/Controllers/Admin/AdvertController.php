@@ -11,6 +11,7 @@ use App\Models\Advert;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Rejection;
 use Illuminate\Http\Request;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
@@ -45,6 +46,9 @@ class AdvertController extends Controller
             }
             if($status == 'pending'){
                 $adverts = $adverts->where('approved',false);
+            }
+            if($status == 'rejected'){
+                $adverts = $adverts->has('rejected');
             }
             if($status == 'inactive'){
                 $adverts = $adverts->running()->whereHas('advertable',function($query){
@@ -108,14 +112,15 @@ class AdvertController extends Controller
             return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Deleted Successfully']);
         }elseif($request->approved){
             $advert->approved = $request->approved;
-            $advert->rejection_reason = null;
             $advert->save();
+            Rejection::where('rejectable_id',$advert->id)->where('rejectable_type','App\Models\Advert')->delete();
             return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Updated Successfully']);
         }else{
-            $advert->approved = $request->approved;
-            $advert->rejection_reason = $request->reason;
+            $advert->approved = false;
             $advert->save();
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Updated Successfully']);
+            $advert->rejected()->create(['reason'=> $request->reason,'rejectable_id'=> $advert->id,'rejectable_type' => get_class($advert)]);
+            
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Advert Rejected Successfully']);
             
         }
     }

@@ -17,6 +17,7 @@ use App\Models\Country;
 use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Rejection;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
 use App\Models\PackageRate;
@@ -199,6 +200,14 @@ class Shop extends Model
         if($this->morphMany(Review::class,'reviewable')->count())
         return $this->morphMany(Review::class,'reviewable')->sum('rating') / $this->morphMany(Review::class,'reviewable')->count();
         else return 0;
+    }
+
+    public function rejections(){
+        return $this->morphMany(Rejection::class,'rejectable');
+    }
+
+    public function rejected(){
+        return $this->morphOne(Rejection::class,'rejectable');
     }
     
 }

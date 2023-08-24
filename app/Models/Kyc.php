@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Rejection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Kyc extends Model
 {
     use HasFactory;
@@ -37,6 +39,14 @@ class Kyc extends Model
         }else{
             return $query->whereHas('user',function ($pq) { $pq->where('country_id',session('locale')['country_id']); });
         }  
+    }
+
+    public function rejections(){
+        return $this->morphMany(Rejection::class,'rejectable');
+    }
+
+    public function rejected(){
+        return $this->morphOne(Rejection::class,'rejectable');
     }
     
 }

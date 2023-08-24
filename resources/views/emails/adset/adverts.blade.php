@@ -134,8 +134,8 @@
 															<td class="h1 pb25" style="color:#666; font-family:Poppins,sans-serif; font-size:13px; line-height:25px; text-align:left; padding-bottom:15px;">
 																<span style="font-size:16px;font-weight:600">Dear {{$advert->adset->user->name}},</span>
 																<br />Your Advert for {{str_replace('App\Models\\','',$advert->advertable_type)}} "{{$advert->advertable->name}}" has been @if($advert->approved) Approved @else Rejected @endif
-																@if($advert->rejection_reason)
-															    <br />Rejection Reason:  {{$advert->rejection_reason}}
+																@if($advert->rejected)
+															    <br />Rejection Reason:  {{$advert->rejected->reason}}
                                                                 @endif
                                                                 <br /><br />Thank you for using Expiring Soon
                                                             </td>

@@ -32,9 +32,7 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
-        if($product->isDirty('rejection_reason')){
-            $product->shop->notify(new ProductStatusNotification($product));
-        }
+        
     }
 
     /**

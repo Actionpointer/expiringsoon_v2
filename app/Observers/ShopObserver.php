@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Shop;
+use App\Models\Rejection;
 use App\Events\DeleteShop;
 use App\Http\Traits\OptimizationTrait;
 use App\Notifications\ShopStatusNotification;
@@ -34,10 +35,8 @@ class ShopObserver
     public function updated(Shop $shop)
     {
         if($shop->isDirty('state_id') || $shop->isDirty('address') || $shop->isDirty('city_id')){
-            if($shop->addressproof){
-                $shop->addressproof->status = false;
-                $shop->addressproof->reason = 'Shop new address does not match address proof document';
-                $shop->addressproof->save();
+            if($shop->addressproof){  
+                Rejection::create(['rejectable_id'=> $shop->addressproof->id,'rejectable_type'=> 'App\Models\Kyc','reason'=> 'Shop new address does not match address proof document']);
                 $shop->approved = false;
                 $shop->save();
             }
@@ -60,9 +59,7 @@ class ShopObserver
             }
             
         }
-        if($shop->isDirty('rejection_reason')){
-            $shop->notify(new ShopStatusNotification($shop));
-        }
+        
     }
 
     public function deleting(Shop $shop)
