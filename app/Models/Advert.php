@@ -40,6 +40,14 @@ class Advert extends Model
         return $this->belongsTo(Product::class,'advertable_id');
     }
 
+    public function rejections(){
+        return $this->morphMany(Rejection::class,'rejectable');
+    }
+
+    public function rejected(){
+        return $this->morphOne(Rejection::class,'rejectable');
+    }
+    
     public function shop(){
         //use only after separating the product from the shop
         return $this->belongsTo(Shop::class,'advertable_id');

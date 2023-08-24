@@ -56,7 +56,7 @@ class PaymentNotification extends Notification
                 break;
             case 'App\Models\Subscription': $url = route('vendor.dashboard');
                 break;
-            case 'App\Model\Adset': $url = route('vendor.adsets');
+            case 'App\Models\Adset': $url = route('vendor.adsets');
                 break;
         }
         return [

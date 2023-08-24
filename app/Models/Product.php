@@ -12,6 +12,7 @@ use App\Models\Feature;
 use App\Models\Package;
 use App\Models\Category;
 use App\Models\OrderItem;
+use App\Models\Rejection;
 use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -102,6 +103,14 @@ class Product extends Model
         return $this->morphMany(Advert::class,'advertable');
     }
 
+    public function rejections(){
+        return $this->morphMany(Rejection::class,'rejectable');
+    }
+
+    public function rejected(){
+        return $this->morphOne(Rejection::class,'rejectable');
+    }
+
     public function features(){
         return $this->hasMany(Feature::class);
     }
@@ -133,7 +142,7 @@ class Product extends Model
     }
     
     public function certified(){
-        return $this->valid && $this->accessible() && $this->approved && $this->status && $this->published && $this->available;
+        return $this->valid && $this->accessible() && $this->approved && $this->status && $this->published && $this->available && !$this->rejected;
     }
 
     public function scopeIsNotCertified($query){
@@ -152,6 +161,10 @@ class Product extends Model
 
     public function scopeIsVisible($query){
         return $query->where('published',true);
+    }
+
+    public function scopeIsNotRejected($query){
+        return $query->doesntHave('rejected');
     }
 
     //accessible

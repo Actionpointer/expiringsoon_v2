@@ -95,6 +95,11 @@
                                   Expired
                               </button>
                           </li>
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-rejected-tab" data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected" aria-selected="false">
+                                Rejected
+                            </button>
+                        </li>
                           
                           
                           
@@ -231,7 +236,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($products->where('approved',false) as $product)        
+                                      @foreach($products->where('approved',false)->where('rejected',null) as $product)        
                                           <tr>
                                               <td class="cart-table-item align-middle" >
                                                   <div class="d-flex flex-column flex-md-row">
@@ -634,6 +639,83 @@
                                                 </p>
                                               </td>
                                               
+                                              
+                                              <td class="cart-table-item add-cart align-middle"> 
+                                                <div class="dropdown">
+                                                  <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    Manage
+                                                  </button>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="dropdown-item">Edit</a>
+                                                    
+                                                    <form class="d-inline" action="{{route('vendor.shop.products.destroy',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
+                                                      <input type="hidden" name="product_id" value="{{$product->id}}">
+                                                      <input type="hidden" name="shop_id" value="{{$shop->id}}">
+                                                      <button type="submit" class="dropdown-item">Delete</button>
+                                                    </form>                                      
+                                                  </div>
+                                                </div>
+                                                  
+                                              </td>
+                                          </tr>
+                                      @endforeach
+                                  </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab">
+                          <div class="dashboard__order-history-table">
+                            <div class="table-responsive">
+                              <table class="table datatable">
+                                  <thead>
+                                  <tr>
+                                      <th scope="col" class="cart-table-title" style="min-width:200px!important;">
+                                          <div class="d-flex align-items-center">
+                                            <div class="form-check d-inline">
+                                              <label class="form-check-label font-body--400" for="existing"> </label>
+                                              <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
+                                            </div>
+                                           <span class="align-bottom">Product</span> 
+                                          </div>
+                                          
+                                      </th>
+                                      
+                                      <th scope="col" class="dashboard__order-history-table-title"> Reason </th>
+                                      
+                                      <th scope="col" class="dashboard__order-history-table-title">Manage</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>                     
+                                      @foreach($products->where('approved',false)->where('rejected','!=',null) as $product)        
+                                          <tr>
+                                              <td class="cart-table-item align-middle" >
+                                                  <div class="d-flex flex-column flex-md-row">
+                                                      <div class="d-flex align-items-center">
+                                                          <div class="form-check pt-2 d-inline-block">
+                                                            <label class="form-check-label font-body--400" for="existing"> </label>
+                                                            <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
+                                                          </div>
+                                                          <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
+                                                            <div class="cart-table__product-item-img">
+                                                              <img src="{{$product->image}}" alt="{{$product->name}}" />
+                                                            </div>
+                                                          </a>
+                                                      </div>
+                                                      
+                                                      <div class="d-flex align-items-center">
+                                                        <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
+                                                          <h5 class="font-body--lg-400" style="font-size:14px"> {{$product->name}} </h5>
+                                                        </a>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              
+                                              <td class="cart-table-item order-date align-middle"> 
+                                                  <p class="font-weight-bold">   {{ucwords($product->rejected->reason)}} </p>
+                                                  <i>{{$product->rejected->created_at->calendar()}}</i>
+                                              </td>
                                               
                                               <td class="cart-table-item add-cart align-middle"> 
                                                 <div class="dropdown">

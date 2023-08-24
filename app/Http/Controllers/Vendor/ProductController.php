@@ -8,6 +8,7 @@ use App\Models\Shop;
 use App\Models\Package;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Rejection;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,8 +25,8 @@ class ProductController extends Controller
     }
    
     public function index(Shop $shop){
-        $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->get();
-        // dd($products);
+
+        $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->with('rejected')->get();
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
@@ -195,9 +196,10 @@ class ProductController extends Controller
             'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,
             'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,
             'published'=> $request->published,'status'=> $shop->certified() ? true:false ,'approved'=> false,'package_id'=> $request->package_id]);
+            $product->rejections()->delete();
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Updated Successfully','data'=> new ProductDetailsResource($product)], 200) :
-                    redirect()->route('vendor.shop.product.list',$product->shop)->with(['result'=>1,'message'=> 'Product Created Successfully']);
+                    redirect()->route('vendor.shop.product.list',$product->shop)->with(['result'=>1,'message'=> 'Product Updated Successfully']);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

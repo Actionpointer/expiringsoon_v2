@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Rejection;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,9 +43,11 @@ class ProductController extends Controller
         if(request()->query() && request()->query('status') && request()->query('status') != 'all'){
             $status = request()->query('status');
             if($status == 'live')
-            $products = $products->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();
+            $products = $products->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable()->isNotRejected();
             if($status == 'pending')
-            $products = $products->where('approved',false);
+            $products = $products->where('approved',false)->isNotRejected();
+            if($status == 'rejected')
+            $products = $products->has('rejected');
             if($status == 'inactive')
             $products = $products->where('status',false);
             if($status == 'draft')
@@ -100,13 +103,12 @@ class ProductController extends Controller
         }elseif($request->approved){
             // dd($request->all());
             $products = Product::whereIn('id',$request->products)->update(['approved'=> $request->approved,'rejection_reason'=> null]);
+            Rejection::whereIn('rejectable_id',$products->pluck('id')->toArray())->where('rejectable_type','App\Models\Product')->delete();
             return redirect()->back()->with(['result'=>1,'message'=> 'Products updated Successfully']);
         }else{
             $product = Product::find($request->product_id);
-            $product->approved = $request->approved;
-            $product->rejection_reason = $request->reason;
-            $product->save();
-            return redirect()->back()->with(['result'=>1,'message'=> 'Products updated Successfully']);
+            $product->rejected()->create(['reason'=> $request->reason,'rejectable_id'=> $product->id,'rejectable_type' => get_class($product)]);
+            return redirect()->back()->with(['result'=>1,'message'=> 'Products rejected Successfully']);
         }
         
     }

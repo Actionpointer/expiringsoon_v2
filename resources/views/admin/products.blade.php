@@ -80,6 +80,7 @@
                                       <option value="all" @if($status == 'all') selected @endif> All </option>
                                       <option value="live" @if($status == 'live') selected @endif>Live </option>
                                       <option value="pending" @if($status == 'pending') selected @endif>Pending Approval</option>
+                                      <option value="rejected" @if($status == 'rejected') selected @endif>Rejected</option>
                                       <option value="inactive" @if($status == 'inactive') selected @endif>Inactive </option>
                                       <option value="draft" @if($status == 'draft') selected @endif>Draft </option>
                                       <option value="expired" @if($status == 'expired') selected @endif>Expired </option>
@@ -173,7 +174,7 @@
                                 <span class="font-body--md-400 in me-1"> Live</span>
                               @endif
                               @if(!$product->approved)
-                                <span class="font-body--md-400 out me-1"> @if($product->rejection_reason) Rejected @else Pending Approval @endif</span>
+                                <span class="font-body--md-400 out me-1"> @if($product->rejected) Rejected @else Pending Approval @endif</span>
                               @endif
                               @if(!$product->status)
                                 <span class="font-body--md-400 out me-1"> Inactive</span>
