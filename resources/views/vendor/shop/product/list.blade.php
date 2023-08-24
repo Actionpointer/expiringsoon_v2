@@ -714,7 +714,7 @@
                                               
                                               <td class="cart-table-item order-date align-middle"> 
                                                   <p class="font-weight-bold">   {{ucwords($product->rejected->reason)}} </p>
-                                                  <i>{{$product->rejected->created_at->calendar()}}</i>
+                                                  <i>Rejected {{$product->rejected->created_at->calendar()}}</i>
                                               </td>
                                               
                                               <td class="cart-table-item add-cart align-middle"> 
