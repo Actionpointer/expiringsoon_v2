@@ -9,27 +9,25 @@
 -ad preview
 -kyc multiple documents
 -shipment fee recalculation
+-super admin can delete a shop
+-approval/rejection to shop,
+-configure email from ngnplanet hostinger : did not work.. 
+
+
+admin enter pin before approval of product, shop, advert, kyc, 
+
+placeholder images for advert positions & sliders
+
+public content table & translation
+
+otp codes to email 
 
 
 
 
-
-
-
-super admin can delete a shop
-only super admin can do this
-
-
-
-
-
-
-
-
-
-
-
-
+add language: arabic
+add date dispute was closed
+check cases on dashboard...
 
 
 

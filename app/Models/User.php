@@ -14,6 +14,7 @@ use App\Models\Account;
 use App\Models\Address;
 use App\Models\Country;
 use App\Models\Payment;
+use App\Models\Rejection;
 use App\Models\Settlement;
 use App\Models\OrderMessage;
 use App\Models\Subscription;
@@ -21,9 +22,9 @@ use App\Observers\UserObserver;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -231,6 +232,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function disputes(){
         return $this->hasMany(Order::class,'arbitrator_id');
+    }
+
+    public function rejections(){
+        return $this->morphMany(Rejection::class,'rejectable');
+    }
+
+    public function rejected(){
+        return $this->morphOne(Rejection::class,'rejectable');
     }
 
 

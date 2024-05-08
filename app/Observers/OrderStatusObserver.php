@@ -124,7 +124,7 @@ class OrderStatusObserver
     public function refunded(OrderStatus $orderStatus)
     {
         //delete one settlement where description is vendor commission
-        Settlement::where('order_id',$orderStatus->order_id)->where('description','Caommission')->delete();
+        Settlement::where('order_id',$orderStatus->order_id)->where('description','Commission')->delete();
         event(new RefundBuyer($orderStatus->order,$orderStatus->order->subtotal));
         event(new SettleVendor($orderStatus->order));
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));

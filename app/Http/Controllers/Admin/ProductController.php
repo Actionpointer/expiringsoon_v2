@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Rejection;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Http\Traits\GeoLocationTrait;
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    use GeoLocationTrait;
+    use GeoLocationTrait,SecurityTrait;
+    
     public function __construct(){
         $this->middleware('auth')->except(['index','show','getSubcategories']);
     }
@@ -95,7 +97,11 @@ class ProductController extends Controller
     }
 
     public function manage(Request $request){
-        /** @var \App\Models\User $user **/ 
+         
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
+        /** @var \App\Models\User $user **/
         $user = auth()->user(); 
         if($request->delete && $user->isRole('superadmin')){
             $products = Product::whereIn('id',$request->products)->whereDoesntHave('orders')->delete();

@@ -65,9 +65,9 @@
                                   <label>Select Country</label>
                                     <select name="country_id" id="country_id" class="select2">
                                         <option></option>
-                                        <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$products->total()}}</option>
+                                        <option value="0" @if($country_id == 0) selected @endif>All Countries - {{$disputes->total()}}</option>
                                         @foreach ($countries->sortBy('category') as $country)
-                                          <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->products->count()}}</option>
+                                          <option value="{{$country->id}}" @if($country_id == $country->id) selected @endif>{{$country->name}} - {{$country->disputes->count()}}</option>
                                         @endforeach
                                     </select>
                                 </div>

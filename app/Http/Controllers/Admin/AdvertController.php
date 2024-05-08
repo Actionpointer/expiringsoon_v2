@@ -16,10 +16,11 @@ use Illuminate\Http\Request;
 use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\GeoLocationTrait;
+use App\Http\Traits\SecurityTrait;
 
 class AdvertController extends Controller
 {
-    use GeoLocationTrait,PaymentTrait;
+    use GeoLocationTrait,PaymentTrait, SecurityTrait;
 
     public function __construct(){
         $this->middleware('auth')->except('redirect');
@@ -75,15 +76,16 @@ class AdvertController extends Controller
             $item = 'App\Models\\'.$type;
             $adverts = $adverts->where('advertable_type',$item);
         }
+        
         if(request()->query() && request()->query('from_date')){
             $from_date = request()->query('from_date');
             $adverts = $adverts->where('created_at','>=',$from_date);
         }
+
         if(request()->query() && request()->query('to_date')){
             $to_date = request()->query('to_date');
             $adverts = $adverts->where('created_at','<=',$to_date);
         }
-
 
         if(request()->query() && request()->query('sortBy')){
             $sortBy = request()->query('sortBy');
@@ -104,6 +106,9 @@ class AdvertController extends Controller
     }
 
     public function manage(Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         /** @var \App\Models\User $user **/             
         $user = auth()->user(); 
         $advert = Advert::find($request->advert_id);

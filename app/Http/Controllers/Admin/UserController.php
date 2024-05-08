@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\State;
 use App\Models\Payout;
 use App\Models\Country;
+use App\Models\Rejection;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -138,9 +139,17 @@ class UserController extends Controller
     }
 
     public function manage(Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $user = User::find($request->user_id);
         $user->status = $request->status;
         $user->save();
+        if($request->status){
+            Rejection::where('rejectable_id',$user->id)->where('rejectable_type','App\Models\User')->delete();
+        }else{
+            $user->rejected()->create(['reason'=> $request->reason,'rejectable_id'=> $user->id,'rejectable_type' => get_class($user)]);
+        }
         return redirect()->back()->with(['result'=> '1','message'=> 'User Status Changed']);
     }
 

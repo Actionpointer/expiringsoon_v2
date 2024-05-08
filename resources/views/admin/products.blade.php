@@ -197,22 +197,43 @@
                           
                           <td class="cart-table-item stock-status order-date align-middle">
                             <div class="button-group text-nowrap">
-                              
-                              <form class="d-inline" action="{{route('admin.products.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
-                                <input type="hidden" name="products[]" value="{{$product->id}}">
                                   @if(!$product->approved)
-                                  <button type="submit" name="approved" value="1" class="btn btn-sm btn-success">Approve</button>
+                                  <button type="button" data-bs-toggle="modal" data-bs-target="#approve{{$product->id}}" class="btn btn-sm btn-success">Approve</button>
                                   <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$product->id}}">Reject</button>
                                   @endif
 
                                   @if(auth()->user()->isRole('superadmin'))
-                                  <button type="submit" name="delete" value="1" class="btn btn-sm btn-danger">Delete</button>
+                                  <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{$product->id}}">Delete</button>
                                   @endif                               
-                                
-                              </form>                                      
-                              
                             </div>
                           </td>
+                          <div class="modal fade" id="approve{{$product->id}}" tabindex="-1" aria-labelledby="approve{{$product->id}}ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="approve{{$product->id}}ModalLabel">Are you sure you want to Approve Product</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{route('admin.products.manage')}}" method="post" id="approveForm{{$product->id}}form">
+                                        @csrf 
+                                        <input type="hidden" name="products[]" value="{{$product->id}}">
+                                        <div class="contact-form__content">
+                                            <div class="contact-form-input">
+                                              <label for="pin">Enter Your Access Pin</label>
+                                              <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                                            </div>
+                                            <div class="contact-form-btn">
+                                              <button class="button button--md" type="submit" name="approved" value="1">Approve</button>
+                                              <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
                           <div class="modal fade" id="reject{{$product->id}}" tabindex="-1" aria-labelledby="reject{{$product->id}}ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
@@ -229,9 +250,39 @@
                                               <label for="hours">Reason</label>
                                               <textarea name="reason" class="form-control" placeholder="Rejection Reason"></textarea>
                                             </div>
-                                    
+                                            <div class="contact-form-input">
+                                              <label for="pin">Enter Your Access Pin</label>
+                                              <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                                            </div>
                                             <div class="contact-form-btn">
                                               <button class="button button--md" type="submit" name="approved" value="0">Reject</button>
+                                              <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal fade" id="delete{{$product->id}}" tabindex="-1" aria-labelledby="delete{{$product->id}}ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="delete{{$product->id}}ModalLabel">Are you sure you want to Delete Product</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{route('admin.products.manage')}}" method="post" id="delete{{$product->id}}form">
+                                        @csrf 
+                                        <input type="hidden" name="products[]" value="{{$product->id}}">
+                                        <div class="contact-form__content">
+                                            <div class="contact-form-input">
+                                              <label for="pin">Enter Your Access Pin</label>
+                                              <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                                            </div>
+                                            <div class="contact-form-btn">
+                                              <button class="button button--md" type="submit" name="delete" value="1">Delete</button>
                                               <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                                             </div>
                                         </div>

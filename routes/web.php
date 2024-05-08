@@ -1,9 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Notifications\WelcomeNotification;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
@@ -17,12 +19,13 @@ use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
 Route::get('broadcast', function () {
+    
     $user = \App\Models\User::find(31);
     // // $shop = \App\Models\Shop::find(2);
     // // dd($shop->followers);
     // return (new App\Notifications\FollowersFeaturedProductNotification($shop))
     //                 ->toMail($shop->followers);
-    $user->notify(new App\Notifications\WelcomeNotification);
+    $user->notify(new \App\Notifications\WelcomeNotification());
     return 'ok';
 });
 

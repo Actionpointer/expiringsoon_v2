@@ -7,6 +7,7 @@ use App\Notifications\ShopStatusNotification;
 use App\Notifications\AdvertStatusNotification;
 use App\Notifications\KycRejectionNotification;
 use App\Notifications\ProductStatusNotification;
+use App\Notifications\UserStatusNotification;
 
 class RejectionObserver
 {
@@ -30,6 +31,9 @@ class RejectionObserver
             break;
             case 'App\Models\Kyc':
                 $rejection->rejectable->user->notify(new KycRejectionNotification($rejection->rejectable));
+            break;
+            case 'App\Models\User':
+                $rejection->rejectable->notify(new UserStatusNotification());
             break;
         }
         

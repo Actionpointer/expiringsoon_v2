@@ -1245,17 +1245,7 @@ $('.select2').select2({
 });
 
 //19. Multi-select
-$('#checkbox_master').change(function() {
-  if($(this).is(':checked')){
-      $('.checkboxes').prop('checked',true)
-  }else $('.checkboxes').prop('checked',false)
-})
-$('#select_all').click(function() {
-    $('.checkboxes').prop('checked',true)
-})
-$('#deselect_all').click(function() {
-  $('.checkboxes').prop('checked',false)
-})
+c
 
 //20. Pin validation
 $('.askpin').on('click',function(){
@@ -1265,11 +1255,11 @@ $('.askpin').on('click',function(){
 })
 
 $('#pinsubmit').on('click',function(){
- let pin = $(this).closest('.modal-body').find('#pin');
- if(pin.val() != ''){
-     $('#pinModal').modal('hide')
-     pin.attr('type','hidden');
-     submittedform.append(pin);
-     submittedform.submit();
- }
+  let pin = $(this).closest('.modal-body').find('#pin');
+  if(pin.val() != ''){
+      $('#pinModal').modal('hide')
+      pin.attr('type','hidden');
+      submittedform.append(pin);
+      submittedform.submit();
+  }
 })

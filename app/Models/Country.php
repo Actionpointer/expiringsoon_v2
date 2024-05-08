@@ -66,6 +66,9 @@ class Country extends Model
     public function products(){
         return $this->hasManyThrough(Product::class,Shop::class,'country_id','shop_id');
     }
+    public function disputes(){
+        return $this->hasManyThrough(OrderStatus::class,User::class,'country_id','user_id')->where('name','disputed');
+    }
     public function payments(){
         return $this->hasManyThrough(Payment::class,User::class,'country_id','user_id');
     }

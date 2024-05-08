@@ -59,14 +59,14 @@
                                 Manage
                               </button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <form class="d-inline" action="{{route('admin.user.manage')}}" method="post" onsubmit="return confirm('Are you sure?');">@csrf
-                                  <input type="hidden" name="user_id" value="{{$user->id}}">
+                               
+                                  
                                   @if(!$user->status)
-                                  <button type="submit" name="status" value="1" class="dropdown-item">Approve</button>
+                                  <button type="button" data-bs-toggle="modal" data-bs-target="#approve{{$user->id}}" class="dropdown-item">Approve</button>
                                   @else
-                                  <button type="submit" name="status" value="0" class="dropdown-item">Disapprove</button>
+                                  <button type="button" data-bs-toggle="modal" data-bs-target="#reject{{$user->id}}" class="dropdown-item">Disapprove</button>
                                   @endif
-                                </form>                                      
+                                                          
                               </div>
                             </div>    
                         </div>
@@ -135,6 +135,68 @@
                         </div>
                     </div>
                   </div>
+                  <div class="modal fade" id="approve{{$user->id}}" tabindex="-1" aria-labelledby="approve{{$user->id}}ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="approve{{$user->id}}ModalLabel">Do you really want to Release User?</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{route('admin.user.manage')}}" method="post" id="approve{{$user->id}}form">
+                                @csrf 
+                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                                <input type="hidden" name="status" value="1">
+                                <div class="contact-form__content my-3">
+                                    <div class="contact-form-input">
+                                      <label for="pin">Enter Your Access Pin</label>
+                                      <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                                    </div>
+                                    <div class="contact-form-btn">
+                                        <button class="button button--md" type="submit">
+                                            Confirm
+                                        </button>
+                                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal fade" id="reject{{$user->id}}" tabindex="-1" aria-labelledby="reject{{$user->id}}ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="reject{{$user->id}}ModalLabel">Suspend User</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{route('admin.user.manage')}}" method="post" id="reject{{$user->id}}form">
+                                @csrf 
+                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                                <input type="hidden" name="status" value="0">
+                                <div class="contact-form__content my-3">
+                                    <div class="contact-form-input">
+                                      <label for="hours">Reason</label>
+                                      <textarea name="reason" class="form-control" placeholder="Suspension Reason"></textarea>
+                                    </div>
+                                    <div class="contact-form-input">
+                                      <label for="pin">Enter Your Access Pin</label>
+                                      <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                                    </div>
+                                    <div class="contact-form-btn">
+                                      <button class="button button--md" type="submit" >Suspend</button>
+                                      <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
         
@@ -170,51 +232,82 @@
                                 <td>{{$user->idcard->created_at->format('d-m-Y')}}</td>
                                   <td>
                                     @if($user->idcard->rejected)
-                                      Rejected:  {{$user->idcard->rejected->reason}}
+                                    <span class="text-danger"> Rejected:  {{$user->idcard->rejected->reason}} </span>
                                     @elseif($user->idcard->status)
-                                      Approved
+                                    <span class="text-success"> Approved </span>
                                     @else
                                       Pending
                                     @endif
                                 </td>
                                 <td>
                                   
-                                  <form action="{{route('admin.kyc.manage')}}" method="post" class="d-inline" onsubmit="return confirm('Do you really want to approve document?');">@csrf
-                                    <input type="hidden" name="kyc_id" value="{{$user->idcard->id}}">
-                                    
+                                  
                                     @if(!$user->idcard->status)
-                                    <input type="hidden" name="status" value="1">
-                                    <button class="btn btn-success" type="submit">Approve</button>
+                                    
+                                    <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#approveKyc{{$user->idcard->id}}">Approve</button>
                                     @endif
                                     @if(!$user->idcard->rejected)
-                                    
-                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#rateedit{{$user->idcard->id}}">Reject</button>
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#rejectKyc{{$user->idcard->id}}">Reject</button>
                                     @endif
-                                  </form>
                                   
                                   
                                 </td>
                             </tr>
-                            <div class="modal fade" id="rateedit{{$user->idcard->id}}" tabindex="-1" aria-labelledby="rateedit{{$user->idcard->id}}ModalLabel" aria-hidden="true">
+                            
+                            <div class="modal fade" id="rejectKyc{{$user->idcard->id}}" tabindex="-1" aria-labelledby="rejectKyc{{$user->idcard->id}}ModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="rateedit{{$user->idcard->id}}ModalLabel">Reject KYC Document</h5>
+                                    <h5 class="modal-title" id="rejectKyc{{$user->idcard->id}}ModalLabel">Reject KYC Document</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                   </div>
                                   <div class="modal-body">
-                                      <form action="{{route('admin.kyc.manage')}}" method="post" id="rateedit{{$user->idcard->id}}">
+                                      <form action="{{route('admin.kyc.manage')}}" method="post" id="rejectKycForm{{$user->idcard->id}}">
                                           @csrf 
                                           <input type="hidden" name="kyc_id" value="{{$user->idcard->id}}">
+                                          <input type="hidden" name="status" value="0">
                                           <div class="contact-form__content my-3">
                                               <div class="contact-form-input">
                                                 <label for="hours">Reason</label>
                                                 <textarea name="reason" class="form-control" placeholder="Rejection Reason"></textarea>
                                               </div>
-                                              <input type="hidden" name="status" value="0">
+                                              <div class="contact-form-input">
+                                                <label for="pin">Enter Your Access Pin</label>
+                                                <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                                              </div>
                                               <div class="contact-form-btn">
                                                   <button class="button button--md" type="submit">
                                                       Reject
+                                                  </button>
+                                                  <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                              </div>
+                                          </div>
+                                      </form>
+                                  </div>
+                                  
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal fade" id="approveKyc{{$user->idcard->id}}" tabindex="-1" aria-labelledby="approveKyc{{$user->idcard->id}}ModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="approveKyc{{$user->idcard->id}}ModalLabel">Do you really want to approve document?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <form action="{{route('admin.kyc.manage')}}" method="post" id="approveKycForm{{$user->idcard->id}}">
+                                          @csrf 
+                                          <input type="hidden" name="kyc_id" value="{{$user->idcard->id}}">
+                                          <input type="hidden" name="status" value="1">
+                                          <div class="contact-form__content my-3">
+                                              <div class="contact-form-input">
+                                                <label for="pin">Enter Your Access Pin</label>
+                                                <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
+                                              </div>
+                                              <div class="contact-form-btn">
+                                                  <button class="button button--md" type="submit">
+                                                      Confirm
                                                   </button>
                                                   <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
                                               </div>

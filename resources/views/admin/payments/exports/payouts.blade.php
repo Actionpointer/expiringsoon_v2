@@ -23,8 +23,8 @@
             <td>{{ $payout->reference }}</td>
             <td>{{ $payout->shop->name }}</td>
             <td>{{ $payout->user->name }}</td> 
-            <td> @if($payout->channel =="bankaccount") {{$payout->user->bankaccount->bank->name}}  @else {{$payment->channel}} @endif </td>
-            <td>@if($payout->channel == "bankaccount") {{$payout->user->bankaccount->account_number}} @else {{$payout->user->payout_account}}</td>
+            <td> @if($payout->channel =="bankaccount") {{$payout->user->bankaccount->bank->name}}  @else {{$payout->channel}} @endif </td>
+            <td>@if($payout->channel == "bankaccount") {{$payout->user->bankaccount->account_number}} @else {{$payout->user->payout_account}} @endif</td>
             <td>{{$payout->currency->iso}}</td>
             <td>{{ number_format($payout->amount, 2)}}</td>
             <td>@if($payout->paid_at) {{$payout->paid_at->format('d-M-Y')}} @endif </td>

@@ -77,6 +77,9 @@ class ShopController extends Controller
     }
 
     public function manage(Request $request){
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $shop = Shop::find($request->shop_id);
         if($request->approved){
             $shop->approved = $request->approved;
@@ -93,7 +96,10 @@ class ShopController extends Controller
     }
     
     public function kyc(Request $request){
-        // dd($request->all());
+        //dd($request->all());
+        if(!$this->checkPin($request)['result']){
+            return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
+        }
         $kyc = Kyc::find($request->kyc_id);
         $kyc->status = $request->status;
         $kyc->save();

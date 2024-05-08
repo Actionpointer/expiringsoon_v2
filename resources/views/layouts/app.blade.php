@@ -215,11 +215,11 @@
                         </div> --}}
                         <div class="header__in">
                             @guest
-                            <a href="{{route('login')}}">Login</a>
+                            <a href="{{route('login')}}">{{ucwords(__('front.login'))}}</a>
                             <span>|</span>
-                            <a href="{{route('register')}}">Register</a>
+                            <a href="{{route('register')}}">{{ucwords(__('front.register'))}}</a>
                             <span>|</span>
-                            <a href="{{route('start-selling')}}">Vendor</a>
+                            <a href="{{route('start-selling')}}">{{ucwords(__('front.vendor'))}}</a>
                             @else
                             <div class="header__navigation-menu-link p-0">
                                 <a href="#">
@@ -235,7 +235,7 @@
                                     <a href="{{route('profile')}}">Profile</a>
                                   </li>
                                   <li class="header__navigation-drop-menu-link">
-                                    <a @if(in_array(auth()->user()->role->name,['vendor','staff'])) href="{{route('help.vendors')}}" @elseif(auth()->user()->role->name == 'shopper') href="{{route('help.shoppers')}}" @else href="{{route('help.index')}}"  @endif>Support</a>
+                                    <a @if(in_array(auth()->user()->role->name,['vendor','staff'])) href="{{route('help.vendors')}}" @elseif(auth()->user()->role->name == 'shopper') href="{{route('help.shoppers')}}" @else href="{{route('help.index')}}"  @endif>{{ucwords(__('front.support'))}}</a>
                                   </li>
                                   <li class="header__navigation-drop-menu-link">
                                     <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-forms').submit();">Logout</a>
@@ -287,7 +287,7 @@
                                 </svg>
                             </span>
                             <button type="submit" class="search-btn button button--md">
-                                Search
+                                {{ucwords(__('front.search'))}}
                             </button>
                         </div>
                     </form>
@@ -319,7 +319,7 @@
                                     <span class="item-number cart-counter">{{Session::has('carts') ? session('carts')->count() : 0}}</span>
                                 </button>
                                 <div class="header__cart-item-content-info">
-                                    <h5>Shopping cart:</h5>
+                                    <h5>{{ucwords(__('front.shopping_cart'))}}:</h5>
                                     <span class="price">{!!session('locale')['currency_symbol']!!}<span class="cart-ttl-amount">{{number_format($total,2)}}</span>
                                 </div>
                                 @else
@@ -351,22 +351,22 @@
                         @includeWhen(isset($categories),'layouts.categoriesmenu')
                         <ul class="header__navigation-menu">
                             <li class="header__navigation-menu-link">
-                                <a href="{{route('index')}}">Home</a>
+                                <a href="{{route('index')}}">{{ucwords(__('front.home'))}}</a>
                             </li>
                             <li class="header__navigation-menu-link">
-                                <a href="{{route('product.list')}}">Products</a>
+                                <a href="{{route('product.list')}}">{{ucwords(__('front.products'))}}</a>
                             </li>
                             <li class="header__navigation-menu-link">
-                                <a href="{{route('hotdeals')}}">Hot Deals</a>
+                                <a href="{{route('hotdeals')}}">{{ucwords(__('front.hot_deals'))}}</a>
                             </li>
                             <li class="header__navigation-menu-link">
-                                <a href="{{route('vendors')}}">Vendors</a>
+                                <a href="{{route('vendors')}}">{{ucwords(__('front.hot_deals'))}}</a>
                             </li>
                             <li class="header__navigation-menu-link">
                             @guest
-                                <a href="{{route('login')}}">Login </a>
+                                <a href="{{route('login')}}">{{ucwords(__('front.login'))}} </a>
                             @else
-                                <a href="{{route('home')}}">Dashboard</a>
+                                <a href="{{route('home')}}">{{ucwords(__('front.dashboard'))}}</a>
                             @endguest
                             </li>
                         </ul>
@@ -434,16 +434,16 @@
                     </form>
                     <ul class="header__mobile-menu">
                         <li class="header__mobile-menu-item">
-                            <a href="{{route('home')}}" class="header__mobile-menu-item-link">Home</a>
+                            <a href="{{route('home')}}" class="header__mobile-menu-item-link">{{ucwords(__('front.home'))}}</a>
                         </li>
                         <li class="header__mobile-menu-item">
-                            <a href="#" class="header__mobile-menu-item-link">Shop</a>
+                            <a href="#" class="header__mobile-menu-item-link">{{ucwords(__('front.shop'))}}</a>
                         </li>
                         <li class="header__mobile-menu-item">
                             @guest
-                            <a href="{{route('login')}}" class="header__mobile-menu-item-link">Login / Register</a>
+                            <a href="{{route('login')}}" class="header__mobile-menu-item-link">{{ucwords(__('front.login'))}} / {{ucwords(__('front.register'))}}</a>
                             @else
-                            <a href="account.php" class="header__mobile-menu-item-link">My Account</a>
+                            <a href="account.php" class="header__mobile-menu-item-link">{{ucwords(__('front.my_account'))}}</a>
                             @endif
                         </li>
                     </ul>
@@ -464,17 +464,17 @@
             <div class="modal-body">
                 <div class="contact-form__content my-3">
                     <div class="contact-form-input">
-                        <label for="pin">Enter Your Access Pin</label>
+                        <label for="pin">{{ucwords(__('inner.enter_pin'))}}</label>
                         <input type="text" name="pin" id="pin" value="" placeholder="Access pin" />
                     </div>
                     <div class="contact-form-btn">
                         <button class="button button--md" id="pinsubmit" type="button"> Save </button>
-                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> {{ucwords(__('button.cancel'))}} </button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-start">
-              <span class="small text-muted">Set or reset your access pin from your <a href="{{route('profile')}}">profile</a></span>
+              <span class="small text-muted">{{ucwords(__('inner.set_pin'))}} <a href="{{route('profile')}}">{{ucwords(__('front.profile'))}}</a></span>
             </div>
           </div>
         </div>
@@ -492,7 +492,7 @@
                                 <a href="{{route('index')}}"> <img src="{{asset('src/images/logo-nl-white.png')}}" alt="logo" /></a>
                             </div>
                             <p class="font-body--md-400">
-                                Same day deliveries nationwide!
+                                {{ucwords(__('front.footer'))}}
                             </p>
                             <div style="font-size:13px;color:#fff;font-weight:500">
                                 <span>+234 811 123 4568</span>
@@ -507,38 +507,38 @@
                             <div class="col-md-6">
                                 <ul class="footer__navigation">
                                     <li class="footer__navigation-title">
-                                        <h2 class="font-body--lg-500">My Account</h2>
+                                        <h2 class="font-body--lg-500">{{ucwords(__('front.my_account'))}}</h2>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('home')}}"> My Account </a>
+                                        <a href="{{route('home')}}">{{ucwords(__('front.my_account'))}} </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('vendor.shop.create')}}"> Create Shop </a>
+                                        <a href="{{route('vendor.shop.create')}}"> {{ucwords(__('front.create_shop'))}} </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('cart')}}"> Shoping Cart </a>
+                                        <a href="{{route('cart')}}"> {{ucwords(__('front.shopping_cart'))}} </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('wishlist')}}"> My Wishlist </a>
+                                        <a href="{{route('wishlist')}}"> {{ucwords(__('front.my_wishlist'))}} </a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
                                 <ul class="footer__navigation">
                                     <li class="footer__navigation-title">
-                                        <h2 class="font-body--lg-500">Help</h2>
+                                        <h2 class="font-body--lg-500">{{ucwords(__('front.help'))}}</h2>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('contact')}}"> Contact Us </a>
+                                        <a href="{{route('contact')}}"> {{ucwords(__('front.contact_us'))}} </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('help.index')}}"> Help </a>
+                                        <a href="{{route('help.index')}}"> {{ucwords(__('front.help'))}} </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('terms')}}"> Terms &amp; Conditions </a>
+                                        <a href="{{route('terms')}}"> {{ucwords(__('front.terms_conditions'))}} </a>
                                     </li>
                                     <li class="footer__navigation-link">
-                                        <a href="{{route('privacy')}}"> Privacy Policy </a>
+                                        <a href="{{route('privacy')}}"> {{ucwords(__('front.privacy_policy'))}} </a>
                                     </li>
                                 </ul>
                             </div>
