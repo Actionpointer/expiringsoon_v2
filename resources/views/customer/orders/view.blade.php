@@ -477,7 +477,6 @@
 @include('layouts.front')
 
 <script>
-
   let order = @json($order->id);
   var channel = pusher.subscribe('private-order.'+order);
   channel.bind('message.created', function(data) {
@@ -495,9 +494,6 @@
                               </div>
                             </div>`;
       $('.user-comments__list').prepend(newmessage)
-
   });
-  
-  
 </script>
 @endpush

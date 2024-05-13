@@ -14,7 +14,7 @@ trait PaystackTrait
       $response = Curl::to('https://api.paystack.co/transaction/initialize')
       ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
       ->withHeader('Content-Type: application/json')
-      ->withData( array('email'=> $payment->user->email,'amount'=> $payment->payable*100,'currency'=> session('locale')['currency_iso'],
+      ->withData( array('email'=> $payment->user->email,'amount'=> intval($payment->payable*100),'currency'=> session('locale')['currency_iso'],
                       'reference'=> $payment->reference,"callback_url"=> route('payment.callback') ) )
       ->asJson()                
       ->post();
@@ -34,7 +34,7 @@ trait PaystackTrait
     protected function refundPaystack(Settlement $settlement){
         $response = Curl::to('https://api.paystack.co/refund')
          ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
-         ->withData( array('transaction'=> $settlement->order->payment_item->payment->reference,'amount'=> $settlement->amount*100 ) )
+         ->withData( array('transaction'=> $settlement->order->payment_item->payment->reference,'amount'=> intval($settlement->amount*100 )) )
          ->asJson()
          ->post();
          if($response &&  isset($response->status) && $response->status)

@@ -67,6 +67,7 @@ class ProductController extends Controller
         });
     
         $products = new LengthAwarePaginator($products, $products_paginated->total(), $products_paginated->perPage());
+
         if(request()->expectsJson()){
             return response()->json([
                 'status' => true,

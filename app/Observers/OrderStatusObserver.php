@@ -72,6 +72,9 @@ class OrderStatusObserver
         $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
         Settlement::where('order_id',$orderStatus->order_id)->delete();
         event(new RefundBuyer($orderStatus->order,$orderStatus->order->total));
+	  $orderStatus->order->shop->notify(new OrderStatusVendorNotification($orderStatus));
+        $orderStatus->order->user->notify(new OrderStatusCustomerNotification($orderStatus));
+	  $this->increaseProducts($orderStatus->order);
     }
 
     public function ready(OrderStatus $orderStatus){
