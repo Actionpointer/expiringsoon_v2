@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReviewResource;
 use App\Http\Resources\ProductResource;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Resources\ProductDetailsResource;
 
@@ -24,9 +23,9 @@ class ProductController extends Controller
     public function index(){
         $category = null;
         $tag = null;
-        $categories = Category::has('products')->get();
+        $categories = Category::all();
         $states = State::has('products')->where('country_id',session('locale')['country_id'])->get();
-        $products = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->orderBy('features_count','desc');
+        $products = Product::withCount('features')->within()->live()->isAccessible()->orderBy('features_count','desc');
         if(request()->query() && request()->query('shop_id')){
             $shop_id = request()->query('shop_id');
             $products = $products->where('shop_id',$shop_id);
@@ -38,8 +37,15 @@ class ProductController extends Controller
             });
         }else{$state_id = 0;}
         if(request()->query() && request()->query('category_id')){
-            $products = $products->where('category_id',request()->query('category_id'));
             $category = Category::find(request()->query('category_id'));
+            $subcategories = $category->subcategories->pluck('name');
+            if($subcategories->count()){
+                $products = $products->where(function($query) use($subcategories) { 
+                    foreach($subcategories as $tag){ 
+                        $query->orWhereJsonContains("tags",$tag); 
+                    } 
+                });
+            }
         }
         if(request()->query() && request()->query('tag')){
             $products = $products->where(function($query){ 
@@ -96,8 +102,8 @@ class ProductController extends Controller
     }
 
     public function show(Product $product){
-
-        if(!$product->certified()){
+        
+        if($product->status != 'live'){
             if(!auth()->check() || auth()->user()->role->name == 'shopper'){
                 return request()->expectsJson() ?
                 response()->json([
@@ -108,7 +114,13 @@ class ProductController extends Controller
                 redirect()->back()->with(['result'=> 0,'message'=> 'Product is no longer available']);
             }  
         }
-        $similar = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->where('category_id',$product->category_id)->where('id','!=',$product->id)->orderBy('features_count','desc')->get();
+        $similar = Product::withCount('features')->within()->live()->isAccessible()->where('id','!=',$product->id)
+        ->where(function($query) use($product){
+            foreach($product->tags as $tag){
+                $query->orWhereJsonContains("tags",$tag); 
+            }
+            
+        })->orderBy('features_count','desc')->get();
         return request()->expectsJson() ?
             response()->json([
                 'status' => true,
@@ -128,7 +140,7 @@ class ProductController extends Controller
     public function hotdeals(){
 
         $categories = Category::orderBy('name','ASC')->take(8)->get();
-        $products = Product::withCount('features')->within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->orderBy('features_count','desc');
+        $products = Product::withCount('features')->within()->live()->isAccessible()->orderBy('features_count','desc');
         if(request()->expectsJson()){
             $products = $products->paginate(16);
             return response()->json([

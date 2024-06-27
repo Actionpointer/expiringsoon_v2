@@ -16,6 +16,7 @@ return [
     'login' => 'login',
     'register' => 'register',
     'vendor' => 'vendor',
+    'dashboard' => 'dashboard',
     'categories' => 'categories',
     'all' => "all",
     'cart' => "cart",

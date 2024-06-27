@@ -38,7 +38,6 @@
       <div class="row dashboard__content">
         @include('layouts.vendor_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
-          
             <div class="container">
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
@@ -297,17 +296,8 @@
                                                 </select>
                                               </div>
                                           </div>
-                                          <div class="my-3 filter" style="display: block;">
-                                              <div class="contact-form-input">
-                                                <label>Filter by Categories</label>
-                                                <select id="categories" name="categories[]" class="select2 w-100" multiple>
-                                                    @foreach ($categories as $category)
-                                                      <option value="{{$category->id}}">{{$category->name}}</option>  
-                                                    @endforeach  
-                                                </select>
-                                              </div>
-                                          </div>
-                                        {{-- @endif --}}
+                                          
+                                        
                                         <div class="contact-form-input">
                                             <label>Select Products</label>
                                             <select id="product" name="products[]" class="select2" multiple @if($adset->units <= $adset->features->count()) disabled @endif required>
@@ -339,11 +329,10 @@
       
                     </div>
                 </div>
-
-                
-
               </div>
             </div>
+            <input type="hidden" id="adset_units" value="{{$adset->units}}">
+            <input type="hidden" id="adset_used" value="{{$adset->features->count()}}">
         </div>
       </div>
     </div>
@@ -371,8 +360,8 @@
     });
 </script>
 <script>
-    var limit = @json($adset->units);
-    var used = @json($adset->features->count());
+    var limit = $('#adset_units');
+    var used = $('#adset_used');
     $('#product').select2({
       maximumSelectionLength:limit-used,
       placeholder:'Select Multiple'
@@ -380,7 +369,7 @@
 
     $(document).on('change','#shops',function(){
       var shops = $('#shops').val();
-      var categories = $('#categories').val(); 
+      
       $.ajax({
           type:'POST',
           dataType: 'json',
@@ -388,7 +377,6 @@
           data:{
               '_token' : $('meta[name="csrf-token"]').attr('content'),
               'shops': shops,
-              'categories': categories,
           },
           success:function(data) {
             $('#product').children().remove()
@@ -406,34 +394,6 @@
       })
     })
 
-    $(document).on('change','#categories',function(){
-      var shops = $('#shops').val();
-      var categories = $('#categories').val();
-      $.ajax({
-          type:'POST',
-          dataType: 'json',
-          url: "{{route('vendor.feature.filter_product')}}",
-          data:{
-              '_token' : $('meta[name="csrf-token"]').attr('content'),
-              'shops': shops,
-              'categories': categories,
-          },
-          success:function(data) {
-            $('#product').children().remove()
-            console.log('filtered product count '+data.length)
-            data.data.forEach(element => {
-              $('#product').append(`<option value="`+element.id+`">`+element.name+` in `+element.shop_name+` </option>`)
-            });
-            $('#product').select2({
-              maximumSelectionLength:limit-used,
-            });
-              
-              //adjust all the subtotals and grandtotals here
-          },
-          error: function (data, textStatus, errorThrown) {
-              console.log(data);
-          },
-      })
-    })
+    
 </script>
 @endpush

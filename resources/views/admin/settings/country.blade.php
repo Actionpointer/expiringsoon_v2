@@ -114,7 +114,7 @@
                                                 </div>
                                             </div>
                                     
-                                            <div class="contact-form__content-group">
+                                            <div class="contact-form__content-group border-bottom">
                                                 <div class="contact-form-input">
                                                     <label for="hours">Vat</label>
                                                     <input type="number" step="0.1" name="vat" value="{{$country->vat}}" placeholder="vat" />
@@ -123,6 +123,18 @@
                                                 <div class="contact-form-input">
                                                     <label for="amounts">Bank Account Digits</label>
                                                     <input type="number" name="bank_digits" value="{{$country->bank_digits}}" placeholder="e.g 10" />
+                                                </div>
+                                            </div>
+                                            <h6 class="my-3">Shipment Package Rate</h6>
+                                            <div class="contact-form__content-group">
+                                                <div class="contact-form-input">
+                                                    <label for="hours">Dimension Rate per cm<sup>2</sup></label>
+                                                    <input type="number" step="0.1" name="dimension_rate" value="{{$country->dimension_rate}}" placeholder="10" />
+                                                </div>
+                                    
+                                                <div class="contact-form-input">
+                                                    <label for="amounts">Weight Rate per kg</label>
+                                                    <input type="number" name="weight_rate" value="{{$country->weight_rate}}" placeholder="e.g 100" />
                                                 </div>
                                             </div>
                                             <div class="contact-form-input">

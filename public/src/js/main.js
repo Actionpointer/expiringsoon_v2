@@ -1245,7 +1245,7 @@ $('.select2').select2({
 });
 
 //19. Multi-select
-c
+
 
 //20. Pin validation
 $('.askpin').on('click',function(){

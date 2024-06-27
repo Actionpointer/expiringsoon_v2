@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\Product;
 use App\Events\DeleteProduct;
 use App\Http\Traits\OptimizationTrait;
-use App\Notifications\ProductStatusNotification;
+use App\Jobs\TagUpdateJob;
 
 class ProductObserver
 {
@@ -18,29 +18,23 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        if(cache('settings')['auto_approve_product'])
-        $product->approved = true;
-        $product->status = $product->shop->user->max_products >= $product->shop->user->total_products ? true:false;
-        $product->save();
+        if($product->published){
+            Product::where('id',$product->id)->update([
+                'approved'=> cache('settings')['auto_approve_product'],'show'=> $product->shop->user->max_products >= $product->shop->user->total_products ? true:false,'published' => $product->publishable]);
+        }
+        TagUpdateJob::dispatchIf($product->tags,$product->tags)->delay(now()->addMinutes(10));
     }
 
-    /**
-     * Handle the Product "updated" event.
-     *
-     * @param  \App\Models\Product  $product
-     * @return void
-     */
     public function updated(Product $product)
     {
-        
+        if($product->wasChanged('published') && $product->published){
+            Product::where('id',$product->id)->update([
+                'approved'=> cache('settings')['auto_approve_product'],'show'=> $product->shop->user->max_products >= $product->shop->user->total_products ? true:false,'published' => $product->publishable]);
+        }
+        TagUpdateJob::dispatchIf($product->tags,$product->tags)->delay(now()->addMinutes(10));
     }
 
-    /**
-     * Handle the Product "deleted" event.
-     *
-     * @param  \App\Models\Product  $product
-     * @return void
-     */
+
     public function deleting(Product $product)
     {
         event(new DeleteProduct($product));
@@ -51,25 +45,14 @@ class ProductObserver
         $this->resetProducts($product->shop->user);
     }
 
-    /**
-     * Handle the Product "restored" event.
-     *
-     * @param  \App\Models\Product  $product
-     * @return void
-     */
     public function restored(Product $product)
     {
         //
     }
 
-    /**
-     * Handle the Product "force deleted" event.
-     *
-     * @param  \App\Models\Product  $product
-     * @return void
-     */
     public function forceDeleted(Product $product)
     {
         //
     }
+
 }

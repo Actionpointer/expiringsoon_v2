@@ -10,5 +10,5 @@ class Pin extends Model
     use HasFactory;
 
     protected $fillable = ['body','user_id','last_updated_at'];
-    protected $dates = ['last_updated_at'];
+    protected $casts = ['last_updated_at'=> 'datetime'];
 }

@@ -12,6 +12,7 @@ use App\Jobs\OrderRejectedToReversedJob;
 use App\Jobs\OrderReversedToCompletedJob;
 use App\Jobs\OrderDeliveredToCompletedJob;
 use App\Jobs\OrderReturnedToAcceptanceJob;
+use App\Jobs\SubscriptionResourceResetJob;
 use App\Jobs\OrderProcessingToCancelledJob;
 use App\Jobs\PayoutApprovedToProcessingJob;
 use App\Jobs\SubscriptionExpiringNotifyJob;
@@ -53,6 +54,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new PayoutStatusCheckJob)->hourly();
         $schedule->job(new SubscriptionExpiredJob)->hourly();
         $schedule->job(new SubscriptionExpiringNotifyJob)->hourly();
+        $schedule->job(new SubscriptionResourceResetJob)->hourly();
 
 
 

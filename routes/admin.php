@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\PlacesController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShipmentController;
@@ -38,10 +39,14 @@ Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,
         Route::post('security/ipaddress/block',[SecurityController::class, 'ip_block'])->name('security.ip_block');
         Route::post('security/ipaddress/release',[SecurityController::class, 'ip_release'])->name('security.ip_release');
 
-        Route::get('categories',[ProductController::class, 'categories'])->name('categories');
-        Route::post('category/store',[ProductController::class, 'category_store'])->name('category.store');
-        Route::post('category/update',[ProductController::class, 'category_update'])->name('category.update');
-        Route::post('category/delete',[ProductController::class, 'category_destroy'])->name('category.destroy');
+        Route::get('categories',[CategoryController::class, 'categories'])->name('categories');
+        Route::post('category/store',[CategoryController::class, 'category_store'])->name('category.store');
+        Route::post('category/update',[CategoryController::class, 'category_update'])->name('category.update');
+        Route::post('category/delete',[CategoryController::class, 'category_destroy'])->name('category.destroy');
+
+        Route::post('tag/store',[CategoryController::class, 'tag_store'])->name('tag.store');
+        Route::post('tag/update',[CategoryController::class, 'tag_update'])->name('tag.update');
+        Route::post('tag/delete',[CategoryController::class, 'tag_destroy'])->name('tag.destroy');
 
     });
     

@@ -1,11 +1,12 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Vendor\StaffController;
 use App\Http\Controllers\Vendor\ShopController;
 use App\Http\Controllers\Vendor\OrderController;
+use App\Http\Controllers\Vendor\StaffController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
+use App\Http\Controllers\Vendor\ProductSyncController;
 
    
 Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],function (){
@@ -13,12 +14,10 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
     Route::get('settings',[ShopController::class, 'settings'])->name('settings');
     Route::get('verification',[ShopController::class, 'verification'])->name('verification');
     Route::post('verification',[ShopController::class, 'verify'])->name('verify');
-    // Route::post('address',[ShopController::class, 'address'])->name('address');
-    // Route::post('discounts',[ShopController::class, 'discounts'])->name('discounts');
-    Route::get('packaging/rates',[ShipmentController::class,'packages'])->name('packages');
-    Route::post('packaging/rates',[ShipmentController::class,'packages_manage'])->name('packages.manage');
 
+    
     Route::get('shipping',[ShipmentController::class, 'index'])->name('shipping');
+    Route::post('shipping/package/rate',[ShipmentController::class,'package_rate'])->name('shipping.package');
     Route::post('shipping/store',[ShipmentController::class, 'store'])->name('shipping.store');
     Route::post('shipping/update',[ShipmentController::class,'update'])->name('shipping.update');
     Route::post('shipping/delete',[ShipmentController::class,'delete'])->name('shipping.delete');
@@ -42,6 +41,15 @@ Route::group(['prefix'=>'{shop}','as'=> 'shop.','middleware'=> 'forcepassword'],
     Route::get('product/edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('product/update', [ProductController::class, 'update'])->name('product.update');
     Route::post('product/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    Route::get('product/upload', [ProductController::class, 'upload'])->name('product.upload');
+    Route::post('product/upload_file', [ProductController::class, 'product_upload'])->name('product.upload_file');
+    Route::get('product/template/download', [ProductController::class, 'template_download'])->name('product.template');
+    
+    Route::group(['prefix'=>'product/sync','as'=> 'product.sync.'],function(){
+        Route::get('/', [ProductSyncController::class, 'index'])->name('index');
+        Route::post('wordpress', [ProductSyncController::class, 'wordpress'])->name('wordpress');
+    });
 
     Route::get('orders/{status?}', [OrderController::class, 'index'])->name('order.list');
     Route::get('order/{order}', [OrderController::class, 'show'])->name('order.view');

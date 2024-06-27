@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Notifications\WelcomeNotification;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
@@ -18,16 +19,7 @@ use App\Http\Controllers\Guest\FrontendController;
 use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Shopper\AddressController;
 
-Route::get('broadcast', function () {
-    
-    $user = \App\Models\User::find(31);
-    // // $shop = \App\Models\Shop::find(2);
-    // // dd($shop->followers);
-    // return (new App\Notifications\FollowersFeaturedProductNotification($shop))
-    //                 ->toMail($shop->followers);
-    $user->notify(new \App\Notifications\WelcomeNotification());
-    return 'ok';
-});
+include('test.php');
 
 Route::view('terms','frontend.legal.term_of_use')->name('terms');
 Route::view('privacy_policy','frontend.legal.privacy_policy')->name('privacy');
@@ -70,11 +62,11 @@ Route::post('product/add-to-wish',[CartController::class,'addtowish'])->name('pr
 Route::post('product/remove-from-wish',[CartController::class,'removefromwish'])->name('product.removefromwish');
 Route::post('product/sortFilter',[CartController::class,'sortFilter'])->name('product.sortFilter');
 
-Route::get('payment/callback',[App\Http\Controllers\PaymentController::class,'paymentcallback'])->name('payment.callback');
+Route::get('payment/callback',[PaymentController::class,'paymentcallback'])->name('payment.callback');
 
-Route::get('invoice/{payment}',[App\Http\Controllers\PaymentController::class, 'invoice'])->name('invoice');
+Route::get('invoice/{payment}',[PaymentController::class, 'invoice'])->name('invoice');
 
-Route::get('receipt/{payout}',[App\Http\Controllers\PaymentController::class, 'receipt'])->name('receipt');
+Route::get('receipt/{payout}',[PaymentController::class, 'receipt'])->name('receipt');
 
 Route::view('start-selling','auth.register_vendor')->name('start-selling');
 

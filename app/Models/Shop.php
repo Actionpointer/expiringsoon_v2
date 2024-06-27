@@ -32,7 +32,7 @@ class Shop extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','status'];
+    protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','show','dimension_rate','weight_rate'];
     protected $appends = ['image'];
 
     public static function boot()
@@ -50,13 +50,11 @@ class Shop extends Model
             ]
         ];
     }
-    // public function routeNotificationForNexmo($notification)
-    // {
-    //     return $this->mobile;
-    // }
+    
     public function getRouteKeyName(){
         return 'slug';
     }
+
     public function getMobileAttribute(){
         return $this->country->dial.intval($this->phone);   
     }
@@ -67,7 +65,7 @@ class Shop extends Model
     }
 
     public function getImageAttribute(){
-        return $this->banner ? config('app.url')."/storage/$this->banner": asset('src/images/site/no-image.png');   
+        return $this->banner ? config('app.url')."/storage/$this->banner": config('app.url').'/src/images/site/no-image.png';   
     }
 
     public function scopeWithin($query,$value = null){
@@ -88,24 +86,58 @@ class Shop extends Model
     }
 
     public function scopeIsVisible($query){
+        return $query->where('show',true);
+    }
+
+    public function scopeIsPublished($query){
         return $query->where('published',true);
     }
 
-    public function scopeIsActive($query){
-        return $query->where('status',true);
-    }
-
-    public function scopeIsSelling($query){
-        return $query->whereHas('products',function($q) {$q->where('status',true)->where('published',true)->where('approved',true)->where('stock','>',cache('settings')['minimum_stock_level']);});
+    public function scopeSelling($query){
+        return $query->whereHas('products',function($q) {$q->live();});
     }
     
     public function certified(){
-        return $this->status && $this->approved && $this->published;
+        return $this->show && $this->approved && $this->published;
+    }
+
+    public function scopeLive($query){
+        $query->whereDoesntHave('rejected')->isPublished()->isApproved()->isVisible();
+    }
+
+    public function getPublishableAttribute(){
+        if($this->rejected || $this->rates->isEmpty() || !$this->dimension_rate || !$this->weight_rate || !$this->banner){
+            return 0;
+        }
+        return 1;
+    }
+
+    public function getStatusAttribute(){
+        if($this->rejected)
+        return 'rejected';
+        elseif(!$this->publishable)
+        return 'inactive';
+        elseif(!$this->approved)
+        return 'pending';
+        elseif(!$this->show)
+        return 'hidden';
+        else return 'live';
+    }
+
+    public function getFaultAttribute(){
+        if(!$this->weight_rate || !$this->dimension_rate)
+        return 'Package rate must be set to enable product shipping';
+        elseif($this->rates->isEmpty())
+        return 'Atleast one shipment destination must be set'; 
+        elseif(!$this->banner)
+        return 'Shop banner must be set';
+        elseif(!$this->published) return 'Shop is in draft mode';
+        else return '';
     }
 
     public function scopeIsNotCertified($query){
         return $query->where(function($q){
-            $q->where('approved',false)->orWhere('status',false)->orWhere('published',false);
+            $q->where('approved',false)->orWhere('show',false)->orWhere('published',false);
         });        
     }
     public function user(){
@@ -146,9 +178,6 @@ class Shop extends Model
     
     public function rates(){
         return $this->hasMany(Rate::class);
-    }
-    public function packageRates(){
-        return $this->hasMany(PackageRate::class);
     }
 
     public function categories(){
@@ -209,5 +238,7 @@ class Shop extends Model
     public function rejected(){
         return $this->morphOne(Rejection::class,'rejectable');
     }
+
+    
     
 }

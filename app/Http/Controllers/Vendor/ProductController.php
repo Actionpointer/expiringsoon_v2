@@ -5,27 +5,27 @@ namespace App\Http\Controllers\Vendor;
 use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Shop;
-use App\Models\Package;
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\Rejection;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
+use App\Imports\ProductsImport;
 use App\Http\Controllers\Controller;
-use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductsTemplateExport;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\ProductDetailsResource;
+use App\Http\Traits\OptimizationTrait;
 
 class ProductController extends Controller
 {
+    use OptimizationTrait;
     public function __construct(){
         $this->middleware('auth:sanctum');
     }
    
     public function index(Shop $shop){
-
         $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->with('rejected')->get();
         return request()->expectsJson() ?
             response()->json([
@@ -38,31 +38,11 @@ class ProductController extends Controller
     }
 
     public function create(Shop $shop){
-        $categories = Category::all();
         $tags = Tag::all(); 
-        $packages = Package::all();
-        return view('vendor.shop.product.create',compact('shop','categories','tags','packages'));
-    }
-
-    public function details(Shop $shop,Product $product){
-        if($product && $shop && $product->shop_id == $shop->id){
-            return response()->json([
-                'status' => true,
-                'message' => 'Products retrieved Successfully',
-                'data' => new ProductDetailsResource($product)
-            ], 200);
-        }else{
-            return response()->json([
-                'status' => false,
-                'message' => 'Product does not exist',
-                'data' => null,
-                'count' => 0
-            ], 401);
-        }
+        return view('vendor.shop.product.create',compact('shop','tags'));
     }
 
     public function store(Shop $shop,Request $request){
-        // dd($request->all());2023-02-04
         try {
             $date_limit = now()->addHours(cache('settings')['order_processing_to_delivery_period']);
             $date_beyond = Carbon::parse('2038-01-01');
@@ -71,24 +51,13 @@ class ProductController extends Controller
                 'shop_id' => 'required|numeric',
                 'name' => 'required|max:255',
                 'description' => 'required',
-                'stock' => 'required|numeric|gt:1',
-                'category_id' => 'required|numeric',
-                'tags' => 'nullable',
-                'photo' => 'required|max:5120|image',
-                'expiry' => ['required','date',"after:$date_limit","before:$date_beyond"],
                 'price' => 'required|numeric',
-                'discount120' => 'nullable|lt:price|gt:discount90',
-                'discount90' => 'nullable|lt:price|gt:discount60',
-                'discount60' => 'nullable|lt:price|gt:discount30',
-                'discount30' => 'nullable|lt:price',   
-                'published' => 'required|numeric',   
-                'package_id' => 'required|numeric',   
+                'stock' => 'required|numeric|gt:1',
+                'tags' => 'nullable',
+                'photo' => 'nullable|max:5120|image',
+                'expiry' => ['nullable','date',"after:$date_limit","before:$date_beyond"],   
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 5mb',
-                'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
-                'discount90.gt' => 'Discount price for 90 days must be higher than that for 60 days',
-                'discount60.gt' => 'Discount price for 60 days must be higher than that for 30 days',
-                'lt' => 'This discount price must be less than actual price',
             ]);
             if($validator->fails()){
                 return request()->expectsJson() ?
@@ -98,22 +67,21 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            $shop = Shop::find($request->shop_id);
+            $photo = '';
             if($request->hasFile('photo')){
-                $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                $path = storage_path('app/public/'.$photo);
-                $imgFile = Image::make($request->file('photo'));
-                // $imgFile->fit(150,150)->save($path);
-                $imgFile->resize(null, 500, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path);
-            } 
+                $photo = $this->imageUpload($request->file('photo'));
+            }
+            $length = $width = $height = $weight = null;
+            if($request->length || $request->width || $height){
+
+            }
             $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,
-            'description'=> $request->description,'stock'=> $request->stock,'category_id'=> $request->category_id,
-            'tags'=> $request->tags,'photo'=> $photo,'expire_at'=> Carbon::parse($request->expiry),
+            'description'=> $request->description,'stock'=> $request->stock,
+            'tags'=> $request->tags ?? [],'photo'=> $photo,'expire_at'=> $request->expiry? Carbon::parse($request->expiry):null,
             'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
-            'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-            'published'=> $request->published,'status'=> $shop->certified() ? true:false ,'package_id'=> $request->package_id]);
+            'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published,
+            'length'=> $request->length,'width'=> $request->width,'height'=> $request->height,'weight'=> $request->weight,'units'=> [$request->length_unit,$request->weight_unit]]);
+            
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
                     redirect()->route('vendor.shop.product.list',$shop)->with(['result'=>1,'message'=> 'Product Created Successfully']);
@@ -128,10 +96,8 @@ class ProductController extends Controller
     }
 
     public function edit(Shop $shop,Product $product){
-        $categories = Category::all();
         $tags = Tag::all();
-        $packages = Package::all();
-        return view('vendor.shop.product.edit',compact('shop','product','categories','tags','packages'));
+        return view('vendor.shop.product.edit',compact('shop','product','tags'));
     }
 
     public function update(Shop $shop,Request $request){
@@ -145,24 +111,13 @@ class ProductController extends Controller
                 'shop_id' => 'required|numeric',
                 'name' => 'required|max:255',
                 'description' => 'required',
+                'price' => 'required|numeric',
                 'stock' => 'required|numeric|gt:1',
-                'category_id' => 'required|numeric',
                 'tags' => 'nullable',
                 'photo' => 'nullable|max:5120|image',
-                'expiry' => ['required','date',"after:$date_limit","before:$date_beyond"],
-                'price' => 'required|numeric',
-                'discount120' => 'nullable|lt:price|gt:discount90',
-                'discount90' => 'nullable|lt:price|gt:discount60',
-                'discount60' => 'nullable|lt:price|gt:discount30',
-                'discount30' => 'nullable|lt:price',   
-                'published' => 'required|numeric', 
-                'package_id' => 'required|numeric', 
+                'expiry' => ['nullable','date',"after:$date_limit","before:$date_beyond"], 
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 5mb',
-                'discount120.gt' => 'Discount price for 120 days must be higher than that for 90 days',
-                'discount90.gt' => 'Discount price for 90 days must be higher than that for 60 days',
-                'discount60.gt' => 'Discount price for 60 days must be higher than that for 30 days',
-                'lt' => 'This discount price must be less than actual price',
             ]);
             
             if($validator->fails()){
@@ -180,22 +135,31 @@ class ProductController extends Controller
                     'message' => 'Product does not exist',
                 ], 401);
             }
+            $photo = '';
             if($request->hasFile('photo')){
                 if($product->photo) Storage::delete('public/'.$product->photo);
-                $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                $path = storage_path('app/public/'.$photo);
-                $imgFile = Image::make($request->file('photo'));
-                // $imgFile->fit(150,150)->save($path);
-                $imgFile->resize(null, 500, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path);
-                $product->update(['photo'=> $photo]);
+                $photo = $this->imageUpload($request->file('photo'));
+                $product->photo = $photo;
             } 
-            $product->update(['name'=> $request->name,'shop_id'=> $product->shop_id,'description'=> $request->description,
-            'stock'=> $request->stock,'category_id'=> $request->category_id, 'tags'=> $request->tags,
-            'expire_at'=> Carbon::parse($request->expiry),'price'=> $request->price,'discount30'=> $request->discount30,
-            'discount60'=> $request->discount60,'discount90'=> $request->discount90,'discount120'=> $request->discount120,
-            'published'=> $request->published,'status'=> $shop->certified() ? true:false ,'approved'=> false,'package_id'=> $request->package_id]);
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->stock = $request->stock;
+            $product->tags = $request->tags ?? [];
+            $product->name = $request->name;
+            $product->price = $request->price;
+            $product->expire_at = $request->expiry? Carbon::parse($request->expiry):null;
+            $product->discount30 = $request->discount30;
+            $product->discount60 = $request->discount60;
+            $product->discount90 = $request->discount90;
+            $product->discount120 = $request->discount120;
+            $product->published = $request->published;
+            $product->length = $request->length;
+            $product->width = $request->width;
+            $product->height = $request->height;
+            $product->weight = $request->weight;
+            $product->units = [$request->length_unit,$request->weight_unit];
+            $product->approved = false;
+            $product->save();
             $product->rejections()->delete();
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Updated Successfully','data'=> new ProductDetailsResource($product)], 200) :
@@ -238,5 +202,44 @@ class ProductController extends Controller
         
         
     }
+
+    public function upload(Shop $shop){
+        $tags = Tag::all(); 
+        return view('vendor.shop.product.upload',compact('shop','tags'));
+    }
+
+    public function template_download(Shop $shop){
+        return Excel::download(new ProductsTemplateExport($shop), 'product_template.xlsx');
+    }
+
+    public function product_upload(Shop $shop,Request $request){
+        try {
+            Excel::import(new ProductsImport($shop->id), $request->file('products'));
+        }
+        catch(\Maatwebsite\Excel\Validators\ValidationException $e){
+            $failures = $e->failures();
+            dd($failures);
+        }
+        return redirect()->route('vendor.shop.product.list',$shop)->with(['result'=>1,'message'=> 'Products Uploaded Successfully']);
+    }
+
+    public function details(Shop $shop,Product $product){
+        if($product && $shop && $product->shop_id == $shop->id){
+            return response()->json([
+                'status' => true,
+                'message' => 'Products retrieved Successfully',
+                'data' => new ProductDetailsResource($product)
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Product does not exist',
+                'data' => null,
+                'count' => 0
+            ], 401);
+        }
+    }
+
+    
 
 }

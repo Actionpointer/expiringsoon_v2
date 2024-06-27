@@ -33,7 +33,6 @@ class ShopResource extends JsonResource
             "approved"=> $this->approved,
             "published"=> $this->published,
             "verified"=> $this->verified(),
-            "certified"=> $this->certified(),
             "wallet"=> $this->wallet,
             "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),

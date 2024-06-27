@@ -234,6 +234,7 @@
                                   <li class="header__navigation-drop-menu-link">
                                     <a href="{{route('profile')}}">Profile</a>
                                   </li>
+                                  
                                   <li class="header__navigation-drop-menu-link">
                                     <a @if(in_array(auth()->user()->role->name,['vendor','staff'])) href="{{route('help.vendors')}}" @elseif(auth()->user()->role->name == 'shopper') href="{{route('help.shoppers')}}" @else href="{{route('help.index')}}"  @endif>{{ucwords(__('front.support'))}}</a>
                                   </li>
@@ -360,7 +361,7 @@
                                 <a href="{{route('hotdeals')}}">{{ucwords(__('front.hot_deals'))}}</a>
                             </li>
                             <li class="header__navigation-menu-link">
-                                <a href="{{route('vendors')}}">{{ucwords(__('front.hot_deals'))}}</a>
+                                <a href="{{route('vendors')}}">{{ucwords(__('front.vendor'))}}</a>
                             </li>
                             <li class="header__navigation-menu-link">
                             @guest
@@ -650,7 +651,7 @@
     <script src="{{asset('src/js/main.js')}}"></script>
     <!--<script src="{{asset('pusher.js')}}"></script>-->
     <script src="https://js.pusher.com/4.4/pusher.min.js"></script>
-    
+    <!--
     <script>
         let user = @json(auth()->id());
         if(user){
@@ -678,10 +679,8 @@
                 
             });
         }
-        
-        
-        
       </script>
+            -->
     @stack('scripts')
 </body>
 </html>

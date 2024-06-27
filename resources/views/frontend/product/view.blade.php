@@ -37,12 +37,6 @@
                             <span> > </span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{route('product.list')}}?cat={{$product->category}}">
-                            {{$product->category->name}}
-                            <span> > </span>
-                        </a>
-                    </li>
                     <li class="active"><a href="#">{{$product->name}}</a></li>
                 </ul>
             </div>
@@ -95,7 +89,7 @@
                                 <h2 class="font-body--md-400">Vendor:<br />
                                 <a href="{{route('vendor.show',$product->shop)}}" style="color:#00b207;font-weight:500">{{$product->shop->username}}</a></h2>
                                 <a href="{{route('vendor.show',$product->shop)}}" class="brand-name-logo">
-                                    <img @if(!$product->shop->banner) src="{{asset('src/images/site/avatar.png')}}"  @else src="{{Storage::url($product->shop->banner)}}" @endif alt="{{$product->shop->username}}" style="width:45px;border-radius:50px;border:1px solid #bababa;padding:2px" />
+                                    <img src="{{$product->shop->image}}" alt="{{$product->shop->username}}" style="width:45px;border-radius:50px;border:1px solid #bababa;padding:2px" />
                                 </a>
                             </div>
                             <div class="social-site">
@@ -135,8 +129,8 @@
                                 </ul>
                             </div>
                         </div>
-                        <p class="products__content-brand-info font-body--md-400">{{$product->description}}</p>
-                        
+                        <p class="products__content-brand-info font-body--md-400">{!!$product->description!!}</p>
+
                     </div>
                     <!-- Action button -->
                     <div class="products__content">
@@ -156,41 +150,31 @@
                             <!-- add to cart  -->
                             <form method="post" id="addtocart">
                             <input type="hidden" name="pid" id="product_id" value="{{$product->id}}">
-                            @if(!$product->isAvailable())
-                              <button type="button" class="button button--md products__content-action-item button--disable">
-                              @else
+                            @if(!$product->stock)
+                                <button type="button" class="button button--md products__content-action-item button--disable">
+                            @else
                                 @if(!auth()->check() || auth()->user()->role->name == 'shopper')
-                                <button type="button" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->price}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
-                                
-                                Add to Cart
-                                <span>
-                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5.66667 7.33333H3.16667L1.5 16.5H16.5L14.8333 7.33333H12.3333M5.66667 7.33333V4.83333C5.66667 2.99239 7.15905 1.5 9 1.5V1.5C10.8409 1.5 12.3333 2.99238 12.3333 4.83333V7.33333M5.66667 7.33333H12.3333M5.66667 7.33333V9.83333M12.3333 7.33333V9.83333"
-                                            stroke="currentColor"
-                                            stroke-width="1.3"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </span>
-                                </button>
+                                    <button type="button" class="button button--md products__content-action-item" id="addbtn" data-price="{{$product->price}}" data-product="{{$product->name}}" data-photo="{{$product->photo}}">
+                                    
+                                    Add to Cart
+                                    <span>
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M5.66667 7.33333H3.16667L1.5 16.5H16.5L14.8333 7.33333H12.3333M5.66667 7.33333V4.83333C5.66667 2.99239 7.15905 1.5 9 1.5V1.5C10.8409 1.5 12.3333 2.99238 12.3333 4.83333V7.33333M5.66667 7.33333H12.3333M5.66667 7.33333V9.83333M12.3333 7.33333V9.83333"
+                                                stroke="currentColor"
+                                                stroke-width="1.3"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </span>
+                                    
                                 @endif
                             @endif
+                                </button>
                             </form>
 
                             <!-- fav  -->
-                            {{-- <button class="button-fav products__content-action-item">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.9996 17.5451C-6.66672 8.33336 4.99993 -1.66664 9.9996 4.65674C14.9999 -1.66664 26.6666 8.33336 9.9996 17.5451Z" stroke="currentColor" stroke-width="1.5" />
-                                </svg>
-                            </button> --}}
-
-                            {{-- <span class="action-btn liked">
-                                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-to-wish" data-product="{{$product->id}}product">
-                                    <path d="M9.9996 16.5451C-6.66672 7.3333 4.99993 -2.6667 9.9996 3.65668C14.9999 -2.6667 26.6666 7.3333 9.9996 16.5451Z" stroke="currentColor" stroke-width="1.5"></path>
-                                </svg>
-                            </span> --}}
                             @if(Auth::check() && $product->likes->where('user_id',Auth::id())->count() == 0)
                                 @if(!auth()->check() || auth()->user()->role->name == 'shopper')
                                     <span class="action-btn">
@@ -210,19 +194,47 @@
                                 @endif
                             @endif
                         </div>
+                        
                     </div>
-                    <!-- Tags  -->
+                    @if($product->length)
+                        <div class="mt-3">
+                            <h5 class="font-body--md-500">Dimensions :</h5>
+                            <table class="table">
+                                <tr class="font-body--sm-400 text-muted">
+                                    <th>Length</th>
+                                    <th>Width</th>
+                                    <th>Height</th>
+                                    <th>Weight</th>
+                                </tr>
+                                <tr class="font-body--sm-300">
+                                    <td>{{$product->length_with_unit}}</td>
+                                    <td>{{$product->width_with_unit}}</td>
+                                    <td>{{$product->height_with_unit}}</td>
+                                    <td>{{$product->weight_with_unit}}</td>
+                                </tr>
+                            </table>
+                            
+                        </div>
+                        @endif
                     <div class="products__content">
-                        <h5 class="products__content-category font-body--md-500">Category: <a href="{{route('product.list')}}?category_id={{$product->category_id}}">{{$product->category->name}}</a></h5>
+                        @if($product->categories() && $product->categories()->count())
+                        <div class="products__content-tags mb-3 d-flex align-items-start">
+                            <h5 class="font-body--md-500">Categories :</h5>
+                            <div class="products__content-tags-item">
+                                @foreach ($product->categories() as $category)
+                                    <a href="{{route('product.list')}}?category_id={{$category->id}}" class="font-body--md-400">{{$category->name}}</a>
+                                @endforeach 
+                            </div>
+                        </div>
+                        @endif
+                        
                         @if($product->tags && count($product->tags))
-                        <div class="products__content-tags">
-                            <h5 class="font-body--md-500">Tag :</h5>
+                        <div class="products__content-tags d-flex align-items-start">
+                            <h5 class="font-body--md-500">Tags :</h5>
                             <div class="products__content-tags-item">
                                 @foreach ($product->tags as $tag)
                                     <a href="{{route('product.list')}}?tag={{$tag}}" class="font-body--md-400">{{$tag}}</a>
-                                @endforeach
-                                
-                                
+                                @endforeach 
                             </div>
                         </div>
                         @endif
@@ -747,7 +759,7 @@
                                 </div>
                                 <div class="cards-md__info d-flex justify-content-between align-items-center">
                                     <a href="{{route('product.show',$item)}}" class="cards-md__info-left">
-                                        <h6 class="font-body--md-400 product-title">{{$item->name}}</h6>
+                                        <h6 class="font-body--md-400 product-title">{{ucwords($item->name)}}</h6>
                                         <div class="cards-md__info-price">
                                         @if($item->expire_at && $item->discount) 
                                             <span class="font-body--lg-500">{!!$product->shop->country->currency->symbol!!}{{number_format($product->amount, 0)}}</span>

@@ -62,3 +62,15 @@ Newsletters[
 ]
 
 advert audience network
+==========================================
+
+consumer key:
+ck_08b146939a5af5a7b77bd781c6bbb2653f24c074
+consumer secret:
+cs_3069964cd932e40979d11a52984f21ef4e821e00
+
+  check certified
+
+(100 naira per kg) =  5kg = 500
+(1naira per cm2) = 15x10x13 = 1950
+lagos to lagos distance =   2000 naira

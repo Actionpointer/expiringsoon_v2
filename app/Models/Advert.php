@@ -103,14 +103,14 @@ class Advert extends Model
 
     public function scopeCertifiedProduct($query){
         return $query->whereHas('product', function (Builder $qry){ 
-                 $qry->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();});
+                 $qry->live()->isAccessible();});
     }
 
     public function scopeCertifiedShop($query){
         return $query->whereHas('shop', function (Builder $qry)  { 
             $qry->isActive()->isApproved()->isVisible()
             ->whereHas('products',function(Builder $q){
-                $q->isValid()->isAccessible()->isAvailable()->isActive()->isApproved()->isVisible();
+                $q->live()->isAccessible();
             });
         });
     }

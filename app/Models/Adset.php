@@ -17,6 +17,7 @@ class Adset extends Model
     use HasFactory,Sluggable,SoftDeletes;
     
     protected $fillable = ['user_id','slug','adplan_id','units','amount','start_at','end_at','auto_renew'];
+    protected $casts = ['start_at'=> 'datetime','end_at'=> 'datetime'];
     protected $appends = ['active'];
 
     public function sluggable():array
@@ -48,7 +49,7 @@ class Adset extends Model
     public function getRouteKeyName(){
         return 'slug';
     }
-    protected $dates = ['start_at','end_at'];
+    
 
     public function adplan(){
         return $this->belongsTo(Adplan::class);

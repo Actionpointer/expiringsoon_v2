@@ -7,7 +7,6 @@ use App\Models\State;
 use App\Models\Adplan;
 use App\Models\Feature;
 use App\Models\Product;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
@@ -24,10 +23,8 @@ class FeatureController extends Controller
         $shops = $user->shops->where('status',true)->where('published',true)->where('approved',true);
         $states = State::within()->get();
         $state_id = session('locale')['state_id'];
-        $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->where("user_id",auth()->id());})->get();
-        $categories = Category::whereIn("id",$products->pluck('category_id')->toArray())->get();
-            // dd($products->first()->shop->name);
-        return view('vendor.features.index',compact('adset','products','categories','shops','states','state_id')); 
+        $products = Product::within()->live()->isAccessible()->whereHas("shop",function($query) use($shops){ $query->where("user_id",auth()->id());})->get();
+        return view('vendor.features.index',compact('adset','products','shops','states','state_id')); 
     }
 
     public function store(Request $request){
@@ -57,8 +54,8 @@ class FeatureController extends Controller
     }
     
     public function feature_products(Request $request){
-        $products = Product::whereIn('id',$request->products)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->get();
-        $allproducts = Product::where('shop_id',$request->shop_id)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->get();
+        $products = Product::whereIn('id',$request->products)->live()->isAccessible()->get();
+        $allproducts = Product::where('shop_id',$request->shop_id)->live()->isAccessible()->get();
         $states = State::all();
         $state_id = session('locale')['state_id'];
         $adplan = Adplan::where('width',null)->first();
@@ -96,11 +93,9 @@ class FeatureController extends Controller
 
     public function filter_products(Request $request){
         $shops = auth()->user()->shops;
-        $products = Product::whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());});
+        $products = Product::live()->isAccessible()->whereHas("shop",function($query) use($shops){ $query->whereIn("id",$shops->pluck("id")->toArray());});
         if($request->shops)
             $products = $products->whereIn("shop_id",$request->shops);
-        if($request->categories)
-            $products = $products->whereIn('category_id', $request->categories);
         $products = $products->with('shop')->get();
         return response()->json(['status' => true,'message' => 'Products filtered ','data' => ProductResource::collection($products)],200);
     }

@@ -65,7 +65,7 @@ class SalesController extends Controller
         }
         foreach($items as $key => $value){
             $product = Product::find($value['product_id']);
-            if(!$product->certified()){
+            if($product->status == 'live'){
                 $this->removeFromCartDb($product);
                 $carts = $this->removeFromCartSession($product);
             }
@@ -94,7 +94,7 @@ class SalesController extends Controller
             $state_id = Address::find($request->address_id)->state_id;
         }
         $carts = Cart::where('user_id',$user->id)->whereHas('product',function($query){
-            $query->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
+            $query->live()->isAccessible();
         })->get();
         Cart::where('user_id',$user->id)->whereNotIn('id',$carts->pluck('id')->toArray())->delete();
         if($carts->isEmpty()){

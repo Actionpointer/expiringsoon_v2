@@ -88,7 +88,7 @@
 
                                 <td class="cart-table-item add-cart align-middle">     
                                     <div class="add-cart__wrapper">
-                                        @if($like->product->certified())
+                                        @if($like->product->status == 'live')
                                             <button class="button button--md add-to-cart" data-product="{{$like->product_id}}">Add to Cart</button>
                                         @else
                                             <button class="button button--md button--disable">Unavailable</button>     
@@ -160,7 +160,7 @@
                         @endif
                       </h6>
                     
-                      @if($like->product->certified())
+                      @if($like->product->status == 'live')
                           <button class="button button--md add-to-cart" data-product="{{$like->product_id}}">Add to Cart</button>
                       @else
                           <button class="button button--md button--disable">Unavailable</button>     

@@ -1,3 +1,11 @@
+change categorization:{
+    let vendor add existing tags and new tags to products.
+    these tags are assigned to categories by admin
+    customers click on a category, it brings out all the products tagged to that category
+    customers search for tag or category name or product name
+    admin assigns orphaned tags to identified categories
+}
+
 -one event can call many listeners
 -many events cannot call one listener - use subscribers to do this
 -charges on payout {add that to commission}
@@ -63,3 +71,8 @@ check advert image quality as validation
 deleting a product should not delete the orders
 
 
+Correct navigation display and menu for vendor, staff, admin, 
+
+checkout shipment fee correction
+
+remove certified from advert and featured, change to Live

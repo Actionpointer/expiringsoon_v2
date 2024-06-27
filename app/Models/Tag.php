@@ -2,24 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tag extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name'];
-    protected $appends = ['category','category_id'];
+    protected $appends = ['orphan'];
 
     public function categories(){
         return $this->belongsToMany(Category::class,'subcategories');
     }
-    public function getCategoryAttribute(){
-        return $this->categories->first()->name;   
+    public function getOrphanAttribute(){
+        return $this->categories->isEmpty();   
     }
-    public function getCategoryIdAttribute(){
-        return $this->categories->first()->id;   
+
+    public function products(){
+        return Product::whereJsonContains('tags',$this->name)->get();
     }
 }

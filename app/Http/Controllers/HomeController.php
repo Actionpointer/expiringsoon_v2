@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Adset;
 use App\Models\Order;
 use App\Models\Advert;
-use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\DB;
 use App\Http\Traits\GeoLocationTrait;
 

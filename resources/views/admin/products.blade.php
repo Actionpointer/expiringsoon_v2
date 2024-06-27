@@ -132,7 +132,7 @@
                         <tr>
                           <th scope="col" class="dashboard__order-history-table-title">Item</th>
                           <th scope="col" class="dashboard__order-history-table-title">Orders</th>
-                          <th scope="col" class="dashboard__order-history-table-title">Statuses</th>
+                          <th scope="col" class="dashboard__order-history-table-title">Status</th>
                           <th scope="col" class="dashboard__order-history-table-title">Manage</th>
                         </tr>
                     </thead>
@@ -148,7 +148,7 @@
                               </div>
                               <a href="{{route('product.show',$product)}}"  class="cart-table__product-item" >
                                   <div class="cart-table__product-item-img">
-                                      <img src="{{$product->image}}" alt="{{$product->name}}" onerror="this.src='{{asset('src/images/site/avatar.png')}}'" />
+                                      <img src="{{$product->image}}" alt="{{$product->name}}" />
                                       
                                   </div>
                                   <div class="d-flex flex-column">
@@ -170,36 +170,22 @@
                           <td class="dashboard__order-history-table-item">{{$product->orders->unique('order_id')->count()}}</td>
                           <td class="cart-table-item stock-status order-date align-middle">
                             <div class="d-flex text-nowrap">
-                              @if($product->certified())
-                                <span class="font-body--md-400 in me-1"> Live</span>
-                              @endif
-                              @if(!$product->approved)
-                                <span class="font-body--md-400 out me-1"> @if($product->rejected) Rejected @else Pending Approval @endif</span>
-                              @endif
-                              @if(!$product->status)
-                                <span class="font-body--md-400 out me-1"> Inactive</span>
-                              @endif
-                              @if(!$product->published)
-                                <span class="font-body--md-400 out me-1"> Draft</span>
-                              @endif
-                              @if(!$product->valid)
-                                <span class="font-body--md-400 out me-1"> Expired</span>
-                              @endif
-                              @if(!$product->available)
-                                <span class="font-body--md-400 out me-1"> Sold Out</span>
-                              @endif
-                              @if(!$product->accessible())
-                                <span class="font-body--md-400 out"> Inaccessible</span>
-                              @endif
+                              
+                              <span class="font-body--md-400 @if($product->status == 'live') in @else out @endif me-1"> {{ucwords($product->status)}}</span>
+                              
                             </div>
                           </td>
                           <!-- Stock Status  -->
                           
                           <td class="cart-table-item stock-status order-date align-middle">
                             <div class="button-group text-nowrap">
-                                  @if(!$product->approved)
+                                  @if($product->status == 'pending')
                                   <button type="button" data-bs-toggle="modal" data-bs-target="#approve{{$product->id}}" class="btn btn-sm btn-success">Approve</button>
-                                  <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$product->id}}">Reject</button>
+                                  @endif
+                                  @if($product->status != 'rejected')
+                                  <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$product->id}}">Ban</button>
+                                  @else
+                                  <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#reject{{$product->id}}">Unban</button>
                                   @endif
 
                                   @if(auth()->user()->isRole('superadmin'))
@@ -238,7 +224,7 @@
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="reject{{$product->id}}ModalLabel">Reject Product</h5>
+                                  <h5 class="modal-title" id="reject{{$product->id}}ModalLabel">Ban Product</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -248,7 +234,7 @@
                                         <div class="contact-form__content my-3">
                                             <div class="contact-form-input">
                                               <label for="hours">Reason</label>
-                                              <textarea name="reason" class="form-control" placeholder="Rejection Reason"></textarea>
+                                              <textarea name="reason" class="form-control" placeholder="Reason for Ban"></textarea>
                                             </div>
                                             <div class="contact-form-input">
                                               <label for="pin">Enter Your Access Pin</label>

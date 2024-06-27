@@ -109,25 +109,11 @@
                       <div class="col-lg-12">
                           <div class="contact-form__content">
                             <div class="contact-form__content-group">
+                              
                               <div class="contact-form-input">
-                                <label for="states">Category</label>
-                                <select id="category_id" name="category_id" class="select2" required>
-                                    <option value="" selected>Select</option>
-                                    @foreach ($categories as $category)
-                                        <option value={{$category->id}}>{{$category->name}}</option>
-                                    @endforeach
-    
-                                </select>
-                                @error('category_id')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                              </div>
-                              <div class="contact-form-input">
-                                <label for="tags">Sub Category</label>
-                                <select name="tags[]" id="tags" class="select2" multiple >
-                                  @foreach ($tags as $tag)
+                                <label for="tags">Tags  <small>(allows multiple)</small></label>
+                                <select name="tags[]" id="tags" class="select2" multiple data-placeholder="Select or Add New" data-tags="true">
+                                  @foreach ($tags->sortBy('name') as $tag)
                                     <option value="{{$tag->name}}">{{$tag->name}}</option>
                                   @endforeach
                                   
@@ -174,7 +160,7 @@
               
                 <div class="dashboard__content-card">
                   <div class="dashboard__content-card-header">
-                  <h5 class="font-body--xl-500">Product Discounts</h5>
+                    <h5 class="font-body--xl-500">Product Discounts</h5>
                   </div>
                   <div class="dashboard__content-card-body">
                     <div class="table-responsive">
@@ -192,7 +178,7 @@
                             <td>
                               <div class="input-group d-flex flex-nowrap">
                                     
-                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount120percent" id="discount120percent" value="{{ old('discount120percent') }}">
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" name="discount120percent" id="discount120percent" value="{{ old('discount120percent') }}">
                                 <div class="input-group-append">
                                   <span class="input-group-text">%</span>
                                 </div>
@@ -204,7 +190,7 @@
                                 <div class="input-group-append">
                                   <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
                                 </div>
-                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount120" id="discount120" value="{{ old('discount120') }}">
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" name="discount120" id="discount120" value="{{ old('discount120') }}">
                                 
                               </div>
                             </td>
@@ -221,7 +207,7 @@
                             <td>
                               <div class="input-group d-flex flex-nowrap">
                                     
-                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount90percent" id="discount90percent" value="{{ old('discount90percent') }}">
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" name="discount90percent" id="discount90percent" value="{{ old('discount90percent') }}">
                                 <div class="input-group-append">
                                   <span class="input-group-text">%</span>
                                 </div>
@@ -233,7 +219,7 @@
                                 <div class="input-group-append">
                                   <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
                                 </div>    
-                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount90" id="discount90" value="{{ old('discount90') }}">
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" name="discount90" id="discount90" value="{{ old('discount90') }}">
                                 
                               </div>
                             </td>
@@ -251,7 +237,7 @@
                             <td>
                               <div class="input-group d-flex flex-nowrap">
                                     
-                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount60percent" id="discount60percent" value="{{ old('discount60percent') }}">
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" name="discount60percent" id="discount60percent" value="{{ old('discount60percent') }}">
                                 <div class="input-group-append">
                                   <span class="input-group-text">%</span>
                                 </div>
@@ -262,7 +248,7 @@
                                 <div class="input-group-append">
                                   <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
                                 </div>  
-                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount60" id="discount60" value="{{ old('discount60') }}">
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" name="discount60" id="discount60" value="{{ old('discount60') }}">
                               </div>
                             </td>
                             <td>
@@ -279,7 +265,7 @@
                             <td>
                               <div class="input-group d-flex flex-nowrap">
                                   
-                                <input class="form-control-sm border-light percent" type="number" step="0.001" required name="discount30percent" id="discount30percent" value="{{ old('discount30percent') }}">
+                                <input class="form-control-sm border-light percent" type="number" step="0.001" name="discount30percent" id="discount30percent" value="{{ old('discount30percent') }}">
                                 <div class="input-group-append">
                                   <span class="input-group-text">%</span>
                                 </div>
@@ -291,7 +277,7 @@
                                 <div class="input-group-append">
                                   <span class="input-group-text">{!!$shop->country->currency->symbol!!}</span>
                                 </div> 
-                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" required name="discount30" id="discount30" value="{{ old('discount30') }}">
+                                <input class="form-control-sm border-light discountprice" type="number" step="0.001" name="discount30" id="discount30" value="{{ old('discount30') }}">
                               </div>
                             </td>
                             <td>
@@ -304,39 +290,112 @@
                           </tr>
                         </tbody>
                       </table>
-                      
                     </div>
-
-                    @if($shop->user->total_products >= $shop->user->max_products) 
-                    <h3 class="text-danger">The status of this product will be <strong>INACTIVE</strong> @if(auth()->id() == $shop->user_id) except you <a href="{{route('vendor.plans')}}">upgrade</a> @endif</h3>
-                    
-                    @endif
-                     
                   </div>
                 </div>
                 <div class="dashboard__content-card">
                   <div class="dashboard__content-card-header">
-                  <h5 class="font-body--xl-500">Packaging</h5>
+                    <h5 class="font-body--xl-500">Dimensions</h5>
                   </div>
                   <div class="dashboard__content-card-body">
                     <div class="contact-form__content">
-                      <p class="font-body--md-500 mb-2">Which type of packaging is most suitable for the product.  </p>
-                      <div class="contact-form-input">
-                        <label for="states">Packages</label>
-                        <select id="package_id" name="package_id" class="select2" required>
-                            <option value="" selected>Select</option>
-                            @foreach ($packages as $package)
-                                <option value="{{$package->id}}">{{$package->name}} - {{$package->description}}</option>
-                            @endforeach
-
-                        </select>
-                        @error('package_id')
-                            <span class="invalid-feedback d-block" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                      <p class="font-body--md-500 mb-2">Exact dimensions of the product is required for accurate logistics  </p>
+                      <div class="table-responsive">
+                        <table class="table w-auto">
+                          <tbody>
+                            <tr>
+                                <th class="text-nowrap"></th>
+                                <th>Value</th>
+                                <th>Unit</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                              <td>Length</td>
+                              <td>
+                                <input class="form-control-sm border-light" type="number" step="0.001" name="length" id="length" value="{{ old('length') }}"> 
+                              </td>
+                              <td>
+                                  <select name="length_unit" id="length_unit" class="form-control">
+                                      <option value="cm">Centimeter (cm)</option>
+                                      <option value="in">Inches (in)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('length')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                              
+                            </tr>
+                            <tr>
+                              <td>Width</td>
+                              <td>
+                                  <input class="form-control-sm border-light" type="number" step="0.001" name="width" id="width" value="{{ old('width') }}"> 
+                                </td>
+                              <td>
+                                  <select name="width_unit" id="width_unit" class="form-control">
+                                      <option value="cm">Centimeter (cm)</option>
+                                      <option value="in">Inches (in)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('width')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Height</td>
+                              <td>
+                                <input class="form-control-sm border-light" type="number" step="0.001" name="height" id="height" value="{{ old('height') }}"> 
+                              </td>
+                              <td>
+                                  <select name="height_unit" id="height_unit" class="form-control">
+                                      <option value="cm">Centimeter (cm)</option>
+                                      <option value="in">Inches (in)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('height')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Weight</td>
+                              <td>
+                                <input class="form-control-sm border-light" type="number" step="0.001" name="weight" id="weight" value="{{ old('weight') }}"> 
+                              </td>
+                              <td>
+                                  <select name="weight_unit" id="weight_unit" class="form-control">
+                                      <option value="g">gram (g)</option>
+                                      <option value="kg">Kilogram (kg)</option>
+                                      <option value="oz">Ounce (oz)</option>
+                                      <option value="lb">Pound (lb)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('weight')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        
                       </div>
-                      
+                      @if($shop->user->total_products >= $shop->user->max_products) 
+                      <h3 class="text-danger">This product will <strong>NOT BE VISIBLE</strong> @if(auth()->id() == $shop->user_id) except you <a href="{{route('vendor.plans')}}">upgrade</a> @endif</h3>
+                    
+                      @endif
                       <div class="contact-form-btn">
                         <button class="button button--md bg-secondary my-1" name="published" value="0" type="submit" id="submit">
                           Save as Draft
@@ -381,59 +440,26 @@
           }
       }
   
-        // $('.adddiscount').on('click',function(){
-        //     $(this).closest('.discount').find('.discountoptions').show();
-        //     $(this).hide();
-        // })
-        // $('.removediscount').on('click',function(){
-        //     $(this).closest('.discount').find('.adddiscount').show();
-        //     $(this).closest('.discount').find('.discountoptions input').val('')
-        //     $(this).closest('.discount').find('.discountoptions').hide()
-        // })
-        $(document).on('input blur change',"#prices",function(){
-          price = $(this).val();
-          // $('.discountprice').attr({"max" : $(this).val(),"min" : price})
-          $('.percent').each(function(){
-            let result = price - ($(this).val() /100 * price);
-            $('#'+$(this).attr('id').split('percent')[0]).val(result.toFixed(3));
-          })         // values (or variables) here
-        });
-        $(document).on('input blur change',".percent",function(){
-          let p = $(this).attr('id').split('percent')[0];
-          let q = price - ($(this).val() /100 * price);
-          $('#'+p).val(q.toFixed(3));
-            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
-        });
-        $(document).on('input blur change',".discountprice",function(){
-          let p = $(this).attr('id')+'percent';
-          let q = $(this).val() * 100 / price;
-          $('#'+p).val(q.toFixed(3));
-            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
-        });
+      $(document).on('input blur change',"#prices",function(){
+        price = $(this).val();
+        // $('.discountprice').attr({"max" : $(this).val(),"min" : price})
+        $('.percent').each(function(){
+          let result = price - ($(this).val() /100 * price);
+          $('#'+$(this).attr('id').split('percent')[0]).val(result.toFixed(3));
+        })         // values (or variables) here
+      });
+      $(document).on('input blur change',".percent",function(){
+        let p = $(this).attr('id').split('percent')[0];
+        let q = price - ($(this).val() /100 * price);
+        $('#'+p).val(q.toFixed(3));
+          // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+      });
+      $(document).on('input blur change',".discountprice",function(){
+        let p = $(this).attr('id')+'percent';
+        let q = $(this).val() * 100 / price;
+        $('#'+p).val(q.toFixed(3));
+          // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+      });
 
-        $(document).on('change','#category_id',function(){
-          let tags = @json($tags);
-          let v = $(this).find(':selected').text()
-          console.log(v)
-          let filtered = tags.filter(function(value){
-            return value.category == v;
-          })
-          $('#tags').children().remove()
-          filtered.forEach(element => {
-              $('#tags').append(`<option value="`+element.name+`">`+element.name+` </option>`)
-          });
-          $('#tags').select2();
-        })
-        // $('#addproduct').one('submit',function(e){
-        //   e.preventDefault();
-        //   let checker = 1;
-        //   $('.discountprice').each(function(){
-        //     if($(this).val() > $(this).attr('max'))
-        //     checker = 0;
-        //   })
-        //   if(checker){
-        //     $('#addproduct').submit();
-        //   }
-        // })
     </script>
 @endpush

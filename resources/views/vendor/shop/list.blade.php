@@ -35,7 +35,7 @@
         @include('layouts.vendor_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
           
-            {{-- <div class="container"> --}}
+            
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
                     <h2 class="font-body--xl-500">Shops</h2>
@@ -47,27 +47,30 @@
                       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                           <li class="nav-item" role="presentation">
                               <button class="nav-link active" id="pills-live-tab" data-bs-toggle="pill" data-bs-target="#pills-live" type="button" role="tab" aria-controls="pills-live" aria-selected="true">
-                                  Live
+                                  Live ({{$shops->where('status','live')->count()}})
                               </button>
                           </li>
                           <li class="nav-item" role="presentation">
-                          <button class="nav-link" id="pills-approval-tab" data-bs-toggle="pill" data-bs-target="#pills-approval" type="button" role="tab" aria-controls="pills-approval" aria-selected="false">
-                              Pending Approval
-                          </button>
-                          </li>
-                          
-                          <li class="nav-item" role="presentation">
-                              <button class="nav-link" id="pills-inactive-tab" data-bs-toggle="pill" data-bs-target="#pills-inactive" type="button" role="tab" aria-controls="pills-inactive" aria-selected="false">
-                              Inactive
+                              <button class="nav-link" id="pills-hidden-tab" data-bs-toggle="pill" data-bs-target="#pills-hidden" type="button" role="tab" aria-controls="pills-hidden" aria-selected="false">
+                              Hidden ({{$shops->where('status','hidden')->count()}})
                               </button>
                           </li>
-                          
                           <li class="nav-item" role="presentation">
-                              <button class="nav-link" id="pills-draft-tab" data-bs-toggle="pill" data-bs-target="#pills-draft" type="button" role="tab" aria-controls="pills-draft" aria-selected="false">
-                                  Draft
-                              </button>
+                            <button class="nav-link" id="pills-approval-tab" data-bs-toggle="pill" data-bs-target="#pills-approval" type="button" role="tab" aria-controls="pills-approval" aria-selected="false">
+                                Pending Approval ({{$shops->where('status','pending')->count()}})
+                            </button>
                           </li>
 
+                          <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="pills-inactive-tab" data-bs-toggle="pill" data-bs-target="#pills-inactive" type="button" role="tab" aria-controls="pills-inactive" aria-selected="false">
+                                  Inactive ({{$shops->where('status','inactive')->count()}})
+                              </button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="pills-rejected-tab" data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected" aria-selected="false">
+                                  Rejected ({{$shops->where('status','rejected')->count()}})
+                              </button>
+                          </li>
                       </ul>
                   </div>
                 </div>
@@ -94,7 +97,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>                     
-                                        @forelse($shops->filter(function($value){ return $value->certified(); }) as $shop)        
+                                        @forelse($shops->where('status','live') as $shop)        
                                             <tr>
                                                 <!-- Order Id  -->
                                                 <td class="dashboard__order-history-table-item order-id"> 
@@ -141,6 +144,74 @@
                               </div>
                             </div>
                         </div>
+
+                        <div class="tab-pane fade" id="pills-hidden" role="tabpanel" aria-labelledby="pills-hidden-tab">
+                            <div class="dashboard__order-history-table">
+                              <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="dashboard__order-history-table-title"> Shop
+                                        </th>
+                                        
+                                        <th scope="col" class="dashboard__order-history-table-title"> Products
+                                        </th>
+                                        <th scope="col" class="dashboard__order-history-table-title"> Sales
+                                        </th>
+                                        <th scope="col" class="dashboard__order-history-table-title"> Earnings
+                                        </th>
+                                        <th scope="col" class="dashboard__order-history-table-title"> Wallet
+                                        </th>
+                                        <th scope="col" class="dashboard__order-history-table-title"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>                     
+                                        @forelse($shops->where('status','hidden') as $shop)        
+                                            <tr>
+                                                <!-- Order Id  -->
+                                                <td class="dashboard__order-history-table-item order-id"> 
+                                                    <span style="font-weight:500">{{$shop->name}}</span><br/>
+                                                </td>
+                                                <!-- Vendor Split  -->
+                                                <td class="dashboard__order-history-table-item order-total "> 
+                                                    <p class="order-total-price">   {{number_format($shop->products->count(), 0)}} </p>
+                                                </td>
+                                                <!-- Site Split  -->
+                                                <td class="dashboard__order-history-table-item order-total"> 
+                                                    <p class="order-total-price">   {!!$shop->country->currency->symbol!!}
+                                                        {{number_format($shop->orders->filter(function($value){ return $value->statuses->count(); })->sum('subtotal') , 0)}} 
+                                                    </p>
+                                                </td>
+                                                <!-- Status -->
+                                                <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} 
+                                                        {{number_format(
+                                                            $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
+                                                        ,2)}}
+                                                </td>
+                                                <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->wallet,2)}}</td>
+                                                <!-- Details page  -->
+                                                <td class="dashboard__order-history-table-item   order-details "> 
+                                                    <a href="{{route('vendor.shop.show',$shop)}}">
+                                                        <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Go to Storefront
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="6" class="border-0">
+                                              <div class="text-center">
+                                                  No Shop in Category
+                                              </div>
+                                            </td>
+                                        </tr>
+                                            
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
                         <!-- Countries -->
                         <div class="tab-pane fade" id="pills-approval" role="tabpanel" aria-labelledby="pills-approval-tab">
                             <div class="dashboard__order-history-table">
@@ -163,7 +234,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>                     
-                                        @forelse($shops->where('approved',false) as $shop)        
+                                        @forelse($shops->where('status','pending') as $shop)        
                                             <tr>
                                                 <!-- Order Id  -->
                                                 <td class="dashboard__order-history-table-item order-id"> 
@@ -210,92 +281,21 @@
                             </div>
                         </div>
                         
-                        <!-- Plan  -->
+                       
                         <div class="tab-pane fade" id="pills-inactive" role="tabpanel" aria-labelledby="pills-inactive-tab">
-                            <div class="dashboard__order-history-table">
-                              <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" class="dashboard__order-history-table-title"> Shop
-                                        </th>
-                                        
-                                        <th scope="col" class="dashboard__order-history-table-title"> Products
-                                        </th>
-                                        <th scope="col" class="dashboard__order-history-table-title"> Sales
-                                        </th>
-                                        <th scope="col" class="dashboard__order-history-table-title"> Earnings
-                                        </th>
-                                        <th scope="col" class="dashboard__order-history-table-title"> Wallet
-                                        </th>
-                                        <th scope="col" class="dashboard__order-history-table-title"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>                     
-                                        @forelse($shops->where('status',false) as $shop)        
-                                            <tr>
-                                                <!-- Order Id  -->
-                                                <td class="dashboard__order-history-table-item order-id"> 
-                                                    <span style="font-weight:500">{{$shop->name}}</span><br/>
-                                                </td>
-                                                <!-- Vendor Split  -->
-                                                <td class="dashboard__order-history-table-item order-total "> 
-                                                    <p class="order-total-price">   {{number_format($shop->products->count(), 0)}} </p>
-                                                </td>
-                                                <!-- Site Split  -->
-                                                <td class="dashboard__order-history-table-item order-total"> 
-                                                    <p class="order-total-price">   {!!$shop->country->currency->symbol!!}
-                                                        {{number_format($shop->orders->filter(function($value){ return $value->statuses->count(); })->sum('subtotal') , 0)}} 
-                                                    </p>
-                                                </td>
-                                                <!-- Status -->
-                                                <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} 
-                                                        {{number_format(
-                                                            $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
-                                                        ,2)}}
-                                                </td>
-                                                <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->wallet,2)}}</td>
-                                                <!-- Details page  -->
-                                                <td class="dashboard__order-history-table-item   order-details "> 
-                                                    <a href="{{route('vendor.shop.show',$shop)}}">
-                                                        <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Go to Storefront
-                                                        </span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="6" class="border-0">
-                                              <div class="text-center">
-                                                  No Shop in Category
-                                              </div>
-                                            </td>
-                                        </tr>
-                                            
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                              </div>
-                            </div>
-                        </div>
-                        
-                        <!--  Advert  -->
-                        <div class="tab-pane fade" id="pills-draft" role="tabpanel" aria-labelledby="pills-draft-tab">
                             <div class="dashboard__order-history-table">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                         <tr>
                                             <th scope="col" class="dashboard__order-history-table-title"> Shop </th>
-                                            <th scope="col" class="dashboard__order-history-table-title"> Products </th>
-                                            <th scope="col" class="dashboard__order-history-table-title"> Sales </th>
-                                            <th scope="col" class="dashboard__order-history-table-title"> Earnings </th>
-                                            <th scope="col" class="dashboard__order-history-table-title"> Wallet </th>
+                                            <th scope="col" class="dashboard__order-history-table-title"> Fault </th>
+                                            
                                             <th scope="col" class="dashboard__order-history-table-title"></th>
                                         </tr>
                                         </thead>
                                         <tbody>                     
-                                            @forelse($shops->where('published',false) as $shop)        
+                                            @forelse($shops->where('status','inactive') as $shop)        
                                                 <tr>
                                                     <!-- Order Id  -->
                                                     <td class="dashboard__order-history-table-item order-id"> 
@@ -303,27 +303,22 @@
                                                     </td>
                                                     <!-- Vendor Split  -->
                                                     <td class="dashboard__order-history-table-item order-total "> 
-                                                        <p class="order-total-price">   {{number_format($shop->products->count(), 0)}} </p>
+                                                        <p class="order-total-price">   {{$shop->fault}} </p>
                                                     </td>
-                                                    <!-- Site Split  -->
-                                                    <td class="dashboard__order-history-table-item order-total"> 
-                                                        <p class="order-total-price">   {!!$shop->country->currency->symbol!!}
-                                                            {{number_format($shop->orders->filter(function($value){ return $value->statuses->count(); })->sum('subtotal') , 0)}} 
-                                                        </p>
-                                                    </td>
-                                                    <!-- Status -->
-                                                    <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} 
-                                                            {{number_format(
-                                                                $shop->orders->filter(function($value){ return $value->statuses->count() && $value->statuses->whereIn('name',['completed','closed'])->count(); })->sum('subtotal')
-                                                            ,2)}}
-                                                    </td>
-                                                    <td class="dashboard__order-history-table-item   order-status "> {!!$shop->country->currency->symbol!!} {{number_format($shop->wallet,2)}}</td>
-                                                    <!-- Details page  -->
+                                                    
                                                     <td class="dashboard__order-history-table-item   order-details "> 
-                                                        <a href="{{route('vendor.shop.show',$shop)}}">
-                                                            <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Go to Storefront
+                                                        @if ($shop->rates->isEmpty() || !$shop->dimension_rate)
+                                                        <a href="{{route('vendor.shop.shipping',$shop)}}">
+                                                            <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Shop Shipment
                                                             </span>
                                                         </a>
+                                                        @else
+                                                        <a href="{{route('vendor.shop.settings',$shop)}}">
+                                                            <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Shop Settings
+                                                            </span>
+                                                        </a>  
+                                                        @endif
+                                                        
                                                     </td>
                                                 </tr>
                                             @empty
@@ -341,6 +336,53 @@
                                 </div>
                             </div>
                         </div> 
+
+                        <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab">
+                            <div class="dashboard__order-history-table">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="dashboard__order-history-table-title"> Shop </th>
+                                            <th scope="col" class="dashboard__order-history-table-title"> Reason </th>
+                                            <th scope="col" class="dashboard__order-history-table-title"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>                     
+                                            @forelse($shops->where('status','rejected') as $shop)        
+                                                <tr>
+                                                    <!-- Order Id  -->
+                                                    <td class="dashboard__order-history-table-item order-id"> 
+                                                        <span style="font-weight:500">{{$shop->name}}</span><br/>
+                                                    </td>
+                                                    <!-- Vendor Split  -->
+                                                    <td class="dashboard__order-history-table-item order-total "> 
+                                                        <p class="order-total-price">   {{$shop->rejected->reason}} </p>
+                                                    </td>
+                                                    
+                                                    
+                                                    <td class="dashboard__order-history-table-item   order-details "> 
+                                                        <a href="{{route('vendor.shop.settings',$shop)}}">
+                                                            <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="24" data-height="24">Store Settings
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="3" class="border-0">
+                                                  <div class="text-center">
+                                                      No Shop in this Category
+                                                  </div>
+                                                </td>
+                                            </tr>
+                                                
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> 
       
                     </div>
                 </div>
@@ -348,7 +390,7 @@
                 
 
               </div>
-            {{-- </div> --}}
+           
         </div>
       </div>
     </div>

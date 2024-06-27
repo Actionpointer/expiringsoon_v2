@@ -15,11 +15,11 @@ class ShopController extends Controller
 {
     
     public function index(){
-        $category = null;
-        $categories = Category::has('products')->get();
-        $states = State::has('products')->get();
         $name = null;
-        $shops = Shop::isActive()->isApproved()->isVisible()->isSelling();
+        $category = null;
+        $categories = Category::all();
+        $states = State::has('products')->get();
+        $shops = Shop::live()->selling();
         if(request()->query() && request()->query('state_id')){
             $state_id = request()->query('state_id');
             $shops = $shops->where('state_id',$state_id);
@@ -27,8 +27,13 @@ class ShopController extends Controller
         if(request()->query() && request()->query('category_id')){
             $category_id = request()->query('category_id');
             $category = Category::find($category_id);
-            $shops = $shops->whereHas('products',function($query) use($category_id){
-                $query->where('category_id',$category_id);
+            $subcategories = $category->subcategories->pluck('name');
+            $shops = $shops->whereHas('products',function($query) use($subcategories){
+                        $query->where(function($qry) use($subcategories) { 
+                            foreach($subcategories as $tag){ 
+                                $qry->orWhereJsonContains("tags",$tag); 
+                            }
+                        }); 
             });
         }
         if(request()->query() && request()->query('name')){
@@ -62,8 +67,8 @@ class ShopController extends Controller
                 
             ], 200);
         }else{
-            // $advert_G = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
-            // $advert_H = Advert::withinState($state_id)->running()->certifiedShop()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
+            // $advert_G = Advert::withinState($state_id)->running()->live()->where('position',"G")->orderBy('views','asc')->take(3)->get()->each(function ($item, $key) {$item->increment('views'); });
+            // $advert_H = Advert::withinState($state_id)->running()->live()->where('position',"H")->orderBy('views','asc')->take(2)->get()->each(function ($item, $key) {$item->increment('views'); });
             $advert_G = [];
             $advert_H = [];
             return view('frontend.shop.list',compact('shops','category','categories','name','states','state_id','advert_G','advert_H'));
@@ -73,7 +78,7 @@ class ShopController extends Controller
     }
 
     public function show(Shop $shop){
-        if(!$shop->certified()){
+        if($shop->status != 'live'){
             return request()->expectsJson() ?
             response()->json([
                 'status' => false,
@@ -89,11 +94,18 @@ class ShopController extends Controller
                 ], 200);
         }
         $category = null;
-        $categories = Category::has('products')->get();
-        $products = Product::where('shop_id',$shop->id)->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible();
+        $categories = Category::all();
+        $products = Product::where('shop_id',$shop->id)->live()->isAccessible();
         if(request()->query() && request()->query('category_id')){
-            $products = $products->where('category_id',request()->query('category_id'));
-            $category = Category::find(request()->query('category_id'));
+            $category_id = request()->query('category_id');
+            $category = Category::find($category_id);
+            $subcategories = $category->subcategories->pluck('name');
+            $products = $products->where(function($qry) use($subcategories) { 
+                            foreach($subcategories as $tag){ 
+                                $qry->orWhereJsonContains("tags",$tag); 
+                            }
+                        }); 
+
         }
         if(request()->query() && request()->query('sortBy')){
             if(request()->query('sortBy') == 'price_asc'){

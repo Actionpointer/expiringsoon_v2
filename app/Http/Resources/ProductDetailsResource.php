@@ -39,7 +39,6 @@ class ProductDetailsResource extends JsonResource
             "valid"=> $this->valid,
             "available"=> $this->available,
             "accessible"=> $this->accessible(),
-            "certified"=> $this->certified(),
             "discount"=> $this->discount,
             "timeline"=> $this->timeline,
             "discount30"=> $this->discount30,

@@ -106,12 +106,7 @@
                   </h2>
                   <div class="dashboard__user-billing-info">
                     <h5 class="dashboard__user-billing-name font-body--xl-500" >
-                      Status: 
-                      @if($shop->status) 
-                        <span class="iconify" style="color:#00b207" data-icon="akar-icons:check-box-fill" data-width="20" data-height="20">Active </span>
-                       @else 
-                        <span class="iconify" style="color:#b20000" data-icon="akar-icons:check-box-fill" data-width="20" data-height="20">Inactive </span>
-                      @endif
+                      Status: {{$shop->status}}
                     </h5>
                     <p class="dashboard__user-billing-location font-body--md-400"> {{$shop->address}}, {{$shop->state->name}} </p>
                     <p class="dashboard__user-billing-email font-body--lg-400" > {{$shop->email}} </p>
@@ -179,7 +174,7 @@
                       <div class="dashboard__totalpayment-card-body-item">
                         <h5 class="font-body--md-400">Shop Status:</h5>
                         <p class="font-body--md-500">
-                          @if($shop->status) Active @else Inactive @endif
+                          {{ucwords($shop->status)}}
                         </p>
                       </div>
                       <div class="dashboard__totalpayment-card-body-item">

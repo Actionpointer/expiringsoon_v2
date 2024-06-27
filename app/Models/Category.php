@@ -16,7 +16,10 @@ class Category extends Model
     protected $hidden = ['created_at','updated_at'];
     
     public function products(){
-        return $this->hasMany(Product::class);
+        $tags = $this->subcategories->pluck('name');
+        if($tags->count())
+        return Product::where(function($query) use($tags) { foreach($tags as $tag){ $query->orWhereJsonContains("tags",$tag); } })->get();
+        else return collect([]);
     }
     public function subcategories(){
         return $this->belongsToMany(Tag::class,'subcategories');

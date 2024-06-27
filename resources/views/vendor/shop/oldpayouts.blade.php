@@ -181,7 +181,7 @@
                                               @if($shop->branch_id)
                                               <span style="color:#000;font-weight:500">{{$shop->bankaccount->branch->name}}</span> <br />
                                               @endif
-                                              <a href="#" onclick="event.preventDefault();document.getElementById('bankedit'+{{$shop->bankaccount->id}}).style.display='block'">Edit</a>
+                                              <a href="javascript:void(0)" class="openedit" data-bankedit="bankedit{{$shop->bankaccount->id}}">Edit</a>
                                           </div>
                                       </div>
                                       <form method="post" id="bankedit{{$shop->bankaccount->id}}" action="{{route('vendor.shop.bank-info',$shop)}}" style="display: none">@csrf
@@ -220,7 +220,7 @@
                                           </div>
                                           <div class="contact-form-btn">
                                               <button class="button button--md askpin" type="button"> Update Details</button>
-                                              <button class="button button--md bg-danger" type="button" onclick="event.preventDefault();document.getElementById('bankedit'+{{$shop->bankaccount->id}}).style.display='none'"> Cancel</button>
+                                              <button class="button button--md bg-danger openedit" type="button" data-bankedit="bankedit{{$shop->bankaccount->id}}"> Cancel</button>
                                           </div>
                                       </form>
                                     </div>
@@ -286,6 +286,10 @@
     $('#addbankaccount').click(function(e){
         e.preventDefault();
         $('#pills-plans-tab').tab('show');
+    })
+    $('.openedit').click(function(){
+        let id = $(this).attr('data-bankedit');
+        $('#'+id).toggle();
     })
 </script>
 @endpush

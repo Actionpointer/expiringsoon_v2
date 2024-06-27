@@ -12,7 +12,7 @@ class Shipment extends Model
 {
     use HasFactory;
     protected $fillable = ['address_id','rate_id','order_id','amount','ready_at','shipped','delivered_at'];
-    protected $dates = ['ready_at','shipped_at','delivered_at'];
+    protected $casts = ['ready_at'=> 'datetime','shipped_at'=> 'datetime','delivered_at'=> 'datetime'];
     
     public static function boot()
     {

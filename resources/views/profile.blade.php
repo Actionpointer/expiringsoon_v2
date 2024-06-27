@@ -287,7 +287,7 @@
                       </div>
                       @if($user->kyc->where('type','idcard')->first()) 
                           <div>
-                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color:@if($user->kyc->where('type','idcard')->first()->status ) #00b207; @else #ff0000; @endif">
+                            <span style="font-weight:500;font-size:12px;text-transform:uppercase;color: @if($user->kyc->where('type','idcard')->first()->status ) #00b207; @else #ff0000; @endif">
                               @if($user->kyc->where('type','idcard')->first()->status) Approved
                               @elseif($user->kyc->where('type','idcard')->first()->rejected) Rejected
                               @else Pending Approval  

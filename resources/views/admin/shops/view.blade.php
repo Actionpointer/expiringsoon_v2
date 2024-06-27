@@ -131,7 +131,7 @@
                                   <tr>
                                     <td>Status </td>
                                     <td align="right">
-                                        @if($shop->status)
+                                        @if($shop->visible)
                                           Active
                                         @else Inactive
                                         @endif

@@ -34,7 +34,7 @@ class AdvertController extends Controller
             $shops = $user->shops->where('status',true)->where('published',true)->where('approved',true);
             $states = State::within()->get();
             $state_id = session('locale')['state_id'];
-            $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->where("user_id",auth()->id());})->get();
+            $products = Product::within()->live()->isAccessible()->whereHas("shop",function($query) use($shops){ $query->where("user_id",auth()->id());})->get();
             return view('vendor.adverts.create',compact('adset','shops','states','state_id','products'));
         }
         
@@ -90,7 +90,7 @@ class AdvertController extends Controller
         $user = auth()->user();
         $shops = $user->shops->where('status',true)->where('published',true)->where('approved',true);
         $states = State::within()->get();
-        $products = Product::within()->isValid()->isApproved()->isActive()->isAccessible()->isAvailable()->isVisible()->whereHas("shop",function($query) use($shops){ $query->where("user_id",auth()->id());})->get();
+        $products = Product::within()->live()->isAccessible()->whereHas("shop",function($query) use($shops){ $query->where("user_id",auth()->id());})->get();
         return view('vendor.adverts.edit',compact('advert','shops','states','products'));
     }
 

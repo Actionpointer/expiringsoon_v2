@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Plan;
-use App\Models\Shop;
+
 use App\Models\Adset;
-use App\Models\State;
 use App\Models\Adplan;
 use App\Models\Advert;
 use App\Models\Country;
-use App\Models\Product;
-use App\Models\Category;
 use App\Models\Rejection;
 use Illuminate\Http\Request;
 use App\Http\Traits\PaymentTrait;
@@ -37,11 +33,9 @@ class AdvertController extends Controller
             if($status == 'live'){
                 $adverts = $adverts->running()->where(function($query){
                             $query->whereHas('shop', function ($qry)  { 
-                                $qry->isActive()->isApproved()->isVisible()->whereHas('products',function($q){
-                                    $q->isValid()->isAccessible()->isAvailable()->isActive()->isApproved()->isVisible();
-                                });
+                                $qry->live()->selling();
                             })->orwhereHas('product', function ($qxy){ 
-                                $qxy->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();
+                                $qxy->live()->isAccessible();
                             });
                 });
             }

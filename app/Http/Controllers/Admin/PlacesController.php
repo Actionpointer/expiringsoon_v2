@@ -30,6 +30,8 @@ class PlacesController extends Controller
         $country->payout_gateway = $request->payout_gateway;
         $country->vat = $request->vat;
         $country->bank_digits = $request->bank_digits;
+        $country->dimension_rate = $request->dimension_rate;
+        $country->weight_rate = $request->weight_rate;
         $country->save();
         return redirect()->back()->with(['result'=> 1,'message'=> 'Udpated Country Settings']);
     }

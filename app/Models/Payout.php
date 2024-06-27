@@ -16,7 +16,7 @@ class Payout extends Model
 
     protected $fillable = ['user_id','shop_id','currency_id','channel','reference','amount','transfer_id','status',	'paid_at'];
     protected $appends = ['destination'];
-    protected $dates = ['paid_at'];
+    protected $casts = ['paid_at'=> 'datetime'];
 
     public static function boot(){
         parent::boot();

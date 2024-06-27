@@ -86,7 +86,7 @@ class Feature extends Model
         return $query->where('approved',true)->whereHas('adset', function (Builder $qry) 
             { $qry->where('status',true)->where('start_at','<',now())->where('end_at','>',now()); })
             ->whereHas('product',function($qpd){
-                $qpd->isValid()->isApproved()->isActive()->isVisible()->isAccessible()->isAvailable();
+                $qpd->live()->isAccessible();
             });
     }
 

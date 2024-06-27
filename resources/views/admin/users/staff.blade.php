@@ -41,150 +41,144 @@
     <div class="container">
       <div class="row dashboard__content">
         @include('layouts.admin_navigation')
-        <div class="col-lg-9 section--xl pt-0">
-          <div class="container">
-            <div class="products-tab__btn">
-              <div class="container">
-                  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                      <li class="nav-item" role="presentation">
-                          <button class="nav-link active" id="pills-description-tab" data-bs-toggle="pill" data-bs-target="#pills-description" type="button" role="tab" aria-controls="pills-description" aria-selected="true">
-                            Manage Staff
-                          </button>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-countries-tab" data-bs-toggle="pill" data-bs-target="#pills-countries" type="button" role="tab" aria-controls="pills-countries" aria-selected="false">
-                            Add Staff
-                        </button>
-                      </li> 
-                  </ul>
-              </div>
-            </div>
-            <div class="products-tab__content">
-                <div class="tab-content" id="pills-tabContent">
-                    <!-- General  -->
-                    <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
-                      <div class="products-tab__information">
-                          <!-- Manage Admins  -->
-                          <div class="dashboard__content-card">
-                              <div class="dashboard__content-card-header">
-                                  <h5 class="font-body--xl-500">Manage Admins</h5>
-                              </div>
-                              <div class="dashboard__content-card-body">
-                                  <div id="process3">
-                                      <table id="" class="table " style="width:100%;font-size:13px">
-                                          <thead>
-                                              <tr>
-                                                  <th scope="col">Name</th>
-                                                  @if(auth()->user()->role->name == 'superadmin')
-                                                  <th scope="col">Country</th>
-                                                  @endif
-                                                  <th scope="col">Contact</th>
-                                                  <th scope="col">Status</th>
-                                                  <th scope="col">Role</th>
-                                                  <th scope="col">Manage</th>
-                                                  <th></th>
-                                              </tr>
-                                          </thead>
-                                          <tbody>
-                                              @foreach ($users as $user)
-                                                  <tr>
-                                                      <td>{{$user->name}}</td>
-                                                      @if(auth()->user()->role->name == 'superadmin')
-                                                        <td>{{$user->country->name}}</td>
-                                                      @endif
-                                                      <td>{{$user->email}}<br>{{$user->mobile}} </td>
-                                                      <td>@if($user->status) Active @else Suspended @endif</td>
-                                                      <td>
-                                                            {{$user->role->name}}
-                                                            @if($user->role->name == 'arbitrator')
-                                                                - {{$user->disputes->count()}} cases
-                                                            @endif
-                                                        </td>
-                                                      <td>
-                                                          @if($user->id != Auth::id()) 
-                                                          <a href="#" onclick="event.preventDefault();document.getElementById('adminedit'+{{$user->id}}).style.display='block';$('.select2').select2();">Edit </a> | 
-                                                          <form class="d-inline" action="{{route('admin.staff.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
-                                                              <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                              <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
-                                                          </form>
-                                                          
-                                                          @endif
-                                                      </td> 
-                                                  </tr>
-                                                  @if($user->id != Auth::id())
-                                                  <tr>
-                                                      <td colspan="6" style="border:none;padding:0px">
-                                                          <form action="{{route('admin.staff.update')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
-                                                              @csrf 
-                                                              <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                              <div class="contact-form__content">
-                                                                  <div class="contact-form__content-group my-3">
-                                                                      <div class="contact-form-input">
-                                                                          <label for="states">Admin Level</label>
-                                                                          <select id="abdcc{{$user->id}}" name="role" class="form-control-lg w-100 border text-muted" >
-                                                                            @foreach ($roles as $role)
-                                                                                <option value='{{$role}}' @if($user->role->name == $role) selected @endif>{{ucwords($role)}}</option>
-                                                                            @endforeach
-                                                                              
-                                                                              
-                                                                          </select>
-                                                                      </div>
-                                                                      <div class="contact-form-input">
-                                                                          <label for="states">Status</label>
-                                                                          <select id="abc{{$user->id}}" name="status" class="form-control-lg w-100 border text-muted" >
-                                                                              <option value='1' @if($user->status) selected @endif>Active</option>
-                                                                              <option value='0' @if(!$user->status) selected @endif>Suspended</option>
-                                                                          </select>
-                                                                      </div>
-                                                                  </div>
-                                                                  <div class="contact-form__content-group my-3">
-                                                                      <div class="contact-form-input">
-                                                                          <label for="firstname">First Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                          <input type="text" name="fname" value="{{$user->fname}}" placeholder="Enter First Name" />
-                                                                      </div>
-                                                                      <div class="contact-form-input">
-                                                                          <label for="lastname">Last Name @error('lname') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                          <input type="text" name="lname" value="{{$user->lname}}" placeholder="Enter Last Name" />
-                                                                      </div>
-                                                                  </div>
-                                                                  <div class="contact-form__content-group">
-                                                                      <div class="contact-form-input"> 
-                                                                      <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                      <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" />
-                                                                      </div>
-                                                                      <div class="contact-form-input">
-                                                                      <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
-                                                                      <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
-                                                                      </div>
-                                                                  </div>
-                                                                  
-                                                                  
-                                                                  <div class="contact-form-btn">
-                                                                      <button class="button button--md askpin" type="button"> Update Admin </button>
-                                                                      <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
-                                                                  </div>
-                                                              </div>
-                                                          </form>
-                                                      </td>
-                                                  </tr>
-                                                  @endif
-                                              @endforeach
-                                          </tbody>
-                                      </table>
-                                  </div>
-                              </div>
-                          </div>
-                          
-                        </div>
+        <div class="col-lg-9 section--xl pt-0" >
+            <div class="dashboard__order-history">
+                <div class="dashboard__order-history-title">
+                    <h2 class="font-body--xl-500">Staff</h2>
+                </div>
+                <div class="products-tab__btn">
+                    <div class="container">
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-description-tab" data-bs-toggle="pill" data-bs-target="#pills-description" type="button" role="tab" aria-controls="pills-description" aria-selected="true">
+                                    Manage Staff
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-countries-tab" data-bs-toggle="pill" data-bs-target="#pills-countries" type="button" role="tab" aria-controls="pills-countries" aria-selected="false">
+                                    Add Staff
+                                </button>
+                            </li> 
+                        </ul>
                     </div>
-                    <!-- Countries -->
-                    <div class="tab-pane fade" id="pills-countries" role="tabpanel" aria-labelledby="pills-countries-tab">
-                        <div class="row products-tab__feedback"> 
-                            <!-- Manage Countries  -->
-                            <div class="dashboard__content-card">
-                                <div class="dashboard__content-card-header">
-                                <h5 class="font-body--xl-500">Add New</h5>
+                </div>
+                <div class="products-tab__content">
+                    <div class="tab-content" id="pills-tabContent">
+                        
+                        <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
+                            <div class="products-tab__information">
+                                
+                                <div class="dashboard__order-history-table">
+                                    <div class="table-responsive">
+                                        <table id="" class="table " style="width:100%;font-size:13px">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    @if(auth()->user()->role->name == 'superadmin')
+                                                    <th scope="col">Country</th>
+                                                    @endif
+                                                    <th scope="col">Contact</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Role</th>
+                                                    <th scope="col">Manage</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($users as $user)
+                                                    <tr>
+                                                        <td>{{$user->name}}</td>
+                                                        @if(auth()->user()->role->name == 'superadmin')
+                                                            <td>{{$user->country->name}}</td>
+                                                        @endif
+                                                        <td>{{$user->email}}<br>{{$user->mobile}} </td>
+                                                        <td>@if($user->status) Active @else Suspended @endif</td>
+                                                        <td>
+                                                                {{$user->role->name}}
+                                                                @if($user->role->name == 'arbitrator')
+                                                                    - {{$user->disputes->count()}} cases
+                                                                @endif
+                                                            </td>
+                                                        <td>
+                                                            @if($user->id != Auth::id()) 
+                                                            <a href="javascript:void(0)" class="openedit"  data-staff="adminedit{{$user->id}}">Edit </a> | 
+                                                            <form class="d-inline" action="{{route('admin.staff.delete')}}" method="post" onsubmit="return confirm('Are you sure you want to delete?');">@csrf
+                                                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                                <button type="submit" name="delete" value="1" class="text-danger">Delete</button>
+                                                            </form>
+                                                            
+                                                            @endif
+                                                        </td> 
+                                                    </tr>
+                                                    @if($user->id != Auth::id())
+                                                    <tr>
+                                                        <td colspan="6" style="border:none;padding:0px">
+                                                            <form action="{{route('admin.staff.update')}}" method="post" id="adminedit{{$user->id}}" style="display:none">
+                                                                @csrf 
+                                                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                                <div class="contact-form__content">
+                                                                    <div class="contact-form__content-group my-3">
+                                                                        <div class="contact-form-input">
+                                                                            <label for="states">Admin Level</label>
+                                                                            <select id="abdcc{{$user->id}}" name="role" class="form-control-lg w-100 border text-muted" >
+                                                                                @foreach ($roles as $role)
+                                                                                    <option value='{{$role}}' @if($user->role->name == $role) selected @endif>{{ucwords($role)}}</option>
+                                                                                @endforeach
+                                                                                
+                                                                                
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="contact-form-input">
+                                                                            <label for="states">Status</label>
+                                                                            <select id="abc{{$user->id}}" name="status" class="form-control-lg w-100 border text-muted" >
+                                                                                <option value='1' @if($user->status) selected @endif>Active</option>
+                                                                                <option value='0' @if(!$user->status) selected @endif>Suspended</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="contact-form__content-group my-3">
+                                                                        <div class="contact-form-input">
+                                                                            <label for="firstname">First Name @error('fname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                            <input type="text" name="fname" value="{{$user->fname}}" placeholder="Enter First Name" />
+                                                                        </div>
+                                                                        <div class="contact-form-input">
+                                                                            <label for="lastname">Last Name @error('lname') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                            <input type="text" name="lname" value="{{$user->lname}}" placeholder="Enter Last Name" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="contact-form__content-group">
+                                                                        <div class="contact-form-input"> 
+                                                                        <label for="email">Email @error('email') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                        <input type="email" name="email" value="{{$user->email}}" placeholder="Enter Email" />
+                                                                        </div>
+                                                                        <div class="contact-form-input">
+                                                                        <label for="phone">Phone @error('phone') <span class="text-danger">{{$message}}</span> @enderror</label>
+                                                                        <input type="text" name="phone" value="{{$user->phone}}" placeholder="Enter Phone" />
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                    <div class="contact-form-btn">
+                                                                        <button class="button button--md askpin" type="button"> Update Admin </button>
+                                                                        <button class="button button--md bg-danger" type="button" data-bs-dismiss="modal"> Cancel </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
                                 </div>
+                            
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="pills-countries" role="tabpanel" aria-labelledby="pills-countries-tab">
+                            <div class="row products-tab__feedback"> 
                                 <div class="dashboard__content-card-body">
                                     <form method="post" action="{{route('admin.staff.store')}}" id="admin" class="mb-3">@csrf
                                         <div class="contact-form__content">
@@ -252,11 +246,11 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>  
+                        </div>  
+                    </div>
                 </div>
+          
             </div>
-          </div>
         </div>
       </div>
     </div>
@@ -321,5 +315,11 @@
         // $('.select2').select2();
         console.log($(this).html())
     });
+
+    $('.openedit').click(function(){
+        let id = $(this).attr('data-staff');
+        $('#'+id).show();
+        $('.select2').select2();
+    })
 </script>
 @endpush

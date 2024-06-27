@@ -45,12 +45,20 @@
       <div class="row dashboard__content">
         @include('layouts.shop_navigation')
         <div class="col-lg-9 section--xl pt-0" style="padding:10px;font-size:13px">
-          
-            {{-- <div class="container"> --}}
               <div class="dashboard__order-history">
                 <div class="dashboard__order-history-title">
                     <h2 class="font-body--xl-500">Products</h2>
-                    <a href="{{route('vendor.shop.product.create',$shop)}}" class="font-body--lg-500"> Add Product</a>
+                    <div class="dropdown">
+                      <button class="button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Create Product
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{route('vendor.shop.product.create',$shop)}}">Single Product</a></li>
+                        <li><a class="dropdown-item" href="{{route('vendor.shop.product.upload',$shop)}}">Upload Bulk</a></li>
+                        <li><a class="dropdown-item" href="{{route('vendor.shop.product.sync.index',$shop)}}">From External Source</a></li>
+                      </ul>
+                    </div>
+                     
                 </div>
                 <div style="display:none">
                     <form id="featureform" action="{{route('vendor.feature.products')}}" method="POST">@csrf
@@ -65,39 +73,30 @@
                       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                           <li class="nav-item" role="presentation">
                               <button class="nav-link active" id="pills-live-tab" data-bs-toggle="pill" data-bs-target="#pills-live" type="button" role="tab" aria-controls="pills-live" aria-selected="true">
-                                  Live
+                                  Live ({{$products->where('status','live')->count()}})
+                              </button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="pills-hidden-tab" data-bs-toggle="pill" data-bs-target="#pills-hidden" type="button" role="tab" aria-controls="pills-hidden" aria-selected="false">
+                                Hidden ({{$products->where('status','hidden')->count()}})
                               </button>
                           </li>
                           <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-approval-tab" data-bs-toggle="pill" data-bs-target="#pills-approval" type="button" role="tab" aria-controls="pills-approval" aria-selected="false">
-                                Pending Approval
+                                Pending Approval ({{$products->where('status','pending')->count()}})
                             </button>
                           </li>
                           
                           <li class="nav-item" role="presentation">
                               <button class="nav-link" id="pills-inactive-tab" data-bs-toggle="pill" data-bs-target="#pills-inactive" type="button" role="tab" aria-controls="pills-inactive" aria-selected="false">
-                              Inactive
+                                  Inactive ({{$products->where('status','inactive')->count()}})
                               </button>
                           </li>
                           
-                          <li class="nav-item" role="presentation">
-                              <button class="nav-link" id="pills-draft-tab" data-bs-toggle="pill" data-bs-target="#pills-draft" type="button" role="tab" aria-controls="pills-draft" aria-selected="false">
-                                  Draft
-                              </button>
-                          </li>
-                          <li class="nav-item" role="presentation">
-                              <button class="nav-link" id="pills-soldout-tab" data-bs-toggle="pill" data-bs-target="#pills-soldout" type="button" role="tab" aria-controls="pills-soldout" aria-selected="false">
-                                  Sold Out
-                              </button>
-                          </li>
-                          <li class="nav-item" role="presentation">
-                              <button class="nav-link" id="pills-expired-tab" data-bs-toggle="pill" data-bs-target="#pills-expired" type="button" role="tab" aria-controls="pills-expired" aria-selected="false">
-                                  Expired
-                              </button>
-                          </li>
+                          
                           <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-rejected-tab" data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected" aria-selected="false">
-                                Rejected
+                              Rejected ({{$products->where('status','rejected')->count()}})
                             </button>
                         </li>
                           
@@ -132,7 +131,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>                     
-                                        @foreach($products->filter(function($value){ return $value->certified();}) as $product)        
+                                        @foreach($products->where('status','live') as $product)        
                                             <tr>
                                                 <td class="cart-table-item align-middle" >
                                                     <div class="d-flex flex-column flex-md-row">
@@ -143,7 +142,7 @@
                                                             </div>
                                                             <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
                                                               <div class="cart-table__product-item-img">
-                                                                <img src="{{$product->image}}" alt="{{$product->name}}" />
+                                                                <img src="{{$product->image}}" alt="{{$product->name}}"  />
                                                               </div>
                                                             </a>
                                                         </div>
@@ -168,7 +167,7 @@
                                                     <p class="order-total-price">   {{number_format($product->stock, 0)}} </p>
                                                 </td>
                                                 <td class="cart-table-item order-date align-middle"> 
-                                                    <p class="order-total-price">   {{$product->expire_at->diffInDays(now())}} days </p>
+                                                    <p class="order-total-price">   {{$product->expiry_in}} days </p>
                                                 </td>
                                                 
                                                 <td class="cart-table-item order-date align-middle"> 
@@ -201,8 +200,7 @@
                                                         <button type="submit" class="dropdown-item">Delete</button>
                                                       </form>                                      
                                                     </div>
-                                                  </div>
-                                                    
+                                                  </div> 
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -211,7 +209,97 @@
                               </div>
                             </div>
                         </div>
-                        <!-- Countries -->
+                      
+                        <div class="tab-pane fade" id="pills-hidden" role="tabpanel" aria-labelledby="pills-hidden-tab">
+                          <div class="dashboard__order-history-table">
+                            <div class="table-responsive">
+                              <table class="table datatable">
+                                  <thead>
+                                  <tr>
+                                      <th scope="col" class="cart-table-title" style="min-width:200px!important;">
+                                          <div class="d-flex align-items-center">
+                                            <div class="form-check d-inline">
+                                              <label class="form-check-label font-body--400" for="existing"> </label>
+                                              <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
+                                            </div>
+                                           <span class="align-bottom">Product</span> 
+                                          </div>
+                                          
+                                      </th>
+                                      
+                                      <th scope="col" class="dashboard__order-history-table-title"> Stock </th>
+                                      <th scope="col" class="dashboard__order-history-table-title"> Expiry </th>
+                                      <th scope="col" class="dashboard__order-history-table-title"> Price </th>
+                                      <th scope="col" class="dashboard__order-history-table-title"></th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>                     
+                                      @foreach($products->where('status','hidden') as $product)        
+                                          <tr>
+                                              <td class="cart-table-item align-middle" >
+                                                  <div class="d-flex flex-column flex-md-row">
+                                                      <div class="d-flex align-items-center">
+                                                          <div class="form-check pt-2 d-inline-block">
+                                                            <label class="form-check-label font-body--400" for="existing"> </label>
+                                                            <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
+                                                          </div>
+                                                          <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
+                                                            <div class="cart-table__product-item-img">
+                                                              <img src="{{$product->image}}" alt="{{$product->name}}" />
+                                                            </div>
+                                                          </a>
+                                                      </div>
+                                                      
+                                                      <div class="d-flex align-items-center">
+                                                        <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
+                                                          <h5 class="font-body--lg-400" style="font-size:14px"> {{$product->name}} </h5>
+                                                        </a>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              
+                                              <td class="cart-table-item order-date align-middle"> 
+                                                  <p class="order-total-price">   {{number_format($product->stock, 0)}} </p>
+                                              </td>
+                                              <td class="cart-table-item order-date align-middle"> 
+                                                  <p class="order-total-price">   {{$product->expiry_in}} days </p>
+                                              </td>
+                                              
+                                              <td class="cart-table-item order-date align-middle"> 
+                                                <p class="order-total-price">   
+                                                  @if($product->amount != $product->price)
+                                                    <del> {!!$shop->country->currency->symbol!!}{{number_format($product->price, 0)}}</del>
+                                                  @endif
+                                                  {!!$shop->country->currency->symbol!!}{{number_format($product->amount, 0)}} 
+                                                </p>
+                                              </td>
+                                              
+                                              
+                                              <td class="cart-table-item add-cart align-middle"> 
+                                                <div class="dropdown">
+                                                  <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    Manage
+                                                  </button>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="dropdown-item">Edit</a>
+                                                    
+                                                    <form class="d-inline" action="{{route('vendor.shop.products.destroy',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
+                                                      <input type="hidden" name="product_id" value="{{$product->id}}">
+                                                      <input type="hidden" name="shop_id" value="{{$shop->id}}">
+                                                      <button type="submit" class="dropdown-item">Delete</button>
+                                                    </form>                                      
+                                                  </div>
+                                                </div>
+                                                  
+                                              </td>
+                                          </tr>
+                                      @endforeach
+                                  </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="tab-pane fade" id="pills-approval" role="tabpanel" aria-labelledby="pills-approval-tab">
                           <div class="dashboard__order-history-table">
                             <div class="table-responsive">
@@ -236,7 +324,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($products->where('approved',false)->where('rejected',null) as $product)        
+                                      @foreach($products->where('status','pending') as $product)        
                                           <tr>
                                               <td class="cart-table-item align-middle" >
                                                   <div class="d-flex flex-column flex-md-row">
@@ -264,7 +352,7 @@
                                                   <p class="order-total-price">   {{number_format($product->stock, 0)}} </p>
                                               </td>
                                               <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{$product->expire_at->diffInDays(now())}} days </p>
+                                                  <p class="order-total-price">   {{$product->expiry_in}} days </p>
                                               </td>
                                               
                                               <td class="cart-table-item order-date align-middle"> 
@@ -301,8 +389,7 @@
                             </div>
                           </div>
                         </div>
-                        
-                        <!-- Plan  -->
+
                         <div class="tab-pane fade" id="pills-inactive" role="tabpanel" aria-labelledby="pills-inactive-tab">
                           <div class="dashboard__order-history-table">
                             <div class="table-responsive">
@@ -320,14 +407,12 @@
                                           
                                       </th>
                                       
-                                      <th scope="col" class="dashboard__order-history-table-title"> Stock </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Expiry </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Price </th>
+                                      <th scope="col" class="dashboard__order-history-table-title"> Fault </th>
                                       <th scope="col" class="dashboard__order-history-table-title"></th>
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($products->where('status',false) as $product)        
+                                      @foreach($products->where('status','inactive') as $product)        
                                           <tr>
                                               <td class="cart-table-item align-middle" >
                                                   <div class="d-flex flex-column flex-md-row">
@@ -338,7 +423,7 @@
                                                           </div>
                                                           <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
                                                             <div class="cart-table__product-item-img">
-                                                              <img src="{{$product->image}}" alt="{{$product->name}}" />
+                                                              <img src="{{$product->image}}" alt="{{$product->name}}"/>
                                                             </div>
                                                           </a>
                                                       </div>
@@ -350,115 +435,9 @@
                                                       </div>
                                                   </div>
                                               </td>
-                                              
                                               <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{number_format($product->stock, 0)}} </p>
+                                                  <p class="order-total-price">   {{$product->fault}} </p>
                                               </td>
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{$product->expire_at->diffInDays(now())}} days </p>
-                                              </td>
-                                              
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                <p class="order-total-price">   
-                                                  @if($product->amount != $product->price)
-                                                    <del> {!!$shop->country->currency->symbol!!}{{number_format($product->price, 0)}}</del>
-                                                  @endif
-                                                  {!!$shop->country->currency->symbol!!}{{number_format($product->amount, 0)}} 
-                                                </p>
-                                              </td>
-                                              
-                                              
-                                              <td class="cart-table-item add-cart align-middle"> 
-                                                <div class="dropdown">
-                                                  <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    Manage
-                                                  </button>
-                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="dropdown-item">Edit</a>
-                                                    
-                                                    <form class="d-inline" action="{{route('vendor.shop.products.destroy',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
-                                                      <input type="hidden" name="product_id" value="{{$product->id}}">
-                                                      <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                                      <button type="submit" class="dropdown-item">Delete</button>
-                                                    </form>                                      
-                                                  </div>
-                                                </div>
-                                                  
-                                              </td>
-                                          </tr>
-                                      @endforeach
-                                  </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <!--  Advert  -->
-                        <div class="tab-pane fade" id="pills-draft" role="tabpanel" aria-labelledby="pills-draft-tab">
-                          <div class="dashboard__order-history-table">
-                            <div class="table-responsive">
-                              <table class="table datatable">
-                                  <thead>
-                                  <tr>
-                                      <th scope="col" class="cart-table-title" style="min-width:200px!important;">
-                                          <div class="d-flex align-items-center">
-                                            <div class="form-check d-inline">
-                                              <label class="form-check-label font-body--400" for="existing"> </label>
-                                              <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
-                                            </div>
-                                           <span class="align-bottom">Product</span> 
-                                          </div>
-                                          
-                                      </th>
-                                      
-                                      <th scope="col" class="dashboard__order-history-table-title"> Stock </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Expiry </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Price </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"></th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>                     
-                                      @foreach($products->where('published',false) as $product)        
-                                          <tr>
-                                              <td class="cart-table-item align-middle" >
-                                                  <div class="d-flex flex-column flex-md-row">
-                                                      <div class="d-flex align-items-center">
-                                                          <div class="form-check pt-2 d-inline-block">
-                                                            <label class="form-check-label font-body--400" for="existing"> </label>
-                                                            <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
-                                                          </div>
-                                                          <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
-                                                            <div class="cart-table__product-item-img">
-                                                              <img src="{{$product->image}}" alt="{{$product->name}}" />
-                                                            </div>
-                                                          </a>
-                                                      </div>
-                                                      
-                                                      <div class="d-flex align-items-center">
-                                                        <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
-                                                          <h5 class="font-body--lg-400" style="font-size:14px"> {{$product->name}} </h5>
-                                                        </a>
-                                                      </div>
-                                                  </div>
-                                              </td>
-                                              
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{number_format($product->stock, 0)}} </p>
-                                              </td>
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{$product->expire_at->diffInDays(now())}} days </p>
-                                              </td>
-                                              
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                <p class="order-total-price">   
-                                                  @if($product->amount != $product->price)
-                                                    <del> {!!$shop->country->currency->symbol!!}{{number_format($product->price, 0)}}</del>
-                                                  @endif
-                                                  {!!$shop->country->currency->symbol!!}{{number_format($product->amount, 0)}} 
-                                                </p>
-                                              </td>
-                                              
-                                              
                                               <td class="cart-table-item add-cart align-middle"> 
                                                 <div class="dropdown">
                                                   <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -483,187 +462,6 @@
                             </div>
                           </div>
                         </div> 
-
-                        <!--  Advert  -->
-                        <div class="tab-pane fade" id="pills-soldout" role="tabpanel" aria-labelledby="pills-soldout-tab">
-                          <div class="dashboard__order-history-table">
-                            <div class="table-responsive">
-                              <table class="table datatable">
-                                  <thead>
-                                  <tr>
-                                      <th scope="col" class="cart-table-title" style="min-width:200px!important;">
-                                          <div class="d-flex align-items-center">
-                                            <div class="form-check d-inline">
-                                              <label class="form-check-label font-body--400" for="existing"> </label>
-                                              <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
-                                            </div>
-                                           <span class="align-bottom">Product</span> 
-                                          </div>
-                                          
-                                      </th>
-                                      
-                                      <th scope="col" class="dashboard__order-history-table-title"> Stock </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Expiry </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Price </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"></th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>                     
-                                      @foreach($products->where('stock',0) as $product)        
-                                          <tr>
-                                              <td class="cart-table-item align-middle" >
-                                                  <div class="d-flex flex-column flex-md-row">
-                                                      <div class="d-flex align-items-center">
-                                                          <div class="form-check pt-2 d-inline-block">
-                                                            <label class="form-check-label font-body--400" for="existing"> </label>
-                                                            <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
-                                                          </div>
-                                                          <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
-                                                            <div class="cart-table__product-item-img">
-                                                              <img src="{{$product->image}}" alt="{{$product->name}}" />
-                                                            </div>
-                                                          </a>
-                                                      </div>
-                                                      
-                                                      <div class="d-flex align-items-center">
-                                                        <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
-                                                          <h5 class="font-body--lg-400" style="font-size:14px"> {{$product->name}} </h5>
-                                                        </a>
-                                                      </div>
-                                                  </div>
-                                              </td>
-                                              
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{number_format($product->stock, 0)}} </p>
-                                              </td>
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{$product->expire_at->diffInDays(now())}} days </p>
-                                              </td>
-                                              
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                <p class="order-total-price">   
-                                                  @if($product->amount != $product->price)
-                                                    <del> {!!$shop->country->currency->symbol!!}{{number_format($product->price, 0)}}</del>
-                                                  @endif
-                                                  {!!$shop->country->currency->symbol!!}{{number_format($product->amount, 0)}} 
-                                                </p>
-                                              </td>
-                                              
-                                              
-                                              <td class="cart-table-item add-cart align-middle"> 
-                                                <div class="dropdown">
-                                                  <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    Manage
-                                                  </button>
-                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="dropdown-item">Edit</a>
-                                                    
-                                                    <form class="d-inline" action="{{route('vendor.shop.products.destroy',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
-                                                      <input type="hidden" name="product_id" value="{{$product->id}}">
-                                                      <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                                      <button type="submit" class="dropdown-item">Delete</button>
-                                                    </form>                                      
-                                                  </div>
-                                                </div>
-                                                  
-                                              </td>
-                                          </tr>
-                                      @endforeach
-                                  </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div> 
-
-                        <div class="tab-pane fade" id="pills-expired" role="tabpanel" aria-labelledby="pills-expired-tab">
-                          <div class="dashboard__order-history-table">
-                            <div class="table-responsive">
-                              <table class="table datatable">
-                                  <thead>
-                                  <tr>
-                                      <th scope="col" class="cart-table-title" style="min-width:200px!important;">
-                                          <div class="d-flex align-items-center">
-                                            <div class="form-check d-inline">
-                                              <label class="form-check-label font-body--400" for="existing"> </label>
-                                              <input class="form-check-input checkboxes" type="checkbox" id="checkbox_master">
-                                            </div>
-                                           <span class="align-bottom">Product</span> 
-                                          </div>
-                                          
-                                      </th>
-                                      
-                                      <th scope="col" class="dashboard__order-history-table-title"> Stock </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Expiry </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"> Price </th>
-                                      <th scope="col" class="dashboard__order-history-table-title"></th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>                     
-                                      @foreach($products->where('expire_at','<',now()) as $product)        
-                                          <tr>
-                                              <td class="cart-table-item align-middle" >
-                                                  <div class="d-flex flex-column flex-md-row">
-                                                      <div class="d-flex align-items-center">
-                                                          <div class="form-check pt-2 d-inline-block">
-                                                            <label class="form-check-label font-body--400" for="existing"> </label>
-                                                            <input class="form-check-input checkboxes" type="checkbox" name="products[]" value="{{$product->id}}" >
-                                                          </div>
-                                                          <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
-                                                            <div class="cart-table__product-item-img">
-                                                              <img src="{{$product->image}}" alt="{{$product->name}}" />
-                                                            </div>
-                                                          </a>
-                                                      </div>
-                                                      
-                                                      <div class="d-flex align-items-center">
-                                                        <a href="{{route('product.show',$product)}}" class="cart-table__product-item">
-                                                          <h5 class="font-body--lg-400" style="font-size:14px"> {{$product->name}} </h5>
-                                                        </a>
-                                                      </div>
-                                                  </div>
-                                              </td>
-                                              
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{number_format($product->stock, 0)}} </p>
-                                              </td>
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                  <p class="order-total-price">   {{$product->expire_at->diffInDays(now())}} days </p>
-                                              </td>
-                                              
-                                              <td class="cart-table-item order-date align-middle"> 
-                                                <p class="order-total-price">   
-                                                  @if($product->amount != $product->price)
-                                                    <del> {!!$shop->country->currency->symbol!!}{{number_format($product->price, 0)}}</del>
-                                                  @endif
-                                                  {!!$shop->country->currency->symbol!!}{{number_format($product->amount, 0)}} 
-                                                </p>
-                                              </td>
-                                              
-                                              
-                                              <td class="cart-table-item add-cart align-middle"> 
-                                                <div class="dropdown">
-                                                  <button class="btn btn-sm btn-secondary dropdown-toggle dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    Manage
-                                                  </button>
-                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('vendor.shop.product.edit',[$shop,$product])}}" class="dropdown-item">Edit</a>
-                                                    
-                                                    <form class="d-inline" action="{{route('vendor.shop.products.destroy',$shop)}}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">@csrf
-                                                      <input type="hidden" name="product_id" value="{{$product->id}}">
-                                                      <input type="hidden" name="shop_id" value="{{$shop->id}}">
-                                                      <button type="submit" class="dropdown-item">Delete</button>
-                                                    </form>                                      
-                                                  </div>
-                                                </div>
-                                                  
-                                              </td>
-                                          </tr>
-                                      @endforeach
-                                  </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
 
                         <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab">
                           <div class="dashboard__order-history-table">
@@ -688,7 +486,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>                     
-                                      @foreach($products->where('approved',false)->where('rejected','!=',null) as $product)        
+                                      @forelse($products->where('status','rejected') as $product)        
                                           <tr>
                                               <td class="cart-table-item align-middle" >
                                                   <div class="d-flex flex-column flex-md-row">
@@ -735,7 +533,11 @@
                                                   
                                               </td>
                                           </tr>
-                                      @endforeach
+                                        @empty
+                                          <tr>
+                                              <td colspan="3" class="text-center"> No Product in this category</td>
+                                          </tr>
+                                      @endforelse
                                   </tbody>
                               </table>
                             </div>
@@ -745,7 +547,6 @@
                     </div>
                 </div>
               </div>
-            {{-- </div> --}}
         </div>
       </div>
     </div>

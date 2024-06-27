@@ -47,7 +47,6 @@ class ShopDetailsResource extends JsonResource
             "approved"=> $this->approved,
             "published"=> $this->published,
             "verified"=> $this->verified(),
-            "certified"=> $this->certified(),
             "wallet"=> $this->wallet,
             "unavailable_balance"=> $this->orders->filter(function($value){
                                         return $value->statuses->count() && $value->statuses->whereNotIn('name',['completed','cancellled'])->count();

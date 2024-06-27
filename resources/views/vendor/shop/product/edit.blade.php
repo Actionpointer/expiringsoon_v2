@@ -115,26 +115,12 @@
                       <div class="col-lg-12">
                           <div class="contact-form__content">
                             <div class="contact-form__content-group">
+                              
                               <div class="contact-form-input">
-                                <label for="states">Category</label>
-                                <select id="category_id" name="category_id" class="select2" required>
-                                  <option value="" selected>Select</option>
-                                  @foreach ($categories as $category)
-                                      <option value={{$category->id}} @if($product->category_id == $category->id) selected @endif>{{$category->name}}</option>
-                                  @endforeach
-  
-                              </select>
-                                @error('category_id')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                              </div>
-                              <div class="contact-form-input">
-                                <label for="tags">Sub Category</label>
-                                <select name="tags[]" id="tags" class="select2" multiple >
+                                <label for="tags">Tags <small>(allows multiple)</small></label>
+                                <select name="tags[]" id="tags" class="select2" multiple data-placeholder="Select or Add New" data-tags="true">
                                   @foreach ($tags as $tag)
-                                    <option value="{{$tag->name}}" @if(is_Array($product->tags) && in_array($tag->name,$product->tags)) selected @endif>{{$tag->name}}</option>
+                                    <option value="{{$tag->name}}" @if(is_array($product->tags) && in_array($tag->name,$product->tags)) selected @endif>{{$tag->name}}</option>
                                   @endforeach
                                   
                                 </select>
@@ -163,7 +149,7 @@
                                 </div>
                                 <div class="contact-form-input">
                                   <label for="number1">Expiry Date</label>
-                                  <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{ $product->expire_at->format('Y-m-d') }}" id="datepicker"/>
+                                  <input type="date" name="expiry" placeholder="YYYY-MM-DD" value="{{$product->expire_at ? $product->expire_at->format('Y-m-d') : '' }}" id="datepicker"/>
                                     @error('expiry')
                                       <span class="invalid-feedback d-block" role="alert">
                                           <strong>{{ $message }}</strong>
@@ -318,25 +304,102 @@
                 </div>
                 <div class="dashboard__content-card">
                   <div class="dashboard__content-card-header">
-                  <h5 class="font-body--xl-500">Packaging</h5>
+                  <h5 class="font-body--xl-500">Dimensions</h5>
                   </div>
                   <div class="dashboard__content-card-body">
                     <div class="contact-form__content">
-                      <p class="font-body--md-500 mb-2">Which type of packaging is most suitable for the product.  </p>
-                      <div class="contact-form-input">
-                        <label for="states">Packages</label>
-                        <select id="package_id" name="package_id" class="select2" required>
-                            <option value="" selected>Select</option>
-                            @foreach ($packages as $package)
-                                <option value="{{$package->id}}" @if($package->id == $product->package_id) selected @endif>{{$package->name}} - {{$package->description}}</option>
-                            @endforeach
-
-                        </select>
-                        @error('package_id')
-                            <span class="invalid-feedback d-block" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                      <p class="font-body--md-500 mb-2">Exact dimensions of the product is required for accurate logistics  </p>
+                      <div class="table-responsive">
+                        <table class="table w-auto">
+                          <tbody>
+                            <tr>
+                                <th class="text-nowrap"></th>
+                                <th>Value</th>
+                                <th>Unit</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                              <td>Length</td>
+                              <td>
+                                <input class="form-control-sm border-light" type="number" step="0.001" name="length" id="length" value="{{ $product->length }}"> 
+                              </td>
+                              <td>
+                                  <select name="length_unit" id="length_unit" class="form-control">
+                                      <option value="cm" @if($product->units && is_array($product->units) && in_array('cm',$product->units)) selected @endif>Centimeter (cm)</option>
+                                      <option value="in" @if($product->units && is_array($product->units) && in_array('in',$product->units)) selected @endif>Inches (in)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('length')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                              
+                            </tr>
+                            <tr>
+                              <td>Width</td>
+                              <td>
+                                  <input class="form-control-sm border-light" type="number" step="0.001" name="width" id="width" value="{{ $product->width }}"> 
+                                </td>
+                              <td>
+                                  <select name="width_unit" id="width_unit" class="form-control">
+                                      <option value="cm" @if($product->units && is_array($product->units) && in_array('cm',$product->units)) selected @endif>Centimeter (cm)</option>
+                                      <option value="in" @if($product->units && is_array($product->units) && in_array('in',$product->units)) selected @endif>Inches (in)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('width')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Height</td>
+                              <td>
+                                <input class="form-control-sm border-light" type="number" step="0.001" name="height" id="height" value="{{ $product->height }}"> 
+                              </td>
+                              <td>
+                                  <select name="height_unit" id="height_unit" class="form-control">
+                                      <option value="cm" @if($product->units && is_array($product->units) && in_array('cm',$product->units)) selected @endif>Centimeter (cm)</option>
+                                      <option value="in" @if($product->units && is_array($product->units) && in_array('in',$product->units)) selected @endif>Inches (in)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('height')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Weight</td>
+                              <td>
+                                <input class="form-control-sm border-light" type="number" step="0.001" name="weight" id="weight" value="{{ $product->weight }}"> 
+                              </td>
+                              <td>
+                                  <select name="weight_unit" id="weight_unit" class="form-control">
+                                      <option value="g" @if($product->units && is_array($product->units) && in_array('g',$product->units)) selected @endif>gram (g)</option>
+                                      <option value="kg" @if($product->units && is_array($product->units) && in_array('kg',$product->units)) selected @endif>Kilogram (kg)</option>
+                                      <option value="oz" @if($product->units && is_array($product->units) && in_array('oz',$product->units)) selected @endif>Ounce (oz)</option>
+                                      <option value="lb" @if($product->units && is_array($product->units) && in_array('lb',$product->units)) selected @endif>Pound (lb)</option>
+                                  </select>
+                              </td>
+                              <td>
+                                @error('weight')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        
                       </div>
                       
                       <div class="contact-form-btn">
@@ -361,8 +424,7 @@
 @endsection
 @push('scripts')
     <script>
-      var price = @json($product->price);
-      // console.log(tags);
+      var price = $('#prices').val();
       function performClick(elemId) {
         var elem = document.getElementById(elemId);
         if(elem && document.createEvent) {
@@ -370,8 +432,7 @@
             evt.initEvent("click", true, false);
             elem.dispatchEvent(evt);
         }
-      }
-        
+      }        
       function readURL(input,output) {
           console.log(input.id);
           if (input.files && input.files[0]) {
@@ -382,60 +443,26 @@
               reader.readAsDataURL(input.files[0]);
           }
       }
-  
-        // $('.adddiscount').on('click',function(){
-        //     $(this).closest('.discount').find('.discountoptions').show();
-        //     $(this).hide();
-        // })
-        // $('.removediscount').on('click',function(){
-        //     $(this).closest('.discount').find('.adddiscount').show();
-        //     $(this).closest('.discount').find('.discountoptions input').val('')
-        //     $(this).closest('.discount').find('.discountoptions').hide()
-        // })
-        $(document).on('input blur change',"#prices",function(){
+      $(document).on('input blur change',"#prices",function(){
           price = $(this).val();
           // $('.discountprice').attr({"max" : $(this).val(),"min" : price})
           $('.percent').each(function(){
             let result = price - ($(this).val() /100 * price);
             $('#'+$(this).attr('id').split('percent')[0]).val(result.toFixed(3));
           })         // values (or variables) here
-        });
-        $(document).on('input blur change',".percent",function(){
-          let p = $(this).attr('id').split('percent')[0];
-          let q = price - ($(this).val() /100 * price);
-          $('#'+p).val(q.toFixed(3));
-            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
-        });
-        $(document).on('input blur change',".discountprice",function(){
-          let p = $(this).attr('id')+'percent';
-          let q = $(this).val() * 100 / price;
-          $('#'+p).val(q.toFixed(3));
-            // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
-        });
-
-        $(document).on('change','#category_id',function(){
-          let tags = @json($tags);
-          let v = $(this).find(':selected').text()
-          console.log(v)
-          let filtered = tags.filter(function(value){
-            return value.category == v;
-          })
-          $('#tags').children().remove()
-          filtered.forEach(element => {
-              $('#tags').append(`<option value="`+element.name+`">`+element.name+` </option>`)
-          });
-          $('#tags').select2();
-        })
-        // $('#addproduct').one('submit',function(e){
-        //   e.preventDefault();
-        //   let checker = 1;
-        //   $('.discountprice').each(function(){
-        //     if($(this).val() > $(this).attr('max'))
-        //     checker = 0;
-        //   })
-        //   if(checker){
-        //     $('#addproduct').submit();
-        //   }
-        // })
+      });
+      $(document).on('input blur change',".percent",function(){
+        let p = $(this).attr('id').split('percent')[0];
+        let q = price - ($(this).val() /100 * price);
+        $('#'+p).val(q.toFixed(3));
+          // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+      });
+      $(document).on('input blur change',".discountprice",function(){
+        let p = $(this).attr('id')+'percent';
+        let q = $(this).val() * 100 / price;
+        $('#'+p).val(q.toFixed(3));
+          // $('.discountprice').attr({"max" : $(this).val(),"min" : m})         // values (or variables) here
+      }); 
+  
     </script>
 @endpush

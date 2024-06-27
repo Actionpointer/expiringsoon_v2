@@ -20,10 +20,10 @@ class ShopObserver
      */
     public function created(Shop $shop)
     {
-        if(cache('settings')['auto_approve_shop'])
-        $shop->approved = true;
-        $shop->status = $shop->user->max_shops >= $shop->user->total_shops ? true:false;
-        $shop->save();
+        if($shop->published){
+            Shop::where('id',$shop->id)->update([
+                'approved'=> cache('settings')['auto_approve_shop'],'show'=> $shop->user->max_shops >= $shop->user->total_shops ? true:false,'published' => $shop->publishable]);
+        }
     }
 
     /**
@@ -58,6 +58,10 @@ class ShopObserver
                 }   
             }
             
+        }
+        if($shop->wasChanged('published') && $shop->published){
+            Shop::where('id',$shop->id)->update([
+                'approved'=> cache('settings')['auto_approve_shop'],'show'=> $shop->user->max_shops >= $shop->user->total_shops ? true:false,'published' => $shop->publishable]);
         }
         
     }
