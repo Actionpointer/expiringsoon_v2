@@ -17,7 +17,7 @@ use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ShipmentController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Vendor\SubscriptionController;
-
+use Illuminate\Support\Facades\Log;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,10 +30,7 @@ use App\Http\Controllers\Vendor\SubscriptionController;
 */
 
 Route::post('webhook',function(Request $request){
-    logger()->info([
-        'payload' => $request->all(),
-        'headers' => $request->headers,
-    ]);
+    Log::channel('single')->info(json_encode(['payload' => $request->all(),'headers' => $request->headers])); 
     return response()->json(200);
 });
 

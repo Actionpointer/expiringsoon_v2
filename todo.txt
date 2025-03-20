@@ -73,6 +73,9 @@ deleting a product should not delete the orders
 
 Correct navigation display and menu for vendor, staff, admin, 
 
-checkout shipment fee correction
-
 remove certified from advert and featured, change to Live
+
+Wordpress Plugin:
+- disable showing of expiry date on frontend
+- change sync all products with expiry date to 6 months
+- 

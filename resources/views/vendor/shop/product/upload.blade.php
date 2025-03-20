@@ -118,7 +118,7 @@
                                 </tr>
                                 <tr>
                                     <td>weight</td>
-                                    <td>Weight of the product in gram (g), kilogram (kg), Ounces (oz) or Pounds (lb). <br>If unit is not specified, g will be used as default.<br> To specify unit, separate the value from the unit with a single space. e.g 50 g</td>
+                                    <td>Weight of the product in gram (g), kilogram (kg), Ounces (oz) or Pounds (lb). <br>If unit is not specified, kg will be used as default.<br> To specify unit, separate the value from the unit with a single space. e.g 0.5 kg</td>
                                     <td>Optional. Product will be uploaded but cannot be published without weight</td>
                                 </tr>
                                 <tr>

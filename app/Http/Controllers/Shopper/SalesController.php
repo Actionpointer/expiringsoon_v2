@@ -65,7 +65,7 @@ class SalesController extends Controller
         }
         foreach($items as $key => $value){
             $product = Product::find($value['product_id']);
-            if($product->status == 'live'){
+            if($product->status != 'live'){
                 $this->removeFromCartDb($product);
                 $carts = $this->removeFromCartSession($product);
             }
@@ -79,7 +79,6 @@ class SalesController extends Controller
             return redirect()->route('cart')->with(['result'=> 0,'message'=> 'Some items are no longer available ']);
         }
         $order = $this->getOrder($carts);
-
         $rates = Rate::where('country_id',$user->country_id)->whereNull('shop_id')->orWhereIn('shop_id',$carts->pluck('shop_id')->toArray())->get();
         return view('frontend.checkout',compact('carts','user','order','rates'));
     }

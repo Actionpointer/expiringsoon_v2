@@ -99,7 +99,7 @@ class Product extends Model
         return $discount;
     }
 
-    public function expiryInAttribute(){
+    public function getExpiryInAttribute(){
         if(!$this->expire_at)
         return 0;
         else
@@ -195,9 +195,9 @@ class Product extends Model
     }
 
     //accessible
-    public function accessible(){
-        return $this->shop->status && $this->shop->approved && $this->shop->published;
-    }
+    // public function accessible(){
+    //     return $this->shop->status && $this->shop->approved && $this->shop->published;
+    // }
 
     public function getStatusAttribute(){
         if($this->rejected)

@@ -17,7 +17,6 @@ class ProductSyncController extends Controller
         return view('vendor.shop.product.sync',compact('shop'));
     }
     public function wordpress(Shop $shop,Request $request){
-
         $url = rtrim($request->url,"/");
         $key = trim($request->key);
         $secret = trim($request->secret);
@@ -27,7 +26,7 @@ class ProductSyncController extends Controller
             ->withHeader('Content-Type: application/json')
             ->asJson()
             ->get();
-        // dd($responses);
+        
         foreach($responses as $response){
             //dd(empty($response->sale_price));
             $product = Product::create([

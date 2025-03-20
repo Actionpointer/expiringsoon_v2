@@ -383,8 +383,8 @@
                               </td>
                               <td>
                                   <select name="weight_unit" id="weight_unit" class="form-control">
+                                  <option value="kg" @if($product->units && is_array($product->units) && in_array('kg',$product->units)) selected @endif>Kilogram (kg)</option>
                                       <option value="g" @if($product->units && is_array($product->units) && in_array('g',$product->units)) selected @endif>gram (g)</option>
-                                      <option value="kg" @if($product->units && is_array($product->units) && in_array('kg',$product->units)) selected @endif>Kilogram (kg)</option>
                                       <option value="oz" @if($product->units && is_array($product->units) && in_array('oz',$product->units)) selected @endif>Ounce (oz)</option>
                                       <option value="lb" @if($product->units && is_array($product->units) && in_array('lb',$product->units)) selected @endif>Pound (lb)</option>
                                   </select>

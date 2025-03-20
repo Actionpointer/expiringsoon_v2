@@ -30,6 +30,7 @@ class ShopResource extends JsonResource
             "state"=> $this->state->name,
             "country"=> $this->country->name,
             "status"=> $this->status,
+            "fault" => $this->fault,
             "approved"=> $this->approved,
             "published"=> $this->published,
             "verified"=> $this->verified(),

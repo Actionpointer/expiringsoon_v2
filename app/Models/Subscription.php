@@ -43,6 +43,7 @@ class Subscription extends Model
     public function getActiveAttribute(){
         return  $this->start_at < now() && $this->end_at > now() && $this->status;
     }
+    
     public function getIsFreeAttribute(){
         return  !$this->renew_at && !$this->end_at;
     }

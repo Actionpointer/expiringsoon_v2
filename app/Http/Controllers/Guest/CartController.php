@@ -49,8 +49,7 @@ class CartController extends Controller
 
     public function addtocart(Request $request){
         $product = Product::find($request->product_id);
-        if(!$product)
-        abort(404);
+        abort_if(!$product,404);
         $quantity = $request->quantity ? $request->quantity : 1;
         $update = $request->update ? true: false;
         $carts = $this->addToCartSession($product,$quantity,$update);

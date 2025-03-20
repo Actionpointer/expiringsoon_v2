@@ -1,3 +1,157 @@
+ADMIN{
+  Entities{
+    users{
+      list users
+      view single user's details
+      suspend/ban/release user
+      message user via email
+    },
+    shops{
+      list shops
+      view single shop's details: products|orders|earnings|payouts
+      suspend/ban/release shop
+      freeze shop wallet
+    },
+  },
+  Logistics{
+    shippers,
+    shipment_rates_tables_cost {
+      shipper, origin_city, destination_city, avg hours, cost, base kg, base volume, additional kg, addition volume, status
+    },
+    shipments
+  },
+  compliance{
+    
+  }
+  ads Manager{
+    adsets{
+
+    }
+    ads{
+
+    }
+  },
+  Resources{
+    orders,
+    products,
+    adverts,
+    coupons
+  },
+  Finances{
+    settlements,
+    payouts
+    payments
+    revenues
+  }
+  security{
+    reported/banned products
+    reported/banned shops
+    suspended/banned users
+    suspended/banned ip
+  },
+  settings{
+    customization {
+      basic settings{
+        admin email, list of currencies, 
+      },
+      security settings{
+        rate limiting,
+        api
+        2factor
+
+      },
+    }
+    countries{
+      list countries - update{
+        financial settings (currency, payout max|min, ),
+        compliance requirement
+        banking requirement
+      }
+    }
+    categories,
+    plans{
+      list of plans 
+      create{
+        title, 
+      }
+    }
+    staff
+    
+  }
+}
+
+VENDOR {
+  shop{
+    can change shop settings{
+      basic settings
+      address settings
+      document verifications
+      payout settings
+      staff settings {
+        can invite people by email, to manage: products, orders, messages, ads, finance
+        can remove users from shop
+        can change shop ownership
+      }
+      discount settings{
+        apply discount by shop/by product
+      }
+      can turn shop ON/OFF
+    }
+  }
+  products{
+    can browse/create/edit/delete
+    can feature one or many as ads
+    can see analytics (views/mails/follows/)
+    can respond to message
+    can publish newsletter of product to customer
+  }
+  order{
+    can browse
+    can change order status
+  }
+  
+}
+
+CUSTOMER {
+  products {
+    can browse many
+    can view one
+    can add to wishlist
+    can add (single/multiples of one/ single or multiples of many) to cart
+    can checkout one/many at once
+    can buy ahead (i.e pay for item before price drops, to receive it when price drops)
+    can share to social media
+    can follow a product: to receive notifications about the product price drop
+    can message vendor about product
+  }
+  shipment address{
+    can create/edit/delete
+    can select/create new during checkout
+  }
+  vendor {
+    can browse many
+    can view one (this will list all products of the vendor)
+    can bookmark/save vendor 
+    can message vendor
+  }
+
+}
+
+
+
+
+
+version 2
+
+auto-renew subscription & adset
+add password strength meter
+create an order on the shipment partners website, if integrated. 
+Also we need to receive a webhook from shipment company when the 
+item has been shipped so we can mark this item shipped
+stripe PAYMENTS, REFUND & PAYOUT
+
+
+
 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
 
 
@@ -46,14 +200,7 @@ Secret Key:
 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 
 
 
-version 2
-report shops/products
-buyer can remove items from order which not yet shipped/ready, not yet expired, and pick another item from the same shop, of similar worth
-buyer can buy now and receive later when the price drops
-auto-renew subscription & adset
-add password strength meter
-create an order on the shipment partners website, if integrated. Also we need to receive a webhook from shipment company when the item has been shipped so we can mark this item shipped
-stripe PAYMENTS, REFUND & PAYOUT
+
 
 Newsletters[
     Products - Customers

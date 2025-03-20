@@ -374,8 +374,8 @@
                               </td>
                               <td>
                                   <select name="weight_unit" id="weight_unit" class="form-control">
-                                      <option value="g">gram (g)</option>
                                       <option value="kg">Kilogram (kg)</option>
+                                      <option value="g">gram (g)</option>
                                       <option value="oz">Ounce (oz)</option>
                                       <option value="lb">Pound (lb)</option>
                                   </select>

@@ -54,7 +54,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new PayoutStatusCheckJob)->hourly();
         $schedule->job(new SubscriptionExpiredJob)->hourly();
         $schedule->job(new SubscriptionExpiringNotifyJob)->hourly();
-        $schedule->job(new SubscriptionResourceResetJob)->hourly();
+        $schedule->job(new SubscriptionResourceResetJob)->everyMinute();
 
 
 
