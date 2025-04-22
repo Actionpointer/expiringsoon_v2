@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('dispute_messages', function (Blueprint $table) {
             $table->id();
-            $table->string('dispute_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('dispute_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('sender_type'); //buyer, seller, admin
             $table->text('body');
             $table->text('attachments')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('dispute_id')->references('id')->on('disputes')->onDelete('cascade');
         });
     }
 

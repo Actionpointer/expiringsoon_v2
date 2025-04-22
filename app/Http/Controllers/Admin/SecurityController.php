@@ -20,9 +20,8 @@ class SecurityController extends Controller
     }
 
     public function index(){
-        $locations = Location::where('status','false')->paginate(10);
-        $users = User::all();
-        return view('admin.security',compact('locations','users'));
+        $countries = Country::all();
+        return view('settings.security',compact('countries'));
     }
     
     public function ip_block(Request $request){

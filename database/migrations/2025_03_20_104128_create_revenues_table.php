@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('revenues', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('payment_id');
-            $table->unsignedBigInteger('country_id');
-            $table->unsignedBigInteger('currency_id');
+            $table->id();
+            $table->unsignedBigInteger('payment_id');
+            $table->string('currency_code');
             $table->string('amount');
             $table->string('description');
             $table->timestamps();
+            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
         });
     }
 

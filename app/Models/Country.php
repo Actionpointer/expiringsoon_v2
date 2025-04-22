@@ -21,10 +21,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
-    protected $fillable = ['iso_code','name','dialing_code','flag','currency_name','currency_iso','currency_symbol'];
+    protected $fillable = ['code','name','dialing_code','flag','currency_name','currency_iso','currency_symbol'];
     
     public function getRouteKeyName(){
-        return 'iso';
+        return 'code';
     }
 
     public function users(){

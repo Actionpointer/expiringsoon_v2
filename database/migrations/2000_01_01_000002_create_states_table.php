@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('states', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('country_id');
+            $table->unsignedBigInteger('country_id');
             $table->string('iso', 11);
             $table->string('name');
             $table->boolean('status')->default(false);
             $table->timestamps();
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
     }
 

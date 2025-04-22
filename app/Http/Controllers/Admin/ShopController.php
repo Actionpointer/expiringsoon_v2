@@ -26,7 +26,7 @@ class ShopController extends Controller
         $status = 'all';
         $sortBy = null;
         $name = null;
-        $shops = Shop::within();
+        $shops = Shop::where('approved',true);
         if(request()->query() && request()->query('name')){
             $name = request()->query('name');
             $shops = $shops->where(function($or) use($name){
@@ -68,12 +68,12 @@ class ShopController extends Controller
         }
         $countries = Country::all();
         $shops = $shops->paginate(16);
-        return view('admin.shops.list',compact('shops','status','countries','country_id','sortBy','name'));
+        return view('shops.list',compact('shops','status','countries','country_id','sortBy','name'));
     }
 
 
     public function show(Shop $shop){
-        return view('admin.shops.view',compact('shop'));
+        return view('shops.view',compact('shop'));
     }
 
     public function manage(Request $request){

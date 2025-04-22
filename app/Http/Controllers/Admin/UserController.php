@@ -11,6 +11,7 @@ use App\Models\State;
 use App\Models\Payout;
 use App\Models\Country;
 use App\Models\Rejection;
+use App\Models\Permission;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -28,27 +29,15 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function dashboard(){
-        
-        $processing = cache('settings')['order_processing_to_auto_cancel_period'];
-        $shipping = cache('settings')['order_processing_to_delivery_period'] - cache('settings')['order_processing_to_shipment_period'];
-        /** @var \App\Models\User $user **/  
-        $user = auth()->user();
-        DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$user->id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->related_to','user')->update(['read_at'=> now()]);
-        $disputes = OrderStatus::within()->where('name','disputed'); 
-        if($user->isAnyRole(['superadmin','admin'])){
-            $disputes = $disputes->get();
-        }else{
-            $disputes = $disputes->whereHas('order',function($query){ $query->where('arbitrator_id',auth()->id()); })->get();
-        }
-        $statuses = OrderStatus::within()->where(function($query) use($processing,$shipping){
-                        $query->where('name','processing')->where('created_at','<',now()->subHours($processing))
-                            ->orWhere('name','shipped')->where('created_at','<',now()->subHours($shipping))
-                            ->orWhere('name','ready')->where('created_at','<',now()->subHours(24));
-                        })->latest()->take(5)->get();   
-        $payouts = Payout::within()->where('status','pending')->orderBy('created_at','asc')->take(5)->get();   
-        return view('admin.dashboard',compact('user','disputes','statuses','payouts'));
+    public function dashboard(){ 
+        return view('dashboard');
     }
+
+    public function index(){
+        return view('customers.list');
+    }
+
+
     
     public function customers(){
         
@@ -127,15 +116,14 @@ class UserController extends Controller
         return view('admin.users.vendors',compact('users','countries','plans','country_id','subscription','sortBy','name'));
     }
 
-    public function staff(){
-        $roles = ['admin','manager','customercare','auditor','arbitrator'];
-        $users = User::within()->whereHas('role',function($query)use($roles){$query->whereIn('name',$roles);})->paginate(10);
-        $countries = Country::all();
-        return view('admin.users.staff',compact('users','countries','roles'));
+    public function admin(){
+        $staff = User::has('is_admin')->get();
+        $permissions = Permission::all();
+        return view('settings.staff.index',compact('staff','permissions'));
     }
 
     public function show(User $user){
-        return view('admin.users.view',compact('user'));
+        return view('customers.view',compact('user'));
     }
 
     public function manage(Request $request){

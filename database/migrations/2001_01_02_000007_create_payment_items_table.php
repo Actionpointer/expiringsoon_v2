@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payment_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('payment_id');
             $table->unsignedBigInteger('paymentable_id');
             $table->string('paymentable_type');
             $table->timestamps();
+            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
         });
     }
 

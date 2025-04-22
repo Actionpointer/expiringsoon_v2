@@ -35,6 +35,7 @@ return new class extends Migration
             $table->index('region');
             // Foreign 
             $table->index(['active', 'expires_at']);
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('set null');
             $table->foreign('added_by_id')->references('id')->on('users')->onDelete('set null');
         });
 

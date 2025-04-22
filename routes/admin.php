@@ -1,123 +1,120 @@
 <?php
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\ShopController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\AdvertController;
-use App\Http\Controllers\Admin\CouponController;
-use App\Http\Controllers\Admin\PlacesController;
-use App\Http\Controllers\Admin\PaymentController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\SecurityController;
-use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Controllers\Admin\ShipmentController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Notifications\WelcomeNotification;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Guest\CartController;
+use App\Http\Controllers\Guest\ShopController;
+use App\Http\Controllers\Guest\AdvertController;
+use App\Http\Controllers\Guest\ProductController;
+use App\Http\Controllers\Shopper\OrderController;
+use App\Http\Controllers\Shopper\SalesController;
+use App\Http\Controllers\Guest\FrontendController;
+use App\Http\Controllers\Shopper\ReviewController;
+use App\Http\Controllers\Shopper\AddressController;
 
-Route::group(['prefix'=> 'admin','as'=>'admin.','middleware'=> 'role:superadmin,admin,manager,customercare,auditor,arbitrator'],function(){
-    Route::get('dashboard',[UserController::class, 'dashboard'])->name('dashboard');
-    Route::group(['middleware'=> 'role:superadmin'],function(){
-        Route::group(['prefix'=> 'settings','as'=>'settings.'],function(){
-            Route::get('/',[SettingsController::class, 'index'])->name('global');
-            Route::post('store',[SettingsController::class, 'store'])->name('store');
+Route::view('terms','frontend.legal.term_of_use')->name('terms');
+Route::view('privacy_policy','frontend.legal.privacy_policy')->name('privacy');
+Route::view('email','emails.completed');
+Route::view('help','help.index')->name('help.index');
+Route::view('help/shoppers','help.shoppers')->name('help.shoppers');
+Route::view('help/vendors','help.vendors')->name('help.vendors');
+Route::view('help/api/documentation','help.apidocumentation')->name('help.api_documentation');
+Route::view('help/faq','help.faq')->name('help.faq');
+Route::view('help/download','help.download')->name('help.download');
+Route::view('contact','frontend.contact')->name('contact');
+Route::get('shipments',[FrontendController::class,'shipment'])->name('shipment');
+Route::post('shipment/search',[FrontendController::class,'shipment_search'])->name('shipment.search');
+Route::post('shipment/updated',[FrontendController::class,'shipment_update'])->name('shipment.update');
 
-            Route::get('country/{country}',[PlacesController::class, 'country'])->name('country');
-            Route::post('country/basic',[PlacesController::class, 'country_basic'])->name('country.basic');
-            Route::post('country/states',[PlacesController::class, 'country_states'])->name('country.states');
-            Route::post('country/cities',[PlacesController::class, 'country_cities'])->name('country.cities');
-            Route::post('state/manage',[PlacesController::class, 'state_manage'])->name('state.manage');
-            Route::post('city/manage',[PlacesController::class, 'city_manage'])->name('city.manage');
+Route::get('/', [FrontendController::class, 'index'])->name('index');
+Route::get('advert/{advert}', [AdvertController::class, 'ad_click'])->name('advert.click');
+Route::get('featured/{feature}', [AdvertController::class, 'featured_click'])->name('featured.click');
 
-            Route::get('plan/{plan}',[SettingsController::class, 'plan'])->name('plan');
-            Route::post('plans',[SettingsController::class, 'plans'])->name('plans');
-            Route::post('plan/pricing',[SettingsController::class, 'plan_pricing'])->name('plan.pricing');
+Route::get('products', [ProductController::class, 'index'])->name('product.list');
+Route::get('product/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('hotdeals',[ProductController::class, 'hotdeals'])->name('hotdeals');
+Route::get('categories',[ProductController::class,'categories'])->name('product.categories');
+Route::post('getSubcategories', [ProductController::class, 'getSubcategories'])->name('product.getSubcategories');
 
-            Route::get('advert-plans/{adplan}',[SettingsController::class, 'adplan'])->name('adplan');
-            Route::post('adplans',[SettingsController::class, 'adplans'])->name('adplans');
-            Route::post('ad/pricing',[SettingsController::class, 'ad_pricing'])->name('ad.pricing');            
-        });
-        Route::get('security',[SecurityController::class, 'index'])->name('security');
-        Route::post('security/ipaddress/block',[SecurityController::class, 'ip_block'])->name('security.ip_block');
-        Route::post('security/ipaddress/release',[SecurityController::class, 'ip_release'])->name('security.ip_release');
+Route::get('getStates/{country_id?}', [ResourcesController::class, 'states'])->name('states');
+Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name('cities');
 
-        Route::get('categories',[CategoryController::class, 'categories'])->name('categories');
-        Route::post('category/store',[CategoryController::class, 'category_store'])->name('category.store');
-        Route::post('category/update',[CategoryController::class, 'category_update'])->name('category.update');
-        Route::post('category/delete',[CategoryController::class, 'category_destroy'])->name('category.destroy');
+Route::get('vendors', [ShopController::class, 'index'])->name('vendors');
+Route::get('vendors/{shop}', [ShopController::class, 'show'])->name('vendor.show');
+Route::get('vendor/follow/{shop}',[SalesController::class, 'follow'])->name('vendor.follow');
+Route::get('vendor/unfollow/{shop}',[SalesController::class, 'unfollow'])->name('vendor.unfollow');
 
-        Route::post('tag/store',[CategoryController::class, 'tag_store'])->name('tag.store');
-        Route::post('tag/update',[CategoryController::class, 'tag_update'])->name('tag.update');
-        Route::post('tag/delete',[CategoryController::class, 'tag_destroy'])->name('tag.destroy');
+Route::get('adpreview/{adset}/{advert}',[HomeController::class,'adpreview'])->name('adpreview');
 
-    });
+Route::get('cart', [CartController::class, 'cart'])->name('cart');
+Route::post('product/add-to-cart',[CartController::class,'addtocart'])->name('product.addtocart');
+Route::post('product/remove-from-cart',[CartController::class,'removefromcart'])->name('product.removefromcart');
+Route::post('product/add-to-wish',[CartController::class,'addtowish'])->name('product.addtowish');
+Route::post('product/remove-from-wish',[CartController::class,'removefromwish'])->name('product.removefromwish');
+Route::post('product/sortFilter',[CartController::class,'sortFilter'])->name('product.sortFilter');
+
+Route::get('payment/callback',[PaymentController::class,'paymentcallback'])->name('payment.callback');
+
+Route::get('invoice/{payment}',[PaymentController::class, 'invoice'])->name('invoice');
+
+Route::get('receipt/{payout}',[PaymentController::class, 'receipt'])->name('receipt');
+
+Route::view('start-selling','auth.register_vendor')->name('start-selling');
+
+Auth::routes(['verify' => true]);
+
+Route::group(['middleware'=> 'verified'],function(){
+    Route::view('change_password','auth.forcepassword')->name('forcepasswordchange');
+    Route::post('changed_password',[LoginController::class, 'forcepassword'] )->name('forcepassword');
     
-    Route::group(['middleware'=> 'role:superadmin,admin,manager'],function(){
-        Route::post('payouts/manage',[PaymentController::class, 'update'])->name('payouts.manage');
-        
-        Route::group(['prefix'=> 'staff','as'=>'staff.'],function(){
-            Route::get('/',[UserController::class, 'staff'])->name('list');
-            Route::post('store',[UserController::class, 'store'])->name('store');
-            Route::post('update',[UserController::class, 'update'])->name('update');
-            Route::post('delete',[UserController::class, 'destroy'])->name('delete');
-        });
-        Route::group(['prefix'=> 'shipments','as'=>'shipments.'],function(){
-            Route::get('rates',[ShipmentController::class,'rates'])->name('rates');
-            Route::post('store',[ShipmentController::class,'store'])->name('store');
-            Route::post('update',[ShipmentController::class,'update'])->name('update');
-            Route::post('destroy',[ShipmentController::class,'destroy'])->name('delete');
-        });
-        Route::get('verifications',[SecurityController::class,'verifications'])->name('verifications');       
-    });
+    Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');
+    Route::get('notifications/read',[UserController::class, 'readNotifications'])->name('notifications.read');
+    Route::get('home', [HomeController::class, 'home'])->name('home');
+    Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
-    Route::group(['middleware'=> 'role:superadmin,admin,manager,auditor'],function(){
-        Route::get('payments',[PaymentController::class, 'index'])->name('payments');
-        Route::post('payments/export', [PaymentController::class, 'exportPayments'])->name('payments.export');
-        Route::get('settlements',[PaymentController::class, 'settlements'])->name('settlements');
-        Route::post('settlements/export', [PaymentController::class, 'exportSettlements'])->name('settlements.export');
-        Route::get('payouts',[PaymentController::class, 'payouts'])->name('payouts');
-        Route::get('payouts/export', [PaymentController::class, 'exportPayouts'])->name('payouts.export');
-        Route::get('revenue',[PaymentController::class, 'revenue'])->name('revenue');
-    });
+    //for users
+    Route::get('profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('profile/update',[UserController::class, 'update'])->name('profile.update');
+    Route::post('edit-password',[UserController::class, 'password'])->name('edit-password');
+    Route::get('generate/otp',[UserController::class, 'generate_otp'])->name('generate_otp');
+    Route::post('edit-pin',[UserController::class, 'pin'])->name('edit-pin');
+    Route::post('applycoupon',[ResourcesController::class, 'coupon'])->name('applycoupon');
 
-    Route::group(['middleware'=> 'role:superadmin,admin,manager,customercare,arbitrator'],function(){
-        Route::group(['middleware'=> 'role:superadmin,admin,manager,customercare'],function(){
-            Route::get('coupons',[CouponController::class, 'list'])->name('coupons');
-            Route::post('coupons/store',[CouponController::class, 'store'])->name('coupon.store');
-            Route::post('coupons/update',[CouponController::class, 'update'])->name('coupon.update');
-            Route::post('coupons/delete',[CouponController::class, 'destroy'])->name('coupon.delete');
+    Route::group(['middleware'=> 'role:shopper'],function(){
+        Route::get('addresses', [AddressController::class, 'index'])->name('addresses');
+        Route::post('address/store',[AddressController::class, 'store'])->name('address.store');
+        Route::post('address/update',[AddressController::class, 'update'])->name('address.update');
+        Route::post('address/delete',[AddressController::class, 'destroy'])->name('address.delete');
 
-            Route::get('vendors',[UserController::class, 'vendors'])->name('vendors');
-            Route::get('customers',[UserController::class, 'customers'])->name('customers');
-            Route::get('user/show/{user}',[UserController::class, 'show'])->name('user.show');
-            Route::post('user',[UserController::class, 'manage'])->name('user.manage');
+        Route::get('wishlist', [SalesController::class, 'wishlist'])->name('wishlist');
+        Route::get('following', [UserController::class, 'followings'])->name('followings');
+        Route::get('checkout/{shop?}',[SalesController::class,'checkout'])->name('checkout');
+        Route::post('checkout/getshipment',[SalesController::class,'shipment'])->name('checkout.shipment');
+        Route::post('checkout/confirm',[SalesController::class,'confirmcheckout'])->name('confirmcheckout');
 
-            Route::get('adsets',[AdvertController::class, 'adsets'])->name('adsets');
-            Route::get('adverts',[AdvertController::class, 'index'])->name('adverts');
-            Route::post('adverts/manage',[AdvertController::class, 'manage'])->name('adverts.manage');
-
-            Route::get('shops', [ShopController::class, 'index'])->name('shops');
-            Route::get('shop/manage/{shop}', [ShopController::class, 'show'])->name('shop.show');
-            Route::post('shop/management', [ShopController::class, 'manage'])->name('shop.manage');
-            Route::post('shop/manage', [ShopController::class, 'kyc'])->name('kyc.manage');
-
-            Route::get('products',[ProductController::class, 'index'])->name('products');
-            Route::post('products',[ProductController::class, 'manage'])->name('products.manage');
-
-        });
-        Route::get('orders',[OrderController::class, 'index'])->name('orders');
-        Route::get('order/disputes',[OrderController::class, 'disputes'])->name('order.disputes');
+        Route::get('orders', [OrderController::class, 'index'])->name('orders');
         Route::get('order/{order}',[OrderController::class, 'show'])->name('order.show');
         Route::post('order/update',[OrderController::class, 'update'])->name('order.update');
-        Route::post('order/resolution',[OrderController::class, 'resolution'])->name('order.resolution');
-        Route::post('order/message/',[OrderController::class, 'message'])->name('order.message');
-      
-        
-        Route::group(['prefix'=> 'shipments','as'=>'shipments.'],function(){
-            Route::get('/',[ShipmentController::class, 'index'])->name('index');
-            Route::post('process',[ShipmentController::class, 'process'])->name('process');
-            
-        });
+        // Route::get('transactions',[OrderController::class,'transactions'])->name('payments');
+        Route::post('order/review',[ReviewController::class, 'review'])->name('order.review');
 
-
+        // Route::get('order/{order}/messages',[OrderController::class, 'messages'])->name('order.messages');
+        Route::post('order/message',[OrderController::class, 'message'])->name('order.message');
     });
     
+
+    include('vendor.php');
+    include('admin.php');
 });
+
+
+
+
+
+

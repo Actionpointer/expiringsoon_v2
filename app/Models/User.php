@@ -5,7 +5,7 @@ namespace App\Models;
 
 use App\Models\Cart;
 use App\Models\Like;
-use App\Models\Role;
+use App\Models\AdminPermission;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\State;
@@ -21,7 +21,6 @@ use App\Models\Subscription;
 use App\Observers\UserObserver;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,11 +28,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable,Sluggable,HasApiTokens;
+    use HasFactory, Notifiable,HasApiTokens;
 
-    protected $fillable = [
-        'slug', 'fname','lname','email','shop_id','password','phone','country_id','role_id','state_id','status','require_password_change','email_verified_at'
-    ];
+    protected $guarded = ['id'];
 
     protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];
 
@@ -51,28 +48,21 @@ class User extends Authenticatable implements MustVerifyEmail
         parent::observe(new UserObserver);
     }
 
-    public function sluggable():array{
-        return [
-            'slug' => [
-                'source' => ['fname','lname'],
-                'separator' => '_'
-            ]
-        ];
-    }
-
-    public function getRouteKeyName(){
-        return 'slug';
-    }
 
     public function getNameAttribute(){
-        return ucwords($this->fname.' '.$this->lname);   
+        return ucwords($this->firstname.' '.$this->surname);   
     }
     
     public function getMobileAttribute(){
         return $this->country->dial.intval($this->phone);   
     }
+
     public function getImageAttribute(){
-        return $this->pic ? config('app.url')."/storage/$this->pic":null;  
+        return $this->photo ? config('app.url')."/storage/$this->photo":null;  
+    }
+
+    public function hasPermission($permissions){
+        return $this->is_admin->permissions->contains($permissions);
     }
     
     public function shops(){
@@ -196,34 +186,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphMany(Settlement::class,'receiver');
     }
 
-    public function role(){
-        return $this->belongsTo(Role::class);
+    public function is_admin(){
+        return $this->hasOne(AdminPermission::class)->where('status',true);
     }
 
     public function pin(){
         return $this->hasOne(Pin::class);
-    }
-
-    public function isRole($value){
-        return $this->role->name == $value;
-    }
-    
-    public function isAnyRole($value){
-        $roles = Role::whereIn('name',$value)->get()->pluck('id')->toArray();
-        return in_array($this->role_id,$roles);
-    }
-
-    public function scopeWithin($query,$value = null){
-        if($value){
-            return $query->where('country_id',$value);
-        }
-        elseif(auth()->check()){
-            if(auth()->user()->role->name == 'superadmin')
-            return $query;
-            else return $query->where('country_id',auth()->user()->country_id);
-        }else{
-            return $query->where('country_id',session('locale')['country_id']);
-        }  
     }
 
     public function disputeCases(){
@@ -242,6 +210,89 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Rejection::class,'rejectable');
     }
 
+    /**
+     * Newsletter Relations
+     */
+    public function newsletterRecipients()
+    {
+        return $this->hasMany(NewsletterRecipient::class);
+    }
+
+    /**
+     * Price Drop Pre-purchases
+     */
+    public function Prepurchases()
+    {
+        return $this->hasMany(Prepurchase::class);
+    }
+
+    public function activePrepurchases()
+    {
+        return $this->Prepurchases()
+            ->where('status', 'pending')
+            ->where('target_date', '>', now());
+    }
+
+    /**
+     * Wishlist Relation (Updated for variants)
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    
+    
+
+    public function shopNewsletters()
+    {
+        return $this->hasManyThrough(Newsletter::class, Shop::class);
+    }
+
+    /**
+     * Helper Methods
+     */
+    public function hasActivePrePurchase(Product $product, ?ProductVariant $variant = null)
+    {
+        return $this->activePrepurchases()
+            ->where('product_id', $product->id)
+            ->when($variant, function($query) use ($variant) {
+                $query->where('product_variant_id', $variant->id);
+            })
+            ->exists();
+    }
+
+    public function isSubscribedToShopNewsletter(Shop $shop)
+    {
+        return $this->following()
+            ->where('shop_id', $shop->id)
+            ->exists();
+    }
+
+    /**
+     * Scopes
+     */
+    public function scopeNewsletterSubscribers($query, Shop $shop)
+    {
+        return $query->whereHas('following', function($q) use ($shop) {
+            $q->where('shop_id', $shop->id);
+        });
+    }
+
+    public function scopeHasPurchasedFrom($query, Shop $shop)
+    {
+        return $query->whereHas('orders', function($q) use ($shop) {
+            $q->where('shop_id', $shop->id)
+                ->whereNotNull('completed_at');
+        });
+    }
+
+    public function scopeRecentFollowers($query, $days = 30)
+    {
+        return $query->whereHas('following', function($q) use ($days) {
+            $q->where('follows.created_at', '>=', now()->subDays($days));
+        });
+    }
 
     // public function receivesBroadcastNotificationsOn(){
     //     return 'users.'.$this->id;

@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/admin/dashboard';
     public const ORIENTATION = '/vendor/get-started';
 
     /**
@@ -46,16 +46,17 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::middleware('web')
+            Route::prefix('admin')
+                ->middleware('web')->as('admin.')
                 ->group(base_path('routes/web.php'));
 
             Route::prefix('api')
                 ->middleware('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::prefix('api/shopper')
+            Route::prefix('api/shop')
                 ->middleware('api')
-                ->group(base_path('routes/apy.php'));
+                ->group(base_path('routes/shop.php'));
         });
     }
 

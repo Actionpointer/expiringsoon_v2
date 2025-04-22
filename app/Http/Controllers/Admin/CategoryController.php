@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\File;
 class CategoryController extends Controller
 {
 
-    public function categories(){
+    public function index(){
         $categories = Category::all();
         $tags = Tag::all();
-        return view('admin.categories',compact('categories','tags'));
+        return view('settings.categories.index',compact('categories','tags'));
     }
 
     public function category_store(Request $request){

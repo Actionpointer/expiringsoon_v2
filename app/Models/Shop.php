@@ -68,18 +68,18 @@ class Shop extends Model
         return $this->banner ? config('app.url')."/storage/$this->banner": config('app.url').'/src/images/site/no-image.png';   
     }
 
-    public function scopeWithin($query,$value = null){
-        if($value){
-            return $query->where('country_id',$value);
-        }
-        elseif(auth()->check()){
-            if(auth()->user()->role->name == 'superadmin')
-            return $query;
-            else return $query->where('country_id',auth()->user()->country_id);
-        }else{
-            return $query->where('country_id',session('locale')['country_id']);
-        }  
-    }
+    // public function scopeWithin($query,$value = null){
+    //     if($value){
+    //         return $query->where('country_id',$value);
+    //     }
+    //     elseif(auth()->check()){
+    //         if(auth()->user()->role->name == 'superadmin')
+    //         return $query;
+    //         else return $query->where('country_id',auth()->user()->country_id);
+    //     }else{
+    //         return $query->where('country_id',session('locale')['country_id']);
+    //     }  
+    // }
     
     public function scopeIsApproved($query){
         return $query->where('approved',true);
@@ -151,13 +151,13 @@ class Shop extends Model
     public function staff(){
         return $this->hasMany(User::class);
     }
-    public function kyc(){
-        return $this->MorphMany(Kyc::class,'verifiable');
-    }
+    // public function kyc(){
+    //     return $this->MorphMany(Kyc::class,'verifiable');
+    // }
     
-    public function addressproof(){
-        return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
-    }
+    // public function addressproof(){
+    //     return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
+    // }
     public function certificate(){
         return $this->MorphOne(Kyc::class,'verifiable')->where('type','certificate');
     }

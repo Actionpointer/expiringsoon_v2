@@ -1,103 +1,59 @@
-ADMIN{
-  Entities{
-    users{
-      list users
-      view single user's details
-      suspend/ban/release user
-      message user via email
-    },
-    shops{
-      list shops
-      view single shop's details: products|orders|earnings|payouts
-      suspend/ban/release shop
-      freeze shop wallet
-    },
-  },
-  Logistics{
-    shippers,
-    shipment_rates_tables_cost {
-      shipper, origin_city, destination_city, avg hours, cost, base kg, base volume, additional kg, addition volume, status
-    },
-    shipments
-  },
-  compliance{
-    
-  }
-  ads Manager{
-    adsets{
+1. admin settings: 
+  basic|currencies|countries|categories|staff|security|
+  plans (subscription plans, ad plans , newsletter plans)
+2. user registration
+3. user login
+4. user logout
+5. user profile + user settings 
+6. user dashboard 
+8. shop creation
+9. shop settings + api + team + bank account + documents + basic (published, discount setting)
+10. shop dashboard
+11. admin categories
+15. shop products
+16. product listing
+17. product view 
+18. product search
+19. product filter
+20. product sort
+21. product review
+22. product rating
+23. product comment
+24. product add to cart
+25. product add to wishlist
+26. admin shipper, shipment rates, shipments
+27. product checkout + coupon + addresses
+28. product prepurchase
+29. product payment with wallet/credit card/bank transfer
+30. shop orders & statuses & & messages & disputes & reviews
+31. customer orders & statuses & messages & disputes & reviews
+32. refunds
+31. shop payouts
+32. shop follow
+32. Newsletters
 
-    }
-    ads{
+30. adverts
+2. admins staff
 
-    }
-  },
-  Resources{
-    orders,
-    products,
-    adverts,
-    coupons
-  },
-  Finances{
-    settlements,
-    payouts
-    payments
-    revenues
-  }
-  security{
-    reported/banned products
-    reported/banned shops
-    suspended/banned users
-    suspended/banned ip
-  },
-  settings{
-    customization {
-      basic settings{
-        admin email, list of currencies, 
-      },
-      security settings{
-        rate limiting,
-        api
-        2factor
 
-      },
-    }
-    countries{
-      list countries - update{
-        financial settings (currency, payout max|min, ),
-        compliance requirement
-        banking requirement
-      }
-    }
-    categories,
-    plans{
-      list of plans 
-      create{
-        title, 
-      }
-    }
-    staff
-    
-  }
-}
 
-VENDOR {
-  shop{
-    can change shop settings{
-      basic settings
-      address settings
-      document verifications
-      payout settings
-      staff settings {
-        can invite people by email, to manage: products, orders, messages, ads, finance
-        can remove users from shop
-        can change shop ownership
-      }
-      discount settings{
-        apply discount by shop/by product
-      }
-      can turn shop ON/OFF
-    }
-  }
+Home Page -
+Products
+
+Stores
+
+
+
+
+
+
+
+
+
+
+
+
+
   products{
     can browse/create/edit/delete
     can feature one or many as ads
@@ -109,8 +65,6 @@ VENDOR {
     can browse
     can change order status
   }
-  
-}
 
 CUSTOMER {
   products {

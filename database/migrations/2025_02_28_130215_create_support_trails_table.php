@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('support_trails', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('support_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('support_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('support_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

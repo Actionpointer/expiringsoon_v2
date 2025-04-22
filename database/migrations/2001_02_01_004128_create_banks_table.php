@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('banks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('country_id');
+            $table->id();
+            $table->unsignedBigInteger('country_id');
             $table->string('name');
             $table->string('code');
             $table->boolean('status')->default(false);
             $table->timestamps();
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
     }
 

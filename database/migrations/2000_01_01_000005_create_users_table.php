@@ -13,17 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('firsname', 50);
-            $table->string('surname', 50);
-            $table->string('email', 100);
+            $table->string('firstname');
+            $table->string('surname');
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->text('password');
             $table->string('photo', 50)->nullable();
-            $table->string('phone', 50);
+            $table->string('phone', 50)->nullable();
+            $table->unsignedBigInteger('country_id');
             $table->boolean('status')->default(true);
             $table->string('remember_token')->nullable();
             $table->boolean('require_password_change')->default(false);
+            $table->json('settings')->nullable();
             $table->timestamps();
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
     }
 

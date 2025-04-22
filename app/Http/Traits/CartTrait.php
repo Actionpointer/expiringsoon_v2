@@ -3,6 +3,7 @@ namespace App\Http\Traits;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Support\Arr;
 use App\Http\Traits\OrderTrait;
 use Illuminate\Support\Facades\Auth;
@@ -11,119 +12,120 @@ trait CartTrait
 {
     use OrderTrait;
 
-    protected function addToCartSession(Product $product,$quantity = 1,$update = false){
-        $carts = session('carts');
-        //if cart is empty then this is the first product
-        if(!$carts) {
-            $carts = collect();
-            $cart = [
-                        "id" => null,
-                        "product_id" => $product->id,
-                        "name"=> $product->name,
-                        "description"=> $product->description,
-                        "url"=> route('product.show',$product),
-                        "shop_id"=> $product->shop_id,
-                        "shop_name"=> $product->shop->name,
-                        "tags"=> $product->tags,
-                        "image"=> $product->image,
-                        "stock"=> $product->stock,
-                        "price"=> $product->price,
-                        "discount"=> $product->discount,
-                        'amount' => $product->amount,
-                        'quantity' => abs($quantity),
-                        'total' => $product->amount * abs($quantity),
-                        'currency'=> $product->shop->country->currency->symbol,
-                ];
-            $carts = $carts->push($cart);
-            session(['carts' => $carts]);
-        }elseif($carts->firstWhere('product_id',$product->id)) {
-                // if cart not empty then check if this product exist then increment quantity
-                if($update){
-                    $carts = $carts->map(function ($item, $key) use($product,$quantity){
-                        if($item['product_id'] == $product->id) {
-                            $item['quantity'] = abs($quantity);
-                            $item['total'] = $product->amount * abs($quantity);
-                        }
-                        return $item;
-                    });
-                }     
-                else{
-                    $carts = $carts->map(function ($item, $key) use($product,$quantity){
-                        if($item['product_id'] == $product->id) {
-                            $new_quantity = $item['quantity'] + $quantity;
-                            $item['quantity'] = $new_quantity;
-                            $item['total'] = $product->amount * $new_quantity;
-                        }
-                        return $item;
-                    });
-                }  
-                session(['carts' => $carts]);
-        }else{
-                // if item not exist in cart then add to cart with quantity = 1
-                $cart = [
-                    "id" => null,
-                    "product_id" => $product->id,
-                    "name"=> $product->name,
-                    "description"=> $product->description,
-                    "url"=> route('product.show',$product),
-                    "shop_id"=> $product->shop_id,
-                    "shop_name"=> $product->shop->name,
-                    "tags"=> $product->tags,
-                    "image"=> $product->image,
-                    "stock"=> $product->stock,
-                    "price"=> $product->price,
-                    "discount"=> $product->discount,
-                    'amount' => $product->amount,
-                    'quantity' => abs($quantity),
-                    'total' => $product->amount * abs($quantity),
-                    'currency'=> $product->shop->country->currency->symbol,
-                ];
-                $carts = $carts->push($cart);
-                session(['carts' => $carts]); 
-        }
-        return $carts;
-    }
-
-    protected function removeFromCartSession(Product $product){
-        $carts = session('carts');
-        if($carts && $carts->count()){
-            $carts = $carts->filter(function($item, $key) use($product){
-                return ($item['product_id'] != $product->id);
-            });
-            session(['carts' => $carts]); 
-        }
-        return session('carts');
-    }
-
-    protected function addToCartDb(Product $product,$quantity = 1,$update = false){
+    protected function addToCart(Product $product, ProductVariant $variant, $quantity = 1, $update = false)
+    {
         $user = Auth::user();
-        $dbcart = Cart::where('user_id',$user->id)->where('product_id',$product->id)->first();
-        if(!$dbcart){
-            $dbcart = Cart::create(['user_id' => $user->id,'product_id' => $product->id,'shop_id'=> $product->shop_id, 'quantity' => abs($quantity), 'amount'=> $product->amount,'total'=> abs($quantity) * $product->amount]);
-        }else{
-            if($quantity == -1 && $dbcart->quantity == 1){
-                $dbcart = Cart::where('user_id',$user->id)->where('product_id',$product->id)->delete();
-            }else{
-                if($update){
-                    $dbcart->quantity = $quantity;
-                    $dbcart->amount = $product->amount;
-                    $dbcart->total = $quantity * $product->amount;
-                }   
-                else {
-                    $new_quantity = $dbcart->quantity + $quantity;
-                    $dbcart->quantity = $dbcart->quantity + $quantity;
-                    $dbcart->amount = $product->amount;
-                    $dbcart->total = $new_quantity * $product->amount;
-                }
-                $dbcart->save();
+        $dbcart = Cart::where('user_id', $user->id)
+                     ->where('product_id', $product->id)
+                     ->where('product_variant_id', $variant->id)
+                     ->first();
+
+        // Get variant-specific image or fall back to product's primary image
+        $image = $product->images()
+            ->where(function($query) use ($variant) {
+                $query->where('product_variant_id', $variant->id)
+                      ->orWhere(function($q) {
+                          $q->whereNull('product_variant_id')
+                            ->where('is_primary', true);
+                      });
+            })
+            ->orderBy('product_variant_id', 'desc') // Prefer variant images
+            ->orderBy('is_primary', 'desc')
+            ->first();
+
+        $variantSnapshot = [
+            "variant_name" => $variant->name,
+            "sku" => $variant->sku,
+            "options" => $variant->options,
+            "price_at_add" => $variant->price,
+            "selected_at" => now()->format('Y-m-d H:i:s'),
+            "image" => [
+                "path" => $image ? $image->image_path : null,
+                "thumbnail" => $image ? $image->thumbnail_path : null,
+                "alt_text" => $image ? $image->alt_text : $variant->name
+            ]
+        ];
+
+        if(!$dbcart) {
+            $dbcart = Cart::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'product_variant_id' => $variant->id,
+                'shop_id' => $product->shop_id,
+                'quantity' => abs($quantity),
+                'amount' => $variant->price,
+                'total' => abs($quantity) * $variant->price,
+                'currency_code' => $product->currency_code,
+                'variant_snapshot' => $variantSnapshot
+            ]);
+        } else {
+            if($update) {
+                $dbcart->quantity = $quantity;
+            } else {
+                $dbcart->quantity = $dbcart->quantity + $quantity;
             }
+            
+            // Ensure quantity doesn't go below 0
+            $dbcart->quantity = max(0, $dbcart->quantity);
+            
+            if($dbcart->quantity == 0) {
+                $dbcart->delete();
+                return null;
+            }
+
+            $dbcart->amount = $variant->price;
+            $dbcart->total = $dbcart->quantity * $variant->price;
+            $dbcart->variant_snapshot = $variantSnapshot;
+            $dbcart->save();
         }
-        
+
+        return $dbcart;
     }
     
-    protected function removeFromCartDb(Product $product){
+    protected function removeFromCart(Product $product, ProductVariant $variant = null)
+    {
         $user = Auth::user();
-        $dbcart = Cart::where('user_id',$user->id)->where('product_id',$product->id)->delete();
+        $query = Cart::where('user_id', $user->id)
+                    ->where('product_id', $product->id);
+        
+        if ($variant) {
+            $query->where('product_variant_id', $variant->id);
+        }
+        
+        return $query->delete();
+    }
+
+    protected function getUserCart()
+    {
+        $user = Auth::user();
+        return Cart::with(['product', 'productVariant', 'shop'])
+                  ->where('user_id', $user->id)
+                  ->get();
+    }
+
+    protected function validateCartItem(Product $product, ProductVariant $variant, $quantity)
+    {
+        // Check if product is published and approved
+        if (!$product->published || !$product->approved) {
+            throw new \Exception('Product is not available');
+        }
+
+        // Check if variant is active
+        if (!$variant->is_active) {
+            throw new \Exception('Product variant is not available');
+        }
+
+        // Check stock
+        if ($variant->stock < $quantity) {
+            throw new \Exception('Requested quantity not available');
+        }
+
+        // Check if product belongs to variant
+        if ($variant->product_id !== $product->id) {
+            throw new \Exception('Invalid product variant combination');
+        }
+
+        return true;
     }
 }
 

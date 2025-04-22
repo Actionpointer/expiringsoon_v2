@@ -15,6 +15,19 @@ class PlacesController extends Controller
 {
     use SecurityTrait;
     
+    public function index(){
+        $countries = Country::all();
+        return view('settings.places.index',compact('countries'));
+    }
+
+    public function store(Request $request){
+        dd($request->all());
+    }
+
+    public function edit(Country $country){
+        return view('settings.places.country',compact('country'));
+    }
+
     public function country(Country $country){
         $currencies = Currency::all();
         return view('admin.settings.country',compact('country','currencies'));

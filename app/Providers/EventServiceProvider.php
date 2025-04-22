@@ -34,12 +34,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        'Illuminate\Auth\Events\Logout' => [
-            'App\Listeners\UserLoggedOut',
-        ],
-        'Illuminate\Auth\Events\Login' => [
-            'App\Listeners\LogSuccessfulLogin',
-        ],
+        // 'Illuminate\Auth\Events\Logout' => [
+        //     'App\Listeners\UserLoggedOut',
+        // ],
+        // 'Illuminate\Auth\Events\Login' => [
+        //     'App\Listeners\LogSuccessfulLogin',
+        // ],
         // 'Illuminate\Notifications\Events\NotificationSent' => [
         //     'App\Listeners\BroadCastTheNotification',
         // ],

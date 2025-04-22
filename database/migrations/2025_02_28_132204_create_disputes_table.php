@@ -18,11 +18,14 @@ return new class extends Migration
             $table->string('subject');
             $table->text('description');
             $table->string('amount')->default(0);
+            $table->string('currency_code')->nullable();
             $table->morphs('contractable');
             $table->string('priority')->default('normal');
             $table->text('verdict')->nullable();
             $table->string('status')->default('open');
             $table->timestamps();
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+        
         });
     }
 

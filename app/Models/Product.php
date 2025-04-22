@@ -65,6 +65,10 @@ class Product extends Model
         return $this->weight ? $this->length.$this->units[1] : '';
     }
 
+    public function currency_values(){
+        return $this->belongsTo(Currency::class,'currency','code');
+    }
+
     public function likes(){
         return $this->hasMany(Like::class);
     }

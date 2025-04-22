@@ -15,6 +15,11 @@ Route::get('broadcast', function () {
 });
 
 Route::group(['prefix'=> 'test'],function(){
+    Route::get('orders',function(){
+        $order = \App\Models\Order::find(124);
+        dd($order->currency_values);
+    });
+
     Route::get('products',function(){
         $products = Product::all();
         foreach($products as $product){

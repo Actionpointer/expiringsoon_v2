@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payouts', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->string('user_id', 5);
+            $table->id();
             $table->unsignedBigInteger('shop_id');
             $table->string('channel');
             $table->string('reference')->nullable();
-            $table->unsignedBigInteger('currency_id');
+            $table->string('currency_code');
             $table->string('amount')->default('0');
             $table->string('status', 10)->default('pending');
             $table->dateTime('paid_at')->nullable();
             $table->string('transfer_id')->nullable();
             $table->timestamps();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
         });
     }
 

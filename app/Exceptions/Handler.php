@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -37,5 +38,22 @@ class Handler extends ExceptionHandler
                 return redirect()->route('login');
             };
         });
+
+        // $this->renderable(function (\Exception $e, $request) {
+        //     if ($e->getPrevious() instanceof \Illuminate\Session\TokenMismatchException) {
+        //         // If it's an API request, return JSON response
+        //         if ($request->expectsJson()) {
+        //             return response()->json(['message' => 'Unauthenticated'], 401);
+        //         }
+        //         // For web requests, redirect to login
+        //         return response()->json(['message' => 'Unauthorized'], 401);
+        //     };
+        // });
+
+        // $this->renderable(function (AuthenticationException $e, $request) {
+        //     if ($request->expectsJson()) {
+        //         return response()->json(['message' => 'Unauthenticated'], 401);
+        //     }
+        // });
     }
 }

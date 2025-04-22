@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('prices', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('currency_id');
+            $table->id();
+            $table->string('currency_code');
             $table->morphs('priceable');//ads, shipments, 
             $table->string('amount');
             $table->timestamps();
+            $table->foreign('currency_code')->references('code')->on('currencies')->onDelete('cascade');
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('adplan_prices');
+        Schema::dropIfExists('prices');
     }
 };

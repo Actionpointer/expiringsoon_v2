@@ -12,18 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('adsets', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->bigInteger('user_id');
-            $table->bigInteger('adplan_id');
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('adplan_id');
             $table->string('slug')->nullable();
-            $table->timestamp('start_at')->useCurrentOnUpdate()->useCurrent();
-            $table->timestamp('end_at')->default('0000-00-00 00:00:00');
+            $table->timestamp('start_at');
+            $table->timestamp('end_at')->nullable();
             $table->integer('units')->default(1);
             $table->double('amount', null, 0);
             $table->boolean('status')->default(false);
             $table->boolean('auto_renew')->default(false);
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('adplan_id')->references('id')->on('adplans')->onDelete('cascade');
         });
     }
 

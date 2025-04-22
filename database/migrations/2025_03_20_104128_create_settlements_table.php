@@ -12,16 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('settlements', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('receiver_id');
-            $table->string('receiver_type')->default('App\\\\Models\\\\Shop');
+            $table->id();
+            $table->morphs('beneficiary');
             $table->unsignedBigInteger('order_id');
             $table->string('description')->nullable();
             $table->string('amount')->default('0');
             $table->string('charges')->default('0');
+            $table->string('currency_code');
             $table->boolean('status')->default(false);
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 

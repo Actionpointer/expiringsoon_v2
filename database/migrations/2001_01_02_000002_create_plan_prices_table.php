@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plan_prices', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('currency_id');
+            $table->id();
+            $table->string('currency_code');
             $table->unsignedBigInteger('plan_id');
             $table->string('minimum_payout')->default('0');
             $table->string('maximum_payout')->default('0');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('months_6')->default('0');
             $table->string('months_12')->default('0');
             $table->timestamps();
+            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
         });
     }
 

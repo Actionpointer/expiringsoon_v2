@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -40,26 +41,75 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except(['logout','forcepassword']);
+        $this->middleware('guest')->except(['logout','signOut','force_password_change',]);
         $this->decayMinutes = cache('settings')['throttle_security_time'];
         $this->maxAttempts = cache('settings')['throttle_security_attempt'];
     }
-    public function showLoginForm()
-    {
+    public function showLoginForm(){
         return view('auth.login');
     }
-    
 
-    protected function authenticated(Request $request, $user)
+    public function signIn(Request $request)
     {
-        if(!$user->status){
-            Auth::logout();
-            return redirect('login')->with(['result'=>0,'message'=> 'Account Suspended']);
+        $validateUser = Validator::make($request->all(), 
+        [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if($validateUser->fails()){
+            return response()->json([
+                'status' => false,
+                'message' => $validateUser->errors()->first()
+            ], 401);
         }
-        session(['locale'=>  [ 'country_id'=> $user->country->id, 'country_name'=> $user->country->name, 'country_iso'=> $user->country->iso, 'state_name'=> $user->state->name, 'state_id'=> $user->state->id, 'dial'=> $user->country->dial, 'currency_id'=> $user->country->currency_id, 'currency_iso'=> $user->country->currency->iso, 'currency_name'=> $user->country->currency->name, 'currency_symbol'=> $user->country->currency->symbol] ]);
+
+        if(!Auth::attempt($request->only(['email', 'password']))){
+            return response()->json([
+                'status' => false,
+                'message' => 'Email & Password does not match with our record.',
+            ], 401);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if(!$user->status){
+            return response()->json([
+                'status' => false,
+                'message' => 'Account Suspended',
+            ], 401);
+        }
+        if($user->subscription && $user->subscription->end_at && $user->subscription->expired()){
+            $user->subscription->delete();
+        }
+        // $user->tokens()->delete();
+        if($request->wantsJson()){
+            return response()->json([
+                'status' => true,
+                'message' => 'Login successfully',
+                'token' => $user->createToken("API TOKEN")->plainTextToken
+            ], 200);
+        }
     }
 
-    public function forcepassword(Request $request){
+    public function signOut()
+    {
+         /** @var \App\Models\User $user **/
+        $user = Auth::user();
+        $user->tokens()->delete();
+        return [
+            'message' => 'Tokens Revoked'
+        ];
+    }
+    
+    protected function authenticated(Request $request, $user)
+    {
+        if(!$user->status || !$user->is_admin){
+            Auth::logout();
+            return redirect('admin_login')->with(['result'=>0,'message'=> 'Invalid Account']);
+        }
+    }
+
+    public function force_password_change(Request $request){
          
         $validator = Validator::make($request->all(), [
             'password' => 'required','string','confirmed'
@@ -74,6 +124,8 @@ class LoginController extends Controller
         $user->password = Hash::make($request->password);
         $user->require_password_change = false;
         $user->save();
-        return redirect()->route('vendor.shop.show',$user->shop)->with(['result'=>1,'message'=> 'Password Changed']);
+        return redirect()->route('admin_dashboard')->with(['result'=>1,'message'=> 'Password Changed']);
     }  
+
+
 }

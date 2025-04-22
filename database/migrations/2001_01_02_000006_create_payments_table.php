@@ -12,18 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('reference');
             $table->string('request_id', 255)->nullable();
-            $table->bigInteger('currency_id');
+            $table->string('currency_code');
             $table->double('amount', null, 0)->default(0);
-            $table->bigInteger('coupon_id')->nullable();
+            $table->unsignedBigInteger('coupon_id')->nullable();
             $table->string('coupon_value')->default('0');
             $table->double('vat', null, 0);
             $table->string('method')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            
         });
     }
 

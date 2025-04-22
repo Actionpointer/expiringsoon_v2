@@ -28,13 +28,13 @@ class SettingsController extends Controller
     }
     
     public function index(){
-        // $users = User::whereDoesntHave('role',function($query){ $query->whereIn('name',['shopper','vendor','staff']);})->get();
-        $countries = Country::all();
-        $plans = Plan::all();
-        $adplans = Adplan::all();
         $settings = Setting::all();
+        return view('settings.index',compact('settings'));
+    }
+
+    public function currencies(){
         $currencies = Currency::all();
-        return view('admin.settings.global',compact('plans','adplans','currencies','countries','settings'));
+        return view('settings.currencies',compact('currencies'));
     }
 
     public function store(Request $request){

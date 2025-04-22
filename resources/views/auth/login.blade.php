@@ -1,82 +1,153 @@
-@extends('layouts.app')
-@push('styles')
-
-@endpush
-@section('title')Login @endsection
+@extends('layouts.base.auth')
+@section('title','Log In')
 @section('main')
-    <!-- breedcrumb section start  -->
-    <div class="section breedcrumb">
-        <div class="breedcrumb__img-wrapper">
-          <img src="{{asset('src/images/banner/breedcrumb.jpg')}}" alt="breedcrumb" />
-          <div class="container">
-            <ul class="breedcrumb__content">
-              <li>
-                <a href="{{route('index')}}">
-                  <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z" stroke="#808080" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  <span> > </span>
-                </a>
+<div class="container-fluid px-3">
+      <div class="row">
+        <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center min-vh-lg-100 position-relative bg-light px-0">
+          <!-- Logo & Language -->
+          <div class="position-absolute top-0 start-0 end-0 mt-3 mx-3">
+            <div class="d-none d-lg-flex justify-content-between">
+              <a href="#">
+                @include('layouts.base.snippets.logo')
+              </a>
+
+              <!-- Select -->
+              <div class="tom-select-custom tom-select-custom-end tom-select-custom-bg-transparent zi-2">
+                
+              </div>
+              <!-- End Select -->
+            </div>
+          </div>
+          <!-- End Logo & Language -->
+
+          <div style="max-width: 23rem;">
+            <div class="text-center mb-5">
+              <img class="img-fluid" src="{{asset('svg/illustrations/oc-chatting.svg')}}" alt="Image Description" style="width: 12rem;" data-hs-theme-appearance="default">
+              <img class="img-fluid" src="{{asset('svg/illustrations-light/oc-chatting.svg')}}" alt="Image Description" style="width: 12rem;" data-hs-theme-appearance="dark">
+            </div>
+
+            <div class="mb-5">
+              <h2 class="display-5">Build digital products with:</h2>
+            </div>
+
+            <!-- List Checked -->
+            <ul class="list-checked list-checked-lg list-checked-primary list-py-2">
+              <li class="list-checked-item">
+                <span class="d-block fw-semibold mb-1">All-in-one tool</span>
+                Build, run, and scale your apps - end to end
               </li>
-              <li class="active"><a href="#">Sign in</a></li>
+
+              <li class="list-checked-item">
+                <span class="d-block fw-semibold mb-1">Easily add &amp; manage your services</span>
+                It brings together your tasks, projects, timelines, files and more
+              </li>
             </ul>
+            <!-- End List Checked -->
+
+            <div class="row justify-content-between mt-5 gx-3">
+              <div class="col">
+                <img class="img-fluid" src="{{asset('svg/brands/gitlab-gray.svg')}}" alt="Logo">
+              </div>
+              <!-- End Col -->
+
+              <div class="col">
+                <img class="img-fluid" src="{{asset('svg/brands/fitbit-gray.svg')}}" alt="Logo">
+              </div>
+              <!-- End Col -->
+
+              <div class="col">
+                <img class="img-fluid" src="{{asset('svg/brands/flow-xo-gray.svg')}}" alt="Logo">
+              </div>
+              <!-- End Col -->
+
+              <div class="col">
+                <img class="img-fluid" src="{{asset('svg/brands/layar-gray.svg')}}" alt="Logo">
+              </div>
+              <!-- End Col -->
+            </div>
+            <!-- End Row -->
           </div>
         </div>
-    </div>
-      <!-- breedcrumb section end   -->
-  
-    @include('layouts.session')
-    <!-- Sign-in Section Start  -->
-    <section class="sign-in section section--xl">
-      <div class="container">
-        <div class="form-wrapper">
-          <h6 class="font-title--sm" style="font-size:16px">Sign in</h6>
-          <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <div class="form-input">
-              <input type="email" name="email" placeholder="Email" />
-            </div>
-            @error('email')
-            <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                  <strong>{{ $message }}</strong>
-              </span>
-            @enderror
-            <div class="form-input">
-              <input type="password" name="password" placeholder="Password" id="password" />
-              <button type="button" class="icon icon-eye" onclick="showPassword('password',this)" >
-                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" > 
-                  <path   d="M1.66663 10.5003C1.66663 10.5003 4.69663 4.66699 9.99996 4.66699C15.3033 4.66699 18.3333 10.5003 18.3333 10.5003C18.3333 10.5003 15.3033 16.3337 9.99996 16.3337C4.69663 16.3337 1.66663 10.5003 1.66663 10.5003Z"   stroke="currentColor"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round"/>
-                  <path   d="M10 13C10.663 13 11.2989 12.7366 11.7678 12.2678C12.2366 11.7989 12.5 11.163 12.5 10.5C12.5 9.83696 12.2366 9.20107 11.7678 8.73223C11.2989 8.26339 10.663 8 10 8C9.33696 8 8.70107 8.26339 8.23223 8.73223C7.76339 9.20107 7.5 9.83696 7.5 10.5C7.5 11.163 7.76339 11.7989 8.23223 12.2678C8.70107 12.7366 9.33696 13 10 13V13Z"   stroke="currentColor"   stroke-width="1.5"   stroke-linecap="round"   stroke-linejoin="round" />
-                </svg>
-              </button>
-              
-            </div>
-            @error('password')
-              <span class="invalid-feedback d-block text-danger mb-4" role="alert">
-                  <strong>{{ $message }}</strong>
-              </span>
-            @enderror
-            <div class="form-wrapper__content">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} />
-                <label class="form-check-label" for="remember"> Remember Me
+        <!-- End Col -->
+
+        <div class="col-lg-6 d-flex justify-content-center align-items-center min-vh-lg-100">
+          <div class="w-100 content-space-t-4 content-space-t-lg-2 content-space-b-1" style="max-width: 25rem;">
+            <!-- Form -->
+            <form action="{{route('admin.login')}}" method="post" class="" novalidate>@csrf
+              <div class="text-center">
+                
+
+                <div class="d-grid mb-4">
+                  <a class="btn btn-white btn-lg" href="#">
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="{{asset('svg/brands/google-icon.svg')}}" alt="Image Description">
+                      Sign in with Google
+                    </span>
+                  </a>
+                </div>
+
+                <span class="divider-center text-muted mb-4">OR</span>
+              </div>
+
+              <!-- Form -->
+              <div class="mb-4">
+                <label class="form-label" for="signinSrEmail">Your email</label>
+                <input type="email" class="form-control form-control-lg" name="email" value="{{ old('email') }}" id="signinSrEmail" tabindex="1" placeholder="email@address.com" aria-label="email@address.com" required>
+                @error('email')
+                <span class="invalid-feedback d-block">{{ $message }}</span>
+                @enderror
+              </div>
+              <!-- End Form -->
+
+              <!-- Form -->
+              <div class="mb-4">
+                <label class="form-label w-100" for="signupSrPassword" tabindex="0">
+                  <span class="d-flex justify-content-between align-items-center">
+                    <span>Password</span>
+                    <a class="form-label-link mb-0" href="{{route('admin.password.request')}}">Forgot Password?</a>
+                  </span>
+                </label>
+
+                <div class="input-group input-group-merge" data-hs-validation-validate-class>
+                  <input type="password" class="js-toggle-password form-control form-control-lg" name="password" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" data-hs-toggle-password-options='{
+                           "target": "#changePassTarget",
+                           "defaultClass": "bi-eye-slash",
+                           "showClass": "bi-eye",
+                           "classChangeTarget": "#changePassIcon"
+                         }'>
+                  <a id="changePassTarget" class="input-group-append input-group-text" href="javascript:;">
+                    <i id="changePassIcon" class="bi-eye"></i>
+                  </a>
+                </div>
+
+                <span class="invalid-feedback">Please enter a valid password.</span>
+              </div>
+              <!-- End Form -->
+
+              <!-- Form Check -->
+              <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" value="" id="termsCheckbox">
+                <label class="form-check-label" for="termsCheckbox">
+                  Remember me
                 </label>
               </div>
-              <a href="{{ route('password.request') }}">Forgot Password?</a>
-            </div>
-            <div class="form-button">
-              <button type="submit" class="button button--md w-100">Login</button>
-            </div>
-            <div class="form-register">
-              Don't have account? <a href="{{route('register')}}">Register</a>
-            </div>
-          </form>
+              <!-- End Form Check -->
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
+              </div>
+            </form>
+            <!-- End Form -->
+          </div>
         </div>
+        <!-- End Col -->
       </div>
-    </section>
-    <!-- Sign-in Section end  -->
+      <!-- End Row -->
+</div>
 @endsection
 
+@push('plugins')
+@endpush
 @push('scripts')
 
 @endpush

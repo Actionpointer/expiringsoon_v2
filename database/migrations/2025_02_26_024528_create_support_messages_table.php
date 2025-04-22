@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('support_messages', function (Blueprint $table) {
             $table->id();
-            $table->string('support_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('support_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->text('body');
             $table->text('attachments');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('support_id')->references('id')->on('supports')->onDelete('cascade');
         });
     }
 

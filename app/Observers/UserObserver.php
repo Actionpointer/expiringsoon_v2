@@ -15,20 +15,6 @@ class UserObserver
     
     public function created(User $user)
     {
-        
-        if($user->role->name == 'vendor' && !$user->shop_id){
-            $subscription = Subscription::create(
-                ['user_id'=> $user->id,
-                'plan_id'=> 1,
-                'amount'=> 0.0,
-                'start_at'=> now(),
-                'renew_at'=> null,
-                'end_at'=> null,
-                'coupon' => null,
-                'status'=> 1,
-                'auto_renew'=> false
-            ]);
-        }
         try{
             $user->notify(new WelcomeNotification);
         }catch (\Throwable $th) {
@@ -37,8 +23,6 @@ class UserObserver
                 'message' => $th->getMessage()
             ], 500);
         }
-        
-    
     }
 
     /**

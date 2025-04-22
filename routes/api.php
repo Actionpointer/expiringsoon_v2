@@ -2,22 +2,32 @@
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\VendorResource;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Auth\ApiController;
+use App\Http\Resources\CustomerResource;
 use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Vendor\ShopController;
+use App\Http\Controllers\Guest\AdvertController;
 use App\Http\Controllers\Vendor\AdsetController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\StaffController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Shopper\SalesController;
+use App\Http\Controllers\Shopper\ReviewController;
 use App\Http\Controllers\Vendor\FeatureController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
+use App\Http\Controllers\Shopper\AddressController;
 use App\Http\Controllers\Vendor\ShipmentController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Vendor\SubscriptionController;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Auth\ConfirmPasswordController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,13 +44,11 @@ Route::post('webhook',function(Request $request){
     return response()->json(200);
 });
 
-
-Route::post('register', [ApiController::class, 'register']);
-Route::post('login/vendor', [ApiController::class, 'login']);
-Route::post('email/resend',[VerificationController::class,'resend']);                                            
-Route::post('email/verify',[VerificationController::class,'verify']);                                                
-Route::post('password/email',[App\Http\Controllers\Auth\ForgotPasswordController::class,'sendResetLinkEmail']);                    
-Route::post('password/reset',[App\Http\Controllers\Auth\ResetPasswordController::class,'reset']);                  
+Route::post('signup',[RegisterController::class,'register']);
+Route::post('signin',[LoginController::class,'signIn']);
+//password request and reset
+Route::post('password/email',[ForgotPasswordController::class,'sendResetLinkEmail']);
+Route::post('password/reset',[ResetPasswordController::class,'reset']);                                        
 
 Route::get('plans', [SubscriptionController::class, 'plans']);
 Route::get('location', [ResourcesController::class, 'location']);
@@ -48,17 +56,83 @@ Route::get('states/{country_id?}', [ResourcesController::class, 'states']);
 Route::get('cities/{state_id}', [ResourcesController::class, 'cities']);
 Route::get('categories', [ResourcesController::class, 'categories']);
 Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);
+Route::get('products',[ProductController::class,'index']);
+Route::get('product/{product_id}',[ProductController::class,'show']);
+Route::get('hotdeals',[ProductController::class, 'hotdeals']);
+Route::get('vendors',[ShopController::class, 'index']);
+Route::get('vendor/{shop_id}',[ShopController::class, 'show']);
+
+Route::get('reviews/{product_id}',[ReviewController::class,'reviews']);
 
 
+ Route::get('adverts',[AdvertController::class,'ads']);
 
-Route::group(['middleware'=> 'auth:sanctum'],function(){
+Route::group(['middleware'=>'auth:sanctum'],function () {
+    Route::group(['prefix'=> 'user'],function(){
+        Route::get('/',function(Request $request){
+            return new CustomerResource(User::findOrFail($request->user()->id));
+        });
+        Route::post('profile', [UserController::class, 'update']);
+        Route::post('password', [UserController::class, 'password']);
+        Route::get('following',[UserController::class, 'followings']);
+    });
+    Route::post('logout',[LoginController::class,'logout'])->name('logout');
+    
+    //email verification
+    Route::post('email/resend',[VerificationController::class,'resend']);                                            
+    Route::post('email/verify',[VerificationController::class,'verify']);    
+    //password confirmation
+    Route::post('password/confirm',[ConfirmPasswordController::class,'confirm']);
+
     Route::get('/user', function (Request $request) {
         return new VendorResource(User::findOrFail($request->user()->id));
     });
     Route::get('notifications',[UserController::class,'notifications']);
     Route::post('notifications/read',[UserController::class,'readNotifications']);
     Route::post('applycoupon',[ResourcesController::class, 'coupon'])->name('applycoupon');
+
+    Route::get('vendor/follow/{shop_id}',[SalesController::class, 'follow']);
+    Route::get('vendor/unfollow/{shop_id}',[SalesController::class, 'unfollow']);
+    Route::get('wishlist', [SalesController::class, 'wishlist']);
+    Route::post('wishlist/add',[CartController::class,'addtowish']);
+    Route::post('wishlist/remove',[CartController::class,'removefromwish']);
+
+    Route::get('cart', [CartController::class, 'cart']);
+    Route::post('cart/add',[CartController::class,'addtocart']);
+    Route::post('cart/remove',[CartController::class,'removefromcart']);
+    
+    Route::get('addresses', [AddressController::class,'index']);
+    Route::post('address/store',[AddressController::class,'store']);
+    Route::post('address/update',[AddressController::class,'update']);
+    Route::post('address/delete',[AddressController::class,'destroy']);
+
+    Route::post('checkout',[SalesController::class,'checkout_api']);
+    Route::post('checkout/confirm',[SalesController::class,'confirmcheckout_api']);
+
+    Route::get('orders/{status?}', [OrderController::class, 'index']);
+    Route::get('order/{order_id}',[OrderController::class, 'show']);
+    Route::post('order/update',[OrderController::class, 'update']); 
+    Route::get('orders/{order_id}/messages',[OrderController::class,'messages']);
+    Route::post('order/message',[OrderController::class, 'message']);
+    Route::post('order/review',[ReviewController::class, 'review']);
+
+
+    Route::group(['prefix'=> 'transactions'],function(){
+        Route::get('/',[PaymentController::class, 'index']);    
+    });
+
+    Route::get('generate/otp',[UserController::class, 'generate_otp']);
+    Route::post('edit-pin',[UserController::class, 'pin']);
+    
+   
+    Route::get('advert/{advert_id}', [AdvertController::class, 'ad_click']);
+
+    Route::get('featured', [AdvertController::class, 'featured']);
+    Route::get('featured/{feature_id}', [AdvertController::class, 'featured_click']);
+
+    
 });
+
 
 Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::group(['prefix'=> 'user'],function(){

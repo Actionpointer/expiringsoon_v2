@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('blacklisted_shops', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('shop_id');
-            
-            
             $table->unsignedBigInteger('suspended_by_id')->nullable();
             $table->enum('suspended_by_type', ['system', 'admin'])->default('system');
             $table->enum('suspension_type', ['temporary', 'permanent'])->default('temporary');
