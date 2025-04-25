@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('verifications', function (Blueprint $table) {
+        Schema::create('supports', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('store_id');
-            $table->string('name'); //id, address, company cert & status, memart, tin, vat, bank, utility
-            $table->string('document'); 
-            $table->date('issue_date')->nullable(); 
-            $table->date('expiry_date')->nullable(); 
-            $table->timestamp('approved_at')->nullable();
-            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->unsignedBigInteger('store_id')->nullable();
+            $table->string('subject');
+            $table->text('description');
+            $table->string('priority')->default('normal');
+            $table->string('status')->default('open');
+            $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('verifications');
+        Schema::dropIfExists('supports');
     }
 };

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('product_variant_id')->nullable();
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('store_id');
             
             // Price information
             $table->string('current_price');
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete('cascade');
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('set null');
             $table->foreign('currency_code')->references('code')->on('currencies')->onDelete('restrict');
 

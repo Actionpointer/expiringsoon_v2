@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blacklisted_shops', function (Blueprint $table) {
+        Schema::create('blacklisted_stores', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('suspended_by_id')->nullable();
             $table->enum('suspended_by_type', ['system', 'admin'])->default('system');
             $table->enum('suspension_type', ['temporary', 'permanent'])->default('temporary');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamps();
             // Indexes
             $table->index('status');
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->foreign('suspended_by_id')->references('id')->on('users')->onDelete('set null');
         });
     }
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blacklisted_shops');
+        Schema::dropIfExists('blacklisted_stores');
     }
 };

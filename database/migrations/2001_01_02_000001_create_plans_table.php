@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('description', 255);
-            $table->integer('shops')->default(0);
+            $table->integer('stores')->default(0);
             $table->integer('products')->default(0);
             $table->softDeletes();
             $table->timestamps();

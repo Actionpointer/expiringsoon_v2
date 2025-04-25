@@ -35,13 +35,13 @@ return new class extends Migration
             ['id' => 7, 'name' => 'support', 'description' => 'Support', 'category' => 'Support'],
             ['id' => 8, 'name' => 'disputes', 'description' => 'Manage Disputes', 'category' => 'Support'],
 
-            // Shop Management (9-10)
-            ['id' => 9, 'name' => 'shops', 'description' => 'Shops', 'category' => 'Shop Management'],
-            ['id' => 10, 'name' => 'subscriptions', 'description' => 'Shop Subscriptions', 'category' => 'Shop Management'],
+            // Store Management (9-10)
+            ['id' => 9, 'name' => 'stores', 'description' => 'Stores', 'category' => 'Store Management'],
+            ['id' => 10, 'name' => 'subscriptions', 'description' => 'Store Subscriptions', 'category' => 'Store Management'],
 
             // Product & Reviews (11-12)
             ['id' => 11, 'name' => 'products', 'description' => 'Products', 'category' => 'Product & Reviews'],
-            ['id' => 12, 'name' => 'reviews', 'description' => 'Product and Shop Reviews', 'category' => 'Product & Reviews'],
+            ['id' => 12, 'name' => 'reviews', 'description' => 'Product and Store Reviews', 'category' => 'Product & Reviews'],
 
             // Orders & Shipping (13-14)
             ['id' => 13, 'name' => 'orders', 'description' => 'Orders', 'category' => 'Orders & Shipping'],

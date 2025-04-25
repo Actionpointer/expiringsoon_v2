@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('newsletters', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('store_id');
             $table->string('subject');
             $table->text('content');
             $table->json('target_criteria')->nullable(); // Stores targeting rules
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
         });
     }
 

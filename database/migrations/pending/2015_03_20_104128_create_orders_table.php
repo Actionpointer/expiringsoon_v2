@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
             $table->string('slug')->nullable();
             $table->string('deliveryfee')->default(0);
@@ -43,10 +43,10 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->foreign('address_id')->references('id')->on('addresses')->onDelete('set null');
             $table->index('slug');
-            $table->index(['user_id', 'shop_id']); // Added index for user_id and shop_id for better query performance
+            $table->index(['user_id', 'store_id']); // Added index for user_id and store_id for better query performance
         });
     }
 

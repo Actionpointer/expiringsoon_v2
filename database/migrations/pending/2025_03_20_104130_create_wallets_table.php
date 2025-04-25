@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('owner_id');
-            $table->string('owner_type'); // user, shop
+            $table->string('owner_type'); // user, store
             $table->string('balance')->nullable();
             $table->string('currency_code');
             $table->string('status', 10)->default('active'); // active, frozen

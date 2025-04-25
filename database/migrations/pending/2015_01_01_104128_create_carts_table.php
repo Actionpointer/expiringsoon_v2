@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('product_variant_id');
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('store_id');
             $table->integer('quantity')->unsigned();
             $table->string('amount')->default(0);
             $table->string('total')->default(0);
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete('cascade');
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->index(['user_id', 'product_id', 'product_variant_id']);
         });
     }

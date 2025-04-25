@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('supports', function (Blueprint $table) {
+        Schema::create('store_users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('shop_id')->nullable();
-            $table->string('subject');
-            $table->text('description');
-            $table->string('priority')->default('normal');
-            $table->string('status')->default('open');
-            $table->timestamps();
+            $table->json('permissions')->nullable();
+            $table->string('status')->default('pending'); // pending, active, inactive
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->unique(['store_id', 'user_id']);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('supports');
+        Schema::dropIfExists('store_users');
     }
 };

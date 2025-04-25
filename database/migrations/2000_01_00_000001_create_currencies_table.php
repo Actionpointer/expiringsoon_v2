@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -19,6 +20,11 @@ return new class extends Migration
             $table->boolean('status');
             $table->timestamps();
         });
+        DB::table('currencies')->insert([
+            ['id' => 1, 'name' => 'Naira', 'code' => 'NGN', 'symbol' => '₦','status'=> 1],
+            
+        ]);
+
     }
 
     /**

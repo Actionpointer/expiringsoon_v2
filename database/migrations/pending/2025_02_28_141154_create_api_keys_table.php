@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('api_keys', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('store_id');
             $table->string('name');
             $table->string('description')->nullable();
             $table->enum('environment', ['production', 'test']);
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('status')->default(true);
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
         });
     }
 

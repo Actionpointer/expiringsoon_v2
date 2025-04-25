@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shops', function (Blueprint $table) {
+        Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('slug');
@@ -24,10 +24,6 @@ return new class extends Migration
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('state_id')->nullable();
             $table->unsignedBigInteger('country_id');
-            $table->string('discount30')->nullable();
-            $table->string('discount60')->nullable();
-            $table->string('discount90')->nullable();
-            $table->string('discount120')->nullable();
             $table->string('commission')->nullable();
             $table->boolean('status')->default(1); // 1: active, 0: inactive
             $table->boolean('approved')->default(0); // 1: approved, 0: not approved
@@ -44,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shops');
+        Schema::dropIfExists('stores');
     }
 };
