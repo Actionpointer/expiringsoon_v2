@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
         });
         DB::table('currencies')->insert([
-            ['id' => 1, 'name' => 'Naira', 'code' => 'NGN', 'symbol' => '₦','decimal_name'=>'Kobo','decimal_places'=> '2','status'=> 1],
+            ['id' => 1, 'name' => 'Naira', 'code' => 'ngn', 'symbol' => '₦','decimal_name'=>'Kobo','decimal_places'=> '2','status'=> 1],
             
         ]);
 

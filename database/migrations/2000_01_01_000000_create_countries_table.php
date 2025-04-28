@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->string('currency_code')->nullable();
             $table->string('dial', 5)->nullable();
             $table->string('continent');           
-            $table->string('primary_gateway');           
+            $table->string('primary_gateway')->nullable();           
             $table->string('secondary_gateway')->nullable(); 
             $table->json('verification_provision')->default('manual');  
             $table->json('banking_fields')->nullable();  // Structure: { "fields":, "digits": "VAT" }                   
@@ -30,6 +31,11 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('currency_code')->references('code')->on('currencies')->onDelete('set null');
         });
+        DB::table('countries')->insert([
+            ['id' => 1, 'code' => 'ng','currency_code'=> 'ngn', 'dial' => '234', 'continent' => 'Africa',
+            'password'=>'$2y$12$H03UYTKV.ZVaim0QqNZvn.2boOO3iYGrIc6T6LB/J0056fqm.k3yi','country_id'=> '1','require_password_change'=> 1],
+            
+        ]);
   
     }
 
