@@ -149,11 +149,10 @@ class PlacesController extends Controller
             if($request->action == 'update'){
                 $request->validate([
                     'name' => 'required|string|max:255',
-                    'status' => 'nullable|boolean',
+                    'state_id' => 'required',
                 ]);
                 $city->update([
                     'name' => $request->name,
-                    'status' => $request->status,
                 ]);
                 return redirect()->back()->with(['result'=> 1,'message'=> 'City updated successfully']);
             }
@@ -161,12 +160,10 @@ class PlacesController extends Controller
             $request->validate([
                 'name' => 'required|string|max:255',
                 'state_id' => 'required',
-                'status' => 'nullable|boolean',
             ]);
             City::create([
                 'name' => $request->name,
                 'state_id' => $request->state_id,
-                'status' => $request->status,
             ]);
             return redirect()->back()->with(['result'=> 1,'message'=> 'City added successfully']);
         }

@@ -135,12 +135,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-4">
-                        <div class="form-check form-switch">
-                            <input type="checkbox" name="status" value="1" class="form-check-input" id="cityStatus" checked>
-                            <label class="form-check-label">Active</label>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
@@ -173,12 +168,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-4">
-                        <div class="form-check form-switch">
-                            <input type="checkbox" name="status" value="1" class="form-check-input" id="cityStatus" checked>
-                            <label class="form-check-label">Active</label>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>

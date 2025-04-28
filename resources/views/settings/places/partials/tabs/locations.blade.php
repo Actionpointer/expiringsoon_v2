@@ -127,14 +127,13 @@
             //loop through the cities array and create a new row for each city
             $('#stateCities').empty(); // Clear previous cities
             $.each(cities, function (index, city) {
-                console.log(city);
                 const stateCity = `<div class="col-sm-6 col-md-3 mb-3">
                                         <div class="card card-body">
                                             <div class="d-flex justify-content-between">
                                                 <h6> ${city.name}</h6>
                                                 <div>
-                                                    <a href="javascript:void(0)" class="p-2 bg-info rounded edit_city" data-city_id="${JSON.stringify(city)}"> <span class="bi-pen"></span></a>
-                                                    <a href="javascript:void(0)" class="p-2 bg-danger rounded delete_city" data-city="${JSON.stringify(city)}"> <span class="bi-trash"></span></a>
+                                                    <a href="javascript:void(0)" class="p-2 bg-info rounded edit_city" data-city_id="${city.id}" data-city_name="${city.name}"> <span class="bi-pen"></span></a>
+                                                    <a href="javascript:void(0)" class="p-2 bg-danger rounded delete_city" data-city_id="${city.id}" data-city_name="${city.name}"> <span class="bi-trash"></span></a>
                                                 </div>
                                                 
                                             </div>
@@ -148,23 +147,24 @@
             $('#viewCitiesModal').modal('show');
         });
         $(document).on('click','.edit_city',function () {
-            console.log($(this).data('city'));
-            // Get the currency data from the data-currency attribute
-            const city = $(this).data('city');
+           
+            const city_id = $(this).data('city_id');
+            const city_name = $(this).data('city_name');
             // Populate the modal fields with the extracted data
-            $('#editCityModal .modal-title').text('Edit City: ' + city.name);
-            $('#editCityModal #cityName').val(city.name);
-            $('#editCityModal #cityStatus').prop('checked', city.status);
-            $('#editCityModal #cityId').val(city.id);
+            $('#editCityModal .modal-title').text('Edit City: ' + city_name);
+            $('#editCityModal #cityName').val(city_name);
+            $('#editCityModal .city_name').val(city_name);
+            $('#editCityModal #cityId').val(city_id);
             // Show the modal
             $('#editCityModal').modal('show');
         });
         $(document).on('click','.delete_city',function () {
-            // Get the currency data from the data-currency attribute
-            const city = $(this).data('city');
+            const city_id = $(this).data('city_id');
+            const city_name = $(this).data('city_name');
             // Populate the modal fields with the extracted data
-            $('#deleteCityModal .modal-title').text('Delete City: ' + city.name);
-            $('#deleteCityModal #cityId').val(city.id);
+            // Populate the modal fields with the extracted data
+            $('#deleteCityModal .modal-title').text('Delete City: ' + city_name);
+            $('#deleteCityModal #cityId').val(city_id);
             // Show the modal
             $('#deleteCityModal').modal('show');
         });
