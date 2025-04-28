@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -20,6 +21,9 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        DB::table('admin_permissions')->insert([
+            ['id' => 1, 'user_id' => '1', 'permissions' => json_encode(array('settings')),'status'=> 1]   
+        ]);
     }
 
     /**

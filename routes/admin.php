@@ -70,8 +70,6 @@ Route::view('start-selling','auth.register_vendor')->name('start-selling');
 Auth::routes(['verify' => true]);
 
 Route::group(['middleware'=> 'verified'],function(){
-    Route::view('change_password','auth.forcepassword')->name('forcepasswordchange');
-    Route::post('changed_password',[LoginController::class, 'forcepassword'] )->name('forcepassword');
     
     Route::get('notifications',[UserController::class, 'notifications'])->name('notifications');
     Route::get('notifications/read',[UserController::class, 'readNotifications'])->name('notifications.read');

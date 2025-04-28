@@ -16,8 +16,8 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(!$request->user()->is_admin)
-            return redirect()->route('home');
+        abort_if(!$request->user()->is_admin,403,'You are not authorized to access this resource.');
+        
         return $next($request);
     }
 }

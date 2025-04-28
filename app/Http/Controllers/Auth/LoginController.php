@@ -41,7 +41,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except(['logout','signOut','force_password_change',]);
+        $this->middleware('guest')->except(['logout','signOut','force_password_change','force_password_change_form']);
         $this->decayMinutes = 60;
         $this->maxAttempts = 5;
     }
@@ -105,9 +105,17 @@ class LoginController extends Controller
     {
         if(!$user->status || !$user->is_admin){
             Auth::logout();
-            return redirect('admin_login')->with(['result'=>0,'message'=> 'Invalid Account']);
+            return redirect('login')->with(['result'=>0,'message'=> 'Invalid Account']);
         }
     }
+
+    public function force_password_change_form(Request $request){
+        if($request->user()->require_password_change){
+            return view('auth.passwords.forcepassword');
+        }
+        return redirect()->route('admin.dashboard')->with(['result'=>0,'message'=> 'Invalid Request']);
+    }
+
 
     public function force_password_change(Request $request){
          
@@ -124,7 +132,7 @@ class LoginController extends Controller
         $user->password = Hash::make($request->password);
         $user->require_password_change = false;
         $user->save();
-        return redirect()->route('admin_dashboard')->with(['result'=>1,'message'=> 'Password Changed']);
+        return redirect()->route('admin.dashboard')->with(['result'=>1,'message'=> 'Password Changed']);
     }  
 
 

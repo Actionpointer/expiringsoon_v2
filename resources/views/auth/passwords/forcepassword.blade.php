@@ -58,7 +58,7 @@
             <!-- End Heading -->
 
             <!-- Form -->
-            <form action="{{route('password.change')}}" method="post" class="js-validate needs-validation" novalidate>
+            <form action="{{route('admin.forcepassword')}}" method="post" class="js-validate needs-validation" novalidate>
               @csrf
               
               <!-- Form -->

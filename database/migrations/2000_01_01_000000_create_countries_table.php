@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('continent');           
             $table->string('primary_gateway')->nullable();           
             $table->string('secondary_gateway')->nullable(); 
-            $table->json('verification_provision')->default('manual');  
+            $table->string('verification_provider')->default('manual');  
             $table->json('banking_fields')->nullable();  // Structure: { "fields":, "digits": "VAT" }                   
             $table->json('verification_fields')->nullable();  // Structure: { "fields":, "digits": "VAT" }                   
             $table->json('transaction_charges')->nullable();// Structure:{ "percentage": 10, "fixed": 10000, "cap": 100000 }          
@@ -32,11 +32,14 @@ return new class extends Migration
             $table->foreign('currency_code')->references('code')->on('currencies')->onDelete('set null');
         });
         DB::table('countries')->insert([
-            ['id' => 1,
+            ['id' => 1,'name'=> 'Nigeria',
              'code' => 'ng',
              'currency_code'=> 'ngn', 
              'dial' => '234', 
-             'continent' => 'Africa'
+             'continent' => 'Africa',
+             'status' => true,
+             'primary_gateway' => 'paystack',
+             'secondary_gateway' => 'flutterwave',
             ],
             
         ]);
