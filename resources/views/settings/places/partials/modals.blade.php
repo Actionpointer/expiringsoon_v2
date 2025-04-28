@@ -93,7 +93,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Cities in Lagos</h5>
+                <h5 class="modal-title"></h5>
                 <div>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCityModal">Add New</button>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -102,21 +102,8 @@
             </div>
             <div class="modal-body">
                 
-                <div class="row">
-                    @foreach($country->cities as $city)
-                    <div class="col-sm-6 col-md-3 mb-3">
-                        <div class="card card-body">
-                            <div class="d-flex justify-content-between">
-                                <h6>{{ $city->name }}</h6>
-                                <div>
-                                    <a class="p-2 bg-info rounded"> <span class="bi-pen"></span></a>
-                                    <a class="p-2 bg-danger rounded"> <span class="bi-trash"></span></a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
+                <div class="row" id="stateCities">
+                    
                 </div>
             </div>
             <div class="modal-footer">

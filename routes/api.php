@@ -44,8 +44,6 @@ Route::get('states/{country_id?}', [ResourcesController::class, 'states']);
 Route::get('cities/{state_id?}', [ResourcesController::class, 'cities']);
 Route::get('location', [ResourcesController::class, 'location']);
 
-Route::get('countries/{country_id}',[ResourcesController::class,'country']);
-
 Route::post('webhook',function(Request $request){
     Log::channel('single')->info(json_encode(['payload' => $request->all(),'headers' => $request->headers])); 
     return response()->json(200);

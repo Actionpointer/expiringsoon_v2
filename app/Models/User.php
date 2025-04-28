@@ -6,7 +6,7 @@ namespace App\Models;
 use App\Models\Cart;
 use App\Models\Like;
 use App\Models\AdminPermission;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Order;
 use App\Models\State;
 use App\Models\Payout;
@@ -32,7 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $guarded = ['id'];
 
-    protected $appends = ['balance','image','max_products','total_products','total_shops','max_shops'];
+    protected $appends = ['image'];
 
     
     protected $hidden = [
@@ -65,13 +65,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->is_admin->permissions->contains($permissions);
     }
     
-    public function shops(){
-        return $this->hasMany(Shop::class);
+    public function stores(){
+        return $this->hasMany(Store::class);
     }
     
-    public function getBalanceAttribute(){
-        return $this->shops->sum('wallet');   
-    }
+
     public function products(){  
         return $this->hasManyThrough(Product::class,Shop::class,'user_id','shop_id');
     }
