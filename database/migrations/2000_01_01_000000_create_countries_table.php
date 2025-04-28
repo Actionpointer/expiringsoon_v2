@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('currency_code')->nullable();
             $table->string('dial', 5)->nullable();
             $table->string('continent');           
-            $table->string('gateway');           
+            $table->string('primary_gateway');           
+            $table->string('secondary_gateway')->nullable(); 
+            $table->json('verification_provision')->default('manual');  
             $table->json('banking_fields')->nullable();  // Structure: { "fields":, "digits": "VAT" }                   
             $table->json('verification_fields')->nullable();  // Structure: { "fields":, "digits": "VAT" }                   
             $table->json('transaction_charges')->nullable();// Structure:{ "percentage": 10, "fixed": 10000, "cap": 100000 }          
