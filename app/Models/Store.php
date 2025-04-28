@@ -28,7 +28,7 @@ use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Shop extends Model
+class Store extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     

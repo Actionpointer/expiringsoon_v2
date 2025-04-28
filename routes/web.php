@@ -135,13 +135,20 @@ Route::group(['middleware'=> ['auth','admin']],function(){
         Route::group(['prefix'=> 'currencies','as'=> 'currencies.'],function(){
             Route::get('/', [SettingsController::class,'currencies'])->name('index');
             Route::post('store', [SettingsController::class,'currency_store'])->name('store');
-            Route::get('{currency}', [SettingsController::class,'currency_edit'])->name('edit');
+            Route::post('update', [SettingsController::class,'currency_update'])->name('update');
         });
 
         Route::group(['prefix'=> 'places','as'=> 'places.'],function(){
             Route::get('/', [PlacesController::class,'index'])->name('index');
-            Route::post('store', [PlacesController::class,'store'])->name('store');
-            Route::get('{country}', [PlacesController::class,'edit'])->name('edit');
+            Route::post('country', [PlacesController::class,'country'])->name('country');
+            Route::get('setup/{country}', [PlacesController::class,'setup'])->name('setup');
+            Route::post('state', [PlacesController::class,'state'])->name('state');
+            Route::post('city', [PlacesController::class,'city'])->name('city');
+            
+
+            
+            
+
             Route::post('financial', [PlacesController::class,'updateFinancial'])->name('update.financial');
             Route::post('gateways', [PlacesController::class,'updateGateways'])->name('update.gateways');
             Route::post('banking', [PlacesController::class,'updateBanking'])->name('update.banking');
@@ -151,8 +158,7 @@ Route::group(['middleware'=> ['auth','admin']],function(){
             Route::get('countries',[PlacesController::class, 'index'])->name('countries');
             // Route::get('country/{country}',[PlacesController::class, 'country'])->name('country');
             Route::post('country/basic',[PlacesController::class, 'country_basic'])->name('country.basic');
-            Route::post('country/states',[PlacesController::class, 'country_states'])->name('country.states');
-            Route::post('country/cities',[PlacesController::class, 'country_cities'])->name('country.cities');
+            
             Route::post('state/manage',[PlacesController::class, 'state_manage'])->name('state.manage');
             Route::post('city/manage',[PlacesController::class, 'city_manage'])->name('city.manage');
         });

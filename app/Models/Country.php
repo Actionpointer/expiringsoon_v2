@@ -21,17 +21,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
-    protected $fillable = ['code','name','dialing_code','flag','currency_name','currency_iso','currency_symbol'];
+    protected $fillable = ['name', 'code', 'continent', 'dial', 'currency_code', 'verification_provider', 'primary_gateway', 'secondary_gateway', 'status'];
     
+    
+    public function setCodeAttribute($value)
+    {
+        $this->attributes['code'] = strtolower($value);
+    }
+
+    public function setCurrencyCodeAttribute($value)
+    {
+        $this->attributes['currency_code'] = strtolower($value);
+    }
+
     public function getRouteKeyName(){
         return 'code';
     }
 
+    // public function getSupportedAttribute(){
+    //     if($this->banking_fields || $this->verification_fields || $this->transaction_charges || ($this->payout_type && $this->payout_type != "manual")){
+    //         return true;
+    //     }
+    //     else return false;
+    // }
+
+
     public function users(){
         return $this->hasMany(User::class);
     }
-    public function shops(){
-        return $this->hasMany(Shop::class);
+    public function stores(){
+        return $this->hasMany(Store::class);
     }
     public function states(){
         return $this->hasMany(State::class);
@@ -40,7 +59,9 @@ class Country extends Model
         return $this->hasMany(Coupon::class);
     }
     public function currency(){
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class,'currency_code','code')->withDefault([
+            'code' => '','name' => '','symbol' => '','decimal_places' => 2,'decimal_name' => '','status' => 0
+        ]);
     }
     public function rates(){
         return $this->hasMany(Rate::class);

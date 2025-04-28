@@ -39,6 +39,13 @@ use App\Http\Controllers\Auth\ConfirmPasswordController;
 |
 */
 
+Route::get('countries',[ResourcesController::class,'countries']);
+Route::get('states/{country_id?}', [ResourcesController::class, 'states']);
+Route::get('cities/{state_id?}', [ResourcesController::class, 'cities']);
+Route::get('location', [ResourcesController::class, 'location']);
+
+Route::get('countries/{country_id}',[ResourcesController::class,'country']);
+
 Route::post('webhook',function(Request $request){
     Log::channel('single')->info(json_encode(['payload' => $request->all(),'headers' => $request->headers])); 
     return response()->json(200);
@@ -51,9 +58,7 @@ Route::post('password/email',[ForgotPasswordController::class,'sendResetLinkEmai
 Route::post('password/reset',[ResetPasswordController::class,'reset']);                                        
 
 Route::get('plans', [SubscriptionController::class, 'plans']);
-Route::get('location', [ResourcesController::class, 'location']);
-Route::get('states/{country_id?}', [ResourcesController::class, 'states']);
-Route::get('cities/{state_id}', [ResourcesController::class, 'cities']);
+
 Route::get('categories', [ResourcesController::class, 'categories']);
 Route::get('tags/{category_id}', [ResourcesController::class, 'tags']);
 Route::get('products',[ProductController::class,'index']);

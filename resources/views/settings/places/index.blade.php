@@ -130,6 +130,24 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-auto">
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
 
         <div class="table-responsive">
@@ -145,81 +163,78 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($countries as $country)
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <img class="avatar avatar-xss avatar-circle me-2" src="assets/vendor/flag-icon-css/flags/1x1/ng.svg" alt="Nigeria Flag">
-                                <span>Nigeria</span>
+                                <img class="avatar avatar-xss avatar-circle me-2" src="{{ 'https://ipdata.co/flags/'.strtolower($country->code).'.png' }}" alt="Nigeria Flag">
+                                <span>{{ $country->name }}</span>
                             </div>
                         </td>
                         <td>
-                            <span class="d-block">37 States</span>
-                            <small class="text-muted">774 Cities</small>
+                            <span class="d-block">{{ $country->states->count() }} States</span>
+                            <small class="text-muted">{{ $country->cities->count() }} Cities</small>
                         </td>
                         <td>
-                            <span class="d-block">NGN</span>
-                            <small class="text-muted">₦ Nigerian Naira</small>
+                            <span class="d-block">{{ strtoupper($country->currency->code) }}</span>
+                            <small class="text-muted">{{ $country->currency->name.' '.$country->currency->symbol }}</small>
                         </td>
                         <td>
+                            @if($country->banking_fields || $country->verification_fields || $country->transaction_charges || ($country->payout_type && $country->payout_type != "manual"))
                             <div class="d-flex gap-1">
+                                @if($country->verification_fields)
                                 <span class="badge bg-soft-success" data-bs-toggle="tooltip" title="Verification">
                                     <i class="bi-shield-check"></i>
                                 </span>
+                                @endif
+                                @if($country->banking_fields)
                                 <span class="badge bg-soft-success" data-bs-toggle="tooltip" title="Banking">
                                     <i class="bi-bank"></i>
                                 </span>
-                                <span class="badge bg-soft-success" data-bs-toggle="tooltip" title="Automatic Payouts">
+                                @endif
+                                @if($country->transaction_charges)
+                                <span class="badge bg-soft-success" data-bs-toggle="tooltip" title="Payments">
                                     <i class="bi-cash-coin"></i>
                                 </span>
+                                @endif
+                                @if($country->payout_type && $country->payout_type != "manual")
+                                <span class="badge bg-soft-success" data-bs-toggle="tooltip" title="Payouts">
+                                    <i class="bi-box-arrow-in-up-right"></i>
+                                </span>
+                                @endif
+
                             </div>
+                            @else
+                            <span class="badge bg-soft-warning">
+                                <i class="bi-exclamation-circle-fill me-1"></i> Pending
+                            </span>
+                            @endif
                         </td>
                         <td>
-                            <span class="badge bg-soft-success">Active</span>
+                            @if ($country->status == 0)
+                                <span class="badge bg-soft-danger">
+                                    <i class="bi-x-circle-fill me-1"></i> Inactive
+                                </span>
+                                
+                            @else
+                                <span class="badge bg-soft-success">
+                                    <i class="bi-check-circle-fill me-1"></i> Active
+                                </span>
+                            @endif
+                           
                         </td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{{route('admin.settings.places.edit',1)}}" class="btn btn-white btn-sm" data-bs-toggle="tooltip" title="Setup">
+                                <a href="{{route('admin.settings.places.setup',$country)}}" class="btn btn-white btn-sm" data-bs-toggle="tooltip" title="Setup">
                                     <i class="bi-gear-fill"></i>
                                 </a>
-                                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editCountryModal">
+                                <button type="button" class="btn btn-white btn-sm editCountryModal" data-country="{{ $country }}">
                                     <i class="bi-pencil-fill"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img class="avatar avatar-xss avatar-circle me-2" src="assets/vendor/flag-icon-css/flags/1x1/gh.svg" alt="Ghana Flag">
-                                <span>Ghana</span>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="d-block">16 States</span>
-                            <small class="text-muted">216 Cities</small>
-                        </td>
-                        <td>
-                            <span class="d-block">GHS</span>
-                            <small class="text-muted">₵ Ghana Cedi</small>
-                        </td>
-                        <td>
-                            <span class="badge bg-soft-warning">
-                                <i class="bi-exclamation-circle-fill me-1"></i> Pending
-                            </span>
-                        </td>
-                        <td>
-                            <span class="badge bg-soft-warning">Partial</span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editCountryModal">
-                                <i class="bi-pencil-fill"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <!-- Add more static country rows here -->
-
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -232,29 +247,31 @@
 
 @section('secondary')
 <div class="modal fade" id="addCountryModal" tabindex="-1" aria-labelledby="addCountryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg">
+        <form action="{{ route('admin.settings.places.country') }}" method="POST">
+            @csrf
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCountryModalLabel">Add New Country</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    
                         <!-- Basic Info -->
                         <div class="mb-4">
                             <h6>Basic Information</h6>
                             <div class="row">
                                 <div class="col-sm-6 mb-3">
                                     <label class="form-label">Country Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter country name">
+                                    <input type="text" name="name" class="form-control" placeholder="Enter country name">
                                 </div>
                                 <div class="col-sm-6 mb-3">
                                     <label class="form-label">Country Code</label>
-                                    <input type="text" class="form-control" placeholder="2-letter code (e.g. NG)">
+                                    <input type="text" name="code" class="form-control" placeholder="2-letter code (e.g. NG)">
                                 </div>
                                 <div class="col-sm-6 mb-3">
                                     <label class="form-label">Continent</label>
-                                    <select class="form-select">
+                                    <select class="form-select" name="continent">
                                         <option>Africa</option>
                                         <option>Asia</option>
                                         <option>Europe</option>
@@ -265,161 +282,209 @@
                                 </div>
                                 <div class="col-sm-6 mb-3">
                                     <label class="form-label">Dial Code</label>
-                                    <input type="text" class="form-control" placeholder="e.g. +234">
+                                    <input type="text" name="dial" class="form-control" placeholder="e.g. +234">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Currency Settings -->
                         <div class="mb-4">
-                            <h6>Currency Settings</h6>
+                            
                             <div class="row">
                                 <div class="col-sm-6 mb-3">
                                     <label class="form-label">Currency</label>
-                                    <select class="form-select">
-                                        <option>Nigerian Naira (NGN)</option>
-                                        <option>US Dollar (USD)</option>
-                                        <option>Euro (EUR)</option>
+                                    <select class="form-select" name="currency_code">
+                                        @foreach ($currencies as $currency)
+                                            <option value="{{$currency->code}}">{{ $currency->name."(".$currency->symbol.")" }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label">Verification Provider</label>
+                                    <select class="form-select" name="verification_provider">
+                                        <option value="manual">Manual Verification</option>
+                                    </select>
+                                </div>
+                                
                             </div>
                         </div>
 
-                        <!-- Verification Requirements -->
+                        <!-- Gateway -->
                         <div class="mb-4">
-                            <h6>Verification Requirements</h6>
-                            <div class="form-check form-switch mb-2">
-                                <input type="checkbox" class="form-check-input" id="verificationRequired">
-                                <label class="form-check-label">Enable Verification</label>
-                            </div>
+                            
+                            <h6>Gateway</h6>
                             <div class="row">
                                 <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Verification Type</label>
-                                    <select class="form-select">
-                                        <option>BVN</option>
-                                        <option>National ID</option>
-                                        <option>Passport</option>
+                                    <label class="form-label">Primary Gateway</label>
+                                    <select class="form-select" name="primary_gateway">
+                                        <option value=""></option>
+                                        <option value="paystack">Paystack</option>
+                                        <option value="flutterwave">Flutterwave</option>
+                                        <option value="paypal">Paypal</option>
+                                        <option value="stripe">Stripe</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Required Fields</label>
-                                    <input type="text" class="form-control" placeholder="Comma separated fields">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Banking Settings -->
-                        <div class="mb-4">
-                            <h6>Banking Settings</h6>
-                            <div class="form-check form-switch mb-2">
-                                <input type="checkbox" class="form-check-input" id="bankingEnabled">
-                                <label class="form-check-label">Enable Banking</label>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Banking Gateway</label>
-                                    <select class="form-select">
-                                        <option>Paystack</option>
-                                        <option>Flutterwave</option>
-                                        <option>Manual Bank Transfer</option>
+                                    <label class="form-label">Secondary Gateway</label>
+                                    <select class="form-select" name="secondary_gateway">
+                                        <option value="">None</option>
+                                        <option value="paystack">Paystack</option>
+                                        <option value="flutterwave">Flutterwave</option>
+                                        <option value="paypal">Paypal</option>
+                                        <option value="stripe">Stripe</option>
                                     </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Required Fields</label>
-                                    <input type="text" class="form-control" placeholder="Account number, Bank code">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Withdrawal Settings -->
-                        <div class="mb-4">
-                            <h6>Withdrawal Settings</h6>
-                            <div class="row">
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Withdrawal Type</label>
-                                    <select class="form-select">
-                                        <option>Automatic</option>
-                                        <option>Manual</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Daily Limit</label>
-                                    <input type="number" class="form-control" placeholder="Enter amount">
-                                </div>
+                                </div> 
                             </div>
                         </div>
 
                         <!-- Status -->
                         <div class="mb-4">
                             <div class="form-check form-switch">
-                                <input type="checkbox" class="form-check-input" id="countryStatus">
+                                <input type="checkbox" name="status" value="1" class="form-check-input" id="countryStatus">
                                 <label class="form-check-label">Enable Country</label>
                             </div>
                         </div>
-                    </form>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Add Country</button>
+                    <button type="submit" class="btn btn-primary">Add Country</button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
+</div>
 
-    <!-- Edit Country Modal -->
-    <div class="modal fade" id="editCountryModal" tabindex="-1" aria-labelledby="editCountryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+<!-- Edit Country Modal -->
+<div class="modal fade" id="editCountryModal" tabindex="-1" aria-labelledby="editCountryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form action="{{ route('admin.settings.places.country') }}" method="POST">@csrf
+            <input type="hidden" name="country_id" id="edit-country-id">
+            <input type="hidden" name="action" value="edit">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editCountryModalLabel">Edit Country - Nigeria</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <!-- Same form structure as Add Country Modal but with pre-filled values -->
-                    <form>
-                        <!-- Basic Info -->
-                        <div class="mb-4">
-                            <h6>Basic Information</h6>
-                            <div class="row">
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Country Name</label>
-                                    <input type="text" class="form-control" value="Nigeria">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Country Code</label>
-                                    <input type="text" class="form-control" value="NG">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Continent</label>
-                                    <select class="form-select">
-                                        <option selected>Africa</option>
-                                        <option>Asia</option>
-                                        <option>Europe</option>
-                                        <option>North America</option>
-                                        <option>South America</option>
-                                        <option>Oceania</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Dial Code</label>
-                                    <input type="text" class="form-control" value="+234">
-                                </div>
+                <div class="modal-body">    
+                    <div class="mb-4">
+                        <h6>Basic Information</h6>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Country Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Enter country name" id="edit-country-name">
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Country Code</label>
+                                <input type="text" name="code" class="form-control" placeholder="2-letter code (e.g. NG)" id="edit-country-code">
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Continent</label>
+                                <select class="form-select" name="continent" id="edit-country-continent">
+                                    <option>Africa</option>
+                                    <option>Asia</option>
+                                    <option>Europe</option>
+                                    <option>North America</option>
+                                    <option>South America</option>
+                                    <option>Oceania</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Dial Code</label>
+                                <input type="text" name="dial" class="form-control" placeholder="e.g. +234" id="edit-country-dial">
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Pre-filled sections continue with same structure... -->
+                    <!-- Currency Settings -->
+                    <div class="mb-4">
                         
-                    </form>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Currency</label>
+                                <select class="form-select" name="currency_code" id="edit-country-currency">
+                                    <option value=""></option>
+                                    @foreach ($currencies as $currency)
+                                        <option value="{{$currency->code}}">{{ $currency->name."(".$currency->symbol.")" }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Verification Provider</label>
+                                <select class="form-select" name="verification_provider" id="edit-country-verification-provider">
+                                    <option value="manual">Manual Verification</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Gateway -->
+                    <div class="mb-4">
+                        
+                        <h6>Gateway</h6>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Primary Gateway</label>
+                                <select class="form-select" name="primary_gateway">
+                                    <option value=""></option>
+                                    <option value="paystack">Paystack</option>
+                                    <option value="flutterwave">Flutterwave</option>
+                                    <option value="paypal">Paypal</option>
+                                    <option value="stripe">Stripe</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Secondary Gateway</label>
+                                <select class="form-select" name="secondary_gateway">
+                                    <option value="">None</option>
+                                    <option value="paystack">Paystack</option>
+                                    <option value="flutterwave">Flutterwave</option>
+                                    <option value="paypal">Paypal</option>
+                                    <option value="stripe">Stripe</option>
+                                </select>
+                            </div> 
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" name="status" value="1" class="form-check-input" id="edit-country-status">
+                            <label class="form-check-label">Enable Country</label>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger me-2">Disable Country</button>
-                    <button type="button" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
+</div>
 @endsection
 @push('scripts')
+<script>
+    $(document).ready(function () {
+        // Attach click event to all buttons with the class 'editCountryModal'
+        $('.editCountryModal').on('click', function () {
+            // Get the country data from the data-country attribute
+            const country = $(this).data('country');
 
+            // Populate the modal fields with the extracted data
+            $('#edit-country-name').val(country.name);
+            $('#edit-country-code').val(country.code);
+            $('#edit-country-continent').val(country.continent);
+            $('#edit-country-dial').val(country.dial);
+            $('#edit-country-currency').val(country.currency_code);
+            $('#edit-country-verification-provider').val(country.verification_provider);
+            $('#edit-country-status').prop('checked', country.status);
+
+            // Show the modal
+            $('#editCountryModal').modal('show');
+        });
+    });
+</script>
 @endpush

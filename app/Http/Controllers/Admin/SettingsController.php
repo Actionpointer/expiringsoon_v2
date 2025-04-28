@@ -37,6 +37,45 @@ class SettingsController extends Controller
         return view('settings.currencies',compact('currencies'));
     }
 
+    public function currency_store(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'code' => 'required|unique:currencies,code',
+            'symbol' => 'required',
+            'decimal_places' => 'required',
+            'decimal_name' => 'required',
+            'status' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
+        }
+        
+        Currency::Create($request->except('_token'));
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Currency Created Successfully']);
+
+    }
+
+    public function currency_update(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'currency_id' => 'required',
+            'name' => 'required',
+            'code' => 'required|exists:currencies,code',
+            'symbol' => 'required',
+            'decimal_places' => 'required',
+            'decimal_name' => 'required',
+            'status' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with(['result'=> 0,'message'=> $validator->errors()->first()]);
+        }
+        
+        Currency::where('id',$request->currency_id)->update($request->except(['currency_id','_token']));
+        return redirect()->back()->with(['result'=> 1,'message'=> 'Currency Updated Successfully']);
+
+    }
+
     public function store(Request $request){
         if(!$this->checkPin($request)['result']){
             return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);

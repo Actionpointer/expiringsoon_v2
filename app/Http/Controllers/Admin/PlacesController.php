@@ -17,27 +17,166 @@ class PlacesController extends Controller
     
     public function index(){
         $countries = Country::all();
-        return view('settings.places.index',compact('countries'));
+        $currencies = Currency::all();
+        return view('settings.places.index',compact('countries','currencies'));
     }
 
-    public function store(Request $request){
-        dd($request->all());
+    public function country(Request $request)
+    {
+        if($request->country_id){
+            $country = Country::find($request->country_id);
+            if(!$country){
+                return redirect()->back()->with(['result'=> 0,'message'=> 'Country not found']);
+            }
+            if($request->action == 'delete'){
+                if($country->stores->count() || $country->users->count() || $country->addresses->count() || $country->states->count() || $country->cities->count()){
+                    return redirect()->back()->with(['result'=> 0,'message'=> 'Country cannot be deleted']);
+                }else{
+                    $country->delete();
+                    return redirect()->back()->with(['result'=> 1,'message'=> 'Country deleted successfully']);
+                }
+            }
+            if($request->action == 'update'){
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'code' => 'required|string|max:2|unique:countries,code,' . $country->id,
+                    'continent' => 'required|string',
+                    'dial' => 'required|string|max:10',
+                    'currency_code' => 'required|string|exists:currencies,code',
+                    'verification_provider' => 'required|string',
+                    'primary_gateway' => 'nullable|string',
+                    'secondary_gateway' => 'nullable|string',
+                    'status' => 'nullable|boolean',
+                ]);
+                $country->update([
+                    'name' => $request->name,
+                    'code' => strtoupper($request->code),
+                    'continent' => $request->continent,
+                    'dial' => $request->dial,
+                    'currency_code' => $request->currency_code,
+                    'verification_provider' => $request->verification_provider,
+                    'primary_gateway' => $request->primary_gateway,
+                    'secondary_gateway' => $request->secondary_gateway,
+                    'status' => $request->status,
+                ]);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'Country updated successfully']);
+            }
+        }else{
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'code' => 'required|string|max:2|unique:countries,code,' . $country->id,
+                'continent' => 'required|string',
+                'dial' => 'required|string|max:10',
+                'currency_code' => 'required|string|exists:currencies,code',
+                'verification_provider' => 'required|string',
+                'primary_gateway' => 'nullable|string',
+                'secondary_gateway' => 'nullable|string',
+                'status' => 'nullable|boolean',
+            ]);
+            Country::create([
+                'name' => $request->name,
+                'code' => strtoupper($request->code),
+                'continent' => $request->continent,
+                'dial' => $request->dial,
+                'currency_code' => $request->currency_code,
+                'verification_provider' => $request->verification_provider,
+                'primary_gateway' => $request->primary_gateway,
+                'secondary_gateway' => $request->secondary_gateway,
+                'status' => $request->status,
+            ]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Country added successfully']);
+        }
     }
 
-    public function edit(Country $country){
+    public function setup(Country $country){
         return view('settings.places.country',compact('country'));
     }
 
-    public function country(Country $country){
-        $currencies = Currency::all();
-        return view('admin.settings.country',compact('country','currencies'));
+    public function state(Request $request){
+        if($request->state_id){
+            $state = State::find($request->state_id);
+            if(!$state){
+                return redirect()->back()->with(['result'=> 0,'message'=> 'State not found']);
+            }
+            if($request->action == 'delete'){
+                if($state->stores->count() || $state->users->count() || $state->addresses->count() || $state->cities->count()){
+                    return redirect()->back()->with(['result'=> 0,'message'=> 'State cannot be deleted']);
+                }else{
+                    $state->delete();
+                    return redirect()->back()->with(['result'=> 1,'message'=> 'State deleted successfully']);
+                }
+            }
+            if($request->action == 'update'){
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'status' => 'nullable|boolean',
+                ]);
+                $state->update([
+                    'name' => $request->name,
+                    'status' => $request->status,
+                ]);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'State updated successfully']);
+            }
+        }else{
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'country_id' => 'required',
+                'status' => 'nullable|boolean',
+            ]);
+            State::create([
+                'name' => $request->name,
+                'country_id' => $request->country_id,
+                'status' => $request->status,
+            ]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'State added successfully']);
+        }
+    }
+
+    public function city(Request $request){
+        if($request->city_id){
+            $city = City::find($request->city_id);
+            if(!$city){
+                return redirect()->back()->with(['result'=> 0,'message'=> 'City not found']);
+            }
+            if($request->action == 'delete'){
+                if($city->stores->count() || $city->users->count() || $city->addresses->count() || $city->cities->count()){
+                    return redirect()->back()->with(['result'=> 0,'message'=> 'City cannot be deleted']);
+                }else{
+                    $city->delete();
+                    return redirect()->back()->with(['result'=> 1,'message'=> 'City deleted successfully']);
+                }
+            }
+            if($request->action == 'update'){
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'status' => 'nullable|boolean',
+                ]);
+                $city->update([
+                    'name' => $request->name,
+                    'status' => $request->status,
+                ]);
+                return redirect()->back()->with(['result'=> 1,'message'=> 'City updated successfully']);
+            }
+        }else{
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'state_id' => 'required',
+                'status' => 'nullable|boolean',
+            ]);
+            City::create([
+                'name' => $request->name,
+                'state_id' => $request->state_id,
+                'status' => $request->status,
+            ]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'City added successfully']);
+        }
     }
 
     public function country_basic(Request $request){
         if(!$this->checkPin($request)['result']){
             return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
         }
-        $country = Country::find($request->country_id);
+        $country = Country::find($request->state_id);
         $country->currency_id = $request->currency_id;
         $country->payment_gateway = $request->payment_gateway;
         $country->payout_gateway = $request->payout_gateway;

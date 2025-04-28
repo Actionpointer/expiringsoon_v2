@@ -44,6 +44,7 @@ return [
         'token'=> env('PAYPAL_ACCESS_TOKEN'),
         'url'=> env('PAYPAL_URL'),
     ],
-    'countrystatecity' => env('COUNTRYSTATECITY')
+    'countrystatecity' => env('COUNTRYSTATECITY'),
+    'ipdata' => env('IPDATA_API_KEY')
 
 ];

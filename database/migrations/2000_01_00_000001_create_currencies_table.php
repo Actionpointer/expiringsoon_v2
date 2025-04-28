@@ -17,11 +17,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('symbol');
+            $table->string('decimal_places');
+            $table->string('decimal_name');
             $table->boolean('status');
             $table->timestamps();
         });
         DB::table('currencies')->insert([
-            ['id' => 1, 'name' => 'Naira', 'code' => 'NGN', 'symbol' => '₦','status'=> 1],
+            ['id' => 1, 'name' => 'Naira', 'code' => 'NGN', 'symbol' => '₦','decimal_name'=>'Kobo','decimal_places'=> '2','status'=> 1],
             
         ]);
 

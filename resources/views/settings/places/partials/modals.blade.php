@@ -1,68 +1,229 @@
 <!-- State Modals -->
 <div class="modal fade" id="addStateModal" tabindex="-1" aria-labelledby="addStateModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+        <form action="{{ route('admin.settings.places.state') }}" method="post">@csrf
+            <input type="hidden" name="country_id" value="{{ $country->id }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStateModalLabel">Add New State</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                        <div class="mb-4">
+                            <label class="form-label">State</label>
+                            <input name="name" class="form-control" placeholder="Name of state" required>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" name="status" value="1" class="form-check-input" id="stateStatus" checked>
+                                <label class="form-check-label">Active</label>
+                            </div>
+                        </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary"> <span id="state_action">Add</span> State</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="editStateModal" tabindex="-1" aria-labelledby="editStateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.settings.places.state') }}" method="post">@csrf
+            <input type="hidden" name="state_id" value="">
+            <input type="hidden" name="action" value="update">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editStateModalLabel">Edit <span class="state_label"></span> State</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                        <div class="mb-4">
+                            <label class="form-label">State</label>
+                            <input name="name" class="form-control state_name" placeholder="Name of state" required>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" name="status" value="1" class="form-check-input" id="stateStatus" checked>
+                                <label class="form-check-label">Active</label>
+                            </div>
+                        </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary"> Update <span class="state_label"></span> State</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteStateModal" tabindex="-1" aria-labelledby="deleteStateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.settings.places.state') }}" method="post">@csrf
+            <input type="hidden" name="state_id" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteStateModalLabel">Delete <span class="state_label"></span> State</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <p>Are you sure you want to delete <span class="state_label"></span> state?</p>
+                    <p>This action cannot be undone.</p>
+                    <input type="hidden" name="action" value="delete">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Delete <span class="state_label"></span> State</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="viewCitiesModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addStateModalLabel">Add New State</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Cities in Lagos</h5>
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCityModal">Add New</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="mb-4">
-                        <label class="form-label">State Name</label>
-                        <input type="text" class="form-control" placeholder="Enter state name">
-                    </div>
-                    <div class="mb-4">
-                        <div class="form-check form-switch">
-                            <input type="checkbox" class="form-check-input" id="stateStatus" checked>
-                            <label class="form-check-label">Active</label>
+                
+                <div class="row">
+                    @foreach($country->cities as $city)
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <div class="card card-body">
+                            <div class="d-flex justify-content-between">
+                                <h6>{{ $city->name }}</h6>
+                                <div>
+                                    <a class="p-2 bg-info rounded"> <span class="bi-pen"></span></a>
+                                    <a class="p-2 bg-danger rounded"> <span class="bi-trash"></span></a>
+                                </div>
+                                
+                            </div>
                         </div>
                     </div>
-                </form>
+                    @endforeach
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Add State</button>
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- City Modals -->
 <div class="modal fade" id="addCityModal" tabindex="-1" aria-labelledby="addCityModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addCityModalLabel">Add New City</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
+        <form action="{{ route('admin.settings.places.city') }}" method="post">@csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCityModalLabel">Add New City</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">        
                     <div class="mb-4">
                         <label class="form-label">City Name</label>
-                        <input type="text" class="form-control" placeholder="Enter city name">
+                        <input type="text" name="name" class="form-control" placeholder="Enter city name">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">State</label>
-                        <select class="form-select">
-                            <option>Lagos</option>
-                            <option>Abuja</option>
-                            <option>Rivers</option>
+                        <select class="form-select" name="state_id">
+                            <option value="" selected>Select State</option>
+                            @foreach ($country->states as $state)
+                                <option value="{{ $state->id }}">{{ $state->name }}</option>         
+                            @endforeach
                         </select>
                     </div>
                     <div class="mb-4">
                         <div class="form-check form-switch">
-                            <input type="checkbox" class="form-check-input" id="cityStatus" checked>
+                            <input type="checkbox" name="status" value="1" class="form-check-input" id="cityStatus" checked>
                             <label class="form-check-label">Active</label>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add City</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Add City</button>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="editCityModal" tabindex="-1" aria-labelledby="editCityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.settings.places.city') }}" method="post">@csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCityModalLabel">Edit <span class="city_label"></span> City</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">        
+                    <div class="mb-4">
+                        <label class="form-label">City Name</label>
+                        <input type="text" name="name" class="form-control city_name" placeholder="Enter city name">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">State</label>
+                        <select class="form-select" name="state_id">
+                            <option value="" selected>Select State</option>
+                            @foreach ($country->states as $state)
+                                <option value="{{ $state->id }}">{{ $state->name }}</option>         
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" name="status" value="1" class="form-check-input" id="cityStatus" checked>
+                            <label class="form-check-label">Active</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update <span class="city_label"></span> City</button>
+                </div>
             </div>
-        </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteCityModal" tabindex="-1" aria-labelledby="deleteCityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.settings.places.city') }}" method="post">@csrf
+            <input type="hidden" name="city_id" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCityModalLabel">Delete <span class="city_label"></span> City</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <p>Are you sure you want to delete <span class="city_label"></span> city?</p>
+                    <p>This action cannot be undone.</p>
+                    <input type="hidden" name="action" value="delete">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Delete <span class="city_label"></span> City</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 

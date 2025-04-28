@@ -47,49 +47,22 @@ Stores
 
 
 
+anybody can register
+only users from supported countries can use the application
+
+if a user tries to visit from a country not supported, 
+because we don't have the currency for that country, no products
+
+a. list all countries
+b. list only supported countries
+c. let anybody register, get their country via ip_address
+   populate the country table with it if the country is not available
 
 
 
 
 
-
-
-  products{
-    can browse/create/edit/delete
-    can feature one or many as ads
-    can see analytics (views/mails/follows/)
-    can respond to message
-    can publish newsletter of product to customer
-  }
-  order{
-    can browse
-    can change order status
-  }
-
-CUSTOMER {
-  products {
-    can browse many
-    can view one
-    can add to wishlist
-    can add (single/multiples of one/ single or multiples of many) to cart
-    can checkout one/many at once
-    can buy ahead (i.e pay for item before price drops, to receive it when price drops)
-    can share to social media
-    can follow a product: to receive notifications about the product price drop
-    can message vendor about product
-  }
-  shipment address{
-    can create/edit/delete
-    can select/create new during checkout
-  }
-  vendor {
-    can browse many
-    can view one (this will list all products of the vendor)
-    can bookmark/save vendor 
-    can message vendor
-  }
-
-}
+  
 
 
 

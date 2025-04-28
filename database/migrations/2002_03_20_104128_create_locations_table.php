@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('ipaddress');
+            $table->string('ip');
             $table->unsignedBigInteger('country_id');
-            $table->string('state_id');
-            $table->unsignedBigInteger('city_id')->nullable();
-            $table->unsignedBigInteger('status')->nullable();
+            $table->string('country');
+            $table->string('continent');
+            $table->string('dial');
+            $table->string('state');
+            $table->string('city');
+            
             $table->timestamps();
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });

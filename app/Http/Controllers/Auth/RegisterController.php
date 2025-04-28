@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -58,12 +59,13 @@ class RegisterController extends Controller
     
     protected function create(array $data)
     {
+        $location = Location::where('ip',request()->ip())->first();
         return User::create([
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'firstname' => $data['firstname'],
             'surname' => $data['surname'],
-            'country_id' => 1,
+            'country_id' => $location->country_id,
         ]);
     }
 }

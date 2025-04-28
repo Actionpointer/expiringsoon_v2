@@ -11,18 +11,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Location extends Model
 {
     use HasFactory;
-    protected $fillable = ['ipaddress','status','country_id','state_id','city_id'];
+    protected $fillable = ['ip','country_id','country','continent','state','city','dial'];
 
     public function country(){
         return $this->belongsTo(Country::class);
     }
-    public function state(){
-        return $this->belongsTo(State::class);
-    }
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-    public function getPlaceAttribute(){
-        return ($this->city? $this->city->name.', ':'').$this->state->name.','.$this->country->name;
-    }
+    
 }

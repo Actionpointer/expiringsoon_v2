@@ -21,29 +21,16 @@ class LocationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!session('locale')){
-            $ip = request()->ip() == '::1'|| request()->ip() == '127.0.0.1'? '197.211.58.12' : request()->ip();
-            //check location table first
-            if($location = $this->getLocation($ip)){
-                if(!$location->status){
-                    return $request->expectsJson()
-                    ? response()->json(['status'=> false,'message' => 'Access is Prohibited'], 403)
-                    : \abort(403);
-                }
-                session(['locale'=> $this->getLocale($location)]);
-            }else{
-                //check outside
-                $result = Curl::to('http://www.geoplugin.net/php.gp?ip='.$ip)->get();
-                $geo_location =  unserialize($result);
-                $location = $this->saveLocation($geo_location);
-                if($geo_location &&  $geo_location['geoplugin_countryCode']){
-                    session(['locale'=> $this->getLocale($location)]);   
-                    
-                }else{
-                    session(['locale'=> $this->getLocale()]);      
-                }
+        //178.238.11.6 || 197.211.58.12
+        $ip = request()->ip() == '::1'|| request()->ip() == '127.0.0.1'? '197.211.58.12' : request()->ip();
+        if(!cache('visitors') || cache('visitors') == null || cache('visitors') == [] || !in_array($ip,cache('visitors'))){
+            $result = Curl::to("https://api.ipdata.co/".$ip."?api-key=".config('services.ipdata'))->asJsonResponse()->get();
+            if($result){
+                $this->saveCountry($result);
+                $visitors[] = $ip;
+                cache(['visitors'=> $visitors]);       
             }
-        }    
+        }
         return $next($request);
     }
 }

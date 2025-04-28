@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-soft-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateStatesModal">
+                    <button type="button" class="btn btn-soft-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addStateModal">
                         <i class="bi-gear"></i> Manage States
                     </button>
                 </div>
@@ -54,7 +54,7 @@
                         <tr>
                             <th>State</th>
                             <th>Cities</th>
-                            <th>Last Updated</th>
+                            
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -65,128 +65,40 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <span>Lagos</span>
-                                    <span class="badge bg-soft-primary ms-2">Popular</span>
                                 </div>
                             </td>
                             <td>
-                                <span class="d-block h5 mb-0">20 Cities</span>
-                                <span class="d-block fs-6 text-body">18 Active</span>
-                            </td>
-                            <td>
-                                <span class="d-block h5 mb-0">2 days ago</span>
-                                <span class="d-block fs-6 text-body">via Google Places</span>
-                            </td>
-                            <td>
-                                <div class="form-check form-switch">
-                                    <input type="checkbox" class="form-check-input" id="stateStatus1" checked>
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <span class="d-block h5 mb-0">{{ $country->cities->count() }} Cities</span>
+                                        <span class="d-block small text-body">18 Active</span>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#viewCitiesModal" 
+                                            data-state="Lagos">
+                                        <i class="bi-building"></i> View Cities
+                                    </button>
                                 </div>
+                                
+                            </td>
+                            
+                            <td>
+                                <span class="badge bg-soft-primary">Popular</span>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#viewCitiesModal" 
-                                        data-state="Lagos">
-                                    <i class="bi-building"></i> View Cities
+                                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editStateModal" 
+                                        data-state="">
+                                    <i class="bi-pen"></i> Edit
                                 </button>
+                                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#deleteStateModal" 
+                                        data-state="">
+                                    <i class="bi-trash "></i> Delete
+                                </button>
+                                
                             </td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Update States Modal -->
-<div class="modal fade" id="updateStatesModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Manage States</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-soft-info">
-                    <div class="d-flex">
-                        <div class="flex-shrink-0">
-                            <i class="bi-info-circle"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-2">
-                            States and cities are automatically updated from Google Places API when users add addresses.
-                            You can manage their visibility and status here.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-check form-switch">
-                                <input type="checkbox" class="form-check-input" id="autoUpdateLocations" checked>
-                                <label class="form-check-label">Auto-update from Google Places</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-check form-switch">
-                                <input type="checkbox" class="form-check-input" id="autoActivateLocations" checked>
-                                <label class="form-check-label">Auto-activate new locations</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label">Popular States</label>
-                    <select class="form-select" multiple data-tom-select>
-                        <option value="lagos" selected>Lagos</option>
-                        <option value="abuja">Abuja</option>
-                        <option value="rivers">Rivers</option>
-                    </select>
-                    <small class="form-text">These states will be prioritized in dropdowns and searches</small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- View Cities Modal -->
-<div class="modal fade" id="viewCitiesModal" tabindex="-1">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Cities in Lagos</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Cities Search -->
-                <div class="mb-4">
-                    <div class="input-group input-group-merge">
-                        <div class="input-group-prepend input-group-text">
-                            <i class="bi-search"></i>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Search cities...">
-                    </div>
-                </div>
-
-                <!-- Cities Grid -->
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-                    <div class="col mb-3">
-                        <div class="card card-body">
-                            <div class="form-check form-switch">
-                                <input type="checkbox" class="form-check-input" id="cityIkeja" checked>
-                                <label class="form-check-label">Ikeja</label>
-                            </div>
-                            <small class="text-muted">Last updated: 2 days ago</small>
-                        </div>
-                    </div>
-                    <!-- More city cards -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
     </div>

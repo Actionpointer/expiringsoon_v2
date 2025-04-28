@@ -3,7 +3,7 @@
 namespace App\Models;
 use App\Models\City;
 use App\Models\Rate;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\Country;
@@ -16,11 +16,7 @@ class State extends Model
 {
     protected $fillable = ['name','iso','country_id'];
 
-    public static function boot()
-    {
-        parent::boot();
-        parent::observe(new StateObserver);
-    }
+    
     public function country(){
         return $this->belongsTo(Country::class);
     }
@@ -28,8 +24,8 @@ class State extends Model
     public function cities(){
         return $this->hasMany(City::class);
     }
-    public function shops(){
-        return $this->hasMany(Shop::class);
+    public function stores(){
+        return $this->hasMany(Store::class);
     }
     public function users(){
         return $this->hasMany(User::class);
@@ -45,17 +41,7 @@ class State extends Model
     }
 
     public function products(){
-        return $this->hasManyThrough(Product::class,Shop::class);
+        return $this->hasManyThrough(Product::class,Store::class);
     }
-    public function scopeWithin($query){
-        if(auth()->check()){
-            if(auth()->user()->role->name == 'superadmin')
-                return $query->limit('10');
-            else return $query->where('country_id',auth()->user()->country_id);
-        }else{
-            $country = session('locale')['country_id'];
-            return $query->where('country_id',$country);
-        }
-        
-    }
+    
 }
