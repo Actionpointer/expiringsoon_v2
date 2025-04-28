@@ -31,7 +31,7 @@ return new class extends Migration
         });
         DB::table('users')->insert([
             ['id' => 1, 'firstname' => 'Super', 'surname' => 'Admin', 'email' => 'reigningkingforever@gmail.com',
-            'password'=>'','country_id'=> '1','require_password_change'=> 1],
+            'password'=>'$2y$12$H03UYTKV.ZVaim0QqNZvn.2boOO3iYGrIc6T6LB/J0056fqm.k3yi','country_id'=> '1','require_password_change'=> 1],
             
         ]);
     }
