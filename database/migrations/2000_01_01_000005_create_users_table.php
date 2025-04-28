@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -28,6 +29,11 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
+        DB::table('users')->insert([
+            ['id' => 1, 'firstname' => 'Super', 'surname' => 'Admin', 'email' => 'reigningkingforever@gmail.com',
+            'password'=>'','country_id'=> '1','require_password_change'=> 1],
+            
+        ]);
     }
 
     /**
