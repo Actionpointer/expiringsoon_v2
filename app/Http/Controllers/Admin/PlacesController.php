@@ -64,7 +64,7 @@ class PlacesController extends Controller
         }else{
             $request->validate([
                 'name' => 'required|string|max:255',
-                'code' => 'required|string|max:2|unique:countries,code,' . $country->id,
+                'code' => 'required|string|max:2|unique:countries,code',
                 'continent' => 'required|string',
                 'dial' => 'required|string|max:10',
                 'currency_code' => 'required|string|exists:currencies,code',
