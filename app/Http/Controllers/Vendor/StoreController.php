@@ -23,7 +23,7 @@ use App\Http\Resources\ShopDetailsResource;
 use App\Http\Resources\NotificationResource;
 
 
-class ShopController extends Controller
+class StoreController extends Controller
 {
     use SecurityTrait;
 

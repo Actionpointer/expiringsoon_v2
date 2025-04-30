@@ -208,11 +208,11 @@ class ProductController extends Controller
         return view('vendor.shop.product.upload',compact('shop','tags'));
     }
 
-    public function template_download(Shop $shop){
+    public function download_template(Shop $shop){
         return Excel::download(new ProductsTemplateExport($shop), 'product_template.xlsx');
     }
 
-    public function product_upload(Shop $shop,Request $request){
+    public function upload(Shop $shop,Request $request){
         try {
             Excel::import(new ProductsImport($shop->id), $request->file('products'));
         }

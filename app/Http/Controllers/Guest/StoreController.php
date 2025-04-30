@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopResource;
 use App\Http\Resources\ShopDetailsResource;
 
-class ShopController extends Controller
+class StoreController extends Controller
 {
     
     public function index(){

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Kyc;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Country;
 use App\Models\Rejection;
@@ -12,7 +12,7 @@ use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
 
 
-class ShopController extends Controller
+class StoreController extends Controller
 {
     use SecurityTrait;
     public function __construct()
@@ -26,10 +26,10 @@ class ShopController extends Controller
         $status = 'all';
         $sortBy = null;
         $name = null;
-        $shops = Shop::where('approved',true);
+        $stores = Store::where('approved',true);
         if(request()->query() && request()->query('name')){
             $name = request()->query('name');
-            $shops = $shops->where(function($or) use($name){
+            $stores = $stores->where(function($or) use($name){
                 $or->where('name','LIKE',"%$name%")->orWhereHas('user',function($us)use($name){
                     $us->where('fname','LIKE',"%$name%")->orWhere('lname','LIKE',"%$name%");
                 });
@@ -37,60 +37,60 @@ class ShopController extends Controller
         }
         if(request()->query() && request()->query('country_id')){
             $country_id = request()->query('country_id');
-            $shops = $shops->where('country_id',$country_id);
+            $stores = $stores->where('country_id',$country_id);
         }else{
             $country_id = 0;
         }
         if(request()->query() && request()->query('status') && request()->query('status') != 'all'){
             $status = request()->query('status');
             if($status == 'live')
-            $shops = $shops->isApproved()->isVisible()->isActive();
+            $stores = $stores->isApproved()->isVisible()->isActive();
             if($status == 'pending')
-            $shops = $shops->where('approved',false);
+            $stores = $stores->where('approved',false);
             if($status == 'rejected'){
-            $shops = $shops->has('rejected');
+            $stores = $stores->has('rejected');
             }
             if($status == 'inactive')
-            $shops = $shops->where('status',false);
+            $stores = $stores->where('status',false);
             if($status == 'draft')
-            $shops = $shops->where('published',false);
+            $stores = $stores->where('published',false);
         }
         
         if(request()->query() && request()->query('sortBy')){
             $sortBy = request()->query('sortBy');
             if(request()->query('sortBy') == 'name_asc'){
-                $shops = $shops->orderBy('name','asc');
+                $stores = $stores->orderBy('name','asc');
             }
             if(request()->query('sortBy') == 'name_desc'){
-                $shops = $shops->orderBy('name','desc');
+                $stores = $stores->orderBy('name','desc');
             }
             
         }
         $countries = Country::all();
-        $shops = $shops->paginate(16);
-        return view('shops.list',compact('shops','status','countries','country_id','sortBy','name'));
+        $stores = $stores->paginate(16);
+        return view('stores.list',compact('stores','status','countries','country_id','sortBy','name'));
     }
 
 
-    public function show(Shop $shop){
-        return view('shops.view',compact('shop'));
+    public function show(Store $store){
+        return view('stores.view',compact('store'));
     }
 
     public function manage(Request $request){
         if(!$this->checkPin($request)['result']){
             return redirect()->back()->with(['result'=> $this->checkPin($request)['result'],'message'=> $this->checkPin($request)['message']]);
         }
-        $shop = Shop::find($request->shop_id);
+        $store = Store::find($request->store_id);
         if($request->approved){
-            $shop->approved = $request->approved;
-            $shop->save();
-            Rejection::where('rejectable_id',$shop->id)->where('rejectable_type','App\Models\Shop')->delete();
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Shop Approved Successfully']);
+            $store->approved = $request->approved;
+            $store->save();
+            Rejection::where('rejectable_id',$store->id)->where('rejectable_type','App\Models\Store')->delete();
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Store Approved Successfully']);
         }else{
-            $shop->approved = $request->approved;
-            $shop->save();
-            $shop->rejected()->create(['reason'=> $request->reason,'rejectable_id'=> $shop->id,'rejectable_type' => get_class($shop)]);
-            return redirect()->back()->with(['result'=> 1,'message'=> 'Shop Rejected Successfully']);
+            $store->approved = $request->approved;
+            $store->save();
+            $store->rejected()->create(['reason'=> $request->reason,'rejectable_id'=> $store->id,'rejectable_type' => get_class($store)]);
+            return redirect()->back()->with(['result'=> 1,'message'=> 'Store Rejected Successfully']);
             
         }
     }

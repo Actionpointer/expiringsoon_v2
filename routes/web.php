@@ -33,21 +33,20 @@ Route::post('password/reset',[ResetPasswordController::class,'reset'])->name('pa
 Route::get('password/reset/{token}',[ResetPasswordController::class,'showResetForm'])->name('password.reset');
 
 Route::group(['middleware'=> ['auth','admin']],function(){
+    Route::get('home', [HomeController::class, 'home'])->name('home');
     Route::get('change_password',[LoginController::class, 'force_password_change_form'] )->name('forcepasswordchange');
     Route::post('changed_password',[LoginController::class, 'force_password_change'] )->name('forcepassword');
     Route::post('logout',[LoginController::class,'logout'])->name('logout');
-    
-    Route::group(['middleware'=> ['forcepassword']],function(){
-        //email verification
-        Route::post('email/resend',[VerificationController::class,'resend'])->name('verification.resend');
-        Route::get('email/verify',[VerificationController::class,'show'])->name('verification.notice');
-        Route::get('email/verify/{id}/{hash}',[VerificationController::class,'verify'])->name('verification.verify');
-        //password confirmation
-        Route::get('password/confirm',[ConfirmPasswordController::class,'showConfirmForm'])->name('password.confirm');
-        Route::post('password/confirm',[ConfirmPasswordController::class,'confirm']);
-        Route::post('password/confirm',[ConfirmPasswordController::class,'confirm']);
+    //email verification
+    Route::post('email/resend',[VerificationController::class,'resend'])->name('verification.resend');
+    Route::get('email/verify',[VerificationController::class,'show'])->name('verification.notice');
+    Route::get('email/verify/{id}/{hash}',[VerificationController::class,'verify'])->name('verification.verify');
+    //password confirmation
+    Route::get('password/confirm',[ConfirmPasswordController::class,'showConfirmForm'])->name('password.confirm');
+    Route::post('password/confirm',[ConfirmPasswordController::class,'confirm']);
+    Route::post('password/confirm',[ConfirmPasswordController::class,'confirm']);
         
-
+    Route::group(['middleware'=> ['forcepassword']],function(){
         Route::get('dashboard',[UserController::class, 'dashboard'])->name('dashboard');
         Route::group(['prefix'=> 'users','as'=>'users.'],function(){
             Route::get('/',[UserController::class, 'index'])->name('index');
@@ -120,7 +119,9 @@ Route::group(['middleware'=> ['auth','admin']],function(){
         Route::group(['prefix'=> 'finance','as'=> 'finance.'],function(){
             Route::get('payments',[FinanceController::class,'payments'])->name('payments');
             Route::post('payments/export', [FinanceController::class, 'exportPayments'])->name('payments.export');
-
+            Route::get('invoice/{payment}',[PaymentController::class, 'invoice'])->name('invoice');
+            Route::get('invoice/{payment}/download',[PaymentController::class, 'invoice_download'])->name('invoice.download');
+            Route::get('invoice/{payment}/receipt',[PaymentController::class, 'receipt'])->name('receipt'); 
             Route::get('withdrawals',[FinanceController::class,'withdrawals'])->name('withdrawals');
             Route::get('withdrawals/show/{withdrawal}',[FinanceController::class,'withdrawal_show'])->name('withdrawal.show');
             Route::post('withdrawals/payout',[FinanceController::class,'withdrawal_payout'])->name('withdrawal.payout');
@@ -230,12 +231,24 @@ Route::group(['middleware'=> ['auth','admin']],function(){
             Route::post('security/ipaddress/release',[SecurityController::class, 'ip_release'])->name('security.ip_release');
 
         });
-
-
-
         Route::group(['middleware'=> 'permission:settings'],function(){
             
         });
+        Route::get('getStates/{country_id?}', [ResourcesController::class, 'states'])->name('states');
+Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name('cities');
+
+Route::get('vendors', [ShopController::class, 'index'])->name('vendors');
+Route::get('vendors/{shop}', [ShopController::class, 'show'])->name('vendor.show');
+Route::get('vendor/follow/{shop}',[SalesController::class, 'follow'])->name('vendor.follow');
+Route::get('vendor/unfollow/{shop}',[SalesController::class, 'unfollow'])->name('vendor.unfollow');
+
+
+
+
+
+
+Route::get('receipt/{payout}',[PaymentController::class, 'receipt'])->name('receipt');
+
     });
 });
 

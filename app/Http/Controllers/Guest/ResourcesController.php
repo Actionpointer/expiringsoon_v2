@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guest;
 
-use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
 use App\Models\Category;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Traits\OrderTrait;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\CountryResource;
-use App\Models\Location;
 
 class ResourcesController extends Controller
 {
@@ -34,9 +34,11 @@ class ResourcesController extends Controller
         }
     }
 
-    public function states($country_id = null){
-        if($country_id)
+    public function states(){
+        $country_id = request()->query('country_id');
+        if($country_id){
             $states = State::where('country_id',$country_id)->get();
+        }
         else{
             //get the state where the user is browsing from location table
             $location = Location::where('ip',request()->ip())->first();
@@ -64,11 +66,17 @@ class ResourcesController extends Controller
         }
     }
 
-    public function cities($country_id = null){
+    public function cities(){
+        $country_id = request()->query('country_id');
+        $state_id = request()->query('state_id');
         if($country_id){
             $country = Country::find($country_id);
             $cities = $country->cities;
         }    
+        else if($state_id){
+            $state = State::find($state_id);
+            $cities = $state->cities;
+        }
         else{
             //get the state where the user is browsing from location table
             $location = Location::where('ip',request()->ip())->first();

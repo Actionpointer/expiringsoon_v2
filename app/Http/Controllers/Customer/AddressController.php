@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Shopper;
+namespace App\Http\Controllers\Customer;
 
 use App\Models\State;
 use App\Models\Address;
