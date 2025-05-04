@@ -1,9 +1,8 @@
 <?php
-use App\Models\User;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
-use App\Http\Resources\CustomerResource;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Guest\ResourcesController;
@@ -17,7 +16,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
     Route::post('signout',[LoginController::class,'signOut']);
 
     Route::group(['prefix'=> 'user'],function(){
-        Route::get('/',function(){ return new CustomerResource(User::findOrFail(request()->user()->id));});
+        Route::get('/',[UserController::class,'show']);
         Route::post('profile', [UserController::class, 'update']);
         Route::post('password', [UserController::class, 'password']);
         Route::get('notifications',[UserController::class,'notifications']);
@@ -25,8 +24,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('notifications/read',[UserController::class,'readNotifications']);
     });
 
-    Route::group(['prefix'=> 'otp','as'=> 'otp.','middleware'=> ['auth']],function(){
-        Route::get('/',[HomeController::class, 'otp_request']);
+    Route::group(['prefix'=> 'otp','middleware'=> ['auth']],function(){
         Route::get('send',[HomeController::class,'otp_send']);
         Route::post('verify',[HomeController::class,'otp_verify']);
     });

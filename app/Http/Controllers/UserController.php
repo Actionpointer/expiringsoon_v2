@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Pin;
 use App\Models\Bank;
+use App\Models\User;
 use App\Models\State;
-use App\Models\Address;
 use Illuminate\Http\Request;
-
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
-use Illuminate\Support\Facades\DB;
-use App\Http\Resources\StoreResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\StoreResource;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -24,6 +23,10 @@ class UserController extends Controller
 
     public function __construct(){
         $this->middleware('auth:sanctum');
+    }
+
+    public function show(){
+        return new UserResource(User::findOrFail(auth()->id()));
     }
 
     public function profile(){

@@ -78,9 +78,7 @@ class LoginController extends Controller
                 'message' => 'Account Suspended',
             ], 401);
         }
-        if($user->subscription && $user->subscription->end_at && $user->subscription->expired()){
-            $user->subscription->delete();
-        }
+        
         // $user->tokens()->delete();
         if($request->wantsJson()){
             return response()->json([
