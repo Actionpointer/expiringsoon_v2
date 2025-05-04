@@ -15,7 +15,7 @@ use App\Http\Resources\StoreResource;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Notifications\PasswordChangedNotification;
+use App\Notifications\UserNotifications\PasswordChangedNotification;
 
 class UserController extends Controller
 {
@@ -29,24 +29,14 @@ class UserController extends Controller
         return new UserResource(User::findOrFail(auth()->id()));
     }
 
-    public function profile(){
-        $user = auth()->user();
-        $banks = Bank::all();
-        $states = State::where('country_id',$user->country_id)->get();
-        return view('profile',compact('user','banks','states'));
-    }
-
     public function update(Request $request){
         /** @var \App\Models\User $user **/
         // dd($request->all());
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
-            'fname' => 'nullable|string',
-            'lname' => 'nullable|string',
+            'firstname' => 'nullable|string',
+            'surname' => 'nullable|string',
             'phone' => ['nullable','string',Rule::unique('users')->ignore($user)],
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'state_id' => 'nullable|numeric',
-            'city_id' => 'nullable',
         ],[
             'photo.max' => 'The image is too heavy. Standard size is 2mb',
         ]);
@@ -55,28 +45,25 @@ class UserController extends Controller
             response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
             redirect()->back()->withErrors($validator)->withInput();
         }
-        if($request->fname) $user->fname = $request->fname;
-        if($request->lname) $user->lname = $request->lname;
-        if($request->state_id) $user->state_id = $request->state_id;
-        if($request->city_id) $user->city_id = $request->city_id;
+        if($request->firstname) $user->firstname = $request->firstname;
+        if($request->surname) $user->surname = $request->surname;
         if($request->phone) $user->phone = $request->phone;
         if($request->hasFile('photo')){
-            if($user->pic) Storage::delete('public/'.$user->pic);
+            if($user->photo) Storage::delete('public/users/'.$user->photo);
             $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $path = storage_path('app/public/'.$photo);
+            $path = storage_path('app/public/users/'.$photo);
             $imgFile = Image::make($request->file('photo'));
             $imgFile->resize(200, 200, function ($constraint) {
                 $constraint->aspectRatio();
             })->save($path);
-            $user->pic = $photo;
+            $user->photo = $photo;
         }
         $user->save();
-        return request()->expectsJson() ? 
-            response()->json([
+        return  response()->json([
                 'status' => true,
                 'message' => 'Profile Updated Successfully',
-            ], 200) :
-            redirect()->back()->with(['result'=> '1','message'=> 'Profile Updated Successfully']);
+            ], 200);
+            
     }
 
     public function password(Request $request){
