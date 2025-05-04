@@ -8,8 +8,8 @@ use App\Models\Advert;
 use App\Models\Product;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ShopResource;
-use App\Http\Resources\ShopDetailsResource;
+use App\Http\Resources\StoreResource;
+use App\Http\Resources\StoreDetailsResource;
 
 class StoreController extends Controller
 {
@@ -53,7 +53,7 @@ class StoreController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Vendors Retrieved',
-                'data' => ShopResource::collection($shops),
+                'data' => StoreResource::collection($shops),
                 'meta'=> [
                     "total"=> $shops->total(),
                     "per_page"=> $shops->perPage(),
@@ -90,7 +90,7 @@ class StoreController extends Controller
             return  response()->json([
                 'status' => true,
                 'message' => 'Product details retrieved Successfully',
-                'data' =>  new ShopDetailsResource($shop),
+                'data' =>  new StoreDetailsResource($shop),
                 ], 200);
         }
         $category = null;

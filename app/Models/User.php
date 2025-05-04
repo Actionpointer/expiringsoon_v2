@@ -71,10 +71,10 @@ class User extends Authenticatable implements MustVerifyEmail
     
 
     public function products(){  
-        return $this->hasManyThrough(Product::class,Shop::class,'user_id','shop_id');
+        return $this->hasManyThrough(Product::class,Store::class,'user_id','store_id');
     }
-    public function shopOrders(){
-        return $this->hasManyThrough(Order::class,Shop::class,'user_id','shop_id');
+    public function storeOrders(){
+        return $this->hasManyThrough(Order::class,Store::class,'user_id','store_id');
     } 
     public function adverts(){  
         return $this->hasManyThrough(Advert::class,Adset::class,'user_id','adset_id');
@@ -89,24 +89,24 @@ class User extends Authenticatable implements MustVerifyEmail
         }else return null;    
     }
     public function getTotalProductsAttribute(){
-        if($this->shop_id)
-            return $this->shop->user->products->count();
+        if($this->store_id)
+            return $this->store->user->products->count();
         else return $this->products->count();
     }
-    public function getTotalShopsAttribute(){
-        if($this->shop_id)
-            return $this->shop->user->shops->count();
-        else return $this->shops->count();
+    public function getTotalStoresAttribute(){
+        if($this->store_id)
+            return $this->store->user->stores->count();
+        else return $this->stores->count();
     }
-    public function getMaxShopsAttribute(){
-        if($this->shop_id)
-            return $this->shop->user->subscription->plan->shops;
+    public function getMaxStoresAttribute(){
+        if($this->store_id)
+            return $this->store->user->subscription->plan->stores;
         elseif($this->subscription)
-            return $this->subscription->plan->shops;
+            return $this->subscription->plan->stores;
     }
     public function getMaxProductsAttribute(){
-        if($this->shop_id)
-            return $this->shop->user->subscription->plan->products;
+        if($this->store_id)
+            return $this->store->user->subscription->plan->products;
         elseif($this->subscription)
              return $this->subscription->plan->products;
     }
@@ -156,12 +156,12 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    public function shop(){
-        return $this->belongsTo(Shop::class);
+    public function store(){
+        return $this->belongsTo(Store::class);
     }
 
     public function following(){
-        return $this->belongsToMany(Shop::class,'follows','user_id','shop_id');
+        return $this->belongsToMany(Store::class,'follows','user_id','store_id');
     }
 
     public function kyc(){
@@ -242,9 +242,9 @@ class User extends Authenticatable implements MustVerifyEmail
     
     
 
-    public function shopNewsletters()
+    public function storeNewsletters()
     {
-        return $this->hasManyThrough(Newsletter::class, Shop::class);
+        return $this->hasManyThrough(Newsletter::class, Store::class);
     }
 
     /**
@@ -260,27 +260,27 @@ class User extends Authenticatable implements MustVerifyEmail
             ->exists();
     }
 
-    public function isSubscribedToShopNewsletter(Shop $shop)
+    public function isSubscribedToStoreNewsletter(Store $store)
     {
         return $this->following()
-            ->where('shop_id', $shop->id)
+            ->where('store_id', $store->id)
             ->exists();
     }
 
     /**
      * Scopes
      */
-    public function scopeNewsletterSubscribers($query, Shop $shop)
+    public function scopeNewsletterSubscribers($query, Store $store)
     {
-        return $query->whereHas('following', function($q) use ($shop) {
-            $q->where('shop_id', $shop->id);
+        return $query->whereHas('following', function($q) use ($store) {
+            $q->where('store_id', $store->id);
         });
     }
 
-    public function scopeHasPurchasedFrom($query, Shop $shop)
+    public function scopeHasPurchasedFrom($query, Store $store)
     {
-        return $query->whereHas('orders', function($q) use ($shop) {
-            $q->where('shop_id', $shop->id)
+        return $query->whereHas('orders', function($q) use ($store) {
+            $q->where('store_id', $store->id)
                 ->whereNotNull('completed_at');
         });
     }
@@ -297,6 +297,34 @@ class User extends Authenticatable implements MustVerifyEmail
     // }
     
 
+    public function workplaces()
+    {
+        return $this->belongsToMany(Store::class, 'store_users')
+                    ->withPivot('permissions', 'status')
+                    ->withTimestamps();
+    }
+
+    public function activeWorkplaces()
+    {
+        return $this->belongsToMany(Store::class, 'store_users')
+                    ->withPivot('permissions', 'status')
+                    ->wherePivot('status', 'active')
+                    ->withTimestamps();
+    }
+
+    // Helper method to check if user has specific permission for a store
+    public function hasStorePermission($storeId, $permission)
+    {
+        $workplace = $this->workplaces()
+                          ->wherePivot('store_id', $storeId)
+                          ->wherePivot('status', 'active')
+                          ->first();
+                          
+        if (!$workplace) return false;
         
+        $permissions = json_decode($workplace->pivot->permissions, true) ?: [];
+        
+        return in_array($permission, $permissions);
+    }
 
 }

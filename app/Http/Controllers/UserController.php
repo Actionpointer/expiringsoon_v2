@@ -7,11 +7,11 @@ use App\Models\Bank;
 use App\Models\State;
 use App\Models\Address;
 use Illuminate\Http\Request;
-use App\Rules\OtpValidateRule;
+
 use Illuminate\Validation\Rule;
 use App\Http\Traits\SecurityTrait;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\ShopResource;
+use App\Http\Resources\StoreResource;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -110,19 +110,14 @@ class UserController extends Controller
         }
     }
 
-    public function generate_otp(){
-        $user = auth()->user();
-        $otp = $this->generateOTP($user);
-        $result = $this->sendOTP($user,$otp->code);
-        return response()->json(['status'=> true ,'data'=> $result['result'],'message'=> $result['message']],200);
-    }
+    
 
     public function pin(Request $request){
         /** @var \App\Models\User $user **/
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
             'pin' => 'required|string|max:4|min:4',
-            'otp' => ['required',new OtpValidateRule($request->otp)]
+            
         ]);
         if ($validator->fails()) {
             return request()->expectsJson() ? 
@@ -171,7 +166,7 @@ class UserController extends Controller
         return request()->expectsJson() ? 
             response()->json([
                 'status' => true,
-                'data' => ShopResource::collection($user->following),
+                'data' => StoreResource::collection($user->following),
             ], 200) :
             view('customer.followings',with(['followings'=> $user->following]));
     }

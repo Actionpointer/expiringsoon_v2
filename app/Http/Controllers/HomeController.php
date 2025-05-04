@@ -44,17 +44,17 @@ class HomeController extends Controller
         return view('customer.dashboard',compact('user','orders'));
     }
 
-    public function otp_resend(){
+    public function otp_send(){
         // Check if OTP was recently sent (within last 2 minutes)
         if (!session()->has('otp_sent') || now()->diffInMinutes(session('otp_sent')) > 2) {
-            $this->otp_send();
+            $this->initiateOTP();
             // Reset the OTP sent timestamp
             session(['otp_sent' => now()]);
         }
         return response()->json(['message'=> 'OTP Sent','status'=> 1],200);
     }
 
-    public function otp_send(){
+    public function initiateOTP(){
         $user = auth()->user();
         $otp = Otp::generate($user->email);
         $user->notify(new OTPNotification($otp));

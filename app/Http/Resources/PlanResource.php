@@ -20,7 +20,7 @@ class PlanResource extends JsonResource
             "name"=> $this->name,
             "slug"=> $this->slug,
             "description"=> $this->description,
-            "shops"=> $this->shops,
+            "stores"=> $this->stores,
             "products"=> $this->products,
             "months_1"=> $this->months_1,
             "months_3"=> $this->months_3,

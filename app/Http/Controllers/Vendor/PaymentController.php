@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Traits\PayoutTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ShopPayoutResource;
+use App\Http\Resources\StorePayoutResource;
 use App\Http\Resources\VendorPaymentResource;
-use App\Http\Resources\ShopSettlementResource;
+use App\Http\Resources\StoreSettlementResource;
 use App\Http\Traits\SecurityTrait;
 
 class PaymentController extends Controller
@@ -51,7 +51,7 @@ class PaymentController extends Controller
         response()->json([
             'status' => true,
             'message' => $settlements->count() ? 'Earnings retrieved Successfully':'No earnings retrieved',
-            'data' => ShopSettlementResource::collection($settlements),
+            'data' => StoreSettlementResource::collection($settlements),
             'count' => $settlements->count()
         ], 200) : view('vendor.shop.earnings',compact('shop','settlements'));
     }
@@ -75,7 +75,7 @@ class PaymentController extends Controller
         response()->json([
             'status' => true,
             'message' => $payouts->count() ? 'Payouts retrieved Successfully':'No payout retrieved',
-            'data' => ShopPayoutResource::collection($payouts),
+            'data' => StorePayoutResource::collection($payouts),
             'count' => $payouts->count()
         ], 200) : view('vendor.shop.payouts',compact('shop','payouts'));
     }

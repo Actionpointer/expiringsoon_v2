@@ -97,10 +97,10 @@ class VerificationController extends Controller
     }
 
     protected function verified(Request $request){
-        $user = User::find($request->route('id'));
-        if($user->country->payout_gateway == 'paypal'){
-            $user->payout_account = $user->email;
-            $user->save();
-        }
+        // $user = User::find($request->route('id'));
+        // if($user->country->payout_gateway == 'paypal'){
+        //     $user->payout_account = $user->email;
+        //     $user->save();
+        // }
     }
 }

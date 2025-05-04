@@ -67,19 +67,6 @@ class Store extends Model
     public function getImageAttribute(){
         return $this->banner ? config('app.url')."/storage/$this->banner": config('app.url').'/src/images/site/no-image.png';   
     }
-
-    // public function scopeWithin($query,$value = null){
-    //     if($value){
-    //         return $query->where('country_id',$value);
-    //     }
-    //     elseif(auth()->check()){
-    //         if(auth()->user()->role->name == 'superadmin')
-    //         return $query;
-    //         else return $query->where('country_id',auth()->user()->country_id);
-    //     }else{
-    //         return $query->where('country_id',session('locale')['country_id']);
-    //     }  
-    // }
     
     public function scopeIsApproved($query){
         return $query->where('approved',true);
@@ -140,17 +127,30 @@ class Store extends Model
             $q->where('approved',false)->orWhere('show',false)->orWhere('published',false);
         });        
     }
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function owner(){
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function staff()
+    {
+        return $this->belongsToMany(User::class, 'store_users')
+                    ->withPivot('permissions', 'status')
+                    ->withTimestamps();
+    }
+
+    public function activeStaff()
+    {
+        return $this->belongsToMany(User::class, 'store_users')
+                    ->withPivot('permissions', 'status')
+                    ->wherePivot('status', 'active')
+                    ->withTimestamps();
     }
 
     public function followers(){
         return $this->belongsToMany(User::class,Follow::class,'shop_id','user_id');
     }
 
-    public function staff(){
-        return $this->hasMany(User::class);
-    }
+    
     // public function kyc(){
     //     return $this->MorphMany(Kyc::class,'verifiable');
     // }

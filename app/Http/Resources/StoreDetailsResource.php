@@ -8,7 +8,7 @@ use App\Http\Resources\UserResource;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ShopDetailsResource extends JsonResource
+class StoreDetailsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

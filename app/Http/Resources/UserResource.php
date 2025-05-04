@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             "country_id"=> $this->country_id,
             "country_name"=> $this->country->name,
             "status"=> $this->status,
-            "shops"=> $this->shops->pluck('id')->combine($this->shops->pluck('name')),
+            "stores"=> $this->stores->pluck('id')->combine($this->stores->pluck('name')),
         ];
     }
 }

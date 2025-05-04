@@ -18,27 +18,24 @@ class CustomerResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            "fname"=> $this->fname,
-            "lname"=> $this->lname,
+            "firstname"=> $this->firstname,
+            "surname"=> $this->surname,
             'email' => $this->email,
-            "email_verified_at"=> $this->email_verified_at,
             'image' => $this->image,
-            "role"=> $this->role->name,
-            "slug"=> $this->slug,
             "phone"=> $this->phone,
             "prefix"=> $this->country->dial,
-            "mobile"=> $this->mobile,
+            "phone"=> $this->phone,
             "country_id"=> $this->country_id,
             "country_name"=> $this->country->name,
-            "state_id"=> $this->state_id,
-            "state_name"=> $this->state->name,
+            
             "status"=> $this->status,
             // "recent_orders"=> OrderResource::collection(Order::where('user_id',$this->id)->whereHas('statuses')->get()),
-            'payment_gateway'=> $this->country->payment_gateway,            
-            'payout_gateway'=> $this->country->payout_gateway,
+            // 'payment_gateway'=> $this->country->payment_gateway,            
+            // 'payout_gateway'=> $this->country->payout_gateway,
             'currency'=> $this->country->currency->symbol,
             'cart'=> $this->carts->pluck('product_id')->combine($this->carts->pluck('quantity')),
             'wishlist' => $this->likes->pluck('product_id')->toArray(),
+            'stores' => $this->stores->pluck('id'),
             "created_at" => $this->created_at
         ];
     }
