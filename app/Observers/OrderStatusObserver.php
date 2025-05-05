@@ -13,7 +13,7 @@ use App\Events\OrderPurchased;
 use App\Http\Traits\OptimizationTrait;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\OrderShipmentNotification;
-use App\Notifications\OrderStatusVendorNotification;
+use App\Notifications\StoreNotifications\OrderStatusVendorNotification;
 use App\Notifications\OrderStatusCustomerNotification;
 
 class OrderStatusObserver

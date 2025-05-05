@@ -9,7 +9,6 @@ use App\Http\Controllers\Vendor\FeatureController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ProductSyncController;
-
 use App\Http\Controllers\Vendor\SubscriptionController;
 
 Route::group(['prefix'=>'stores'],function (){

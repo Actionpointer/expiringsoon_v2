@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\Subscription;
 use App\Http\Traits\OptimizationTrait;
-use App\Notifications\SubscriptionStatusNotification;
+use App\Notifications\StoreNotification\SubscriptionStatusNotification;
 
 
 class SubscriptionObserver

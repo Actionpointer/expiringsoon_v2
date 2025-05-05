@@ -17,7 +17,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Notifications\NewStaffNotification;
+use App\Notifications\StoreNotification\NewStaffNotification;
 
 class StaffController extends Controller
 {

@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Adset;
-use App\Notifications\AdsetStatusNotification;
+use App\Notifications\StoreNotification\AdsetStatusNotification;
 
 
 class AdsetObserver

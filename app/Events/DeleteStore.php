@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Shop;
+use App\Models\Store;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class DeleteShop
+class DeleteStore
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,10 +20,10 @@ class DeleteShop
      *
      * @return void
      */
-    public $shop;
-    public function __construct(Shop $shop)
+    public $store;
+    public function __construct(Store $store)
     {
-        $this->shop = $shop;
+        $this->store = $store;
     }
 
     /**

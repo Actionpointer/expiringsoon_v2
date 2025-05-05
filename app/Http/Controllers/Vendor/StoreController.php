@@ -38,40 +38,49 @@ class StoreController extends Controller
             $validator = Validator::make($request->all(), 
             [
                 'name' => 'required|max:255',
-                'address' => 'required|string',
-                'state_id' => 'required|numeric',
-                'email' => 'required|string|unique:shops',
-                'phone' => 'required|string|unique:shops',
+                'description' => 'required|string',
+                'email' => 'required|string|unique:stores',
+                'phone' => 'required|string|unique:stores',
                 'photo' => 'required|max:2048|image',
-                'published' => 'required|numeric',
+                'address' => 'required|string',
+                'country_id' => 'required|numeric',
+                'state_id' => 'required|numeric',
+                'city_id' => 'required|numeric',
+                
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 2mb',
             ]);
 
             if($validator->fails()){
-                return request()->expectsJson()
-                ? response()->json(['status' => false, 'message'=>$validator->errors()->first() ], 401) :
-                redirect()->back()->withErrors($validator)->withInput();
+                return response()->json(['status' => false, 'message'=>$validator->errors()->first() ], 401);
             }
 
-            if($request->hasFile('photo')){
-                $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                $path = storage_path('app/public/'.$banner);
-                $imgFile = Image::make($request->file('photo'));
-                // $imgFile->fit(150,150)->save($path);
-                $imgFile->resize(null, 400, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path);
-            }
-            $store = Store::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
-            'address'=> $request->address,'country_id'=> $user->country_id ,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> $request->published]);
+            $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $path = storage_path('app/public/'.$banner);
+            $imgFile = Image::make($request->file('photo'));
+            // $imgFile->fit(150,150)->save($path);
+            $imgFile->resize(null, 500, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($path);
             
-            return request()->expectsJson()
-                ? response()->json(['status' => true, 'message' => 'Store Created Successfully', 
-                    'data' => ['shop_id'=> $store->id,'name'=> $store->id,'wallet_balance'=> 0,
-                    'products'=> $store->products->count() ,
-                    'create_shops_remaining'=> $store->user->max_shops]], 200) :
-                    redirect()->route('vendor.shop.settings',$store)->with(['result'=> 1,'message'=> 'Store Created Successfully.']);
+            $store = Store::create(['name'=> $request->name,
+            'user_id'=> $user->id ,'email'=>$request->email,
+            'phone'=>$request->phone,'banner'=>$banner,
+            'address'=> $request->address,'country_id'=> $user->country_id ,
+            'state_id'=> $request->state_id,
+            'city_id'=> $request->city_id,
+            'published'=> 1]);
+            
+            return response()->json([
+                'status' => true, 
+                'message' => 'Store Created Successfully', 
+                'data' => [
+                    'store_id'=> $store->id,
+                    'name'=> $store->name,
+                    'wallet_balance'=> 0,
+                    'products'=> $store->products->count(),
+                ]
+            ], 200);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -82,15 +91,15 @@ class StoreController extends Controller
     }
     
     public function index(){
+        dd('home');
         $user = auth()->user();
-        $stores = $user->shops;
-        return request()->expectsJson() ?  
-        response()->json([
+        $stores = $user->activeWorkplaces;
+        return response()->json([
             'status' => true,
-            'message' => $user->shops->count() ? 'Stores retrieved Successfully':'No Stores retrieved',
+            'message' => $user->activeWorkplaces->count() ? 'Stores retrieved Successfully':'No Stores retrieved',
             'data' => StoreResource::collection($stores),
-            'count' => $user->shops->count()
-        ], 200) : view('vendor.shop.list',compact('user','shops'));
+            'count' => $stores->count()
+        ], 200);
     }
 
     public function show(Store $store){
@@ -111,13 +120,6 @@ class StoreController extends Controller
                 'count' => 0
             ], 401);
         }
-    }
-
-    public function create(){
-        $user = auth()->user();
-        $states = $user->country->states;
-        $cities = $user->country->cities;
-        return view('vendor.shop.create',compact('states','cities'));
     }
 
     public function import(Request $request){

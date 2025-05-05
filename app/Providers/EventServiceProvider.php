@@ -3,13 +3,13 @@
 namespace App\Providers;
 
 
-use App\Events\DeleteShop;
+use App\Events\DeleteStore;
 use App\Events\RefundBuyer;
 use App\Events\RetryPayout;
 use App\Events\SettleVendor;
 use App\Events\DeleteProduct;
 use App\Events\OrderPurchased;
-use App\Listeners\DeletingShop;
+use App\Listeners\DeletingStore;
 use App\Events\CheckPayoutStatus;
 use App\Listeners\BroadcastOrder;
 use App\Listeners\RefundingBuyer;
@@ -61,8 +61,8 @@ class EventServiceProvider extends ServiceProvider
         CheckPayoutStatus::class => [
             CheckingPayoutStatus::class
         ],
-        DeleteShop::class => [
-            DeletingShop::class
+        DeleteStore::class => [
+            DeletingStore::class
         ],
         DeleteProduct::class => [
             DeletingProduct::class

@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\StoreNotifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewStaffNotification extends Notification
+class AdvertInsightNotification extends Notification
 {
     use Queueable;
-    public $password;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($password)
+    public function __construct()
     {
-        $this->password = $password;
+        //
     }
 
     /**
@@ -40,10 +40,7 @@ class NewStaffNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->subject('Welcome to '.$notifiable->shop->name)->view(
-            'emails.user.staff', ['user' => $notifiable,'password'=> $this->password]
-        );
-    
+        return (new MailMessage)->view('emails.adset.insights');
     }
 
     /**

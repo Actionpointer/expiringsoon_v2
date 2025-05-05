@@ -15,16 +15,15 @@ class WorkplaceMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if user is authenticated
-        if (!auth()->check()) {
-            return redirect()->route('login')->with('error', 'Please login first.');
-        }
         
         $user = auth()->user();
         
         // Check if user works in any store
         if ($user->activeWorkplaces()->count() == 0) {
-            return redirect()->route('dashboard')->with('error', 'You are not assigned to any store.');
+            return response()->json([
+                'status' => false,
+                'message' => 'You are not assigned to any store.',
+            ], 403);
         }
         
         // If store_id is provided, check if user works in that specific store
@@ -32,7 +31,10 @@ class WorkplaceMiddleware
             $storeId = $request->input('store_id') ?? $request->route('store_id');
             
             if (!$user->activeWorkplaces()->where('stores.id', $storeId)->exists()) {
-                return redirect()->route('dashboard')->with('error', 'You do not have access to this store.');
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You do not have access to this store.',
+                ], 403);
             }
         }
         

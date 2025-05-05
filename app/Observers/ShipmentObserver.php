@@ -4,8 +4,8 @@ namespace App\Observers;
 
 use App\Models\Shipment;
 use App\Models\OrderStatus;
-use App\Notifications\OrderStatusVendorNotification;
-use App\Notifications\OrderStatusCustomerNotification;
+use App\Notifications\StoreNotifications\OrderStatusVendorNotification;
+use App\Notifications\UserNotificationsOrderStatusCustomerNotification;
 
 class ShipmentObserver
 {

@@ -22,7 +22,7 @@ use App\Models\Settlement;
 use App\Models\OrderStatus;
 use App\Models\PackageRate;
 use App\Models\OrderMessage;
-use App\Observers\ShopObserver;
+use App\Observers\StoreObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -32,13 +32,13 @@ class Store extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','show','dimension_rate','weight_rate'];
+    protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','description'];
     protected $appends = ['image'];
 
     public static function boot()
     {
         parent::boot();
-        parent::observe(new ShopObserver);
+        parent::observe(new StoreObserver);
     }
 
     public function sluggable():array
@@ -109,17 +109,6 @@ class Store extends Model
         elseif(!$this->show)
         return 'hidden';
         else return 'live';
-    }
-
-    public function getFaultAttribute(){
-        if(!$this->weight_rate || !$this->dimension_rate)
-        return 'Package rate must be set to enable product shipping';
-        elseif($this->rates->isEmpty())
-        return 'Atleast one shipment destination must be set'; 
-        elseif(!$this->banner)
-        return 'Shop banner must be set';
-        elseif(!$this->published) return 'Shop is in draft mode';
-        else return '';
     }
 
     public function scopeIsNotCertified($query){
@@ -237,6 +226,10 @@ class Store extends Model
 
     public function rejected(){
         return $this->morphOne(Rejection::class,'rejectable');
+    }
+
+    public function wallet(){
+        return $this->morphOne(Wallet::class,'owner');
     }
 
     

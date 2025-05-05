@@ -3,12 +3,12 @@
 namespace App\Listeners;
 
 use App\Models\User;
-use App\Events\DeleteShop;
+use App\Events\DeleteStore;
 use App\Http\Traits\OptimizationTrait;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DeletingShop implements ShouldQueue
+class DeletingStore implements ShouldQueue
 {
     use OptimizationTrait;
     /**
@@ -24,22 +24,22 @@ class DeletingShop implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\DeleteShop  $event
+     * @param  \App\Events\DeleteStore  $event
      * @return void
      */
-    public function handle(DeleteShop $event)
+    public function handle(DeleteStore $event)
     {
         //delete all adverts
-        $event->shop->adverts->delete();
+        $event->store->adverts->delete();
         //delete all carts
-        $event->shop->carts->delete();
+        $event->store->carts->delete();
         //delete all wishlists
-        $event->shop->likes->delete();
+        $event->store->likes->delete();
         //delete all products
-        $event->shop->products->delete();
+        $event->store->products->delete();
         //delete all orders
-        $event->shop->orders->delete();
+        $event->store->orders->delete();
         //delete all staff
-        User::where('shop_id',$event->shop->id)->delete();
+        User::where('store_id',$event->store->id)->delete();
     }
 }

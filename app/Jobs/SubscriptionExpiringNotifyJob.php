@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use App\Notifications\SubscriptionStatusNotification;
+use App\Notifications\StoreNotification\SubscriptionStatusNotification;
 
 class SubscriptionExpiringNotifyJob implements ShouldQueue
 {

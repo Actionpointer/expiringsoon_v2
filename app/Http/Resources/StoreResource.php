@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\OrderStatus;
+use App\Models\Order;
 
+use App\Models\OrderStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,16 +30,18 @@ class StoreResource extends JsonResource
             "city"=> $this->city ? $this->city->name : '',
             "state"=> $this->state->name,
             "country"=> $this->country->name,
+            "currency"=> $this->country->currency->symbol,
+            "wallet"=> $this->wallet->balance,
             "status"=> $this->status,
-            "fault" => $this->fault,
             "approved"=> $this->approved,
             "published"=> $this->published,
-            "verified"=> $this->verified(),
-            "wallet"=> $this->wallet,
-            "currency"=> $this->country->currency->symbol,
             "total_products"=> $this->products->count(),
-            "opened_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->whereNotIn('name',['completed','closed'])->count(),
-            "total_orders"=> OrderStatus::whereIn('order_id',$this->orders->pluck('id')->toArray())->count(),
+            "opened_orders"=> Order::where('store_id',$this->id)
+                ->whereNull('cancelled_at')
+                ->whereNull('accepted_at')
+                ->whereNull('completed_at')
+                ->count(),
+            "total_orders"=> Order::where('store_id',$this->id)->count(),
             "is_following"=> $request->user('sanctum') ? ($request->user('sanctum')->following->firstWhere('id',$this->id) ? true:false) : null
         ];
     }

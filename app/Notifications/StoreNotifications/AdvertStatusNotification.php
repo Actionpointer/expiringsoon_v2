@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\StoreNotifications;
 
 use App\Models\Adset;
 use App\Models\Advert;

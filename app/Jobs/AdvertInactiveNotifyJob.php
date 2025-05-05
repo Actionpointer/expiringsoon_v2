@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use App\Notifications\AdvertStatusNotification;
+use App\Notifications\StoreNotification\AdvertStatusNotification;
 
 class AdvertInactiveNotifyJob implements ShouldQueue
 {

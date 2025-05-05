@@ -3,10 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Rejection;
-use App\Notifications\ShopStatusNotification;
-use App\Notifications\AdvertStatusNotification;
+use App\Notifications\StoreNotification\ShopStatusNotification;
+use App\Notifications\StoreNotification\AdvertStatusNotification;
 use App\Notifications\KycRejectionNotification;
-use App\Notifications\ProductStatusNotification;
+use App\Notifications\StoreNotification\ProductStatusNotification;
 use App\Notifications\UserStatusNotification;
 
 class RejectionObserver

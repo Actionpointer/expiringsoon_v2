@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\StoreNotifications;
 
 use App\Models\Review;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Notifications\VendorAlertNotification;
+use App\Notifications\StoreNotification\VendorAlertNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class ProductReviewNotification extends Notification

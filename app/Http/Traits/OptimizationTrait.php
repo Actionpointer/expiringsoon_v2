@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Traits;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
@@ -13,16 +13,16 @@ trait OptimizationTrait
 {
     use CartTrait;
     
-    protected function resetShops(User $user) {
-        $allowed_shops = $user->max_shops;
-        Shop::where('user_id',$user->id)->update(['show'=> false]);
-        Shop::where('user_id',$user->id)->where('approved',true)->orderBy('created_at','asc')->take($allowed_shops)->update(['show'=> true]);
+    protected function resetStores(User $user) {
+        $allowed_stores = $user->max_stores;
+        Store::where('user_id',$user->id)->update(['show'=> false]);
+        Store::where('user_id',$user->id)->where('approved',true)->orderBy('created_at','asc')->take($allowed_stores)->update(['show'=> true]);
     }
 
     protected function resetProducts(User $user) {
         $allowed_products = $user->max_products;
-        Product::whereIn('shop_id',$user->shops->pluck('id')->toArray())->update(['show'=> false]);
-        Product::whereIn('shop_id',$user->shops->pluck('id')->toArray())->where('approved',true)->orderBy('created_at','desc')->take($allowed_products)->update(['show'=> true]);
+        Product::whereIn('store_id',$user->stores->pluck('id')->toArray())->update(['show'=> false]);
+        Product::whereIn('store_id',$user->stores->pluck('id')->toArray())->where('approved',true)->orderBy('created_at','desc')->take($allowed_products)->update(['show'=> true]);
     }
 
     protected function decreaseProducts(Order $order){
