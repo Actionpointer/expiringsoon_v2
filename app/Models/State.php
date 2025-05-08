@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
 {
-    protected $fillable = ['name','iso','country_id'];
+    protected $fillable = ['name','country_id'];
 
     
     public function country(){

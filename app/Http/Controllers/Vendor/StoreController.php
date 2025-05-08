@@ -7,8 +7,9 @@ use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\City;
 use App\Models\Rate;
-use App\Models\Store;
 use App\Models\State;
+use App\Models\Store;
+use App\Models\Country;
 use App\Events\DeleteStore;
 use Illuminate\Http\Request; 
 use Illuminate\Validation\Rule;
@@ -19,8 +20,8 @@ use App\Http\Resources\StoreResource;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\StoreDetailsResource;
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\StoreDetailsResource;
 
 
 class StoreController extends Controller
@@ -43,9 +44,11 @@ class StoreController extends Controller
                 'phone' => 'required|string|unique:stores',
                 'photo' => 'required|max:2048|image',
                 'address' => 'required|string',
-                'country_id' => 'required|numeric',
-                'state_id' => 'required|numeric',
-                'city_id' => 'required|numeric',
+                'continent' => 'required|string',
+                'country' => 'required|string',
+                'country_code' => 'required|string',
+                'state' => 'required|string',
+                'city' => 'required|string',
                 
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 2mb',
@@ -54,6 +57,28 @@ class StoreController extends Controller
             if($validator->fails()){
                 return response()->json(['status' => false, 'message'=>$validator->errors()->first() ], 401);
             }
+
+            // Get or create country
+            $country = Country::firstOrCreate(
+                ['code' => $request->country_code],
+                ['name' => $request->country,'continent' => $request->continent]
+            );
+
+            // Get or create state
+            $state = State::firstOrCreate(
+                [
+                    'name' => $request->state,
+                    'country_id' => $country->id
+                ]
+            );
+
+            // Get or create city
+            $city = City::firstOrCreate(
+                [
+                    'name' => $request->city,
+                    'state_id' => $state->id
+                ]
+            );
 
             $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $path = storage_path('app/public/'.$banner);
@@ -66,9 +91,10 @@ class StoreController extends Controller
             $store = Store::create(['name'=> $request->name,
             'user_id'=> $user->id ,'email'=>$request->email,
             'phone'=>$request->phone,'banner'=>$banner,
-            'address'=> $request->address,'country_id'=> $user->country_id ,
-            'state_id'=> $request->state_id,
-            'city_id'=> $request->city_id,
+            'address'=> $request->address,
+            'country_id'=> $country->id,
+            'state_id'=> $state->id,
+            'city_id'=> $city->id,
             'published'=> 1]);
             
             return response()->json([
@@ -91,7 +117,6 @@ class StoreController extends Controller
     }
     
     public function index(){
-        dd('home');
         $user = auth()->user();
         $stores = $user->activeWorkplaces;
         return response()->json([
