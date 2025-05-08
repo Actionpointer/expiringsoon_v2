@@ -21,7 +21,7 @@ class StoreObserver
      */
     public function created(Store $store)
     {
-        if($store->published){
+        if($store->status){
             Store::where('id',$store->id)->update([
                 'approved'=> config('settings.auto_approve_store'),
             ]);
