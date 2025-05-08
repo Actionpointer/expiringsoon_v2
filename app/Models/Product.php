@@ -5,7 +5,7 @@ namespace App\Models;
 // use PDO;
 use App\Models\Cart;
 use App\Models\Like;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Advert;
 use App\Models\Review;
 use App\Models\Feature;

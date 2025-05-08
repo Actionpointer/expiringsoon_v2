@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('broadcast', function () {
     
     $user = \App\Models\User::find(31);
-    // // $shop = \App\Models\Shop::find(2);
+    // // $shop = \App\Models\Store::find(2);
     // // dd($shop->followers);
     // return (new App\Notifications\FollowersFeaturedProductNotification($shop))
     //                 ->toMail($shop->followers);

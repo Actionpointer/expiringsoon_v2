@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Models\City;
 use App\Models\Rate;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Package;
 use App\Models\PackageRate;
 use Illuminate\Http\Request;

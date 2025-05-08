@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Adset;
 use App\Models\State;
 use App\Models\Product;
@@ -108,7 +108,7 @@ class Advert extends Model
 
     public function scopeCertifiedShop($query){
         return $query->whereHas('shop', function (Builder $qry)  { 
-            $qry->isActive()->isApproved()->isVisible()
+            $qry->where('status',1)->isApproved()->isVisible()
             ->whereHas('products',function(Builder $q){
                 $q->live()->isAccessible();
             });

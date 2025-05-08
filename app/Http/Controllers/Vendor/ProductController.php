@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use Carbon\Carbon;
 use App\Models\Tag;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Product;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;

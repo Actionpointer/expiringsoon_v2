@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;

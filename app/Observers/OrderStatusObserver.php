@@ -146,7 +146,7 @@ class OrderStatusObserver
             $receiver_type = 'App\Models\User';
         }else{
             $sender_id = $orderStatus->order->shop_id;
-            $sender_type = 'App\Models\Shop';
+            $sender_type = 'App\Models\Store';
             $receiver_id = $arbitrator_id;
             $receiver_type = 'App\Models\User';
         }

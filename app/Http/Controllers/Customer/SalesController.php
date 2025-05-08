@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Models\Cart;
 use App\Models\Like;
 use App\Models\Rate;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Order;
 use App\Models\Address;
 use App\Models\Product;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Models\Cart;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;

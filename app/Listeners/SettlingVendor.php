@@ -27,7 +27,7 @@ class SettlingVendor
      */
     public function handle(SettleVendor $event)
     {
-        $settlements = $event->order->settlements->where('receiver_type','App\Models\Shop');
+        $settlements = $event->order->settlements->where('receiver_type','App\Models\Store');
         if($settlements->isNotEmpty()){
             $shop = $event->order->shop;
             $shop->wallet += $settlements->sum('amount');

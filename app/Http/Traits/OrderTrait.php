@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\City;
 use App\Models\Rate;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Order;
 use App\Models\State;
 use App\Models\Coupon;

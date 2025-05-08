@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Plan;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\Shipment;

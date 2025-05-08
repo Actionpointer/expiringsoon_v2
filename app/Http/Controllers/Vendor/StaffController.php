@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Vendor;
 use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\Role;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Account;

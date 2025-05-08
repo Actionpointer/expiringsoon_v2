@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Guest;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\State;
 use App\Models\Advert;
 use App\Models\Product;

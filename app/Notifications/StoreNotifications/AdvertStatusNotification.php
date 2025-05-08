@@ -47,7 +47,7 @@ class AdvertStatusNotification extends Notification
         //             $puery->where(function($wuery){
         //                 $wuery->where('advertable_type','App\Models\Product')->whereHas('product',function($pd){
         //                     $pd->isNotCertified();
-        //                 })->orWhere('advertable_type','App\Models\Shop')->whereHas('shop',function($sh){
+        //                 })->orWhere('advertable_type','App\Models\Store')->whereHas('shop',function($sh){
         //                 $sh->isNotCertified();
         //                 });
         //             });

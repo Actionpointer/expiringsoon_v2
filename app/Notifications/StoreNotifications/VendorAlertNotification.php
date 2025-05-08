@@ -2,7 +2,7 @@
 
 namespace App\Notifications\StoreNotifications;
 
-use App\Models\Shop;
+use App\Models\Store;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;

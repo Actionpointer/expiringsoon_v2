@@ -32,7 +32,7 @@ class Store extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','published','description'];
+    protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','description','status'];
     protected $appends = ['image'];
 
     public static function boot()
@@ -77,15 +77,11 @@ class Store extends Model
     }
 
     public function scopeIsPublished($query){
-        return $query->where('published',true);
+        return $query->where('status',1);
     }
 
     public function scopeSelling($query){
         return $query->whereHas('products',function($q) {$q->live();});
-    }
-    
-    public function certified(){
-        return $this->show && $this->approved && $this->published;
     }
 
     public function scopeLive($query){
@@ -113,7 +109,7 @@ class Store extends Model
 
     public function scopeIsNotCertified($query){
         return $query->where(function($q){
-            $q->where('approved',false)->orWhere('show',false)->orWhere('published',false);
+            $q->where('approved',false)->orWhere('show',false)->orWhere('status',0);
         });        
     }
     public function owner(){

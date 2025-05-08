@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Events\BroadcastOrderMessage;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Review;
@@ -63,16 +63,16 @@ class OrderController extends Controller
     }
 
     public function show(Shop $shop,Order $order){
-        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Store')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);
         
         OrderMessage::where(function($query) use($order){
-            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop')->whereNull('read_at');
+            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Store')->whereNull('read_at');
         })->update(['read_at'=> now()]);
 
         $messages = OrderMessage::where(function($query) use($order){
-            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop');
+            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Store');
         })->orWhere(function($qeury) use($order){
-            return $qeury->where('order_id',$order->id)->where('sender_id',$order->shop_id)->where('sender_type','App\Models\Shop');
+            return $qeury->where('order_id',$order->id)->where('sender_id',$order->shop_id)->where('sender_type','App\Models\Store');
         })->orderBy('created_at','desc')->get();
 
         $statuses = $this->getVendorOrderStatuses($order);
@@ -97,9 +97,9 @@ class OrderController extends Controller
     }
 
     public function messages(Shop $shop,Order $order){
-        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);        
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Store')->whereJsonContains('data->related_to','order')->whereJsonContains('data->id',$order->id)->update(['read_at'=> now()]);        
         OrderMessage::where(function($query) use($order){
-            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Shop')->whereNull('read_at');
+            return $query->where('order_id',$order->id)->where('receiver_id',$order->shop_id)->where('receiver_type','App\Models\Store')->whereNull('read_at');
         })->update(['read_at'=> now()]);
 
         return request()->expectsJson() ? 
@@ -118,7 +118,7 @@ class OrderController extends Controller
             $document = 'uploads/'.time().'.'.$request->file('file')->getClientOriginalExtension();
             $request->file('file')->storeAs('public/',$document);
         }
-        $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Shop','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type,'body'=> $request->body,'attachment'=> $document ?? '']);
+        $message = OrderMessage::create(['order_id'=> $request->order_id,'sender_id'=> $request->sender_id,'sender_type'=> 'App\Models\Store','receiver_id'=> $request->receiver_id ,'receiver_type'=> $request->receiver_type,'body'=> $request->body,'attachment'=> $document ?? '']);
         return request()->expectsJson() ? 
         response()->json([
             'status' => true,

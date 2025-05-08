@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;

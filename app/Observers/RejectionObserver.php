@@ -23,7 +23,7 @@ class RejectionObserver
             case 'App\Models\Product':
                     $rejection->rejectable->shop->notify(new ProductStatusNotification($rejection->rejectable));
                 break;
-            case 'App\Models\Shop':
+            case 'App\Models\Store':
                 $rejection->rejectable->notify(new ShopStatusNotification($rejection->rejectable));
             break;
             case 'App\Models\Advert':

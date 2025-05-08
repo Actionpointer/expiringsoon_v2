@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Kyc;
 use App\Models\City;
 use App\Models\Rate;
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Adset;
 use App\Models\Order;

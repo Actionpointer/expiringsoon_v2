@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Country;
@@ -136,7 +136,7 @@ class OrderController extends Controller
     public function message(Request $request){
         $order = Order::find($request->order_id);
         $receiver_id = $request->receiver == 'buyer'? $order->user_id : $order->shop_id;
-        $receiver_type = $request->receiver == 'buyer'? 'App\Models\User' : 'App\Models\Shop';
+        $receiver_type = $request->receiver == 'buyer'? 'App\Models\User' : 'App\Models\Store';
         if($request->hasFile('file')){
             $document = 'uploads/'.time().'.'.$request->file('file')->getClientOriginalExtension();
             $request->file('file')->storeAs('public/',$document);

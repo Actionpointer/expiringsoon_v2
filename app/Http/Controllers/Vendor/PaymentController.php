@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Payout;
 use Illuminate\Http\Request;
 use App\Http\Traits\PayoutTrait;
@@ -58,7 +58,7 @@ class PaymentController extends Controller
     
     //all payouts
     public function payouts(Shop $shop){
-        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Shop')->whereJsonContains('data->related_to','payout')->update(['read_at'=> now()]);
+        $notifications = DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$shop->id)->where('notifiable_type','App\Models\Store')->whereJsonContains('data->related_to','payout')->update(['read_at'=> now()]);
         
         $payouts = Payout::where('shop_id',$shop->id);
 

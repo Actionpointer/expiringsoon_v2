@@ -26,7 +26,7 @@ class OrderObserver
                 $shipment = ($shipment_percentage * $order->deliveryfee / 100) - $shipment_fixed;
 
                 Settlement::create(['description'=> 'Shipment','order_id'=> $order->id,
-                'receiver_id'=> $order->shop_id,'receiver_type'=>'App\Models\Shop',
+                'receiver_id'=> $order->shop_id,'receiver_type'=>'App\Models\Store',
                 'amount'=> $shipment,'charges'=> $order->deliveryfee - $shipment,'status'=> false]);
             }
         }
@@ -39,7 +39,7 @@ class OrderObserver
             $commission_fixed = $order->shop->user->subscription->plan->commission_fixed;
             $commission = ($commission_percentage * $order->subtotal / 100) - $commission_fixed;
             Settlement::create(['description'=> 'Commission','order_id'=> $order->id, 
-            'receiver_id' => $order->shop_id, 'receiver_type' => 'App\Models\Shop', 'amount' => $commission,
+            'receiver_id' => $order->shop_id, 'receiver_type' => 'App\Models\Store', 'amount' => $commission,
             'charges'=> $order->subtotal - $commission]);
         }
         if($order->isDirty('arbitrator_id') && $order->arbitrator_id){

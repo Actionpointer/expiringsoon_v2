@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Adset;
 use App\Models\State;
 use App\Models\Advert;
@@ -76,7 +76,7 @@ class AdvertController extends Controller
         } 
         if($adset->units > $adset->adverts->count()){
             $advert = Advert::create(['advertable_id'=> $request->type == 'shop' ? $request->shop_id: $request->product_id,
-            'advertable_type'=> $request->type == 'shop' ? 'App\Models\Shop' : 'App\Models\Product',
+            'advertable_type'=> $request->type == 'shop' ? 'App\Models\Store' : 'App\Models\Product',
             'adset_id'=> $adset->id, 'state_id'=> $request->state_id,
             'photo'=> $photo,'heading'=> $request->heading,'subheading'=> $request->subheading,
             'offer'=> $request->offer, 'text_color'=> $request->text_color, 'button_text'=> $request->button_text,
@@ -132,7 +132,7 @@ class AdvertController extends Controller
             $photo = $advert->photo;
         }
         Advert::where('id',$request->advert_id)->update(['advertable_id'=> $request->type == 'shop' ? $request->shop_id: $request->product_id,
-        'advertable_type'=> $request->type == 'shop' ? 'App\Models\Shop' : 'App\Models\Product',
+        'advertable_type'=> $request->type == 'shop' ? 'App\Models\Store' : 'App\Models\Product',
         'adset_id'=> $adset->id, 'state_id'=> $request->state_id,
         'photo'=> $photo,'heading'=> $request->heading,'subheading'=> $request->subheading,
         'offer'=> $request->offer, 'text_color'=> $request->text_color, 'button_text'=> $request->button_text,

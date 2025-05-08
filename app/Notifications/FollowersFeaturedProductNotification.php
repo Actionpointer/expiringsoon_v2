@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\Feature;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;

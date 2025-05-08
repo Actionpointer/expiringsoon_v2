@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Shop;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,7 @@ class OrderMessage extends Model
         return $this->belongsTo(User::class,'sender_id')->where('sender_type','App\Models\User');
     }
     public function shop(){
-        return $this->belongsTo(Shop::class,'sender_id')->where('sender_type','App\Models\Shop');
+        return $this->belongsTo(Shop::class,'sender_id')->where('sender_type','App\Models\Store');
     }
     public function order(){
         return $this->belongsTo(Order::class);
