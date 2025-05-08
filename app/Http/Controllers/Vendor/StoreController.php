@@ -100,7 +100,12 @@ class StoreController extends Controller
             // Add the store owner as a workplace member with full permissions
             $store->staff()->attach($user->id, [
                 'permissions' => json_encode([
-                    'stores', 'products', 'orders', 'reviews', 
+                    'settings', 'security', 'api_management',
+                    'admin', 'customers', 'verifications',
+                    'support', 'disputes',
+                    'stores', 'subscriptions',
+                    'products', 'reviews',
+                    'orders', 'shipment',
                     'payments', 'withdrawals', 'settlements',
                     'coupons', 'newsletter', 'adverts', 
                     'reports', 'analytics'
