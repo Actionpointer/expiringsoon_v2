@@ -97,6 +97,17 @@ class StoreController extends Controller
             'city_id'=> $city->id,
             'status'=> 1]);
             
+            // Add the store owner as a workplace member with full permissions
+            $store->staff()->attach($user->id, [
+                'permissions' => json_encode([
+                    'stores', 'products', 'orders', 'reviews', 
+                    'payments', 'withdrawals', 'settlements',
+                    'coupons', 'newsletter', 'adverts', 
+                    'reports', 'analytics'
+                ]),
+                'status' => 'active'
+            ]);
+            
             return response()->json([
                 'status' => true, 
                 'message' => 'Store Created Successfully', 
