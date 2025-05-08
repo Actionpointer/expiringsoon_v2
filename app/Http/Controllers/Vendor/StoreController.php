@@ -95,7 +95,7 @@ class StoreController extends Controller
             'country_id'=> $country->id,
             'state_id'=> $state->id,
             'city_id'=> $city->id,
-            'published'=> 1]);
+            'status'=> 1]);
             
             return response()->json([
                 'status' => true, 
