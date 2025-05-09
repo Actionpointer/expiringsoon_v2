@@ -26,7 +26,7 @@ class StoreObserver
                 'approved'=> config('settings.auto_approve_store'),
             ]);
             $this->createWallet($store);
-            $store->user->notify(new NewStoreNotification($store));
+            $store->owner->notify(new NewStoreNotification($store));
 
         }
     }

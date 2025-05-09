@@ -88,25 +88,6 @@ class Store extends Model
         $query->whereDoesntHave('rejected')->isPublished()->isApproved()->isVisible();
     }
 
-    public function getPublishableAttribute(){
-        if($this->rejected || $this->rates->isEmpty() || !$this->dimension_rate || !$this->weight_rate || !$this->banner){
-            return 0;
-        }
-        return 1;
-    }
-
-    public function getStatusAttribute(){
-        if($this->rejected)
-        return 'rejected';
-        elseif(!$this->publishable)
-        return 'inactive';
-        elseif(!$this->approved)
-        return 'pending';
-        elseif(!$this->show)
-        return 'hidden';
-        else return 'live';
-    }
-
     public function scopeIsNotCertified($query){
         return $query->where(function($q){
             $q->where('approved',false)->orWhere('show',false)->orWhere('status',0);
@@ -131,9 +112,9 @@ class Store extends Model
                     ->withTimestamps();
     }
 
-    public function followers(){
-        return $this->belongsToMany(User::class,Follow::class,'shop_id','user_id');
-    }
+    // public function followers(){
+    //     return $this->belongsToMany(User::class,Follow::class,'shop_id','user_id');
+    // }
 
     
     // public function kyc(){
@@ -143,13 +124,13 @@ class Store extends Model
     // public function addressproof(){
     //     return $this->MorphOne(Kyc::class,'verifiable')->where('type','addressproof');
     // }
-    public function certificate(){
-        return $this->MorphOne(Kyc::class,'verifiable')->where('type','certificate');
-    }
+    // public function certificate(){
+    //     return $this->MorphOne(Kyc::class,'verifiable')->where('type','certificate');
+    // }
 
-    public function companydocs(){
-        return $this->MorphMany(Kyc::class,'verifiable')->where('type','companydoc');
-    }
+    // public function companydocs(){
+    //     return $this->MorphMany(Kyc::class,'verifiable')->where('type','companydoc');
+    // }
     
     public function country(){
         return $this->belongsTo(Country::class);
@@ -159,10 +140,6 @@ class Store extends Model
     }
     public function city(){
         return $this->belongsTo(City::class);
-    }
-    
-    public function rates(){
-        return $this->hasMany(Rate::class);
     }
 
     public function categories(){
@@ -174,9 +151,9 @@ class Store extends Model
         return $this->hasMany(Product::class);
     }
     
-    public function likes(){
-        return $this->hasManyThrough(Like::class,Product::class,'shop_id','product_id');
-    }
+    // public function likes(){
+    //     return $this->hasManyThrough(Like::class,Product::class,'shop_id','product_id');
+    // }
     
     public function adverts(){
         return $this->morphMany(Advert::class,'advertable');

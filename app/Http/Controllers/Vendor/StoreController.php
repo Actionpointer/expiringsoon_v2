@@ -33,8 +33,9 @@ class StoreController extends Controller
     }
 
     public function store(Request $request){
+        //dd($request->all());
         $user = auth()->user();
-        try {
+        // try {
             //Validated
             $validator = Validator::make($request->all(), 
             [
@@ -42,7 +43,7 @@ class StoreController extends Controller
                 'description' => 'required|string',
                 'email' => 'required|string|unique:stores',
                 'phone' => 'required|string|unique:stores',
-                'photo' => 'required|max:2048|image',
+                //'photo' => 'required|max:2048|image',
                 'address' => 'required|string',
                 'continent' => 'required|string',
                 'country' => 'required|string',
@@ -80,14 +81,14 @@ class StoreController extends Controller
                 ]
             );
 
-            $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $path = storage_path('app/public/'.$banner);
-            $imgFile = Image::make($request->file('photo'));
-            // $imgFile->fit(150,150)->save($path);
-            $imgFile->resize(null, 500, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($path);
-            
+            // $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            // $path = storage_path('app/public/'.$banner);
+            // $imgFile = Image::make($request->file('photo'));
+            // // $imgFile->fit(150,150)->save($path);
+            // $imgFile->resize(null, 500, function ($constraint) {
+            //     $constraint->aspectRatio();
+            // })->save($path);
+            $banner = null;
             $store = Store::create(['name'=> $request->name,
             'user_id'=> $user->id ,'email'=>$request->email,
             'phone'=>$request->phone,'banner'=>$banner,
@@ -124,12 +125,12 @@ class StoreController extends Controller
                 ]
             ], 200);
 
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
+        // } catch (\Throwable $th) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => $th->getMessage()
+        //     ], 500);
+        // }
     }
     
     public function index(){
