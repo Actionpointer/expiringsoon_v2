@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Vendor;
 use App\Models\Kyc;
 use App\Models\Bank;
 use App\Models\City;
-use App\Models\Rate;
 use App\Models\State;
 use App\Models\Store;
 use App\Models\Country;
@@ -22,6 +21,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\StoreDetailsResource;
+use App\Notifications\StoreNotifications\StoreStatusNotification;
+use App\Notifications\StoreNotifications\NewStoreNotification;
 
 
 class StoreController extends Controller
@@ -112,6 +113,7 @@ class StoreController extends Controller
                 ]),
                 'status' => 'active'
             ]);
+            $store->owner->notify(new NewStoreNotification($store));
             
             return response()->json([
                 'status' => true, 

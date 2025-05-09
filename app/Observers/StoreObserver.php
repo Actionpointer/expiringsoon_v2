@@ -6,8 +6,7 @@ use App\Models\Store;
 use App\Models\Rejection;
 use App\Events\DeleteStore;
 use App\Http\Traits\OptimizationTrait;
-use App\Notifications\Store\StoreStatusNotification;
-use App\Notifications\StoreNotifications\NewStoreNotification;
+
 
 
 class StoreObserver
@@ -26,7 +25,6 @@ class StoreObserver
                 'approved'=> config('settings.auto_approve_store'),
             ]);
             $this->createWallet($store);
-            $store->owner->notify(new NewStoreNotification($store));
 
         }
     }

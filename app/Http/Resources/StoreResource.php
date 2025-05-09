@@ -30,11 +30,11 @@ class StoreResource extends JsonResource
             "city"=> $this->city ? $this->city->name : '',
             "state"=> $this->state->name,
             "country"=> $this->country->name,
-            "currency"=> $this->country->currency->symbol,
+            "currency"=> $this->currency,
+            "currency_symbol"=> $this->currency_symbol,
             "wallet"=> $this->wallet->balance,
             "status"=> $this->status,
             "approved"=> $this->approved,
-            "published"=> $this->published,
             "total_products"=> $this->products->count(),
             "opened_orders"=> Order::where('store_id',$this->id)
                 ->whereNull('cancelled_at')

@@ -59,6 +59,14 @@ class Store extends Model
         return $this->country->dial.intval($this->phone);   
     }
 
+    public function getCurrencyAttribute(){
+        return $this->country->currency_code;
+    }
+    
+    public function getCurrencySymbolAttribute(){
+        return $this->currency ? $this->country->currency_symbol:null;
+    }
+
     public function verified(){
         return $this->addressproof && $this->addressproof->status && $this->companydoc && $this->companydoc->status && $this->user->idcard && $this->user->idcard->status;   
         // return true;
