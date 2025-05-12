@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Auth\ConfirmPasswordController;
 
 Route::get('login',[LoginController::class,'showLoginForm'])->name('login');
 Route::post('login',[LoginController::class,'login'])->name('login');
+Route::post('logout',[LoginController::class,'logout'])->name('logout')->middleware(['auth','admin']);
 //password request and reset
 Route::post('password/email',[ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset',[ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
@@ -36,7 +38,7 @@ Route::group(['middleware'=> ['auth','admin']],function(){
     Route::get('home', [HomeController::class, 'home'])->name('home');
     Route::get('change_password',[LoginController::class, 'force_password_change_form'] )->name('forcepasswordchange');
     Route::post('changed_password',[LoginController::class, 'force_password_change'] )->name('forcepassword');
-    Route::post('logout',[LoginController::class,'logout'])->name('logout');
+    
     //email verification
     Route::post('email/resend',[VerificationController::class,'resend'])->name('verification.resend');
     Route::get('email/verify',[VerificationController::class,'show'])->name('verification.notice');
