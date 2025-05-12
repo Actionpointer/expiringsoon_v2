@@ -30,8 +30,8 @@
             
             <div class="dropdown-divider"></div>
 
-            <a class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-forms').submit();">Sign out</a>
-            <form id="logout-forms" action="{{ route('logout') }}" method="POST" class="d-none">
+            <a class="dropdown-item" href="{{route('admin.logout')}}" onclick="event.preventDefault(); document.getElementById('logout-forms').submit();">Sign out</a>
+            <form id="logout-forms" action="{{ route('admin.logout') }}" method="POST" class="d-none">
                 @csrf
             </form>
         </div>

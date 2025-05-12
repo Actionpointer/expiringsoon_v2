@@ -239,8 +239,8 @@
                                     <a @if(in_array(auth()->user()->role->name,['vendor','staff'])) href="{{route('help.vendors')}}" @elseif(auth()->user()->role->name == 'shopper') href="{{route('help.shoppers')}}" @else href="{{route('help.index')}}"  @endif>{{ucwords(__('front.support'))}}</a>
                                   </li>
                                   <li class="header__navigation-drop-menu-link">
-                                    <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-forms').submit();">Logout</a>
-                                    <form id="logout-forms" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <a href="{{route('admin.logout')}}" onclick="event.preventDefault(); document.getElementById('logout-forms').submit();">Logout</a>
+                                    <form id="logout-forms" action="{{ route('admin.logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                   </li>
