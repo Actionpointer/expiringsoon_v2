@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Vendor;
 
 
 use App\Models\Kyc;
-use App\Models\Bank;
 use App\Models\City;
 use App\Models\State;
 use App\Models\Store;
@@ -81,8 +80,8 @@ class StoreController extends Controller
                 ]
             );
 
-            $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $path = storage_path('app/public/'.$banner);
+            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $path = storage_path('app/public/'.$photo);
             $imgFile = Image::make($request->file('photo'));
             // $imgFile->fit(150,150)->save($path);
             $imgFile->resize(null, 500, function ($constraint) {
@@ -91,12 +90,12 @@ class StoreController extends Controller
             
             $store = Store::create(['name'=> $request->name,
             'user_id'=> $user->id ,'email'=>$request->email,
-            'phone'=>$request->phone,'banner'=>$banner,
+            'phone'=>$request->phone,'photo'=>$photo,
             'address'=> $request->address,
             'country_id'=> $country->id,
             'state_id'=> $state->id,
             'city_id'=> $city->id,
-            'status'=> 1]);
+            'published'=> 1]);
             
             // Add the store owner as a workplace member with full permissions
             $store->staff()->attach($user->id, [
@@ -165,139 +164,116 @@ class StoreController extends Controller
         }
     }
 
-    public function import(Request $request){
+    public function update(Request $request){
+        $store = Store::find($request->store_id);
+            if(!$store){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Store Not found',
+            ], 404);
+        }
+
         $user = auth()->user();
+        
+        // Check if user has permission to update this store
+        $staffMember = $store->staff()->where('user_id', $user->id)->first();
+        if (!$staffMember || !$staffMember->pivot || !in_array('stores', json_decode($staffMember->pivot->permissions, true) ?? [])) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You do not have permission to update this store',
+            ], 403);
+        }
+
         try {
-            //Validated
+            // Validated
             $validator = Validator::make($request->all(), 
             [
                 'name' => 'required|max:255',
+                'description' => 'required|string',
+                'email' => ['required', 'string', Rule::unique('stores')->ignore($store->id)],
+                'phone' => ['required', 'string', Rule::unique('stores')->ignore($store->id)],
                 'address' => 'required|string',
-                'state_id' => 'required|numeric',
-                'email' => 'required|string|unique:shops',
-                'phone' => 'required|string|unique:shops',
-                'photo' => ['required','string','url','not-regex:(.svg|.gif)']
-            ]);
-
-            if($validator->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message'=> $validator->errors()->first()
-                ], 401);
-            }
-            $size = getimagesize($request->photo);
-            $extension = image_type_to_extension($size[2]);
-            $banner = 'uploads/'.time().'.'.$extension;
-            $path = storage_path('app/public/'.$banner);                   
-            $imgFile = Image::make(file_get_contents($request->photo));
-            $imgFile->resize(null, 400, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($path);
-            $store = Store::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'banner'=>$banner,
-            'address'=> $request->address,'country_id'=> $user->country_id ,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> 1]);
-            
-            return response()->json([
-                'status' => true,
-                'message' => 'Store Created Successfully',
-                'data' => ['shop_id'=> $store->id,'name'=> $store->id,'wallet_balance'=> 0,'owner'=> auth()->user(),'products'=> $store->products->count() ,'create_shops_remaining'=> $store->user->max_shops]
-            ], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
-
-    
-
-    public function settings(Store $store){
-        $user = auth()->user();
-        $states = $store->country->states;
-        $cities = City::where('state_id',$store->state_id)->get();
-        return view('vendor.shop.settings',compact('user','shop','states','cities'));
-    }
-    
-    public function update(Request $request){
-        $store = Store::find($request->shop_id);
-        try {
-            $validator = Validator::make($request->all(), 
-            [
-                'shop_id' => 'required|numeric|exists:shops,id',
-                // 'pin' => 'required|numeric',
-                'name' => 'nullable|string',
-                'email' => ['nullable','string',Rule::unique('shops')->ignore($store)],
-                'phone' => ['nullable','string',Rule::unique('shops')->ignore($store)],
-                'published' => 'nullable|numeric',
+                'state' => 'required|string',
+                'city' => 'required|string',
                 'photo' => 'nullable|max:2048|image',
-                'address' => 'nullable|string',
-                'state_id' => 'nullable|numeric',
-                'discount30' => 'nullable|string',
-                'discount60' => 'nullable|string',
-                'discount90' => 'nullable|string',
-                'discount120' => 'nullable|string',
             ],[
                 'photo.max' => 'The image is too heavy. Standard size is 2mb',
             ]);
 
             if($validator->fails()){
-                return request()->expectsJson() ?  
-                        response()->json(['status' => false,'message'=> $validator->errors()->first()],401):
-                        redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
+                return response()->json(['status' => false, 'message'=>$validator->errors()->first()], 422);
             }
-            // if(!$this->checkPin($request)['result']){
-            //     return request()->expectsJson() ?  
-            //      response()->json([
-            //         'status' => false,gi
-            //         'message' => 'Invalid Pin',
-            //     ], 401) :
-            //     redirect()->back()->with(['result'=> '0','message'=> 'Invalid Pin']);
-            // }
-            
-            $request->name ? $store->name = $request->name:'';
-            $request->email ? $store->email = $request->email:'';
-            $request->phone ? $store->phone = $request->phone:'';
-            $request->published ? $store->published = $request->published:'';
-            if($request->photo){
-                if($request->hasFile('photo')){
-                    if($store->banner) 
-                    Storage::delete('public/'.$store->banner);
-                    $banner = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
-                    $path = storage_path('app/public/'.$banner);
-                    $imgFile = Image::make($request->file('photo'));
-                    $imgFile->resize(null, 400, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($path);
-                }else{
-                    $size = getimagesize($request->photo);
-                    $extension = image_type_to_extension($size[2]);
-                    $banner = 'uploads/'.time().'.'.$extension;
-                    $path = storage_path('app/public/'.$banner);                   
-                    $imgFile = Image::make(file_get_contents($request->photo));
-                    $imgFile->resize(null, 400, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($path);
+
+            // Country cannot be changed, use existing country
+            $country = Country::find($store->country_id);
+            if (!$country) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Store country information is invalid',
+                ], 500);
+            }
+
+            // Get or create state within the same country
+            $state = State::firstOrCreate(
+                [
+                    'name' => $request->state,
+                    'country_id' => $country->id
+                ]
+            );
+
+            // Get or create city
+            $city = City::firstOrCreate(
+                [
+                    'name' => $request->city,
+                    'state_id' => $state->id
+                ]
+            );
+
+            // Update store data
+            $storeData = [
+                'name' => $request->name,
+                'description' => $request->description,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'state_id' => $state->id,
+                'city_id' => $city->id
+            ];
+
+            // Handle photo upload if provided
+            if ($request->hasFile('photo')) {
+                // Delete old photo if exists
+                if ($store->photo && Storage::exists('public/' . $store->photo)) {
+                    Storage::delete('public/' . $store->photo);
                 }
-                $store->banner = $banner;
-            } 
-            $request->address ? $store->address = $request->address:'';
-            $request->state_id ? $store->state_id = $request->state_id:'';
-            $request->city_id ? $store->city_id = $request->city_id:'';
-            $request->discount30 ? $store->discount30 = $request->discount30:'';
-            $request->discount60 ? $store->discount60 = $request->discount60:'';
-            $request->discount90 ? $store->discount90 = $request->discount90:'';
-            $request->discount120 ? $store->discount120 = $request->discount120:'';
-            $store->save();
-            $store->rejections()->delete();
-            return request()->expectsJson() ?  
-                response()->json([
-                'status' => true,
-                'message' => 'Successfully Updated Store',
-                'data' => new StoreResource($store)
-            ], 200) :
-            redirect()->back()->with(['result'=> '1','message'=> 'Store Details Updated Successfully']);
-    
+                
+                $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+                $path = storage_path('app/public/'.$photo);
+            $imgFile = Image::make($request->file('photo'));
+            $imgFile->resize(null, 500, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($path);
+            
+                $storeData['photo'] = $photo;
+            }
+            
+            // Update the store
+            $store->update($storeData);
+
+            // Notify store owner of updates
+            $store->owner->notify(new NewStoreNotification($store));
+            
+            return response()->json([
+                'status' => true, 
+                'message' => 'Store Updated Successfully', 
+                'data' => [
+                    'store_id'=> $store->id,
+                    'name'=> $store->name,
+                    'wallet_balance'=> $store->wallet->balance ?? 0,
+                    'products'=> $store->products->count(),
+                ]
+            ], 200);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -342,6 +318,58 @@ class StoreController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function import(Request $request){
+        $user = auth()->user();
+        try {
+            //Validated
+            $validator = Validator::make($request->all(), 
+            [
+                'name' => 'required|max:255',
+                'address' => 'required|string',
+                'state_id' => 'required|numeric',
+                'email' => 'required|string|unique:shops',
+                'phone' => 'required|string|unique:shops',
+                'photo' => ['required','string','url','not-regex:(.svg|.gif)']
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'status' => false,
+                    'message'=> $validator->errors()->first()
+                ], 401);
+            }
+            $size = getimagesize($request->photo);
+            $extension = image_type_to_extension($size[2]);
+            $photo = 'uploads/'.time().'.'.$extension;
+            $path = storage_path('app/public/'.$photo);                   
+            $imgFile = Image::make(file_get_contents($request->photo));
+            $imgFile->resize(null, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($path);
+            $store = Store::create(['name'=> $request->name,'user_id'=> $user->id ,'email'=>$request->email,'phone'=>$request->phone,'photo'=>$photo,
+            'address'=> $request->address,'country_id'=> $user->country_id ,'state_id'=> $request->state_id,'city_id'=> $request->city_id,'published'=> 1]);
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Store Created Successfully',
+                'data' => ['shop_id'=> $store->id,'name'=> $store->id,'wallet_balance'=> 0,'owner'=> auth()->user(),'products'=> $store->products->count() ,'create_shops_remaining'=> $store->user->max_shops]
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function settings(Store $store){
+        $user = auth()->user();
+        $states = $store->country->states;
+        $cities = City::where('state_id',$store->state_id)->get();
+        return view('vendor.shop.settings',compact('user','shop','states','cities'));
     }
 
     public function verification(Store $store){
@@ -395,8 +423,6 @@ class StoreController extends Controller
             ], 500);
         }
     }
-
-    
 
     public function notifications(Store $store){
         $store->unreadNotifications->markAsRead();

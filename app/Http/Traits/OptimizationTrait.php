@@ -63,15 +63,15 @@ trait OptimizationTrait
         $size = @getimagesize($url);
         if(!$size) return null;
         $extension = image_type_to_extension($size[2]);
-        $banner = 'uploads/'.time().$extension;
-        $path = storage_path('app/public/'.$banner);  
+        $photo = 'uploads/'.time().$extension;
+        $path = storage_path('app/public/'.$photo);  
         $file = file_get_contents($url);
         if(!$file) return null;
         $imgFile = Image::make($file);
         $imgFile->resize(null, 400, function ($constraint) {
             $constraint->aspectRatio();
         })->save($path);
-        return $banner;
+        return $photo;
         
     }
 }

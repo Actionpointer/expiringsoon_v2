@@ -30,10 +30,12 @@ class StoreResource extends JsonResource
             "city"=> $this->city ? $this->city->name : '',
             "state"=> $this->state->name,
             "country"=> $this->country->name,
+            "country_code"=> $this->country->code,
             "currency"=> $this->currency,
             "currency_symbol"=> $this->currency_symbol,
             "wallet"=> $this->wallet->balance,
             "status"=> $this->status,
+            "published"=> $this->published,
             "approved"=> $this->approved,
             "total_products"=> $this->products->count(),
             "opened_orders"=> Order::where('store_id',$this->id)

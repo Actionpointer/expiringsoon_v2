@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShopRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -40,7 +40,8 @@ class ShopRequest extends FormRequest
         return [
             'state_id.required' => 'The state field is required',
             'city_id.required' => 'The city field is required',
-            'photo.max' => 'The banner size must be less than or equal to 1mb',
+            'photo.max' => 'The photo size must be less than or equal to 1mb',
+            'photo.image' => 'The photo must be an image',
         ];
     }
 }

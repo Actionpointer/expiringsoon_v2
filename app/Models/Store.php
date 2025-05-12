@@ -32,7 +32,7 @@ class Store extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','user_id','email','phone','banner','address','country_id','state_id','city_id','description','status'];
+    protected $fillable = ['name','slug','user_id','email','phone','photo','address','country_id','state_id','city_id','description','status'];
     protected $appends = ['image'];
 
     public static function boot()
@@ -73,7 +73,7 @@ class Store extends Model
     }
 
     public function getImageAttribute(){
-        return $this->banner ? config('app.url')."/storage/$this->banner": config('app.url').'/src/images/site/no-image.png';   
+        return $this->photo ? config('app.url')."/storage/$this->photo": config('app.url').'/src/images/site/no-image.png';   
     }
     
     public function scopeIsApproved($query){
@@ -85,7 +85,7 @@ class Store extends Model
     }
 
     public function scopeIsPublished($query){
-        return $query->where('status',1);
+        return $query->where('published',1);
     }
 
     public function scopeSelling($query){

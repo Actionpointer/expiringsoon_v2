@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('email')->unique();
             $table->string('phone');
-            $table->string('banner')->nullable();
+            $table->string('photo')->nullable();
             $table->string('address');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('state_id')->nullable();

@@ -25,30 +25,23 @@ class ProductController extends Controller
         $this->middleware('auth:sanctum');
     }
    
-    public function index(Shop $shop){
-        $products = Product::where('shop_id',$shop->id)->orderBy('expire_at','desc')->with('rejected')->get();
-        return request()->expectsJson() ?
-            response()->json([
+    public function index(Store $store){
+        $products = Product::where('store_id',$store->id)->orderBy('expire_at','desc')->with('rejected')->get();
+        return response()->json([
                 'status' => true,
                 'message' => $products->count() ? 'Products retrieved Successfully':'No Products retrieved',
                 'data' => ProductResource::collection($products),
                 'count' => $products->count()
-            ], 200) :
-            view('vendor.shop.product.list',compact('shop','products'));
+            ], 200);
     }
 
-    public function create(Shop $shop){
-        $tags = Tag::all(); 
-        return view('vendor.shop.product.create',compact('shop','tags'));
-    }
-
-    public function store(Shop $shop,Request $request){
+    public function store(Store $store,Request $request){
         try {
             $date_limit = now()->addHours(cache('settings')['order_processing_to_delivery_period']);
             $date_beyond = Carbon::parse('2038-01-01');
             $validator = Validator::make($request->all(), 
             [
-                'shop_id' => 'required|numeric',
+                'store_id' => 'required|numeric',
                 'name' => 'required|max:255',
                 'description' => 'required',
                 'price' => 'required|numeric',
@@ -75,7 +68,7 @@ class ProductController extends Controller
             if($request->length || $request->width || $height){
 
             }
-            $product = Product::create(['name'=> $request->name,'shop_id'=> $shop->id,
+            $product = Product::create(['name'=> $request->name,'store_id'=> $store->id,
             'description'=> $request->description,'stock'=> $request->stock,
             'tags'=> $request->tags ?? [],'photo'=> $photo,'expire_at'=> $request->expiry? Carbon::parse($request->expiry):null,
             'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
@@ -84,7 +77,7 @@ class ProductController extends Controller
             
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
-                    redirect()->route('vendor.shop.product.list',$shop)->with(['result'=>1,'message'=> 'Product Created Successfully']);
+                    redirect()->route('vendor.store.product.list',$store)->with(['result'=>1,'message'=> 'Product Created Successfully']);
         
         } catch (\Throwable $th) {
             return response()->json([
@@ -95,12 +88,12 @@ class ProductController extends Controller
     
     }
 
-    public function edit(Shop $shop,Product $product){
+    public function edit(Store $store,Product $product){
         $tags = Tag::all();
-        return view('vendor.shop.product.edit',compact('shop','product','tags'));
+        return view('vendor.store.product.edit',compact('store','product','tags'));
     }
 
-    public function update(Shop $shop,Request $request){
+    public function update(Store $store,Request $request){
         // dd($request->all());
         try {
             $date_limit = now()->addHours(cache('settings')['order_processing_to_delivery_period']);
@@ -108,7 +101,7 @@ class ProductController extends Controller
             $validator = Validator::make($request->all(), 
             [
                 'product_id' => 'required|numeric',
-                'shop_id' => 'required|numeric',
+                'store_id' => 'required|numeric',
                 'name' => 'required|max:255',
                 'description' => 'required',
                 'price' => 'required|numeric',
@@ -128,7 +121,7 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
-            $product = Product::where('id',$request->product_id)->where('shop_id',$request->shop_id)->first();
+            $product = Product::where('id',$request->product_id)->where('store_id',$request->store_id)->first();
             if(!$product){
                 return response()->json([
                     'status' => false,
@@ -163,7 +156,7 @@ class ProductController extends Controller
             $product->rejections()->delete();
             return request()->expectsJson()
                 ? response()->json(['status' => true, 'message' => 'Product Updated Successfully','data'=> new ProductDetailsResource($product)], 200) :
-                    redirect()->route('vendor.shop.product.list',$product->shop)->with(['result'=>1,'message'=> 'Product Updated Successfully']);
+                    redirect()->route('vendor.store.product.list',$product->store)->with(['result'=>1,'message'=> 'Product Updated Successfully']);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -176,13 +169,13 @@ class ProductController extends Controller
     public function destroy(Request $request){
         // dd($request->all());
         $product = Product::find($request->product_id);
-        if($product->shop_id != $request->shop_id){
+        if($product->store_id != $request->store_id){
             return request()->expectsJson() ?
                  response()->json([
                     'status' => false,
-                    'message'=> 'Product does not belong to shop'
+                    'message'=> 'Product does not belong to store'
                 ], 401) :
-                redirect()->back()->with(['result'=> '0','message'=> 'Product does not belong to shop']);
+                redirect()->back()->with(['result'=> '0','message'=> 'Product does not belong to store']);
         }
         if($product->orders->isNotEmpty() && OrderStatus::whereIn('order_id',$product->orders->pluck('order_id')->toArray())->count()){
             return request()->expectsJson() ?
@@ -203,28 +196,28 @@ class ProductController extends Controller
         
     }
 
-    public function upload(Shop $shop){
+    public function upload(Store $store){
         $tags = Tag::all(); 
-        return view('vendor.shop.product.upload',compact('shop','tags'));
+        return view('vendor.store.product.upload',compact('store','tags'));
     }
 
-    public function download_template(Shop $shop){
-        return Excel::download(new ProductsTemplateExport($shop), 'product_template.xlsx');
+    public function download_template(Store $store){
+        return Excel::download(new ProductsTemplateExport($store), 'product_template.xlsx');
     }
 
-    public function upload(Shop $shop,Request $request){
+    public function upload(Store $store,Request $request){
         try {
-            Excel::import(new ProductsImport($shop->id), $request->file('products'));
+            Excel::import(new ProductsImport($store->id), $request->file('products'));
         }
         catch(\Maatwebsite\Excel\Validators\ValidationException $e){
             $failures = $e->failures();
             dd($failures);
         }
-        return redirect()->route('vendor.shop.product.list',$shop)->with(['result'=>1,'message'=> 'Products Uploaded Successfully']);
+        return redirect()->route('vendor.store.product.list',$store)->with(['result'=>1,'message'=> 'Products Uploaded Successfully']);
     }
 
-    public function details(Shop $shop,Product $product){
-        if($product && $shop && $product->shop_id == $shop->id){
+    public function details(Store $store,Product $product){
+        if($product && $store && $product->store_id == $store->id){
             return response()->json([
                 'status' => true,
                 'message' => 'Products retrieved Successfully',

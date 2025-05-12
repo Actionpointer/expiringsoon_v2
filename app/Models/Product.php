@@ -36,9 +36,11 @@ class Product extends Model
         return 'slug';
     }
     
-    protected $fillable = ['name','shop_id','slug','description','stock','published','approved', 'tags','photo','expire_at','price','discount30','discount60','discount90','discount120','length','width','height','weight','units'];
+    protected $fillable = ['store_id','name','slug','description','category_id',
+    'published','approved_at','tags','photos','expire_at','expiry_term',
+    'discount30','discount60','discount90','discount120'];
     protected $appends = ['amount','image','discount','valid','available','expiry_in','fault'];
-    protected $casts = ['expire_at'=> 'datetime','tags'=> 'array','units'=> 'array'];
+    protected $casts = ['expire_at'=> 'datetime','approved_at'=> 'datetime','tags'=> 'array'];
 
     public static function boot()
     {

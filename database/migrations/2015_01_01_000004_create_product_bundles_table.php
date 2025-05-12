@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('price');
             $table->string('currency_code');
-            $table->string('image')->nullable();
+            $table->string('photo')->nullable();
             $table->timestamps();
         });
         Schema::create('product_bundle_variants', function (Blueprint $table) {

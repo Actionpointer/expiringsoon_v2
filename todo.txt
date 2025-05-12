@@ -1,6 +1,6 @@
-
-
-
+when store is updated, notify all customers of the store
+store subscribe to plan
+store create product
 
 
 
@@ -16,8 +16,7 @@ change categorization:{
     admin assigns orphaned tags to identified categories
 }
 
--one event can call many listeners
--many events cannot call one listener - use subscribers to do this
+
 -charges on payout {add that to commission}
 -phone number verification
 -change password, send email

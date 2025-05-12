@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('name', 100);
-            $table->text('description');
             $table->string('slug')->nullable();
-            $table->text('tags')->nullable();
-            $table->json('images')->nullable(); 
+            $table->text('description');
+            $table->text('meta_description')->nullable();
+            $table->json('photos')->nullable();
+            $table->boolean('preorder')->default(false);
+            $table->boolean('always_available')->default(false);
             $table->dateTime('expire_at')->nullable();
             $table->string('expiry_term')->nullable();
             $table->string('discount30')->nullable();
@@ -26,12 +29,14 @@ return new class extends Migration
             $table->string('discount90')->nullable();
             $table->string('discount120')->nullable();
             $table->boolean('published')->default(false);
-            $table->boolean('approved')->default(false);
+            $table->timestamp('approved_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->index(['store_id', 'published', 'approved']);
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->index(['store_id', 'published', 'approved_at']);
             $table->index('slug');
+            $table->index('expire_at');
         });
     }
 

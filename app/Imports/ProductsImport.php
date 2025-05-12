@@ -32,10 +32,10 @@ class ProductsImport implements ToModel,SkipsEmptyRows, WithHeadingRow, WithVali
 
     public function model(array $row)
     {
-        $banner = null;
+        $photo = null;
         
         if($row['photo']){
-            $banner = $this->imageFromUrl($row['photo']);
+            $photo = $this->imageFromUrl($row['photo']);
         }
         return new Product([
             'shop_id'=> $this->shop,
@@ -47,7 +47,7 @@ class ProductsImport implements ToModel,SkipsEmptyRows, WithHeadingRow, WithVali
             'published'=> $row['published'],
             'expire_at'=> $row['expire_at'] ? Carbon::createFromFormat('d-m-Y',$row['expire_at']) : null,
             'tags'=> array_filter(explode(',',$row['tags'])),
-            'photo'=> $banner,
+            'photo'=> $photo,
             'length'=> $row['length'] ? explode(' ',$row['length'])[0] : null,
             'width'=> $row['width'] ? explode(' ',$row['width'])[0] : null,
             'height'=> $row['height'] ? explode(' ',$row['height'])[0] : null,

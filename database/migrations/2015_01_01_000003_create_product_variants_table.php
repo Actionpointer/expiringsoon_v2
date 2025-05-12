@@ -15,7 +15,7 @@ class CreateProductVariantsTable extends Migration
             $table->string('price');
             $table->integer('stock')->default(0);
             $table->json('options')->nullable(); // Stores variant options like color, size, image etc
-            $table->string('image')->nullable(); 
+            $table->string('photo')->nullable(); 
             $table->boolean('is_default')->default(false);
             $table->boolean('is_active')->default(true);
             $table->string('type')->default('product'); // product, bundle etc.
