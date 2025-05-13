@@ -10,9 +10,9 @@ class CreateProductAttributesTable extends Migration
     {
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // e.g. "Color", "Size"
-            $table->string('type')->default('select'); // select, radio, checkbox
-            $table->string('values'); // e.g. "Red", "XL"
+            $table->string('name'); // e.g. "Color", "Size", "Material", "Weight"
+            $table->string('slug')->nullable();
+            $table->string('options')->nullable(); // e.g. "Red", "XL"
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->index('is_active');

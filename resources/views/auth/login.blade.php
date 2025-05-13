@@ -8,7 +8,7 @@
           <div class="position-absolute top-0 start-0 end-0 mt-3 mx-3">
             <div class="d-none d-lg-flex justify-content-between">
               <a href="#">
-                @include('layouts.base.snippets.logo')
+                @include('layouts.snippets.logo')
               </a>
 
               <!-- Select -->

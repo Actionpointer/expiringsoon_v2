@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('photo');
-            $table->string('slug');
+            $table->string('slug')->nullable();
             $table->string('description')->nullable();
             $table->string('group')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

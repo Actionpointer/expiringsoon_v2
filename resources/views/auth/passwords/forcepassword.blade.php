@@ -14,7 +14,7 @@
 
               <figcaption class="blockquote-footer blockquote-light">
                 <div class="mb-3">
-                  <img class="avatar avatar-circle" src="{{asset('img/160x160/img9.jpg')}}" alt="Image Description">
+                  <img class="avatar avatar-circle" src="{{asset('images/160x160/img9.jpg')}}" alt="Image Description">
                 </div>
 
                 Lida Reidy

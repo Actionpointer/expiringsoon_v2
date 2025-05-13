@@ -50,7 +50,7 @@ class UserController extends Controller
         if($request->phone) $user->phone = $request->phone;
         if($request->hasFile('photo')){
             if($user->photo) Storage::delete('public/users/'.$user->photo);
-            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $photo = 'users/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $path = storage_path('app/public/users/'.$photo);
             $imgFile = Image::make($request->file('photo'));
             $imgFile->resize(200, 200, function ($constraint) {

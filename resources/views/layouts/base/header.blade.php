@@ -3,23 +3,23 @@
     <div class="navbar-nav-wrap">
         <!-- Logo -->
         <a class="navbar-brand" href="{{ route('admin.dashboard') }}" aria-label="Front">
-            @include('layouts.base.snippets.logo')
+            @include('layouts.snippets.logo')
         </a>
         <!-- End Logo -->
 
-        @include('layouts.base.snippets.search')
+        @include('layouts.snippets.search')
 
         <div class="navbar-nav-wrap-content-end">
             <!-- Navbar -->
             <ul class="navbar-nav">
-                @include('layouts.base.snippets.messages')
+                @include('layouts.snippets.messages')
 
-                @include('layouts.base.snippets.notifications')
+                @include('layouts.snippets.notifications')
 
-                @include('layouts.base.snippets.activities')
+                @include('layouts.snippets.activities')
 
                 
-                @include('layouts.base.snippets.admin')
+                @include('layouts.snippets.admin')
                 
             </ul>
             <!-- End Navbar -->

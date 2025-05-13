@@ -20,7 +20,8 @@
         "laravel/ui": "^4.0",
         "maatwebsite/excel": "*",
         "pusher/pusher-php-server": "^5.0",
-        "tzsk/otp": "^8.0"
+        "tzsk/otp": "^8.0",
+        "unisharp/laravel-filemanager": "^2.10"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.9.1",

@@ -18,7 +18,7 @@ trait FlutterwaveTrait
                         "customizations"=> [
                             "title" => "Expiring Soon",
                             "description" => "Payment",
-                            "logo" => asset('src/images/logo.png')
+                            "logo" => asset('images/logo.png')
                         ]) )
         ->asJson()
         ->post();
@@ -74,7 +74,7 @@ trait FlutterwaveTrait
                         "customizations"=> [
                             "title"=>"Expiring Soon",
                             "description"=>"Payment",
-                            "logo"=> asset('src/images/logo.png')
+                            "logo"=> asset('images/logo.png')
                         ]) )
         ->asJson()
         ->post();

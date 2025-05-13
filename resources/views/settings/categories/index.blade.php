@@ -1,4 +1,4 @@
-@extends('layouts.base.provider')
+@extends('layouts.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -31,7 +31,7 @@
                     <h6 class="card-subtitle mb-2">Total Categories</h6>
                     <div class="row align-items-center gx-2">
                         <div class="col">
-                            <span class="display-4 text-dark">56</span>
+                            <span class="display-4 text-dark">{{ $categories->count() }}</span>
                             <span class="text-body fs-6 ms-1">categories</span>
                         </div>
                     </div>
@@ -45,10 +45,10 @@
                     <h6 class="card-subtitle mb-2">Active Categories</h6>
                     <div class="row align-items-center gx-2">
                         <div class="col">
-                            <span class="display-4 text-dark">48</span>
+                            <span class="display-4 text-dark">{{ $active_categories }}</span>
                             <div class="d-flex align-items-center">
                                 <span class="text-success me-2">
-                                    <i class="bi-check-circle-fill"></i> 85.7% active
+                                    <i class="bi-check-circle-fill"></i> {{ number_format(($active_categories / max(1, $categories->count())) * 100, 1) }}% active
                                 </span>
                             </div>
                         </div>
@@ -60,13 +60,13 @@
         <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
             <div class="card h-100">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2">Total Subcategories</h6>
+                    <h6 class="card-subtitle mb-2">Category Groups</h6>
                     <div class="row align-items-center gx-2">
                         <div class="col">
-                            <span class="display-4 text-dark">182</span>
+                            <span class="display-4 text-dark">{{ $groups->count() }}</span>
                             <div class="d-flex align-items-center">
                                 <span class="text-body">
-                                    3.25 avg per category
+                                    {{ number_format($categories->count() / max(1, $groups->count()), 1) }} avg per group
                                 </span>
                             </div>
                         </div>
@@ -78,13 +78,13 @@
         <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
             <div class="card h-100">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2">Items Using Categories</h6>
+                    <h6 class="card-subtitle mb-2">Products Using Categories</h6>
                     <div class="row align-items-center gx-2">
                         <div class="col">
-                            <span class="display-4 text-dark">1.2k</span>
+                            <span class="display-4 text-dark">{{ $categories->sum('products_count') }}</span>
                             <div class="d-flex align-items-center">
                                 <span class="text-body">
-                                    items categorized
+                                    products categorized
                                 </span>
                             </div>
                         </div>
@@ -108,10 +108,11 @@
                     <div class="row align-items-center">
                         <div class="col-auto">
                             <div class="tom-select-custom">
-                                <select class="js-select form-select form-select-sm">
-                                    <option value="all">All Status</option>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                                <select class="js-select form-select form-select-sm" id="group-filter">
+                                    <option value="all">All Groups</option>
+                                    @foreach($groups as $group)
+                                        <option value="{{ $group }}">{{ $group }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -122,53 +123,55 @@
 
         <!-- Table -->
         <div class="table-responsive">
-            <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+            <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table" id="categories-table">
                 <thead class="thead-light">
                     <tr>
                         <th>Category</th>
-                        <th>Subcategories</th>
-                        <th>Items</th>
-                        <th>Status</th>
+                        <th>Group</th>
+                        <th>Description</th>
+                        <th>Products</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr>
+                    @foreach($categories as $category)
+                    <tr data-group="{{ $category->group }}">
                         <td>
                             <div class="d-flex align-items-center">
-                                <img class="avatar avatar-lg me-3" src="assets/img/categories/electronics.jpg" alt="Electronics">
+                                <img class="avatar avatar-lg me-3" src="{{ asset('images/categories/'.$category->photo) }}" alt="{{ $category->name }}">
                                 <div class="flex-grow-1 ms-3">
-                                    <h5 class="mb-0">Electronics</h5>
+                                    <h5 class="mb-0">{{ $category->name }}</h5>
                                 </div>
                             </div>
                         </td>
-                        <td>
-                            <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-soft-primary">Phones</span>
-                                <span class="badge bg-soft-primary">Laptops</span>
-                                <span class="badge bg-soft-primary">Tablets</span>
-                                <span class="badge bg-soft-primary">+3 more</span>
-                            </div>
-                        </td>
-                        <td>245 items</td>
-                        <td><span class="badge bg-success">Active</span></td>
+                        <td>{{ $category->group_by ?? 'Uncategorized' }}</td>
+                        <td>{{ Str::limit($category->description, 50) }}</td>
+                        <td>{{ $category->products->count() }} products</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
+                                <button type="button" class="btn btn-white btn-sm edit-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editCategoryModal"
+                                    data-id="{{ $category->id }}"
+                                    data-name="{{ $category->name }}"
+                                    data-group="{{ $category->group_by }}"
+                                    data-description="{{ $category->description }}"
+                                    data-photo="{{ asset('images/categories/' . $category->photo) }}"
+                                    data-active="{{ $category->is_active }}">
                                     <i class="bi-pencil-square"></i>
                                 </button>
-                                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#manageCategorySubcatsModal">
-                                    <i class="bi-list-task"></i>
-                                </button>
-                                <button type="button" class="btn btn-white btn-sm">
+                                <button type="button" class="btn btn-white btn-sm delete-btn"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteCategoryModal"
+                                    data-id="{{ $category->id }}"
+                                    data-name="{{ $category->name }}">
                                     <i class="bi-trash"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
-
-                    <!-- More rows... -->
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -180,7 +183,7 @@
                     <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
                         <span class="me-2">Showing:</span>
                         <div class="tom-select-custom">
-                            <select class="js-select form-select form-select-borderless w-auto">
+                            <select class="js-select form-select form-select-borderless w-auto" id="per-page-select">
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
@@ -188,13 +191,13 @@
                             </select>
                         </div>
                         <span class="text-secondary me-2">of</span>
-                        <span>24</span>
+                        <span>{{ $categories->total() }}</span>
                     </div>
                 </div>
 
                 <div class="col-sm-auto">
                     <div class="d-flex justify-content-center justify-content-sm-end">
-                        <!-- Pagination -->
+                        {{ $categories->links() }}
                     </div>
                 </div>
             </div>
@@ -213,8 +216,66 @@
         // Initialize datatables
         HSCore.components.HSDatatables.init('.js-datatable');
 
-        // Initialize tom select
-        HSCore.components.HSTomSelect.init('.js-select');
+        
+        // Filter by group
+        $('#group-filter').on('change', function() {
+            var group = $(this).val();
+            
+            if (group === 'all') {
+                $('#categories-table tbody tr').show();
+            } else {
+                $('#categories-table tbody tr').hide();
+                $('#categories-table tbody tr[data-group="' + group + '"]').show();
+            }
+        });
+
+        // Edit category
+        $('.edit-btn').on('click', function() {
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+            var group = $(this).data('group');
+            var description = $(this).data('description');
+            var photo = $(this).data('photo');
+            var active = $(this).data('active');
+            console.log(group);
+            $('#edit-id').val(id);
+            $('#edit-name').val(name);
+            $('#edit-description').val(description);
+            $('#editCategoryImagePreview').attr('src', photo);
+            if (active == 1) {
+                $('#editActiveStatus').prop('checked', true);
+            } else {
+                $('#editActiveStatus').prop('checked', false);
+            }
+            
+            const selectElement = document.querySelector('#edit-group_by');
+            if (selectElement) {
+                // Get the TomSelect instance from the element
+                const tomSelectInstance = selectElement.tomselect;
+                if (tomSelectInstance) {
+                    // Clear previous selection and set new value
+                    tomSelectInstance.clear();
+                    tomSelectInstance.setValue(group);
+                }
+            }   
+        });
+        
+        // Delete category
+        $('.delete-btn').on('click', function() {
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+            
+            $('#delete-category-id').val(id);
+            $('#delete-category-name').text(name);
+            
+            // Update form action
+            $('#deleteCategoryForm').attr('action', '{{ route("admin.settings.categories.destroy") }}');
+        });
+        
+        // Handle page size changes
+        $('#per-page-select').on('change', function() {
+            window.location.href = '{{ route("admin.settings.categories.index") }}?per_page=' + $(this).val();
+        });
     });
 </script>
 @endpush 

@@ -15,94 +15,71 @@ class CategoryController extends Controller
 {
 
     public function index(){
-        $categories = Category::all();
-        $tags = Tag::all();
-        return view('settings.categories.index',compact('categories','tags'));
+        // Get all categories for statistics
+        $allCategories = Category::all();
+        
+        // Get paginated categories for display
+        $categories = Category::with('products')->paginate(10);
+        
+        // Calculate statistics from the full collection
+        $active_categories = $allCategories->where('is_active', 1)->count();
+        
+        // Get unique groups for filtering
+        $groups = $allCategories->pluck('group_by')->unique()->filter();
+        
+        // Get total product count
+        $product_count = $allCategories->sum('products_count');
+        
+        return view('settings.categories.index', compact(
+            'categories',
+            'active_categories',
+            'groups',
+            'product_count'
+        ));
     }
 
-    public function category_store(Request $request){
+    public function store(Request $request){
+        // dd($request->all());
         $file = $request->file('photo') ;
         $fileName = time().'.'.$request->file('photo')->getClientOriginalExtension();
-        $destinationPath = public_path().'/src/images/categories' ;
+        $destinationPath = public_path().'/images/categories';
         $file->move($destinationPath,$fileName);
-        $category = Category::create(['name'=> $request->category,'photo'=> $fileName]);
-        foreach($request->subcategories as $tag){
-            if(is_numeric($tag)){
-                $category->subcategories()->attach($tag);
-            }else{
-                $newtag = Tag::create(['name'=> $tag]);
-                $category->subcategories()->attach($newtag->id);
-            }
-        }
+        $category = Category::create(['name'=> $request->name,'description'=> $request->description,'photo'=> $fileName,'is_active'=> $request->is_active,'group_by'=> $request->group_by]);
+        
         return redirect()->back();
     }
 
-    public function category_update(Request $request){
+    public function update(Request $request){
         $category = Category::find($request->category_id);
         if($request->hasFile('photo')){
-            $image_path = public_path("src/images/categories/{{$category->photo}}");
+            $image_path = public_path("images/categories/{{$category->photo}}");
             if(File::exists($image_path)) {
                 unlink($image_path);
             }
             $file = $request->file('photo');
             $fileName = time().'.'.$request->file('photo')->getClientOriginalExtension();
-            $destinationPath = public_path().'/src/images/categories' ;
+            $destinationPath = public_path().'/images/categories' ;
             $file->move($destinationPath,$fileName);
             $category->photo = $fileName;
         }
-        $category->name = $request->category;
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->is_active = $request->is_active;
+        $category->group_by = $request->group_by;
         $category->save();
-        $old_subs = Arr::where($request->subcategories, function ($value, $key) {
-            return is_numeric($value) ;
-        });
-        $category->subcategories()->sync($old_subs);
-        $new_subs = Arr::where($request->subcategories, function ($value, $key) {
-            return !is_numeric($value);
-        });
-        foreach($new_subs as $sub){
-            $newtag = Tag::create(['name'=> $sub]);
-            $category->subcategories()->attach($newtag->id);
-        }
+        
         return redirect()->back();
     }
     
-    public function category_destroy(Request $request){
+    public function destroy(Request $request){
         $category = Category::find($request->category_id);
         $category->subcategories()->detach();
-        $image_path = public_path("src/images/categories/{{$category->photo}}");
+        $image_path = public_path("images/categories/{{$category->photo}}");
         if (File::exists($image_path)) {
             // File::delete($image_path);
             unlink($image_path);
         }
         $category->delete();
-        return redirect()->back();
-    }
-
-    public function tag_store(Request $request){
-        $tag = Tag::create(['name'=> $request->tag]);
-        foreach($request->categories as $category){
-             $tag->categories()->attach($category);
-        }
-        return redirect()->back();
-    }
-
-    public function tag_update(Request $request){
-        $tag = Tag::find($request->tag_id);
-        $tag->name = $request->tag;
-        $tag->save();
-        $tag->categories()->sync($request->categories);
-        return redirect()->back();
-    }
-    
-    public function tag_destroy(Request $request){
-        $tag = Tag::find($request->tag_id);
-        $tag->categories()->detach();
-        $products = Product::where('tags','LIKE',"%$tag->name%")->get();
-        foreach($products as $product){
-            $product->tags = Str::remove($tag->name, $product->tags);
-            $product->save();
-        }
-        $tag->delete();
         return redirect()->back();
     }
 }

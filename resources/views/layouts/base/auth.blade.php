@@ -10,7 +10,7 @@
     <title>ExpiringSoon | @yield('title')</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('img/logo_short.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/logo_short.png') }}">
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">

@@ -1,4 +1,4 @@
-@extends('layouts.base.provider')
+@extends('layouts.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -148,7 +148,7 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="avatar avatar-sm avatar-circle">
-                                    <img class="avatar-img" src="assets/img/160x160/img10.jpg" alt="Image">
+                                    <img class="avatar-img" src="assets/images/160x160/img10.jpg" alt="Image">
                                 </div>
                                 <div class="ms-3">
                                     <span class="d-block h5 text-inherit mb-0">John Smith</span>
@@ -185,7 +185,7 @@
                                             {{ $staff->id }}, 
                                             '{{ $staff->firstname }} {{ $staff->surname }}',
                                             '{{ $staff->email }}',
-                                            '{{ $staff->photo ? asset($staff->photo) : asset('assets/img/160x160/img1.jpg') }}'
+                                            '{{ $staff->photo ? asset($staff->photo) : asset('assets/images/160x160/img1.jpg') }}'
                                         )">
                                     <i class="bi-trash"></i>
                                 </button>

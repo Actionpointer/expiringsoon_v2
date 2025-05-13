@@ -1,4 +1,4 @@
-@extends('layouts.base.provider')
+@extends('layouts.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -156,7 +156,7 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                    <img class="avatar avatar-sm" src="../assets/img/160x160/img1.jpg" alt="Product Image">
+                                    <img class="avatar avatar-sm" src="../assets/images/160x160/img1.jpg" alt="Product Image">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <a class="d-inline-block link-dark" href="#">
@@ -194,7 +194,7 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                    <img class="avatar avatar-sm" src="../assets/img/160x160/img2.jpg" alt="Product Image">
+                                    <img class="avatar avatar-sm" src="../assets/images/160x160/img2.jpg" alt="Product Image">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <a class="d-inline-block link-dark" href="#">

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,8 +28,13 @@ class WorkplaceMiddleware
         }
         
         // If store_id is provided, check if user works in that specific store
-        if ($request->has('store_id') || $request->route('store_id')) {
-            $storeId = $request->input('store_id') ?? $request->route('store_id');
+        if ($request->has('store_id') || $request->route('store_id') || $request->route('store_slug')) {
+            if($request->route('store_slug')){
+                $store = Store::where('slug', $request->route('store_slug'))->first();
+                $storeId = $store->id;
+            }else{
+                $storeId = $request->input('store_id') ?? $request->route('store_id');
+            }
             
             if (!$user->activeWorkplaces()->where('stores.id', $storeId)->exists()) {
                 return response()->json([

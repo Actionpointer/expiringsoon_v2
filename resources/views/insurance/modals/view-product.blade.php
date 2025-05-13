@@ -12,7 +12,7 @@
                 <div class="row mb-4">
                     <div class="col-sm-4">
                         <div class="text-center">
-                            <img class="avatar avatar-xl avatar-4x3 mb-3" src="../assets/img/160x160/img1.jpg" alt="Product Image">
+                            <img class="avatar avatar-xl avatar-4x3 mb-3" src="../assets/images/160x160/img1.jpg" alt="Product Image">
                             <span class="badge bg-soft-success text-success">Active</span>
                         </div>
                     </div>

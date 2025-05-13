@@ -124,7 +124,7 @@
                                 <div class="form-check form-switch mb-3">
                                     <input type="checkbox" class="form-check-input" id="paystackEnabled" checked>
                                     <label class="form-check-label">
-                                        <img src="assets/img/paystack-logo.svg" alt="Paystack" height="20">
+                                        <img src="assets/images/paystack-logo.svg" alt="Paystack" height="20">
                                     </label>
                                 </div>
                                 <div class="mb-2">
@@ -139,7 +139,7 @@
                                 <div class="form-check form-switch mb-3">
                                     <input type="checkbox" class="form-check-input" id="flutterwaveEnabled" checked>
                                     <label class="form-check-label">
-                                        <img src="assets/img/flutterwave-logo.svg" alt="Flutterwave" height="20">
+                                        <img src="assets/images/flutterwave-logo.svg" alt="Flutterwave" height="20">
                                     </label>
                                 </div>
                                 <div class="mb-2">

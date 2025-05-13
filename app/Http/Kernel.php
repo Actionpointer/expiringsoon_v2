@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin'  =>  \App\Http\Middleware\AdminMiddleware::class,
         'workplace'  =>  \App\Http\Middleware\WorkplaceMiddleware::class,
+        'filemanager.store' => \App\Http\Middleware\FileManagerStoreMiddleware::class,
     ];
 }

@@ -1,4 +1,4 @@
-@extends('layouts.base.provider')
+@extends('layouts.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -16,7 +16,7 @@
                 <div class="d-flex align-items-center gap-2">
                     <div class="flex-shrink-0">
                         <div class="avatar avatar-lg avatar-circle">
-                            <img class="avatar-img" src="{{asset('img/160x160/img1.jpg')}}" alt="Profile Image">
+                            <img class="avatar-img" src="{{asset('images/160x160/img1.jpg')}}" alt="Profile Image">
                             <span class="avatar-status avatar-lg-status avatar-status-success"></span>
                         </div>
                     </div>
@@ -191,7 +191,7 @@
                         <!-- Wishlist Item -->
                         <div class="col mb-3">
                             <div class="card card-bordered h-100">
-                                <img class="card-img-top" src="{{asset('img/400x400/img1.jpg')}}" alt="Product Image">
+                                <img class="card-img-top" src="{{asset('images/400x400/img1.jpg')}}" alt="Product Image">
                                 <div class="card-body">
                                     <h5 class="card-title">Product Name</h5>
                                     <p class="card-text text-success">₦15,000</p>
@@ -228,7 +228,7 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center mb-2">
                                     <div class="flex-shrink-0">
-                                        <img class="avatar avatar-circle" src="{{asset('img/160x160/img1.jpg')}}" alt="Product Image">
+                                        <img class="avatar avatar-circle" src="{{asset('images/160x160/img1.jpg')}}" alt="Product Image">
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h5 class="mb-0">Product Name</h5>

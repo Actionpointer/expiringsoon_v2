@@ -1,4 +1,4 @@
-@extends('layouts.base.provider')
+@extends('layouts.base.app')
 @section('title', 'API Keys Management')
 
 @section('main')

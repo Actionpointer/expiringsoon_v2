@@ -25,6 +25,9 @@
             <a class="nav-link {{ request()->is('*/settings/categories') ? 'active' : '' }}" href="{{ route('admin.settings.categories.index') }}">Categories</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ request()->is('*/settings/attributes') ? 'active' : '' }}" href="{{ route('admin.settings.attributes.index') }}">Attributes</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->is('*/settings/staff') ? 'active' : '' }}" href="{{ route('admin.settings.staff.index') }}">Staff</a>
         </li>
         <li class="nav-item">

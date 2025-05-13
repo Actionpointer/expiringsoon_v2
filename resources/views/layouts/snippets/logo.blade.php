@@ -1,0 +1,2 @@
+<img class="navbar-brand-logo" src="{{asset('images/logo.png')}}" alt="Logo" data-hs-theme-appearance="default">
+<img class="navbar-brand-logo" src="{{asset('images/logo_white.png')}}" alt="Logo" data-hs-theme-appearance="dark">

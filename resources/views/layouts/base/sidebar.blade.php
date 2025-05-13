@@ -5,7 +5,7 @@
             <!-- Logo -->
 
             <a class="navbar-brand" href="#" aria-label="Front">
-                @include('layouts.base.snippets.logo')
+                @include('layouts.snippets.logo')
             </a>
 
             <!-- End Logo -->
@@ -26,7 +26,7 @@
             <div class="navbar-vertical-content">
                 <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
                     <div class="nav-item">
-                        <a class="nav-link @if(Route::is('admin.dashboard')) active @endif" href="#" data-placement="left">
+                        <a class="nav-link @if(Route::is('admin.dashboard')) active @endif" href="{{ route('admin.dashboard') }}" data-placement="left">
                             <i class="bi-house-door nav-icon"></i>
                             <span class="nav-link-title">Dashboard</span>
                         </a>
@@ -49,8 +49,8 @@
 
                             <div id="navbarVerticalMenuPagesUsersMenu" class="nav-collapse collapse"
                                 data-bs-parent="#navbarVerticalMenuPagesMenu">
-                                <a class="nav-link" href="#">Users</a>
-                                <a class="nav-link" href="#">Shops</a>
+                                <a class="nav-link" href="{{ route('admin.users.index') }}">Users</a>
+                                <a class="nav-link" href="{{ route('admin.stores.index') }}">Stores</a>
                                 
                             </div>
                         </div>
@@ -239,6 +239,9 @@
                             <a class="nav-link" href="{{ route('admin.settings.categories.index') }}">
                                 <i class="bi-diagram-3 nav-icon"></i> Categories
                             </a>
+                            <a class="nav-link" href="{{ route('admin.settings.attributes.index') }}">
+                                <i class="bi-diagram-3 nav-icon"></i> Attributes
+                            </a>
                             <a class="nav-link" href="{{ route('admin.settings.staff.index') }}">
                                 <i class="bi-people nav-icon"></i> Staff
                             </a>
@@ -289,8 +292,8 @@
                                     <a class="nav-link" href="{{ route('admin.security.monitoring.ips') }}">
                                         <i class="bi-ban nav-icon"></i> Blacklisted IPs
                                     </a>
-                                    <a class="nav-link" href="{{ route('admin.security.monitoring.shops') }}">
-                                        <i class="bi-shop-slash nav-icon"></i> Blacklisted Shops
+                                    <a class="nav-link" href="{{ route('admin.security.monitoring.stores') }}">
+                                        <i class="bi-shop-slash nav-icon"></i> Blacklisted Stores
                                     </a>
                                     <a class="nav-link" href="{{ route('admin.security.monitoring.users') }}">
                                         <i class="bi-person-x nav-icon"></i> Blacklisted Users

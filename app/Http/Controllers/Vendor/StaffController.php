@@ -66,7 +66,7 @@ class StaffController extends Controller
             }
             foreach($request->file('document') as $file){
                 $doc_type = explode('/',$file->getClientMimeType())[0];
-                $document = 'uploads/'.time().'.'.$file->getClientOriginalExtension();
+                $document = 'users/'.time().'.'.$file->getClientOriginalExtension();
                 if($user_idcard = $user->kyc->where('type','idcard')->first()){
                     Storage::delete('public/'.$user_idcard->document);
                     $user_idcard->delete();

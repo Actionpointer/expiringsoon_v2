@@ -52,7 +52,7 @@ class Feature extends Model
     public function getImageAttribute(){
         if($photo = $this->product->photo){
             return config('app.url')."/storage/$photo";
-        }else return asset('src/images/site/no-image.png');  
+        }else return asset('images/site/no-image.png');  
     }
 
     public function scopeWithinState($query,$state_id=null){

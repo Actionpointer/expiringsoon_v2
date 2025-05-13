@@ -63,7 +63,7 @@ trait OptimizationTrait
         $size = @getimagesize($url);
         if(!$size) return null;
         $extension = image_type_to_extension($size[2]);
-        $photo = 'uploads/'.time().$extension;
+        $photo = 'products/'.time().$extension;
         $path = storage_path('app/public/'.$photo);  
         $file = file_get_contents($url);
         if(!$file) return null;

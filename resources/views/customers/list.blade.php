@@ -1,4 +1,4 @@
-@extends('layouts.base.provider')
+@extends('layouts.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -76,7 +76,7 @@
                         <td style="min-width: 200px;">
                             <div class="d-flex align-items-center">
                                 <div class="avatar avatar-circle">
-                                    <img class="avatar-img" src="{{asset('img/160x160/img1.jpg')}}" alt="Profile Image">
+                                    <img class="avatar-img" src="{{asset('images/160x160/img1.jpg')}}" alt="Profile Image">
                                     <span class="avatar-status avatar-sm-status avatar-status-success"></span>
                                 </div>
                                 <div class="ms-3">

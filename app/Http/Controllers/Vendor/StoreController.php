@@ -80,7 +80,7 @@ class StoreController extends Controller
                 ]
             );
 
-            $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+            $photo = 'stores/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
             $path = storage_path('app/public/'.$photo);
             $imgFile = Image::make($request->file('photo'));
             // $imgFile->fit(150,150)->save($path);
@@ -247,7 +247,7 @@ class StoreController extends Controller
                     Storage::delete('public/' . $store->photo);
                 }
                 
-                $photo = 'uploads/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
+                $photo = 'stores/'.time().'.'.$request->file('photo')->getClientOriginalExtension();
                 $path = storage_path('app/public/'.$photo);
             $imgFile = Image::make($request->file('photo'));
             $imgFile->resize(null, 500, function ($constraint) {
@@ -342,7 +342,7 @@ class StoreController extends Controller
             }
             $size = getimagesize($request->photo);
             $extension = image_type_to_extension($size[2]);
-            $photo = 'uploads/'.time().'.'.$extension;
+            $photo = 'stores/'.time().'.'.$extension;
             $path = storage_path('app/public/'.$photo);                   
             $imgFile = Image::make(file_get_contents($request->photo));
             $imgFile->resize(null, 400, function ($constraint) {
@@ -406,7 +406,7 @@ class StoreController extends Controller
 
                 }
                 $doctype = explode('/',$file->getClientMimeType())[0];
-                $document = 'uploads/'.time().'.'.$file->getClientOriginalExtension();
+                $document = 'stores/'.time().'.'.$file->getClientOriginalExtension();
                 $file->storeAs('public/',$document);
                 $kyc = Kyc::create(['user_id'=> $user->id,'verifiable_id'=> $verifiable_id,
                     'verifiable_type'=> $verifiable_type,'type'=> $request->type,'doctype'=> $doctype,'document'=> $document]);
