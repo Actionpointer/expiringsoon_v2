@@ -33,7 +33,7 @@ class WorkplaceMiddleware
                 $store = Store::where('slug', $request->route('store_slug'))->first();
                 $storeId = $store->id;
             }else{
-                $storeId = $request->input('store_id') ?? $request->route('store_id');
+                $storeId = $request->input('store_id') ?? $request->route('store_id')->id;
             }
             
             if (!$user->activeWorkplaces()->where('stores.id', $storeId)->exists()) {

@@ -1,12 +1,13 @@
 <?php
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PlansController;
+use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\AdvertController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\PlacesController;
@@ -25,16 +26,15 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 
-Route::group(['prefix' => 'store-filemanager/', 'middleware' => ['web', 'auth:sanctum']], function () {
+Route::group(['prefix' => 'store-filemanager/', 'middleware' => ['web']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
-Route::get('{store_slug}/filemanager', function ($store_slug) {
-    $store = \App\Models\Store::where('slug', $store_slug)->first();
-    if ($store) {
-        session(['store_slug' => $store_slug]);
-    }
+
+Route::middleware(['web','signed'])->get('filemanager', function () {
+    session(['store_slug' => request()->store_slug]);
     return redirect('/store-filemanager');
-})->middleware(['auth:sanctum','workplace']);
+})->name('unisharp.filemanager');
+
 
 
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {

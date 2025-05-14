@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::bind('shop_id', function ($value) {
+        Route::bind('store_id', function ($value) {
             return \App\Models\Store::where('id', $value)->first();
         });
         Route::bind('product_id', function ($value) {

@@ -28,10 +28,6 @@ class StoreController extends Controller
 {
     use SecurityTrait;
 
-    public function __construct(){
-        $this->middleware('auth:sanctum');
-    }
-
     public function store(Request $request){
         $user = auth()->user();
         try {
@@ -146,14 +142,12 @@ class StoreController extends Controller
 
     public function show(Store $store){
         if($store){
-            DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$store->user_id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->id',$store->id)->whereJsonContains('data->related_to','shop')->update(['read_at'=> now()]);
-            return request()->expectsJson() ?  
-            response()->json([
+            //DB::table('notifications')->whereNull('read_at')->where('notifiable_id',$store->user_id)->where('notifiable_type','App\Models\User')->whereJsonContains('data->id',$store->id)->whereJsonContains('data->related_to','shop')->update(['read_at'=> now()]);
+            return response()->json([
                 'status' => true,
                 'message' => 'Store retrieved Successfully',
-                'data' => new StoreDetailsResource($store)
-            ], 200):
-            view('vendor.shop.dashboard',compact('shop'));
+                'data' => new StoreResource($store)
+            ], 200);
         }else{
             return response()->json([
                 'status' => true,
