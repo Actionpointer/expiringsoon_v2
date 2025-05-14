@@ -26,9 +26,8 @@ Route::group(['prefix'=>'stores','middleware'=> ['auth:sanctum']],function (){
                 $signedUrl = URL::temporarySignedRoute(  
                     'unisharp.filemanager',        // Route name  
                     now()->addMinutes(10),           // Expiration time  
-                    ['store_slug' => $store_id->slug] // Route parameters  
+                    ['store_slug' => $store_id->slug,'type' => 'image'] // Route parameters  
                 ); 
-            
                 return response()->json(['url' => $signedUrl]);  
             });
 
@@ -37,6 +36,7 @@ Route::group(['prefix'=>'stores','middleware'=> ['auth:sanctum']],function (){
                 Route::post('store', [ProductController::class, 'store']);
                 Route::post('update', [ProductController::class, 'update']);
                 Route::post('destroy', [ProductController::class, 'destroy']);
+
                 Route::post('upload', [ProductController::class, 'upload']);
                 Route::get('download/template', [ProductController::class, 'template_download']);
                 

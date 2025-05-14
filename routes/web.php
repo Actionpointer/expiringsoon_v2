@@ -26,7 +26,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 
-Route::group(['prefix' => 'store-filemanager/', 'middleware' => ['web']], function () {
+Route::group(['prefix' => 'store-filemanager/', 'middleware' => ['web','vendor']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 

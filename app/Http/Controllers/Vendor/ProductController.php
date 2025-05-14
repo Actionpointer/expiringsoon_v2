@@ -37,47 +37,109 @@ class ProductController extends Controller
 
     public function store(Store $store,Request $request){
         try {
-            $date_limit = now()->addHours(cache('settings')['order_processing_to_delivery_period']);
-            $date_beyond = Carbon::parse('2038-01-01');
+            $date_limit = now()->addHours(config('settings.order_processing_to_shipment_period'));
             $validator = Validator::make($request->all(), 
             [
-                'store_id' => 'required|numeric',
-                'name' => 'required|max:255',
-                'description' => 'required',
-                'price' => 'required|numeric',
-                'stock' => 'required|numeric|gt:1',
-                'tags' => 'nullable',
-                'photo' => 'nullable|max:5120|image',
-                'expiry' => ['nullable','date',"after:$date_limit","before:$date_beyond"],   
-            ],[
-                'photo.max' => 'The image is too heavy. Standard size is 5mb',
+                'name' => 'required|string',  
+                'category_id' => 'required|integer',  
+                'photos' => 'required|array',  
+                'photos.*' => 'string|url', // or 'string' if filenames  
+                'description' => 'string|nullable',  
+                'meta_description' => 'string|nullable',  
+                'pre_order' => 'boolean',  
+                'always_available' => 'boolean',  
+                'expiry_at' => ['nullable','date',"after:$date_limit",'before:2038-01-01'],  
+                'expiry_term' => 'string|nullable',  
+                'discount30' => 'numeric|nullable',  
+                'discount60' => 'numeric|nullable',  
+                'discount90' => 'numeric|nullable',  
+                'discount120' => 'numeric|nullable',  
+                'status' => 'string',  
+                'options' => 'array',  
+                'options.*.id' => 'required|integer',  
+                'options.*.values' => 'required|array',  
+                'options.*.values.*' => 'string',  
+                'variants' => 'array',  
+                'variants.*.price' => 'required|numeric',  
+                'variants.*.stock' => 'required|integer',  
+                'variants.*.options' => 'required|array',  
+                'variants.*.options.*.id' => 'required|integer',  
+                'variants.*.options.*.value' => 'required|string',  
+                'variants.*.photo' => 'string|nullable',  
             ]);
             if($validator->fails()){
-                return request()->expectsJson() ?
-                 response()->json([
+                return response()->json([
                     'status' => false,
                     'message'=> $validator->errors()->first()
-                ], 401) :
-                redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
+                ], 401);
             }
-            $photo = '';
-            if($request->hasFile('photo')){
-                $photo = $this->imageUpload($request->file('photo'));
+            
+            // Create the product
+            $product = Product::create([
+                'name' => $request->name,
+                'store_id' => $store->id,
+                'category_id' => $request->category_id,
+                'description' => $request->description,
+                'meta_description' => $request->meta_description,
+                'photos' => $request->photos,
+                'preorder' => $request->pre_order ?? false,
+                'always_available' => $request->always_available ?? false,
+                'expire_at' => $request->expiry_at ? Carbon::parse($request->expiry_at) : null,
+                'expiry_term' => $request->expiry_term,
+                'discount30' => $request->discount30,
+                'discount60' => $request->discount60,
+                'discount90' => $request->discount90,
+                'discount120' => $request->discount120,
+                'published' => $request->status == 'published'
+            ]);
+            
+            // Process product options if provided
+            if ($request->has('options') && is_array($request->options)) {
+                foreach ($request->options as $option) {
+                    $product->options()->create([
+                        'product_attribute_id' => $option['id'],
+                        'values' => $option['values']
+                    ]);
+                }
             }
-            $length = $width = $height = $weight = null;
-            if($request->length || $request->width || $height){
-
+            
+            // Process variants if provided
+            if ($request->has('variants') && is_array($request->variants)) {
+                foreach ($request->variants as $index => $variant) {
+                    $isDefault = $index === 0; // First variant is default
+                    
+                    $product->variants()->create([
+                        'name' => $product->name . ' - Variant ' . ($index + 1),
+                        'price' => $variant['price'],
+                        'stock' => $variant['stock'],
+                        'options' => $variant['options'],
+                        'photo' => $variant['photo'] ?? null,
+                        'is_default' => $isDefault,
+                        'is_active' => true,
+                        'type' => 'product'
+                    ]);
+                }
+            } else {
+                // Create default variant if no variants specified
+                $product->variants()->create([
+                    'name' => $product->name,
+                    'price' => $request->price ?? 0,
+                    'stock' => $request->stock ?? 0,
+                    'options' => [],
+                    'is_default' => true,
+                    'is_active' => true,
+                    'type' => 'product'
+                ]);
             }
-            $product = Product::create(['name'=> $request->name,'store_id'=> $store->id,
-            'description'=> $request->description,'stock'=> $request->stock,
-            'tags'=> $request->tags ?? [],'photo'=> $photo,'expire_at'=> $request->expiry? Carbon::parse($request->expiry):null,
-            'price'=> $request->price,'discount30'=> $request->discount30,'discount60'=> $request->discount60,
-            'discount90'=> $request->discount90,'discount120'=> $request->discount120,'published'=> $request->published,
-            'length'=> $request->length,'width'=> $request->width,'height'=> $request->height,'weight'=> $request->weight,'units'=> [$request->length_unit,$request->weight_unit]]);
             
             return request()->expectsJson()
-                ? response()->json(['status' => true, 'message' => 'Product Created Successfully'], 200) :
-                    redirect()->route('vendor.store.product.list',$store)->with(['result'=>1,'message'=> 'Product Created Successfully']);
+                ? response()->json([
+                    'status' => true, 
+                    'message' => 'Product Created Successfully',
+                    'data' => new ProductDetailsResource($product)
+                ], 200) :
+                redirect()->route('vendor.store.product.list', $store)
+                    ->with(['result'=>1, 'message'=> 'Product Created Successfully']);
         
         } catch (\Throwable $th) {
             return response()->json([
@@ -85,7 +147,6 @@ class ProductController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
-    
     }
 
     public function edit(Store $store,Product $product){
@@ -196,10 +257,6 @@ class ProductController extends Controller
         
     }
 
-    public function upload(Store $store){
-        $tags = Tag::all(); 
-        return view('vendor.store.product.upload',compact('store','tags'));
-    }
 
     public function download_template(Store $store){
         return Excel::download(new ProductsTemplateExport($store), 'product_template.xlsx');
