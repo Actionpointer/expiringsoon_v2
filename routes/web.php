@@ -25,7 +25,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 
-Route::group(['prefix' => 'store-filemanager/', 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => 'store-filemanager/', 'middleware' => ['web', 'auth:sanctum']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 Route::get('{store_slug}/filemanager', function ($store_slug) {
@@ -34,7 +34,7 @@ Route::get('{store_slug}/filemanager', function ($store_slug) {
         session(['store_slug' => $store_slug]);
     }
     return redirect('/store-filemanager');
-})->middleware('workplace');
+})->middleware(['auth:sanctum','workplace']);
 
 
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
