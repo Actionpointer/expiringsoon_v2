@@ -40,7 +40,7 @@ Route::post('forgot-password',[ForgotPasswordController::class,'sendResetOtp']);
 Route::post('reset-password',[ResetPasswordController::class,'verifyResetOtp']);                                        
 
 Route::get('categories', [ResourcesController::class, 'categories']);
-Route::get('subcategories/{category_id}', [ResourcesController::class, 'subcategories']);
+Route::get('attributes', [ResourcesController::class, 'attributes']);
 
 Route::get('adverts',[AdvertController::class,'ads']);
 Route::get('adverts/click/{advert_id}', [AdvertController::class, 'ad_click']);

@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Traits\OrderTrait;
+use App\Models\ProductAttribute;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CountryResource;
 
@@ -133,31 +134,22 @@ class ResourcesController extends Controller
         }
     }
 
-    public function tags($category_id){
-        $category = Category::find($category_id);
-        if(!$category){
+    public function attributes(){
+        $attributes = ProductAttribute::all();
+        if(!$attributes || $attributes->count() == 0){
             return response()->json([
                 'status' => true,
-                'message' => 'Category does not exist',
+                'message' => 'No Attribute retrieved',
                 'data' => null
             ], 200);
         }
-        $tags = $category->subcategories;
-        if($tags->count()){
-            return response()->json([
+        
+        return response()->json([
                 'status' => true,
-                'message' => 'Tags retrieved Successfully',
-                'data' => $tags,
-                'count' => $tags->count()
-            ], 200);
-        }else{
-            return response()->json([
-                'status' => true,
-                'message' => 'No Tags available for selected category',
-                'data' => null,
-                'count' => 0
-            ], 200);
-        }
+                'message' => 'Attributes retrieved Successfully',
+                'data' => $attributes,
+                'count' => $attributes->count()
+        ], 200);
     }  
 
     public function coupon(Request $request){
