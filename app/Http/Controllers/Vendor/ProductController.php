@@ -36,14 +36,16 @@ class ProductController extends Controller
     }
 
     public function store(Store $store,Request $request){
+        // dd($request->all());
+         
         try {
             $date_limit = now()->addHours(config('settings.order_processing_to_shipment_period'));
             $validator = Validator::make($request->all(), 
             [
                 'name' => 'required|string',  
                 'category_id' => 'required|integer',  
-                'photos' => 'required|array',  
-                'photos.*' => 'string|url', // or 'string' if filenames  
+                'photos' => 'nullable|array',  
+                'photos.*' => 'nullable|image|max:5120',  
                 'description' => 'string|nullable',  
                 'meta_description' => 'string|nullable',  
                 'pre_order' => 'boolean',  
@@ -54,24 +56,34 @@ class ProductController extends Controller
                 'discount60' => 'numeric|nullable',  
                 'discount90' => 'numeric|nullable',  
                 'discount120' => 'numeric|nullable',  
-                'status' => 'string',  
+                'published' => 'boolean',  
                 'options' => 'array',  
                 'options.*.id' => 'required|integer',  
                 'options.*.values' => 'required|array',  
-                'options.*.values.*' => 'string',  
+                // 'options.*.values.*' => 'string',  
                 'variants' => 'array',  
                 'variants.*.price' => 'required|numeric',  
                 'variants.*.stock' => 'required|integer',  
                 'variants.*.options' => 'required|array',  
                 'variants.*.options.*.id' => 'required|integer',  
                 'variants.*.options.*.value' => 'required|string',  
-                'variants.*.photo' => 'string|nullable',  
+                'variants.*.photo' => 'nullable|image|max:5120',  
             ]);
             if($validator->fails()){
                 return response()->json([
                     'status' => false,
                     'message'=> $validator->errors()->first()
                 ], 401);
+            }
+            
+            // Process uploaded images
+            $uploadedImages = [];
+            if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $imageFile) {
+                    $imagePath = 'products/' . time() . '_' . rand(1000, 9999) . '.' . $imageFile->getClientOriginalExtension();
+                    $imageFile->storeAs('public', $imagePath);
+                    $uploadedImages[] = $imagePath;
+                }
             }
             
             // Create the product
@@ -81,7 +93,7 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'description' => $request->description,
                 'meta_description' => $request->meta_description,
-                'photos' => $request->photos,
+                'photos' => $uploadedImages, // Database field is still 'photos'
                 'preorder' => $request->pre_order ?? false,
                 'always_available' => $request->always_available ?? false,
                 'expire_at' => $request->expiry_at ? Carbon::parse($request->expiry_at) : null,
@@ -90,7 +102,7 @@ class ProductController extends Controller
                 'discount60' => $request->discount60,
                 'discount90' => $request->discount90,
                 'discount120' => $request->discount120,
-                'published' => $request->status == 'published'
+                'published' => $request->published
             ]);
             
             // Process product options if provided
@@ -108,12 +120,22 @@ class ProductController extends Controller
                 foreach ($request->variants as $index => $variant) {
                     $isDefault = $index === 0; // First variant is default
                     
+                    // Handle variant image upload if present
+                    $variantImagePath = null;
+                    if (isset($variant['photo']) && $variant['photo']) {
+                        $imageFile = $variant['photo'];
+                        if (is_object($imageFile) && $imageFile instanceof \Illuminate\Http\UploadedFile) {
+                            $variantImagePath = 'products/variants/' . time() . '_' . rand(1000, 9999) . '.' . $imageFile->getClientOriginalExtension();
+                            $imageFile->storeAs('public', $variantImagePath);
+                        }
+                    }
+                    
                     $product->variants()->create([
                         'name' => $product->name . ' - Variant ' . ($index + 1),
                         'price' => $variant['price'],
                         'stock' => $variant['stock'],
                         'options' => $variant['options'],
-                        'photo' => $variant['photo'] ?? null,
+                        'photo' => $variantImagePath, // DB field is still 'photo'
                         'is_default' => $isDefault,
                         'is_active' => true,
                         'type' => 'product'
@@ -132,14 +154,11 @@ class ProductController extends Controller
                 ]);
             }
             
-            return request()->expectsJson()
-                ? response()->json([
+            return response()->json([
                     'status' => true, 
                     'message' => 'Product Created Successfully',
                     'data' => new ProductDetailsResource($product)
-                ], 200) :
-                redirect()->route('vendor.store.product.list', $store)
-                    ->with(['result'=>1, 'message'=> 'Product Created Successfully']);
+                ], 200);
         
         } catch (\Throwable $th) {
             return response()->json([

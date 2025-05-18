@@ -39,8 +39,9 @@ class Product extends Model
     protected $fillable = ['store_id','name','slug','description','category_id',
     'published','approved_at','tags','photos','expire_at','expiry_term',
     'discount30','discount60','discount90','discount120'];
+
     protected $appends = ['amount','image','discount','valid','available','expiry_in','fault'];
-    protected $casts = ['expire_at'=> 'datetime','approved_at'=> 'datetime','tags'=> 'array'];
+    protected $casts = ['expire_at'=> 'datetime','approved_at'=> 'datetime','photos'=> 'array'];
 
     public static function boot()
     {
