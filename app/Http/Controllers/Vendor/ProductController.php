@@ -57,7 +57,7 @@ class ProductController extends Controller
                 'discount90' => 'numeric|nullable',  
                 'discount120' => 'numeric|nullable',  
                 'published' => 'boolean',  
-                'options' => 'array',  
+                //'options' => 'array',  
                 'options.*.id' => 'required|integer',  
                 'options.*.values' => 'required|array',  
                 // 'options.*.values.*' => 'string',  
@@ -130,8 +130,16 @@ class ProductController extends Controller
                         }
                     }
                     
+                    // Build variant name with attributes
+                    $variantName = $product->name;
+                    if (isset($variant['options']) && is_array($variant['options'])) {
+                        foreach ($variant['options'] as $option) {
+                            $variantName .= ' | ' . $option['value'];
+                        }
+                    }
+                    
                     $product->variants()->create([
-                        'name' => $product->name . ' - Variant ' . ($index + 1),
+                        'name' => $variantName,
                         'price' => $variant['price'],
                         'stock' => $variant['stock'],
                         'options' => $variant['options'],
@@ -201,6 +209,7 @@ class ProductController extends Controller
                 ], 401) :
                 redirect()->back()->withErrors($validator)->withInput()->with(['result'=> '0','message'=> $validator->errors()->first()]);
             }
+            
             $product = Product::where('id',$request->product_id)->where('store_id',$request->store_id)->first();
             if(!$product){
                 return response()->json([
