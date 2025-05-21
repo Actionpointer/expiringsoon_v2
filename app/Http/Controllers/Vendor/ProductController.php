@@ -61,7 +61,7 @@ class ProductController extends Controller
                 'options.*.id' => 'required|integer',  
                 'options.*.values' => 'required|array',  
                 // 'options.*.values.*' => 'string',  
-                'variants' => 'array',  
+                // 'variants' => 'array',  
                 'variants.*.price' => 'required|numeric',  
                 'variants.*.stock' => 'required|integer',  
                 'variants.*.options' => 'required|array',  
