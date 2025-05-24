@@ -21,9 +21,6 @@ use App\Http\Traits\OptimizationTrait;
 class ProductController extends Controller
 {
     use OptimizationTrait;
-    public function __construct(){
-        $this->middleware('auth:sanctum');
-    }
    
     public function index(Store $store){
         $products = Product::where('store_id',$store->id)->orderBy('expire_at','desc')->with('rejected')->get();

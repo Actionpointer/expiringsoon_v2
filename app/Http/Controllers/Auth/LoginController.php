@@ -87,6 +87,7 @@ class LoginController extends Controller
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
         }
+        return redirect()->intended();
     }
 
     public function signOut()
