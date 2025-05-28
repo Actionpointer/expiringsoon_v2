@@ -161,10 +161,10 @@ Route::group(['prefix'=>'stores','middleware'=> ['auth:sanctum']],function (){
                 Route::post('delete',[StaffController::class, 'destroy'])->name('destroy');
             });
         
-            Route::get('analytics',[StoreController::class, 'notifications'])->name('notifications');
+            Route::get('analytics',[StoreController::class, 'notifications']);
             Route::post('subscription/plans', [SubscriptionController::class, 'subscribe'])->name('plans.subscribe');
             Route::post('subscription/cancel-renewal', [SubscriptionController::class, 'cancel_renew'])->name('subscription.cancel_renew');   
-            Route::get('notifications',[StoreController::class, 'notifications'])->name('notifications');
+            Route::get('notifications',[StoreController::class, 'notifications']);
             Route::get('banking',[StaffController::class, 'banking'])->name('banking');
             Route::post('bank_account_number_verification',[StaffController::class,'accountNumberResolve'])->name('account_number_verification');
             Route::post('bank-info',[StaffController::class, 'bank_info'])->name('bank-info');

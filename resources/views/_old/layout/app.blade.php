@@ -14,8 +14,7 @@
     <link rel="stylesheet" href="{{asset('src/plugins/venobox/style.css')}}" />
     <link rel="stylesheet" href="{{asset('src/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('src/css/font-awesome.min.css')}}" />
-    <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/select2/css/select2.min.css')}}"/>
-    <link rel="stylesheet" type="text/css" href="{{asset('src/plugins/select2/css/custom.css')}}"/>
+    
     <link rel="stylesheet" href="{{asset('src/css/style.css')}}" />
     
     <style>
@@ -647,7 +646,7 @@
     <script src="{{asset('src/plugins/bvselect/script.js')}}"></script>
     <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('src/js/jquery.syotimer.min.js')}}"></script>
-    <script src="{{asset('src/plugins/select2/js/select2.min.js')}}"></script>
+    
     <script src="{{asset('src/js/main.js')}}"></script>
     <!--<script src="{{asset('pusher.js')}}"></script>-->
     <script src="https://js.pusher.com/4.4/pusher.min.js"></script>

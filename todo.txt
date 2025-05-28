@@ -1,3 +1,10 @@
+wishlist
+cart
+checkout
+subscription plans
+
+
+
 when store is updated, notify all customers of the store
 store subscribe to plan
 store create product

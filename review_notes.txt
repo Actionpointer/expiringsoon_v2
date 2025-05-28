@@ -1,7 +1,6 @@
 1. admin settings: 
   basic|currencies|countries|categories|staff|security|
   plans (subscription plans, ad plans , newsletter plans)
-
 2. user registration  
 3. user login
 4. user logout

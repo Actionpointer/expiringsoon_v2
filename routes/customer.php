@@ -12,38 +12,26 @@ use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Customer\AddressController;
 
 
-Route::group(['middleware'=>'auth:sanctum'],function () {
-    Route::post('signout',[LoginController::class,'signOut']);
-    
 
-    
+    Route::post('logout',[LoginController::class,'logout'])->name('logout');
+    //customer
+    Route::view('checkout', 'customer.checkout')->name('checkout');
+    Route::view('wishlist', 'customer.wishlist')->name('wishlist');
+    Route::view('dashboard', 'customer.dashboard')->name('dashboard');
+    Route::view('profile', 'customer.profile')->name('profile');
+    Route::view('addresses', 'customer.address')->name('addresses');
+    Route::view('followings', 'customer.followings')->name('followings');
+    Route::view('notifications', 'customer.notifications')->name('notifications');
+    Route::view('orders', 'customer.orders.index')->name('orders');
+    Route::view('order/{order}', 'customer.orders.show')->name('order');
+    Route::view('order/{order}/disputes', 'customer.orders.disputes')->name('dispute');
+    Route::view('order/{order}/messages', 'customer.orders.messages')->name('messages');
+    Route::view('order/{order}/timeline', 'customer.orders.timeline')->name('timeline');
 
-    Route::group(['prefix'=> 'user'],function(){
-        Route::get('/',[UserController::class,'show']);
-        Route::post('profile', [UserController::class, 'update']);
-        Route::post('password', [UserController::class, 'password']);
-        
-        Route::get('notifications',[UserController::class,'notifications']);
-        Route::get('updates',[UserController::class,'notifications']);
-        Route::post('notifications/read',[UserController::class,'readNotifications']);
-    });
-
-    Route::group(['prefix'=> 'otp','middleware'=> ['auth']],function(){
+    Route::group(['prefix'=> 'otp'],function(){
         Route::get('send',[HomeController::class,'otp_send']);
         Route::post('verify',[HomeController::class,'otp_verify']);
     });
-
-    Route::group(['prefix'=>'orders'],function(){
-        Route::get('/', [OrderController::class, 'index']);
-        Route::get('show/{order}', [OrderController::class, 'index']);
-        Route::post('update', [OrderController::class, 'update']);
-        Route::post('destroy', [OrderController::class, 'destroy']);
-        Route::post('message',[OrderController::class, 'message']);  
-        Route::get('dispute',[OrderController::class, 'messages']);
-        Route::get('orders/{order_id}/messages',[OrderController::class,'messages']);
-        Route::post('order/message',[OrderController::class, 'message']);
-        Route::post('order/review',[ReviewController::class, 'review']);
-    });  
 
     Route::group(['prefix'=>'payment'],function(){
         Route::post('status',[App\Http\Controllers\PaymentController::class,'paymentcallback']);
@@ -62,11 +50,11 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::post('unfollow', [SalesController::class, 'update']);
     });
     
-    Route::get('wishlist', [SalesController::class, 'wishlist']);
+    // Route::get('wishlist', [SalesController::class, 'wishlist']);
     Route::post('wishlist/add',[CartController::class,'addtowish']);
     Route::post('wishlist/remove',[CartController::class,'removefromwish']);
 
-    Route::get('cart', [CartController::class, 'cart']);
+    // Route::get('cart', [CartController::class, 'cart']);
     Route::post('cart/add',[CartController::class,'addtocart']);
     Route::post('cart/remove',[CartController::class,'removefromcart']);
 
@@ -79,5 +67,7 @@ Route::group(['middleware'=>'auth:sanctum'],function () {
         Route::get('/',[PaymentController::class, 'index']);    
         Route::get('view/{transaction_id}',[PaymentController::class, 'show']);
     });
+
+    // Route::get('mystores', [StoreController::class, 'index']);
     
-});
+
