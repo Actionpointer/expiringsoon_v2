@@ -29,12 +29,12 @@ class SettingsController extends Controller
     
     public function index(){
         $settings = Setting::all();
-        return view('settings.index',compact('settings'));
+        return view('backend.settings.index',compact('settings'));
     }
 
     public function currencies(){
         $currencies = Currency::all();
-        return view('settings.currencies',compact('currencies'));
+        return view('backend.settings.currencies',compact('currencies'));
     }
 
     public function currency_store(Request $request){

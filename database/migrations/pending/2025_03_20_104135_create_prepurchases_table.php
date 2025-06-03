@@ -45,7 +45,7 @@ return new class extends Migration
             $table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete('cascade');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('set null');
-            $table->foreign('currency_code')->references('code')->on('currencies')->onDelete('restrict');
+            
 
             // Indexes
             $table->index(['status', 'target_date']); // For processing due pre-purchases

@@ -13,14 +13,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('store_id');
             $table->string('slug')->nullable();
             $table->string('deliveryfee')->default(0);
-            $table->string('vat')->default(0);
-            $table->string('currency_code')->nullable();
-            $table->string('subtotal')->nullable();
-            $table->string('total')->nullable();
             $table->string('delivery_type')->nullable(); //pickup or delivery
             $table->unsignedBigInteger('address_id')->nullable();
             $table->timestamp('processing_at')->nullable();

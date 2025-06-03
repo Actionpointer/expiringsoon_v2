@@ -25,7 +25,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 
-Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
+
     Route::get('login',[LoginController::class,'showLoginForm'])->name('login');
     Route::post('login',[LoginController::class,'login'])->name('login');
     //password request and reset
@@ -248,4 +248,3 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
         });
     });
-});

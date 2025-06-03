@@ -15,7 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class State extends Model
 {
     protected $fillable = ['name','country_id'];
-
+    protected $connection = 'sqlite_states';
+    protected $table = 'states'; // adjust table name if different
+    // public $timestamps = false; // if no timestamps
     
     public function country(){
         return $this->belongsTo(Country::class);

@@ -6,14 +6,14 @@ use App\Models\Store;
 use App\Models\User;
 use App\Models\State;
 use App\Models\Address;
-use App\Models\Country;
-use App\Models\Location;
 use App\Models\Rate;
 use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    protected $fillable = ['name','state_id'];
+    protected $fillable = ['name','state_id','delivery'];
+    protected $connection = 'sqlite_cities';
+    protected $table = 'cities'; // adjust table name if different
 
     public function state(){
         return $this->belongsTo(State::class);
@@ -23,15 +23,13 @@ class City extends Model
     //     return $this->belongsTo(State::class)->belongsTo(Country::class);
     // }
 
-    public function shops(){
-        return $this->hasMany(Shop::class);
+    public function stores(){
+        return $this->hasMany(Store::class);
     }
     public function users(){
         return $this->hasMany(User::class);
     }
-    public function locations(){
-        return $this->hasMany(Location::class);
-    }
+    
     public function addresses(){
         return $this->hasMany(Address::class);
     }

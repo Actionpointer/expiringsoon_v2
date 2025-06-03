@@ -16,22 +16,24 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('slug');
             $table->string('name');
-            $table->text('description')->nullable();
             $table->string('email')->unique();
             $table->string('phone');
-            $table->string('photo')->nullable();
+            $table->string('business_type');
+            $table->text('description')->nullable();
             $table->string('address');
-            $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('state_id')->nullable();
             $table->unsignedBigInteger('country_id');
-            $table->string('commission')->nullable();
-            $table->boolean('status')->default(1); // 1: active, 0: inactive
-            $table->boolean('approved')->default(0); // 1: approved, 0: not approved
+            $table->unsignedBigInteger('state_id');
+            $table->unsignedBigInteger('city_id');
+            $table->string('zip_code');
+            $table->string('photo')->nullable();
+            $table->string('commission_override')->nullable(); //override commission
+            $table->boolean('published')->default(true); // 1: active, 0: inactive
+            $table->timestamp('approved_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
-            $table->foreign('state_id')->references('id')->on('states')->onDelete('set null');
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index(['user_id', 'published', 'approved_at']);
+            $table->index('slug');
         });
     }
 

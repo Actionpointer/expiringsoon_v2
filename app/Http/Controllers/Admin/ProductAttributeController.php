@@ -24,7 +24,7 @@ class ProductAttributeController extends Controller
         // Get total product options count
         $product_options_count = ProductOption::count();
         
-        return view('settings.attributes.index', compact(
+        return view('backend.settings.attributes.index', compact(
             'attributes',
             'active_attributes',
             'product_options_count'

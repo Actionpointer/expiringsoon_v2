@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('role_id');
             $table->json('permissions')->nullable();
             $table->string('status')->default('pending'); // pending, active, inactive
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');

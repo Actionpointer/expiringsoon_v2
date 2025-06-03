@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -15,7 +15,7 @@
                 <h1 class="page-header-title">Plans Settings</h1>
             </div>
         </div>
-        @include('settings.partials.menu')
+        @include('backend.settings.partials.menu')
     </div>
 
     <!-- Stats Row -->
@@ -121,7 +121,7 @@
                     </div>
                 </div>
 
-                @include('settings.plans.partials.subscription-table')
+                @include('backend.settings.plans.partials.subscription-table')
             </div>
 
             <!-- Ad Plans Tab -->
@@ -139,7 +139,7 @@
                     </div>
                 </div>
 
-                @include('settings.plans.partials.ad-table')
+                @include('backend.settings.plans.partials.ad-table')
             </div>
 
             <!-- Newsletter Plans Tab -->
@@ -157,7 +157,7 @@
                     </div>
                 </div>
 
-                @include('settings.plans.partials.newsletter-table')
+                @include('backend.settings.plans.partials.newsletter-table')
             </div>
         </div>
     </div>
@@ -165,7 +165,7 @@
 @endsection
 
 @section('secondary')
-@include('settings.plans.partials.modals')
+@include('backend.settings.plans.partials.modals')
 @endsection
 
 @push('scripts')

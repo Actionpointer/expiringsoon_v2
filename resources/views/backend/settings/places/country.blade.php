@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -50,19 +50,19 @@
     <!-- Tab Content -->
     <div class="tab-content">
         <!-- Locations Tab -->
-        @include('settings.places.partials.tabs.locations')
+        @include('backend.settings.places.partials.tabs.locations')
 
         <!-- Banking Tab -->
-        @include('settings.places.partials.tabs.banking')
+        @include('backend.settings.places.partials.tabs.banking')
 
         <!-- Verification Tab -->
-        @include('settings.places.partials.tabs.verification')
+        @include('backend.settings.places.partials.tabs.verification')
 
         <!-- Transactions Tab -->
-        @include('settings.places.partials.tabs.transactions')
+        @include('backend.settings.places.partials.tabs.transactions')
     </div>
 </div>
 
 <!-- Modals -->
-@include('settings.places.partials.modals')
+@include('backend.settings.places.partials.modals')
 @endsection

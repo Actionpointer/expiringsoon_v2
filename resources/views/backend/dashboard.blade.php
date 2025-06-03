@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -206,7 +206,7 @@
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <div class="avatar avatar-sm avatar-circle">
-                                        <img class="avatar-img" src="{{asset('images/160x160/img1.jpg')}}" alt="User">
+                                        <img class="avatar-img" src="{{asset('backend/images/160x160/img1.jpg')}}" alt="User">
                                     </div>
                                 </div>
                                 <div class="col">

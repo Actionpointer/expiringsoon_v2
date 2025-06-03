@@ -8,7 +8,7 @@
 <!-- breedcrumb section start  -->
 <div class="section breedcrumb">
     <div class="breedcrumb__img-wrapper">
-      <img src="{{asset('images/banner/breedcrumb.jpg')}}" alt="breedcrumb" />
+      <img src="{{asset('backend/images/banner/breedcrumb.jpg')}}" alt="breedcrumb" />
       <div class="container">
         <ul class="breedcrumb__content">
           <li>

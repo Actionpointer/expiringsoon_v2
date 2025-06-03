@@ -1,9 +1,23 @@
 <?php
 
+use App\Livewire\Auth\Signin;
+use App\Livewire\Auth\Signup;
+use App\Livewire\Guest\Welcome;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\URL;
+use App\Livewire\Auth\ResetPassword;
+use App\Livewire\Auth\ForgotPassword;
+use App\Livewire\Guest\Blog\BlogList;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Guest\Blog\BlogArticle;
 
-Route::view('/', 'welcome')->name('welcome');
+Route::get('/', Welcome::class)->name('welcome');
+Route::get('signin', Signin::class)->name('signin');
+Route::get('signup', Signup::class)->name('signup');
+Route::get('forgot-password', ForgotPassword::class)->name('forgot-password');
+Route::get('reset-password', ResetPassword::class)->name('reset-password');
+
+
 Route::view('products', 'guest.products')->name('products');
 Route::view('products/{product}', 'guest.product')->name('product');
 Route::view('hotdeals', 'guest.hotdeals')->name('hotdeals');
@@ -11,15 +25,18 @@ Route::view('stores', 'guest.stores')->name('stores');
 Route::view('stores/{store}', 'guest.store')->name('store');
 Route::view('cart', 'guest.cart')->name('cart');
 Route::view('compare', 'guest.compare')->name('compare');
-Route::view('blog', 'guest.blog')->name('blog');
-Route::view('blog-single', 'guest.blog-single')->name('blog-single');
-
-
-//store
-
+Route::get('blog', BlogList::class)->name('blog');
+Route::get('blog-single', BlogArticle::class)->name('blog-single');
 
 
 // Route::group(['middleware'=>'auth'],function(){
+    Route::get('home',function(){
+        if(auth()->user()->is_admin){
+            return redirect()->route('admin.dashboard');
+        }else{
+            return redirect()->route('dashboard');
+        }
+    });
     include('customer.php');
     include('store.php');
 // });
@@ -34,6 +51,7 @@ Route::middleware(['web','signed'])->get('filemanager', function () {
     session(['store_slug' => request()->store_slug]);
     return redirect('/store-filemanager');
 })->name('unisharp.filemanager');
+
 
 
 

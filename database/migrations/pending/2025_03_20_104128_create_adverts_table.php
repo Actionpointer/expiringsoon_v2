@@ -29,8 +29,6 @@ return new class extends Migration
             $table->unsignedBigInteger('clicks')->default(0);
             $table->timestamps();
             $table->foreign('adset_id')->references('id')->on('adsets')->onDelete('cascade');
-            $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade');
-
             $table->index(['advertable_type', 'advertable_id']);
         });
     }

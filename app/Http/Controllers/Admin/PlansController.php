@@ -20,7 +20,7 @@ class PlansController extends Controller
         $adPlans = Adplan::all();
         $newsletterPlans = NewsletterPlan::all();
         $currencies = Currency::all();
-        return view('settings.plans.index',compact('subscriptionPlans','adPlans','newsletterPlans','currencies'));
+        return view('backend.settings.plans.index',compact('subscriptionPlans','adPlans','newsletterPlans','currencies'));
     }
 
     /**

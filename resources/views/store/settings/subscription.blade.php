@@ -19,9 +19,9 @@
                     </nav>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#upgradeSubscriptionModal">
+                    <a href="{{ route('store.plans') }}" class="btn btn-primary">
                         <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Plan
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -70,9 +70,9 @@
                             </div>
                             
                             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#upgradeSubscriptionModal">
+                                <a href="{{ route('store.plans') }}" class="btn btn-primary">
                                     Upgrade Plan
-                                </button>
+                                </a>
                                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#renewSubscriptionModal">
                                     Renew Plan
                                 </button>
@@ -275,189 +275,6 @@
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Upgrade Subscription Modal -->
-<div class="modal fade" id="upgradeSubscriptionModal" tabindex="-1" aria-labelledby="upgradeSubscriptionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="upgradeSubscriptionModalLabel">Upgrade Your Subscription</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center mb-5">
-                    <h4>Choose the plan that's right for your business</h4>
-                    <p class="text-muted">All plans include a 14-day free trial</p>
-                </div>
-                
-                <div class="row">
-                    <!-- Basic Plan -->
-                    <div class="col-md-4 mb-4 mb-md-0">
-                        <div class="card h-100">
-                            <div class="card-header bg-light text-center py-4">
-                                <h5 class="mb-0">Basic</h5>
-                                <p class="text-muted mb-0">For small businesses</p>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center mb-4">
-                                    <h2 class="mb-0">$29.99</h2>
-                                    <p class="text-muted">per month</p>
-                                </div>
-                                
-                                <ul class="list-group list-group-flush mb-4">
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Up to 100 Products
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        2 GB Storage
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        2 Staff Accounts
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        5 Categories
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Basic Analytics
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Email Support
-                                    </li>
-                                </ul>
-                                
-                                <div class="d-grid">
-                                    <button type="button" class="btn btn-outline-primary">Select Plan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Premium Plan (Current) -->
-                    <div class="col-md-4 mb-4 mb-md-0">
-                        <div class="card h-100 border-primary">
-                            <div class="card-header bg-primary text-white text-center py-4">
-                                <h5 class="mb-0">Premium</h5>
-                                <p class="mb-0 opacity-75">For growing businesses</p>
-                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-warning text-dark">
-                                    Current Plan
-                                </span>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center mb-4">
-                                    <h2 class="mb-0">$49.99</h2>
-                                    <p class="text-muted">per month</p>
-                                </div>
-                                
-                                <ul class="list-group list-group-flush mb-4">
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Up to 500 Products
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        5 GB Storage
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        5 Staff Accounts
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        10 Categories
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Advanced Analytics
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        24/7 Support
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Custom Domain
-                                    </li>
-                                </ul>
-                                
-                                <div class="d-grid">
-                                    <button type="button" class="btn btn-primary" disabled>Current Plan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Pro Plan -->
-                    <div class="col-md-4">
-                        <div class="card h-100">
-                            <div class="card-header bg-dark text-white text-center py-4">
-                                <h5 class="mb-0">Pro</h5>
-                                <p class="mb-0 opacity-75">For established businesses</p>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center mb-4">
-                                    <h2 class="mb-0">$99.99</h2>
-                                    <p class="text-muted">per month</p>
-                                </div>
-                                
-                                <ul class="list-group list-group-flush mb-4">
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Unlimited Products
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        20 GB Storage
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Unlimited Staff Accounts
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Unlimited Categories
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Premium Analytics
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Priority 24/7 Support
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        Custom Domain
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        API Access
-                                    </li>
-                                    <li class="list-group-item px-0 d-flex align-items-center">
-                                        <i class="bi bi-check2 text-success me-2"></i>
-                                        White-label Option
-                                    </li>
-                                </ul>
-                                
-                                <div class="d-grid">
-                                    <button type="button" class="btn btn-dark">Upgrade to Pro</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

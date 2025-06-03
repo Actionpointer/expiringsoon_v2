@@ -20,7 +20,7 @@ return new class extends Migration
             $table->double('amount', null, 0)->default(0);
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->string('coupon_value')->default('0');
-            $table->double('vat', null, 0);
+            $table->double('vat_value')->default(0);
             $table->string('method')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();

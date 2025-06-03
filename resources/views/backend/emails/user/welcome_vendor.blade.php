@@ -184,7 +184,7 @@
 											<!--<![endif]-->
 											<div class="img-container left fixedwidth" align="left" style="padding-right: 0px;padding-left: 25px;">
 												<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 25px;" align="left"><![endif]-->
-												<div style="font-size:1px;line-height:5px">&nbsp;</div><img class="left fixedwidth" border="0" src="{{asset('images/logo.png')}}" alt="Alternate text" title="Alternate text" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 100%; max-width: 150px; display: block;" width="150">
+												<div style="font-size:1px;line-height:5px">&nbsp;</div><img class="left fixedwidth" border="0" src="{{asset('backend/images/logo.png')}}" alt="Alternate text" title="Alternate text" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 100%; max-width: 150px; display: block;" width="150">
 												<!--[if mso]></td></tr></table><![endif]-->
 											</div>
 											<!--[if (!mso)&(!IE)]><!-->

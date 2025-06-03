@@ -18,7 +18,7 @@ class PlacesController extends Controller
     public function index(){
         $countries = Country::all();
         $currencies = Currency::all();
-        return view('settings.places.index',compact('countries','currencies'));
+        return view('backend.settings.places.index',compact('countries','currencies'));
     }
 
     public function country(Request $request)
@@ -88,8 +88,13 @@ class PlacesController extends Controller
         }
     }
 
-    public function setup(Country $country){
-        return view('settings.places.country',compact('country'));
+    public function setup($value){
+        //dd($value);
+        $country = Country::where('iso2',strtoupper($value))->first();
+        if(!$country){
+            return redirect()->back()->with(['result'=> 0,'message'=> 'Country not found']);
+        }
+        return view('backend.settings.places.country',compact('country'));
     }
 
     public function state(Request $request){

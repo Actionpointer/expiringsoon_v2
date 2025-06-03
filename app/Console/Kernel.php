@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SubscriptionExpiredJob)->hourly();
         $schedule->job(new SubscriptionExpiringNotifyJob)->hourly();
         $schedule->job(new SubscriptionResourceResetJob)->everyMinute();
-
+        $schedule->command('db:update-sqlite')->daily(); // or any interval you want
 
 
         // Your cronjob should run this: php /path/to/laravel/artisan queue:work --stop-when-empty

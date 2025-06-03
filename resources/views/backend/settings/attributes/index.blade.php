@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -20,7 +20,7 @@
                 </button>
             </div>
         </div>
-        @include('settings.partials.menu')
+        @include('backend.settings.partials.menu')
     </div>
 
     <!-- Stats Row -->
@@ -195,7 +195,7 @@
 @endsection
 
 @section('secondary')
-@include('settings.attributes.partials.modals')
+@include('backend.settings.attributes.partials.modals')
 @endsection
 
 @push('scripts')

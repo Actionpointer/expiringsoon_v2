@@ -26,8 +26,8 @@ return new class extends Migration
             $table->string('remember_token')->nullable();
             $table->boolean('require_password_change')->default(false);
             $table->json('settings')->nullable();
+            $table->softDeletes();
             $table->timestamps();
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
         DB::table('users')->insert([
             ['id' => 1, 'firstname' => 'Super', 'surname' => 'Admin', 'email' => 'reigningkingforever@gmail.com',

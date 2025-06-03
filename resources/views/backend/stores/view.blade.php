@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -16,7 +16,7 @@
                 <div class="d-flex align-items-center gap-2">
                     <div class="flex-shrink-0">
                         <div class="avatar avatar-lg avatar-circle">
-                            <img class="avatar-img" src="{{asset('images/160x160/img1.jpg')}}" alt="Shop Logo">
+                            <img class="avatar-img" src="{{asset('backend/images/160x160/img1.jpg')}}" alt="Shop Logo">
                             <span class="avatar-status avatar-lg-status avatar-status-success"></span>
                         </div>
                     </div>
@@ -283,7 +283,7 @@
                                     <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <img class="avatar avatar-lg" src="{{asset('images/400x400/img1.jpg')}}" alt="Product">
+                                            <img class="avatar avatar-lg" src="{{asset('backend/images/400x400/img1.jpg')}}" alt="Product">
                                             <div class="ms-3">
                                                 <h5 class="mb-0">Designer T-Shirt</h5>
                                                 <small class="text-muted">SKU: TSH-001</small>
@@ -408,7 +408,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="avatar avatar-circle">
-                                                <img class="avatar-img" src="{{asset('images/160x160/img1.jpg')}}" alt="Customer">
+                                                <img class="avatar-img" src="{{asset('backend/images/160x160/img1.jpg')}}" alt="Customer">
                         </div>
                                             <div class="ms-3">
                                                 <span class="d-block h5 mb-0">John Doe</span>
@@ -488,7 +488,7 @@
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div class="d-flex align-items-center">
                                         <div class="avatar avatar-circle">
-                                            <img class="avatar-img" src="{{asset('images/160x160/img1.jpg')}}" alt="Customer">
+                                            <img class="avatar-img" src="{{asset('backend/images/160x160/img1.jpg')}}" alt="Customer">
                                         </div>
                                         <div class="ms-3">
                                             <h5 class="mb-0">John Doe</h5>

@@ -30,7 +30,7 @@ class CategoryController extends Controller
         // Get total product count
         $product_count = $allCategories->sum('products_count');
         
-        return view('settings.categories.index', compact(
+        return view('backend.settings.categories.index', compact(
             'categories',
             'active_categories',
             'groups',

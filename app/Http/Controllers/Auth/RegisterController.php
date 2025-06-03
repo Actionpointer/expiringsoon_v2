@@ -11,42 +11,41 @@ use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Http\Traits\AuthTrait;
 
 class RegisterController extends Controller
 {
-    use RegistersUsers,GeoLocationTrait;
+    use RegistersUsers, AuthTrait;
 
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'firstname' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
-
     public function register(Request $request)
     {
-        $validator = $this->validator($request->all());
+        // Map the request data to the format expected by registerUser
+        $data = [
+            'first_name' => $request->firstname,
+            'last_name' => $request->surname,
+            'email' => $request->email,
+            'password' => $request->password,
+            'password_confirmation' => $request->password_confirmation,
+        ];
 
-        if ($validator->fails()) {
+        $result = $this->registerUser($data);
+        
+        if (!$result['status']) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
+                'message' => $result['message'],
+                'errors' => $result['errors'] ?? null
             ], 422);
         }
 
-        $user = $this->create($request->all());
+        $user = $result['user'];
         
-        // event(new Registered($user));
-
+        // For API requests, create and return a token
         $token = $user->createToken("API TOKEN")->plainTextToken;
 
         return response()->json([
@@ -57,15 +56,5 @@ class RegisterController extends Controller
         ], 201);
     }
     
-    protected function create(array $data)
-    {
-        $location = Location::where('ip',request()->ip())->first();
-        return User::create([
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'firstname' => $data['firstname'],
-            'surname' => $data['surname'],
-            'country_id' => $location->country_id,
-        ]);
-    }
+    
 }

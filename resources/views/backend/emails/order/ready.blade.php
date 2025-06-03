@@ -14,8 +14,8 @@
 	
 	<title>Order Receipt No. {{$order->slug}} | Expiring Soon</title>
 	
-	<link rel="icon" type="image/png" href="{{asset('images/favicon/favicon-16x16.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('images/favicon/favicon-16x16.png')}}" />
+	<link rel="icon" type="image/png" href="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -90,7 +90,7 @@
 														<tr>
 															<td style="font-size:0pt; line-height:0pt; text-align:left;">
 																<a href="https://expiringsoon.shop" target="_blank">
-																	<img src="{{asset('images/logo.png')}}" width="125" border="0" alt="" />
+																	<img src="{{asset('backend/images/logo.png')}}" width="125" border="0" alt="" />
 																</a>
 															</td>
 														</tr>
@@ -115,7 +115,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="fluid-img">
-										<img src="{{asset('images/site/img-delivered.jpg')}}" border="0" width="100%" alt="" />
+										<img src="{{asset('backend/images/site/img-delivered.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -142,7 +142,7 @@
 														
 														<tr>
 															<td class="fluid-img" align="center">
-																<img src="{{asset('images/site/tracking-bar-ready.jpg')}}" border="0" width="100%" alt="" />
+																<img src="{{asset('backend/images/site/tracking-bar-ready.jpg')}}" border="0" width="100%" alt="" />
 															</td>
 														</tr>
 														<tr>
@@ -218,7 +218,7 @@
 																	<tr>
 																		<td class="text-button" style="padding:12px">
 																			<a @if(isset($user)) href="{{route('order.show',$order)}}" @else href="{{route('vendor.shop.order.view',[$shop,$order])}}" @endif target="_blank" class="link">
-																				<img src="{{asset('images/site/btn-orderdetails.png')}}" width="175">
+																				<img src="{{asset('backend/images/site/btn-orderdetails.png')}}" width="175">
 																			</a>
 																		</td>
 																	</tr>
@@ -250,7 +250,7 @@
 														<tr>
 															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
 																<a href="#" target="_blank">
-																	<img src="{{asset('images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																	<img src="{{asset('backend/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
 																</a>
 															</td>
 														</tr>

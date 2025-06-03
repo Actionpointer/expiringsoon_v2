@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -20,7 +20,7 @@
                 </button>
             </div>
         </div>
-        @include('settings.partials.menu')
+        @include('backend.settings.partials.menu')
     </div>
 
     <div class="row">

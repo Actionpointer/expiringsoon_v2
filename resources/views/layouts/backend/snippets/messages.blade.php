@@ -83,7 +83,7 @@
                                                     <label class="form-check-label" for="notificationCheck1"></label>
                                                     <span class="form-check-stretched-bg"></span>
                                                 </div>
-                                                <img class="avatar avatar-sm avatar-circle" src="{{asset('images/160x160/img3.jpg')}}"
+                                                <img class="avatar avatar-sm avatar-circle" src="{{asset('backend/images/160x160/img3.jpg')}}"
                                                     alt="Image Description">
                                             </div>
                                         </div>
@@ -153,7 +153,7 @@
                                                     <span class="form-check-stretched-bg"></span>
                                                 </div>
                                                 <div class="avatar avatar-sm avatar-circle">
-                                                    <img class="avatar-img" src="{{asset('images/160x160/img10.jpg')}}"
+                                                    <img class="avatar-img" src="{{asset('backend/images/160x160/img10.jpg')}}"
                                                         alt="Image Description">
                                                 </div>
                                             </div>
@@ -186,7 +186,7 @@
                                                     <span class="form-check-stretched-bg"></span>
                                                 </div>
                                                 <div class="avatar avatar-sm avatar-circle">
-                                                    <img class="avatar-img" src="{{asset('svg/brands/google-icon.svg')}}"
+                                                    <img class="avatar-img" src="{{asset('backend/svg/brands/google-icon.svg')}}"
                                                         alt="Image Description">
                                                 </div>
                                             </div>
@@ -220,7 +220,7 @@
                                                     <span class="form-check-stretched-bg"></span>
                                                 </div>
                                                 <div class="avatar avatar-sm avatar-circle">
-                                                    <img class="avatar-img" src="{{asset('images/160x160/img7.jpg')}}" alt="Image Description">
+                                                    <img class="avatar-img" src="{{asset('backend/images/160x160/img7.jpg')}}" alt="Image Description">
                                                 </div>
                                             </div>
                                         </div>
@@ -292,7 +292,7 @@
                                                     <span class="form-check-stretched-bg"></span>
                                                 </div>
                                                 <div class="avatar avatar-sm avatar-circle">
-                                                    <img class="avatar-img" src="{{asset('images/160x160/img5.jpg')}}" alt="Image Description">
+                                                    <img class="avatar-img" src="{{asset('backend/images/160x160/img5.jpg')}}" alt="Image Description">
                                                 </div>
                                             </div>
                                         </div>
@@ -357,7 +357,7 @@
                                                     <span class="form-check-stretched-bg"></span>
                                                 </div>
                                                 <div class="avatar avatar-sm avatar-circle">
-                                                    <img class="avatar-img" src="{{asset('images/160x160/img8.jpg')}}" alt="Image Description">
+                                                    <img class="avatar-img" src="{{asset('backend/images/160x160/img8.jpg')}}" alt="Image Description">
                                                 </div>
                                             </div>
                                         </div>

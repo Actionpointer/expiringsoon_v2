@@ -16,6 +16,7 @@ class Address extends Model
     public function getLocationAttribute(){
         return $this->street.', '.$this->city->name.', '.$this->state->name;
     }
+    
     public function state(){
         return $this->belongsTo(State::class);
     }

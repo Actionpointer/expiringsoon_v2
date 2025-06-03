@@ -21,7 +21,7 @@
                     <a class="dropdown-item" href="#">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('svg/brands/atlassian-icon.svg')}}"
+                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('backend/svg/brands/atlassian-icon.svg')}}"
                                     alt="Image Description">
                             </div>
                             <div class="flex-grow-1 text-truncate ms-3">
@@ -34,7 +34,7 @@
                     <a class="dropdown-item" href="#">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('svg/brands/slack-icon.svg')}}"
+                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('backend/svg/brands/slack-icon.svg')}}"
                                     alt="Image Description">
                             </div>
                             <div class="flex-grow-1 text-truncate ms-3">
@@ -48,7 +48,7 @@
                     <a class="dropdown-item" href="#">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('svg/brands/google-webdev-icon.svg')}}"
+                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('backend/svg/brands/google-webdev-icon.svg')}}"
                                     alt="Image Description">
                             </div>
                             <div class="flex-grow-1 text-truncate ms-3">
@@ -61,7 +61,7 @@
                     <a class="dropdown-item" href="#">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('svg/brands/frontapp-icon.svg')}}"
+                                <img class="avatar avatar-xs avatar-4x3" src="{{asset('backend/svg/brands/frontapp-icon.svg')}}"
                                     alt="Image Description">
                             </div>
                             <div class="flex-grow-1 text-truncate ms-3">
@@ -75,7 +75,7 @@
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
                                 <img class="avatar avatar-xs avatar-4x3"
-                                    src="{{asset('svg/illustrations/review-rating-shield.svg')}}" alt="Image Description">
+                                    src="{{asset('backend/svg/illustrations/review-rating-shield.svg')}}" alt="Image Description">
                             </div>
                             <div class="flex-grow-1 text-truncate ms-3">
                                 <h5 class="mb-0">HS Support</h5>

@@ -74,7 +74,7 @@ class ComplianceController extends Controller
         // Get active filters for the view
         $activeFilters = $this->getActiveFilters($request);
 
-        return view('compliance.kyc.all', compact(
+        return view('backend.compliance.kyc.all', compact(
             'documents', 
             'counts', 
             'activeFilters',
@@ -135,7 +135,7 @@ class ComplianceController extends Controller
     public function show(Verification $verification){
         $verification->load(['profile', 'approver', 'rejection', 'location']);
         
-        return view('compliance.kyc.view-documents', compact('verification'));
+        return view('backend.compliance.kyc.view-documents', compact('verification'));
     }
 
 

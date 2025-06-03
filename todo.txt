@@ -1,3 +1,13 @@
+address, 
+users
+store
+banks
+gateway: new table
+locations
+blacklisted
+shippers
+
+
 wishlist
 cart
 checkout

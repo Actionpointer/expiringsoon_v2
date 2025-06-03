@@ -20,8 +20,8 @@
 
     <!-- CSS Front Template -->
 
-    <link rel="preload" href="{{asset('css/theme.min.css')}}" data-hs-appearance="default" as="style">
-    <link rel="preload" href="{{asset('css/theme-dark.min.css')}}" data-hs-appearance="dark" as="style">
+    <link rel="preload" href="{{asset('backend/css/theme.min.css')}}" data-hs-appearance="default" as="style">
+    <link rel="preload" href="{{asset('backend/css/theme-dark.min.css')}}" data-hs-appearance="dark" as="style">
 
     <style data-hs-appearance-onload-styles>
         * {
@@ -120,14 +120,14 @@
 
 <body class="d-flex align-items-center min-h-100">
 
-    <script src="{{asset('js/hs.theme-appearance.js')}}"></script>
+    <script src="{{asset('backend/js/hs.theme-appearance.js')}}"></script>
 
     <!-- ========== HEADER ========== -->
     <header class="position-absolute top-0 start-0 end-0 mt-3 mx-3">
         <div class="d-flex d-lg-none justify-content-between">
             <a href="./index.html">
-                <img class="w-100" src="{{asset('svg/logos/logo.svg')}}" alt="Image Description" data-hs-theme-appearance="default" style="min-width: 7rem; max-width: 7rem;">
-                <img class="w-100" src="{{asset('svg/logos-light/logo.svg')}}" alt="Image Description" data-hs-theme-appearance="dark" style="min-width: 7rem; max-width: 7rem;">
+                <img class="w-100" src="{{asset('backend/svg/logos/logo.svg')}}" alt="Image Description" data-hs-theme-appearance="default" style="min-width: 7rem; max-width: 7rem;">
+                <img class="w-100" src="{{asset('backend/svg/logos-light/logo.svg')}}" alt="Image Description" data-hs-theme-appearance="dark" style="min-width: 7rem; max-width: 7rem;">
       </a>
 
       <!-- Select -->
@@ -154,7 +154,7 @@
     <script src="{{asset('vendor/hs-toggle-password/dist/js/hs-toggle-password.js')}}"></script>
     
     <!-- JS Front -->
-    <script src="{{asset('js/theme.min.js')}}"></script>
+    <script src="{{asset('backend/js/theme.min.js')}}"></script>
 
     <!-- JS Plugins Init. -->
     <script>

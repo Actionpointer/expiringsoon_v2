@@ -16,8 +16,8 @@
 	
 	<title>Adset | Expiring Soon</title>
 	
-	<link rel="icon" type="image/png" href="{{asset('images/favicon/favicon-16x16.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('images/favicon/favicon-16x16.png')}}" />
+	<link rel="icon" type="image/png" href="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -92,7 +92,7 @@
 														<tr>
 															<td style="font-size:0pt; line-height:0pt; text-align:left;">
 																<a href="https://expiringsoon.shop" target="_blank">
-																	<img src="{{asset('images/logo.png')}}" width="125" border="0" alt="" />
+																	<img src="{{asset('backend/images/logo.png')}}" width="125" border="0" alt="" />
 																</a>
 															</td>
 														</tr>
@@ -118,7 +118,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
 								<tr>
 									<td class="fluid-img" align="center" style="padding:10px">
-										<img src="{{asset('images/site/img-shoppingbag.jpg')}}" border="0" width="200" alt="" />
+										<img src="{{asset('backend/images/site/img-shoppingbag.jpg')}}" border="0" width="200" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -188,7 +188,7 @@
 														<tr>
 															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
 																<a href="#" target="_blank">
-																	<img src="{{asset('images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
+																	<img src="{{asset('backend/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" />
 																</a>
 															</td>
 														</tr>

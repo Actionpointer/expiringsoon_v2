@@ -63,6 +63,26 @@ return [
             ]) : [],
         ],
 
+        // new SQLite connections
+        'sqlite_countries' => [
+            'driver' => 'sqlite',
+            'database' => database_path('sqlites/countries.sqlite3'),
+            'prefix' => '',
+        ],
+
+        'sqlite_states' => [
+            'driver' => 'sqlite',
+            'database' => database_path('sqlites/states.sqlite3'),
+            'prefix' => '',
+        ],
+
+        'sqlite_cities' => [
+            'driver' => 'sqlite',
+            'database' => database_path('sqlites/cities.sqlite3'),
+            'prefix' => '',
+        ],
+
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

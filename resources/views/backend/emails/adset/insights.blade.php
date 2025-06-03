@@ -16,9 +16,9 @@
 	
 	<title>Order Receipt No. 123232 | Expiring Soon</title>
 	
-	<link rel="icon" href="{{asset('images/favicon/favicon.png')}}" sizes="32x32" />
-	<link rel="apple-touch-icon" href="{{asset('images/favicon/favicon.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('images/favicon/favicon.png')}}" />
+	<link rel="icon" href="{{asset('backend/images/favicon/favicon.png')}}" sizes="32x32" />
+	<link rel="apple-touch-icon" href="{{asset('backend/images/favicon/favicon.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('backend/images/favicon/favicon.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -93,7 +93,7 @@
 														<tr>
 															<td style="font-size:0pt; line-height:0pt; text-align:left;">
 																<a href="https://expiringsoon.shop" target="_blank">
-																	<img src="{{asset('images/logo.png')}}" width="125" border="0" alt="" />
+																	<img src="{{asset('backend/images/logo.png')}}" width="125" border="0" alt="" />
 																</a>
 															</td>
 														</tr>
@@ -118,7 +118,7 @@
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img"><img src="{{asset('images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img"><img src="{{asset('backend/images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
@@ -210,7 +210,7 @@
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('backend/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
 														</tr>
 													</table>
 												</td>

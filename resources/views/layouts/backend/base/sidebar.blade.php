@@ -5,7 +5,7 @@
             <!-- Logo -->
 
             <a class="navbar-brand" href="#" aria-label="Front">
-                @include('layouts.snippets.logo')
+                @include('layouts.backend.snippets.logo')
             </a>
 
             <!-- End Logo -->

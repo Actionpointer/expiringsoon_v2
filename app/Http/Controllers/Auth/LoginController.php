@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Http\Traits\AuthTrait;
 
 class LoginController extends Controller
 {
@@ -25,6 +26,7 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+    use AuthTrait;
 
     /**
      * Where to redirect users after login.
@@ -46,48 +48,7 @@ class LoginController extends Controller
         $this->maxAttempts = 5;
     }
     public function showLoginForm(){
-        return view('auth.login');
-    }
-
-    public function signIn(Request $request)
-    {
-        $validateUser = Validator::make($request->all(), 
-        [
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if($validateUser->fails()){
-            return response()->json([
-                'status' => false,
-                'message' => $validateUser->errors()->first()
-            ], 401);
-        }
-
-        if(!Auth::attempt($request->only(['email', 'password']))){
-            return response()->json([
-                'status' => false,
-                'message' => 'Email & Password does not match with our record.',
-            ], 401);
-        }
-
-        $user = User::where('email', $request->email)->first();
-        if(!$user->status){
-            return response()->json([
-                'status' => false,
-                'message' => 'Account Suspended',
-            ], 401);
-        }
-        
-        // $user->tokens()->delete();
-        if($request->wantsJson()){
-            return response()->json([
-                'status' => true,
-                'message' => 'Login successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
-            ], 200);
-        }
-        return redirect()->intended();
+        return view('backend.auth.login');
     }
 
     public function signOut()
@@ -134,5 +95,31 @@ class LoginController extends Controller
         return redirect()->route('admin.dashboard')->with(['result'=>1,'message'=> 'Password Changed']);
     }  
 
+    /**
+     * Handle API login request
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function apiLogin(Request $request)
+    {
+        $result = $this->loginUser($request->all());
+        
+        if (!$result['status']) {
+            return response()->json([
+                'status' => false,
+                'message' => $result['message']
+            ], 401);
+        }
+        
+        $user = $result['user'];
+        
+        // For API requests, create and return a token
+        return response()->json([
+            'status' => true,
+            'message' => 'Login successful',
+            'token' => $user->createToken("API TOKEN")->plainTextToken
+        ], 200);
+    }
 
 }

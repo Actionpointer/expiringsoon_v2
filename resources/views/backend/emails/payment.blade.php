@@ -16,8 +16,8 @@
 	
 	<title>Payment Receipt No. 123232 | Expiring Soon</title>
 	
-	<link rel="icon" type="image/png" href="{{asset('images/favicon/favicon-16x16.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('images/favicon/favicon-16x16.png')}}" />
+	<link rel="icon" type="image/png" href="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
 
 
 	<style type="text/css" media="screen">
@@ -92,7 +92,7 @@
 														<tr>
 															<td style="font-size:0pt; line-height:0pt; text-align:left;">
 																<a href="https://expiringsoon.shop" target="_blank">
-																	<img src="{{asset('images/logo.png')}}" width="125" border="0" alt="" />
+																	<img src="{{asset('backend/images/logo.png')}}" width="125" border="0" alt="" />
 																</a>
 															</td>
 														</tr>
@@ -117,7 +117,7 @@
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img"><img src="{{asset('images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img"><img src="{{asset('backend/images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
@@ -136,7 +136,7 @@
 															<br /><br />It will be packed and shipped as soon as possible. You will receive a notification from us once the item(s) are available for door delivery.</td>
 														</tr>
 														<tr>
-															<td class="fluid-img" align="center"><img src="{{asset('images/site/tracking-bar-accepted.jpg')}}" border="0" width="100%" alt="" /></td>
+															<td class="fluid-img" align="center"><img src="{{asset('backend/images/site/tracking-bar-accepted.jpg')}}" border="0" width="100%" alt="" /></td>
 														</tr>
 														<tr>
 															<td class="text-center pb25" style="color:#666666;font-family:Poppins,sans-serif; font-size:12px; line-height:20px; text-align:left; padding-bottom:20px;padding-top:20px;border-bottom:1px solid #ddd;border-top:1px solid #ddd">
@@ -209,7 +209,7 @@
 															<td align="center">
 																<table class="center" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
 																	<tr>
-																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link"><img src="{{asset('images/site/btn-orderdetails.png')}}" width="175"></a></td>
+																		<td class="text-button" style="padding:12px"><a href="https://ng.expiringsoon.shop/invoice.php?ref=123232" target="_blank" class="link"><img src="{{asset('backend/images/site/btn-orderdetails.png')}}" width="175"></a></td>
 																	</tr>
 																</table>
 															</td>
@@ -238,7 +238,7 @@
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('backend/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
 														</tr>
 													</table>
 												</td>

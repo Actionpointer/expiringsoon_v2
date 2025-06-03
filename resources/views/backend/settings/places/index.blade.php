@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -20,7 +20,7 @@
                 </button>
             </div>
         </div>
-        @include('settings.partials.menu')
+        @include('backend.settings.partials.menu')
     </div>
 
     <!-- Stats Row -->
@@ -172,12 +172,12 @@
                             </div>
                         </td>
                         <td>
-                            <span class="d-block">{{ $country->states->count() }} States</span>
-                            <small class="text-muted">{{ $country->cities->count() }} Cities</small>
+                            <span class="d-block"> 1 States</span>
+                            <small class="text-muted"> 1 Cities</small>
                         </td>
                         <td>
-                            <span class="d-block">{{ strtoupper($country->currency->code) }}</span>
-                            <small class="text-muted">{{ $country->currency->name.' '.$country->currency->symbol }}</small>
+                            <span class="d-block">{{ strtoupper($country->currency_code) }}</span>
+                            <small class="text-muted">{{ $country->currency_name }}</small>
                         </td>
                         <td>
                             @if($country->banking_fields || $country->verification_fields || $country->transaction_charges || ($country->payout_type && $country->payout_type != "manual"))
@@ -225,7 +225,7 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{{route('admin.settings.places.setup',$country)}}" class="btn btn-white btn-sm" data-bs-toggle="tooltip" title="Setup">
+                                <a href="{{route('admin.settings.places.setup',$country->iso2)}}" class="btn btn-white btn-sm" data-bs-toggle="tooltip" title="Setup">
                                     <i class="bi-gear-fill"></i>
                                 </a>
                                 <button type="button" class="btn btn-white btn-sm editCountryModal" data-country="{{ $country }}">
@@ -242,7 +242,7 @@
 </div>
 
 <!-- Add/Edit Country Modals -->
-@include('settings.places.partials.modals')
+@include('backend.settings.places.partials.modals')
 @endsection
 
 @section('secondary')

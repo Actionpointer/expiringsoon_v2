@@ -1,4 +1,4 @@
-@extends('layouts.base.app')
+@extends('layouts.backend.base.app')
 
 @section('main')
 <div class="content container-fluid">
@@ -137,7 +137,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
                                     <div class="avatar avatar-sm avatar-circle">
-                                        <img class="avatar-img" src="{{asset('images/160x160/img8.jpg')}}" alt="Logo">
+                                        <img class="avatar-img" src="{{asset('backend/images/160x160/img8.jpg')}}" alt="Logo">
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">

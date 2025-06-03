@@ -21,7 +21,7 @@ class SecurityController extends Controller
 
     public function index(){
         $countries = Country::all();
-        return view('settings.security',compact('countries'));
+        return view('backend.settings.security',compact('countries'));
     }
     
     public function ip_block(Request $request){

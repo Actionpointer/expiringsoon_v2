@@ -22,20 +22,12 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     protected $fillable = ['name', 'code', 'continent', 'dial', 'currency_code', 'verification_provider', 'primary_gateway', 'secondary_gateway', 'status'];
-    
-    
-    public function setCodeAttribute($value)
-    {
-        $this->attributes['code'] = strtolower($value);
-    }
-
-    public function setCurrencyCodeAttribute($value)
-    {
-        $this->attributes['currency_code'] = strtolower($value);
-    }
+    protected $connection = 'sqlite_countries';
+    protected $table = 'countries'; // adjust table name if different
+    //public $timestamps = false; // if no timestamps
 
     public function getRouteKeyName(){
-        return 'code';
+        return 'iso2';
     }
 
     // public function getSupportedAttribute(){

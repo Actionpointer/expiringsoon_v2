@@ -13,7 +13,7 @@ class DisputeController extends Controller
 
     public function index()
     {
-        return view('support.disputes.index');
+        return view('backend.support.disputes.index');
     }
 
     /**
@@ -37,7 +37,7 @@ class DisputeController extends Controller
      */
     public function show(string $id)
     {
-        return view('support.disputes.view');
+        return view('backend.support.disputes.view');
     }
 
     /**

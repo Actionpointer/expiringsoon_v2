@@ -12,21 +12,16 @@ use App\Http\Traits\GeoLocationTrait;
 class LocationMiddleware
 {
     use GeoLocationTrait;
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
-     */
+    
     public function handle(Request $request, Closure $next)
     {
         //178.238.11.6 || 197.211.58.12
-        $ip = request()->ip() == '::1'|| request()->ip() == '127.0.0.1'? '197.211.58.12' : request()->ip();
+
+        $ip = $this->visitorIp();
         if(!cache('visitors') || cache('visitors') == null || cache('visitors') == [] || !in_array($ip,cache('visitors'))){
-            $result = Curl::to("https://api.ipdata.co/".$ip."?api-key=".config('services.ipdata'))->asJsonResponse()->get();
+            $result = Curl::to("https://api.ipdata.co/".$ip."?api-key=".config('services.ipdata'))->asJsonResponse()->get();    
             if($result){
-                $this->saveCountry($result);
+                $this->saveLocation($ip,$result);
                 $visitors[] = $ip;
                 cache(['visitors'=> $visitors]);       
             }

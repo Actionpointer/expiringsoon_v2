@@ -30,7 +30,7 @@ class UserController extends Controller
     }
 
     public function index(){
-        return view('customers.list');
+        return view('backend.customers.list');
     }
 
 
@@ -115,11 +115,11 @@ class UserController extends Controller
     public function admin(){
         $staff = User::has('is_admin')->get();
         $permissions = Permission::all();
-        return view('settings.staff.index',compact('staff','permissions'));
+        return view('backend.settings.staff.index',compact('staff','permissions'));
     }
 
     public function show(User $user){
-        return view('customers.view',compact('user'));
+        return view('backend.customers.view',compact('user'));
     }
 
     public function manage(Request $request){

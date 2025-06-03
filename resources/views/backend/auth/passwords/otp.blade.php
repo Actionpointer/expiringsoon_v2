@@ -8,7 +8,7 @@
       <div class="position-absolute top-0 start-0 end-0 mt-3 mx-3">
         <div class="d-none d-lg-flex justify-content-between">
           <a href="{{ route('index') }}">
-            @include('layouts.headers.snippets.logo')
+            @include('layouts.backend.snippets.logo')
           </a>
 
           <!-- Select -->
@@ -22,8 +22,8 @@
 
       <div style="max-width: 23rem;">
         <div class="text-center mb-5">
-          <img class="img-fluid" src="{{asset('svg/illustrations/oc-chatting.svg')}}" alt="Image Description" style="width: 12rem;" data-hs-theme-appearance="default">
-          <img class="img-fluid" src="{{asset('svg/illustrations-light/oc-chatting.svg')}}" alt="Image Description" style="width: 12rem;" data-hs-theme-appearance="dark">
+          <img class="img-fluid" src="{{asset('backend/svg/illustrations/oc-chatting.svg')}}" alt="Image Description" style="width: 12rem;" data-hs-theme-appearance="default">
+          <img class="img-fluid" src="{{asset('backend/svg/illustrations-light/oc-chatting.svg')}}" alt="Image Description" style="width: 12rem;" data-hs-theme-appearance="dark">
         </div>
 
         <div class="mb-5">
@@ -46,22 +46,22 @@
 
         <div class="row justify-content-between mt-5 gx-3">
           <div class="col">
-            <img class="img-fluid" src="{{asset('svg/brands/gitlab-gray.svg')}}" alt="Logo">
+            <img class="img-fluid" src="{{asset('backend/svg/brands/gitlab-gray.svg')}}" alt="Logo">
           </div>
           <!-- End Col -->
 
           <div class="col">
-            <img class="img-fluid" src="{{asset('svg/brands/fitbit-gray.svg')}}" alt="Logo">
+            <img class="img-fluid" src="{{asset('backend/svg/brands/fitbit-gray.svg')}}" alt="Logo">
           </div>
           <!-- End Col -->
 
           <div class="col">
-            <img class="img-fluid" src="{{asset('svg/brands/flow-xo-gray.svg')}}" alt="Logo">
+            <img class="img-fluid" src="{{asset('backend/svg/brands/flow-xo-gray.svg')}}" alt="Logo">
           </div>
           <!-- End Col -->
 
           <div class="col">
-            <img class="img-fluid" src="{{asset('svg/brands/layar-gray.svg')}}" alt="Logo">
+            <img class="img-fluid" src="{{asset('backend/svg/brands/layar-gray.svg')}}" alt="Logo">
           </div>
           <!-- End Col -->
         </div>
@@ -74,8 +74,8 @@
       <div class="w-100 content-space-t-4 content-space-t-lg-2 content-space-b-1" style="max-width: 25rem;">
         <div class="text-center">
           <div class="mb-4">
-            <img class="avatar avatar-xxl avatar-4x3" src="{{asset('svg/illustrations/oc-unlock.svg')}}" alt="Image Description" data-hs-theme-appearance="default">
-            <img class="avatar avatar-xxl avatar-4x3" src="{{asset('svg/illustrations-light/oc-unlock.svg')}}" alt="Image Description" data-hs-theme-appearance="dark">
+            <img class="avatar avatar-xxl avatar-4x3" src="{{asset('backend/svg/illustrations/oc-unlock.svg')}}" alt="Image Description" data-hs-theme-appearance="default">
+            <img class="avatar avatar-xxl avatar-4x3" src="{{asset('backend/svg/illustrations-light/oc-unlock.svg')}}" alt="Image Description" data-hs-theme-appearance="dark">
           </div>
 
           <div class="mb-5">

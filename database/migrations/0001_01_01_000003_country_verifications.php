@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('country_verifications', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('country_id'); 
+            $table->unsignedBigInteger('verification_provider_id');  
+            $table->string('id_requirement');   //all, one, none
+            $table->json('id_documents')->nullable();
+            $table->string('business_requirement');   //all, one, none
+            $table->json('business_documents')->nullable();
+            $table->string('address_requirement');   //all, one, none
+            $table->json('address_documents')->nullable();   
+            $table->string('finance_requirement');   //all, one, none
+            $table->json('finance_documents')->nullable(); 
+            $table->string('mode')->default('test');   //live or test     
+            $table->boolean('status')->default(true); 
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('country_verifications');
+    }
+};

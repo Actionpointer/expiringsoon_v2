@@ -56,6 +56,14 @@ class Payment extends Model
 
 
     public function getPayableAttribute(){
-        return $this->amount - $this->coupon_value;
+        return $this->amount - $this->coupon_value - $this->vat_value;
+    }
+
+    public function getVatAttribute(){
+        $country = $this->user->country;
+        if($country->banking->tax_rate){
+            return $this->amount * $country->banking->tax_rate / 100;
+        }
+        return 0;
     }
 }

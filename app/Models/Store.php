@@ -32,7 +32,11 @@ class Store extends Model
 {
     use HasFactory,Notifiable,Sluggable;
     
-    protected $fillable = ['name','slug','user_id','email','phone','photo','address','country_id','state_id','city_id','description','published'];
+    protected $fillable = [
+        'name','email','phone','business_type','description','address',
+        'country_id','state_id','city_id','zip_code','photo',
+        'slug','user_id','published'
+    ];
     protected $appends = ['image'];
 
     public static function boot()

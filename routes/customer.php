@@ -1,14 +1,15 @@
 <?php
 
+use App\Livewire\Customer\Dashboard;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
-use App\Http\Controllers\Guest\ResourcesController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Customer\SalesController;
 use App\Http\Controllers\Vendor\PaymentController;
+use App\Http\Controllers\Guest\ResourcesController;
 use App\Http\Controllers\Customer\AddressController;
 
 
@@ -17,7 +18,7 @@ use App\Http\Controllers\Customer\AddressController;
     //customer
     Route::view('checkout', 'customer.checkout')->name('checkout');
     Route::view('wishlist', 'customer.wishlist')->name('wishlist');
-    Route::view('dashboard', 'customer.dashboard')->name('dashboard');
+    Route::get('dashboard', Dashboard::class)->name('dashboard');
     Route::view('profile', 'customer.profile')->name('profile');
     Route::view('addresses', 'customer.address')->name('addresses');
     Route::view('followings', 'customer.followings')->name('followings');
@@ -67,7 +68,3 @@ use App\Http\Controllers\Customer\AddressController;
         Route::get('/',[PaymentController::class, 'index']);    
         Route::get('view/{transaction_id}',[PaymentController::class, 'show']);
     });
-
-    // Route::get('mystores', [StoreController::class, 'index']);
-    
-

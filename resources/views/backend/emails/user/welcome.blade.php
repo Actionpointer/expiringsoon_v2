@@ -28,9 +28,9 @@
 	</style>
 	<![endif]-->
 	<!-- site Favicon -->
-	<link rel="icon" href="{{asset('images/favicon/favicon-16x16.png')}}" />
-	<link rel="apple-touch-icon" href="{{asset('images/favicon/favicon-16x16.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('images/favicon/favicon-16x16.png')}}" />
+	<link rel="icon" href="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
+	<link rel="apple-touch-icon" href="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
 
 	<style type="text/css" media="screen">
 		/* Linked Styles */
@@ -96,7 +96,7 @@
 												<th class="column-top" width="145" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; vertical-align:top;">
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="{{url(config('app.url'))}}" target="_blank"><img src="{{asset('images/logo.png')}}" width="125" border="0" alt="" /></a></td>
+															<td style="font-size:0pt; line-height:0pt; text-align:left;"><a href="{{url(config('app.url'))}}" target="_blank"><img src="{{asset('backend/images/logo.png')}}" width="125" border="0" alt="" /></a></td>
 														</tr>
 													</table>
 												</th>
@@ -119,7 +119,7 @@
 							<!-- Hero Image -->
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;"><img src="{{asset('images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
+									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;"><img src="{{asset('backend/images/site/img-welcome.jpg')}}" border="0" width="100%" alt="" /></td>
 								</tr>
 							</table>
 							<!-- END Hero Image -->
@@ -155,7 +155,7 @@
 																	<tr>
 																		<td class="text-button" style="padding:12px">
 																			<a href="{{url(config('app.url'))}}" target="_blank" class="link">
-																				<img src="{{asset('images/site/btn-welcome.png')}}" width="200"></a></td>
+																				<img src="{{asset('backend/images/site/btn-welcome.png')}}" width="200"></a></td>
 																	</tr>
 																</table>
 															</td>
@@ -180,7 +180,7 @@
 												<td align="center" style="padding-bottom: 30px;">
 													<table border="0" cellspacing="0" cellpadding="0">
 														<tr>
-															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
+															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="{{asset('backend/images/site/t2_instagram.jpg')}}" width="34" height="34" border="0" alt="" /></a></td>
 														</tr>
 													</table>
 												</td>

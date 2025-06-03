@@ -4,7 +4,7 @@
 @endpush
 @section('main')
 <!-- Breadcrumb -->
-@include('layouts.snippets.breadcrumb')
+@include('layouts.backend.snippets.breadcrumb')
 <!-- End Breadcrumb -->
 
 <!-- Content Section -->
@@ -58,7 +58,7 @@
                                             <div class="flex-grow-1 ms-3">
                                                 <div class="d-inline-block">
                                                     <p class=" mb-0">{{ $settlement->profile->name }} 
-                                                        <img class="avatar avatar-xss ms-1" src="{{asset('svg/illustrations/top-vendor.svg')}}" alt="Image Description" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Verified user" data-bs-original-title="Verified user">
+                                                        <img class="avatar avatar-xss ms-1" src="{{asset('backend/svg/illustrations/top-vendor.svg')}}" alt="Image Description" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Verified user" data-bs-original-title="Verified user">
                                                     </p>
                                                 </div>
                                         

@@ -4,7 +4,7 @@
 @endpush
 @section('main')
 <!-- Breadcrumb -->
-@include('layouts.snippets.breadcrumb')
+@include('layouts.backend.snippets.breadcrumb')
 <!-- End Breadcrumb -->
 
 <!-- Content Section -->

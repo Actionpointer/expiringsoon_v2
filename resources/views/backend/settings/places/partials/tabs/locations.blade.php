@@ -78,8 +78,8 @@
                             <td>
                                 <div class="d-flex">
                                     <div class="flex-shrink-0 me-3">
-                                        <span class="d-block h5 mb-0">{{ $state->cities->count() }} Cities</span>
-                                        <span class="d-block small text-body">{{ $country->cities->where('status',true)->count() }} Active</span>
+                                        <span class="d-block h5 mb-0">0 Cities</span>
+                                        <span class="d-block small text-body">1 Active</span>
                                     </div>
                                     
                                     <button type="button" class="btn btn-white btn-sm view_cities" data-state="{{ $state->name }}" data-bs-toggle="modal" data-bs-target="#viewCitiesModal" 

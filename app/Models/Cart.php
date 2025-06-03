@@ -14,9 +14,8 @@ class Cart extends Model
 {
     use HasFactory,SoftDeletes;
     
-    public $table = 'cart';
 
-    protected $fillable = ['user_id','product_id','quantity','shop_id','amount','total'];
+    protected $fillable = ['user_id','product_id','quantity','store_id','amount','total'];
     
     public function product(){
         return $this->belongsTo(Product::class);
@@ -24,8 +23,8 @@ class Cart extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function shop(){
-        return $this->belongsTo(Shop::class);
+    public function store(){
+        return $this->belongsTo(Store::class);
     }
 
     public function unit_conversion($value,$unit){

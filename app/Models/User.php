@@ -4,7 +4,7 @@ namespace App\Models;
 
 
 use App\Models\Cart;
-use App\Models\Like;
+use App\Models\Wishlist;
 use App\Models\Order;
 use App\Models\State;
 use App\Models\Store;
@@ -135,8 +135,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(OrderMessage::class, 'sender');
     }
       
-    public function likes(){
-        return $this->hasMany(Like::class);
+    public function wishlists(){
+        return $this->hasMany(Wishlist::class);
     }
     
     public function addresses(){
@@ -230,15 +230,6 @@ class User extends Authenticatable implements MustVerifyEmail
             ->where('status', 'pending')
             ->where('target_date', '>', now());
     }
-
-    /**
-     * Wishlist Relation (Updated for variants)
-     */
-    public function wishlists()
-    {
-        return $this->hasMany(Wishlist::class);
-    }
-
     
     
 

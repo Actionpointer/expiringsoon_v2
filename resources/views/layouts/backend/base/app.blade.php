@@ -21,8 +21,8 @@
   <link rel="stylesheet" href="{{asset('vendor/tom-select/dist/css/tom-select.bootstrap5.css')}}">
   <link rel="stylesheet" href="{{asset('vendor/quill/dist/quill.snow.css')}}">
   @stack('styles')
-  <link rel="preload" href="{{asset('css/theme.min.css')}}" data-hs-appearance="default" as="style">
-  <link rel="preload" href="{{asset('css/theme-dark.min.css')}}" data-hs-appearance="dark" as="style">
+  <link rel="preload" href="{{asset('backend/css/theme.min.css')}}" data-hs-appearance="default" as="style">
+  <link rel="preload" href="{{asset('backend/css/theme-dark.min.css')}}" data-hs-appearance="dark" as="style">
   
   <style data-hs-appearance-onload-styles>
     * {
@@ -128,14 +128,14 @@
     }
   </style>
 
-  <script src="{{asset('js/hs.theme-appearance.js')}}"></script>
+  <script src="{{asset('backend/js/hs.theme-appearance.js')}}"></script>
 
   <!-- ========== HEADER ========== -->
-    @include('layouts.base.header')
+    @include('layouts.backend.base.header')
     <script src="{{asset('vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js')}}"></script>
     
      
-      @include('layouts.base.sidebar')
+      @include('layouts.backend.base.sidebar')
     
         
     
@@ -145,7 +145,7 @@
   <main id="content" role="main" class="main">
         @yield('main')   
   </main>
-      @include('layouts.base.footer')
+      @include('layouts.backend.base.footer')
 
   <!-- ========== END MAIN CONTENT ========== -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasActivityStream" aria-labelledby="offcanvasActivityStreamLabel">
@@ -160,7 +160,7 @@
         <li class="step-item">
           <div class="step-content-wrapper">
             <div class="step-avatar">
-              <img class="step-avatar" src="{{asset('images/160x160/img9.jpg')}}" alt="Image Description">
+              <img class="step-avatar" src="{{asset('backend/images/160x160/img9.jpg')}}" alt="Image Description">
             </div>
 
             <div class="step-content">
@@ -176,7 +176,7 @@
                       <!-- Media -->
                       <div class="d-flex">
                         <div class="flex-shrink-0">
-                          <img class="avatar avatar-xs" src="{{asset('svg/brands/excel-icon.svg')}}" alt="Image Description">
+                          <img class="avatar avatar-xs" src="{{asset('backend/svg/brands/excel-icon.svg')}}" alt="Image Description">
                         </div>
                         <div class="flex-grow-1 text-truncate ms-2">
                           <span class="d-block fs-6 text-dark text-truncate" title="weekly-reports.xls">weekly-reports.xls</span>
@@ -191,7 +191,7 @@
                       <!-- Media -->
                       <div class="d-flex">
                         <div class="flex-shrink-0">
-                          <img class="avatar avatar-xs" src="{{asset('svg/brands/word-icon.svg')}}" alt="Image Description">
+                          <img class="avatar avatar-xs" src="{{asset('backend/svg/brands/word-icon.svg')}}" alt="Image Description">
                         </div>
                         <div class="flex-grow-1 text-truncate ms-2">
                           <span class="d-block fs-6 text-dark text-truncate" title="weekly-reports.xls">weekly-reports.xls</span>
@@ -233,7 +233,7 @@
         <li class="step-item">
           <div class="step-content-wrapper">
             <div class="step-avatar">
-              <img class="step-avatar-img" src="{{asset('images/160x160/img3.jpg')}}" alt="Image Description">
+              <img class="step-avatar-img" src="{{asset('backend/images/160x160/img3.jpg')}}" alt="Image Description">
             </div>
 
             <div class="step-content">
@@ -245,13 +245,13 @@
                 <li class="list-group-item list-group-item-light">
                   <div class="row gx-1">
                     <div class="col">
-                      <img class="img-fluid rounded" src="{{asset('svg/components/card-1.svg')}}" alt="Image Description">
+                      <img class="img-fluid rounded" src="{{asset('backend/svg/components/card-1.svg')}}" alt="Image Description">
                     </div>
                     <div class="col">
-                      <img class="img-fluid rounded" src="{{asset('svg/components/card-2.svg')}}" alt="Image Description">
+                      <img class="img-fluid rounded" src="{{asset('backend/svg/components/card-2.svg')}}" alt="Image Description">
                     </div>
                     <div class="col">
-                      <img class="img-fluid rounded" src="{{asset('svg/components/card-3.svg')}}" alt="Image Description">
+                      <img class="img-fluid rounded" src="{{asset('backend/svg/components/card-3.svg')}}" alt="Image Description">
                     </div>
                     <div class="col-auto align-self-center">
                       <div class="text-center">
@@ -288,7 +288,7 @@
         <li class="step-item">
           <div class="step-content-wrapper">
             <div class="step-avatar">
-              <img class="step-avatar-img" src="{{asset('images/160x160/img7.jpg')}}" alt="Image Description">
+              <img class="step-avatar-img" src="{{asset('backend/images/160x160/img7.jpg')}}" alt="Image Description">
             </div>
 
             <div class="step-content">
@@ -306,7 +306,7 @@
         <li class="step-item">
           <div class="step-content-wrapper">
             <div class="step-avatar">
-              <img class="step-avatar-img" src="{{asset('images/160x160/img5.jpg')}}" alt="Image Description">
+              <img class="step-avatar-img" src="{{asset('backend/images/160x160/img5.jpg')}}" alt="Image Description">
             </div>
 
             <div class="step-content">
@@ -363,8 +363,8 @@
         <div class="modal-body p-sm-5">
           <div class="text-center">
             <div class="w-75 w-sm-50 mx-auto mb-4">
-              <img class="img-fluid" src="{{asset('svg/illustrations/oc-collaboration.svg')}}" alt="Image Description" data-hs-theme-appearance="default">
-              <img class="img-fluid" src="{{asset('svg/illustrations-light/oc-collaboration.svg')}}" alt="Image Description" data-hs-theme-appearance="dark">
+              <img class="img-fluid" src="{{asset('backend/svg/illustrations/oc-collaboration.svg')}}" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="img-fluid" src="{{asset('backend/svg/illustrations-light/oc-collaboration.svg')}}" alt="Image Description" data-hs-theme-appearance="dark">
             </div>
 
             <h4 class="h1">Welcome to Front</h4>
@@ -381,16 +381,16 @@
           <div class="w-85 mx-auto">
             <div class="row justify-content-between">
               <div class="col">
-                <img class="img-fluid" src="{{asset('svg/brands/gitlab-gray.svg')}}" alt="Image Description">
+                <img class="img-fluid" src="{{asset('backend/svg/brands/gitlab-gray.svg')}}" alt="Image Description">
               </div>
               <div class="col">
-                <img class="img-fluid" src="{{asset('svg/brands/fitbit-gray.svg')}}" alt="Image Description">
+                <img class="img-fluid" src="{{asset('backend/svg/brands/fitbit-gray.svg')}}" alt="Image Description">
               </div>
               <div class="col">
-                <img class="img-fluid" src="{{asset('svg/brands/flow-xo-gray.svg')}}" alt="Image Description">
+                <img class="img-fluid" src="{{asset('backend/svg/brands/flow-xo-gray.svg')}}" alt="Image Description">
               </div>
               <div class="col">
-                <img class="img-fluid" src="{{asset('svg/brands/layar-gray.svg')}}" alt="Image Description">
+                <img class="img-fluid" src="{{asset('backend/svg/brands/layar-gray.svg')}}" alt="Image Description">
               </div>
             </div>
           </div>
@@ -446,7 +446,7 @@
   <script src="{{asset('vendor/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
   @stack('plugins')
   <!-- JS Front -->
-  <script src="{{asset('js/theme.min.js')}}"></script>
+  <script src="{{asset('backend/js/theme.min.js')}}"></script>
 
   <!-- JS Plugins Init. -->
   <script>

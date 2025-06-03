@@ -23,7 +23,7 @@ class HomeController extends Controller
         /** @var \App\Models\User $user **/
         $user = auth()->user(); 
         abort_if(!$user->is_admin,403,'Unauthorized');
-        return view('dashboard');
+        return view('backend.dashboard');
     }
 
     public function otp_send(){

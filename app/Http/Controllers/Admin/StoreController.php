@@ -68,12 +68,12 @@ class StoreController extends Controller
         }
         $countries = Country::all();
         $stores = $stores->paginate(16);
-        return view('stores.list',compact('stores','status','countries','country_id','sortBy','name'));
+        return view('backend.stores.list',compact('stores','status','countries','country_id','sortBy','name'));
     }
 
 
     public function show(Store $store){
-        return view('stores.view',compact('store'));
+        return view('backend.stores.view',compact('store'));
     }
 
     public function manage(Request $request){

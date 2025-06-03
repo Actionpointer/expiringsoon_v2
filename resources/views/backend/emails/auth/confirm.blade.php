@@ -28,8 +28,8 @@
 	</style>
 	<![endif]-->
 	<!-- site Favicon -->
-	<link rel="icon" type="image/png" href="{{asset('images/favicon/favicon-16x16.png')}}" />
-	<meta name="msapplication-TileImage" content="{{asset('images/favicon/favicon-16x16.png')}}" />
+	<link rel="icon" type="image/png" href="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
+	<meta name="msapplication-TileImage" content="{{asset('backend/images/favicon/favicon-16x16.png')}}" />
 
 	<style type="text/css" media="screen">
 		/* Linked Styles */
@@ -97,7 +97,7 @@
 														<tr>
 															<td style="font-size:0pt; line-height:0pt; text-align:left;">
 																<a href="http://expiringsoon.shop" target="_blank">
-																	<img src="{{asset('images/logo.png')}}" width="125" border="0" alt="" />
+																	<img src="{{asset('backend/images/logo.png')}}" width="125" border="0" alt="" />
 																</a>
 															</td>
 														</tr>
@@ -123,7 +123,7 @@
 							<table width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left;">
-										<img src="{{asset('images/site/img-verify.jpg')}}" border="0" width="100%" alt="" />
+										<img src="{{asset('backend/images/site/img-verify.jpg')}}" border="0" width="100%" alt="" />
 									</td>
 								</tr>
 							</table>
@@ -150,7 +150,7 @@
 														 {{-- <tr>
 															<td align="center">
 																<a href="https://ng.expiringsoon.shop/verify.php?token=11111" target="_blank" class="link">
-																	<img src="{{asset('images/site/btn-confirm.png')}}" width="200">
+																	<img src="{{asset('backend/images/site/btn-confirm.png')}}" width="200">
 																</a>
 															</td>
 														</tr>  --}}
@@ -179,7 +179,7 @@
 														<tr>
 															<td class="img" width="55" style="font-size:0pt; line-height:0pt; text-align:center;">
 																<a href="#" target="_blank">
-																	<img src="{{asset('images/logo.png')}}" width="34" height="34" border="0" alt="" />
+																	<img src="{{asset('backend/images/logo.png')}}" width="34" height="34" border="0" alt="" />
 																</a>
 															</td>
 														</tr>

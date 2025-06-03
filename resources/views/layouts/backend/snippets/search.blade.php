@@ -118,7 +118,7 @@
                     <a class="dropdown-item" href="./index.html">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img class="avatar avatar-xs avatar-circle" src="{{asset('images/160x160/img10.jpg')}}"
+                                <img class="avatar avatar-xs avatar-circle" src="{{asset('backend/images/160x160/img10.jpg')}}"
                                     alt="Image Description">
                             </div>
                             <div class="flex-grow-1 text-truncate ms-2">
@@ -131,7 +131,7 @@
                     <a class="dropdown-item" href="./index.html">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img class="avatar avatar-xs avatar-circle" src="{{asset('images/160x160/img3.jpg')}}"
+                                <img class="avatar avatar-xs avatar-circle" src="{{asset('backend/images/160x160/img3.jpg')}}"
                                     alt="Image Description">
                             </div>
                             <div class="flex-grow-1 text-truncate ms-2">
