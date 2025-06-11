@@ -1,4 +1,4 @@
-@extends('layouts.base.auth')
+@extends('layouts.backend.base.auth')
 @section('title','Change Password')
 @section('main')
     <div class="row">

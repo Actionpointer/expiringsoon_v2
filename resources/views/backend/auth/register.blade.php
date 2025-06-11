@@ -1,4 +1,4 @@
-@extends('layouts.base.auth')   
+@extends('layouts.backend.base.auth')   
 @section('title','Register')
 @section('main')
 <div class="container-fluid px-3">

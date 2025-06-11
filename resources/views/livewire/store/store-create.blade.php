@@ -134,7 +134,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div wire:ignore class="col-md-6">
+                                    <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="storeCountrySelect" class="form-label">
                                                 Country <span class="text-danger">*</span>
@@ -201,7 +201,7 @@
                                             <label for="storeZipCode" class="form-label">
                                                 Zip/Postal Code <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" class="form-control @error('zip_code') is-invalid @enderror" id="storeZipCode" name="zip_code" placeholder="Enter zip code" value="{{ old('zip_code') }}" required />
+                                            <input type="text" class="form-control @error('zip_code') is-invalid @enderror" id="storeZipCode" wire:model="zip_code" placeholder="Enter zip code" value="{{ old('zip_code') }}" required />
                                             @error('zip_code')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -252,7 +252,7 @@
 
                                 <div class="col-12 mt-2">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="terms" wire:model="terms" required>
+                                        <input class="form-check-input" type="checkbox" id="terms" value="1" wire:model="terms" required>
                                         <label class="form-check-label" for="terms">
                                             I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
                                         </label>
@@ -320,6 +320,12 @@
             window.Livewire.dispatch('getCities', { state_id: value});
         });
 
+        $(document).on('select2:select', '#storeCitySelect', function(e) {
+            const value = $(this).val();
+            console.log(value);
+            window.Livewire.dispatch('setCityId', { city_id: value});
+        });
+
         // Listen for Livewire events to reinitialize Select2
         Livewire.on('states-updated', function(data) {
             setTimeout(function() {
@@ -334,6 +340,8 @@
                 $('#storeCitySelect').select2('open');
             }, 100);
         });
+
+
         
         // Logo preview
         document.getElementById('store-logo')?.addEventListener('change', function(event) {

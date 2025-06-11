@@ -71,7 +71,7 @@ class LoginController extends Controller
 
     public function force_password_change_form(Request $request){
         if($request->user()->require_password_change){
-            return view('auth.passwords.forcepassword');
+            return view('backend.auth.passwords.forcepassword');
         }
         return redirect()->route('admin.dashboard')->with(['result'=>0,'message'=> 'Invalid Request']);
     }

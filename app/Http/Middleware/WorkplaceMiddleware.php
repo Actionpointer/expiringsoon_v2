@@ -28,7 +28,7 @@ class WorkplaceMiddleware
         }
         
         // If store_id is provided, check if user works in that specific store
-        if ($request->has('store_id') || $request->route('store_id') || $request->route('store_slug')) {
+        if ($request->has('store_id') || $request->route('store_id') || $request->route('store')) {
             if($request->route('store_slug')){
                 $store = Store::where('slug', $request->route('store_slug'))->first();
                 $storeId = $store->id;

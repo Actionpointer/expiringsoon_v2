@@ -1,5 +1,6 @@
 @extends('layouts.backend.base.app')
 
+
 @section('main')
 <div class="content container-fluid">
     <!-- Page Header -->
@@ -143,7 +144,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach($staff as $staff)
+                    @foreach($staffs as $staff)
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">

@@ -4,8 +4,8 @@ namespace App\Models;
 
 
 use App\Models\Cart;
-use App\Models\Wishlist;
 use App\Models\Order;
+use App\Models\Staff;
 use App\Models\State;
 use App\Models\Store;
 use App\Models\Payout;
@@ -13,11 +13,11 @@ use App\Models\Account;
 use App\Models\Address;
 use App\Models\Country;
 use App\Models\Payment;
+use App\Models\Wishlist;
 use App\Models\Rejection;
 use App\Models\Settlement;
 use App\Models\OrderMessage;
 use App\Models\Subscription;
-use App\Models\AdminPermission;
 use App\Observers\UserObserver;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable,HasApiTokens;
 
     protected $guarded = ['id'];
+
 
     protected $appends = ['image'];
 
@@ -185,7 +186,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function is_admin(){
-        return $this->hasOne(AdminPermission::class)->where('status',true);
+        return $this->hasOne(Staff::class)->where('status',true);
     }
 
     public function pin(){

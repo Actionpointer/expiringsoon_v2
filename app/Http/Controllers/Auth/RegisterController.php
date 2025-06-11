@@ -26,11 +26,10 @@ class RegisterController extends Controller
     {
         // Map the request data to the format expected by registerUser
         $data = [
-            'first_name' => $request->firstname,
-            'last_name' => $request->surname,
+            'firstname' => $request->firstname,
+            'surname' => $request->surname,
             'email' => $request->email,
             'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation,
         ];
 
         $result = $this->registerUser($data);

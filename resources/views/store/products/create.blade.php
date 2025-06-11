@@ -1,10 +1,17 @@
 @extends('layouts.frontend.store.app')
 @push('styles')
-<link rel="stylesheet" href="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.css') }}">
-<link rel="stylesheet" href="{{ asset('frontend/libs/quill/dist/quill.snow.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.css') }}"> -->
+<link href="{{asset('vendor/summernote/summernote-bs5.css')}}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/select2.min.css')}}" />
 <link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/custom.css')}}" />
-
+<style>
+    .note-color .dropdown-toggle {
+        width: 35px !important;
+    }
+    .note-color .note-dropdown-menu.show{
+        display:flex !important;
+    }
+</style>
 @endpush
 @section('content')
 
@@ -61,12 +68,21 @@
 
                             <div class="mb-3 mt-5 col-lg-12">
                                 <h4 class="mb-3 h5">Product Images</h4>
-                                <div id="my-dropzone" class="dropzone mt-4 border-dashed rounded-2 min-h-0"></div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                        <i class="fa fa-picture-o"></i> Choose
+                                        </a>
+                                    </span>
+                                    <input id="thumbnail" class="form-control" type="text" name="filepath">
+                                </div>
+                                <div id="holder" class="border-dashed rounded-2" style="margin-top:15px;max-height:100px;"></div>
+                                
                             </div>
                             <!-- input -->
                             <div class="mb-3 col-lg-12 mt-5">
                                 <h4 class="mb-3 h5">Product Descriptions</h4>
-                                <textarea class="form-control" rows="3" placeholder="Product Description"></textarea>
+                                <textarea class="summernote-editor form-control" rows="3" placeholder="Product Description"></textarea>
                             </div>
                             <div class="mb-3 mt-5 col-lg-12">
                                 <h4 class="mb-3 h5">Meta Data</h4>
@@ -246,7 +262,7 @@
                         <h4 class="mb-4 h5">Product Expiry</h4>
                         <!-- input -->
                         <div class="form-check form-switch mb-4">
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchStock" checked />
+                            <input class="form-check-input" type="checkbox" role="switch" id="productCanExpire" checked />
                             <label class="form-check-label" for="flexSwitchStock">Product can expire</label>
                         </div>
                         <!-- input -->
@@ -322,45 +338,47 @@
 </div>
 @endsection
 @push('scripts')
-<script src="{{ asset('frontend/libs/quill/dist/quill.min.js') }}"></script>
-<script src="{{ asset('frontend/js/vendors/editor.js') }}"></script>
-<script src="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
-<script src="{{ asset('frontend/js/vendors/dropzone.js') }}"></script>
+<script src="{{asset('vendor/summernote/summernote-bs5.js')}}"></script>
 <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
+<script src="{{asset('vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function(){
+        $('.summernote-editor').summernote({
+            height: 'auto',
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear','fontsize','italic']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']]
+            ]
+        })
         $('.select2').select2();
-    });
-</script>
-<script>
-    // Toggle expiry details based on checkbox
-    document.getElementById('productCanExpire').addEventListener('change', function() {
-        document.getElementById('expiryDetails').style.display = this.checked ? 'block' : 'none';
-    });
-
-    // Initialize dropzone
-    new Dropzone("#dropzone", {
-        url: "/file/upload",
-        dictDefaultMessage: "Drop files here to upload"
-    });
-
-    // Add event listeners for add attribute and variant buttons
-    document.getElementById('addAttributeBtn').addEventListener('click', function() {
-        // Add attribute logic
-        console.log('Add attribute');
-    });
-
-    document.getElementById('addVariantBtn').addEventListener('click', function() {
-        // Add variant logic
-        console.log('Add variant');
-    });
-
-    // Remove buttons
-    document.querySelectorAll('.remove-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            // Remove parent element logic
-            console.log('Remove element');
+        // Toggle expiry details based on checkbox
+        document.getElementById('productCanExpire').addEventListener('change', function() {
+            document.getElementById('expiryDetails').style.display = this.checked ? 'block' : 'none';
         });
-    });
+        // Add event listeners for add attribute and variant buttons
+        document.getElementById('addAttributeBtn').addEventListener('click', function() {
+            // Add attribute logic
+            console.log('Add attribute');
+        });
+
+        document.getElementById('addVariantBtn').addEventListener('click', function() {
+            // Add variant logic
+            console.log('Add variant');
+        });
+
+        // Remove buttons
+        document.querySelectorAll('.remove-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                // Remove parent element logic
+                console.log('Remove element');
+            });
+        });
+        var route_prefix = "{{ route('store.filemanager',$store) }}";
+        $('#lfm').filemanager('image', {prefix: route_prefix});
+
+    })
 </script>
 @endpush

@@ -14,10 +14,11 @@ trait PaystackTrait
       $response = Curl::to('https://api.paystack.co/transaction/initialize')
       ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
       ->withHeader('Content-Type: application/json')
-      ->withData( array('email'=> $payment->user->email,'amount'=> intval($payment->payable*100),'currency'=> session('locale')['currency_iso'],
+      ->withData( array('email'=> $payment->user->email,'amount'=> intval($payment->payable*100),'currency'=> strtoupper($payment->currency_code),
                       'reference'=> $payment->reference,"callback_url"=> route('payment.callback') ) )
       ->asJson()                
       ->post();
+      // dd($response);
       if($response &&  isset($response->status) && $response->status)
         return $response->data->authorization_url;
       else return false;

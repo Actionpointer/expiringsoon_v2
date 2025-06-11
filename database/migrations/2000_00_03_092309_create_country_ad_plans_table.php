@@ -16,12 +16,16 @@ return new class extends Migration
             $table->unsignedBigInteger('country_id');
             $table->string('name');
             $table->text('description');
-            $table->string('instruction', 255);
+            $table->string('instruction', 255)->nullable();
             $table->string('type');//store, product, coupon, 
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
             $table->integer('price')->default(0);
+            $table->string('placement'); // homepage_banner, product_sidebar, etc.
+            $table->string('format'); // image, video, carousel, etc.
+            $table->json('device_restrictions')->nullable(); // desktop, mobile, both
             $table->boolean('is_active')->default(1); //still in use
+            $table->softDeletes();
             $table->timestamps();
         });
     }

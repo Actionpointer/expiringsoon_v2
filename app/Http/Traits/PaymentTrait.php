@@ -1,12 +1,16 @@
 <?php
 namespace App\Http\Traits;
+use App\Models\Order;
 use App\Models\Coupon;
 use App\Models\Payment;
+use App\Models\Purchase;
 use App\Models\Settlement;
 use App\Models\PaymentItem;
+use Illuminate\Support\Str;
 use App\Http\Traits\OrderTrait;
 use App\Http\Traits\PaypalTrait;
 use App\Http\Traits\PaystackTrait;
+use Illuminate\Support\Facades\Log;
 use App\Http\Traits\FlutterwaveTrait;
 
 
@@ -14,27 +18,72 @@ trait PaymentTrait
 {
     use PaystackTrait,FlutterwaveTrait,PaypalTrait,OrderTrait;
 
-    protected function initializePayment($amount,$items,$type,$coupon){
-        $user = auth()->user();
-        $gateway = $user->country->payment_gateway;
-        $coupon_id = null;
-        $coupon_value = 0;
-        if($coupon){
-            $coupon_value = $this->getCoupon($coupon,$amount)['value'];
-            $coupon_id = Coupon::where('code',$coupon)->first()->id;
+    public function getRedirectionRoute(Purchase $purchase){
+        $store = $purchase->store;
+        switch($purchase->purchaseable_type){
+            case 'App\Models\Subscription': return route('store.settings.subscription',$store);
+                break;
+            case 'App\Models\Deposit': return route('orders');
+                break;
+            case 'App\Models\Advert': return route('store.marketing.adverts',$store);
+                break;
+            case 'App\Models\Newsletter': return route('store.marketing.newsletters',$store);
+                break;
+            default: return route('store.dashboard',$store);
         }
-        $payment = Payment::create(['user_id'=> $user->id,'currency_id'=> $user->country->currency_id, 'reference'=> uniqid(),'coupon_id'=> $coupon_id,'coupon_value'=> $coupon_value,'amount'=> $amount ,'vat'=> $user->country->vat]);
-        foreach($items as $item){
-            PaymentItem::create(['payment_id'=> $payment->id,'paymentable_id'=> $item,'paymentable_type'=> $type]);
+    }
+
+    // public function getCustomerRedirectionRoute(){
+    //     return route('orders');
+    // }
+
+    public function giveValueAfterPayment(Payment $payment){
+        $route = null;
+        switch($payment->paymentable_type){
+            case 'App\Models\Purchase':
+                    $payment->paymentable->completed_at = now();
+                    $payment->paymentable->save();
+                    foreach($payment->paymentable->items as $item){
+                        
+                        if($item->purchaseable_type == 'App\Models\Subscription'){
+                            $item->purchaseable->status = true;
+                            $item->purchaseable->save();
+                        }
+                        if($item->purchaseable_type == 'App\Models\Deposit'){
+                            $item->purchaseable->status = true;
+                            $item->purchaseable->save();
+                            //credit the wallet
+                        }
+                    }
+                    
+                    $route = $this->getRedirectionRoute($payment->paymentable);
+
+                break;
+            case 'App\Models\Order': $route = route('orders');
+                break;
+            default: $route = route('welcome');
         }
+        return $route;
+    }
+
+    public function getGateway(Payment $payment){
+        $gateway = $payment->paymentable_type == 'App\Models\Purchase'? 
+        $payment->paymentable->store->country->active_gateway()->gateway : 
+        $payment->paymentable->user->country->active_gateway()->gateway;
+        return $gateway->slug;
+    }
+
+    public function initializePayment(Payment $payment){
+        $gateway = $this->getGateway($payment);
+        
         switch($gateway){
             case 'paystack': 
                 $link = $this->initiatePaystack($payment);
-                return ['link'=> $link,'reference'=> $payment->reference];
+                return ['redirect_url'=> $link];
             break;
             case 'flutterwave': 
                 $link = $this->initiateFlutterWave($payment);
-                return ['link'=> $link,'reference'=> $payment->reference];
+                return ['redirect_url'=> $link,'reference'=> $payment->reference];
             break;
             case 'paypal': 
                 $result = $this->initiatePaypal($payment);
@@ -48,7 +97,6 @@ trait PaymentTrait
             break;
             default: return false;
         }
-        
     }
 
     protected function initializeRefund(Settlement $settlement){
@@ -67,23 +115,32 @@ trait PaymentTrait
     }
 
     protected function verifyPayment(Payment $payment){
-        $gateway = $payment->user->country->payment_gateway;
+        $gateway = $this->getGateway($payment);
         switch($gateway){
             case 'paystack': 
                 $details = $this->verifyPaystackPayment($payment->reference);
-                return ['status'=> $details->status,'trx_status'=> $details->data->status,'amount'=> $details->data->amount/100,'method'=> $details->data->channel];
+                return ['status'=> $details->status,
+                        'trx_status'=> $details->data->status,
+                        'amount'=> $details->data->amount/100,
+                        'method'=> $details->data->channel];
             break;
             case 'flutterwave': 
                 $details = $this->verifyFlutterWavePayment($payment->reference);
                 $payment->request_id = $details->data->id;
                 $payment->save();
-                return ['status'=> $details->status == 'success'? true:false,'trx_status'=> $details->data ->status == 'successful' ? 'success':'failed','amount'=> $details->data->amount,'method'=> $details->data->payment_type];
+                return ['status'=> $details->status == 'success'? true:false,
+                        'trx_status'=> $details->data->status == 'successful' ? 'success':'failed',
+                        'amount'=> $details->data->amount,
+                        'method'=> $details->data->payment_type];
             break;
             case 'paypal': 
                 $details =  $this->verifyPaypalPayment($payment->reference,$payment->request_id);
                 $payment->reference = $details->purchase_units[0]->payments->captures[0]->id;
                 $payment->save();
-                return ['status'=> $details->status == 'COMPLETED'? true:false,'trx_status'=> $details->purchase_units[0]->payments->captures[0]->final_capture ? 'success':'failed','amount'=> $details->purchase_units[0]->payments->captures[0]->amount->value,'method'=> 'paypal'];
+                return ['status'=> $details->status == 'COMPLETED'? true:false,
+                        'trx_status'=> $details->purchase_units[0]->payments->captures[0]->final_capture ? 'success':'failed',
+                        'amount'=> $details->purchase_units[0]->payments->captures[0]->amount->value,
+                        'method'=> 'paypal'];
             break;
             case 'stripe': $details =  $this->verifyStripePayment($payment->reference);
             break;

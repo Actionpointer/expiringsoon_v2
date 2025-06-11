@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'admin'  =>  \App\Http\Middleware\AdminMiddleware::class,
         'vendor'  =>  \App\Http\Middleware\VendorMiddleware::class,
         'workplace'  =>  \App\Http\Middleware\WorkplaceMiddleware::class,
+        'subscription'  =>  \App\Http\Middleware\SubscriptionMiddleware::class,
     ];
 }

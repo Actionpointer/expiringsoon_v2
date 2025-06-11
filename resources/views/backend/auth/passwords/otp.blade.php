@@ -1,4 +1,4 @@
-@extends('layouts.base.auth')
+@extends('layouts.backend.base.auth')
 @section('title','2-Step Verification')
 @section('main')
 <div class="container-fluid px-3">

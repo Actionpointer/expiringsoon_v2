@@ -14,17 +14,25 @@ return new class extends Migration
         Schema::create('country_verifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('country_id'); 
-            $table->unsignedBigInteger('verification_provider_id');  
-            $table->string('id_requirement');   //all, one, none
-            $table->json('id_documents')->nullable();
-            $table->string('business_requirement');   //all, one, none
-            $table->json('business_documents')->nullable();
-            $table->string('address_requirement');   //all, one, none
-            $table->json('address_documents')->nullable();   
-            $table->string('finance_requirement');   //all, one, none
-            $table->json('finance_documents')->nullable(); 
-            $table->string('mode')->default('test');   //live or test     
-            $table->boolean('status')->default(true); 
+            $table->unsignedBigInteger('verification_provider_id')->default('manual'); // manual, smile, veriff, jumio
+            $table->boolean('auto_verify_after_pass')->default(false); // Auto-approve if all checks pass
+            $table->integer('verification_validity_days')->default(0); // 0 = Never Expires, 180, 365, 730
+            $table->string('mode')->default('test'); // live or test
+            // Government ID
+            $table->string('id_requirement')->default('all');   // all, any, none
+            $table->json('id_documents')->nullable(); // nationalId, driverLicense, passport, votersCard
+            
+            // Business Documents
+            $table->string('business_requirement')->default('any');   // all, any, none
+            $table->json('business_documents')->nullable(); // regCertificate, taxCertificate, tradingLicense, vatCertificate
+            
+            // Address Verification
+            $table->string('address_requirement')->default('any');   // all, any, none
+            $table->json('address_documents')->nullable(); // utilityBill, bankStatement, tenancyAgreement, councilTax
+            
+            // Additional Requirements
+            $table->string('additional_requirement')->default('any'); // all, any, none
+            $table->json('additional_documents')->nullable(); // requireSelfie, requireProofOfOwnership, requirePhoneVerification, requireEmailVerification
             $table->timestamps();
         });
     }

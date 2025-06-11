@@ -5,11 +5,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\PlansController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\AdvertController;
 use App\Http\Controllers\Admin\CouponController;
-use App\Http\Controllers\Admin\PlacesController;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DisputeController;
 use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\ProductController;
@@ -19,6 +18,7 @@ use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\ComplianceController;
+use App\Http\Controllers\Admin\NewsletterController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -141,36 +141,46 @@ use App\Http\Controllers\Admin\ProductAttributeController;
                 Route::get('/', [SettingsController::class,'index'])->name('index');
                 Route::post('store', [SettingsController::class,'store'])->name('store');
 
-                Route::group(['prefix'=> 'currencies','as'=> 'currencies.'],function(){
-                    Route::get('/', [SettingsController::class,'currencies'])->name('index');
-                    Route::post('store', [SettingsController::class,'currency_store'])->name('store');
-                    Route::post('update', [SettingsController::class,'currency_update'])->name('update');
+                Route::group(['prefix'=> 'countries','as'=> 'countries.'],function(){
+                    Route::get('/', [CountryController::class,'index'])->name('index');
+                    Route::get('financials/{country}', [CountryController::class,'financials'])->name('financials');
+                    Route::post('financial-gateway', [CountryController::class,'financial_gateway'])->name('financials.gateway');
+                    Route::post('financial-banking', [CountryController::class,'financial_banking'])->name('financials.banking');
+                    
+                    Route::get('subscription-plans/{country}', [CountryController::class,'subscription_plan'])->name('subscription_plans');
+                    Route::post('store/subscription-plan', [CountryController::class,'store_subscription_plan'])->name('subscription_plan.store');
+                    Route::post('update/subscription-plan', [CountryController::class,'update_subscription_plan'])->name('subscription_plan.update');
+                    
+                    Route::get('ad-plans/{country}', [CountryController::class,'ad_plan'])->name('ad_plans');
+                    Route::post('update/ad-plan', [CountryController::class,'updateAdPlan'])->name('update.ad_plan');
+                    Route::get('newsletter-plans/{country}', [CountryController::class,'newsletter_plan'])->name('newsletter_plans');
+                    Route::post('update/newsletter-plan', [CountryController::class,'updateNewsletterPlan'])->name('update.newsletter_plan');
+                    
+                    Route::get('verification/{country}', [CountryController::class,'verifications'])->name('verifications');
+                    Route::post('update/verification', [CountryController::class,'updateVerification'])->name('update.verifications');
                 });
 
-                Route::group(['prefix'=> 'places','as'=> 'places.'],function(){
-                    Route::get('/', [PlacesController::class,'index'])->name('index');
-                    Route::post('country', [PlacesController::class,'country'])->name('country');
-                    Route::get('setup/{country}', [PlacesController::class,'setup'])->name('setup');
-                    Route::post('state', [PlacesController::class,'state'])->name('state');
-                    Route::post('city', [PlacesController::class,'city'])->name('city');
-                    
-
-                    
-                    
-
-                    Route::post('financial', [PlacesController::class,'updateFinancial'])->name('update.financial');
-                    Route::post('gateways', [PlacesController::class,'updateGateways'])->name('update.gateways');
-                    Route::post('banking', [PlacesController::class,'updateBanking'])->name('update.banking');
-                    Route::post('verification', [PlacesController::class,'updateVerification'])->name('update.verification');
-
-                    
-                    Route::get('countries',[PlacesController::class, 'index'])->name('countries');
-                    // Route::get('country/{country}',[PlacesController::class, 'country'])->name('country');
-                    Route::post('country/basic',[PlacesController::class, 'country_basic'])->name('country.basic');
-                    
-                    Route::post('state/manage',[PlacesController::class, 'state_manage'])->name('state.manage');
-                    Route::post('city/manage',[PlacesController::class, 'city_manage'])->name('city.manage');
+                Route::group(['prefix'=> 'roles','as'=> 'roles.'],function(){
+                    Route::get('/', [SettingsController::class,'roles'])->name('index');
+                    Route::post('store',[SettingsController::class,'store_role'] )->name('store'); 
+                    Route::post('update', [SettingsController::class,'update_role'])->name('update');
+                    Route::post('delete', [SettingsController::class,'destroy_role'])->name('delete');
                 });
+                
+                Route::group(['prefix'=> 'staff','as'=> 'staff.'],function(){
+                    Route::get('/', [UserController::class,'admin'])->name('index');
+                    Route::post('store',[UserController::class,'store'] )->name('store'); 
+                    Route::post('update', [UserController::class,'update'])->name('update');
+                    Route::post('delete', [UserController::class,'destroy'])->name('delete');
+                });
+    
+                Route::group(['prefix'=> 'newsletters','as'=> 'newsletters.'],function(){
+                    Route::get('/', [NewsletterController::class,'index'])->name('index');
+                    Route::post('store', [NewsletterController::class,'store'])->name('store');
+                    Route::post('update', [NewsletterController::class,'update'])->name('update');
+                });
+
+                
 
                 Route::group(['prefix'=> 'categories','as'=> 'categories.'],function(){
                     Route::get('/',[CategoryController::class,'index'])->name('index');
@@ -187,13 +197,6 @@ use App\Http\Controllers\Admin\ProductAttributeController;
                     Route::post('destroy', [ProductAttributeController::class, 'destroy'])->name('destroy');
                 });
 
-                Route::group(['prefix'=> 'staff','as'=> 'staff.'],function(){
-                    Route::get('/', [UserController::class,'admin'])->name('index');
-                    Route::post('store',[UserController::class,'store'] )->name('store'); 
-                    Route::post('update', [UserController::class,'update'])->name('update');
-                    Route::post('delete', [UserController::class,'destroy'])->name('delete');
-                });
-
                 Route::group(['prefix'=> 'security','as'=> 'security.'],function(){
                     Route::get('/',[SecurityController::class,'index'])->name('index');
                     Route::post('store',[SecurityController::class,'store'])->name('store');
@@ -201,20 +204,7 @@ use App\Http\Controllers\Admin\ProductAttributeController;
                     Route::post('delete',[SecurityController::class,'destroy'])->name('delete');
                 });
 
-                Route::group(['prefix'=> 'plans','as'=> 'plans.'],function(){
-                    Route::get('/',[PlansController::class, 'index'])->name('index');
-                    Route::post('subscription',[PlansController::class, 'subscription'])->name('subscription');
-                    Route::post('ads',[PlansController::class, 'ads'])->name('ads');
-                    Route::post('newsletters',[PlansController::class, 'newsletters'])->name('newsletters');
-
-                    Route::get('plan/{plan}',[PlansController::class, 'plan'])->name('plan');
-                    Route::post('plans',[PlansController::class, 'plans'])->name('plans');
-                    Route::post('plan/pricing',[PlansController::class, 'plan_pricing'])->name('plan.pricing');
-
-                    Route::get('advert-plans/{adplan}',[SettingsController::class, 'adplan'])->name('adplan');
-                    Route::post('adplans',[PlansController::class, 'adplans'])->name('adplans');
-                    Route::post('ad/pricing',[PlansController::class, 'ad_pricing'])->name('ad.pricing'); 
-                });
+               
 
             });
             Route::group(['prefix'=> 'security','as'=> 'security.'],function(){
@@ -236,9 +226,7 @@ use App\Http\Controllers\Admin\ProductAttributeController;
             Route::group(['middleware'=> 'permission:settings'],function(){
                 
             });
-            Route::get('getStates/{country_id?}', [ResourcesController::class, 'states'])->name('states');
-            Route::get('getCities/{state_id}', [ResourcesController::class, 'cities'])->name('cities');
-
+            
             Route::get('vendors', [StoreController::class, 'index'])->name('vendors');
             Route::get('vendors/{shop}', [StoreController::class, 'show'])->name('vendor.show');
             Route::get('vendor/follow/{shop}',[SalesController::class, 'follow'])->name('vendor.follow');

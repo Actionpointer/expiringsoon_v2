@@ -77,6 +77,25 @@
     <script src="{{ asset('frontend/js/theme.min.js') }}"></script>
     <script src="{{ asset('frontend/js/vendors/validation.js') }}"></script>
     @livewireScripts
+    <script>
+		$(document).ready(function() {
+			Livewire.on('closeModal', function(data) {
+				console.log('Close modal event received:', data);
+				const modalId = data[0].modalId;
+
+				const modalEl = document.getElementById(modalId);
+
+				// Check if Bootstrap modal instance already exists
+				let modalInstance = bootstrap.Modal.getInstance(modalEl);
+				if (!modalInstance) {
+					// If not, create a new instance (Bootstrap 5)
+					modalInstance = new bootstrap.Modal(modalEl);
+				}
+				// Hide the modal with Bootstrap 5 API
+				modalInstance.hide();
+			});
+		});
+	</script>
     @stack('scripts')
 </body>
 

@@ -16,15 +16,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->string('slug');
+            $table->string('slug')->nullable();
             $table->string('type')->default('admin'); //admin/store
             $table->json('permissions');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
 
         $permissions = DB::table('permissions')->pluck('id')->toArray();
         DB::table('roles')->insert([
-                ['id' => 1, 'name' => 'Super Admin', 'slug' => 'super-admin', 'type' => 'admin', 'description' => 'Super Admin', 'permissions' => json_encode($permissions)]
+                ['id' => 1, 'name' => 'Super Admin','description' => 'Super Admin', 'slug' => 'super-admin', 'type' => 'admin', 'permissions' => json_encode($permissions),'status'=> 1]
             ]);
     }
 

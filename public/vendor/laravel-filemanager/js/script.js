@@ -738,14 +738,7 @@ function use(items) {
   } else if (callback && parent[callback]) {
     parent[callback](getSelectedItems());
   } else if (window.opener) { // standalone button or other situations
-    // window.opener.SetUrl(getSelectedItems());
-    window.opener.postMessage(
-      {
-        type: 'SetUrl',
-        items: getSelectedItems()
-      },
-      '*' // Update this to your actual domain
-    );
+    window.opener.SetUrl(getSelectedItems());
   } else {
     useFileSucceeded = false;
   }

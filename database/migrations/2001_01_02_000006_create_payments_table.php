@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('reference');
+            $table->morphs('paymentable');
             $table->string('request_id', 255)->nullable();
             $table->string('currency_code');
             $table->double('amount', null, 0)->default(0);

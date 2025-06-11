@@ -8,7 +8,7 @@ use App\Models\BankBranch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Account extends Model
+class BankAccount extends Model
 {
     use HasFactory;
     

@@ -113,9 +113,9 @@ class UserController extends Controller
     }
 
     public function admin(){
-        $staff = User::has('is_admin')->get();
+        $staffs = User::has('is_admin')->get();
         $permissions = Permission::all();
-        return view('backend.settings.staff.index',compact('staff','permissions'));
+        return view('backend.settings.staff.index',compact('staffs','permissions'));
     }
 
     public function show(User $user){

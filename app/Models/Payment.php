@@ -14,7 +14,20 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['reference','method','user_id','currency_id','status','amount','coupon_id','coupon_value','vat'];
+    protected $fillable = [
+        'user_id',
+        'reference',
+        'request_id',
+        'paymentable_id',
+        'paymentable_type',
+        'currency_code',
+        'amount',
+        'coupon_id',
+        'coupon_value',
+        'vat_value',
+        'method',
+        'status',
+    ];
 
     public static function boot()
     {
@@ -65,5 +78,10 @@ class Payment extends Model
             return $this->amount * $country->banking->tax_rate / 100;
         }
         return 0;
+    }
+
+    public function paymentable()
+    {
+        return $this->morphTo();
     }
 }

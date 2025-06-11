@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Revenue extends Model
 {
     use HasFactory;
-    protected $fillable = ['payment_id','country_id','currency_id','amount','description'];
+    protected $fillable = ['payment_id','currency_code','amount','description'];
 
     public function scopeWithin($query,$value = null){
         if($value){
@@ -26,12 +26,6 @@ class Revenue extends Model
         }  
     }
 
-    public function currency(){
-        return $this->belongsTo(Currency::class);
-    } 
-    public function country(){
-        return $this->belongsTo(Country::class);
-    }
     public function payment(){
         return $this->belongsTo(Payment::class);
     }

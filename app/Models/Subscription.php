@@ -10,13 +10,29 @@ use App\Observers\SubscriptionObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Subscription extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['user_id','plan_id','amount','start_at','renew_at','end_at','auto_renew','coupon','status'];
+    protected $fillable = [
+        'store_id',
+        'country_subscription_plan_id',
+        'start_at',
+        'renew_at',
+        'end_at',
+        'status',
+        'auto_renew',
+    ];
     protected $appends = ['active','duration','is_free'];
-    protected $casts = ['start_at'=> 'datetime','end_at'=> 'datetime','renew_at'=> 'datetime'];
+    protected $casts = [
+        'start_at' => 'datetime',
+        'renew_at' => 'datetime',
+        'end_at' => 'datetime',
+        'status' => 'boolean',
+        'auto_renew' => 'boolean',
+    ];
 
     public static function boot()
     {
@@ -31,9 +47,22 @@ class Subscription extends Model
     public function payment_item(){
         return $this->morphOne(PaymentItem::class,'paymentable');
     }
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
+    }
 
-    public function plan(){
-        return $this->belongsTo(Plan::class);
+    /**
+     * Get the subscription plan associated with this subscription.
+     */
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(CountrySubscriptionPlan::class, 'country_subscription_plan_id');
+    }
+
+    public function purchaseItem()
+    {
+        return $this->morphOne(PurchaseItem::class, 'purchaseable');
     }
 
     public function getDurationAttribute(){
@@ -56,4 +85,24 @@ class Subscription extends Model
         return $query->where('start_at','<',now())->where('end_at','<',now());
     }
 
+    /**
+     * Get the store that owns the subscription.
+     */
+    
+
+    /**
+     * Get the purchase items for this subscription.
+     */
+    public function purchaseItems(): MorphMany
+    {
+        return $this->morphMany(PurchaseItem::class, 'purchaseable');
+    }
+
+    /**
+     * Check if the subscription is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->status && ($this->end_at === null || $this->end_at->isFuture());
+    }
 }

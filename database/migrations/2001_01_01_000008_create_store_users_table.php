@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unique(['store_id', 'user_id']);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -13,25 +13,32 @@
                     <p>Welcome back to Expiring Soon! Enter your email to get started.</p>
                 </div>
 
-                <form class="needs-validation" wire:submit.prevent="signin">
+                <div class="needs-validation">
+                    @if($errorMessage)
+                    <div class="alert alert-danger">
+                        {{ $errorMessage }}
+                    </div>
+                    @endif
                     <div class="row g-3">
-                        <!-- row -->
-
                         <div class="col-12">
                             <!-- input -->
                             <label for="formSigninEmail" class="form-label visually-hidden">Email address</label>
-                            <input type="email" class="form-control" id="formSigninEmail" placeholder="Email" required wire:model="email" />
-                            <div class="invalid-feedback">Please enter name.</div>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="formSigninEmail" placeholder="Email" required wire:model="email" />
+                            @error('email')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-12">
                             <!-- input -->
                             <div class="password-field position-relative">
                                 <label for="formSigninPassword" class="form-label visually-hidden">Password</label>
                                 <div class="password-field position-relative">
-                                    <input type="password" class="form-control fakePassword" id="formSigninPassword"
+                                    <input type="password" class="form-control fakePassword @error('password') is-invalid @enderror" id="formSigninPassword"
                                         placeholder="*****" required wire:model="password" />
                                     <span><i class="bi bi-eye-slash passwordToggler"></i></span>
-                                    <div class="invalid-feedback">Please enter password.</div>
+                                    @error('password')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -49,7 +56,7 @@
                         </div>
                         <!-- btn -->
                         <div class="col-12 d-grid">
-                            <button type="submit" class="btn btn-primary">Sign In</button>
+                            <button type="submit" class="btn btn-primary" id="signInButton" wire:click.prevent="submit">Sign In</button>
                         </div>
                         <!-- link -->
                         <div>
@@ -57,7 +64,7 @@
                             <a wire:navigate href="{{ route('signup') }}">Sign Up</a>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

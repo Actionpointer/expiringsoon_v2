@@ -19,7 +19,7 @@
                     </nav>
                 </div>
                 <div>
-                    <a href="{{ route('store.plans') }}" class="btn btn-primary">
+                    <a href="{{ route('store.plans',$store) }}" class="btn btn-primary">
                         <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Plan
                     </a>
                 </div>
@@ -70,7 +70,7 @@
                             </div>
                             
                             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                                <a href="{{ route('store.plans') }}" class="btn btn-primary">
+                                <a href="{{ route('store.plans',$store) }}" class="btn btn-primary">
                                     Upgrade Plan
                                 </a>
                                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#renewSubscriptionModal">

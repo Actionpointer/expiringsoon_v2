@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\NewsletterPlan;
 use App\Http\Controllers\Controller;
 
-class PlansController extends Controller
+class NewsletterController extends Controller
 {
     /**
      * Display a listing of the resource.

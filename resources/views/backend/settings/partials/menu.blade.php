@@ -16,10 +16,7 @@
             <a class="nav-link {{ request()->is('*/settings') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">General</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('*/settings/currencies') ? 'active' : '' }}" href="{{ route('admin.settings.currencies.index') }}">Currencies</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('*/settings/places') ? 'active' : '' }}" href="{{ route('admin.settings.places.index') }}">Places</a>
+            <a class="nav-link {{ request()->is('*/settings/countries') ? 'active' : '' }}" href="{{ route('admin.settings.countries.index') }}">Countries</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->is('*/settings/categories') ? 'active' : '' }}" href="{{ route('admin.settings.categories.index') }}">Categories</a>
@@ -28,14 +25,16 @@
             <a class="nav-link {{ request()->is('*/settings/attributes') ? 'active' : '' }}" href="{{ route('admin.settings.attributes.index') }}">Attributes</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ request()->is('*/settings/newsletters') ? 'active' : '' }}" href="{{ route('admin.settings.newsletters.index') }}">Newsletters</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->is('*/settings/staff') ? 'active' : '' }}" href="{{ route('admin.settings.staff.index') }}">Staff</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('*/settings/roles') ? 'active' : '' }}" href="{{ route('admin.settings.roles.index') }}">Roles</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->is('*/settings/security') ? 'active' : '' }}" href="{{ route('admin.settings.security.index') }}">Security</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('*/settings/plans') ? 'active' : '' }}" href="{{ route('admin.settings.plans.index') }}">Plans</a>
-        </li>
-
     </ul>
 </div>

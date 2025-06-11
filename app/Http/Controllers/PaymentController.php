@@ -21,42 +21,15 @@ class PaymentController extends Controller
 
     public function paymentcallback(){       
         $user = auth()->user();
-        $gateway = $user->country->payment_gateway;
-        if(request()->expectsJson()){
-            if(!request()->reference){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Reference Not Found',
-                ], 401);
-            }else $reference = request()->reference;
-        }
-        else{
-            if(!request()->query()){
-                \abort(404);
-            }else {
-                switch($gateway){
-                    case 'paystack': 
-                        if(!request()->query('reference')) \abort(404);
-
-                        $reference = request()->query('reference');
-                    break;
-                    case 'flutterwave':
-                        if(!request()->query('tx_ref')) \abort(404);
-                        if(request()->query('status') != 'successful') return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
-                        $reference = request()->query('tx_ref');
-                    break;
-                    case 'paypal': 
-                        if(!request()->query('token')) \abort(404);
-                        if(request()->query('status') != 'success') return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
-                        $reference = request()->query('token');
-                    break;
-                    case 'stripe': 
-                    break;
-                }
-            }
-        } 
+        //dd(request()->query());
+        if(!request()->reference){
+            return response()->json([
+                'status' => false,
+                'message' => 'Reference Not Found',
+            ], 401);
+        }else $reference = request()->reference;
         $payment = Payment::where('reference',$reference)->first();
-        //if payment was already successful before now
+        //if there's no payent or payment is already successful or the payer is not the auth user
         if(!$payment || $payment->status == 'success' || $payment->user_id != $user->id){
             if(request()->expectsJson()){
                 return response()->json([
@@ -75,62 +48,19 @@ class PaymentController extends Controller
             }else return redirect()->route('home')->with(['result'=> 0,'message'=> 'Payment was not successful. Please try again']);
             
         }
-        $payment->status = 'success';
-        $payment->method = $details['method'];
-        $payment->save();
+        // $payment->status = 'success';
+        // $payment->method = $details['method'];
+        // $payment->save();
         $redirect_to = $this->giveValueAfterPayment($payment);
         return request()->expectsJson() ? 
             response()->json([
                 'status' => true,
                 'message' => 'Payment Successful',
             ], 200) :
-            redirect()->route($redirect_to)->with(['result'=>1,'message'=> 'Payment Successful']);
-       
+            redirect()->to($redirect_to)->with(['result'=>1,'message'=> 'Payment Successful']);
+            
     }
 
-    public function giveValueAfterPayment(Payment $payment){
-        $redirect_to = null;
-        if($payment->status){
-            foreach($payment->items as $item){
-                if($item->paymentable_type == 'App\Models\Order'){
-                    $order = Order::find($item->paymentable_id);
-                    $status = $order->statuses()->create(['user_id'=> $payment->user_id,'name'=> 'processing']);
-                    $redirect_to = 'orders';
-                }
-                if($item->paymentable_type == 'App\Models\Adset'){
-                    $adset = Adset::find($item->paymentable_id);
-                    $adset->status = true;
-                    $adset->save();
-                    $redirect_to = 'vendor.adsets';
-                }
-                if($item->paymentable_type == 'App\Models\Subscription'){
-                    $subscription = Subscription::find($item->paymentable_id);
-                    $duration = $subscription->end_at->diffInMonths($subscription->start_at);
-                    $renew_at = null;
-                    switch($duration){
-                        case '1': $renew_at =  now()->addMonths($duration)->subWeeks(1);
-                        break;
-                        case '3': $renew_at = now()->addMonths($duration)->subWeeks(2);
-                        break;
-                        case '6': $renew_at = now()->addMonths($duration)->subWeeks(3);
-                        break;
-                        case '12': $renew_at = now()->addMonths($duration)->subWeeks(4);
-                        break;
-                    }
-                    $subscription->status = true;
-                    $subscription->start_at = now();
-                    $subscription->renew_at = $renew_at;
-                    $subscription->end_at = now()->addMonths($duration);
-                    $subscription->save();
-                    $subscription->user->save();
-                    Subscription::where('user_id',$payment->user->id)->whereNull('end_at')->delete();
-                    $redirect_to = 'vendor.dashboard';
-                }
-            }
-        }
-        return $redirect_to;
-        
-    }
 
     public function invoice(Payment $payment){
         return view('invoice',compact('payment'));

@@ -14,40 +14,53 @@
                     <p>Welcome to FreshCart! Enter your email to get started.</p>
                 </div>
                 <!-- form -->
-                <form class="needs-validation" wire:submit.prevent="signup">
+                <div class="needs-validation">
+                    @if($errorMessage)
+                    <div class="alert alert-danger">
+                        {!! $errorMessage !!}
+                    </div>
+                    @endif
                     <div class="row g-3">
                         <!-- col -->
                         <div class="col">
                             <!-- input -->
                             <label for="formSignupfname" class="form-label visually-hidden">First Name</label>
-                            <input type="text" class="form-control" id="formSignupfname" placeholder="First Name" required wire:model="first_name" />
-                            <div class="invalid-feedback">Please enter first name.</div>
+                            <input type="text" class="form-control @error('firstname') is-invalid @enderror" id="formSignupfname" placeholder="First Name" required wire:model="firstname" />
+                            @error('firstname')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col">
                             <!-- input -->
                             <label for="formSignuplname" class="form-label visually-hidden">Last Name</label>
-                            <input type="text" class="form-control" id="formSignuplname" placeholder="Last Name" required wire:model="last_name" />
-                            <div class="invalid-feedback">Please enter last name.</div>
+                            <input type="text" class="form-control @error('surname') is-invalid @enderror" id="formSignuplname" placeholder="Last Name" required wire:model="surname" />
+                            @error('surname')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-12">
                             <!-- input -->
                             <label for="formSignupEmail" class="form-label visually-hidden">Email address</label>
-                            <input type="email" class="form-control" id="formSignupEmail" placeholder="Email" required wire:model="email" />
-                            <div class="invalid-feedback">Please enter email.</div>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="formSignupEmail" placeholder="Email" required wire:model="email" />
+                            @error('email')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-12">
                             <div class="password-field position-relative">
                                 <label for="formSignupPassword" class="form-label visually-hidden">Password</label>
                                 <div class="password-field position-relative">
-                                    <input type="password" class="form-control fakePassword" id="formSignupPassword"
+                                    <input type="password" class="form-control fakePassword @error('password') is-invalid @enderror" id="formSignupPassword"
                                         placeholder="*****" required wire:model="password" />
                                     <span><i class="bi bi-eye-slash passwordToggler"></i></span>
-                                    <div class="invalid-feedback">Please enter password.</div>
+                                    @error('password')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                         <!-- btn -->
-                        <div class="col-12 d-grid"><button type="submit" class="btn btn-primary">Register</button></div>
+                        <div class="col-12 d-grid"><button type="submit" class="btn btn-primary" id="signUpButton" wire:click.prevent="submit">Register</button></div>
 
                         <!-- text -->
                         <p>
@@ -59,7 +72,7 @@
                             </small>
                         </p>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

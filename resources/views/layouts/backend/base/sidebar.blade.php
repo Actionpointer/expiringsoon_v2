@@ -230,11 +230,9 @@
                             <a class="nav-link" href="{{ route('admin.settings.index') }}">
                                 <i class="bi-sliders nav-icon"></i> General
                             </a>
-                            <a class="nav-link" href="{{ route('admin.settings.currencies.index') }}">
-                                <i class="bi-currency-exchange nav-icon"></i> Currencies
-                            </a>
-                            <a class="nav-link" href="{{ route('admin.settings.places.index') }}">
-                                <i class="bi-geo-alt nav-icon"></i> Places
+                            
+                            <a class="nav-link" href="{{ route('admin.settings.countries.index') }}">
+                                <i class="bi-geo-alt nav-icon"></i> Countries
                             </a>
                             <a class="nav-link" href="{{ route('admin.settings.categories.index') }}">
                                 <i class="bi-diagram-3 nav-icon"></i> Categories
@@ -242,12 +240,22 @@
                             <a class="nav-link" href="{{ route('admin.settings.attributes.index') }}">
                                 <i class="bi-diagram-3 nav-icon"></i> Attributes
                             </a>
+                            <a class="nav-link" href="#">
+                                <i class="bi-people nav-icon"></i> Newsletters
+                            </a>
+                            
                             <a class="nav-link" href="{{ route('admin.settings.staff.index') }}">
-                                <i class="bi-people nav-icon"></i> Staff
+                                <i class="bi-person-workspace nav-icon"></i> Staff
                             </a>
-                            <a class="nav-link" href="{{ route('admin.settings.plans.index') }}">
-                                <i class="bi-boxes nav-icon"></i> Plans
+                            <a class="nav-link" href="{{ route('admin.settings.roles.index') }}">
+                                <i class="bi-person-badge nav-icon"></i> Roles
                             </a>
+                            <a class="nav-link" href="{{ route('admin.settings.security.index') }}">
+                                <i class="bi-shield-check nav-icon"></i> Security
+                            </a>
+                            
+
+                            
                         </div>
                     </div>
 

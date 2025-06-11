@@ -12,31 +12,28 @@ class Signup extends Component
 {
     use AuthTrait;
 
-    public $first_name;
-    public $last_name;
+    public $firstname;
+    public $surname;
     public $email;
     public $password;
-    public $password_confirmation;
     public $errorMessage = '';
 
     protected $rules = [
-        'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
+        'firstname' => 'required|string|max:255',
+        'surname' => 'required|string|max:255',
         'email' => 'required|email|max:255|unique:users',
-        'password' => 'required|min:8|confirmed',
-        'password_confirmation' => 'required'
+        'password' => 'required|min:8',
     ];
 
-    public function signup()
+    public function submit()
     {
         $this->validate();
         
         $result = $this->registerUser([
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
+            'firstname' => $this->firstname,
+            'surname' => $this->surname,
             'email' => $this->email,
             'password' => $this->password,
-            'password_confirmation' => $this->password_confirmation,
         ]);
 
         if (!$result['status']) {

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 trait AuthTrait
 {
+    use GeoLocationTrait;
     /**
      * Authenticate a user with the provided credentials
      * 
@@ -69,10 +70,10 @@ trait AuthTrait
     public function registerUser(array $data)
     {
         $validator = Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+            'firstname' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
 
         if ($validator->fails()) {
@@ -86,14 +87,14 @@ trait AuthTrait
 
         try {
             // Get location data if available (assuming GeoLocationTrait functionality)
-            $location = Location::where('ip', request()->ip())->first();
+            $location = $this->getLocation();
             
             // Create the user
             $user = User::create([
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-                'firstname' => $data['first_name'],
-                'surname' => $data['last_name'],
+                'firstname' => $data['firstname'],
+                'surname' => $data['surname'],
                 'country_id' => $location ? $location->country_id : null,
                 'status' => true
             ]);

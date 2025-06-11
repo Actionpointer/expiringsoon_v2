@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Permission extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','description'];
+    protected $fillable = ['name','description','category'];
 
     public function roles(){
-        return $this->belongsToMany(Role::class,'permission_roles')->withPivot('list','view','edit','new','remove');
+        return Role::whereJsonContains('permissions', $this->id)->get();
     }
 }

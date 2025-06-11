@@ -18,10 +18,12 @@ use App\Models\Feature;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Rejection;
+use App\Models\StoreUser;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
 use App\Models\PackageRate;
 use App\Models\OrderMessage;
+use App\Models\Subscription;
 use App\Observers\StoreObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -57,6 +59,14 @@ class Store extends Model
     
     public function getRouteKeyName(){
         return 'slug';
+    }
+
+    public function subscription(){
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function active_subscription(){
+        return $this->subscription()->where('status',true)->where('start_at','<',now())->where('end_at','>',now())->first();
     }
 
     public function getMobileAttribute(){
@@ -105,14 +115,15 @@ class Store extends Model
             $q->where('approved',false)->orWhere('show',false)->orWhere('status',0);
         });        
     }
+    
     public function owner(){
         return $this->belongsTo(User::class,'user_id');
     }
 
     public function staff()
     {
-        return $this->belongsToMany(User::class, 'store_users')
-                    ->withPivot('permissions', 'status')
+        return $this->belongsToMany(User::class, 'store_users')->using(StoreUser::class)
+                    ->withPivot('role_id','permissions', 'status')
                     ->withTimestamps();
     }
 

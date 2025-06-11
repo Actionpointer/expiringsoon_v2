@@ -16,6 +16,9 @@ class SubscriptionMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if(!$request->route('store')->active_subscription())
+        return redirect()->route('store.plans',$request->route('store'));
+
         return $next($request);
     }
 }

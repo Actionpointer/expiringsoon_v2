@@ -15,11 +15,14 @@ class VendorMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!$request->has('store_id') && !$request->route('store_id') && !$request->route('store_slug') && !session('store_slug')){
+        if(!$request->has('store') && !$request->route('store') && !$request->route('store_slug') && !session('store_slug')){
             return response()->json([
                 'status' => false,
                 'message' => 'Store not found.',
             ], 404);
+        }
+        if($request->route('store_slug')){
+            session(['store_slug' => $request->route('store')]);
         }
         return $next($request);
     }

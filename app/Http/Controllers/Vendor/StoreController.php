@@ -18,11 +18,6 @@ use App\Http\Resources\StoreResource;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\NotificationResource;
-use App\Http\Resources\StoreDetailsResource;
-use App\Notifications\StoreNotifications\StoreStatusNotification;
-use App\Notifications\StoreNotifications\NewStoreNotification;
-
 
 class StoreController extends Controller
 {
@@ -94,21 +89,7 @@ class StoreController extends Controller
             'published'=> 1]);
             
             // Add the store owner as a workplace member with full permissions
-            $store->staff()->attach($user->id, [
-                'permissions' => json_encode([
-                    'settings', 'security', 'api_management',
-                    'admin', 'customers', 'verifications',
-                    'support', 'disputes',
-                    'stores', 'subscriptions',
-                    'products', 'reviews',
-                    'orders', 'shipment',
-                    'payments', 'withdrawals', 'settlements',
-                    'coupons', 'newsletter', 'adverts', 
-                    'reports', 'analytics'
-                ]),
-                'status' => 'active'
-            ]);
-            $store->owner->notify(new NewStoreNotification($store));
+            
             
             return response()->json([
                 'status' => true, 

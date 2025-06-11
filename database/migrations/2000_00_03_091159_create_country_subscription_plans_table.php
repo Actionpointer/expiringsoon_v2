@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('minimum_withdrawal');
             $table->integer('maximum_withdrawal');
             $table->string('withdrawal_interval'); // instant, same_day, next_day, 2_3_bdays
+            $table->integer('withdrawal_count');
             $table->integer('newsletter_credits');
             $table->string('monthly_price');
             $table->string('annual_price');

@@ -27,10 +27,15 @@ return new class extends Migration
             $table->boolean('approved')->default(false);
             $table->unsignedBigInteger('views')->default(0);
             $table->unsignedBigInteger('clicks')->default(0);
+            $table->unsignedBigInteger('conversions')->default(0);
+            $table->decimal('conversion_value', 10, 2)->default(0);
+            $table->decimal('ctr', 5, 2)->default(0); // Click-through rate percentage
             $table->timestamps();
             $table->foreign('adset_id')->references('id')->on('adsets')->onDelete('cascade');
             $table->index(['advertable_type', 'advertable_id']);
         });
+
+        
     }
 
     /**
