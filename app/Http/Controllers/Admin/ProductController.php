@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 use App\Http\Traits\SecurityTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\GeoLocationTrait;
-use App\Models\ProductOption;
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -118,6 +115,7 @@ class ProductController extends Controller
         
     }
 
+<<<<<<< HEAD
     public function store(Request $request)
     {
         $user = auth()->user();
@@ -211,6 +209,8 @@ class ProductController extends Controller
         }
     }
 
+=======
+>>>>>>> 9ce005d64c7ad61b6f8886542add6622fd6b76c4
     
 
 }

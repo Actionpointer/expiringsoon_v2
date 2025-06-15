@@ -20,11 +20,14 @@
     <link href="{{ asset('frontend/libs/simplebar/dist/simplebar.min.css') }}" rel="stylesheet">
     <!-- Theme CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/css/theme.min.css') }}">
+<<<<<<< HEAD
 
     <!-- Summernote CSS -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+=======
+>>>>>>> 9ce005d64c7ad61b6f8886542add6622fd6b76c4
 </head>
 
 <body>
@@ -81,9 +84,13 @@
     <!-- Theme JS -->
     <script src="{{ asset('frontend/js/theme.min.js') }}"></script>
     <script src="{{ asset('frontend/js/vendors/validation.js') }}"></script>
+<<<<<<< HEAD
     <!-- Summernote JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+=======
+    @livewireScripts
+>>>>>>> 9ce005d64c7ad61b6f8886542add6622fd6b76c4
     <script>
 		$(document).ready(function() {
 			Livewire.on('closeModal', function(data) {
@@ -104,8 +111,11 @@
 		});
 	</script>
     @stack('scripts')
+<<<<<<< HEAD
     @livewireScripts
 
+=======
+>>>>>>> 9ce005d64c7ad61b6f8886542add6622fd6b76c4
 </body>
 
 </html>
