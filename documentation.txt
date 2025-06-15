@@ -1,0 +1,242 @@
+SHOPPERS
+Introduction: 
+    Welcome to expiringsoon marketplace, the only online platform where you can buy items at huge discounted rate.
+    All products on expiringsoon are categorized by their expiry date and discounted for you with reference to 
+    the date difference between the date of purchase and the expiry date.
+
+How it works: 
+    For example, lets assume today's date is January 1st 2022. Let's also assume a cake has been uploaded
+    by a vendor with the expiry date as December 25th 2022, and with the following discount prices
+        *Normal Price: 5000
+        *Discount Price 120 days: 4500          120 days to the expiry date (i.e Between August 27th and September 2th), you will pay the discount price of 4500 
+        *Discount Price 90 days: 4000           90 days to the expiry date (i.e Between September 26th and October 26th), you will pay the discount price of 4000
+        *Discount Price 60 days: 3000           60 days to the expiry date (i.e Between October 27th and  November 25th), you will pay the discounted price of 3000
+        *Discount Price 30 days: 2500           30 days to the expiry date (i.e Between November 26th and December 25th), you will pay the discount price of 2500
+
+    New prices automatically appear on the product with respect to its discount timeline. 
+    Note that some products may not be discount and prices are subject to change before orders are made. 
+    Once you make payment for an order, the price at which the order was made is final even if the product price is adjusted upwards or downwards minutes after 
+    your order is received
+
+Site Navigation:
+    Home: 
+        On the homepage, you will find featured products and shops within your locality. All products are categorized based on their nature, e.g Food items
+        Electronics, House hold items, etc
+        The hot deals section on the homepage shows products whose current discounted price are atleast 50% below their normal price.
+
+    Products: 
+        We list all products in grid format to help you search, sort, and filter as you wish. You can search for products by name, sort by price or expiry date, 
+        filter by category, tags, and location.
+
+    Hot Deals:
+        Everybody likes awoof, so we've created a page for you to find the hottest deals on expiringsoon. 
+        You will find items featured according to their current discount percentage. 
+
+    Vendor:
+        You can browse expiringsoon by vendors. This allows you to browse all the product offerings of a particular vendor. It can be very useful
+        when you want to buy several items of similar nature or category. Also when you shop from a particular vendor, all your delivery comes
+        from one single point, therefore reducing your cost of logistics.
+        You can also filter and sort shops based on different criteria. 
+
+Account:
+    Dashboard
+    Profile
+    Orders
+
+----------------------------------------------------------------------------------------------------------------
+
+VENDORS
+    Thank you for deciding to sell on expiringsoon marketplace. We have created numerous tools for you to give you a smooth business 
+    expirience on expiringsoon.
+
+Start Selling: 
+    The first step towards becoming a vendor is registering a vendor account. 
+    Click on Start-Selling at the top right section of the home page to create a vendor account. 
+    You will be redirected to create your shop after successfully creating your vendor account.
+
+Dashboard:
+    The vendor dashboard presents you information about your current subscription and the total number of assets which your subscription affords you,
+    your recent transactions, and notifications. Use the menu on the right side to navigate other areas of the vendor dashboard
+
+My Shops:
+    The vendors shops page contains a list of shops created by the vendor and basic comparative analytics. From here, you can access the dashboard of
+    any shop you own, or create a new shop using the creat shop link at the top
+    Note: For a shop to be shown on the site to users, it has to meet the following conditions
+                - Stocked: The shop must contain atleast one sellable product
+                    For a product to be sellable, it must be available, not expired, visible, and approved.
+                - Visibility: The shop should be in published status, not draft
+                - Approval: The shop should be approved
+                - Active:  The shop's subscription status must be active
+                
+    create shop:
+        Creating a shop is very simple. You only have to fill a shop creating form which is acessible from here. Bear in mind that you
+        can either publish your shop or keep it as draft if you are not yet ready to publish it
+
+    Shops
+        When you select a particular shop from the list of shops you have on your 'My Shops' page, you are taken to the dashboard
+        of that particular shop where you can manage products, orders, settings, and payouts of the shop
+
+        Storefront:
+            This is the shopfront of a shop created by a vendor. It also has a shop menu bar on the right for easy navigation through
+            the shop. To go back to vendor's dashboard, you can simply use the Dashboard Menu on the Shop Menu Bar
+
+        Products:
+            The products menu takes you to a list of all products of a particular shop. You can manage each product or perform actions
+            on a group of products at the same time.
+            Note: For a product to be shown on the site to users, it has to meet the following conditions
+                - Expiration: The expiry date of the product should be greater than today
+                - Availability: The available stock quantity of the product should be greater than zero
+                - Visibility: The product should be in published status, not draft
+                - Approval: The product should be approved
+                - Accessibility:  The shop under which the product was created should be accessible
+                    The accessibility of a shop depends on all of these criteria being met:
+                        - The shop's subscription status i.e shop's subscription must be active
+                        - The shop's visibility Status i.e shop is published and not in draft mode
+                        - The shop's approval status i.e shop is approved 
+
+            create product:
+                To create a new product, use the Add Products button on the top right of the Products Page. 
+                The create product form contains both required and optional fields. Filling all the fields makes your product
+                easy for buyers to filter and find on the site.
+                Discount Prices: We use the discount price section to present attractive offers to buyers on the site so you can sell offerings
+                your products at discounted rates before they expire 
+
+        Orders:
+            Orders placed for your products will show up here with their status of fulfillment. When you want to fulfill an order, 
+            click the view button on the order to visit the order details page
+            Order Details:
+                From the order details page, you can update order status and open a chat with the buyer.
+                Please note that vendors are required to fulfill their orders within a 48 hours window between the time the order
+                was place and the delivery.
+            
+        Settings:
+            basic: The basic details of a shop can be updated from here
+            store pickup: The store's pickup address (must be same as shop's address), is set here. This location is provided
+                to buyers who choose pickup delivery option. 
+                Note that you will be required to submit a new address proof verification document whenever you make changes to 
+                your store location.
+            shop discount:  You could set global discount rates for all products in your shop. This will only be applied when you do not set discount rate for your product.
+                            In order words, your individual product discount rates will override whatever you set here.
+            verification:   You are required to submit verification documents for the store (e.g business documents), address proof
+                            (e.g utility bill showing company address) and owner Identification (e.g Drivers License, International Passport
+                            or any government issued ID)
+            staff:          You can add new and manage existing staff. Each staff you add will be able to help you manage products
+                            and orders in your store. 
+            shipping:       Cost of shipping or logistics is at your discretion. You can set how much you are charging to make delivery both within the state
+                            where you operate and inter-state.
+
+        Earning: 
+            When you make money from an order, you will details of your earning on this page. Earnings are calculated by subtracting 
+            the commission percentage from the payment made for the product. We do not subtract from whatever you charge for delivery
+            For example: If a product price is 500, and the delivery charge is 200. Suppose our commision is 10%
+            A customer who has chosen to buy your product and have it delivered to him will pay 700
+            We will charge you commision of 10% on the 500, which is equal to 50
+            And your earning will be 450 + 200 (cost of shipping) = 650
+
+        Payouts:
+            To initiate a payout or withdrawal, you need to add a bank account (For Nigeria and Ghana) or a Paypal account (For UK, USA, UAE)
+            Enter a withdrawal amount to be within the withdrawal maximum and minimum to submit request. Most of our payout process takes
+            a maximum of 24hours business day.
+
+Adverts:
+    Adverts help to make your product and shop even more visible to buyers on the platform. We have a total of 11 advert positions 
+    across the front pages.       
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Position
+                </th>
+                <th>
+                    Pages
+                </th>
+                <th>
+                    Type
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Featured Products
+                </td>
+                <td>
+                    Home Page, 
+                </td>
+                <td>
+                    Product
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    Adset:
+        The first step to creating an ad is to add a new adset.
+        Insert Image
+        Each set represent different advert positions and the units per days you can buy. You may buy single or multiple adset at a time.
+        *Days specifies the duration for which the set will be active
+        *Units specifies the number of ads you can place in the set
+        Once you have purchased your adset(s), you can add new ads under any of the sets by clicking on manage.
+        Note: You can also renew expired adsets. This saves you the time of creating new adsets
+    Create Ad:
+        To create an ad, pick an adset and select manage
+
+
+
+Transactions:
+    All transactions related to subscriptions and adsets are displayed here. 
+
+Notifications:
+------------------------------------------------------------------------------------------------------------------
+
+API DOCUMENTATION
+
+Getting Started:
+    get_token:
+    re-issue-token:
+    delete-tokens:
+    access-pin:
+Subscription:
+    plans:
+    subscribe
+Shops
+    create:
+    update:
+    
+    shipping:
+        destination:
+            new:
+            all:
+            update:
+            delete:
+    
+
+Products:
+    new:
+    all:
+    update:
+    delete:
+
+Orders:
+    web-hook:
+    get_all_orders:
+    view_order:
+    fulfil_order:
+
+Payout:
+    bankaccount:
+    withdrawal:
+
+Miscellaneous:
+    states:
+    cities:
+    categories:
+    tags:
+
+DOWNLOAD
+    vendors app:
+    shoppers app: coming soon
+
+FAQ
+
+
+CONTACT

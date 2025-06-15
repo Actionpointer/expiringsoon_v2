@@ -1,0 +1,103 @@
+address, 
+users
+store
+banks
+gateway: new table
+locations
+blacklisted
+shippers
+
+
+wishlist
+cart
+checkout
+subscription plans
+
+
+
+when store is updated, notify all customers of the store
+store subscribe to plan
+store create product
+
+
+
+change categorization:{
+    let vendor add existing tags and new tags to products.
+    these tags are assigned to categories by admin
+    customers click on a category, it brings out all the products tagged to that category
+    customers search for tag or category name or product name
+    admin assigns orphaned tags to identified categories
+}
+
+
+-charges on payout {add that to commission}
+-phone number verification
+-change password, send email
+-vendor add shop advert with exact resolution, size and graphics
+-customer - who i'm following| vendors - number of people following me
+-featured product sends email to followers
+-ad preview
+-kyc multiple documents
+-shipment fee recalculation
+-super admin can delete a shop
+-approval/rejection to shop,
+-configure email from ngnplanet hostinger : did not work.. 
+
+
+admin enter pin before approval of product, shop, advert, kyc, 
+
+placeholder images for advert positions & sliders
+
+public content table & translation
+
+otp codes to email 
+
+
+
+
+add language: arabic
+add date dispute was closed
+check cases on dashboard...
+
+
+
+
+admin staff add - email notification
+
+admin notifications - [kyc]
+
+vendor notifications - [kyc]
+
+order dispute email to admin
+
+accountability for arbitrators
+
+add payment_id to revenue table
+
+ORDER MESSAGE MODEL, RE-ENABLE BROADCAST
+
+
+version2
+on change settings->payout_gateway, send email to all users of that gateway, especially if its paypal & stripe
+send email to followers of shops
+store the subscription plan items on the subscription table
+
+store the product details on the order details table.
+
+use balance to buy adverts
+
+measure order status defaults and penalize vendor
+
+check advert image quality as validation
+
+deleting a product should not delete the orders
+
+
+Correct navigation display and menu for vendor, staff, admin, 
+
+remove certified from advert and featured, change to Live
+
+Wordpress Plugin:
+- disable showing of expiry date on frontend
+- change sync all products with expiry date to 6 months
+- 
