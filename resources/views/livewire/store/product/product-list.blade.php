@@ -15,7 +15,8 @@
 				</div>
 				<!-- button -->
 				<div>
-					<a href="{{ route('store.products.create', $store) }}" class="btn btn-primary">Add Product</a>
+					{{-- {{ route('store.products.create', $store) }} --}}
+					<a href="" class="btn btn-primary">Add Product</a>
 				</div>
 			</div>
 		</div>
@@ -109,149 +110,154 @@
 						</tr>
 						</thead>
 						<tbody>
-						@forelse($this->products as $product)
-							<tr>
-								<td>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox" value="{{ $product->id }}" id="product{{ $product->id }}" />
-										<label class="form-check-label" for="product{{ $product->id }}"></label>
-									</div>
-								</td>
-								<td>
-									<a href="{{ route('store.products.edit', ['store' => $store, 'product' => $product]) }}">
-										@php
-											$hasPhoto = false;
-											$photoUrl = null;
-											
-											if (!empty($product->photos)) {
-												try {
-													$photos = json_decode($product->photos, true);
-													if (is_array($photos) && count($photos) > 0) {
-														$photoUrl = $photos[0];
-														$hasPhoto = true;
+							@forelse($this->products as $product)
+								<tr>
+									<td>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="{{ $product->id }}" id="product{{ $product->id }}" />
+											<label class="form-check-label" for="product{{ $product->id }}"></label>
+										</div>
+									</td>
+									<td>
+										{{-- href="{{ route('store.products.edit', ['store' => $store, 'product' => $product]) }}" --}}
+										<a >
+											@php
+												$hasPhoto = false;
+												$photoUrl = null;
+												
+												if (!empty($product->photos)) {
+													try {
+														$photos = json_decode($product->photos, true);
+														if (is_array($photos) && count($photos) > 0) {
+															$photoUrl = $photos[0];
+															$hasPhoto = true;
+														}
+													} catch (\Exception $e) {
+														// Handle JSON decode error silently
 													}
-												} catch (\Exception $e) {
-													// Handle JSON decode error silently
 												}
-											}
-										@endphp
-										
-										@if($hasPhoto && $photoUrl)
-											<img src="{{ asset('storage/' . $photoUrl) }}" alt="{{ $product->name }}" class="icon-shape icon-md" />
-										@else
-											<div class="icon-shape icon-md bg-light">
-												<i class="bi bi-image text-muted"></i>
-											</div>
-										@endif
-									</a>
-								</td>
-								<td>
-									<a href="{{ route('store.products.edit', ['store' => $store, 'product' => $product]) }}" class="text-reset">
-										{{ $product->name }}
-									</a>
-									<div class="text-muted small">{{ Str::limit($product->description, 40) }}</div>
-								</td>
-								<td>
-									{{ $product->category->name ?? 'Uncategorized' }}
-								</td>
-								<td>
-									@if($product->published)
-										@if($product->approved_at)
-											<span class="badge bg-light-primary text-dark-primary">Published</span>
-										@else
-											<span class="badge bg-light-warning text-dark-warning">Pending Approval</span>
-										@endif
-									@else
-										<span class="badge bg-light-secondary text-dark-secondary">Draft</span>
-									@endif
-								</td>
-								<td>
-									@if($product->always_available)
-										<span class="badge bg-light-success">No Expiry</span>
-									@elseif($product->expire_at)
-										@if($product->expire_at->isPast())
-											<span class="badge bg-light-danger text-dark-danger">Expired</span>
-										@elseif($product->expire_at->diffInDays(now()) <= 30)
-											<span class="badge bg-light-warning text-dark-warning">
-												{{ $product->expire_at->diffInDays(now()) }} days left
-											</span>
-										@else
-											<span class="badge bg-light-info text-dark-info">
-												{{ $product->expire_at->format('M d, Y') }}
-											</span>
-										@endif
-									@else
-										<span class="badge bg-light-secondary">Not Set</span>
-									@endif
-								</td>
-								<td>{{ $product->created_at->format('M d, Y') }}</td>
-								<td>
-									<div class="dropdown">
-										<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-											<i class="feather-icon icon-more-vertical fs-5"></i>
+											@endphp
+											
+											@if($hasPhoto && $photoUrl)
+												<img src="{{ asset('storage/' . $photoUrl) }}" alt="{{ $product->name }}" class="icon-shape icon-md" />
+											@else
+												<div class="icon-shape icon-md bg-light">
+													<i class="bi bi-image text-muted"></i>
+												</div>
+											@endif
 										</a>
-										<ul class="dropdown-menu">
-											<li>
-												<a class="dropdown-item" href="{{ route('store.products.edit', ['store' => $store, 'product' => $product]) }}">
-													<i class="bi bi-pencil-square me-3"></i>
-													Edit
-												</a>
-											</li>
-											@if(!$product->published)
-												<li>
-													<button class="dropdown-item text-success" 
-														wire:click="$emit('publishProduct', {{ $product->id }})"
-														wire:loading.attr="disabled">
-														<i class="bi bi-check-circle me-3"></i>
-														Publish
-													</button>
-												</li>
+									</td>
+									<td>
+										 {{-- href="{{ route('store.products.edit', ['store' => $store, 'product' => $product]) }}"  --}}
+										<a class="text-reset">
+											{{ $product->name }}
+										</a>
+										<div class="text-muted small">{{ Str::limit($product->description, 40) }}</div>
+									</td>
+									<td>
+										{{ $product->category->name ?? 'Uncategorized' }}
+									</td>
+									<td>
+										@if($product->published)
+											@if($product->approved_at)
+												<span class="badge bg-light-primary text-dark-primary">Published</span>
 											@else
-												<li>
-													<button class="dropdown-item text-secondary" 
-														wire:click="$emit('unpublishProduct', {{ $product->id }})"
-														wire:loading.attr="disabled">
-														<i class="bi bi-file-earmark-minus me-3"></i>
-														Unpublish
-													</button>
-												</li>
+												<span class="badge bg-light-warning text-dark-warning">Pending Approval</span>
 											@endif
-											<li>
-												<button class="dropdown-item text-danger" 
-													wire:click="confirmDelete({{ $product->id }})"
-													wire:loading.attr="disabled">
-													<i class="bi bi-trash me-3"></i>
-													Delete
-												</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-							</tr>
-						@empty
-							<tr>
-								<td colspan="8" class="text-center py-4">
-									<div class="d-flex flex-column align-items-center">
-										<i class="bi bi-box fs-1 text-muted mb-3"></i>
-										<h5>No products found</h5>
-										<p class="text-muted">
-											@if($search || $categoryFilter || $statusFilter || $expiryFilter)
-												Try adjusting your search or filter criteria
-											@else
-												Start by adding your first product
-											@endif
-										</p>
-										@if(!$search && !$categoryFilter && !$statusFilter && !$expiryFilter)
-											<a href="{{ route('store.products.create', $store) }}" class="btn btn-primary mt-3">
-												<i class="bi bi-plus-circle me-2"></i>Add Product
-											</a>
+										@else
+											<span class="badge bg-light-secondary text-dark-secondary">Draft</span>
 										@endif
-									</div>
-								</td>
-							</tr>
-						@endforelse
+									</td>
+									<td>
+										@if($product->always_available)
+											<span class="badge bg-light-success">No Expiry</span>
+										@elseif($product->expire_at)
+											@if($product->expire_at->isPast())
+												<span class="badge bg-light-danger text-dark-danger">Expired</span>
+											@elseif($product->expire_at->diffInDays(now()) <= 30)
+												<span class="badge bg-light-warning text-dark-warning">
+													{{ $product->expire_at->diffInDays(now()) }} days left
+												</span>
+											@else
+												<span class="badge bg-light-info text-dark-info">
+													{{ $product->expire_at->format('M d, Y') }}
+												</span>
+											@endif
+										@else
+											<span class="badge bg-light-secondary">Not Set</span>
+										@endif
+									</td>
+									<td>{{ $product->created_at->format('M d, Y') }}</td>
+									<td>
+										<div class="dropdown">
+											<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
+												<i class="feather-icon icon-more-vertical fs-5"></i>
+											</a>
+											<ul class="dropdown-menu">
+												<li>
+													<a class="dropdown-item"  href="#" x-data @click="$dispatch('editProductRequest', { id: {{ $product->id }} })">
+														<i class="bi bi-pencil-square me-3"></i>
+														Editt
+													</a>
+													
+												</li>
+												@if(!$product->published)
+													<li>
+														<button class="dropdown-item text-success" 
+															wire:click="$emit('publishProduct', {{ $product->id }})"
+															wire:loading.attr="disabled">
+															<i class="bi bi-check-circle me-3"></i>
+															Publish
+														</button>
+													</li>
+												@else
+													<li>
+														<button class="dropdown-item text-secondary" 
+															wire:click="$emit('unpublishProduct', {{ $product->id }})"
+															wire:loading.attr="disabled">
+															<i class="bi bi-file-earmark-minus me-3"></i>
+															Unpublish
+														</button>
+													</li>
+												@endif
+												<li>
+													<button class="dropdown-item text-danger" 
+														wire:click="confirmDelete({{ $product->id }})"
+														wire:loading.attr="disabled">
+														<i class="bi bi-trash me-3"></i>
+														Delete
+													</button>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+							@empty
+								<tr>
+									<td colspan="8" class="text-center py-4">
+										<div class="d-flex flex-column align-items-center">
+											<i class="bi bi-box fs-1 text-muted mb-3"></i>
+											<h5>No products found</h5>
+											<p class="text-muted">
+												@if($search || $categoryFilter || $statusFilter || $expiryFilter)
+													Try adjusting your search or filter criteria
+												@else
+													Start by adding your first product
+												@endif
+											</p>
+											@if(!$search && !$categoryFilter && !$statusFilter && !$expiryFilter)
+												<a href="{{ route('store.products.create', $store) }}" class="btn btn-primary mt-3">
+													<i class="bi bi-plus-circle me-2"></i>Add Product
+												</a>
+											@endif
+										</div>
+									</td>
+								</tr>
+							@endforelse
 						</tbody>
 					</table>
+					
+
 				</div>
 			</div>
 			<div class="card-footer border-top d-flex justify-content-between align-items-center">
@@ -270,37 +276,41 @@
 			</div>
 		</div>
 	</div>
+
+	
 </div>
-
+<livewire:store.product.edit-product-modal />
 @push('scripts')
-<script>
-	window.addEventListener('livewire:load', function () {
-		// Initialize any scripts needed for the products list
-		
-		// Select all checkbox
-		document.getElementById('checkAll')?.addEventListener('change', function() {
-			const checkboxes = document.querySelectorAll('tbody .form-check-input');
-			checkboxes.forEach(checkbox => {
-				checkbox.checked = this.checked;
-			});
-		});
+	<script>
 
-		// Listen for the delete confirmation event
-		window.addEventListener('show-delete-confirmation', event => {
-			Swal.fire({
-				title: event.detail.title,
-				text: event.detail.text,
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#dc3545',
-				cancelButtonColor: '#6c757d',
-				confirmButtonText: 'Yes, delete it!'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					Livewire.emit('deleteProduct', event.detail.productId);
-				}
-			})
+		window.addEventListener('livewire:load', function () {
+			// Initialize any scripts needed for the products list
+			
+			// Select all checkbox
+			document.getElementById('checkAll')?.addEventListener('change', function() {
+				const checkboxes = document.querySelectorAll('tbody .form-check-input');
+				checkboxes.forEach(checkbox => {
+					checkbox.checked = this.checked;
+				});
+			});
+
+			// Listen for the delete confirmation event
+			window.addEventListener('show-delete-confirmation', event => {
+				Swal.fire({
+					title: event.detail.title,
+					text: event.detail.text,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#dc3545',
+					cancelButtonColor: '#6c757d',
+					confirmButtonText: 'Yes, delete it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						Livewire.emit('deleteProduct', event.detail.productId);
+					}
+				})
+			});
+
 		});
-	});
-</script>
+	</script>
 @endpush

@@ -5,6 +5,8 @@ namespace App\Livewire\Store\Product;
 use App\Models\Store;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,15 +15,19 @@ class ProductList extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public Store $store;
-    
+    // public $products;
     // Search and filter properties
-    public $search = '';
+    public string $search = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
     public $perPage = 10;
     public $categoryFilter = '';
     public $statusFilter = '';
     public $expiryFilter = '';
+   public $editModalOpen = false;
+    public $editingProduct = null;
+    public $productData = [];
+
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -39,92 +45,99 @@ class ProductList extends Component
         'unpublishProduct' => 'unpublishProduct',
     ];
 
-    public function mount($store)
+    public function mount(Store $store)
     {
         $this->store = $store;
     }
 
-    public function sortBy($field)
+    #[On('productUpdated')]
+    public function refreshProductList()
     {
-        if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortField = $field;
-            $this->sortDirection = 'asc';
-        }
+        $this->dispatch('$resfresh');
     }
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
+    // public function sortBy($field)
+    // {
+    //     if ($this->sortField === $field) {
+    //         $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+    //     } else {
+    //         $this->sortField = $field;
+    //         $this->sortDirection = 'asc';
+    //     }
+    // }
 
-    public function updatingCategoryFilter()
-    {
-        $this->resetPage();
-    }
+    // public function updatingSearch()
+    // {
+    //     $this->resetPage();
+    // }
 
-    public function updatingStatusFilter()
-    {
-        $this->resetPage();
-    }
+    // public function updatingCategoryFilter()
+    // {
+    //     $this->resetPage();
+    // }
 
-    public function updatingExpiryFilter()
-    {
-        $this->resetPage();
-    }
+    // public function updatingStatusFilter()
+    // {
+    //     $this->resetPage();
+    // }
 
-    public function confirmDelete($productId)
-    {
-        $this->dispatchBrowserEvent('show-delete-confirmation', [
-            'title' => 'Delete Product',
-            'text' => 'Are you sure you want to delete this product? This action cannot be undone.',
-            'productId' => $productId
-        ]);
-    }
+    // public function updatingExpiryFilter()
+    // {
+    //     $this->resetPage();
+    // }
 
-    public function deleteProduct($productId)
-    {
-        $product = Product::find($productId);
+    // public function confirmDelete($productId)
+    // {
+    //     $this->dispatchBrowserEvent('show-delete-confirmation', [
+    //         'title' => 'Delete Product',
+    //         'text' => 'Are you sure you want to delete this product? This action cannot be undone.',
+    //         'productId' => $productId
+    //     ]);
+    // }
+
+    // public function deleteProduct($productId)
+    // {
+    //     $product = Product::find($productId);
         
-        if ($product && $product->store_id == $this->store->id) {
-            $product->delete();
-            session()->flash('success', 'Product deleted successfully');
-        } else {
-            session()->flash('error', 'Unable to delete product');
-        }
-    }
+    //     if ($product && $product->store_id == $this->store->id) {
+    //         $product->delete();
+    //         session()->flash('success', 'Product deleted successfully');
+    //     } else {
+    //         session()->flash('error', 'Unable to delete product');
+    //     }
+    // }
 
-    public function publishProduct($productId)
-    {
-        $product = Product::find($productId);
+    // public function publishProduct($productId)
+    // {
+    //     $product = Product::find($productId);
         
-        if ($product && $product->store_id == $this->store->id) {
-            $product->published = true;
-            $product->save();
-            session()->flash('success', 'Product published successfully');
-        } else {
-            session()->flash('error', 'Unable to publish product');
-        }
-    }
+    //     if ($product && $product->store_id == $this->store->id) {
+    //         $product->published = true;
+    //         $product->save();
+    //         session()->flash('success', 'Product published successfully');
+    //     } else {
+    //         session()->flash('error', 'Unable to publish product');
+    //     }
+    // }
 
-    public function unpublishProduct($productId)
-    {
-        $product = Product::find($productId);
+    // public function unpublishProduct($productId)
+    // {
+    //     $product = Product::find($productId);
         
-        if ($product && $product->store_id == $this->store->id) {
-            $product->published = false;
-            $product->save();
-            session()->flash('success', 'Product unpublished successfully');
-        } else {
-            session()->flash('error', 'Unable to unpublish product');
-        }
-    }
+    //     if ($product && $product->store_id == $this->store->id) {
+    //         $product->published = false;
+    //         $product->save();
+    //         session()->flash('success', 'Product unpublished successfully');
+    //     } else {
+    //         session()->flash('error', 'Unable to unpublish product');
+    //     }
+    // }
 
     public function getProductsProperty()
     {
         return Product::where('store_id', $this->store->id)
-            ->when($this->search, function($query) {
+            ->when(strlen($this->search) >= 2, function ($query) {
+                
                 return $query->where(function($query) {
                     $query->where('name', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%')
@@ -164,7 +177,8 @@ class ProductList extends Component
                 }
             })
             ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
+            ->paginate($this->perPage); Log::info('Searching for:', ['search' => $this->search]);
+
     }
 
     public function getStoreCategoriesProperty()
@@ -180,6 +194,8 @@ class ProductList extends Component
             ->orderBy('name')
             ->get();
     }
+
+    
 
     public function render()
     {

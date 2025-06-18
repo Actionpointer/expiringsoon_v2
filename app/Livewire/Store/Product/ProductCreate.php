@@ -81,19 +81,19 @@ class ProductCreate extends Component
     {
         return [
             'name' => 'required|min:3|max:100',
-            'description' => 'required|min:10',
-            'meta_description' => 'nullable|max:255',
+            // 'description' => 'required|min:10',
+            // 'meta_description' => 'nullable|max:255',
             'photos' => 'nullable|string',
             'category_id' => 'required',
             'preorder' => 'boolean',
             'always_available' => 'boolean',
             'expire_at' => 'required_if:always_available,false|nullable|date|after:today',
-            'expiry_term' => 'nullable|string',
-            'discount30' => 'required|numeric|min:0',
-            'discount60' => 'required|numeric|min:0',
-            'discount90' => 'required|numeric|min:0',
-            'discount120' => 'required|numeric|min:0',
-            'published' => 'boolean',
+            // 'expiry_term' => 'nullable|string',
+            // 'discount30' => 'required|numeric|min:0',
+            // 'discount60' => 'required|numeric|min:0',
+            // 'discount90' => 'required|numeric|min:0',
+            // 'discount120' => 'required|numeric|min:0',
+            // 'published' => 'boolean',
             
             'hasVariants' => 'boolean',
             'variants' => 'required|array|min:1',
@@ -117,23 +117,7 @@ class ProductCreate extends Component
         $this->rebuildSelectedAttributePayload();
     }
 
-    // protected function rebuildSelectedAttributePayload()
-    // {
-    //     $this->selected_attributes_payload = [];
-
-    //     foreach ($this->selected_attributes as $index => $attributeId) {
-    //         if (!isset($this->selected_options[$index])) continue;
-
-    //         $attribute = ProductAttribute::find($attributeId);
-    //         if (!$attribute) continue;
-
-    //         $this->selected_attributes_payload[] = [
-    //             'attribute_id' => $attribute->id,
-    //             'attribute_name' => $attribute->name,
-    //             'options' => $this->selected_options[$index],
-    //         ];
-    //     }
-    // }
+ 
     
     protected $messages = [
         'category_id.required' => 'Please select a category',
@@ -144,16 +128,12 @@ class ProductCreate extends Component
         'variants.*.stock.required' => 'Stock quantity is required for all variants',
     ];
 
-    // public function updatedImage()
-    // {
-    //     // Handle direct uploads if needed
-    //     $this->validate(['image' => 'image|max:2048']);
-    // }
-    
 
     #[On('attributesCollected')]
     public function updateSelectedAttributes( $detail)
     {
+        // $this->generateVariants();
+
         $attributes = isset($detail['detail']) ? $detail['detail'] : $detail;
         $this->selected_attributes = $detail;
         Log::info('Raw attributesCollected payload:', ['detail' => $detail]);
@@ -176,151 +156,24 @@ class ProductCreate extends Component
         $this->selected_attributes = $normalizedAttributes;
     }
 
-    // public function selectFromFileManager($path)
-    // {
-    //     $this->photoPath = $path;
-    //     $this->dispatchBrowserEvent('image-selected', ['path' => $path]);
-    // }
-    /*
-    public function updatedAlwaysAvailable()
+    public function generateVariants()
     {
-        if ($this->always_available) {
-            $this->expire_at = null;
-        } else {
-            $this->expire_at = now()->addMonths(3)->format('Y-m-d');
-        }
-    }
-    
-    public function updatedHasVariants($value)
-    {
-        if (!$value && count($this->variants) > 1) {
-            // Keep only the first variant if variants are disabled
-            $this->variants = [$this->variants[0]];
-        }
-    }
-    
-    public function addVariant()
-    {
-        $this->variants[] = [
-            'price' => '',
-            'stock' => 0,
-            'options' => [],
-            'is_default' => count($this->variants) === 0, // First variant is default
-        ];
-        
-        // Generate names for all variants based on current options
-        $this->updateVariantNames();
-    }
-    
-    public function removeVariant($index)
-    {
-        // Don't remove if it's the only variant
-        if (count($this->variants) <= 1) {
-            return;
-        }
-        
-        // Check if we're removing the default variant
-        $wasDefault = isset($this->variants[$index]['is_default']) && $this->variants[$index]['is_default'];
-        
-        // Remove the variant
-        unset($this->variants[$index]);
-        $this->variants = array_values($this->variants);
-        
-        // If we removed the default variant, set the first one as default
-        if ($wasDefault && count($this->variants) > 0) {
-            $this->variants[0]['is_default'] = true;
-        }
-        
-        // Update variant names
-        $this->updateVariantNames();
-    }
-    
-    public function setDefaultVariant($index)
-    {
-        foreach ($this->variants as $key => $variant) {
-            $this->variants[$key]['is_default'] = ($key == $index);
-        }
-    }
-    
-    public function updateVariantNames()
-    {
-        // Get attribute information for name generation
-        $attributeInfo = [];
-        foreach ($this->selected_attributes as $index => $attributeId) {
-            if (!empty($attributeId)) {
-                // Use firstWhere to ensure we get a single model, not a collection
-                $prd_attribute = ProductAttribute::where('id', $attributeId)->first();
-                if ($prd_attribute) {
-                    $attributeInfo[$attributeId] = [
-                        'name' => $prd_attribute->name,
-                        'options' => isset($this->selected_options[$index]) ? $this->selected_options[$index] : []
-                    ];
-                }
-            }
-        }
-        
-        // Update each variant name based on its options
-        foreach ($this->variants as $index => $variant) {
-            $nameParts = [];
-            
-            if (isset($variant['options']) && is_array($variant['options'])) {
-                foreach ($variant['options'] as $attrId => $optionValue) {
-                    if (!empty($optionValue) && isset($attributeInfo[$attrId])) {
-                        $nameParts[] = $optionValue;
-                    }
-                }
-            }
-            
-            // Generate variant name based on product name and options
-            if (!empty($nameParts)) {
-                $this->variants[$index]['name'] = $this->name . ' - ' . implode(' ', $nameParts);
-            } else {
-                $this->variants[$index]['name'] = $this->name . ' - Variant ' . ($index + 1);
-            }
-        }
-    }
-    
-    public function updatedName()
-    {
-        // When the product name changes, update all variant names
-        $this->updateVariantNames();
-    }
-    */
-    // #[On('photoSelected')]
-    // public function getPhotoArrayAttribute($payload)
-    // {
-    //     $this->photos = $payload['url'] ?? null;
-        
-    //     return explode(',', $this->photos);
-    // }
+        $this->variants = [];
 
-    // #[On('variantNameUpdated')]
-    // public function updateVariantName($payload)
-    // {
-    //     $this->variants[$payload['index']]['name'] = $payload['name'];
-    // }
-    
-    public function validateDiscounts()
-    {
-        // Ensure discounts are in descending order (30d > 60d > 90d > 120d)
-        if ($this->discount30 < $this->discount60) {
-            $this->addError('discount30', '30-day discount must be greater than 60-day discount');
-            return false;
+        if (!empty($this->selectedAttributes)) {
+            $combinations = $this->getCombinations(array_values($this->selectedAttributes));
+
+            foreach ($combinations as $combo) {
+                $variantKey = implode('-', $combo);
+                $this->variants[] = [
+                    'attributes' => $combo,
+                    'price' => null,
+                    'stock' => null,
+                ];
+            }
         }
-        
-        if ($this->discount60 < $this->discount90) {
-            $this->addError('discount60', '60-day discount must be greater than 90-day discount');
-            return false;
-        }
-        
-        if ($this->discount90 < $this->discount120) {
-            $this->addError('discount90', '90-day discount must be greater than 120-day discount');
-            return false;
-        }
-        
-        return true;
     }
-    
+
     public function saveAsDraft()
     {
         // Temporarily set published to false
@@ -355,9 +208,8 @@ class ProductCreate extends Component
     {
         $storeId = auth()->user()->stores->first()->id;
 
-
+        // dd($this->category_id, $this->selected_attributes, $this->variants);
         // Validate and prepare data
-        Log::info('Photos value:', [$this->photos]);
         
         // Build attribute-option pairs
         $attributesData = [];
@@ -369,43 +221,45 @@ class ProductCreate extends Component
 
         try {
             try {
-    $this->validate();
-} catch (\Illuminate\Validation\ValidationException $e) {
-    Log::error('Validation failed', [
-        'errors' => $e->validator->errors()->toArray(),
-    ]);
-    throw $e; // or return false
-}
+                $this->validate();
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                Log::error('Validation failed', [
+                    'errors' => $e->validator->errors()->toArray(),
+                ]);
+                throw $e; // or return false
+            }
+
             DB::beginTransaction();
 
             // Create product
-        try {
-            $productData = [
-                'store_id'         => $storeId,
-                'category_id'      => $this->category_id,
-                'name'             => $this->name,
-                'slug'             => Str::slug($this->name),
-                'description'      => $this->description,
-                'meta_description' => $this->meta_description,
-                'photos'           => $this->photos ? json_encode(explode(',', $this->photos)) : json_encode([]),
-                'preorder'         => $this->preorder,
-                'always_available' => $this->always_available,
-                'expire_at'        => $this->always_available ? null : Carbon::parse($this->expire_at),
-                'expiry_term'      => $this->expiry_term,
-                'discount30'       => $this->discount30,
-                'discount60'       => $this->discount60,
-                'discount90'       => $this->discount90,
-                'discount120'      => $this->discount120,
-                'published'        => $this->published,
-            ];
+            try {
+                $productData = [
+                    'store_id'         => $storeId,
+                    'category_id'      => $this->category_id,
+                    'name'             => $this->name,
+                    'slug'             => Str::slug($this->name),
+                    'description'      => $this->description,
+                    'meta_description' => $this->meta_description,
+                    'photos'           => $this->photos ? json_encode(explode(',', $this->photos)) : json_encode([]),
+                    'preorder'         => $this->preorder,
+                    'always_available' => $this->always_available,
+                    'expire_at'        => $this->always_available ? null : Carbon::parse($this->expire_at),
+                    'expiry_term'      => $this->expiry_term,
+                    'discount30'       => $this->discount30,
+                    'discount60'       => $this->discount60,
+                    'discount90'       => $this->discount90,
+                    'discount120'      => $this->discount120,
+                    'published'        => $this->published,
+                ];
 
-            $product = new Product($productData);
-            $product->save();
+                $product = new Product($productData);
+              
+                $product->save();
 
-            Log::info('Product created successfully', [
-                'product_id' => $product->id,
-                'data'       => $productData,
-            ]);
+                Log::info('Product created successfully', [
+                    'product_id' => $product->id,
+                    'data'       => $productData,
+                ]);
 
             } catch (\Throwable $e) {
                 Log::error('Error creating product', [
@@ -417,14 +271,16 @@ class ProductCreate extends Component
                 throw $e; // Optional: rethrow if you want to halt execution
             }
 
-            // Save variants
+
+            
+            // Save variants $dd()
             $createdVariants = [];
             foreach ($this->variants as $variantData) {
                 $variantPayload = [
                     'name'       => $product->name,
                     'price'      => $variantData['price'],
                     'stock'      => $variantData['stock'],
-                    'options'    => json_encode($variantData['options'] ?? []),
+                    'options'    => $variantData['options'],
                     'is_default' => $variantData['is_default'] ?? false,
                     'is_active'  => true,
                 ];
@@ -464,9 +320,7 @@ class ProductCreate extends Component
             session()->flash('success', "Product successfully {$status}!");
             $this->dispatch('productSaved');
 
-            return $redirect
-                ? redirect()->route('store.products', $this->store)
-                : true;
+            return $redirect ? redirect()->route('store.products', $this->store) : true;
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -474,6 +328,7 @@ class ProductCreate extends Component
             $this->dispatch('validationErrors');
             return false;
         }
+        
     }
 
     public function getCategoriesProperty()
@@ -489,3 +344,4 @@ class ProductCreate extends Component
         ->extends('layouts.frontend.store.app')->section('content');
     }
 }
+

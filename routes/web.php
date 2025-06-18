@@ -9,6 +9,9 @@ use App\Livewire\Guest\Blog\BlogList;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Guest\Blog\BlogArticle;
 use App\Http\Controllers\PaymentController;
+use App\Livewire\Store\Product\EditProductModal;
+use App\Livewire\Store\Product\ProductEdit;
+
 
 Route::get('/', Welcome::class)->name('welcome');
 Route::middleware('guest')->group(function(){
@@ -24,6 +27,9 @@ Route::view('products/{product}', 'guest.product')->name('product');
 Route::view('hotdeals', 'guest.hotdeals')->name('hotdeals');
 Route::view('stores', 'guest.stores')->name('stores');
 Route::view('stores/{store}', 'guest.store')->name('store');
+// Route::get('/store/{store}/products/{product}/edit-product', EditProductModal::class)
+//     ->name('store.products.edit');
+
 Route::view('cart', 'guest.cart')->name('cart');
 Route::view('compare', 'guest.compare')->name('compare');
 Route::get('blog', BlogList::class)->name('blog');

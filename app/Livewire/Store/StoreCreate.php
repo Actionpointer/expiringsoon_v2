@@ -61,21 +61,13 @@ class StoreCreate extends Component
         // $this->city_id = null; // Reset city selection
         $this->dispatch('cities-updated', ['cities' => $this->cities]);
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> 9ce005d64c7ad61b6f8886542add6622fd6b76c4
     public function setCityId($city_id)
     {
         $this->city_id = $city_id;
     }
 
-<<<<<<< HEAD
     public function createStore(){       
-=======
-    public function createStore(){
->>>>>>> 9ce005d64c7ad61b6f8886542add6622fd6b76c4
         //dd($this->all());
         $this->validate([
             'name' => 'required|string|max:255',

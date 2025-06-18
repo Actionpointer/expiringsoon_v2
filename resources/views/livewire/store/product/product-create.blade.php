@@ -35,12 +35,12 @@
                             <!-- input -->
                             <div class="mb-3 col-lg-6">
                                 <label class="form-label">Title</label>
-                                <input type="text" wire:model="name" class="form-control" placeholder="Product Name" required />
+                                <input type="text" wire:model="name"   class="form-control" placeholder="Product Name" required />
                             </div>
                             <!-- input -->
-                            <div class="mb-3 col-lg-6" >
+                            <div class="mb-3 col-lg-6" wire:ignore>
                                 <label class="form-label">Product Category</label>
-                                <select id="selectCategory" wire:model="category_id" class="form-select select2"  data-placeholder="Select Product Category" >
+                                <select id="selectCategory"  class="form-select select2"   data-placeholder="Select Product Category" >
                                     <option  value=""></option>
                                     @foreach($this->categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -48,7 +48,7 @@
                                 </select>
                             </div>
                             <!-- input -->
-
+                            <!-- product image -->
                             <div class="mb-3 mt-5 col-lg-12">
                                 <h4 class="mb-3 h5">Product Images</h4>
                                 <div class="input-group">
@@ -63,29 +63,33 @@
                                 
                             </div>
                             <!-- input -->
-                            <div class="mb-3 col-lg-12 mt-5">
+                            <!-- product descriptoin -->
+                            <div class="mb-3 col-lg-12 mt-5" wire:ignore>
                                 <h4 class="mb-3 h5">Product Descriptions</h4>
-                                <textarea wire:model="description" class="summernote-editor form-control" rows="3" placeholder="Product Description"></textarea>
+                                <textarea  class="summernote-editor form-control" rows="3" placeholder="Product Description"></textarea>
                             </div>
+
+                            <!-- product meta descriptoin -->
                             <div wire:ignore class="mb-3 mt-5 col-lg-12">
                                 <h4 class="mb-3 h5">Meta Data</h4>
                                 <div class="mb-3">
-                                    <textarea wire:model="meta_description" class="form-control" rows="3" placeholder="Meta Description"></textarea>
+                                    <textarea class="form-control" rows="3" placeholder="Meta Description"></textarea>
                                 </div>
                             </div>
 
-                            <div class="mb-3 col-lg-12 mt-5">
+                            <!-- product attribute -->
+                            <div  class="mb-3 col-lg-12 mt-5" wire:ignore>
                                 <!-- heading -->
                                 <h4 class="mb-3 h5">Product Attributes</h4>
                                 <div class="card">
-                                    <div wire:ignore class="card-body" id="attribute_container">
+                                    <div class="card-body" id="attribute_container">
                                         <div class="row mb-3">
                                             <div class="col-md-4"><label class="form-label">Attributes</label></div>
                                             <div class="col-md-8"><label class="form-label">Options</label></div>
                                         </div>
                                         <div class="row mb-3 attribute_row">
                                             <div class="col-md-4">
-                                                <select wire:model="selected_attributes.0" class="form-select select2 select_attribute" data-placeholder="Select Attribute">
+                                                <select  class="form-select select2 select_attribute"  data-placeholder="Select Attribute">
                                                     <option value=""></option>
                                                     @foreach($product_attributes as $attribute)
                                                         <option value="{{ $attribute->id }}" data-options="{{ $attribute->options }}">{{ $attribute->name }}</option>
@@ -93,7 +97,7 @@
                                                 </select>
                                             </div>
                                             <div  class="col-md-7 d-flex align-items-center">
-                                                <select  wire:model="selected_options.0"  class="form-select select2 select_attribute_options" multiple data-tags="true" data-placeholder="Select Options">
+                                                <select    class="form-select select2 select_attribute_options" multiple data-tags="true" data-placeholder="Select Options">
 
                                                 </select>
                                             </div>
@@ -104,14 +108,15 @@
                                             </div>
 
                                         </div>
-                                            </div>
+                                    </div>
                                     <div class="d-grid p-4" >
                                             <button type="button" class="btn btn-outline-primary" id="addAttributeBtn">Add Attribute</button>
                                     </div>
                                 </div>
 
                             </div>
-                            <div class="col-lg-12 mt-5" id="variant_container">
+                            <!-- product variant -->
+                            <div wire:ignore class="col-lg-12 mt-5" id="variant_container">
                                 <h4 class="mb-3 h5">Product Variants</h4>
                                 <div class="card mb-3 variant-item" id="variant_1">
                                     <div class="card-body">
@@ -128,15 +133,15 @@
                                         <div class="row mb-3">
                                             <div class="mb-3 col-lg-6">
                                                 <label class="form-label">Price</label>
-                                                <input type="number" wire:model="variants.0.price" class="form-control" placeholder="0" />
+                                                <input type="number" wire:model="variants.0.price"  class="form-control" placeholder="0" />
                                             </div>
                                             <!-- input -->
                                             <div class="mb-3 col-lg-6">
                                                 <label class="form-label">Quantity</label>
-                                                <input type="number" wire:model="variants.0.stock" class="form-control" placeholder="0" />
+                                                <input type="number" wire:model="variants.0.stock"  class="form-control" placeholder="0" />
                                             </div>
 
-                                            <input type="hidden" id="productName" wire:model="variants.0.name" class="variant-name" name="variant_name" />
+                                            <input type="hidden" wire:model="variants.0.stock" id="productName"  class="variant-name" name="variant_name" />
                                             <div wire:ignore>
                                                 <input type="hidden" id="productName" value="{{ $product->name ?? '' }}" />
                                             </div>
@@ -145,8 +150,11 @@
                                         <div class="row variant-options-container">
                                             <!-- Options will be dynamically generated via JavaScript -->
                                         </div>
+
                                     </div>
                                 </div>
+                                <!-- Hidden field to sync JS variant state with Livewire -->
+                                {{-- <input type="hidden" x-model="variantListJSON" id="variantsDataInput"> --}}
                             </div>
 
                             <div class="mb-3 col-lg-12">
@@ -289,17 +297,19 @@
             const select = $('#selectCategory');
             
             select.select2({
-                multiple: true,
-                // width: '100%'
-            }).on('change', function() {
+                
+                placeholder: 'Select Product Category',
+                allowClear: true,
+        
+            });
+            select.on('change', function() {
+                // array of selected category IDs
+                const selectedValues = $(this).val(); 
+                
                 // Double check Livewire is available
                 if (window.Livewire) {
-                    const categoryId = $(this).val();
-                     if (categoryId) {
-                         console.log('Emitting categoryUpdated', $(this).val());
-                        Livewire.dispatch('categoryUpdated', { value: categoryId});
-                    }
-                    // window.Livewire.dispatch('categoryUpdated', $(this).val());
+                    console.log('dispatching categ0ry values to livewire', selectedValues);
+                    Livewire.dispatch('categoryUpdated', { value: selectedValues });
                 } else {
                     console.error('Livewire not found');
                 }
@@ -357,12 +367,31 @@
                 $(this).closest('.attribute_row').find('.select_attribute_options').select2();
 
                 // Delay to ensure options are populated before collecting
-                setTimeout(collectSelectedAttributes, 100);
+                $(this).closest('.attribute_row').find('.select_attribute_options').trigger('change');            
             });
             
             // Handle attribute options change
             $(document).on('change', '.select_attribute_options', function() {
-                collectSelectedAttributes();
+                const $row = $(this).closest('.attribute_row');
+                const $attrSelect = $row.find('.select_attribute');
+                const attrId = $attrSelect.val();
+                const attrName = $attrSelect.find('option:selected').text().trim();
+                const selectedOptions = $(this).val() || [];
+
+                if (attrId && attrName && selectedOptions.length > 0) {
+                    selectedAttributes[attrName] = {
+                        id: attrId,
+                        options: selectedOptions.map(opt => opt.trim())
+                    };
+                } else {
+                    delete selectedAttributes[attrName];
+                }
+
+                console.log('Generating variant fields with selectedAttributes:', selectedAttributes);
+
+                Livewire.dispatch('attributesCollected', { detail: selectedAttributes });
+
+                updateVariantsBasedOnAttributes();
             });
 
 
@@ -392,7 +421,7 @@
                         }
                     }
                 });
-                console.log('dispatching to livewire', selectedAttributes);
+                console.log('dispatching selected attributes to livewire', selectedAttributes);
 
                 Livewire.dispatch('attributesCollected', {detail: selectedAttributes});
                 
@@ -511,7 +540,7 @@
                     var attrValue = attrSelect.val();
                     var optValues = [];
                     optSelect.find('option:selected').each(function() {
-                        optValues.push($(this).val());
+                        optValues.push($(this).val().trim());
                     });
                     
                     // Update wire:model attributes
@@ -553,6 +582,11 @@
             function updateVariantIndices() {
                 $('.variant-item').each(function(index) {
                     const productName = $('#productName').val();
+
+                   // update variant name
+                    $(this).find('.variant-label').text('Variant ' + (index + 1));
+
+
                     // Update price and stock fields
                     $(this).find('input[wire\\:model^="variants"][wire\\:model$="price"]').attr('wire:model', 'variants.' + index + '.price');
                     $(this).find('input[wire\\:model^="variants"][wire\\:model$="stock"]').attr('wire:model', 'variants.' + index + '.stock');
@@ -571,6 +605,34 @@
                     });
                 });
             }
+
+            function collectVariantDataAndSync() {
+                let variants = [];
+
+                $('.variant-item').each(function () {
+                    let variant = {
+                        name: $('#productName').val(),
+                        price: $(this).find('input[name="price"]').val(),
+                        stock: $(this).find('input[name="stock"]').val(),
+                        options: {}
+                    };
+
+                    // Collect options from all selects inside this variant
+                    $(this).find('select').each(function () {
+                        const key = $(this).data('option-name'); // e.g. "size", "color"
+                        const value = $(this).val();
+                        variant.options[key] = value;
+                    });
+
+                    variants.push(variant);
+                });
+
+                console.log('Syncing variants to Livewire', variants);
+
+                // Sync to Livewire via hidden input
+                $('#variantsDataInput').val(JSON.stringify(variants)).trigger('input');
+            }
+
             
             // Update all variants based on current attributes
             function updateVariantsBasedOnAttributes() {
@@ -582,7 +644,10 @@
 
             // Helper function to generate variant fields based on selected attributes
             function generateVariantFields(variantElement, variantIndex) {
+            console.log('Generating variant fields with selectedAttributes:', selectedAttributes);
+
                 var optionsContainer = variantElement.find('.variant-options-container');
+                
                 if (optionsContainer.length === 0) {
                     // Create container if it doesn't exist
                     variantElement.find('.card-body').append('<div class="row variant-options-container"></div>');
@@ -606,6 +671,22 @@
                 Object.keys(selectedAttributes).forEach(function(attrName) {
                     var attrOptions = selectedAttributes[attrName].options;
                     var attrId = selectedAttributes[attrName].id;
+
+                    // Ensure it's an array even if stored as comma-separated string
+                    if (!Array.isArray(attrOptions)) {
+                       try {
+                            // Try parsing JSON (in case it was stored like '["Small", "Large"]')
+                            attrOptions = JSON.parse(attrOptions);
+                        } catch {
+                            // Fallback to comma-separated string
+                            attrOptions = String(attrOptions).split(',').map(o => o.trim());
+                        }
+                    }
+
+                    if (!attrOptions || attrOptions.length === 0) {
+                        console.warn(`No options found for ${attrName}`, selectedAttributes[attrName]);
+                        return;
+                    }
                     
                     // Create select field for this attribute
                     var fieldHtml = `
@@ -659,9 +740,9 @@
                     $('#thumbnail').val(properUrl).trigger('change');
                     
                     // Update Livewire property
-//                     setTimeout(() => {
-//     @this.set('photos', properUrl);
-// }, 100);
+                    setTimeout(() => {
+                    @this.set('photos', properUrl);
+                }, 100);
                     
                     // Force preview update
                     updateImagePreview(properUrl);
