@@ -223,9 +223,9 @@
                                         <div class="d-flex justify-content-between border-top pt-3 mt-3">
                                             <span class="fw-bold">Total</span>
                                             <span id="modalTotal" class="fw-bold">$49.99</span>
-                                        </div>
                                     </div>
                                 </div>
+                            </div>
 
                                 <div class="alert alert-info">
                                     <i class="bi bi-info-circle me-2"></i>
@@ -279,7 +279,7 @@
             // Set the selected plan in the hidden field and update Livewire property
             document.getElementById('selectedPlan').value = planId;
             window.Livewire.dispatch('planSelected', {planId: planId});
-            
+
             // Update modal content
             document.getElementById('modalPlanName').textContent = planName;
             console.log(planName)
@@ -326,8 +326,8 @@
             const currentPrice = isYearly ? annualPrice : monthlyPrice;
             const formattedPrice = currentPrice == 0 ? 'Free' : `${currencySymbol}${currentPrice}`;
             const pricePeriod = isYearly ? '/year' : '/month';
-            
-            // Update modal prices
+
+        // Update modal prices
             document.getElementById('modalPlanPrice').textContent = currentPrice == 0 ? 'Free' : `${formattedPrice}${pricePeriod}`;
             document.getElementById('modalSubtotal').textContent = formattedPrice;
             document.getElementById('modalTotal').textContent = formattedPrice;
