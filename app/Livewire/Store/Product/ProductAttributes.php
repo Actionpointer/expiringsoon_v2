@@ -4,7 +4,6 @@ namespace App\Livewire\Store\Product;
 
 use Livewire\Component;
 use App\Models\ProductAttribute;
-use Illuminate\Support\Collection;
 
 class ProductAttributes extends Component
 {
@@ -45,13 +44,34 @@ class ProductAttributes extends Component
         }
     }
 
-    public function handleAttributeChange($value, $wireModel)
+    public function handleAttributeChange($id, $value, $extra)
     {
-        if (strpos($wireModel, 'selected_attributes.') === 0) {
-            $index = (int) str_replace('selected_attributes.', '', $wireModel);
-            $this->selectedAttributes[$index] = $value;
-            $this->emitAttributesChanged();
+        // Extract index from id, e.g., 'select2-single-1' => 1
+        $index = (int) str_replace('select2-single-', '', $id);
+        $this->selectedAttributes[$index] = [
+            'value' => $value,
+            'extra' => $extra,
+        ];
+        $this->emitAttributesChanged();
+
+        // Build new options for select2-multiple using $extra
+        $options = [];
+        if (!empty($extra)) {
+            $optionsArray = explode(',', $extra);
+            foreach($optionsArray as $option) {
+                $options[] = [
+                    'value' => trim($option),
+                    'label' => trim($option),
+                    'extra' => '',
+                ];
+            }
         }
+        $multipleId = 'select2-multiple-' . $index;
+        $this->dispatch($multipleId, [
+            'id' => $multipleId,
+            'values' => $options,
+            'selected' => $this->selectedOptions[$index] ?? []
+        ]);
     }
 
     public function handleOptionsChange($values, $wireModel)
@@ -69,7 +89,7 @@ class ProductAttributes extends Component
         foreach ($this->selectedAttributes as $index => $attributeId) {
             if (!empty($attributeId)) {
                 $currentAttribute = collect($this->productAttributes)->first(function($attr) use ($attributeId) {
-                    return $attr['slug'] === $attributeId;
+                    return $attr['slug'] === $attributeId['value'];
                 });
                 if ($currentAttribute) {
                     // Convert options string to array
@@ -78,7 +98,7 @@ class ProductAttributes extends Component
                         $allOptions = array_map('trim', explode(',', $currentAttribute['options']));
                     }
                     $attributePayload[] = [
-                        'id' => $attributeId,
+                        'id' => $attributeId['value'],
                         'name' => $currentAttribute['name'],
                         'options' => $allOptions, // send all possible options
                         'selected_options' => $this->selectedOptions[$index], // optionally, send selected

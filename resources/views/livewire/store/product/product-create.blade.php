@@ -46,14 +46,19 @@
                                 @php
                                     $categoryOptions = [];
                                     foreach($categories as $category) {
-                                        $categoryOptions[$category->id] = $category->name;
+                                        $categoryOptions[] = [
+                                            'value' => $category->id,
+                                            'label' => $category->name,
+                                            'extra' => '',
+                                        ];
                                     }
                                 @endphp
                                 @livewire('components.form.select2-single', [
                                     'value' => $category_id,
                                     'options' => $categoryOptions,
                                     'placeholder' => 'Select Product Category',
-                                    'wireModel' => 'category_id'
+                                    'wireModel' => 'category_id',
+                                    'uniqueId' => 'category_id',
                                 ])
                                 @error('category_id')
                                     <div class="text-danger small">{{ $message }}</div>

@@ -17,41 +17,33 @@
 @push('scripts')
 <script>
 document.addEventListener('livewire:init', () => {
-    function initSelect2Multiple() {
-        $('#{{ $uniqueId }}').select2({
-            placeholder: '{{ $placeholder }}',
-            allowClear: true,
-            multiple: true,
-            tags: true,
-            width:'100%'
+    const selectId = '{{ $uniqueId }}';
+    const $select = $('#'+selectId);
+    $select.select2({
+        placeholder: '{{ $placeholder }}',
+        allowClear: true,
+        multiple: true,
+        tags: true,
+        width:'100%'
+    });
+
+    $select.off('change').on('change', function() {
+        const values = $(this).val();
+        Livewire.dispatch('select2MultipleValuesUpdated', {
+            id: selectId,
+            values: values
         });
-        // Remove previous change event
-        $('#{{ $uniqueId }}').off('change').on('change', function() {
-            const values = $(this).val();
-            Livewire.dispatch('select2MultipleValuesUpdated', { 
-                values: values, 
-                wireModel: '{{ $wireModel }}',
-                selectId: '{{ $uniqueId }}'
-            });
-            // Dispatch custom JS event for external listeners
-            window.dispatchEvent(new CustomEvent('select2-multiple-changed-{{ $uniqueId }}', {
-                detail: { values: values, selectId: '{{ $uniqueId }}' }
-            }));
-        });
-    }
-    initSelect2Multiple();
-    // Remove previous event listener if exists
-    if (window['updateSelect2Multiple{{ $uniqueId }}']) {
-        window.removeEventListener('update-select2-multiple-{{ $uniqueId }}', window['updateSelect2Multiple{{ $uniqueId }}']);
-    }
-    window['updateSelect2Multiple{{ $uniqueId }}'] = function(e) {
-        const { options, values } = e.detail;
-        const $select = $('#{{ $uniqueId }}');
+    });
+
+    Livewire.on(selectId, function(e) {
+        const { id, values, selected } = e;
+        if (id !== selectId) return;
+        $select.select2('destroy');
         $select.empty();
-        for (const [val, label] of Object.entries(options)) {
-            $select.append(`<option value="${val}">${label}</option>`);
-        }
-        $select.val(values).trigger('change');
+        $select.append('<option value=""></option>');
+        values.forEach(opt => {
+            $select.append(`<option value="${opt.value}" data-extra="${opt.extra ?? ''}">${opt.label}</option>`);
+        });
         $select.select2({
             placeholder: '{{ $placeholder }}',
             allowClear: true,
@@ -59,9 +51,8 @@ document.addEventListener('livewire:init', () => {
             tags: true,
             width:'100%'
         });
-    };
-    window.addEventListener('update-select2-multiple-{{ $uniqueId }}', window['updateSelect2Multiple{{ $uniqueId }}']);
+        $select.val(selected ?? []).trigger('change.select2');
+    });
 });
-
 </script>
 @endpush 

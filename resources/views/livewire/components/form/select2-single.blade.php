@@ -6,9 +6,13 @@
         wire:model="value"
     >
         <option value=""></option>
-        @foreach($options as $value => $label)
-            <option value="{{ $value }}" {{ $value == $this->value ? 'selected' : '' }}>
-                {{ $label }}
+        @foreach($options as $option)
+            <option 
+                value="{{ $option['value'] }}"
+                data-extra="{{ $option['extra'] ?? '' }}"
+                {{ $option['value'] == $this->value ? 'selected' : '' }}
+            >
+                {{ $option['label'] }}
             </option>
         @endforeach
     </select>
@@ -17,46 +21,38 @@
 @push('scripts')
 <script>
 document.addEventListener('livewire:init', () => {
-    window.initSelect2Single = function() {
-        $('#{{ $uniqueId }}').select2({
-            placeholder: '{{ $placeholder }}',
-            allowClear: true
+    const selectId = '{{ $uniqueId }}';
+    const $select = $('#'+selectId);
+    $select.select2({
+        placeholder: '{{ $placeholder }}',
+        allowClear: true
+    });
+
+    $select.on('change', function() {
+        const value = $(this).val();
+        const extra = $(this).find('option:selected').data('extra') ?? '';
+        Livewire.dispatch('select2ValueUpdated', {
+            id: selectId,
+            value: value,
+            extra: extra,
         });
-        // Remove previous change event
-        $('#{{ $uniqueId }}').off('change').on('change', function() {
-            const value = $(this).val();
-            Livewire.dispatch('select2ValueUpdated', { 
-                value: value, 
-                wireModel: '{{ $wireModel }}',
-                selectId: '{{ $uniqueId }}'
-            });
-            // Dispatch custom JS event for external listeners
-            window.dispatchEvent(new CustomEvent('select2-single-changed-{{ $uniqueId }}', {
-                detail: { value: value, selectId: '{{ $uniqueId }}' }
-            }));
-        });
-    };
-    window.initSelect2Single();
-    // Remove previous event listener if exists
-    if (window['updateSelect2Single{{ $uniqueId }}']) {
-        window.removeEventListener('update-select2-single-{{ $uniqueId }}', window['updateSelect2Single{{ $uniqueId }}']);
-    }
-    window['updateSelect2Single{{ $uniqueId }}'] = function(e) {
-        const { options, value } = e.detail;
-        const $select = $('#{{ $uniqueId }}');
+    });
+
+    Livewire.on(selectId, function(e) {
+        const { id, values } = e;
+        if (id !== selectId) return;
+        $select.select2('destroy');
         $select.empty();
         $select.append('<option value=""></option>');
-        for (const [val, label] of Object.entries(options)) {
-            $select.append(`<option value="${val}">${label}</option>`);
-        }
-        $select.val(value).trigger('change');
+        values.forEach(opt => {
+            $select.append(`<option value="${opt.value}" data-extra="${opt.extra ?? ''}">${opt.label}</option>`);
+        });
         $select.select2({
             placeholder: '{{ $placeholder }}',
             allowClear: true
         });
-    };
-    window.addEventListener('update-select2-single-{{ $uniqueId }}', window['updateSelect2Single{{ $uniqueId }}']);
-
+        $select.trigger('change.select2');
+    });
 });
 </script>
 @endpush 

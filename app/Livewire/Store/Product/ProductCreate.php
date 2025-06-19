@@ -65,11 +65,12 @@ class ProductCreate extends Component
         }
     }
 
-    public function handleCategoryUpdate($value, $wireModel)
+    public function handleCategoryUpdate($id, $value, $extra)
     {
-        if ($wireModel === 'category_id') {
+        if ($id === 'category_id') {
             $this->category_id = $value;
         }
+        //dd($this->category_id);
     }
 
     public function handleAttributesChanged($data)

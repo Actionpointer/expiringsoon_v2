@@ -8,45 +8,45 @@
             </div>
             
             @foreach($selectedAttributes as $index => $attributeId)
+                @php
+                    $singleId = 'select2-single-' . $index;
+                    $multipleId = 'select2-multiple-' . $index;
+                    $attributeOptions = [];
+                    foreach($productAttributes as $attr) {
+                        $attributeOptions[] = [
+                            'value' => $attr['slug'],
+                            'label' => $attr['name'],
+                            'extra' => $attr['options'] ?? '',
+                        ];
+                    }
+                    $selectedAttribute = collect($productAttributes)->first(function($attr) use ($attributeId) {
+                        return is_array($attributeId) ? $attr['slug'] === $attributeId['value'] : $attr['slug'] === $attributeId;
+                    });
+                    $options = [];
+                    if ($selectedAttribute && $selectedAttribute['options']) {
+                        $optionsArray = explode(',', $selectedAttribute['options']);
+                        foreach($optionsArray as $option) {
+                            $options[trim($option)] = trim($option);
+                        }
+                    }
+                @endphp
                 <div class="row mb-3 attribute_row">
                     <div class="col-md-4">
-                        @php
-                            $attributeOptions = [];
-                            foreach($productAttributes as $attr) {
-                                $attributeOptions[$attr['slug']] = $attr['name'];
-                            }
-                        @endphp
                         @livewire('components.form.select2-single', [
-                            'value' => $attributeId,
+                            'value' => is_array($attributeId) ? $attributeId['value'] : $attributeId,
                             'options' => $attributeOptions,
                             'placeholder' => 'Select Attribute',
-                            'wireModel' => 'selected_attributes.' . $index
+                            'wireModel' => 'selected_attributes.' . $index,
+                            'uniqueId' => $singleId
                         ])
                     </div>
                     <div class="col-md-7 align-items-center">
-                        @php
-                            $selectedAttribute = collect($productAttributes)->first(function($attr) use ($attributeId) {
-                                return $attr['slug'] === $attributeId;
-                            });
-                            $options = [];
-                            if ($selectedAttribute && $selectedAttribute['options']) {
-                                $optionsArray = explode(',', $selectedAttribute['options']);
-                                foreach($optionsArray as $option) {
-                                    $options[trim($option)] = trim($option);
-                                }
-                            }
-                        @endphp
-                        <!-- DEBUG: Show attributeId and options -->
-                        <div class="text-muted small">
-                            <strong>Attribute ID:</strong> {{ $attributeId }}<br>
-                            <strong>Options:</strong> {{ json_encode($options) }}
-                        </div>
-                        
                         @livewire('components.form.select2-multiple', [
                             'values' => $selectedOptions[$index] ?? [],
                             'options' => $options,
                             'placeholder' => 'Select Options',
-                            'wireModel' => 'selected_options.' . $index
+                            'wireModel' => 'selected_options.' . $index,
+                            'uniqueId' => $multipleId
                         ])
                     </div>
                     <div class="col-md-1 px-0">
@@ -64,13 +64,3 @@
         </div>
     </div>
 </div> 
-
-<script>
-    Livewire.on('select2 updated', function(data) {
-        setTimeout(function() {
-            $('destroy corresponding select2 multiple').select2('destroy').off()
-            $('populate the corresponding select2 multiple with options from data')
-            $('reinitialize the select2 element')
-        }, 100);   
-    });
-</script>

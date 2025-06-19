@@ -6,8 +6,11 @@ use Livewire\Component;
 
 class Select2Single extends Component
 {
-    public $value = '';
+    /**
+     * @var array<int, array{value: mixed, label: string, extra?: mixed}>
+     */
     public $options = [];
+    public $value = '';
     public $placeholder = '';
     public $wireModel = '';
     public $uniqueId;
@@ -18,7 +21,7 @@ class Select2Single extends Component
         $this->options = $options;
         $this->placeholder = $placeholder;
         $this->wireModel = $wireModel;
-        $this->uniqueId = 'select2_single_' . uniqid();
+        // $this->uniqueId = $uniqueId ?? 'select2_single_' . uniqid();
     }
 
     public function updatedValue($value)
