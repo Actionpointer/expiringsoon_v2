@@ -24,10 +24,10 @@ class Select2Single extends Component
         // $this->uniqueId = $uniqueId ?? 'select2_single_' . uniqid();
     }
 
-    public function updatedValue($value)
-    {
-        $this->dispatch('select2ValueUpdated', ['value' => $value, 'wireModel' => $this->wireModel]);
-    }
+    // public function updatedValue($value)
+    // {
+    //     $this->dispatch('select2ValueUpdated', ['value' => $value, 'wireModel' => $this->wireModel]);
+    // }
 
     public function render()
     {

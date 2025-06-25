@@ -72,8 +72,8 @@ class Product extends Model
         return $this->belongsTo(Currency::class,'currency','code');
     }
 
-    public function likes(){
-        return $this->hasMany(Like::class);
+    public function wishlists(){
+        return $this->hasMany(Wishlist::class);
     }
     public function carts(){
         return $this->hasMany(Cart::class);
@@ -81,27 +81,19 @@ class Product extends Model
     public function orders(){
         return $this->hasMany(OrderItem::class);
     }
-    public function shop(){
-        return $this->belongsTo(Shop::class);
+    public function store(){
+        return $this->belongsTo(Store::class);
     }
-    public function categories(){
-        $categories = collect([]);
-        foreach($this->tags as $tag){
-            $tg = Tag::where('name',$tag)->first();
-            if($tg) $categories->push($tg->categories);
-        }
-        return $categories->unique('id')->flatten();
+    public function category(){
+        return $this->belongsTo(Category::class,'category_id');
     }
     
 
     public function getDiscountAttribute(){
         $timeline = $this->timeline;
         $discount = 0;
-        if($timeline){
-            if($this['discount'.$timeline]) 
-                $discount = 100 * ($this->price - $this['discount'.$timeline]) / $this->price;
-            elseif($this->shop['discount'.$timeline]) 
-                $discount = $this->shop['discount'.$timeline];
+        if($timeline && $this['discount'.$timeline]){
+            $discount = 100 * ($this->price - $this['discount'.$timeline]) / $this->price;
         }
         return $discount;
     }
@@ -114,25 +106,28 @@ class Product extends Model
     }
 
     public function getTimelineAttribute(){
-        if($this->expiry_in <= 30)
-            return 30;
+        $timeline = 0;
+        if(!$this->expiry_in)
+            $timeline = 0;
+        elseif($this->expiry_in <= 30)
+            $timeline = 30;
         elseif($this->expiry_in <= 60)
-            return 60;
+            $timeline = 60;
         elseif($this->expiry_in <= 90)
-            return 90;
+            $timeline = 90;
         elseif($this->expiry_in <= 120)
-            return 120;
-        else return 0;
+            $timeline =  120;
+        return $timeline;
     }
 
     //expiry
     public function getValidAttribute(){
-        $hours = cache('settings')['order_processing_to_delivery_period'] + cache('settings')['order_delivered_to_acceptance_period'];
+        $hours = config('settings.order_processing_to_shipment_period') + config('settings.order_shipment_to_delivery_period');
         return $this->expire_at && $this->expire_at->subHours($hours) > now() ? true:false;
     }
 
     public function scopeIsValid($query){
-        $hours = cache('settings')['order_processing_to_delivery_period'] + cache('settings')['order_delivered_to_acceptance_period'];
+        $hours = config('settings.order_processing_to_shipment_period') + config('settings.order_shipment_to_delivery_period');
         return $query->where('expire_at','>',now()->addHours($hours));
     }
 
@@ -175,11 +170,6 @@ class Product extends Model
         }  
     }
 
-    public function scopeIsNotCertified($query){
-        return $query->where(function($q){
-            $q->where('approved',false)->orWhere('show',false)->orWhere('published',false)->orWhere('expire_at','<',now()->addHours(cache('settings')['order_processing_to_delivery_period']));
-        });        
-    }
 
     public function scopeIsApproved($query){
         return $query->where('approved',true);
@@ -194,7 +184,7 @@ class Product extends Model
     }
 
     public function scopeIsAvailable($query){
-        return $query->where('stock','>',cache('settings')['minimum_stock_level']);
+        return $query;
     }
 
     public function scopeIsNotRejected($query){
@@ -228,7 +218,7 @@ class Product extends Model
 
     //available
     public function getAvailableAttribute(){
-        return $this->stock > cache('settings')['minimum_stock_level'];
+        return $this->stock;
     }
     
     public function reviews(){
@@ -289,24 +279,28 @@ class Product extends Model
         return 'Expiry date must be specified';
         elseif(!$this->valid)
         return 'Expiry date period is not acceptable';
-        elseif(!$this->photo)
-        return 'Product must have image';
-        elseif(!$this->stock)
-        return 'Product stock quantity must be greater than '.cache('settings')['minimum_stock_level'];
-        elseif(!$this->tags)
-        return 'Atleast one tag is required for product';
-        elseif(!$this->length || !$this->width || !$this->height || !$this->weight)
-        return 'Product Dimensions must be specified';
-        elseif($this->discount30 > $this->price)
-        return 'The 30days discount price must be less than actual price';
-        elseif($this->discount30 > $this->discount60)
-        return 'The 30days discount price must be less than 60days discount price';
-        elseif($this->discount60 > $this->discount90)
-        return 'The 60days discount price must be less than 90days discount price';
-        elseif($this->discount90 > $this->discount120)
-        return 'The 90days discount price must be less than 120days discount price';
-        elseif(!$this->published) return 'Product is in draft mode';
+        // elseif(!$this->photo)
+        // return 'Product must have image';
+        // elseif(!$this->stock)
+        // return 'Product stock quantity must be greater than '.config('settings.minimum_stock_level'];
+        // elseif(!$this->tags)
+        // return 'Atleast one tag is required for product';
+        // elseif(!$this->length || !$this->width || !$this->height || !$this->weight)
+        // return 'Product Dimensions must be specified';
+        // elseif($this->discount30 > $this->price)
+        // return 'The 30days discount price must be less than actual price';
+        // elseif($this->discount30 > $this->discount60)
+        // return 'The 30days discount price must be less than 60days discount price';
+        // elseif($this->discount60 > $this->discount90)
+        // return 'The 60days discount price must be less than 90days discount price';
+        // elseif($this->discount90 > $this->discount120)
+        // return 'The 90days discount price must be less than 120days discount price';
+        // elseif(!$this->published) return 'Product is in draft mode';
         else return '';
+    }
+
+    public function variants(){
+        return $this->hasMany(ProductVariant::class);
     }
 
     

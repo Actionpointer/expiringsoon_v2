@@ -39,7 +39,7 @@ class Store extends Model
         'country_id','state_id','city_id','zip_code','photo',
         'slug','user_id','published'
     ];
-    protected $appends = ['image'];
+    protected $appends = ['image','currency','currency_symbol'];
 
     public static function boot()
     {

@@ -20,6 +20,8 @@
     <link href="{{ asset('frontend/libs/simplebar/dist/simplebar.min.css') }}" rel="stylesheet">
     <!-- Theme CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/css/theme.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/select2.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('frontend/css/custom.css')}}" />
 </head>
 
 <body>
@@ -76,6 +78,8 @@
     <!-- Theme JS -->
     <script src="{{ asset('frontend/js/theme.min.js') }}"></script>
     <script src="{{ asset('frontend/js/vendors/validation.js') }}"></script>
+    <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
+    <script src="{{asset('vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
     @livewireScripts
     <script>
 		$(document).ready(function() {

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Store\StoreDashboard;
 use App\Livewire\Store\Subscription\Plans;
+use App\Livewire\Store\Product\ProductEdit;
 use App\Livewire\Store\Product\ProductList;
 use App\Livewire\Store\Product\ProductCreate;
 use App\Livewire\Store\Marketing\Sales\SalesList;
@@ -15,12 +16,14 @@ use App\Livewire\Store\Marketing\Giveaway\GiveawayCreate;
 
 Route::group(['prefix'=>'store','as'=>'store.'],function(){
     Route::get('create', StoreCreate::class)->name('create');
-    
-    
+ 
     Route::group(['prefix'=>'{store}'],function(){
         Route::get('plans',Plans::class )->name('plans');
+
         Route::group(['middleware'=> ['auth']],function(){
+
             Route::get('dashboard', StoreDashboard::class)->name('dashboard');
+
             Route::get('filemanager', function ($store) {  
                 // Generate a signed URL valid for, for example, 5 minutes  
                 $signedUrl = URL::temporarySignedRoute(  
@@ -30,12 +33,15 @@ Route::group(['prefix'=>'store','as'=>'store.'],function(){
                 ); 
                 return redirect()->to($signedUrl);  
             })->name('filemanager');
+
             Route::get('products', ProductList::class)->name('products');
             Route::get('products/create', ProductCreate::class)->name('products.create');
+            Route::get('products/edit/{product}', ProductEdit::class)->name('products.edit');
 
             Route::group(['prefix'=> 'marketing','as'=> 'marketing.'],function(){
                 Route::get('bundles', BundleList::class)->name('bundles');
                 Route::get('bundles/create', BundleCreate::class)->name('bundles.create');
+                Route::get('bundles/edit/{bundle}', BundleCreate::class)->name('bundles.edit');
 
                 Route::get('sales', SalesList::class)->name('sales');
                 Route::get('sales/create', SalesCreate::class)->name('sales.create');
@@ -43,18 +49,14 @@ Route::group(['prefix'=>'store','as'=>'store.'],function(){
                 Route::get('giveaways', GiveawayList::class)->name('giveaways');
                 Route::get('giveaways/create', GiveawayCreate::class)->name('giveaways.create');
 
+                Route::view('coupons', 'store.marketing.coupons.index')->name('coupons');
+                Route::view('coupons/create', 'store.marketing.coupons.create')->name('coupons.create');
 
                 Route::view('adverts', 'store.marketing.adverts.index')->name('adverts');
                 Route::view('adverts/plans', 'store.marketing.adverts.plans')->name('adverts.plans');
                 Route::view('adverts/{adset}', 'store.marketing.adverts.show')->name('adverts.view');
                 Route::view('adverts/create/{adset}', 'store.marketing.adverts.create')->name('adverts.create');
                 
-
-                
-
-                Route::view('coupons', 'store.marketing.coupons.index')->name('coupons');
-                Route::view('coupons/create', 'store.marketing.coupons.create')->name('coupons.create');
-
                 Route::view('newsletters', 'store.marketing.newsletters.index')->name('newsletters');
                 Route::view('newsletters/create', 'store.marketing.newsletters.create')->name('newsletters.create');
                 Route::view('newsletters/templates', 'store.marketing.newsletters.template-selection')->name('newsletters.templates');

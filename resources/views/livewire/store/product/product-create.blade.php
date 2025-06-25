@@ -108,7 +108,7 @@
 
                             <!-- Product Variants Component -->
                             <div class="col-lg-12 mt-5" >
-                                @livewire('store.product.product-variants', ['routePrefix' => route('store.filemanager', $store)])
+                                @livewire('store.product.product-variants')
                             </div>
                         </div>
                     </div>
@@ -242,21 +242,16 @@
 @push('styles')
 <link href="{{asset('vendor/summernote/summernote-bs5.css')}}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/select2.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/custom.css')}}" />
+
 <style>
-    .note-color .dropdown-toggle {
-        width: 35px !important;
-    }
-    .note-color .note-dropdown-menu.show{
-        display:flex !important;
-    }
+    
 </style>
 @endpush
 
 @push('scripts')
 <script src="{{asset('vendor/summernote/summernote-bs5.js')}}"></script>
-<script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
-<script src="{{asset('vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+
 <script>
     $(document).ready(function(){
         // Toggle expiry details based on checkbox

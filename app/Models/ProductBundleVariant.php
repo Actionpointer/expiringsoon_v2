@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class ProductBundleVariant extends Model
 {
     use HasFactory;
-    protected $fillable = ['product_id','variant_id','price','stock','status'];
+    protected $fillable = ['product_bundle_id', 'product_variant_id'];
 
-    public function product(){
-        return $this->belongsTo(Product::class);
+    public function bundle()
+    {
+        return $this->belongsTo(ProductBundle::class, 'product_bundle_id');
     }
-    
-    
+
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
 }

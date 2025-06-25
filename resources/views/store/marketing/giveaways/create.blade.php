@@ -2,8 +2,6 @@
 @push('styles')
 <link rel="stylesheet" href="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.css') }}">
 <link rel="stylesheet" href="{{ asset('frontend/libs/quill/dist/quill.snow.css') }}">
-<link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/select2.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/custom.css')}}" />
 
 @endpush
 @section('content')
@@ -149,7 +147,7 @@
 <script src="{{ asset('frontend/js/vendors/editor.js') }}"></script>
 <script src="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('frontend/js/vendors/dropzone.js') }}"></script>
-<script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
+
 <script>
     $(document).ready(function() {
         // Initialize Select2

@@ -3,8 +3,6 @@
 @push('styles')
 <link rel="stylesheet" href="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.css') }}">
 <link rel="stylesheet" href="{{ asset('frontend/libs/quill/dist/quill.snow.css') }}">
-<link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/select2.min.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/css/custom.css')}}" />
 <link rel="stylesheet" href="{{ asset('frontend/libs/flatpickr/dist/flatpickr.min.css') }}">
 @endpush
 
@@ -514,7 +512,6 @@
 @push('scripts')
 <script src="{{ asset('frontend/libs/quill/dist/quill.min.js') }}"></script>
 <script src="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
-<script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
 <script src="{{ asset('frontend/libs/flatpickr/dist/flatpickr.min.js') }}"></script>
 
 <script>

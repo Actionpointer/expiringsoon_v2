@@ -20,18 +20,18 @@ class ProductObserver
     {
         if($product->published){
             Product::where('id',$product->id)->update([
-                'approved'=> cache('settings')['auto_approve_product'],'show'=> $product->shop->user->max_products >= $product->shop->user->total_products ? true:false,'published' => $product->publishable]);
+                'approved_at'=> config('settings.auto_approve_products') ? now() : null
+            ]);
         }
-        TagUpdateJob::dispatchIf($product->tags,$product->tags)->delay(now()->addMinutes(10));
     }
 
     public function updated(Product $product)
     {
         if($product->wasChanged('published') && $product->published){
             Product::where('id',$product->id)->update([
-                'approved'=> cache('settings')['auto_approve_product'],'show'=> $product->shop->user->max_products >= $product->shop->user->total_products ? true:false,'published' => $product->publishable]);
+                'approved_at'=> config('settings.auto_approve_products') ? now() : null
+            ]);
         }
-        TagUpdateJob::dispatchIf($product->tags,$product->tags)->delay(now()->addMinutes(10));
     }
 
 

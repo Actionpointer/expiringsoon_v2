@@ -3,56 +3,59 @@
 namespace App\Livewire\Store\Product;
 
 use Livewire\Component;
+use App\Models\ProductOption;
 use App\Models\ProductAttribute;
 
 class ProductAttributes extends Component
 {
-    public $selectedAttributes = [];
+    public $attributeRows = [];
     public $selectedOptions = [];
     public $productAttributes = [];
 
     protected function getListeners()
     {
         return [
-            'select2ValueUpdated' => 'handleAttributeChange',
-            'select2MultipleValuesUpdated' => 'handleOptionsChange'
+            'select2ValueUpdated' => 'handleSelect2AttributeChange',
+            'select2MultipleValuesUpdated' => 'handleSelect2MultipleOptionsChange',
+            'saveAttributes' => 'handleAttributesSave'
         ];
     }
 
     public function mount()
     {
         $this->productAttributes = ProductAttribute::all()->toArray();
-        $this->selectedAttributes = [''];
+        $this->attributeRows = [['value' => '', 'extra' => '']];
         $this->selectedOptions = [[]];
         //dd($this->productAttributes);
     }
 
     public function addAttributeRow()
     {
-        $this->selectedAttributes[] = '';
+        $this->attributeRows[] = ['value' => '', 'extra' => ''];
         $this->selectedOptions[] = [];
+        $newIndex = count($this->attributeRows) - 1;
+        $this->dispatch('init-select2-row', ['index' => $newIndex]);
     }
 
     public function removeAttributeRow($index)
     {
-        if (count($this->selectedAttributes) > 1) {
-            unset($this->selectedAttributes[$index]);
+        if (count($this->attributeRows) > 1) {
+            unset($this->attributeRows[$index]);
             unset($this->selectedOptions[$index]);
-            $this->selectedAttributes = array_values($this->selectedAttributes);
+            $this->attributeRows = array_values($this->attributeRows);
             $this->selectedOptions = array_values($this->selectedOptions);
-            $this->emitAttributesChanged();
+            $this->generateVariantSelectOptions();
         }
     }
 
-    public function handleAttributeChange($id, $value, $extra)
+    public function handleSelect2AttributeChange($id, $value, $extra)
     {
-        // Extract index from id, e.g., 'select2-single-1' => 1
         $index = (int) str_replace('select2-single-', '', $id);
-        $this->selectedAttributes[$index] = [
+        $this->attributeRows[$index] = [
             'value' => $value,
             'extra' => $extra,
         ];
-        $this->emitAttributesChanged();
+        //$this->generateVariantSelectOptions();
 
         // Build new options for select2-multiple using $extra
         $options = [];
@@ -67,46 +70,57 @@ class ProductAttributes extends Component
             }
         }
         $multipleId = 'select2-multiple-' . $index;
-        $this->dispatch($multipleId, [
+        $this->dispatch('updateSelectMultipleOptions', [
             'id' => $multipleId,
             'values' => $options,
             'selected' => $this->selectedOptions[$index] ?? []
         ]);
+        
     }
 
-    public function handleOptionsChange($values, $wireModel)
+    public function handleSelect2MultipleOptionsChange($id, $values)
     {
-        if (strpos($wireModel, 'selected_options.') === 0) {
-            $index = (int) str_replace('selected_options.', '', $wireModel);
-            $this->selectedOptions[$index] = $values ?? [];
-            $this->emitAttributesChanged();
-        }
+        $index = (int) str_replace('select2-multiple-', '', $id);
+        $this->selectedOptions[$index] = $values ?? [];
+        $this->generateVariantSelectOptions();
     }
 
-    public function emitAttributesChanged()
+    public function generateVariantSelectOptions()
     {
         $attributePayload = [];
-        foreach ($this->selectedAttributes as $index => $attributeId) {
-            if (!empty($attributeId)) {
-                $currentAttribute = collect($this->productAttributes)->first(function($attr) use ($attributeId) {
-                    return $attr['slug'] === $attributeId['value'];
+        foreach ($this->attributeRows as $index => $selectedAttribute) {
+            if (!empty($selectedAttribute)) {
+                $currentAttribute = collect($this->productAttributes)->first(function($attr) use ($selectedAttribute) {
+                    return $attr['slug'] === $selectedAttribute['value'];
                 });
                 if ($currentAttribute) {
-                    // Convert options string to array
-                    $allOptions = [];
-                    if (!empty($currentAttribute['options'])) {
-                        $allOptions = array_map('trim', explode(',', $currentAttribute['options']));
-                    }
                     $attributePayload[] = [
-                        'id' => $attributeId['value'],
-                        'name' => $currentAttribute['name'],
-                        'options' => $allOptions, // send all possible options
-                        'selected_options' => $this->selectedOptions[$index], // optionally, send selected
+                        'id' => $selectedAttribute['value'], //the actual value selected e.g color
+                        'name' => $currentAttribute['name'], //e.g Color
+                        'options' => $this->selectedOptions[$index], // optionally, send selected
+                        'selected' => ''
                     ];
+                    //dd($attributePayload);
                 }
             }
         }
-        $this->dispatch('attributesChanged', ['attributes' => $attributePayload]);
+        $this->dispatch('initializeVariantSelects', $attributePayload);
+    }
+
+    public function handleAttributesSave($product_id)
+    {
+        foreach($this->attributeRows as $key => $attributeRow){
+            $singleAttribute = collect($this->productAttributes)->first(function($attr) use ($attributeRow) {
+                return $attr['slug'] === $attributeRow['value'];
+            });
+            if ($singleAttribute) {
+                ProductOption::create([
+                    'product_id' => $product_id,
+                    'product_attribute_id' => $singleAttribute['id'],
+                    'values' => json_encode($this->selectedOptions[$key])
+                ]);
+            }
+        }
     }
 
     public function render()

@@ -8,6 +8,8 @@ class GiveawayCreate extends Component
 {
     public function render()
     {
-        return view('livewire.store.marketing.giveaway.giveaway-create');
+        return view('livewire.store.marketing.giveaway.giveaway-create')
+        ->extends('layouts.frontend.store.app')
+        ->section('content');
     }
 }

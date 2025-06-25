@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('product_sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_variant_id')->constrained()->onDelete('cascade');    
-            $table->string('price')->default(1);
-            $table->string('currency_code');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');    
+            $table->string('discount_percentage')->default(1);
             $table->timestamp('start_at');
             $table->timestamp('end_at')->nullable();
             $table->string('frequency_minutes')->nullable();

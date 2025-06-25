@@ -125,7 +125,7 @@
 											
 											if (!empty($product->photos)) {
 												try {
-													$photos = json_decode($product->photos, true);
+													$photos = $product->photos;
 													if (is_array($photos) && count($photos) > 0) {
 														$photoUrl = $photos[0];
 														$hasPhoto = true;
@@ -137,7 +137,7 @@
 										@endphp
 										
 										@if($hasPhoto && $photoUrl)
-											<img src="{{ asset('storage/' . $photoUrl) }}" alt="{{ $product->name }}" class="icon-shape icon-md" />
+											<img src="{{ $photoUrl }}" alt="{{ $product->name }}" class="icon-shape icon-md" />
 										@else
 											<div class="icon-shape icon-md bg-light">
 												<i class="bi bi-image text-muted"></i>
@@ -149,7 +149,7 @@
 									<a href="{{ route('store.products.edit', ['store' => $store, 'product' => $product]) }}" class="text-reset">
 										{{ $product->name }}
 									</a>
-									<div class="text-muted small">{{ Str::limit($product->description, 40) }}</div>
+									<div class="text-muted small">{{ Str::limit(strip_tags($product->description), 40) }}</div>
 								</td>
 								<td>
 									{{ $product->category->name ?? 'Uncategorized' }}

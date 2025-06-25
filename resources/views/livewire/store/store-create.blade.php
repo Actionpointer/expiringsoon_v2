@@ -300,7 +300,7 @@
 <script src="{{ asset('frontend/libs/flatpickr/dist/flatpickr.min.js') }}"></script>
 <script src="{{ asset('frontend/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('frontend/libs/@yaireo/tagify/dist/tagify.js') }}"></script>
-<script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
+
 
 <script>
     $(document).ready(function() {

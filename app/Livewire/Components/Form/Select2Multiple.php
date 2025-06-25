@@ -18,12 +18,7 @@ class Select2Multiple extends Component
         $this->options = $options;
         $this->placeholder = $placeholder;
         $this->wireModel = $wireModel;
-        $this->uniqueId = 'select2_multiple_' . uniqid();
-    }
-
-    public function updatedValues($values)
-    {
-        $this->dispatch('select2MultipleValuesUpdated', ['values' => $values, 'wireModel' => $this->wireModel]);
+        // $this->uniqueId = 'select2_multiple_' . uniqid();
     }
 
     public function render()

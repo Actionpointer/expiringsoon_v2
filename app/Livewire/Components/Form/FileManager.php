@@ -12,13 +12,13 @@ class FileManager extends Component
     public $uniqueId;
     public $routePrefix;
 
-    public function mount($value = '', $placeholder = '', $wireModel = '', $routePrefix = '')
+    public function mount($value = '', $placeholder = '', $wireModel = '', $routePrefix = '', $uniqueId = null)
     {
         $this->value = $value;
         $this->placeholder = $placeholder;
         $this->wireModel = $wireModel;
         $this->routePrefix = $routePrefix;
-        $this->uniqueId = 'filemanager_' . uniqid();
+        $this->uniqueId = $uniqueId ?: 'filemanager_' . uniqid();
     }
 
     public function updatedValue($value)
@@ -30,4 +30,4 @@ class FileManager extends Component
     {
         return view('livewire.components.form.file-manager');
     }
-} 
+}

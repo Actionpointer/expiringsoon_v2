@@ -1,3 +1,4 @@
+/* Select2 */
 .select2-container--default .select2-selection--single{
     height:40px !important;
     padding-top:10px !important;
@@ -33,3 +34,11 @@ span.select2.select2-container.select2-container--default{
 }
 
  */
+
+/* Summernote */
+.note-color .dropdown-toggle {
+    width: 35px !important;
+}
+.note-color .note-dropdown-menu.show{
+    display:flex !important;
+}

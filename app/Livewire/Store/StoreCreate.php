@@ -121,6 +121,8 @@ class StoreCreate extends Component
 
     public function render()
     {
-        return view('livewire.store.store-create')->extends('layouts.frontend.store.app')->section('content');
+        return view('livewire.store.store-create')
+        ->extends('layouts.frontend.store.app')
+        ->section('content');
     }
 }

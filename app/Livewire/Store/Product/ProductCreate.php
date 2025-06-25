@@ -37,17 +37,12 @@ class ProductCreate extends Component
     // Product status
     public $published = false;
 
-    public $variantData = [];
-
     protected function getListeners()
     {
         return [
             'summernoteContentUpdated' => 'handleDescriptionUpdate',
             'fileManagerValueUpdated' => 'handlePhotoUpdate',
-            'select2ValueUpdated' => 'handleCategoryUpdate',
-            'attributesChanged' => 'handleAttributesChanged',
-            'variantsAttributesChanged' => 'handleVariantsAttributesChanged',
-            'variantDataReceived' => 'handleVariantDataReceived'
+            'select2ValueUpdated' => 'handleCategoryUpdate'
         ];
     }
 
@@ -60,6 +55,7 @@ class ProductCreate extends Component
 
     public function handlePhotoUpdate($value, $wireModel)
     {
+
         if ($wireModel === 'photos') {
             $this->photos = $value;
         }
@@ -71,22 +67,6 @@ class ProductCreate extends Component
             $this->category_id = $value;
         }
         //dd($this->category_id);
-    }
-
-    public function handleAttributesChanged($data)
-    {
-        // This will be handled by the ProductVariants component
-        $this->dispatch('attributesChanged', $data);
-    }
-
-    public function handleVariantsAttributesChanged($data)
-    {
-        // Handle variant attribute changes if needed
-    }
-
-    public function handleVariantDataReceived($data)
-    {
-        $this->variantData = $data['variants'];
     }
 
     public function mount($store)
@@ -114,11 +94,6 @@ class ProductCreate extends Component
             'discount90' => 'required|numeric|min:0',
             'discount120' => 'required|numeric|min:0',
             'published' => 'boolean',
-            'variants' => 'required|array|min:1',
-            'variants.*.price' => 'required|numeric|min:0',
-            'variants.*.stock' => 'required|integer|min:0',
-            'variants.*.options' => 'nullable',
-            'variants.*.photo' => 'nullable|string',
         ];
     }
 
@@ -127,12 +102,10 @@ class ProductCreate extends Component
         'photos.required' => 'Please provide at least one product image URL',
         'expire_at.required_if' => 'Expiry date is required when the product is not always available',
         'expire_at.after' => 'Expiry date must be after today',
-        'variants.*.price.required' => 'Price is required for all variants',
-        'variants.*.stock.required' => 'Stock quantity is required for all variants',
     ];
 
 
-    public function getPhotoArrayAttribute()
+    public function getPhotoArray()
     {
         if (empty($this->photos)) {
             return [];
@@ -176,8 +149,8 @@ class ProductCreate extends Component
 
     public function saveProduct()
     {
+        
         $this->validate();
-
         if (!$this->validateDiscounts()) {
             return false;
         }
@@ -192,7 +165,7 @@ class ProductCreate extends Component
             $product->name = $this->name;
             $product->description = $this->description;
             $product->meta_description = $this->meta_description;
-            $product->photos = $this->photo_array;
+            $product->photos = $this->getPhotoArray();
             $product->preorder = $this->preorder;
             $product->always_available = $this->always_available;
             $product->expire_at = $this->always_available ? null : Carbon::parse($this->expire_at);
@@ -202,58 +175,20 @@ class ProductCreate extends Component
             $product->discount90 = $this->discount90;
             $product->discount120 = $this->discount120;
             $product->published = $this->published;
-
             $product->save();
 
-            // Get variant data from the ProductVariants component
-            $this->dispatch('getVariantData');
-
-            // Wait a moment for the variant data to be received
-            usleep(100000); // 0.1 seconds
-
-            // Save variants if we have variant data
-            if (!empty($this->variantData)) {
-                foreach ($this->variantData as $variantData) {
-                    // Convert options to JSON
-                    $options = isset($variantData['options']) ? $variantData['options'] : [];
-
-                    // Auto-generate variant name from product name and selected options
-                    $variantName = $this->name;
-                    if (!empty($options) && is_array($options)) {
-                        foreach ($options as $optionValue) {
-                            if (is_array($optionValue)) {
-                                // If options are nested arrays, flatten them
-                                foreach ($optionValue as $val) {
-                                    $variantName .= ' | ' . $val;
-                                }
-                            } else {
-                                $variantName .= ' | ' . $optionValue;
-                            }
-                        }
-                    }
-
-                    $product->variants()->create([
-                        'name' => $variantName,
-                        'price' => $variantData['price'],
-                        'stock' => $variantData['stock'],
-                        'options' => json_encode($options),
-                        'photo' => $variantData['photo'] ?? null,
-                        'is_default' => $variantData['is_default'] ?? false,
-                        'is_active' => true,
-                        'type' => 'product',
-                    ]);
-                }
-            }
+            // Save product options and variants via events
+            $this->dispatch('saveAttributes', $product->id);
+            $this->dispatch('saveVariants', $product->id);
 
             DB::commit();
 
             $status = $this->published ? 'published' : 'saved as draft';
             session()->flash('success', "Product successfully {$status}!");
-            $this->dispatch('productSaved');
-
             return redirect()->route('store.products', $this->store);
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('Product creation error: ' . $e->getMessage(), ['exception' => $e]);
             session()->flash('error', 'Error creating product: ' . $e->getMessage());
             $this->dispatch('validationErrors');
             return false;

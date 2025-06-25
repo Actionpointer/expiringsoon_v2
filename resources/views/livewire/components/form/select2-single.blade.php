@@ -3,7 +3,7 @@
         id="{{ $uniqueId }}" 
         class="form-select select2-single" 
         data-placeholder="{{ $placeholder }}"
-        wire:model="value"
+        wire:model="value" required
     >
         <option value=""></option>
         @foreach($options as $option)
@@ -21,14 +21,22 @@
 @push('scripts')
 <script>
 document.addEventListener('livewire:init', () => {
-    const selectId = '{{ $uniqueId }}';
-    const $select = $('#'+selectId);
-    $select.select2({
-        placeholder: '{{ $placeholder }}',
-        allowClear: true
-    });
+    function initSelect2(targetId) {
+        const $select = $('#' + targetId);
+        const placeholder = $select.data('placeholder') || $select.attr('data-placeholder') || '';
+        if ($select.length === 0) return;
+        if ($select.data('select2')) {
+            $select.select2('destroy');
+        }
+        $select.select2({
+            placeholder: placeholder,
+            allowClear: true
+        });
+    }
 
-    $select.on('change', function() {
+    // Delegate change event for all select2-single elements
+    $(document).on('select2:select', '.select2-single', function() {
+        const selectId = $(this).attr('id');
         const value = $(this).val();
         const extra = $(this).find('option:selected').data('extra') ?? '';
         Livewire.dispatch('select2ValueUpdated', {
@@ -38,20 +46,18 @@ document.addEventListener('livewire:init', () => {
         });
     });
 
-    Livewire.on(selectId, function(e) {
-        const { id, values } = e;
-        if (id !== selectId) return;
-        $select.select2('destroy');
-        $select.empty();
-        $select.append('<option value=""></option>');
-        values.forEach(opt => {
-            $select.append(`<option value="${opt.value}" data-extra="${opt.extra ?? ''}">${opt.label}</option>`);
-        });
-        $select.select2({
-            placeholder: '{{ $placeholder }}',
-            allowClear: true
-        });
-        $select.trigger('change.select2');
+    // Initial run for all select2-single elements
+    $('.select2-single').each(function() {
+        initSelect2($(this).attr('id'));
+    });
+
+    // Listen for Livewire update event
+    Livewire.on('init-select2-row', function(e) {
+        const { index } = e[0];
+        const targetId = 'select2-single-' + index;
+        setTimeout(function() {
+            initSelect2(targetId);
+        }, 100);
     });
 });
 </script>
