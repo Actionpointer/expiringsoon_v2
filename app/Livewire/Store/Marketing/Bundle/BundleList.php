@@ -11,14 +11,14 @@ class BundleList extends Component
 {
     use WithPagination;
 
-    public $store;
+    public Store $store;
     public $search = '';
     public $status = '';
     public $sortBy = 'created_at';
     public $sortDirection = 'desc';
 
-    public function mount(){
-        $this->store = Store::firstWhere('slug',request()->store);
+    public function mount($store){
+        $this->store = $store;
     }
 
     public function sortBy($field)

@@ -154,8 +154,24 @@ trait PaystackTrait
         return $response->data->account_name;
     }
 
-    protected function getBanksByPaystack(){
-        
+    protected function banksByPaystack($country){
+      
+      $response = Curl::to("https://api.paystack.co/bank?country=".$country)
+            ->withHeader('Authorization: Bearer '.config('services.paystack.secret'))
+            ->withHeader('Content-Type: application/json')
+            ->asJsonResponse()
+            ->get();
+            //dd($response);
+      if(!$response || !$response->status){
+        return false;
+      }
+      return collect($response->data)->map(function ($bank) {
+          return [
+              'name' => $bank->name,
+              'code' => $bank->code,
+              'currency' => $bank->currency,
+          ];
+      })->all();
     }
 
 

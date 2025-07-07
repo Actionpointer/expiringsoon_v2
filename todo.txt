@@ -1,11 +1,14 @@
-address, 
-users
-store
-banks
-gateway: new table
-locations
-blacklisted
-shippers
+adverts,
+newsletters,
+bank account verification
+stripe account connection
+customer menus 
+store invitation page. 
+
+
+blog,
+subscription plan renew
+
 
 
 wishlist
@@ -101,3 +104,25 @@ Wordpress Plugin:
 - disable showing of expiry date on frontend
 - change sync all products with expiry date to 6 months
 - 
+
+
+
+button - Enable Automatic Payment
+show bank list - true or false
+
+Bank Name: 
+
+1. i want users to be able to add their bank account on the platform
+2. i want users to be able to connect to payment platforms
+
+when users get to the page..
+loop the payment methods
+if a payment method allows entering bank details, show banking details
+if a payment method allows entering email, show it
+if a payment method allows only connects, connect. 
+
+1. Select Gateway
+2. Mode (Test/Live)
+3. Set as Primary
+4. Select Bank Fields
+5. Requires Gateway Onboarding

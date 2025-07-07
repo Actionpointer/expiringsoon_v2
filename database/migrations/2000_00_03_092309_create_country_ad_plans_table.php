@@ -23,7 +23,15 @@ return new class extends Migration
             $table->integer('price')->default(0);
             $table->string('placement'); // homepage_banner, product_sidebar, etc.
             $table->string('format'); // image, video, carousel, etc.
-            $table->json('device_restrictions')->nullable(); // desktop, mobile, both
+            $table->boolean('device_desktop')->default(false);
+            $table->boolean('device_tablet')->default(false);
+            $table->boolean('device_mobile')->default(false);
+            $table->boolean('duration_daily')->default(false);
+            $table->boolean('duration_weekly')->default(false);
+            $table->boolean('duration_monthly')->default(false);
+            $table->decimal('price_cpm', 10, 2)->nullable();
+            $table->decimal('price_cpc', 10, 2)->nullable();
+            $table->decimal('price_fixed', 10, 2)->nullable();
             $table->boolean('is_active')->default(1); //still in use
             $table->softDeletes();
             $table->timestamps();

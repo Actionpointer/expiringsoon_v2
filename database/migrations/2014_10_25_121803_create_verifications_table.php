@@ -21,6 +21,8 @@ return new class extends Migration
             $table->date('expiry_date')->nullable(); 
             $table->timestamp('approved_at')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
+            $table->string('status')->default('pending'); // pending, under_review, verified, rejected
+            $table->text('comments')->nullable(); // admin/user feedback
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->timestamps();

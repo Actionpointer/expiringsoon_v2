@@ -9,7 +9,7 @@ class ProductBundle extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','currency_code','published','photo', 'price'];
+    protected $fillable = ['store_id','name','currency_code','published','photo', 'price'];
 
     protected $appends = ['sumup_price'];
 

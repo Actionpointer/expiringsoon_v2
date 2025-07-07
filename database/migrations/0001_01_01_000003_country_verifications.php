@@ -18,21 +18,15 @@ return new class extends Migration
             $table->boolean('auto_verify_after_pass')->default(false); // Auto-approve if all checks pass
             $table->integer('verification_validity_days')->default(0); // 0 = Never Expires, 180, 365, 730
             $table->string('mode')->default('test'); // live or test
-            // Government ID
-            $table->string('id_requirement')->default('all');   // all, any, none
-            $table->json('id_documents')->nullable(); // nationalId, driverLicense, passport, votersCard
-            
-            // Business Documents
-            $table->string('business_requirement')->default('any');   // all, any, none
-            $table->json('business_documents')->nullable(); // regCertificate, taxCertificate, tradingLicense, vatCertificate
-            
-            // Address Verification
-            $table->string('address_requirement')->default('any');   // all, any, none
-            $table->json('address_documents')->nullable(); // utilityBill, bankStatement, tenancyAgreement, councilTax
-            
-            // Additional Requirements
-            $table->string('additional_requirement')->default('any'); // all, any, none
-            $table->json('additional_documents')->nullable(); // requireSelfie, requireProofOfOwnership, requirePhoneVerification, requireEmailVerification
+            // Document requirements as JSON arrays of objects
+            $table->json('id_documents')->nullable(); // [{key, require_file, require_issue_date, require_expiry_date, require_document_number}]
+            $table->json('business_documents')->nullable();
+            $table->json('address_documents')->nullable();
+            $table->json('additional_documents')->nullable();
+            $table->string('id_requirement')->default('any'); // 'any' or 'all'
+            $table->string('business_requirement')->default('any');
+            $table->string('address_requirement')->default('any');
+            $table->string('additional_requirement')->default('any');
             $table->timestamps();
         });
     }

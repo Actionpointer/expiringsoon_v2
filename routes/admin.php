@@ -144,7 +144,8 @@ use App\Http\Controllers\Admin\ProductAttributeController;
                 Route::group(['prefix'=> 'countries','as'=> 'countries.'],function(){
                     Route::get('/', [CountryController::class,'index'])->name('index');
                     Route::get('financials/{country}', [CountryController::class,'financials'])->name('financials');
-                    Route::post('financial-gateway', [CountryController::class,'financial_gateway'])->name('financials.gateway');
+                    Route::post('financial-gateway-store', [CountryController::class,'financial_gateway_store'])->name('financials.gateway.store');
+                    Route::post('financial-gateway-delete', [CountryController::class,'financial_gateway_delete'])->name('financials.gateway.delete');
                     Route::post('financial-banking', [CountryController::class,'financial_banking'])->name('financials.banking');
                     
                     Route::get('subscription-plans/{country}', [CountryController::class,'subscription_plan'])->name('subscription_plans');
@@ -152,6 +153,9 @@ use App\Http\Controllers\Admin\ProductAttributeController;
                     Route::post('update/subscription-plan', [CountryController::class,'update_subscription_plan'])->name('subscription_plan.update');
                     
                     Route::get('ad-plans/{country}', [CountryController::class,'ad_plan'])->name('ad_plans');
+                    Route::post('ad-plans/store', [CountryController::class, 'storeAdPlan'])->name('ad_plans.store');
+                    Route::post('ad-plans/update/', [CountryController::class, 'updateAdPlan'])->name('ad_plans.update');
+                    
                     Route::post('update/ad-plan', [CountryController::class,'updateAdPlan'])->name('update.ad_plan');
                     Route::get('newsletter-plans/{country}', [CountryController::class,'newsletter_plan'])->name('newsletter_plans');
                     Route::post('update/newsletter-plan', [CountryController::class,'updateNewsletterPlan'])->name('update.newsletter_plan');

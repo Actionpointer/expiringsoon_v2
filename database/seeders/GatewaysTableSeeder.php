@@ -17,7 +17,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['north_america', 'europe', 'asia', 'oceania']),
                 'description' => 'Global payment processor supporting cards and local payment methods',
                 'website' => 'https://stripe.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'stripe_connect_onboarding|Connect with Stripe',
+                'payout_required_fields' => null,
             ],
             [
                 'name' => 'paypal',
@@ -26,7 +28,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['global']),
                 'description' => 'Global digital payment platform',
                 'website' => 'https://paypal.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save PayPal',
+                'payout_required_fields' => json_encode(['email']),
             ],
             [
                 'name' => 'adyen',
@@ -35,7 +39,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['europe', 'north_america', 'asia', 'south_america']),
                 'description' => 'Enterprise payment platform supporting global payment methods',
                 'website' => 'https://adyen.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Adyen',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'square',
@@ -44,7 +50,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['north_america', 'europe', 'australia', 'japan']),
                 'description' => 'Payment processor with focus on small businesses',
                 'website' => 'https://squareup.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Square',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'checkout',
@@ -53,7 +61,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['europe', 'middle_east', 'asia']),
                 'description' => 'Global payment solution with strong presence in Europe and Middle East',
                 'website' => 'https://checkout.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Checkout',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'mollie',
@@ -62,7 +72,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['europe']),
                 'description' => 'European payment processor with focus on local payment methods',
                 'website' => 'https://mollie.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Mollie',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'wise',
@@ -71,7 +83,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['global']),
                 'description' => 'International money transfer and multi-currency accounts',
                 'website' => 'https://wise.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Wise',
+                'payout_required_fields' => json_encode(['email', 'account_id']),
             ],
             [
                 'name' => 'gocardless',
@@ -80,7 +94,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['europe', 'north_america', 'australia']),
                 'description' => 'Global bank debit network',
                 'website' => 'https://gocardless.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save GoCardless',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
 
             // African Payment Gateways
@@ -91,7 +107,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH', 'ZA', 'KE','EG','RW','CG','CD','CI','SN','CM','MA','TN']),
                 'description' => 'Leading payment gateway in Africa, supporting multiple payment methods and currencies.',
                 'website' => 'https://paystack.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Paystack',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'flutterwave',
@@ -100,7 +118,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH', 'KE', 'ZA', 'EG', 'MA', 'TN', 'CI', 'SN', 'CM']),
                 'description' => 'Pan-African payment gateway supporting multiple currencies and payment methods.',
                 'website' => 'https://flutterwave.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Flutterwave',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             
             [
@@ -110,7 +130,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH', 'KE', 'UG', 'ZM']),
                 'description' => 'Leading digital payment and commerce company in Africa.',
                 'website' => 'https://interswitchgroup.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Interswitch',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'okra',
@@ -119,7 +141,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH', 'KE', 'ZA']),
                 'description' => 'Open finance infrastructure for Africa, enabling secure access to financial data.',
                 'website' => 'https://okra.ng',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Okra',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'paga',
@@ -128,7 +152,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'ET', 'MX']),
                 'description' => 'Leading mobile payment company in Nigeria, expanding to other markets.',
                 'website' => 'https://mypaga.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Paga',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'cellulant',
@@ -137,7 +163,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'KE', 'GH', 'UG', 'ZM', 'TZ', 'RW']),
                 'description' => 'Pan-African payment technology company offering multiple payment solutions.',
                 'website' => 'https://cellulant.io',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Cellulant',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'dpo',
@@ -146,7 +174,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['ZA', 'KE', 'NG', 'GH', 'MA', 'TN']),
                 'description' => 'Leading African payment service provider supporting multiple payment methods.',
                 'website' => 'https://dpogroup.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save DPO',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             
             [
@@ -156,7 +186,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GB']),
                 'description' => 'Digital-only bank with payment gateway services in Nigeria.',
                 'website' => 'https://kuda.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Kuda',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             
             [
@@ -166,7 +198,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH', 'KE', 'ZA', 'UG', 'RW', 'TZ']),
                 'description' => 'Cross-border payment platform popular in Africa.',
                 'website' => 'https://chippercash.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Chipper',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'opay',
@@ -175,7 +209,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'EG', 'KE', 'ZA']),
                 'description' => 'Digital payment platform offering various financial services.',
                 'website' => 'https://opay.ng',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save OPay',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'palmpay',
@@ -184,7 +220,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH']),
                 'description' => 'Digital payment platform offering mobile money and payment services.',
                 'website' => 'https://palmpay.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save PalmPay',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'mfs',
@@ -193,7 +231,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH', 'KE', 'ZA', 'UG', 'RW', 'TZ', 'BF', 'ML', 'SN']),
                 'description' => 'Leading digital payments hub in Africa, connecting mobile money networks.',
                 'website' => 'https://mfsafrica.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save MFS Africa',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'plaid',
@@ -202,7 +242,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['north_america', 'europe']),
                 'description' => 'Leading financial data aggregator in the US market',
                 'website' => 'https://plaid.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Plaid',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'truelayer',
@@ -211,7 +253,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['europe', 'australia']),
                 'description' => 'Open banking platform for European and Australian markets',
                 'website' => 'https://truelayer.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save TrueLayer',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'tink',
@@ -220,7 +264,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['europe']),
                 'description' => 'European open banking platform, owned by Visa',
                 'website' => 'https://tink.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Tink',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'nordigen',
@@ -229,7 +275,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['europe']),
                 'description' => 'European focused open banking platform, part of GoCardless',
                 'website' => 'https://nordigen.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Nordigen',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'belvo',
@@ -238,7 +286,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['south_america']),
                 'description' => 'Leading financial data API for Latin America',
                 'website' => 'https://belvo.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Belvo',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'akoya',
@@ -247,7 +297,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['north_america']),
                 'description' => 'US-focused data access network',
                 'website' => 'https://akoya.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Akoya',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'mono',
@@ -256,7 +308,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['NG', 'GH', 'KE']),
                 'description' => 'Open banking infrastructure for Africa, enabling secure access to financial data.',
                 'website' => 'https://mono.co',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Mono',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             
             [
@@ -266,47 +320,53 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['KE', 'TZ', 'UG', 'ZA', 'GH', 'ET']),
                 'description' => 'Mobile money transfer service, widely used in East Africa.',
                 'website' => 'https://www.mpesa.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save M-Pesa',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'mtn_mobile_money',
                 'slug' => 'mtn',
                 'display_name' => 'MTN Mobile Money',
-                
                 'regions' => json_encode(['ghana', 'uganda', 'cameroon', 'ivory_coast', 'rwanda']),
                 'description' => 'MTN Group\'s mobile money service across Africa',
                 'website' => 'https://www.mtn.com/what-we-do/mobile-financial-services/',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save MTN Mobile Money',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'airtel_money',
                 'slug' => 'airtel',
                 'display_name' => 'Airtel Money',
-                
                 'regions' => json_encode(['kenya', 'uganda', 'tanzania', 'rwanda', 'nigeria']),
                 'description' => 'Airtel Africa\'s mobile money service',
                 'website' => 'https://airtel.africa/money',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Airtel Money',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'orange_money',
                 'slug' => 'orange',
                 'display_name' => 'Orange Money',
-                
                 'regions' => json_encode(['senegal', 'mali', 'burkina_faso', 'ivory_coast']),
                 'description' => 'Orange\'s mobile money service in West Africa',
                 'website' => 'https://orangemoney.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Orange Money',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'gcash',
                 'slug' => 'gcash',
                 'display_name' => 'GCash',
-                
                 'regions' => json_encode(['philippines']),
                 'description' => 'Leading mobile wallet in the Philippines',
                 'website' => 'https://www.gcash.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save GCash',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'paytm',
@@ -315,7 +375,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['india']),
                 'description' => 'India\'s leading digital payments and financial services platform',
                 'website' => 'https://paytm.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Paytm',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             [
                 'name' => 'wave',
@@ -324,7 +386,9 @@ class GatewaysTableSeeder
                 'regions' => json_encode(['SN', 'CI', 'BF', 'ML', 'UG']),
                 'description' => 'Mobile money provider offering instant, free transfers in West Africa.',
                 'website' => 'https://wave.com',
-                'status' => true
+                'status' => true,
+                'payout_action_type' => 'form_fields|Save Wave',
+                'payout_required_fields' => json_encode(['account_id']),
             ],
             
         ];

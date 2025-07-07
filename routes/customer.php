@@ -1,9 +1,10 @@
 <?php
 
-use App\Livewire\Customer\Dashboard;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Customer\ProfilePage;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Livewire\Customer\DashboardPage;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guest\CartController;
 use App\Http\Controllers\Vendor\OrderController;
@@ -11,20 +12,25 @@ use App\Http\Controllers\Customer\SalesController;
 use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Guest\ResourcesController;
 use App\Http\Controllers\Customer\AddressController;
-
-
+use App\Livewire\Customer\Address\AddressPage;
+use App\Livewire\Customer\CheckoutPage;
+use App\Livewire\Customer\Following\FollowPage;
+use App\Livewire\Customer\Notifications\NotificationPage;
+use App\Livewire\Customer\Orders\AllOrders;
+use App\Livewire\Customer\Orders\SingleOrder;
+use App\Livewire\Customer\WishlistPage;
 
     Route::post('logout',[LoginController::class,'logout'])->name('logout');
     //customer
-    Route::view('checkout', 'customer.checkout')->name('checkout');
-    Route::view('wishlist', 'customer.wishlist')->name('wishlist');
-    Route::get('dashboard', Dashboard::class)->name('dashboard');
-    Route::view('profile', 'customer.profile')->name('profile');
-    Route::view('addresses', 'customer.address')->name('addresses');
-    Route::view('followings', 'customer.followings')->name('followings');
-    Route::view('notifications', 'customer.notifications')->name('notifications');
-    Route::view('orders', 'customer.orders.index')->name('orders');
-    Route::view('order/{order}', 'customer.orders.show')->name('order');
+    Route::get('checkout', CheckoutPage::class)->name('checkout');
+    Route::get('wishlist', WishlistPage::class)->name('wishlist');
+    Route::get('dashboard', DashboardPage::class)->name('dashboard');
+    Route::get('profile', ProfilePage::class)->name('profile');
+    Route::get('addresses', AddressPage::class)->name('addresses');
+    Route::get('followings', FollowPage::class)->name('followings');
+    Route::get('notifications', NotificationPage::class)->name('notifications');
+    Route::get('orders', AllOrders::class)->name('orders');
+    Route::get('order/{order}', SingleOrder::class)->name('order');
     Route::view('order/{order}/disputes', 'customer.orders.disputes')->name('dispute');
     Route::view('order/{order}/messages', 'customer.orders.messages')->name('messages');
     Route::view('order/{order}/timeline', 'customer.orders.timeline')->name('timeline');

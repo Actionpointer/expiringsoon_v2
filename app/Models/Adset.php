@@ -16,7 +16,10 @@ class Adset extends Model
 {
     use HasFactory,Sluggable,SoftDeletes;
     
-    protected $fillable = ['user_id','slug','adplan_id','units','amount','start_at','end_at','auto_renew'];
+    protected $fillable = [
+        'store_id', 'campaign_id', 'country_ad_plan_id', 'slug', 'start_at', 'end_at', 'units', 'amount', 'status',
+        'auto_renew', 'targeting', 'daily_budget', 'pricing_model', 'schedule'
+    ];
     protected $casts = ['start_at'=> 'datetime','end_at'=> 'datetime'];
     protected $appends = ['active'];
 
@@ -102,4 +105,8 @@ class Adset extends Model
         }  
     }
 
+    public function plan()
+    {
+        return $this->belongsTo(CountryAdPlan::class, 'country_ad_plan_id');
+    }
 }

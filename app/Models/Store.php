@@ -21,9 +21,10 @@ use App\Models\Rejection;
 use App\Models\StoreUser;
 use App\Models\Settlement;
 use App\Models\OrderStatus;
-use App\Models\PackageRate;
 use App\Models\OrderMessage;
 use App\Models\Subscription;
+use App\Models\PaymentMethod;
+use App\Models\BankAccount;
 use App\Observers\StoreObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -35,9 +36,11 @@ class Store extends Model
     use HasFactory,Notifiable,Sluggable;
     
     protected $fillable = [
-        'name','email','phone','business_type','description','address',
-        'country_id','state_id','city_id','zip_code','photo',
-        'slug','user_id','published'
+        'name', 'legal_business_name', 'email', 'phone', 'description', 'address',
+        'country_id', 'state_id', 'city_id', 'zip_code', 'photo', 'banner',
+        'contact_person', 'alt_contact_phone', 'website', 'facebook', 'instagram', 'twitter',
+        'business_type', 'tax_id', 'business_registration_number', 'year_established',
+        'slug', 'user_id', 'published'
     ];
     protected $appends = ['image','currency','currency_symbol'];
 
@@ -59,6 +62,11 @@ class Store extends Model
     
     public function getRouteKeyName(){
         return 'slug';
+    }
+
+    public function bankAccount()
+    {
+        return $this->hasOne(BankAccount::class);
     }
 
     public function subscription(){
@@ -123,7 +131,7 @@ class Store extends Model
     public function staff()
     {
         return $this->belongsToMany(User::class, 'store_users')->using(StoreUser::class)
-                    ->withPivot('role_id','permissions', 'status')
+                    ->withPivot('role_id','permissions', 'status','created_at')
                     ->withTimestamps();
     }
 
@@ -225,9 +233,11 @@ class Store extends Model
     }
 
     public function wallet(){
-        return $this->morphOne(Wallet::class,'owner');
+        return $this->hasOne(Wallet::class);
     }
 
-    
-    
+    public function notifications()
+    {
+        return $this->hasOne(StoreNotification::class);
+    }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('adsets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('campaign_id');
             $table->unsignedBigInteger('country_ad_plan_id');
             $table->string('slug')->nullable();

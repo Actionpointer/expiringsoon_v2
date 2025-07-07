@@ -41,11 +41,11 @@
                     <i class="bi-badge-ad me-1"></i> Ad Plans
                 </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link @if(request()->is('*/settings/countries/newsletter-plans/*')) active @endif" href="{{ route('admin.settings.countries.newsletter_plans', $country) }}">
                     <i class="bi-envelope-paper me-1"></i> Newsletter Plans
                 </a>
-            </li>
+            </li> -->
 
             <li class="nav-item">
                 <a class="nav-link @if(request()->is('*/settings/countries/verification/*')) active @endif" href="{{ route('admin.settings.countries.verifications', $country) }}">

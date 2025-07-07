@@ -43,14 +43,20 @@ class BundleCreate extends Component
     public function mount($store)
     {
         $this->store = $store;
-        $this->allVariants = ProductVariant::with('product')->get()->map(function($variant) {
-            return [
-                'id' => $variant->id,
-                'name' => $variant->name . ' (' . ($variant->product->name ?? '-') . ')',
-                'price' => $variant->price,
-                'stock' => $variant->stock,
-            ];
-        })->toArray();
+        $this->allVariants = ProductVariant::with('product')
+            ->whereHas('product', function($query) {
+                $query->where('store_id', $this->store->id);
+            })
+            ->get()
+            ->map(function($variant) {
+                return [
+                    'id' => $variant->id,
+                    'name' => $variant->name . ' (' . ($variant->product->name ?? '-') . ')',
+                    'price' => $variant->price,
+                    'stock' => $variant->stock,
+                ];
+            })
+            ->toArray();
     }
 
     public function handleSelect2Update($id, $values)
@@ -89,6 +95,7 @@ class BundleCreate extends Component
         DB::beginTransaction();
         try {
             $bundle = ProductBundle::create([
+                'store_id' => $this->store->id,
                 'name' => $this->title,
                 'price' => $this->price,
                 'currency_code' => $this->price,

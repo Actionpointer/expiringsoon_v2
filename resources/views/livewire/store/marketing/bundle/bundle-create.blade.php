@@ -17,7 +17,7 @@
                     </nav>
                 </div>
                 <!-- button -->
-                <div>
+<div>
                     <a href="{{route('store.marketing.bundles',$store)}}" class="btn btn-light">Back to Bundles</a>
                 </div>
             </div>

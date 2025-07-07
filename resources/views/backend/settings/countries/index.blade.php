@@ -81,7 +81,7 @@
                         <th>Financials</th>
                         <th>Subscription Plans</th>
                         <th>Ad Plans</th>
-                        <th>Newsletter Plans</th>
+                        <!-- <th>Newsletter Plans</th> -->
                         <th>Verification</th>
                         <th>Staff</th>
                         <th>Actions</th>
@@ -130,17 +130,7 @@
                             </span>
                             @endif
                         </td>
-                        <td>
-                            @if($country->country_newsletter_plans->count() > 0)
-                            <span class="badge bg-soft-success" data-bs-toggle="tooltip" title="Newsletter Plans">
-                                <i class="bi-envelope-paper"></i> {{ $country->country_newsletter_plans->count() }} plans
-                            </span>
-                            @else
-                            <span class="badge bg-soft-danger" data-bs-toggle="tooltip" title="Newsletter Plans">
-                                <i class="bi-envelope-paper"></i> Not Set
-                            </span>
-                            @endif
-                        </td>
+                        
                         <td>
                             @if($country->country_verifications->count() > 0)
                             <span class="badge bg-soft-success" data-bs-toggle="tooltip" title="Verification">

@@ -15,22 +15,9 @@ class UserObserver
     
     public function created(User $user)
     {
-        try{
-            $user->notify(new WelcomeNotification);
-        }catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
+        
     }
 
-    /**
-     * Handle the User "updated" event.
-     *
-     * @param  \App\Models\User  $user
-     * @return void
-     */
     public function updated(User $user)
     {
         // if($user->isDirty('fname') || $user->isDirty('fname')){

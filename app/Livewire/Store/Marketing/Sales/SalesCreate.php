@@ -3,117 +3,147 @@
 namespace App\Livewire\Store\Marketing\Sales;
 
 use App\Models\Store;
-use Livewire\Component;
+use App\Models\Product;
 use App\Models\ProductSale;
+use Livewire\Component;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SalesCreate extends Component
 {
     public Store $store;
-    public $title;
-    public $selectedVariants = [];
-    public $price = 1;
-    public $image;
-    public $allVariants = [];
-    public $summaryVariants = [];
-
+    public $selectedProduct = null;
+    public $discountPercentage = 0;
+    public $startDate = '';
+    public $endDate = '';
+    public $isFlashSale = false;
+    public $frequencyMinutes = '';
+    public $durationMinutes = '';
+    public $allProducts = [];
+    public $selectedProductData = null;
 
     protected $rules = [
-        'title' => 'required|string',
-        'selectedVariants' => 'required|array',
-        'price' => 'required|numeric|min:0',
-        'image' => 'required|string',
+        'selectedProduct' => 'required|exists:products,id',
+        'discountPercentage' => 'required|numeric|min:0|max:100',
+        'startDate' => 'required|date',
+        'endDate' => 'nullable|date|after:startDate',
+        'isFlashSale' => 'boolean',
+        'frequencyMinutes' => 'required_if:isFlashSale,true|nullable|numeric|min:1',
+        'durationMinutes' => 'required_if:isFlashSale,true|nullable|numeric|min:1',
     ];
 
     protected $messages = [
-        'title.required' => 'The bundle title is required.',
-        'selectedVariants.required' => 'Please select at least one product variant.',
-        'price.required' => 'The bundle price is required.',
-        'price.numeric' => 'The bundle price must be a number.',
-        'image.required' => 'Please select a bundle image.',
+        'selectedProduct.required' => 'Please select a product.',
+        'selectedProduct.exists' => 'The selected product is invalid.',
+        'discountPercentage.required' => 'Discount percentage is required.',
+        'discountPercentage.numeric' => 'Discount percentage must be a number.',
+        'discountPercentage.min' => 'Discount percentage must be at least 0.',
+        'discountPercentage.max' => 'Discount percentage cannot exceed 100.',
+        'startDate.required' => 'Start date is required.',
+        'startDate.date' => 'Start date must be a valid date.',
+        'endDate.date' => 'End date must be a valid date.',
+        'endDate.after' => 'End date must be after start date.',
+        'frequencyMinutes.required_if' => 'Frequency is required for flash sales.',
+        'durationMinutes.required_if' => 'Duration is required for flash sales.',
     ];
 
     protected $listeners = [
-        'select2MultipleValuesUpdated' => 'handleSelect2Update',
-        'fileManagerValueUpdated' => 'handleFileManagerUpdate'
+        'select2ValueUpdated' => 'handleSelect2Update',
     ];
 
     public function mount($store)
     {
         $this->store = $store;
-        $this->allVariants = ProductVariant::with('product')->get()->map(function($variant) {
-            return [
-                'id' => $variant->id,
-                'name' => $variant->name . ' (' . ($variant->product->name ?? '-') . ')',
-                'price' => $variant->price,
-                'stock' => $variant->stock,
-            ];
-        })->toArray();
-    }
-
-    public function handleSelect2Update($id, $values)
-    {
-        if ($id === 'bundle-variants-select') {
-            $this->selectedVariants = $values ?? [];
-            $this->updatedSelectedVariants();
-        }
-    }
-
-    public function handleFileManagerUpdate($value,$wireModel,$inputId)
-    {
-        if ($inputId === 'bundle-image-input') {
-            $this->image = $value;
-        }
-    }
-
-    public function updatedSelectedVariants()
-    {
-        $this->summaryVariants = collect($this->allVariants)
-            ->whereIn('id', $this->selectedVariants)
-            ->values()
+        $this->allProducts = Product::where('store_id', $this->store->id)
+            ->where('published', 1)
+            ->get()
+            ->map(function($product) {
+                return [
+                    'value' => $product->id,
+                    'label' => $product->name,
+                    'extra' => $product->image,
+                ];
+            })
             ->toArray();
     }
 
-    public function updatedPrice()
+    public function handleSelect2Update($id, $value,$extra)
     {
-        if (empty($this->price) || $this->price === '') {
-            $this->price = 0;
+        if ($id === 'product-select') {
+            $this->selectedProduct = $value;
+            $this->updatedSelectedProduct();
+        }
+    }
+
+    public function updatedSelectedProduct()
+    {
+        if ($this->selectedProduct) {
+            $product = Product::with('variants')->find($this->selectedProduct);
+            if ($product) {
+                $this->selectedProductData = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'image' => $product->image,
+                    'variants' => $product->variants->map(function($variant) {
+                        return [
+                            'id' => $variant->id,
+                            'name' => $variant->name,
+                            'price' => $variant->price,
+                            'stock' => $variant->stock,
+                        ];
+                    })->toArray()
+                ];
+            }
+        } else {
+            $this->selectedProductData = null;
+        }
+    }
+
+    public function updatedIsFlashSale()
+    {
+        if (!$this->isFlashSale) {
+            $this->frequencyMinutes = '';
+            $this->durationMinutes = '';
         }
     }
 
     public function save($asDraft = false)
     {
         $this->validate();
+        
         DB::beginTransaction();
         try {
-            $bundle = ProductBundle::create([
-                'name' => $this->title,
-                'price' => $this->price,
-                'currency_code' => $this->price,
-                'photo' => $this->image,
+            $sale = ProductSale::create([
+                'product_id' => $this->selectedProduct,
+                'discount_percentage' => $this->discountPercentage,
+                'start_at' => $this->startDate,
+                'end_at' => $this->endDate ?: null,
+                'frequency_minutes' => $this->isFlashSale ? $this->frequencyMinutes : null,
+                'duration_minutes' => $this->isFlashSale ? $this->durationMinutes : null,
                 'published' => $asDraft ? 0 : 1,
             ]);
-            foreach ($this->selectedVariants as $variantId) {
-                ProductBundleVariant::create([
-                    'product_bundle_id' => $bundle->id,
-                    'product_variant_id' => $variantId,
-                ]);
-            }
+            
             DB::commit();
-            session()->flash('success', 'Bundle created successfully!');
-            return redirect()->route('store.marketing.bundles', $this->store);
+            session()->flash('success', 'Sale created successfully!');
+            return redirect()->route('store.marketing.sales', $this->store);
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Failed to create bundle', [
+            Log::error('Failed to create sale', [
                 'error' => $e->getMessage(),
             ]);
-            session()->flash('error', 'Failed to create bundle: ' . $e->getMessage());
+            session()->flash('error', 'Failed to create sale: ' . $e->getMessage());
         }
     }
 
     public function render()
     {
-        return view('livewire.store.marketing.sales.sales-create')
+        return view('livewire.store.marketing.sales.sales-create', [
+            'allProducts' => $this->allProducts,
+            'selectedProductData' => $this->selectedProductData,
+            'currencySymbol' => $this->store->country->currency_symbol ?? '$',
+        ])
         ->extends('layouts.frontend.store.app')
         ->section('content');
     }
 }
+

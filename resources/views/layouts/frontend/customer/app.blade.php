@@ -39,7 +39,7 @@
 	@livewire('layouts.customer.modals.workplaces')
 	<!-- Modal -->
 	
-	{{ $slot }}
+	@yield('content', $slot ?? '')
 
 	@include('layouts.frontend.customer.footer')
 

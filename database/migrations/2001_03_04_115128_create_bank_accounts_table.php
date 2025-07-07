@@ -14,13 +14,9 @@ return new class extends Migration
         Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
-            $table->string('bank_name');
-            $table->string('bank_code')->nullable();
-            $table->string('account_name');
-            $table->string('account_number');
-            $table->string('routing_number')->nullable();
-            $table->string('swift_code')->nullable();
-            $table->string('branch_code')->nullable();
+            $table->string('gateway')->nullable();
+            $table->string('gateway_reference')->nullable();
+            $table->json('banking_fields')->nullable();
             $table->boolean('account_status')->default(false); //active, inactive
             $table->boolean('primary_account')->default(false);
             $table->timestamp('verified_at')->nullable();

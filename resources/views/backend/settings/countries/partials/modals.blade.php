@@ -292,334 +292,352 @@
 <!-- Add Ad Plan Modal -->
 <div class="modal fade" id="addAdPlanModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Ad Format</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addAdPlanForm">
-                    <!-- Basic Info -->
-                    <div class="row mb-4">
-                        <div class="col-sm-6">
-                        <label class="form-label">Format Name</label>
-                        <input type="text" class="form-control" name="name" required>
-                    </div>
-                        <div class="col-sm-6">
-                            <label class="form-label">Type</label>
-                            <select class="form-select" name="type" required>
-                                <option value="banner">Banner</option>
-                                <option value="popup">Popup</option>
-                                <option value="sidebar">Sidebar</option>
-                                <option value="product">Product</option>
-                                <option value="coupon">Coupon</option>
-                                <option value="featured">Featured</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Placement & Format -->
-                    <div class="row mb-4">
-                        <div class="col-sm-6">
-                            <label class="form-label">Placement</label>
-                            <select class="form-select" name="placement" required>
-                                <option value="homepage_banner">Homepage Banner</option>
-                                <option value="product_sidebar">Product Sidebar</option>
-                                <option value="category_top">Category Top</option>
-                                <option value="search_results">Search Results</option>
-                                <option value="checkout_page">Checkout Page</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label">Format</label>
-                            <select class="form-select" name="format" required>
-                                <option value="image">Image</option>
-                                <option value="video">Video</option>
-                                <option value="carousel">Carousel</option>
-                                <option value="text">Text Only</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Dimensions -->
-                    <div class="row mb-4">
-                        <div class="col-sm-6">
-                            <label class="form-label">Width (px)</label>
-                            <input type="number" class="form-control" name="width" min="1">
-                            <small class="form-text text-muted">Leave empty for responsive formats</small>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label">Height (px)</label>
-                            <input type="number" class="form-control" name="height" min="1">
-                            <small class="form-text text-muted">Leave empty for responsive formats</small>
-                        </div>
-                    </div>
-
-                    <!-- Description & Instructions -->
-                    <div class="mb-4">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" name="description" rows="2" required></textarea>
-                        <small class="form-text text-muted">Explain what this ad format is for</small>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Instructions</label>
-                        <textarea class="form-control" name="instruction" rows="2"></textarea>
-                        <small class="form-text text-muted">Guidelines for advertisers creating ads in this format</small>
-                    </div>
-
-                    <!-- Device Restrictions -->
-                    <div class="mb-4">
-                        <label class="form-label">Device Availability</label>
-                        <div class="d-flex">
-                            <div class="form-check me-4">
-                                <input class="form-check-input" type="checkbox" name="device_desktop" id="deviceDesktop" value="1" checked>
-                                <label class="form-check-label" for="deviceDesktop">Desktop</label>
+        <form id="addAdPlanForm" action="{{ route('admin.settings.countries.ad_plans.store') }}" method="POST">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Ad Format</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    
+                        @csrf
+                        <input type="hidden" name="country_id" value="{{ $country->id }}">
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <label class="form-label">Plan Name</label>
+                                <input type="text" class="form-control" name="name" required>
                             </div>
-                            <div class="form-check me-4">
-                                <input class="form-check-input" type="checkbox" name="device_tablet" id="deviceTablet" value="1" checked>
-                                <label class="form-check-label" for="deviceTablet">Tablet</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="device_mobile" id="deviceMobile" value="1" checked>
-                                <label class="form-check-label" for="deviceMobile">Mobile</label>
+                            <div class="col-sm-6">
+                                <label class="form-label">Type</label>
+                                <select class="form-select" name="type" required>
+                                    <option value="banner">Banner</option>
+                                    <option value="popup">Popup</option>
+                                    <option value="sidebar">Sidebar</option>
+                                    <option value="product">Product</option>
+                                    <option value="coupon">Coupon</option>
+                                    <option value="featured">Featured</option>
+                                </select>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Pricing -->
-                    <div class="mb-4">
-                        <h5>Pricing</h5>
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                <label class="form-label">CPM Price ({{ $country->currency_symbol }})</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="price_cpm" required min="0" step="0.01" placeholder="0.00">
-                                    <span class="input-group-text">per 1000</span>
-                                </div>
-                                <small class="form-text text-muted">Cost per 1000 impressions</small>
-                                </div>
-                                <div class="col-sm-4">
-                                <label class="form-label">CPC Price ({{ $country->currency_symbol }})</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="price_cpc" required min="0" step="0.01" placeholder="0.00">
-                                    <span class="input-group-text">per click</span>
-                                </div>
-                                <small class="form-text text-muted">Cost per click</small>
-                                </div>
-                                <div class="col-sm-4">
-                                <label class="form-label">Fixed Price ({{ $country->currency_symbol }})</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="price_fixed" required min="0" step="0.01" placeholder="0.00">
-                                    <span class="input-group-text">per day</span>
-                                </div>
-                                <small class="form-text text-muted">Fixed daily rate</small>
+                        <!-- Placement & Format -->
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <label class="form-label">Placement</label>
+                                <select class="form-select" name="placement" required>
+                                    <option value="homepage_banner">Homepage Banner</option>
+                                    <option value="product_sidebar">Product Sidebar</option>
+                                    <option value="category_top">Category Top</option>
+                                    <option value="search_results">Search Results</option>
+                                    <option value="checkout_page">Checkout Page</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label">Format</label>
+                                <select class="form-select" name="format" required>
+                                    <option value="image">Image</option>
+                                    <option value="video">Video</option>
+                                    <option value="carousel">Carousel</option>
+                                    <option value="text">Text Only</option>
+                                </select>
                             </div>
                         </div>
-                        <div id="durationOptions" class="row mb-3">
-                            <div class="col-sm-12">
-                                <label class="form-label">Available Durations</label>
-                                <div class="d-flex flex-wrap">
-                                    <div class="form-check me-4 mb-2">
-                                        <input class="form-check-input" type="checkbox" name="duration_daily" id="durationDaily" checked>
-                                        <label class="form-check-label" for="durationDaily">Daily</label>
+
+                        <!-- Dimensions -->
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <label class="form-label">Width (px)</label>
+                                <input type="number" class="form-control" name="width" min="1">
+                                <small class="form-text text-muted">Leave empty for responsive formats</small>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label">Height (px)</label>
+                                <input type="number" class="form-control" name="height" min="1">
+                                <small class="form-text text-muted">Leave empty for responsive formats</small>
+                            </div>
+                        </div>
+
+                        <!-- Description & Instructions -->
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="description" rows="2" required></textarea>
+                            <small class="form-text text-muted">Explain what this ad format is for</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Instructions</label>
+                            <textarea class="form-control" name="instruction" rows="2"></textarea>
+                            <small class="form-text text-muted">Guidelines for advertisers creating ads in this format</small>
+                        </div>
+
+                        <!-- Device Restrictions -->
+                        <div class="mb-4">
+                            <label class="form-label">Device Availability</label>
+                            <div class="d-flex">
+                                <div class="form-check me-4">
+                                    <input type="hidden" name="device_desktop" value="0" checked>
+                                    <input class="form-check-input" type="checkbox" name="device_desktop" id="deviceDesktop" value="1" checked>
+                                    <label class="form-check-label" for="deviceDesktop">Desktop</label>
+                                </div>
+                                <div class="form-check me-4">
+                                    <input type="hidden" name="device_tablet" value="0" checked>
+                                    <input class="form-check-input" type="checkbox" name="device_tablet" id="deviceTablet" value="1" checked>
+                                    <label class="form-check-label" for="deviceTablet">Tablet</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="hidden" name="device_mobile" value="0" checked>
+                                    <input class="form-check-input" type="checkbox" name="device_mobile" id="deviceMobile" value="1" checked>
+                                    <label class="form-check-label" for="deviceMobile">Mobile</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing -->
+                        <div class="mb-4">
+                            <h5>Pricing</h5>
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                    <label class="form-label">CPM Price ({{ $country->currency_symbol }})</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="price_cpm" required min="0" step="0.01" placeholder="0.00">
+                                        <span class="input-group-text">per 1000</span>
                                     </div>
-                                    <div class="form-check me-4 mb-2">
-                                        <input class="form-check-input" type="checkbox" name="duration_weekly" id="durationWeekly" checked>
-                                        <label class="form-check-label" for="durationWeekly">Weekly</label>
+                                    <small class="form-text text-muted">Cost per 1000 impressions</small>
                                     </div>
-                                    <div class="form-check me-4 mb-2">
-                                        <input class="form-check-input" type="checkbox" name="duration_monthly" id="durationMonthly" checked>
-                                        <label class="form-check-label" for="durationMonthly">Monthly</label>
+                                    <div class="col-sm-4">
+                                    <label class="form-label">CPC Price ({{ $country->currency_symbol }})</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="price_cpc" required min="0" step="0.01" placeholder="0.00">
+                                        <span class="input-group-text">per click</span>
+                                    </div>
+                                    <small class="form-text text-muted">Cost per click</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                    <label class="form-label">Fixed Price ({{ $country->currency_symbol }})</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="price_fixed" required min="0" step="0.01" placeholder="0.00">
+                                        <span class="input-group-text">per day</span>
+                                    </div>
+                                    <small class="form-text text-muted">Fixed daily rate</small>
+                                </div>
+                            </div>
+                            <div id="durationOptions" class="row mb-3">
+                                <div class="col-sm-12">
+                                    <label class="form-label">Available Durations</label>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="form-check me-4 mb-2">
+                                            <input type="hidden" name="duration_daily" value="0" checked>
+                                            <input class="form-check-input" type="checkbox" name="duration_daily" id="durationDaily" value="1" checked>
+                                            <label class="form-check-label" for="durationDaily">Daily</label>
+                                        </div>
+                                        <div class="form-check me-4 mb-2">
+                                            <input type="hidden" name="duration_weekly" value="0" checked>
+                                            <input class="form-check-input" type="checkbox" name="duration_weekly" id="durationWeekly" value="1" checked>
+                                            <label class="form-check-label" for="durationWeekly">Weekly</label>
+                                        </div>
+                                        <div class="form-check me-4 mb-2">
+                                            <input type="hidden" name="duration_monthly" value="0" checked>
+                                            <input class="form-check-input" type="checkbox" name="duration_monthly" id="durationMonthly" value="1" checked>
+                                            <label class="form-check-label" for="durationMonthly">Monthly</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Status -->
-                    <div class="mb-4">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="is_active" id="isActive" checked>
-                            <label class="form-check-label" for="isActive">Active</label>
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="hidden" name="is_active" value="0" checked>
+                                <input class="form-check-input" type="checkbox" name="is_active" id="isActive" value="1" checked>
+                                <label class="form-check-label" for="isActive">Active</label>
+                            </div>
+                            <small class="form-text text-muted">Deactivating will hide this ad format from advertisers</small>
                         </div>
-                        <small class="form-text text-muted">Deactivating will hide this ad format from advertisers</small>
-                    </div>
-                </form>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Format</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveAdPlan('add')">Add Format</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
 <!-- Edit Ad Plan Modal -->
 <div class="modal fade" id="editAdPlanModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Ad Format</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editAdPlanForm">
-                    <input type="hidden" name="plan_id" id="edit_ad_plan_id">
+        <form id="editAdPlanForm" action="{{ route('admin.settings.countries.ad_plans.update') }}" method="POST">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Ad Plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                        <input type="hidden" name="plan_id" id="edit_plan_id">
+                        @csrf
+                        <input type="hidden" name="country_id" id="edit_country_id" value="{{ $country->id }}">
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <label class="form-label">Plan Name</label>
+                                <input type="text" class="form-control" name="name" id="edit_adplan_name" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label">Type</label>
+                                <select class="form-select" name="type" id="edit_adplan_type" required>
+                                    <option value="banner">Banner</option>
+                                    <option value="popup">Popup</option>
+                                    <option value="sidebar">Sidebar</option>
+                                    <option value="product">Product</option>
+                                    <option value="coupon">Coupon</option>
+                                    <option value="featured">Featured</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Placement & Format -->
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <label class="form-label">Placement</label>
+                                <select class="form-select" name="placement" id="edit_adplan_placement" required>
+                                    <option value="homepage_banner">Homepage Banner</option>
+                                    <option value="product_sidebar">Product Sidebar</option>
+                                    <option value="category_top">Category Top</option>
+                                    <option value="search_results">Search Results</option>
+                                    <option value="checkout_page">Checkout Page</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label">Format</label>
+                                <select class="form-select" name="format" id="edit_adplan_format" required>
+                                    <option value="image">Image</option>
+                                    <option value="video">Video</option>
+                                    <option value="carousel">Carousel</option>
+                                    <option value="text">Text Only</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Dimensions -->
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <label class="form-label">Width (px)</label>
+                                <input type="number" class="form-control" name="width" id="edit_adplan_width" min="1">
+                                <small class="form-text text-muted">Leave empty for responsive formats</small>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label">Height (px)</label>
+                                <input type="number" class="form-control" name="height" id="edit_adlan_height" min="1">
+                                <small class="form-text text-muted">Leave empty for responsive formats</small>
+                            </div>
+                        </div>
+
+                        <!-- Description & Instructions -->
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="edit_adplan_description" rows="2" required></textarea>
+                            <small class="form-text text-muted">Explain what this ad format is for</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Instructions</label>
+                            <textarea class="form-control" name="instruction" id="edit_adplan_instruction" rows="2"></textarea>
+                            <small class="form-text text-muted">Guidelines for advertisers creating ads in this format</small>
+                        </div>
+
+                        <!-- Device Restrictions -->
+                        <div class="mb-4">
+                            <label class="form-label">Device Availability</label>
+                            <div class="d-flex">
+                                <div class="form-check me-4">
+                                    <input type="hidden" name="device_desktop" id="edit_adplan_device_desktop_hidden" value="0" checked>
+                                    <input class="form-check-input" type="checkbox" name="device_desktop" id="edit_adplan_device_desktop" value="1" checked>
+                                    <label class="form-check-label" for="edit_device_desktop">Desktop</label>
+                                </div>
+                                <div class="form-check me-4">
+                                    <input type="hidden" name="device_tablet" id="edit_adplan_device_tablet_hidden" value="0" checked>
+                                    <input class="form-check-input" type="checkbox" name="device_tablet" id="edit_adplan_device_tablet" value="1" checked>
+                                    <label class="form-check-label" for="edit_device_tablet">Tablet</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="hidden" name="device_mobile" id="edit_adplan_device_mobile_hidden" value="0" checked>
+                                    <input class="form-check-input" type="checkbox" name="device_mobile" id="edit_adplan_device_mobile" value="1" checked>
+                                    <label class="form-check-label" for="edit_device_mobile">Mobile</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing -->
+                        <div class="mb-4">
+                            <h5>Pricing</h5>
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                    <label class="form-label">CPM Price ({{ $country->currency_symbol }})</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="price_cpm" id="edit_adplan_price_cpm" required min="0" step="0.01" placeholder="0.00">
+                                        <span class="input-group-text">per 1000</span>
+                                    </div>
+                                    <small class="form-text text-muted">Cost per 1000 impressions</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                    <label class="form-label">CPC Price ({{ $country->currency_symbol }})</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="price_cpc" id="edit_adplan_price_cpc" required min="0" step="0.01" placeholder="0.00">
+                                        <span class="input-group-text">per click</span>
+                                    </div>
+                                    <small class="form-text text-muted">Cost per click</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                    <label class="form-label">Fixed Price ({{ $country->currency_symbol }})</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="price_fixed" id="edit_adplan_price_fixed" required min="0" step="0.01" placeholder="0.00">
+                                        <span class="input-group-text">per day</span>
+                                    </div>
+                                    <small class="form-text text-muted">Fixed daily rate</small>
+                                </div>
+                            </div>
+                            <div id="durationOptions" class="row mb-3">
+                                <div class="col-sm-12">
+                                    <label class="form-label">Available Durations</label>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="form-check me-4 mb-2">
+                                            <input type="hidden" name="duration_daily" id="edit_adplan_duration_daily_hidden" value="0" checked>
+                                            <input class="form-check-input" type="checkbox" name="duration_daily" id="edit_adplan_duration_daily" value="1" checked>
+                                            <label class="form-check-label" for="edit_duration_daily">Daily</label>
+                                        </div>
+                                        <div class="form-check me-4 mb-2">
+                                            <input type="hidden" name="duration_weekly" id="edit_adplan_duration_weekly_hidden" value="0" checked>
+                                            <input class="form-check-input" type="checkbox" name="duration_weekly" id="edit_adplan_duration_weekly" value="1" checked>
+                                            <label class="form-check-label" for="edit_duration_weekly">Weekly</label>
+                                        </div>
+                                        <div class="form-check me-4 mb-2">
+                                            <input type="hidden" name="duration_monthly" id="edit_adplan_duration_monthly_hidden" value="0" checked>
+                                            <input class="form-check-input" type="checkbox" name="duration_monthly" id="edit_adplan_duration_monthly" value="1" checked>
+                                            <label class="form-check-label" for="edit_duration_monthly">Monthly</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="hidden" name="is_active" id="edit_adplan_is_active_hidden" value="0" checked>
+                                <input class="form-check-input" type="checkbox" name="is_active" id="edit_adplan_is_active" value="1" checked>
+                                <label class="form-check-label" for="edit_is_active">Active</label>
+                            </div>
+                            <small class="form-text text-muted">Deactivating will hide this ad format from advertisers</small>
+                        </div>
                     
-                    <!-- Basic Info -->
-                    <div class="row mb-4">
-                        <div class="col-sm-6">
-                            <label class="form-label">Format Name</label>
-                            <input type="text" class="form-control" name="name" id="edit_ad_name" required>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label">Type</label>
-                            <select class="form-select" name="type" id="edit_ad_type" required>
-                                <option value="banner">Banner</option>
-                                <option value="popup">Popup</option>
-                                <option value="sidebar">Sidebar</option>
-                                <option value="product">Product</option>
-                                <option value="coupon">Coupon</option>
-                                <option value="featured">Featured</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Placement & Format -->
-                    <div class="row mb-4">
-                        <div class="col-sm-6">
-                            <label class="form-label">Placement</label>
-                            <select class="form-select" name="placement" id="edit_ad_placement" required>
-                                <option value="homepage_banner">Homepage Banner</option>
-                                <option value="product_sidebar">Product Sidebar</option>
-                                <option value="category_top">Category Top</option>
-                                <option value="search_results">Search Results</option>
-                                <option value="checkout_page">Checkout Page</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label">Format</label>
-                            <select class="form-select" name="format" id="edit_ad_format" required>
-                                <option value="image">Image</option>
-                                <option value="video">Video</option>
-                                <option value="carousel">Carousel</option>
-                                <option value="text">Text Only</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Dimensions -->
-                    <div class="row mb-4">
-                        <div class="col-sm-6">
-                            <label class="form-label">Width (px)</label>
-                            <input type="number" class="form-control" name="width" id="edit_ad_width" min="1">
-                            <small class="form-text text-muted">Leave empty for responsive formats</small>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label">Height (px)</label>
-                            <input type="number" class="form-control" name="height" id="edit_ad_height" min="1">
-                            <small class="form-text text-muted">Leave empty for responsive formats</small>
-                        </div>
-                    </div>
-
-                    <!-- Description & Instructions -->
-                    <div class="mb-4">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" name="description" id="edit_ad_description" rows="2" required></textarea>
-                        <small class="form-text text-muted">Explain what this ad format is for</small>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Instructions</label>
-                        <textarea class="form-control" name="instruction" id="edit_ad_instruction" rows="2"></textarea>
-                        <small class="form-text text-muted">Guidelines for advertisers creating ads in this format</small>
-                    </div>
-
-                    <!-- Device Restrictions -->
-                    <div class="mb-4">
-                        <label class="form-label">Device Availability</label>
-                        <div class="d-flex">
-                            <div class="form-check me-4">
-                                <input class="form-check-input" type="checkbox" name="device_desktop" id="edit_device_desktop">
-                                <label class="form-check-label" for="edit_device_desktop">Desktop</label>
-                            </div>
-                            <div class="form-check me-4">
-                                <input class="form-check-input" type="checkbox" name="device_tablet" id="edit_device_tablet">
-                                <label class="form-check-label" for="edit_device_tablet">Tablet</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="device_mobile" id="edit_device_mobile">
-                                <label class="form-check-label" for="edit_device_mobile">Mobile</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pricing for Edit Modal -->
-                    <div class="mb-4">
-                        <h5>Pricing</h5>
-                            <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <label class="form-label">CPM Price ({{ $country->currency_symbol }})</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="price_cpm" id="edit_ad_price_cpm" required min="0" step="0.01" placeholder="0.00">
-                                    <span class="input-group-text">per 1000</span>
-                                </div>
-                                <small class="form-text text-muted">Cost per 1000 impressions</small>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label">CPC Price ({{ $country->currency_symbol }})</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="price_cpc" id="edit_ad_price_cpc" required min="0" step="0.01" placeholder="0.00">
-                                    <span class="input-group-text">per click</span>
-                                </div>
-                                <small class="form-text text-muted">Cost per click</small>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label">Fixed Price ({{ $country->currency_symbol }})</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="price_fixed" id="edit_ad_price_fixed" required min="0" step="0.01" placeholder="0.00">
-                                    <span class="input-group-text">per day</span>
-                                </div>
-                                <small class="form-text text-muted">Fixed daily rate</small>
-                            </div>
-                        </div>
-                        <div id="editDurationOptions" class="row mb-3">
-                            <div class="col-sm-12">
-                                <label class="form-label">Available Durations</label>
-                                <div class="d-flex flex-wrap">
-                                    <div class="form-check me-4 mb-2">
-                                        <input class="form-check-input" type="checkbox" name="duration_daily" id="edit_duration_daily">
-                                        <label class="form-check-label" for="edit_duration_daily">Daily</label>
-                                    </div>
-                                    <div class="form-check me-4 mb-2">
-                                        <input class="form-check-input" type="checkbox" name="duration_weekly" id="edit_duration_weekly">
-                                        <label class="form-check-label" for="edit_duration_weekly">Weekly</label>
-                                    </div>
-                                    <div class="form-check me-4 mb-2">
-                                        <input class="form-check-input" type="checkbox" name="duration_monthly" id="edit_duration_monthly">
-                                        <label class="form-check-label" for="edit_duration_monthly">Monthly</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Status -->
-                    <div class="mb-4">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="is_active" id="edit_is_active">
-                            <label class="form-check-label" for="edit_is_active">Active</label>
-                        </div>
-                        <small class="form-text text-muted">Deactivating will hide this ad format from advertisers</small>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveAdPlan('edit')">Save Changes</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -709,7 +727,7 @@
             </div>
             <div class="modal-body">
                 <form id="editNewsletterPlanForm">
-                    <input type="hidden" name="plan_id" id="edit_newsletter_plan_id">
+                    <input type="hidden" name="plan_id" id="edit_adplan_newsletter_plan_id">
                     
                     <!-- Basic Info -->
                     <div class="mb-4">
@@ -794,58 +812,58 @@
     
     
     // Function to populate the edit form with existing ad plan data
-    function editAdPlan(planId) {
-        // In a real implementation, you'd fetch the plan data from the server
-        // For now, we'll just simulate this with placeholder data
+    function editAdPlan(button) {
+        // Get all data attributes from the clicked button
+        const planData = {
+            id: button.getAttribute('data-plan-id'),
+            name: button.getAttribute('data-plan-name'),
+            type: button.getAttribute('data-plan-type'),
+            placement: button.getAttribute('data-plan-placement'),
+            format: button.getAttribute('data-plan-format'),
+            width: button.getAttribute('data-plan-width'),
+            height: button.getAttribute('data-plan-height'),
+            description: button.getAttribute('data-plan-description'),
+            instruction: button.getAttribute('data-plan-instruction'),
+            device_desktop: button.getAttribute('data-plan-device-desktop'),
+            device_tablet: button.getAttribute('data-plan-device-tablet'),
+            device_mobile: button.getAttribute('data-plan-device-mobile'),
+            duration_daily: button.getAttribute('data-plan-duration-daily'),
+            duration_weekly: button.getAttribute('data-plan-duration-weekly'),
+            duration_monthly: button.getAttribute('data-plan-duration-monthly'),
+            price_cpm: button.getAttribute('data-plan-price-cpm'),
+            price_cpc: button.getAttribute('data-plan-price-cpc'),
+            price_fixed: button.getAttribute('data-plan-price-fixed'),
+            is_active: button.getAttribute('data-plan-is-active')
+        };
         
-        // Example of populating the form with data
-        document.getElementById('edit_ad_plan_id').value = planId;
+        // Populate form fields with the data
+        document.getElementById('edit_plan_id').value = planData.id;
+        document.getElementById('edit_adplan_name').value = planData.name;
+        document.getElementById('edit_adplan_type').value = planData.type;
+        document.getElementById('edit_adplan_placement').value = planData.placement;
+        document.getElementById('edit_adplan_format').value = planData.format;
+        document.getElementById('edit_adplan_width').value = planData.width || '';
+        document.getElementById('edit_adlan_height').value = planData.height || '';
+        document.getElementById('edit_adplan_description').value = planData.description;
+        document.getElementById('edit_adplan_instruction').value = planData.instruction || '';
         
-        // Fetch plan data via AJAX and populate the form
-        // This is placeholder code - in a real app you'd make an AJAX request
-        setTimeout(() => {
-            // For demo, let's pretend we got this data from the server
-            const planData = {
-                name: 'Homepage Banner',
-                type: 'banner',
-                placement: 'homepage_banner',
-                format: 'image',
-                width: 728,
-                height: 90,
-                description: 'Premium banner displayed at the top of the homepage',
-                instruction: 'Upload a high-quality image with text that is clearly visible',
-                device_restrictions: {
-                    desktop: true,
-                    tablet: true,
-                    mobile: false
-                },
-                price_cpm: 50,
-                price_cpc: 0.5,
-                price_fixed: 10,
-                durations: ['daily', 'weekly', 'monthly'],
-                is_active: true
-            };
-            
-            // Populate form with data
-            document.getElementById('edit_ad_name').value = planData.name;
-            document.getElementById('edit_ad_type').value = planData.type;
-            document.getElementById('edit_ad_placement').value = planData.placement;
-            document.getElementById('edit_ad_format').value = planData.format;
-            document.getElementById('edit_ad_width').value = planData.width;
-            document.getElementById('edit_ad_height').value = planData.height;
-            document.getElementById('edit_ad_description').value = planData.description;
-            document.getElementById('edit_ad_instruction').value = planData.instruction;
-            document.getElementById('edit_device_desktop').checked = planData.device_restrictions.desktop;
-            document.getElementById('edit_device_tablet').checked = planData.device_restrictions.tablet;
-            document.getElementById('edit_device_mobile').checked = planData.device_restrictions.mobile;
-            document.getElementById('edit_ad_price_cpm').value = planData.price_cpm;
-            document.getElementById('edit_ad_price_cpc').value = planData.price_cpc;
-            document.getElementById('edit_ad_price_fixed').value = planData.price_fixed;
-            document.getElementById('edit_duration_daily').checked = planData.durations.includes('daily');
-            document.getElementById('edit_duration_weekly').checked = planData.durations.includes('weekly');
-            document.getElementById('edit_duration_monthly').checked = planData.durations.includes('monthly');
-            document.getElementById('edit_is_active').checked = planData.is_active;
-        }, 100);
+        // Set device checkboxes
+        document.getElementById('edit_adplan_device_desktop').checked = planData.device_desktop == 1;
+        document.getElementById('edit_adplan_device_tablet').checked = planData.device_tablet == 1;
+        document.getElementById('edit_adplan_device_mobile').checked = planData.device_mobile == 1;
+        
+        // Set duration checkboxes
+        document.getElementById('edit_adplan_duration_daily').checked = planData.duration_daily == 1;
+        document.getElementById('edit_adplan_duration_weekly').checked = planData.duration_weekly == 1;
+        document.getElementById('edit_adplan_duration_monthly').checked = planData.duration_monthly == 1;
+        
+        // Set pricing fields
+        document.getElementById('edit_adplan_price_cpm').value = planData.price_cpm || '';
+        document.getElementById('edit_adplan_price_cpc').value = planData.price_cpc || '';
+        document.getElementById('edit_adplan_price_fixed').value = planData.price_fixed || '';
+        
+        // Set active status
+        document.getElementById('edit_adplan_is_active').checked = planData.is_active == 1;
     }
 
     // Function to handle saving newsletter plans (add or edit)

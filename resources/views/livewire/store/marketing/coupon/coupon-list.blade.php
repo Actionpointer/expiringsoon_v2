@@ -17,7 +17,7 @@
 				</div>
 				<!-- button -->
 				<div>
-					<a href="{{ route('store.marketing.coupons.create',1) }}" class="btn btn-primary">Add Coupon</a>
+					<a href="{{ route('store.marketing.coupons.create', $store) }}" class="btn btn-primary">Add Coupon</a>
 				</div>
 			</div>
 		</div>
@@ -32,16 +32,15 @@
 						<div class="col-md-4 col-12 mb-2 mb-md-0">
 							<!-- form -->
 							<form class="d-flex" role="search">
-								<input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+								<input class="form-control" type="search" wire:model.live="search" placeholder="Search coupons..." aria-label="Search" />
 							</form>
 						</div>
 						<div class="col-lg-2 col-md-4 col-12">
 							<!-- select -->
-							<select class="form-select">
-								<option selected>Status</option>
-								<option value="Success">Success</option>
-								<option value="Pending">Pending</option>
-								<option value="Cancel">Cancel</option>
+							<select class="form-select" wire:model.live="status">
+								<option value="">All Status</option>
+								<option value="active">Active</option>
+								<option value="draft">Draft</option>
 							</select>
 						</div>
 					</div>
@@ -59,30 +58,71 @@
 											<label class="form-check-label" for="checkAll"></label>
 										</div>
 									</th>
-									<th>Coupon Code</th>
-									<th>Value</th>
-									<th>Start Date</th>
-									<th>End Date</th>
-									<th>Quantity</th>
-									<th>Status</th>
+									<th style="cursor: pointer;" wire:click="sortBy('code')">
+										Coupon Code
+										@if($sortBy === 'code')
+											<i class="bi bi-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+										@endif
+									</th>
+									<th style="cursor: pointer;" wire:click="sortBy('value')">
+										Value
+										@if($sortBy === 'value')
+											<i class="bi bi-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+										@endif
+									</th>
+									<th style="cursor: pointer;" wire:click="sortBy('start_at')">
+										Start Date
+										@if($sortBy === 'start_at')
+											<i class="bi bi-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+										@endif
+									</th>
+									<th style="cursor: pointer;" wire:click="sortBy('end_at')">
+										End Date
+										@if($sortBy === 'end_at')
+											<i class="bi bi-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+										@endif
+									</th>
+									<th style="cursor: pointer;" wire:click="sortBy('quantity')">
+										Quantity
+										@if($sortBy === 'quantity')
+											<i class="bi bi-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+										@endif
+									</th>
+									<th style="cursor: pointer;" wire:click="sortBy('published')">
+										Status
+										@if($sortBy === 'published')
+											<i class="bi bi-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+										@endif
+									</th>
 									<th></th>
 								</tr>
 							</thead>
 							<tbody>
+								@forelse($coupons as $coupon)
 								<tr>
 									<td>
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="" id="orderOne" />
-											<label class="form-check-label" for="orderOne"></label>
+											<input class="form-check-input" type="checkbox" value="" id="coupon{{ $coupon->id }}" />
+											<label class="form-check-label" for="coupon{{ $coupon->id }}"></label>
 										</div>
 									</td>
-									<td>CODE</td>
-									<td>10%</td>
-									<td>01 May 2023</td>
-									<td>01 May 2024</td>
-									<td>1000</td>
+									<td>{{ $coupon->code }}</td>
 									<td>
-										<span class="badge bg-light-primary text-dark-primary">Active</span>
+										@if($coupon->type === 'percentage')
+											{{ $coupon->value }}%
+										@else
+											{{ $store->country->currency_symbol ?? '$' }}{{ number_format($coupon->value, 2) }}
+										@endif
+									</td>
+									<td>{{ $coupon->start_at ? \Carbon\Carbon::parse($coupon->start_at)->format('d M Y') : 'Not set' }}</td>
+									<td>{{ $coupon->end_at ? \Carbon\Carbon::parse($coupon->end_at)->format('d M Y') : 'No expiry' }}</td>
+									<td>{{ $coupon->quantity ?? 'Unlimited' }}</td>
+									<td>
+										@if($coupon->published)
+											<span class="badge bg-light-primary text-dark-primary">Active</span>
+										@else
+											<span class="badge bg-light-warning text-dark-warning">Draft</span>
+										@endif
 									</td>
 									<td>
 										<div class="dropdown">
@@ -91,13 +131,13 @@
 											</a>
 											<ul class="dropdown-menu">
 												<li>
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" href="#" wire:click="delete({{ $coupon->id }})">
 														<i class="bi bi-trash me-3"></i>
 														Delete
 													</a>
 												</li>
 												<li>
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" href="{{ route('store.marketing.coupons.edit', [$store, $coupon]) }}">
 														<i class="bi bi-pencil-square me-3"></i>
 														Edit
 													</a>
@@ -106,57 +146,21 @@
 										</div>
 									</td>
 								</tr>
+								@empty
 								<tr>
-									<td>
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="" id="orderOne" />
-											<label class="form-check-label" for="orderOne"></label>
-										</div>
-									</td>
-									<td>CODE</td>
-									<td>$20</td>
-									<td>01 May 2023</td>
-									<td>01 May 2024</td>
-									<td>1000</td>
-									<td>
-										<span class="badge bg-light-warning text-dark-warning">Draft</span>
-									</td>
-									<td>
-										<div class="dropdown">
-											<a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-												<i class="feather-icon icon-more-vertical fs-5"></i>
-											</a>
-											<ul class="dropdown-menu">
-												<li>
-													<a class="dropdown-item" href="#">
-														<i class="bi bi-trash me-3"></i>
-														Delete
-													</a>
-												</li>
-												<li>
-													<a class="dropdown-item" href="#">
-														<i class="bi bi-pencil-square me-3"></i>
-														Edit
-													</a>
-												</li>
-											</ul>
-										</div>
+									<td colspan="8" class="text-center py-4">
+										<p class="text-muted mb-0">No coupons found</p>
 									</td>
 								</tr>
+								@endforelse
 							</tbody>
 						</table>
 					</div>
 				</div>
 				<div class="border-top d-md-flex justify-content-between align-items-center p-6">
-					<span>Showing 1 to 8 of 12 entries</span>
+					<span>Showing {{ $coupons->firstItem() ?? 0 }} to {{ $coupons->lastItem() ?? 0 }} of {{ $coupons->total() }} entries</span>
 					<nav class="mt-2 mt-md-0">
-						<ul class="pagination mb-0">
-							<li class="page-item disabled"><a class="page-link" href="#!">Previous</a></li>
-							<li class="page-item"><a class="page-link active" href="#!">1</a></li>
-							<li class="page-item"><a class="page-link" href="#!">2</a></li>
-							<li class="page-item"><a class="page-link" href="#!">3</a></li>
-							<li class="page-item"><a class="page-link" href="#!">Next</a></li>
-						</ul>
+						{{ $coupons->links() }}
 					</nav>
 				</div>
 			</div>

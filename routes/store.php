@@ -1,4 +1,5 @@
 <?php
+
 use App\Livewire\Store\StoreCreate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
@@ -6,11 +7,23 @@ use App\Livewire\Store\StoreDashboard;
 use App\Livewire\Store\Subscription\Plans;
 use App\Livewire\Store\Product\ProductEdit;
 use App\Livewire\Store\Product\ProductList;
+use App\Livewire\Store\Settings\Compliance;
+use App\Livewire\Store\Settings\TeamMembers;
 use App\Livewire\Store\Product\ProductCreate;
+use App\Livewire\Store\Settings\StoreDetails;
+use App\Livewire\Store\Marketing\Sales\SalesEdit;
 use App\Livewire\Store\Marketing\Sales\SalesList;
+use App\Livewire\Store\Settings\StoreBankAccount;
+use App\Livewire\Store\Settings\StoreSubscription;
+use App\Livewire\Store\Marketing\Advert\AdvertList;
 use App\Livewire\Store\Marketing\Bundle\BundleList;
+use App\Livewire\Store\Marketing\Coupon\CouponEdit;
+use App\Livewire\Store\Marketing\Coupon\CouponList;
 use App\Livewire\Store\Marketing\Sales\SalesCreate;
 use App\Livewire\Store\Marketing\Bundle\BundleCreate;
+use App\Livewire\Store\Marketing\Coupon\CouponCreate;
+use App\Livewire\Store\Settings\StoreNotificationPage;
+use App\Livewire\Store\Marketing\Giveaway\GiveawayEdit;
 use App\Livewire\Store\Marketing\Giveaway\GiveawayList;
 use App\Livewire\Store\Marketing\Giveaway\GiveawayCreate;
 
@@ -45,14 +58,17 @@ Route::group(['prefix'=>'store','as'=>'store.'],function(){
 
                 Route::get('sales', SalesList::class)->name('sales');
                 Route::get('sales/create', SalesCreate::class)->name('sales.create');
+                Route::get('sales/edit/{sale}', SalesEdit::class)->name('sales.edit');
 
                 Route::get('giveaways', GiveawayList::class)->name('giveaways');
                 Route::get('giveaways/create', GiveawayCreate::class)->name('giveaways.create');
+                Route::get('giveaways/edit/{giveaway', GiveawayEdit::class)->name('giveaways.edit');
 
-                Route::view('coupons', 'store.marketing.coupons.index')->name('coupons');
-                Route::view('coupons/create', 'store.marketing.coupons.create')->name('coupons.create');
+                Route::get('coupons', CouponList::class)->name('coupons');
+                Route::get('coupons/create', CouponCreate::class)->name('coupons.create');
+                Route::get('coupons/edit/{coupon}', CouponEdit::class)->name('coupons.edit');
 
-                Route::view('adverts', 'store.marketing.adverts.index')->name('adverts');
+                Route::get('adverts', AdvertList::class)->name('adverts');
                 Route::view('adverts/plans', 'store.marketing.adverts.plans')->name('adverts.plans');
                 Route::view('adverts/{adset}', 'store.marketing.adverts.show')->name('adverts.view');
                 Route::view('adverts/create/{adset}', 'store.marketing.adverts.create')->name('adverts.create');
@@ -92,12 +108,13 @@ Route::group(['prefix'=>'store','as'=>'store.'],function(){
             Route::view('analytics', 'store.analytics')->name('analytics');
             Route::view('notifications', 'store.notifications')->name('notifications');
 
-            Route::view('settings', 'store.settings.edit')->name('settings');
-            Route::view('settings/subscription', 'store.settings.subscription')->name('settings.subscription');
-            Route::view('settings/notifications', 'store.settings.notifications')->name('settings.notifications');
-            Route::view('settings/banking', 'store.settings.banking')->name('settings.banking');
-            Route::view('settings/compliance', 'store.settings.compliance')->name('settings.compliance');
-            Route::view('settings/team', 'store.settings.team')->name('settings.team');
+            Route::get('settings', StoreDetails::class)->name('settings');
+            Route::get('settings/notifications', StoreNotificationPage::class)->name('settings.notifications');
+            Route::get('settings/subscription', StoreSubscription::class)->name('settings.subscription');
+            
+            Route::get('settings/banking', StoreBankAccount::class)->name('settings.banking');
+            Route::get('settings/compliance', Compliance::class)->name('settings.compliance');
+            Route::get('settings/team', TeamMembers::class)->name('settings.team');
 
         });
     });

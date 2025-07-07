@@ -18,6 +18,8 @@ return new class extends Migration
             $table->boolean('is_primary')->default(false);
             $table->boolean('status')->default(false);
             $table->enum('mode', ['live', 'test'])->default('test');
+            $table->boolean('show_bank_fields')->default(false);
+            $table->json('bank_fields')->nullable(); // Array of selected bank field keys
             $table->timestamps();
         });
     }

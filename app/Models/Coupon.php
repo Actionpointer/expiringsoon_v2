@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Store;
 use App\Models\Country;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,7 +13,7 @@ class Coupon extends Model
 {
     use HasFactory,SoftDeletes;
     
-    protected $fillable = ['name','code', 'start_at', 'end_at',  'quantity', 'available', 'is_percentage', 'value',  'limit_per_user', 'role', 'status', 'maximum_spend', 'minimum_spend','country_id'];
+    protected $fillable = ['store_id','name','code', 'start_at', 'end_at',  'quantity', 'available', 'is_percentage', 'value',  'limit_per_user', 'role', 'published', 'maximum_spend', 'minimum_spend','country_id'];
     protected $casts = ['start_at'=> 'datetime','end_at'=> 'datetime'];
 
     protected static function boot()
@@ -25,17 +26,8 @@ class Coupon extends Model
         });
     }
 
-    public function scopeWithin($query,$value = null){
-        if($value){
-            return $query->where('country_id',$value);
-        }
-        elseif(auth()->check()){
-            if(auth()->user()->role->name == 'superadmin')
-            return $query;
-            else return $query->where('country_id',auth()->user()->country_id);
-        }else{
-            return $query->where('country_id',session('locale')['country_id']);
-        }  
+    public function store(){
+        return $this->belongsTo(Store::class);
     }
 
     public function country(){

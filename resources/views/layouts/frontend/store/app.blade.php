@@ -36,7 +36,7 @@
         <nav class="navbar-vertical-nav d-none d-xl-block">
             <div class="navbar-vertical">
                 <div class="px-4 py-5">
-                    <a @if(!isset($store)) href="{{ route('welcome') }}" @else href="{{ route('store.dashboard', $store) }}" @endif class="navbar-brand">
+                    <a @if(!request()->store) href="{{ route('welcome') }}" @else href="{{ route('store.dashboard', request()->store) }}" @endif class="navbar-brand">
                         <img src="{{ asset('frontend/images/logo/freshcart-logo.svg') }}" alt="" />
                     </a>
                 </div>

@@ -6,6 +6,7 @@ use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\WelcomeNotification;
 
 trait AuthTrait
 {
@@ -98,6 +99,7 @@ trait AuthTrait
                 'country_id' => $location ? $location->country_id : null,
                 'status' => true
             ]);
+            $user->notify(new WelcomeNotification);
 
             // Optionally trigger registered event
             // event(new \Illuminate\Auth\Events\Registered($user));

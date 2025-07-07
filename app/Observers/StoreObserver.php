@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Store;
+use App\Models\Wallet;
 use App\Models\Rejection;
 use App\Events\DeleteStore;
 use App\Http\Traits\OptimizationTrait;
@@ -22,7 +23,7 @@ class StoreObserver
     {
         if($store->published){
             Store::where('id',$store->id)->update([
-                'approved'=> config('settings.auto_approve_store'),
+                'approved_at'=> config('settings.auto_approve_store') ? now():null,
             ]);
             $this->createWallet($store);
 
@@ -65,9 +66,11 @@ class StoreObserver
     }
 
     public function createWallet(Store $store){
-        $store->wallet()->create([
+        Wallet::create([
+            'owner_id'=> $store->id,
+            'owner_type'=> get_class($store),
             'balance' => 0,
-            'currency_code' => $store->country->currency_code,
+            'currency_code' => $store->country->currency,
             'status' => 'active',
         ]);
     }

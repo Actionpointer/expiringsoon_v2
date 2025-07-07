@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('store_id');
             $table->string('name');
             $table->string('code');
             $table->integer('quantity')->default(1);

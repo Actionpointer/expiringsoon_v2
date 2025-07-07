@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Place;
+use App\Models\Store;
 use App\Models\Profile;
 use App\Models\Rejection;
-use App\Models\Place;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,11 +14,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Verification extends Model
 {
     use HasFactory;
-    protected $fillable = ['profile_id','file','type','approved_at','approved_by'];
+    protected $fillable = [
+        'user_id',
+        'store_id',
+        'name',
+        'document',
+        'issue_date',
+        'expiry_date',
+        'approved_at',
+        'approved_by',
+        'status',
+        'comments',
+    ];
     protected $casts = ['approved_at'=> 'datetime'];
 
-    public function profile(){
-        return $this->belongsTo(Profile::class);
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function store(){
+        return $this->belongsTo(Store::class);
     }
 
     public function approver(){
@@ -39,16 +55,14 @@ class Verification extends Model
         return !is_null($this->location_id);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
+    
     public function verifiable(){
         return $this->morphTo();
     }
     public static function boot()
     {
         parent::boot();
-        parent::observe(new \App\Observers\KycObserver);
+        parent::observe(new \App\Observers\VerificationObserver);
     }
 
     public function scopeWithin($query,$value = null){

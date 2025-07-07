@@ -17,8 +17,8 @@ class Advert extends Model
     use HasFactory,GeoLocationTrait;
 
     protected $fillable = [
-        'advertable_id','advertable_type','adset_id','state_id','approved','photo','heading','subheading',
-        'offer','text_color','button_text','button_color'
+        'advertable_id','advertable_type','adset_id','state_id','photo','heading','subheading','offer',
+        'text_color','button_text','button_color','approved','views','clicks','conversions','conversion_value','ctr'
     ];
     //status means the state (not status) of the shop/product .e.g availability, approval, accessibility, etc
     protected $appends = ['status','running','image'];

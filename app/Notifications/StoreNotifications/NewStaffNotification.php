@@ -2,23 +2,28 @@
 
 namespace App\Notifications\StoreNotifications;
 
+use App\Models\Store;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class NewStaffNotification extends Notification
 {
     use Queueable;
+    public $store;
     public $password;
+    public $newlyCreated;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($password)
+    public function __construct(Store $store,$password,$newlyCreated)
     {
+        $this->store = $store;
         $this->password = $password;
+        $this->newlyCreated = $newlyCreated;
     }
 
     /**
@@ -29,7 +34,7 @@ class NewStaffNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -40,8 +45,8 @@ class NewStaffNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->subject('Welcome to '.$notifiable->shop->name)->view(
-            'emails.user.staff', ['user' => $notifiable,'password'=> $this->password]
+        return (new MailMessage)->subject('Welcome to '.$this->store->name)->view(
+            'emails.user.staff', ['user' => $notifiable,'password'=> $this->password,'store'=> $this->store,'newUser'=> $this->newlyCreated]
         );
     
     }
@@ -55,7 +60,10 @@ class NewStaffNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'subject' => $this->store->name.' Store Invitation',
+            'body' => 'Join to manage store',
+            'url'=> '',
+            'related_to'=> 'store'
         ];
     }
 }

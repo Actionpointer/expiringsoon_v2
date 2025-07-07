@@ -58,17 +58,42 @@ trait PayoutTrait
         //save to paid/failed
     }
 
-    public function verifybankaccount($bank_code,$account_number){
-        $user = Auth::user();
-        $gateway = $user->country->payout_gateway;
-        // switch($gateway){
-        //     case 'paystack':  $result = $this->resolveBankAccountByPaystack($bank_code,$account_number);
-        //     break;
-        //     case 'flutterwave': $result = $this->resolveBankAccountByFlutter($bank_code,$account_number);
-        //     break;
-        // }
-        $result = $this->resolveBankAccountByPaystack($bank_code,$account_number);
-        return $result;
+    public function listBanks($gateway,$country){
+        switch($gateway){
+            case 'paystack': 
+                //ghana,kenya,nigeria,south africa
+                return $this->banksByPaystack($country);
+            break;
+            case 'flutterwave': 
+                return $this->banksByFlutter($country);
+            break;
+            case 'paypal': 
+                return $this->banksByPaypal($country);
+            break;
+            case 'stripe':
+                return $this->banksByStripe($country);
+            break;
+            default: return false;
+        }
+
+    }
+
+    public function verifyBankAccount($gateway,$bank_code, $account_number,$account_name){
+        switch($gateway){
+            case 'paystack': 
+                $gateway_account_name = $this->resolveBankAccountByPaystack($bank_code, $account_number);
+                if ($gateway_account_name && str_contains(strtolower($gateway_account_name), strtolower($account_name))) {
+                    return true;
+                }
+                break;
+            case 'flutterwave': 
+                $gateway_account_name = $this->resolveBankAccountByFlutter($bank_code, $account_number);
+                if ($gateway_account_name && str_contains(strtolower($gateway_account_name), strtolower($account_name))) {
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
     
     

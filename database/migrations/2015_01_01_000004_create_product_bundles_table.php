@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('product_bundles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('store_id');
             $table->string('name');
             $table->string('price');
             $table->string('currency_code');

@@ -21,7 +21,7 @@ use App\Models\CountryAdPlan;
 use App\Models\CountryBanking;
 use App\Models\CountryGateway;
 use App\Models\CountryVerification;
-use App\Models\CountryNewsletterPlan;
+// use App\Models\CountryNewsletterPlan;
 use App\Models\CountrySubscriptionPlan;
 use Illuminate\Database\Eloquent\Model;
 
@@ -82,14 +82,14 @@ class Country extends Model
     public function country_ad_plans(){
         return $this->setConnection('mysql')->hasMany(CountryAdPlan::class);
     }
-    public function country_newsletter_plans(){
-        return $this->setConnection('mysql')->hasMany(CountryNewsletterPlan::class);
-    }
+    // public function country_newsletter_plans(){
+    //     return $this->setConnection('mysql')->hasMany(CountryNewsletterPlan::class);
+    // }
     public function country_verifications(){
         return $this->setConnection('mysql')->hasMany(CountryVerification::class);
     }
     public function getActiveAttribute(){
-        return $this->country_banking && $this->country_subscription_plans->count() && $this->country_ad_plans->count() && $this->country_newsletter_plans->count() && $this->country_verifications->count();
+        return $this->country_banking && $this->country_subscription_plans->count() && $this->country_ad_plans->count() && $this->country_verifications->count();
     }
     
     

@@ -26,8 +26,15 @@
             </div>
         </div>
     </div>
-
-    <!-- Tabs -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="card">
         <div class="card-header">
             <div class="row justify-content-between align-items-center flex-grow-1">
@@ -46,130 +53,87 @@
             <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
                 <thead class="thead-light">
                     <tr>
-                        <th>Format Name</th>
+                        <th>Plan Name</th>
                         <th>Type</th>
                         <th>Dimensions</th>
                         <th>Placement</th>
                         <th>Format</th>
-                        <th>Description</th>
-                        <th>Status</th>
+                        <th>Devices</th>
+                        <th>Durations</th>
                         <th>Pricing</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                    $sampleAdPlans = [
-                        [
-                            'id' => 1,
-                            'name' => 'Homepage Banner',
-                            'type' => 'banner',
-                            'width' => 728,
-                            'height' => 90,
-                            'placement' => 'homepage_banner',
-                            'format' => 'image',
-                            'description' => 'Premium banner displayed at the top of the homepage',
-                            'instruction' => 'Upload a high-quality image with text that is clearly visible',
-                            'price_cpm' => 50,
-                            'price_cpc' => 0.75,
-                            'price_fixed' => 120,
-                            'is_active' => true
-                        ],
-                        [
-                            'id' => 2,
-                            'name' => 'Sidebar Ad',
-                            'type' => 'sidebar',
-                            'width' => 300,
-                            'height' => 250,
-                            'placement' => 'product_sidebar',
-                            'format' => 'image',
-                            'description' => 'Sidebar ad displayed on product pages',
-                            'instruction' => 'Use compelling visuals to attract attention',
-                            'price_cpm' => 35,
-                            'price_cpc' => 0.50,
-                            'price_fixed' => 80,
-                            'is_active' => true
-                        ],
-                        [
-                            'id' => 3,
-                            'name' => 'Featured Product',
-                            'type' => 'featured',
-                            'width' => null,
-                            'height' => null,
-                            'placement' => 'category_top',
-                            'format' => 'carousel',
-                            'description' => 'Highlight your products at the top of category pages',
-                            'instruction' => 'Submit multiple high-quality product images',
-                            'price_cpm' => 75,
-                            'price_cpc' => 1.20,
-                            'price_fixed' => 150,
-                            'is_active' => true
-                        ],
-                        [
-                            'id' => 4,
-                            'name' => 'Mobile Pop-up',
-                            'type' => 'popup',
-                            'width' => 320,
-                            'height' => 480,
-                            'placement' => 'checkout_page',
-                            'format' => 'video',
-                            'description' => 'Mobile-only pop-up ad with video',
-                            'instruction' => 'Keep videos under 15 seconds for best results',
-                            'price_cpm' => 60,
-                            'price_cpc' => 0.90,
-                            'price_fixed' => 100,
-                            'is_active' => false
-                        ]
-                    ];
-                    @endphp
-
-                    @foreach($sampleAdPlans as $plan)
+                    @foreach($adPlans as $plan)
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <span class="d-block h5 text-inherit mb-0">{{ $plan['name'] }}</span>
+                                <span class="d-block h5 text-inherit mb-0">{{ $plan->name }}</span>
                             </div>
                         </td>
                         <td>
-                            <span class="text-capitalize">{{ $plan['type'] }}</span>
+                            <span class="text-capitalize">{{ $plan->type }}</span>
                         </td>
                         <td>
-                            @if($plan['width'] && $plan['height'])
-                            {{ $plan['width'] }}x{{ $plan['height'] }}
+                            @if($plan->width && $plan->height)
+                            {{ $plan->width }}x{{ $plan->height }}
                             @else
                             <span class="badge bg-soft-secondary">Responsive</span>
                             @endif
                         </td>
                         <td>
                             <span class="badge bg-soft-primary">
-                                {{ str_replace('_', ' ', ucfirst($plan['placement'])) }}
+                                {{ str_replace('_', ' ', ucfirst($plan->placement)) }}
                             </span>
                         </td>
                         <td>
                             <span class="badge bg-soft-info">
-                                {{ ucfirst($plan['format']) }}
+                                {{ ucfirst($plan->format) }}
                             </span>
                         </td>
-                        <td>{{ $plan['description'] }}</td>
                         <td>
-                            @if($plan['is_active'])
-                            <span class="badge bg-soft-success">Active</span>
-                            @else
-                            <span class="badge bg-soft-danger">Inactive</span>
+                            @if($plan->device_desktop)
+                                <span class="badge bg-primary">Desktop</span>
+                            @endif
+                            @if($plan->device_tablet)
+                                <span class="badge bg-info">Tablet</span>
+                            @endif
+                            @if($plan->device_mobile)
+                                <span class="badge bg-success">Mobile</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($plan->duration_daily)
+                                <span class="badge bg-primary">Daily</span>
+                            @endif
+                            @if($plan->duration_weekly)
+                                <span class="badge bg-info">Weekly</span>
+                            @endif
+                            @if($plan->duration_monthly)
+                                <span class="badge bg-success">Monthly</span>
                             @endif
                         </td>
                         <td>
                             <div class="d-flex flex-column">
-                                <span class="badge bg-soft-primary mb-1">
-                                    CPM: {{ $country->currency_symbol }}{{ $plan['price_cpm'] }}/1000
-                                </span>
-                                <span class="badge bg-soft-info mb-1">
-                                    CPC: {{ $country->currency_symbol }}{{ $plan['price_cpc'] }}/click
-                                </span>
-                                <span class="badge bg-soft-dark">
-                                    Fixed: {{ $country->currency_symbol }}{{ $plan['price_fixed'] }}/day
-                                </span>
+                                @if($plan->price_cpm !== null)
+                                    <span class="badge bg-soft-primary mb-1">CPM: {{ $country->currency_symbol }}{{ $plan->price_cpm }}/1000</span>
+                                @endif
+                                @if($plan->price_cpc !== null)
+                                    <span class="badge bg-soft-info mb-1">CPC: {{ $country->currency_symbol }}{{ $plan->price_cpc }}/click</span>
+                                @endif
+                                @if($plan->price_fixed !== null)
+                                    <span class="badge bg-soft-dark">Fixed: {{ $country->currency_symbol }}{{ $plan->price_fixed }}/day</span>
+                                @endif
                             </div>
+                        </td>
+                        <td>
+                            @if($plan->is_active)
+                            <span class="badge bg-soft-success">Active</span>
+                            @else
+                            <span class="badge bg-soft-danger">Inactive</span>
+                            @endif
                         </td>
                         <td>
                             <div class="btn-group" role="group">
@@ -177,7 +141,25 @@
                                     class="btn btn-white btn-sm"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editAdPlanModal"
-                                    data-plan-id="{{ $plan['id'] }}">
+                                    data-plan-id="{{ $plan->id }}"
+                                    data-plan-name="{{ $plan->name }}"
+                                    data-plan-type="{{ $plan->type }}"
+                                    data-plan-placement="{{ $plan->placement }}"
+                                    data-plan-format="{{ $plan->format }}"
+                                    data-plan-width="{{ $plan->width }}"
+                                    data-plan-height="{{ $plan->height }}"
+                                    data-plan-description="{{ $plan->description }}"
+                                    data-plan-instruction="{{ $plan->instruction }}"
+                                    data-plan-device-desktop="{{ $plan->device_desktop }}"
+                                    data-plan-device-tablet="{{ $plan->device_tablet }}"
+                                    data-plan-device-mobile="{{ $plan->device_mobile }}"
+                                    data-plan-duration-daily="{{ $plan->duration_daily }}"
+                                    data-plan-duration-weekly="{{ $plan->duration_weekly }}"
+                                    data-plan-duration-monthly="{{ $plan->duration_monthly }}"
+                                    data-plan-price-cpm="{{ $plan->price_cpm }}"
+                                    data-plan-price-cpc="{{ $plan->price_cpc }}"
+                                    data-plan-price-fixed="{{ $plan->price_fixed }}"
+                                    data-plan-is-active="{{ $plan->is_active }}">
                                     <i class="bi-pencil-square"></i>
                                 </button>
                                 <button type="button"
@@ -185,8 +167,8 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#deletePlanModal"
                                     data-plan-type="ad"
-                                    data-plan-id="{{ $plan['id'] }}"
-                                    data-plan-name="{{ $plan['name'] }}">
+                                    data-plan-id="{{ $plan->id }}"
+                                    data-plan-name="{{ $plan->name }}">
                                     <i class="bi-trash"></i>
                                 </button>
                             </div>
@@ -213,10 +195,7 @@
         // Event handlers for the edit buttons
         document.querySelectorAll('[data-bs-target="#editAdPlanModal"]').forEach(function(button) {
             button.addEventListener('click', function() {
-                const planId = this.getAttribute('data-plan-id');
-                if (planId) {
-                    editAdPlan(parseInt(planId));
-                }
+                editAdPlan(this);
             });
         });
 

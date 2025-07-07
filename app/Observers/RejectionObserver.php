@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\Rejection;
 use App\Notifications\StoreNotification\ShopStatusNotification;
 use App\Notifications\StoreNotification\AdvertStatusNotification;
-use App\Notifications\KycRejectionNotification;
+use App\Notifications\VerificationRejectionNotification;
 use App\Notifications\StoreNotification\ProductStatusNotification;
 use App\Notifications\UserStatusNotification;
 
@@ -29,8 +29,8 @@ class RejectionObserver
             case 'App\Models\Advert':
                 $rejection->rejectable->adset->user->notify(new AdvertStatusNotification($rejection->rejectable));
             break;
-            case 'App\Models\Kyc':
-                $rejection->rejectable->user->notify(new KycRejectionNotification($rejection->rejectable));
+            case 'App\Models\Verification':
+                $rejection->rejectable->user->notify(new VerificationRejectionNotification($rejection->rejectable));
             break;
             case 'App\Models\User':
                 $rejection->rejectable->notify(new UserStatusNotification());

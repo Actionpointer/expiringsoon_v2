@@ -9,6 +9,13 @@ use App\Livewire\Guest\Blog\BlogList;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Guest\Blog\BlogArticle;
 use App\Http\Controllers\PaymentController;
+use App\Livewire\Guest\Carts\CartPage;
+use App\Livewire\Guest\Compare\ComparePage;
+use App\Livewire\Guest\Deals\HotDeals;
+use App\Livewire\Guest\Products\AllProducts;
+use App\Livewire\Guest\Products\SingleProduct;
+use App\Livewire\Guest\Stores\AllStores;
+use App\Livewire\Guest\Stores\SingleStore;
 
 Route::get('/', Welcome::class)->name('welcome');
 Route::middleware('guest')->group(function(){
@@ -17,15 +24,13 @@ Route::middleware('guest')->group(function(){
     Route::get('forgot-password', ForgotPassword::class)->name('forgot-password');
     Route::get('reset-password', ResetPassword::class)->name('reset-password');
 });
-
-
-Route::view('products', 'guest.products')->name('products');
-Route::view('products/{product}', 'guest.product')->name('product');
-Route::view('hotdeals', 'guest.hotdeals')->name('hotdeals');
-Route::view('stores', 'guest.stores')->name('stores');
-Route::view('stores/{store}', 'guest.store')->name('store');
-Route::view('cart', 'guest.cart')->name('cart');
-Route::view('compare', 'guest.compare')->name('compare');
+Route::get('products', AllProducts::class)->name('products');
+Route::get('products/{product}', SingleProduct::class)->name('product');
+Route::get('hotdeals', HotDeals::class)->name('hotdeals');
+Route::get('stores', AllStores::class)->name('stores');
+Route::get('stores/{store}', SingleStore::class)->name('store');
+Route::get('cart', CartPage::class)->name('cart');
+Route::get('compare', ComparePage::class)->name('compare');
 Route::get('blog', BlogList::class)->name('blog');
 Route::get('blog-single', BlogArticle::class)->name('blog-single');
 

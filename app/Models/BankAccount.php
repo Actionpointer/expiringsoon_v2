@@ -13,7 +13,7 @@ class BankAccount extends Model
     use HasFactory;
     
     protected $fillable = [
-        'user_id','account_number','bank_id','branch_id','status'
+        'store_id','gateway','gateway_reference','banking_fields','account_status','primary_account','verified_at'
     ];
 
     public function user(){

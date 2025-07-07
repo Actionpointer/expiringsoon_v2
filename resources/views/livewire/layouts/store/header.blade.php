@@ -132,7 +132,7 @@
                             
                         </ul>
                         <div class="border-top px-5 py-3">
-                            <a href="#">Log Out</a>
+                            <a class="nav-link" href="#" wire:click.prevent="logout">Log Out</a>
                         </div>
                     </div>
                 </li>

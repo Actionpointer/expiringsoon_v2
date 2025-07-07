@@ -136,7 +136,7 @@ class Product extends Model
     }
 
     public function getImageAttribute(){
-        return $this->photo ? config('app.url')."/storage/$this->photo": config('app.url')."/images/site/no-image.png";  
+        return $this->photos ? $this->photos[0]: config('app.url')."/images/site/no-image.png";  
     }
 
     public function adverts(){
